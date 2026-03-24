@@ -61,7 +61,6 @@ The "cost-quality frontier" line answers the core question: is paying for cloud 
 
 **Coming**
 - LM Studio discovery (currently works via compat, no auto-detect yet)
-- `verdict compare` for run-vs-run deltas
 - Cross-judge strategy (two judge models, averaged scores)
 - Tag-based case filtering
 
@@ -195,6 +194,10 @@ verdict run --pack ./eval-packs/quantization.yaml
 | `general.yaml` | 10 | Factual recall, reasoning, coding, instruction following |
 | `moe.yaml` | 5 | Multi-domain tasks that highlight MoE model strengths |
 | `quantization.yaml` | 10 | JSON output (3), tool calling (1), structured data (2), instruction precision (4) |
+| `coding.yaml` | 10 | Algorithms, debugging, SQL, system design across languages |
+| `reasoning.yaml` | 10 | Logic puzzles, probability, multi-step reasoning, argument critique |
+| `instruction-following.yaml` | 10 | Strict format, word count, template, and constraint adherence |
+| `writing-quality.yaml` | 8 | Clarity, concision, tone, audience-appropriate writing |
 
 The quantization pack uses deterministic scoring (`JSON.parse()` pass or fail) where structured output is required. No LLM judge call. If a model produces `'name'` instead of `"name"`, it fails. These are the cases that would have caught the flash-moe 2-bit regression before the paper shipped.
 
@@ -267,6 +270,8 @@ verdict run --pack ./eval-packs/moe.yaml # run specific pack
 verdict run --dry-run                    # preview without API calls
 verdict models                           # ping all configured models
 verdict models discover                  # scan for local inference servers
+verdict compare <run-a.json> <run-b.json>          # compare two runs
+verdict compare <run-a.json> <run-b.json> -o out.md  # with markdown output
 ```
 
 ## Results

@@ -1,0 +1,45 @@
+# eval-packs/writing-quality.yaml
+name: Writing Quality
+version: 1.0.0
+description: 8 cases testing writing quality — clarity, concision, tone, and ability to write for different audiences.
+
+cases:
+  - id: write-001
+    prompt: "Explain how HTTPS works to a non-technical person who knows how to use the internet but has no programming knowledge. Max 4 sentences."
+    criteria: "Accurate but accessible. No jargon without explanation. Good analogy (e.g., sealed envelope, lock-and-key). 4 sentences or fewer. A non-technical person could understand it."
+    tags: [explanation, clarity, easy]
+
+  - id: write-002
+    prompt: "Rewrite this sentence to be more concise without losing meaning: 'Due to the fact that the weather conditions were not favorable for outdoor activities, we made the decision to cancel the picnic that had been planned for the afternoon.'"
+    criteria: "Substantially shorter. Preserves meaning. Removes wordy phrases ('due to the fact that', 'made the decision to', 'that had been planned'). Natural English."
+    tags: [concision, editing, easy]
+
+  - id: write-003
+    prompt: "Write a cold email subject line that would get a busy startup founder to open an email offering a B2B SaaS tool for managing engineering team velocity. No clickbait. Max 8 words."
+    criteria: "Specific to the audience (founder/engineering). Suggests value without being vague. No clickbait ('you won't believe'). 8 words or fewer. Compelling enough to open."
+    tags: [copywriting, email, medium]
+
+  - id: write-004
+    prompt: "Write a one-paragraph executive summary of what a vector database is and why it matters for AI applications. Audience: C-suite executives who understand business but not technical details."
+    criteria: "Accurate at a high level. No unexplained technical jargon. Business-relevant framing (not 'cosine similarity' but 'finds semantically similar content'). One paragraph. Explains the business value."
+    tags: [explanation, executive-audience, medium]
+
+  - id: write-005
+    prompt: "Edit this sentence for clarity and remove passive voice: 'It was decided by the team that the project would be delayed due to resources not being available.'"
+    criteria: "Active voice. Clear subject (team/we). Concise. Removes 'it was decided by' and 'not being available' constructs. Same meaning preserved."
+    tags: [editing, active-voice, easy]
+
+  - id: write-006
+    prompt: "Write a rejection email to a job applicant who was not selected. Professional, warm, and specific (they applied for 'Senior Engineer' at a company called 'Acme'). Under 80 words."
+    criteria: "Professional and warm tone. References role (Senior Engineer) and company (Acme). Encourages the applicant. No corporate clichés ('we'll keep your resume on file' is OK if brief). Under 80 words."
+    tags: [email, tone, professional]
+
+  - id: write-007
+    prompt: "What's the difference between 'affect' and 'effect'? Give one example of each used correctly in a sentence."
+    criteria: "Accurate distinction: affect = verb (to influence), effect = noun (the result), with exceptions noted or ignored. Two correct example sentences demonstrating each."
+    tags: [grammar, language, easy]
+
+  - id: write-008
+    prompt: "Improve this product description: 'Our software helps companies do things better and faster. It's great for all kinds of businesses and has lots of features.' Make it specific and compelling in 2 sentences."
+    criteria: "Removes vague language ('things', 'great', 'lots of features'). Adds specificity (even if invented). Compelling value proposition. Exactly 2 sentences."
+    tags: [copywriting, editing, medium]

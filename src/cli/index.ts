@@ -3,13 +3,14 @@ import chalk from 'chalk'
 import { runCommand } from './commands/run.js'
 import { modelsCommand, discoverCommand } from './commands/models.js'
 import { initCommand } from './commands/init.js'
+import { compareCommand } from './commands/compare.js'
 
 const program = new Command()
 
 program
   .name('verdict')
   .description(chalk.bold('verdict') + '\nLLM eval framework. Benchmark local and cloud models with one config file.')
-  .version('0.1.0')
+  .version('0.2.0')
 
 program
   .command('init')
@@ -36,5 +37,11 @@ models
   .command('discover')
   .description('Scan for local inference servers (Ollama, MLX, LM Studio)')
   .action(discoverCommand)
+
+program
+  .command('compare <run-a> <run-b>')
+  .description('Compare two result JSON files — show score deltas and rank changes')
+  .option('-o, --output <path>', 'Save comparison as markdown file')
+  .action(compareCommand)
 
 program.parse()

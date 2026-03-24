@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0 (2026-03-24)
+
+- **`verdict compare`** — compare two result JSON files side-by-side: score deltas per model, rank changes, notable per-case score changes (Δ ≥ 1.0), and overall verdict. `--output` flag saves a markdown report.
+- **4 new eval packs:** `coding.yaml` (10 cases), `reasoning.yaml` (10 cases), `instruction-following.yaml` (10 cases), `writing-quality.yaml` (8 cases). Total: 53 cases across 7 packs.
+- **Build fix:** switched to `tsup.config.ts` to fix `--banner.js` flag compatibility with tsup 8.x.
+
 ## 0.1.0 (2026-03-24)
 
 Initial release.

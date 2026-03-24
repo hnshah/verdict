@@ -1,6 +1,6 @@
 {
   "name": "verdict",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "LLM eval framework. Benchmark local and cloud models with one config file.",
   "type": "module",
   "bin": {
@@ -17,7 +17,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "tsup src/cli/index.ts --format esm --target node20 --out-dir dist/cli --clean --banner.js '#!/usr/bin/env node' --shims",
+    "build": "tsup",
     "prepublishOnly": "npm run build && npm run typecheck",
     "dev": "npx tsx src/cli/index.ts",
     "typecheck": "tsc --noEmit"
@@ -37,7 +37,16 @@
     "tsx": "^4.7.0",
     "typescript": "^5.4.0"
   },
-  "keywords": ["llm", "eval", "benchmark", "ollama", "mlx", "openai", "moe", "local-ai"],
+  "keywords": [
+    "llm",
+    "eval",
+    "benchmark",
+    "ollama",
+    "mlx",
+    "openai",
+    "moe",
+    "local-ai"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",

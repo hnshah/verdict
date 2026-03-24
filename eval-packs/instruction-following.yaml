@@ -1,0 +1,57 @@
+# eval-packs/instruction-following.yaml
+name: Instruction Following
+version: 1.0.0
+description: 10 cases that test strict adherence to explicit format, length, and structural constraints.
+
+cases:
+  - id: instruct-001
+    prompt: "List exactly 5 programming languages. Each on its own line. No numbering. No descriptions. Just the names."
+    criteria: "Exactly 5 languages. One per line. No numbers, bullets, or descriptions. Pure names only."
+    tags: [format, strict, easy]
+
+  - id: instruct-002
+    prompt: "Respond with ONLY a valid JSON object with exactly these fields: name (string), age (number), active (boolean). Use any realistic values. Do not include any text before or after the JSON."
+    scorer: json
+    expected: '{"name": "string", "age": 0, "active": false}'
+    criteria: "Valid JSON. Exactly three fields: name (string), age (number), active (boolean). No extra fields. No surrounding text."
+    tags: [json, format, strict]
+
+  - id: instruct-003
+    prompt: "Write a product description for a coffee mug. Maximum 20 words. Do not use the word 'perfect' or 'great'."
+    criteria: "20 words or fewer. Does not contain the word 'perfect' or 'great' (case-insensitive). Coherent product description."
+    tags: [format, constraints, easy]
+
+  - id: instruct-004
+    prompt: "Translate 'Hello, how are you?' into: (1) French, (2) Spanish, (3) German, (4) Japanese, (5) Arabic. Number each one. No explanations."
+    criteria: "Exactly 5 translations. Numbered 1-5. Correct translations in each language. No extra commentary."
+    tags: [translation, format, medium]
+
+  - id: instruct-005
+    prompt: "Write a haiku about artificial intelligence. Title it 'Silicon Dreams'. Format: title on first line, then haiku (5-7-5 syllables). Nothing else."
+    criteria: "Title 'Silicon Dreams' on first line. Three-line haiku. 5-7-5 syllable count. No additional text."
+    tags: [creative, format, syllables]
+
+  - id: instruct-006
+    prompt: "Give me 3 recommendations for a trip to Japan. Format each as: [City]: [One-sentence description]. Use square brackets exactly as shown."
+    criteria: "Exactly 3 recommendations. Each formatted as [City]: [description]. Square brackets around city names. One sentence per recommendation."
+    tags: [format, template, easy]
+
+  - id: instruct-007
+    prompt: "Rewrite this sentence using exactly 10 words: 'The quick brown fox jumped over the lazy dog.'"
+    criteria: "Exactly 10 words. Grammatically correct sentence. Related to the original meaning or contains some original words."
+    tags: [rewrite, word-count, medium]
+
+  - id: instruct-008
+    prompt: "Create a table with 3 columns (Language, Year Created, Creator) and exactly 4 rows of data for programming languages. Use markdown table format."
+    criteria: "Valid markdown table. Exactly 3 columns with correct headers. Exactly 4 data rows. Accurate language/year/creator information."
+    tags: [markdown, table, format]
+
+  - id: instruct-009
+    prompt: "Answer these three questions with ONLY yes or no for each. No elaboration. Q1: Is Python a compiled language? Q2: Is the Earth older than the Sun? Q3: Is 2+2=4?"
+    criteria: "Exactly three answers. Each is ONLY 'yes' or 'no' (or Yes/No). No sentences, explanations, or qualifications. Correct answers: No, No, Yes."
+    tags: [yes-no, strict, easy]
+
+  - id: instruct-010
+    prompt: "Write a tweet (max 280 characters) about the future of AI. Include exactly one hashtag. Do not use exclamation marks."
+    criteria: "280 characters or fewer (not counting spaces around hashtag). Exactly one hashtag (starts with #). Zero exclamation marks. Coherent thought about AI."
+    tags: [format, social-media, constraints]
