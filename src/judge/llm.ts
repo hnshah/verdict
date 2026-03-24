@@ -8,15 +8,40 @@ Question: ${prompt}
 
 Evaluation Criteria: ${criteria}
 
-Response: ${response}
+Response to evaluate:
+${response}
 
-Score on three dimensions (1-10 each):
-1. Accuracy (${Math.round(rubric.accuracy * 100)}% weight): Is the content correct and factual?
-2. Completeness (${Math.round(rubric.completeness * 100)}% weight): Does it address all criteria?
-3. Conciseness (${Math.round(rubric.conciseness * 100)}% weight): Appropriately scoped, no padding?
+Score on three dimensions. Use integers 1-10.
+- accuracy (${Math.round(rubric.accuracy * 100)}% weight): Is the content correct and factual?
+- completeness (${Math.round(rubric.completeness * 100)}% weight): Does it address all criteria?
+- conciseness (${Math.round(rubric.conciseness * 100)}% weight): Appropriately scoped, no padding?
 
-Respond ONLY with valid JSON, no other text:
-{"accuracy":<n>,"completeness":<n>,"conciseness":<n>,"reasoning":"<one sentence>"}`
+Output ONLY a JSON object on a single line. No markdown, no citations, no other text:
+{"accuracy":N,"completeness":N,"conciseness":N,"reasoning":"one sentence"}`
+}
+
+function parseJudgeJson(text: string): { accuracy: number; completeness: number; conciseness: number; reasoning: string } | null {
+  // Strip markdown fences and citation markers (e.g. [1][2][3] from Perplexity)
+  const cleaned = text
+    .replace(/```(?:json)?/gi, '')
+    .replace(/\[\d+\]/g, '')
+    .trim()
+
+  // Try direct parse first
+  try {
+    return JSON.parse(cleaned)
+  } catch { /* fall through */ }
+
+  // Find the outermost JSON object (greedy match, handles nested braces in reasoning)
+  const first = cleaned.indexOf('{')
+  const last = cleaned.lastIndexOf('}')
+  if (first === -1 || last === -1 || last <= first) return null
+
+  try {
+    return JSON.parse(cleaned.slice(first, last + 1))
+  } catch { /* fall through */ }
+
+  return null
 }
 
 export async function judgeResponse(
@@ -47,24 +72,32 @@ export async function judgeResponse(
   })
 
   const text = result.choices[0]?.message?.content ?? ''
-  const match = text.match(/\{[\s\S]*?\}/)
-  if (!match) throw new Error(`Judge returned non-JSON: ${text.slice(0, 200)}`)
+  const parsed = parseJudgeJson(text)
+  if (!parsed) throw new Error(`Judge returned non-JSON: ${text.slice(0, 200)}`)
 
-  const parsed = JSON.parse(match[0]) as {
-    accuracy: number; completeness: number; conciseness: number; reasoning: string
+  // Clamp and normalize scores to 0-10 range
+  const clamp = (n: unknown) => {
+    const v = typeof n === 'number' ? n : parseFloat(String(n))
+    return isNaN(v) ? 5 : Math.min(10, Math.max(0, v))
   }
+
+  const accuracy = clamp(parsed.accuracy)
+  const completeness = clamp(parsed.completeness)
+  const conciseness = clamp(parsed.conciseness)
+
   const { rubric } = config
+  // Weighted average: scores are 0-10, weights sum to 1.0, result is 0-10
   const total = +(
-    parsed.accuracy * rubric.accuracy * 10 +
-    parsed.completeness * rubric.completeness * 10 +
-    parsed.conciseness * rubric.conciseness * 10
+    accuracy * rubric.accuracy +
+    completeness * rubric.completeness +
+    conciseness * rubric.conciseness
   ).toFixed(1)
 
   return {
-    accuracy: parsed.accuracy,
-    completeness: parsed.completeness,
-    conciseness: parsed.conciseness,
+    accuracy,
+    completeness,
+    conciseness,
     total,
-    reasoning: parsed.reasoning ?? '',
+    reasoning: typeof parsed.reasoning === 'string' ? parsed.reasoning : '',
   }
 }
