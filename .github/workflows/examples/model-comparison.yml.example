@@ -1,0 +1,44 @@
+# Example: Run Verdict on every PR
+# This workflow compares model outputs to catch quality regressions
+
+name: Model Quality Check
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'prompts/**'
+
+jobs:
+  verdict:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Verdict
+        run: npm install -g @hnshah/verdict
+      
+      - name: Run comparison
+        run: |
+          verdict run \
+            --pack eval-packs/general.yaml \
+            --output results.json
+      
+      - name: Check for regressions
+        run: |
+          # Fail if score drops below threshold
+          score=$(cat results.json | jq '.summary."your-model".avg_total')
+          if (( $(echo "$score < 80" | bc -l) )); then
+            echo "Quality regression detected: $score < 80"
+            exit 1
+          fi
+      
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: verdict-results
+          path: results.json
