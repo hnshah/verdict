@@ -1,0 +1,55 @@
+# eval-packs/general.yaml
+name: General
+version: 1.0.0
+description: 10 general-purpose cases covering factual recall, reasoning, coding, and instruction following
+
+cases:
+  - id: gen-001
+    prompt: "What is the capital of France?"
+    criteria: "Single correct answer: Paris"
+    tags: [factual, easy]
+
+  - id: gen-002
+    prompt: "What does RAM stand for and what does it do?"
+    criteria: "Random Access Memory, volatile storage that holds running programs and data"
+    tags: [factual, cs]
+
+  - id: gen-003
+    prompt: "Explain the difference between a process and a thread in one paragraph."
+    criteria: "Covers: separate memory space vs shared, overhead difference, use cases for each"
+    tags: [technical, cs]
+
+  - id: gen-004
+    prompt: "If all mammals are warm-blooded, and dolphins are mammals, what can we conclude about dolphins?"
+    criteria: "Correct deductive conclusion: dolphins are warm-blooded. Clear reasoning shown."
+    tags: [reasoning, logic]
+
+  - id: gen-005
+    prompt: "List exactly 3 benefits of regular exercise. Numbered list. Max 12 words per item."
+    criteria: "Exactly 3 items, numbered list format, each under 12 words"
+    tags: [instruction-following]
+
+  - id: gen-006
+    prompt: "Write a JavaScript function that returns the sum of all even numbers in an array."
+    criteria: "Working JS function, handles empty array, filters even numbers with % 2 === 0, returns sum"
+    tags: [coding, javascript]
+
+  - id: gen-007
+    prompt: "What is the time complexity of binary search and why?"
+    criteria: "O(log n), correct explanation of halving the search space each iteration"
+    tags: [cs, algorithms]
+
+  - id: gen-008
+    prompt: "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics."
+    criteria: "Covers attention mechanism, parallel processing (vs RNN), why it improved NLP. Appropriate depth."
+    tags: [ml, explanation]
+
+  - id: gen-009
+    prompt: "Write a haiku about debugging code."
+    criteria: "5-7-5 syllable structure, references debugging or code, coherent meaning"
+    tags: [creative, instruction-following]
+
+  - id: gen-010
+    prompt: "What is the CAP theorem and what does it mean for distributed systems design?"
+    criteria: "Consistency, Availability, Partition tolerance, can only guarantee 2 of 3, tradeoffs for system design"
+    tags: [cs, distributed-systems]

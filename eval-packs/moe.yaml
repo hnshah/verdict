@@ -1,0 +1,30 @@
+# eval-packs/moe.yaml
+name: MoE Benchmark
+version: 1.0.0
+description: Tasks that highlight Mixture-of-Experts model strengths. MoE models activate different experts per token, excelling at tasks that require switching between domains.
+
+cases:
+  - id: moe-001
+    prompt: "Explain how mRNA vaccines work, then write a Python function that simulates a simple S-curve adoption model."
+    criteria: "Correct mRNA mechanism (spike protein, immune training). Working Python S-curve function (sigmoid or logistic), accepts time parameter."
+    tags: [multi-domain, biology, coding]
+
+  - id: moe-002
+    prompt: "Solve: if x^2 - 5x + 6 = 0, find x. Then describe one real-world system this equation could model."
+    criteria: "Correct roots: x=2, x=3. Reasonable real-world application (spring, projectile, population model, etc.)"
+    tags: [math, reasoning, applied]
+
+  - id: moe-003
+    prompt: "Translate this Python code to TypeScript, then explain the main type safety difference: def add(a, b): return a + b"
+    criteria: "Correct TypeScript with type annotations (number params + return type). Explanation mentions static typing."
+    tags: [coding, multi-language]
+
+  - id: moe-004
+    prompt: "Describe the French Revolution in 3 sentences, then identify 2 parallels to a modern political movement."
+    criteria: "Historically accurate summary. Two specific, defensible modern parallels named."
+    tags: [history, analysis, reasoning]
+
+  - id: moe-005
+    prompt: "Write a SQL query to find the top 3 customers by revenue from an orders table (customer_id, amount, date). Then explain what index would speed it up."
+    criteria: "Correct SQL with GROUP BY, SUM, ORDER BY DESC, LIMIT 3. Reasonable index suggestion (customer_id or composite)."
+    tags: [coding, sql, performance]

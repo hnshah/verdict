@@ -162,16 +162,32 @@ cases:
   fs.writeFileSync('./verdict.yaml', config)
   fs.writeFileSync('./eval-packs/general.yaml', generalPack)
   fs.writeFileSync('./eval-packs/moe.yaml', moePack)
+
+  // Try to copy quantization.yaml from the package if available, else write inline stub
+  const pkgQuantPath = new URL('../../../eval-packs/quantization.yaml', import.meta.url)
+  try {
+    const { readFileSync } = await import('fs')
+    const quantContent = readFileSync(pkgQuantPath, 'utf8')
+    fs.writeFileSync('./eval-packs/quantization.yaml', quantContent)
+  } catch {
+    // Package not installed (dev mode) - write a pointer comment
+    fs.writeFileSync('./eval-packs/quantization.yaml',
+      '# See https://github.com/hnshah/verdict/blob/main/eval-packs/quantization.yaml\n')
+  }
+
   fs.writeFileSync('./.env.example',
+    '# verdict environment variables\n' +
     'OPENROUTER_API_KEY=your_key_here\n' +
+    '# OPENAI_API_KEY=sk-...\n' +
+    '# GROQ_API_KEY=gsk_...\n' +
     '# OLLAMA_HOST=localhost:11434\n' +
-    '# MLX_PORT=8080\n' +
-    '# OPENAI_API_KEY=your_key\n'
+    '# MLX_PORT=8080\n'
   )
 
   console.log(chalk.green('  verdict.yaml created'))
   console.log(chalk.green('  eval-packs/general.yaml (10 cases)'))
   console.log(chalk.green('  eval-packs/moe.yaml (5 MoE benchmark cases)'))
+  console.log(chalk.green('  eval-packs/quantization.yaml (10 cases, deterministic JSON scoring)'))
   console.log(chalk.green('  .env.example'))
   console.log()
   console.log(chalk.bold('  Next:'))

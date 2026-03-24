@@ -3,7 +3,7 @@ import ora from 'ora'
 import { loadConfig } from '../../core/config.js'
 import { pingModel } from '../../providers/compat.js'
 import { discoverOllama, isOllamaRunning } from '../../providers/ollama.js'
-import { discoverMLX, isMLXRunning, mlxStartCommand } from '../../providers/mlx.js'
+import { discoverMLX, isMLXRunning } from '../../providers/mlx.js'
 
 interface ModelsOptions { config: string }
 

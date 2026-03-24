@@ -80,7 +80,7 @@ export async function discoverOllama(
         found.push({ provider: 'ollama', id, model: name, base_url, size_gb, is_moe: moe, tags })
       }
     } catch {
-      // Host not running — skip silently
+      // Host not running, skip silently
     }
   }
 
