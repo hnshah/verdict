@@ -1,14 +1,14 @@
 # verdict
 
-I build AI products. The question I kept asking was: which model should I actually use for this task?
+> "Output quality at 2-bit is indistinguishable from 4-bit for these evaluations."
+>
+> flash-moe paper, March 2026
 
-Not "which model is best" in the abstract. That question is useless. Which model is best for my specific tasks, at my quality bar, given what I'm willing to pay vs. what I can run for free on my machine?
+Those evaluations were three prompts. A few days later the repo was updated: 2-bit broke JSON output. String keys came back single-quoted. Unparseable. Tool calling stopped working. Recommendation changed to 4-bit.
 
-The honest answer: most people don't know. They eyeball outputs, pick a favorite, and move on. I did this for a long time. It led to bad decisions.
+The authors were thorough about the engineering. The quality validation was not. There was no tool to catch it before the claim shipped.
 
-The [flash-moe paper](https://github.com/danveloper/flash-moe) made this concrete for me. It ran a 397-billion-parameter model on a 48GB laptop by streaming weights from SSD. The authors claimed 2-bit quantization produced output "indistinguishable" from 4-bit, based on three tasks. Then they discovered 2-bit broke JSON output and tool calling entirely, because the three tasks they tested didn't require structured output. The quality claim was wrong, and there was no tool to catch it.
-
-**verdict is that tool.** Benchmark any model via OpenAI-compatible API. Get a scored leaderboard, a cost-quality comparison, and structured output validation. No account, no cloud dependency. Your data stays local.
+**verdict turns model decisions into data.** Run eval packs against any model via OpenAI-compatible API. Get a leaderboard, cost-quality comparison, and structured output validation. Config lives in your repo. Zero cloud dependency.
 
 ```
   verdict run
@@ -28,10 +28,10 @@ The [flash-moe paper](https://github.com/danveloper/flash-moe) made this concret
 ```
 
 **Who this is for:**
-- **Developers running Ollama** who want to know which local model to use
-- **Teams evaluating cloud vs. local** who want actual scores, not vibes
-- **ML researchers testing quantization** who need rigorous output quality checks
-- **Anyone using flash-moe or SSD-streaming inference** who wants to validate quality at different bit depths
+- You run Ollama and want to know which local model to use for your actual tasks, not a generic benchmark
+- You are deciding whether paying for cloud is worth it or whether a free local model is close enough
+- You just quantized a model and need to know what broke
+- You make model decisions on intuition and want to stop
 
 ## Quick start
 
@@ -39,12 +39,12 @@ The [flash-moe paper](https://github.com/danveloper/flash-moe) made this concret
 npx verdict init
 ```
 
-That creates `verdict.yaml` and starter eval packs. Edit it to add your models, then:
+This creates `verdict.yaml` and starter eval packs in your current directory. Add your models, then:
 
 ```bash
-verdict models discover   # see what Ollama models you have installed
+verdict models discover   # find installed Ollama models, get YAML to paste in
 verdict models            # ping all configured models
-verdict run               # run your first eval
+verdict run               # run evals
 ```
 
 ## Install
@@ -59,15 +59,14 @@ Node.js 18+ required.
 
 ### Ollama
 
-verdict has deep Ollama integration. It auto-discovers running models,
-detects MoE architectures, and needs zero API keys.
+Run `verdict models discover` and it lists every installed Ollama model with the config YAML ready to paste in. MoE models (Mixture-of-Experts architectures like DeepSeek-R1 and Mixtral) are detected and tagged automatically. No API key needed.
 
 ```bash
 # Install Ollama: https://ollama.ai
 ollama pull qwen2.5:7b
-ollama pull deepseek-r1:7b   # MoE model
+ollama pull deepseek-r1:7b
 
-verdict models discover      # shows all installed models with YAML to paste
+verdict models discover
 ```
 
 In verdict.yaml:
@@ -86,12 +85,11 @@ models:
     tags: [local, free, moe]
 ```
 
-Point `OLLAMA_HOST` at any machine to use a remote Ollama instance.
+Set `OLLAMA_HOST` to run evals against a remote machine running Ollama.
 
 ### MLX (Apple Silicon)
 
-MLX runs models natively on Apple Silicon via mlx-lm. Faster inference
-and lower memory pressure than Ollama on M-series chips.
+MLX runs models natively on M-series chips via mlx-lm, generally faster than Ollama on Apple Silicon.
 
 ```bash
 pip install mlx-lm
@@ -106,14 +104,11 @@ mlx_lm.server --model mlx-community/Llama-3.2-3B-Instruct-4bit --port 8080
     tags: [local, free, apple-silicon]
 ```
 
-### MoE and quantization testing
+### SSD-streaming and MoE inference
 
-MoE models activate only a fraction of expert weights per token, which makes them
-well-suited for SSD-streaming inference on consumer hardware. flash-moe demonstrated
-this by running Qwen3.5-397B on a 48GB MacBook at 4+ tokens/second.
+[flash-moe](https://github.com/danveloper/flash-moe) showed that MoE models can run at interactive speeds on consumer hardware by streaming expert weights from SSD on demand. Only 2% of weights are active at any given token, which makes it viable.
 
-If you are running a custom inference server (flash-moe or similar), add it
-as a generic compat endpoint:
+If you're running flash-moe or any other custom inference server, add it as a generic compat endpoint:
 
 ```yaml
   - id: flash-moe-local
@@ -123,21 +118,18 @@ as a generic compat endpoint:
     tags: [local, free, moe, ssd-streaming]
 ```
 
-Then run the quantization pack to validate output quality:
+Then run the quantization pack to validate output quality across bit depths:
 
 ```bash
 verdict run --pack ./eval-packs/quantization.yaml
 ```
-
-The quantization pack uses deterministic JSON scoring (no LLM judge needed)
-to catch exactly the failure mode the flash-moe paper missed.
 
 ## Cloud models
 
 Any OpenAI-compatible endpoint works. One config entry per model.
 
 ```yaml
-  # OpenRouter (one key, access to every cloud model)
+  # OpenRouter: one key, every major cloud model
   - id: cloud-fast
     base_url: "https://openrouter.ai/api/v1"
     api_key: "${OPENROUTER_API_KEY}"
@@ -145,18 +137,43 @@ Any OpenAI-compatible endpoint works. One config entry per model.
     cost_per_1m_input: 0.80
     cost_per_1m_output: 4.00
 
-  # Direct OpenAI
+  # OpenAI
   - id: gpt4o-mini
     base_url: "https://api.openai.com/v1"
     api_key: "${OPENAI_API_KEY}"
     model: gpt-4o-mini
 
-  # Groq (fast inference)
+  # Groq
   - id: groq-llama
     base_url: "https://api.groq.com/openai/v1"
     api_key: "${GROQ_API_KEY}"
     model: llama-3.1-8b-instant
 ```
+
+## Eval packs
+
+| Pack | Cases | Focus |
+|------|-------|-------|
+| `general.yaml` | 10 | Factual recall, reasoning, coding, instruction following |
+| `moe.yaml` | 5 | Multi-domain tasks that highlight MoE model strengths |
+| `quantization.yaml` | 10 | Structured output, tool calling format, instruction precision |
+
+The quantization pack uses deterministic scoring (`JSON.parse()` pass or fail) for cases that require structured output. No LLM judge call, no subjectivity. If a model produces `'name'` instead of `"name"`, it fails. These are the cases that would have caught the flash-moe 2-bit regression before the paper shipped.
+
+Write your own pack:
+
+```yaml
+# eval-packs/my-pack.yaml
+name: My Tasks
+cases:
+  - id: my-001
+    prompt: "Your prompt here"
+    criteria: "What a good answer must include"
+    scorer: llm    # or: json, exact, contains
+    tags: [custom]
+```
+
+See [docs/writing-eval-packs.md](docs/writing-eval-packs.md) for scorer types, criteria writing, and quantization-sensitive case patterns.
 
 ## Config reference
 
@@ -170,7 +187,7 @@ models:
     base_url: <url>            # or raw OpenAI-compat endpoint
     api_key: <string>          # use "none" for local endpoints
     model: <string>            # model name as the endpoint expects it
-    host: <host:port>          # Ollama: override host
+    host: <host:port>          # Ollama: override default host
     port: <number>             # MLX: port (default 8080)
     tags: [local, cloud, moe, ...]
     cost_per_1m_input: <number>
@@ -179,12 +196,12 @@ models:
     max_tokens: <number>       # default 1024
 
 judge:
-  model: <model-id>            # references a model id from models[]
-  blind: true                  # never reveals model names to judge
+  model: <model-id>            # any model id from the models list above
+  blind: true                  # model names never shown to the judge
   rubric:
-    accuracy: 0.4
-    completeness: 0.4
-    conciseness: 0.2
+    accuracy: 0.4              # is it correct?
+    completeness: 0.4          # does it cover the criteria?
+    conciseness: 0.2           # is it appropriately brief?
 
 packs:
   - ./eval-packs/general.yaml
@@ -192,41 +209,14 @@ packs:
 run:
   concurrency: 3               # parallel model calls per case
   retries: 2
-  cache: true
+  cache: true                  # resume interrupted runs
 
 output:
   dir: ./results
   formats: [json, markdown]
 ```
 
-All values support `${ENV_VAR}` and `${ENV_VAR:-default}` substitution.
-
-## Eval packs
-
-| Pack | Cases | Scorer | Focus |
-|------|-------|--------|-------|
-| `general.yaml` | 10 | LLM judge | Factual recall, reasoning, coding, instruction following |
-| `moe.yaml` | 5 | LLM judge | Multi-domain tasks that highlight MoE model strengths |
-| `quantization.yaml` | 10 | Mixed (JSON + LLM) | Structured output, tool calling format, instruction precision |
-
-The quantization pack uses deterministic JSON scoring for cases 1-3 and 7:
-`JSON.parse()` pass or fail, no LLM needed. If a model produces `'name'` instead
-of `"name"`, it fails. These are the cases that caught the flash-moe 2-bit regression.
-
-Write your own:
-
-```yaml
-# eval-packs/my-pack.yaml
-name: My Tasks
-cases:
-  - id: my-001
-    prompt: "Your prompt here"
-    criteria: "What a good answer must include"
-    scorer: llm    # or: json, exact, contains
-    tags: [custom]
-```
-
-See [docs/writing-eval-packs.md](docs/writing-eval-packs.md) for full documentation.
+All values support `${ENV_VAR}` and `${ENV_VAR:-default}` substitution. Store keys in `.env` (see `.env.example`).
 
 ## CLI reference
 
@@ -245,22 +235,19 @@ verdict models discover                  # scan for local inference servers
 
 Every run saves to `./results/`:
 
-- `YYYY-MM-DD-<run-id>.json` - full results with per-case scores
-- `YYYY-MM-DD-<run-id>.md` - leaderboard and case detail report
+- `YYYY-MM-DD-<run-id>.json` - full results with per-case scores and model responses
+- `YYYY-MM-DD-<run-id>.md` - leaderboard, cost-quality frontier, and case detail report
 
 ## Docs
 
 - [Getting started](docs/getting-started.md)
 - [Provider setup: Ollama, MLX, OpenRouter, flash-moe](docs/providers.md)
 - [Writing eval packs](docs/writing-eval-packs.md)
-- [Quantization testing](docs/quantization.md)
+- [Quantization testing with flash-moe](docs/quantization.md)
 
 ## Contributing
 
-Contributions welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-The highest-value contribution is a well-designed eval pack for a domain we
-don't cover yet.
+The best contribution is a well-designed eval pack for a domain we don't have yet: coding, reasoning, instruction-following, domain-specific. Open an issue first to align before building. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
