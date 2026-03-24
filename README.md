@@ -27,19 +27,53 @@ The authors were thorough about the engineering. The quality validation was not.
   local-fast matches cloud-mini within 0.4pts. Use the free model.
 ```
 
+The "cost-quality frontier" line answers the core question: is paying for cloud worth it for your tasks?
+
 **Who this is for:**
 - You run Ollama and want to know which local model to use for your actual tasks, not a generic benchmark
 - You are deciding whether paying for cloud is worth it or whether a free local model is close enough
 - You just quantized a model and need to know what broke
 - You make model decisions on intuition and want to stop
 
+## What's supported
+
+**Local inference**
+
+| Provider | Integration | Notes |
+|----------|-------------|-------|
+| Ollama | Deep: auto-discover, MoE detection, any host | `verdict models discover` |
+| MLX (Apple Silicon) | Deep: mlx-lm server auto-detect | Faster than Ollama on M-series |
+| LM Studio | Generic compat (localhost:1234) | Works today, no auto-discover yet |
+| flash-moe + custom servers | Generic compat (any port) | Any OpenAI-compat HTTP endpoint |
+
+**Cloud**
+
+| Provider | How |
+|----------|-----|
+| OpenRouter | One key, access to every major model |
+| OpenAI | Direct |
+| Anthropic | Via OpenRouter or compat proxy |
+| Groq | Direct |
+| Mistral | Direct |
+| Any OpenAI-compat API | `base_url` + `api_key` in config |
+
+**The judge can be any model in your config, including a local one.** No cloud account required to get started if you have Ollama running.
+
+**Coming**
+- LM Studio discovery (currently works via compat, no auto-detect yet)
+- `verdict compare` for run-vs-run deltas
+- Cross-judge strategy (two judge models, averaged scores)
+- Tag-based case filtering
+
 ## Quick start
+
+`npx verdict init` creates `verdict.yaml` and starter eval packs in your current directory.
 
 ```bash
 npx verdict init
 ```
 
-This creates `verdict.yaml` and starter eval packs in your current directory. Add your models, then:
+Add your models to `verdict.yaml`, then:
 
 ```bash
 verdict models discover   # find installed Ollama models, get YAML to paste in
@@ -104,13 +138,19 @@ mlx_lm.server --model mlx-community/Llama-3.2-3B-Instruct-4bit --port 8080
     tags: [local, free, apple-silicon]
 ```
 
-### SSD-streaming and MoE inference
+### LM Studio and custom servers
 
-[flash-moe](https://github.com/danveloper/flash-moe) showed that MoE models can run at interactive speeds on consumer hardware by streaming expert weights from SSD on demand. Only 2% of weights are active at any given token, which makes it viable.
-
-If you're running flash-moe or any other custom inference server, add it as a generic compat endpoint:
+LM Studio, flash-moe, and any other server that implements the OpenAI `/v1/chat/completions` endpoint works as a generic compat provider:
 
 ```yaml
+  # LM Studio (default port 1234)
+  - id: lmstudio
+    base_url: "http://localhost:1234/v1"
+    api_key: "none"
+    model: "meta-llama-3-8b-instruct"
+    tags: [local, free]
+
+  # flash-moe or any custom server
   - id: flash-moe-local
     base_url: "http://localhost:8080/v1"
     api_key: "none"
@@ -118,15 +158,13 @@ If you're running flash-moe or any other custom inference server, add it as a ge
     tags: [local, free, moe, ssd-streaming]
 ```
 
-Then run the quantization pack to validate output quality across bit depths:
+Then run the quantization pack to validate output quality:
 
 ```bash
 verdict run --pack ./eval-packs/quantization.yaml
 ```
 
 ## Cloud models
-
-Any OpenAI-compatible endpoint works. One config entry per model.
 
 ```yaml
   # OpenRouter: one key, every major cloud model
@@ -156,11 +194,11 @@ Any OpenAI-compatible endpoint works. One config entry per model.
 |------|-------|-------|
 | `general.yaml` | 10 | Factual recall, reasoning, coding, instruction following |
 | `moe.yaml` | 5 | Multi-domain tasks that highlight MoE model strengths |
-| `quantization.yaml` | 10 | Structured output, tool calling format, instruction precision |
+| `quantization.yaml` | 10 | JSON output (3), tool calling (1), structured data (2), instruction precision (4) |
 
-The quantization pack uses deterministic scoring (`JSON.parse()` pass or fail) for cases that require structured output. No LLM judge call, no subjectivity. If a model produces `'name'` instead of `"name"`, it fails. These are the cases that would have caught the flash-moe 2-bit regression before the paper shipped.
+The quantization pack uses deterministic scoring (`JSON.parse()` pass or fail) where structured output is required. No LLM judge call. If a model produces `'name'` instead of `"name"`, it fails. These are the cases that would have caught the flash-moe 2-bit regression before the paper shipped.
 
-Write your own pack:
+Write your own:
 
 ```yaml
 # eval-packs/my-pack.yaml
@@ -196,7 +234,7 @@ models:
     max_tokens: <number>       # default 1024
 
 judge:
-  model: <model-id>            # any model id from the models list above
+  model: <model-id>            # any model id from the list above, local or cloud
   blind: true                  # model names never shown to the judge
   rubric:
     accuracy: 0.4              # is it correct?
@@ -235,7 +273,7 @@ verdict models discover                  # scan for local inference servers
 
 Every run saves to `./results/`:
 
-- `YYYY-MM-DD-<run-id>.json` - full results with per-case scores and model responses
+- `YYYY-MM-DD-<run-id>.json` - full results with per-case scores and responses
 - `YYYY-MM-DD-<run-id>.md` - leaderboard, cost-quality frontier, and case detail report
 
 ## Docs
@@ -247,7 +285,7 @@ Every run saves to `./results/`:
 
 ## Contributing
 
-The best contribution is a well-designed eval pack for a domain we don't have yet: coding, reasoning, instruction-following, domain-specific. Open an issue first to align before building. See [CONTRIBUTING.md](CONTRIBUTING.md).
+The best contribution is a well-designed eval pack for a domain we don't cover yet: coding, reasoning, instruction-following, domain-specific. [Open an eval pack issue](https://github.com/hnshah/verdict/issues/new?template=eval-pack.yml) to propose one. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
