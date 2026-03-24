@@ -51,7 +51,7 @@ export async function callModel(
 
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err)
-    if (attempt < config.run?.retries ?? 2) {
+    if (attempt < 2) {
       await new Promise(r => setTimeout(r, 1000 * (attempt + 1)))
       return callModel(config, prompt, attempt + 1)
     }

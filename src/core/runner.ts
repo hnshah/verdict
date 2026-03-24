@@ -1,6 +1,7 @@
 import type { Config, EvalPack, RunResult, ModelSummary, CaseResult } from '../types/index.js'
 import { callModel } from '../providers/compat.js'
 import { judgeResponse } from '../judge/llm.js'
+import { scoreDeterministic, isDeterministic } from '../judge/deterministic.js'
 
 export async function runEvals(
   config: Config,
@@ -45,8 +46,10 @@ export async function runEvals(
       await Promise.all(jobs.slice(i, i + concurrency).map(fn => fn()))
     }
 
-    // Judge each response (blind)
-    log(`${evalCase.id}: judging`)
+    // Judge each response (blind or deterministic)
+    const usesDeterministic = isDeterministic(evalCase.scorer)
+    if (!usesDeterministic) log(`${evalCase.id}: judging`)
+
     for (const [modelId, resp] of Object.entries(caseResult.responses)) {
       if (resp.error || !resp.text) {
         caseResult.scores[modelId] = {
@@ -56,7 +59,12 @@ export async function runEvals(
         continue
       }
       try {
-        const score = await judgeResponse(judgeModel, config.judge, evalCase.prompt, evalCase.criteria, resp.text)
+        let score
+        if (usesDeterministic) {
+          score = scoreDeterministic(evalCase.scorer, resp.text, evalCase.expected)!
+        } else {
+          score = await judgeResponse(judgeModel, config.judge, evalCase.prompt, evalCase.criteria, resp.text)
+        }
         caseResult.scores[modelId] = score
         summary[modelId].avg_accuracy += score.accuracy
         summary[modelId].avg_completeness += score.completeness

@@ -61,6 +61,9 @@ export const EvalCaseSchema = z.object({
   criteria: z.string(),
   expected: z.string().optional(),
   tags: z.array(z.string()).default([]),
+  // scorer: 'llm' uses LLM judge (default), 'json' parses output as JSON (pass/fail),
+  // 'exact' checks exact string match, 'contains' checks substring presence
+  scorer: z.enum(['llm', 'json', 'exact', 'contains']).default('llm'),
   judge_type: z.enum(['llm', 'reference', 'keyword']).default('llm'),
   max_tokens: z.number().optional(),
 })

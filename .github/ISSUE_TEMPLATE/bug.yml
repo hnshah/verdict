@@ -1,0 +1,53 @@
+name: Bug report
+description: Something is broken
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting. The more detail, the faster we can fix it.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what did you get?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run verdict run --pack ...
+        2. See error ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: verdict.yaml (redact API keys)
+      render: yaml
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error output
+      render: shell
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js version
+      placeholder: "e.g. 20.11.0"
+    validations:
+      required: true
+
+  - type: input
+    id: verdict-version
+    attributes:
+      label: verdict version
+      placeholder: "e.g. 0.1.0"
+    validations:
+      required: true

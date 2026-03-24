@@ -27,7 +27,8 @@ cases:
     criteria: |
       Output is valid, parseable JSON. Uses double-quoted string keys. Correct
       field names (name, age, active). Correct types (string, number, boolean).
-      No surrounding text, no ```json wrapper.
+      No surrounding text, no json wrapper.
+    scorer: json
     tags: [json, structured-output, quantization-sensitive]
 
   - id: quant-002
@@ -39,6 +40,7 @@ cases:
     criteria: |
       Valid JSON array. Three objects. Correct id integers. Correct label strings.
       Double-quoted keys and string values. Parseable without modification.
+    scorer: json
     tags: [json, arrays, quantization-sensitive]
 
   - id: quant-003
@@ -52,6 +54,7 @@ cases:
       Valid JSON. Tool field is "search". Parameters object has query set to
       "current temperature in Tokyo" and max_results set to 3 (integer, not string).
       Double-quoted keys throughout.
+    scorer: json
     tags: [json, tool-calling, quantization-sensitive]
 
   - id: quant-004
@@ -127,4 +130,6 @@ cases:
     criteria: |
       The output is exactly "pineapple" with no other characters except possibly
       a trailing newline. No punctuation, no explanation, no formatting.
+    scorer: contains
+    expected: "pineapple"
     tags: [instruction-following, precision, quantization-sensitive]

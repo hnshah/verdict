@@ -6,8 +6,19 @@
   "bin": {
     "verdict": "./dist/cli/index.js"
   },
+  "files": [
+    "dist/",
+    "eval-packs/",
+    "docs/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "tsup src/cli/index.ts --format esm --target node20 --out-dir dist/cli --clean --banner.js '#!/usr/bin/env node' --shims",
+    "prepublishOnly": "npm run build && npm run typecheck",
     "dev": "npx tsx src/cli/index.ts",
     "typecheck": "tsc --noEmit"
   },
@@ -26,6 +37,15 @@
     "tsx": "^4.7.0",
     "typescript": "^5.4.0"
   },
-  "keywords": ["llm", "eval", "benchmark", "ollama", "mlx", "openai"],
-  "license": "MIT"
+  "keywords": ["llm", "eval", "benchmark", "ollama", "mlx", "openai", "moe", "local-ai"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hnshah/verdict.git"
+  },
+  "homepage": "https://github.com/hnshah/verdict#readme",
+  "bugs": {
+    "url": "https://github.com/hnshah/verdict/issues"
+  },
+  "author": "Hiten Shah"
 }

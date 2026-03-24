@@ -1,0 +1,43 @@
+name: New eval pack
+description: Propose a new eval pack or add cases to an existing one
+labels: [eval-pack]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Eval packs are the most valuable contribution you can make.
+        A good pack isolates a specific capability and has cases with unambiguous criteria.
+
+  - type: input
+    id: pack-name
+    attributes:
+      label: Pack name
+      placeholder: "e.g. coding, reasoning, instruction-following"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-it-tests
+    attributes:
+      label: What does this pack test?
+      description: What capability, failure mode, or domain? Why is this useful?
+    validations:
+      required: true
+
+  - type: textarea
+    id: sample-cases
+    attributes:
+      label: Sample cases (YAML)
+      description: Show 2-3 representative cases in eval pack format
+      render: yaml
+
+  - type: dropdown
+    id: scorer
+    attributes:
+      label: Primary scorer type
+      options:
+        - llm (prose, reasoning, explanation)
+        - json (structured output validation)
+        - exact (precise string match)
+        - contains (substring check)
+        - mixed
