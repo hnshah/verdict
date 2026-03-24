@@ -1,0 +1,22 @@
+# Code Quality Evaluation Example
+# Test models on code generation and review tasks
+
+name: Code Quality Evaluation
+version: 1.0.0
+description: Evaluate code generation and review capabilities
+
+cases:
+  - id: code-001
+    prompt: "Write a Python function to reverse a string"
+    criteria: "Working function, handles edge cases, clear variable names"
+    tags: [coding, python, easy]
+
+  - id: code-002
+    prompt: "Review this code: `for i in range(len(arr)): print(arr[i])`"
+    criteria: "Suggests using `for item in arr`, explains why it's better"
+    tags: [review, python, medium]
+
+  - id: code-003
+    prompt: "Explain the difference between == and === in JavaScript"
+    criteria: "Mentions type coercion, provides examples, recommends ==="
+    tags: [explanation, javascript, medium]

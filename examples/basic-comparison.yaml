@@ -1,0 +1,22 @@
+# Basic Model Comparison Example
+# Compare two models on simple tasks
+
+name: Basic Comparison Example
+version: 1.0.0
+description: Simple example comparing two local models
+
+cases:
+  - id: basic-001
+    prompt: "What is the capital of France?"
+    criteria: "Answer should be Paris"
+    tags: [factual, easy]
+
+  - id: basic-002
+    prompt: "Explain recursion in one sentence."
+    criteria: "Clear definition mentioning function calling itself"
+    tags: [technical, medium]
+
+  - id: basic-003
+    prompt: "Write a haiku about coding."
+    criteria: "3 lines, 5-7-5 syllable pattern, coding-related"
+    tags: [creative, easy]
