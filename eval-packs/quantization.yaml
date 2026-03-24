@@ -1,0 +1,130 @@
+# eval-packs/quantization.yaml
+#
+# Quantization sensitivity benchmark.
+#
+# Designed to catch quality regressions at lower bit depths (2-bit, 3-bit)
+# that simpler benchmarks miss. The flash-moe paper claimed 2-bit experts were
+# "indistinguishable" from 4-bit based on three prose tasks -- then later
+# discovered 2-bit broke tool calling and JSON output entirely.
+#
+# These cases specifically target the failure modes that show up first:
+# structured output, JSON formatting, instruction precision, and counting.
+# If a model passes all 10 cases, it is viable for production use at that
+# quantization level. If it fails quant-001 through quant-004, it is not.
+
+name: Quantization Sensitivity
+version: 1.0.0
+description: 10 cases that catch output degradation from aggressive quantization. Validates JSON output, tool calling format, structured data, and instruction precision.
+
+cases:
+  - id: quant-001
+    prompt: |
+      Return a JSON object with exactly these fields:
+        name: "Alice"
+        age: 32
+        active: true
+      Output ONLY the JSON. No explanation. No markdown code block.
+    criteria: |
+      Output is valid, parseable JSON. Uses double-quoted string keys. Correct
+      field names (name, age, active). Correct types (string, number, boolean).
+      No surrounding text, no ```json wrapper.
+    tags: [json, structured-output, quantization-sensitive]
+
+  - id: quant-002
+    prompt: |
+      Output a JSON array of 3 objects. Each object has:
+        id: integer (1, 2, 3)
+        label: string ("alpha", "beta", "gamma")
+      Output ONLY the JSON array. Nothing else.
+    criteria: |
+      Valid JSON array. Three objects. Correct id integers. Correct label strings.
+      Double-quoted keys and string values. Parseable without modification.
+    tags: [json, arrays, quantization-sensitive]
+
+  - id: quant-003
+    prompt: |
+      Produce a tool call in this exact JSON format:
+      {"tool": "search", "parameters": {"query": "Paris weather", "max_results": 5}}
+      
+      Replace nothing. Output that exact JSON, substituting only the values I describe:
+      query should be "current temperature in Tokyo", max_results should be 3.
+    criteria: |
+      Valid JSON. Tool field is "search". Parameters object has query set to
+      "current temperature in Tokyo" and max_results set to 3 (integer, not string).
+      Double-quoted keys throughout.
+    tags: [json, tool-calling, quantization-sensitive]
+
+  - id: quant-004
+    prompt: |
+      List exactly 5 prime numbers between 10 and 50.
+      One number per line. Numbers only. No explanations, no labels, no punctuation.
+    criteria: |
+      Exactly 5 lines. Each line contains only a number. All are prime numbers
+      between 10 and 50 (11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47 are valid).
+      No extra text anywhere.
+    tags: [counting, instruction-following, quantization-sensitive]
+
+  - id: quant-005
+    prompt: |
+      Write a markdown table with exactly 3 columns: Name, Score, Grade.
+      Include exactly 3 data rows:
+        Alice, 92, A
+        Bob, 74, C
+        Carol, 88, B
+      Output only the table. No explanation before or after.
+    criteria: |
+      Valid markdown table with pipe characters. Header row present with correct
+      column names. Separator row with dashes present. Exactly 3 data rows with
+      the correct values. No text outside the table.
+    tags: [markdown, structured-output, quantization-sensitive]
+
+  - id: quant-006
+    prompt: |
+      Complete this sentence EXACTLY, filling in only the blank:
+      "The capital of Japan is ___."
+      Output the complete sentence with the blank filled in. Nothing else.
+    criteria: |
+      Exactly the sentence "The capital of Japan is Tokyo." No other text.
+      Correct answer (Tokyo). Sentence ends with a period.
+    tags: [instruction-following, precision]
+
+  - id: quant-007
+    prompt: |
+      Convert this to valid JSON. Input:
+        First name: Maria
+        Last name: Garcia
+        Year born: 1990
+        Is employed: yes
+      
+      Output ONLY the JSON. Boolean for is_employed (true, not "yes").
+      Use snake_case keys.
+    criteria: |
+      Valid JSON. Keys are first_name, last_name, year_born, is_employed.
+      String values for names. Integer for year (1990, not "1990").
+      Boolean true for is_employed (not "yes" or "true").
+    tags: [json, type-coercion, quantization-sensitive]
+
+  - id: quant-008
+    prompt: |
+      Count the letter "r" in the word "strawberry". Output only the number.
+    criteria: |
+      The correct answer is 3. Output is only the digit 3 with no other text.
+    tags: [counting, character-level, quantization-sensitive]
+
+  - id: quant-009
+    prompt: |
+      Write a Python function called add_numbers that takes two parameters a and b
+      and returns their sum. Output only the function definition. No docstring,
+      no example usage, no explanation.
+    criteria: |
+      Correct Python function definition. Named add_numbers. Two parameters a and b.
+      Returns a + b. No extra code, no docstring, no print statements. Syntactically valid.
+    tags: [coding, instruction-following]
+
+  - id: quant-010
+    prompt: |
+      Respond with exactly the word "pineapple" and nothing else.
+    criteria: |
+      The output is exactly "pineapple" with no other characters except possibly
+      a trailing newline. No punctuation, no explanation, no formatting.
+    tags: [instruction-following, precision, quantization-sensitive]

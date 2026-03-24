@@ -2,7 +2,7 @@
 
 **LLM eval framework. Benchmark local and cloud models with one config file.**
 
-Compare Ollama models, MLX (Apple Silicon), MoE models, and cloud APIs. Get a leaderboard, cost-quality analysis, and delta reports. No account needed. Your data stays local.
+Run evals against Ollama, MLX, MoE models, and any cloud API. Get a leaderboard, cost-quality comparison, and output quality scores. No account, no cloud dependency. Your data stays local.
 
 ```
   verdict run
@@ -37,6 +37,18 @@ npm install -g verdict
 ```
 
 Node.js 18+ required.
+
+## Why verdict
+
+When you run a local model, the obvious questions are: *how good is it really?* and *is it worth paying for cloud?*
+
+The default way to answer those — prompting both and eyeballing — misses a lot. You end up with confident but wrong intuitions about which model to use, especially when:
+
+- Quantization degrades output. A 2-bit MoE model may give fluent prose but silently break JSON output and tool calling.
+- Cost tradeoffs are non-obvious. A free local model might be 92% as good as a $0.80/1M-token cloud model for your actual tasks.
+- Different models have different failure modes. You want data, not vibes.
+
+verdict runs structured evals, judges responses against a rubric, and tells you where each model actually stands.
 
 ## Local inference
 
@@ -74,7 +86,7 @@ Point `OLLAMA_HOST` at any machine to use a remote Ollama instance.
 ### MLX (Apple Silicon)
 
 MLX runs models natively on Apple Silicon via mlx-lm. Faster inference
-and lower memory than Ollama on M-series chips.
+and lower memory pressure than Ollama on M-series chips.
 
 ```bash
 pip install mlx-lm
@@ -91,31 +103,33 @@ In verdict.yaml:
     tags: [local, free, mlx, apple-silicon]
 ```
 
-### MoE models
+### MoE models and quantization
 
-Mixture-of-Experts models activate different expert weights per token.
-They often match dense models above their size class, especially on
-multi-domain tasks. verdict tags and tracks MoE models automatically.
+Mixture-of-Experts models activate only a fraction of expert weights per token, which makes them well-suited for SSD-streaming inference on consumer hardware. [flash-moe](https://github.com/danveloper/flash-moe) demonstrated this by running Qwen3.5-397B on a 48GB MacBook at 4+ tokens/second by streaming expert weights from NVMe on demand.
+
+The catch: lower-bit quantization (2-bit) can silently degrade output quality in ways that simple benchmarks miss. The flash-moe paper claimed 2-bit was indistinguishable from 4-bit based on a handful of prose tasks, then discovered later that 2-bit broke JSON output and tool calling entirely.
+
+That is exactly what verdict is for.
 
 ```bash
 # Via Ollama
-ollama pull deepseek-r1:7b     # 7B active, 671B total
+ollama pull deepseek-r1:7b
 ollama pull mixtral:8x7b
-ollama pull qwen2.5:14b-instruct  # includes MoE variants
 
-# Via MLX
-mlx_lm.server --model mlx-community/DeepSeek-R1-8B-Instruct-4bit
+# flash-moe or any other custom inference server
+# add it as a generic compat endpoint in verdict.yaml:
+#   base_url: "http://localhost:8080/v1"
+#   api_key: "none"
 ```
 
-Use `eval-packs/moe.yaml` to run tasks that highlight MoE strengths:
-multi-domain reasoning, cross-language tasks, and applied problem solving.
+Use `eval-packs/quantization.yaml` to validate output quality at any quantization level, or `eval-packs/moe.yaml` for tasks that highlight MoE strengths across domains.
 
 ## Cloud models
 
 Any OpenAI-compatible endpoint works. One config entry per model.
 
 ```yaml
-  # OpenRouter (one key, every cloud model)
+  # OpenRouter (one key, access to every cloud model)
   - id: cloud-fast
     base_url: "https://openrouter.ai/api/v1"
     api_key: "${OPENROUTER_API_KEY}"
@@ -188,6 +202,9 @@ Eval cases are portable YAML. Comes with:
 |------|-------|-------|
 | `general.yaml` | 10 | Factual, reasoning, coding, instruction following |
 | `moe.yaml` | 5 | Multi-domain tasks that highlight MoE strengths |
+| `quantization.yaml` | 10 | JSON output, tool calling format, instruction precision |
+
+The quantization pack specifically targets the failure modes that show up first when bit depth drops: structured output, JSON formatting, type coercion, and counting precision. If a model passes all 10 cases, it is viable for production use at that quantization level.
 
 Write your own:
 
@@ -204,11 +221,11 @@ cases:
 ## CLI reference
 
 ```bash
-verdict init                         # create verdict.yaml + starter packs
+verdict init                         # create verdict.yaml and starter packs
 verdict run                          # run with ./verdict.yaml
 verdict run --config other.yaml      # custom config
 verdict run --models local-fast      # run subset of models
-verdict run --pack moe               # run specific pack
+verdict run --pack quantization      # run specific pack
 verdict run --dry-run                # preview without API calls
 verdict models                       # ping all configured models
 verdict models discover              # scan for local inference servers
