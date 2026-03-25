@@ -170,7 +170,8 @@ export async function runEvals(
     if (!usesDeterministic) log(`${evalCase.id}: judging`)
 
     for (const [modelId, resp] of Object.entries(caseResult.responses)) {
-      if (resp.error || !resp.text) {
+      const hasContent = resp.text || (evalCase.scorer === 'tool_call' && resp.tool_calls?.length)
+      if (resp.error || !hasContent) {
         caseResult.scores[modelId] = {
           accuracy: 0, completeness: 0, conciseness: 0, total: 0,
           reasoning: resp.error ?? 'no response',
