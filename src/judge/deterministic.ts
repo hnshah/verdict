@@ -8,32 +8,56 @@ import type { JudgeScore, ToolCallResult } from '../types/index.js'
  * but scoring is binary: pass (10/10) or fail (0/10).
  */
 
+/**
+ * Extract JSON from text that may contain markdown fences and surrounding text.
+ * Handles:
+ * - ```json ... ```
+ * - ``` ... ```
+ * - JSON surrounded by explanatory text
+ */
+function extractJson(text: string): string | null {
+  const trimmed = text.trim()
+  
+  // Try to find JSON in markdown code fence
+  const fenceMatch = trimmed.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/)
+  if (fenceMatch) {
+    return fenceMatch[1].trim()
+  }
+  
+  // Try to find JSON object/array in the text (greedy match for largest valid JSON)
+  const jsonObjectMatch = trimmed.match(/\{[\s\S]*\}/)
+  if (jsonObjectMatch) {
+    return jsonObjectMatch[0].trim()
+  }
+  
+  const jsonArrayMatch = trimmed.match(/\[[\s\S]*\]/)
+  if (jsonArrayMatch) {
+    return jsonArrayMatch[0].trim()
+  }
+  
+  return null
+}
+
 export function scoreJson(output: string): JudgeScore {
-  const text = output.trim()
-  // Strip markdown code fences if present
-  const stripped = text
-    .replace(/^```(?:json)?\s*/i, '')
-    .replace(/\s*```$/, '')
-    .trim()
+  const extracted = extractJson(output)
+  
+  if (!extracted) {
+    return {
+      accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+      reasoning: `No JSON found in output: ${output.trim().slice(0, 60)}`,
+    }
+  }
 
   try {
-    JSON.parse(stripped)
+    JSON.parse(extracted)
     return {
       accuracy: 10, completeness: 10, conciseness: 10, total: 10,
       reasoning: 'Valid JSON output.',
     }
   } catch (err) {
-    // Give partial credit for near-misses (the json structure is there but malformed)
-    const looksLikeJson = stripped.startsWith('{') || stripped.startsWith('[')
-    if (looksLikeJson) {
-      return {
-        accuracy: 2, completeness: 2, conciseness: 2, total: 2,
-        reasoning: `JSON structure detected but parse failed: ${err instanceof Error ? err.message : err}`,
-      }
-    }
     return {
-      accuracy: 0, completeness: 0, conciseness: 0, total: 0,
-      reasoning: `Not JSON: ${stripped.slice(0, 60)}`,
+      accuracy: 2, completeness: 2, conciseness: 2, total: 2,
+      reasoning: `JSON structure found but parse failed: ${err instanceof Error ? err.message : err}`,
     }
   }
 }
@@ -126,19 +150,22 @@ export function scoreToolCall(
 }
 
 export function scoreJsonSchema(output: string, schema: Record<string, unknown>): JudgeScore {
-  const text = output.trim()
-  const stripped = text
-    .replace(/^```(?:json)?\s*/i, '')
-    .replace(/\s*```$/, '')
-    .trim()
+  const extracted = extractJson(output)
+  
+  if (!extracted) {
+    return {
+      accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+      reasoning: `No JSON found in output: ${output.trim().slice(0, 60)}`,
+    }
+  }
 
   let parsed: Record<string, unknown>
   try {
-    parsed = JSON.parse(stripped)
+    parsed = JSON.parse(extracted)
   } catch {
     return {
       accuracy: 0, completeness: 0, conciseness: 0, total: 0,
-      reasoning: `Invalid JSON: ${stripped.slice(0, 60)}`,
+      reasoning: `JSON parse failed: ${extracted.slice(0, 60)}`,
     }
   }
 
