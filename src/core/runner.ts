@@ -2,9 +2,9 @@ import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
 import type { Config, EvalPack, RunResult, ModelSummary, CaseResult, Checkpoint } from '../types/index.js'
-import { callModel } from '../providers/compat.js'
+import { callModel, callModelMultiTurn, callModelWithTools } from '../providers/compat.js'
 import { judgeResponse } from '../judge/llm.js'
-import { scoreDeterministic, isDeterministic } from '../judge/deterministic.js'
+import { scoreDeterministic, isDeterministic, scoreToolCall } from '../judge/deterministic.js'
 
 export function computeConfigHash(config: Config): string {
   const key = JSON.stringify({ models: config.models.map(m => m.id), judge: config.judge.model, packs: config.packs })
@@ -35,6 +35,41 @@ function saveCheckpoint(outputDir: string, checkpoint: Checkpoint): void {
 function deleteCheckpoint(outputDir: string): void {
   const cpPath = getCheckpointPath(outputDir)
   if (fs.existsSync(cpPath)) fs.unlinkSync(cpPath)
+}
+
+async function runMultiTurn(
+  modelConfig: import('../types/index.js').ModelConfig,
+  turns: Array<{ role: 'user' | 'assistant'; content: string }>
+): Promise<import('../types/index.js').ModelResponse> {
+  const messages: Array<{ role: string; content: string }> = []
+  let lastResponse: import('../types/index.js').ModelResponse | null = null
+
+  for (const turn of turns) {
+    if (turn.role === 'assistant' && turn.content === '__model__') {
+      // Call the model with conversation history so far
+      const resp = await callModelMultiTurn(modelConfig, messages)
+      messages.push({ role: 'assistant', content: resp.text })
+      lastResponse = resp
+    } else {
+      messages.push({ role: turn.role, content: turn.content })
+    }
+  }
+
+  // If the last turn is a user message, we need one final model call
+  const lastTurn = turns[turns.length - 1]
+  if (lastTurn.role === 'user') {
+    const resp = await callModelMultiTurn(modelConfig, messages)
+    lastResponse = resp
+  }
+
+  if (!lastResponse) {
+    return {
+      model_id: modelConfig.id, text: '', input_tokens: 0,
+      output_tokens: 0, latency_ms: 0, error: 'No model response generated in multi-turn',
+    }
+  }
+
+  return lastResponse
 }
 
 export async function runEvals(
@@ -114,7 +149,14 @@ export async function runEvals(
 
     // Run all models concurrently (chunked)
     const jobs = config.models.map(m => async () => {
-      const resp = await callModel(m, evalCase.prompt)
+      let resp
+      if (evalCase.scorer === 'tool_call' && evalCase.tools && evalCase.tools.length > 0) {
+        resp = await callModelWithTools(m, evalCase.prompt, evalCase.tools)
+      } else if (evalCase.turns && evalCase.turns.length > 0) {
+        resp = await runMultiTurn(m, evalCase.turns)
+      } else {
+        resp = await callModel(m, evalCase.prompt, 0, evalCase.image)
+      }
       caseResult.responses[m.id] = resp
       if (resp.cost_usd) summary[m.id].total_cost_usd += resp.cost_usd
       summary[m.id].avg_latency_ms += resp.latency_ms
@@ -137,8 +179,10 @@ export async function runEvals(
       }
       try {
         let score
-        if (usesDeterministic) {
-          score = scoreDeterministic(evalCase.scorer, resp.text, evalCase.expected)!
+        if (evalCase.scorer === 'tool_call') {
+          score = scoreToolCall(resp.tool_calls, evalCase.expected_tool ?? '', evalCase.expected_args)
+        } else if (usesDeterministic) {
+          score = scoreDeterministic(evalCase.scorer, resp.text, evalCase.expected, evalCase.schema)!
         } else {
           score = await judgeResponse(judgeModel, config.judge, evalCase.prompt, evalCase.criteria, resp.text)
         }

@@ -53,17 +53,41 @@ export const ConfigSchema = z.object({
 })
 export type Config = z.infer<typeof ConfigSchema>
 
+// ─── Tool definitions ────────────────────────────────────────────────────────
+
+export const ToolDefSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  parameters: z.record(z.unknown()),
+})
+export type ToolDef = z.infer<typeof ToolDefSchema>
+
+export interface ToolCallResult {
+  name: string
+  arguments: Record<string, unknown>
+}
+
 // ─── Eval packs ──────────────────────────────────────────────────────────────
 
 export const EvalCaseSchema = z.object({
   id: z.string(),
-  prompt: z.string(),
+  prompt: z.string().default(''),
   criteria: z.string(),
   expected: z.string().optional(),
   tags: z.array(z.string()).default([]),
   // scorer: 'llm' uses LLM judge (default), 'json' parses output as JSON (pass/fail),
-  // 'exact' checks exact string match, 'contains' checks substring presence
-  scorer: z.enum(['llm', 'json', 'exact', 'contains']).default('llm'),
+  // 'exact' checks exact string match, 'contains' checks substring presence,
+  // 'jsonschema' validates JSON output against a schema, 'tool_call' scores tool usage
+  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'jsonschema', 'tool_call']).default('llm'),
+  schema: z.record(z.unknown()).optional(),
+  turns: z.array(z.object({
+    role: z.enum(['user', 'assistant']),
+    content: z.string(),
+  })).optional(),
+  image: z.string().optional(),
+  tools: z.array(ToolDefSchema).optional(),
+  expected_tool: z.string().optional(),
+  expected_args: z.record(z.unknown()).optional(),
   judge_type: z.enum(['llm', 'reference', 'keyword']).default('llm'),
   max_tokens: z.number().optional(),
 })
@@ -87,6 +111,7 @@ export interface ModelResponse {
   latency_ms: number
   cost_usd?: number
   error?: string
+  tool_calls?: ToolCallResult[]
 }
 
 export interface JudgeScore {
