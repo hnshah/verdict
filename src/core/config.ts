@@ -62,5 +62,14 @@ export function loadEvalPack(packPath: string, configDir: string): EvalPack {
     const issues = result.error.issues.map(i => `  ${i.path.join('.')}: ${i.message}`).join('\n')
     throw new Error(`Invalid eval pack ${packPath}:\n${issues}`)
   }
+
+  // Resolve image paths relative to pack file directory
+  const packDir = path.dirname(fullPath)
+  for (const evalCase of result.data.cases) {
+    if (evalCase.image && !evalCase.image.startsWith('http://') && !evalCase.image.startsWith('https://')) {
+      evalCase.image = path.resolve(packDir, evalCase.image)
+    }
+  }
+
   return result.data
 }

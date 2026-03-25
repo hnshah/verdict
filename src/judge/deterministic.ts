@@ -1,4 +1,4 @@
-import type { JudgeScore } from '../types/index.js'
+import type { JudgeScore, ToolCallResult } from '../types/index.js'
 
 /**
  * Deterministic scorers that don't require an LLM.
@@ -68,15 +68,129 @@ export function scoreContains(output: string, expected: string): JudgeScore {
   }
 }
 
+export function scoreToolCall(
+  toolCalls: ToolCallResult[] | undefined,
+  expectedTool: string,
+  expectedArgs?: Record<string, unknown>
+): JudgeScore {
+  if (!toolCalls || toolCalls.length === 0) {
+    return {
+      accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+      reasoning: 'No tool calls made.',
+    }
+  }
+
+  // Check if any tool call matches the expected tool
+  const matchingCall = toolCalls.find(tc => tc.name === expectedTool)
+  if (!matchingCall) {
+    return {
+      accuracy: 2, completeness: 2, conciseness: 2, total: 2,
+      reasoning: `Wrong tool called: got '${toolCalls[0].name}', expected '${expectedTool}'.`,
+    }
+  }
+
+  // Correct tool: +4pts
+  let score = 4
+  // Valid format: +2pts
+  score += 2
+
+  // Each expected arg present with correct value: +2pts (cap at 4pts total from args)
+  let argPoints = 0
+  const reasons: string[] = [`Correct tool: ${expectedTool}`]
+  if (expectedArgs) {
+    for (const [key, expectedVal] of Object.entries(expectedArgs)) {
+      if (argPoints >= 4) break
+      const actualVal = matchingCall.arguments[key]
+      if (JSON.stringify(actualVal) === JSON.stringify(expectedVal)) {
+        argPoints += 2
+        reasons.push(`arg '${key}' correct`)
+      } else {
+        reasons.push(`arg '${key}': expected ${JSON.stringify(expectedVal)}, got ${JSON.stringify(actualVal)}`)
+      }
+    }
+  }
+  score += argPoints
+
+  const total = Math.min(score, 10)
+  return {
+    accuracy: total, completeness: total, conciseness: total, total,
+    reasoning: reasons.join('; '),
+  }
+}
+
+export function scoreJsonSchema(output: string, schema: Record<string, unknown>): JudgeScore {
+  const text = output.trim()
+  const stripped = text
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```$/, '')
+    .trim()
+
+  let parsed: Record<string, unknown>
+  try {
+    parsed = JSON.parse(stripped)
+  } catch {
+    return {
+      accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+      reasoning: `Invalid JSON: ${stripped.slice(0, 60)}`,
+    }
+  }
+
+  if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    return {
+      accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+      reasoning: 'JSON output is not an object.',
+    }
+  }
+
+  let missingRequired = 0
+  let wrongType = 0
+  const reasons: string[] = []
+
+  const required = Array.isArray(schema.required) ? schema.required as string[] : []
+  for (const field of required) {
+    if (!(field in parsed)) {
+      missingRequired++
+      reasons.push(`missing required field: ${field}`)
+    }
+  }
+
+  const properties = (schema.properties ?? {}) as Record<string, Record<string, unknown>>
+  for (const [key, propSchema] of Object.entries(properties)) {
+    if (!(key in parsed)) continue
+    const expectedType = propSchema.type as string | undefined
+    if (!expectedType) continue
+    const value = parsed[key]
+    let actualType: string
+    if (Array.isArray(value)) actualType = 'array'
+    else if (value === null) actualType = 'null'
+    else actualType = typeof value
+    if (actualType !== expectedType) {
+      wrongType++
+      reasons.push(`field '${key}': expected ${expectedType}, got ${actualType}`)
+    }
+  }
+
+  const total = Math.max(0, 10 - (2 * missingRequired) - (1 * wrongType))
+  const reasoning = total === 10
+    ? 'JSON matches schema: all required fields present with correct types.'
+    : `Schema violations: ${reasons.join('; ')}`
+
+  return {
+    accuracy: total, completeness: total, conciseness: total, total,
+    reasoning,
+  }
+}
+
 export function isDeterministic(scorer: string): boolean {
-  return scorer === 'json' || scorer === 'exact' || scorer === 'contains'
+  return scorer === 'json' || scorer === 'exact' || scorer === 'contains' || scorer === 'jsonschema' || scorer === 'tool_call'
 }
 
 export function scoreDeterministic(
-  scorer: string, output: string, expected?: string
+  scorer: string, output: string, expected?: string, schema?: Record<string, unknown>
 ): JudgeScore | null {
   if (scorer === 'json') return scoreJson(output)
   if (scorer === 'exact') return scoreExact(output, expected ?? '')
   if (scorer === 'contains') return scoreContains(output, expected ?? '')
+  if (scorer === 'jsonschema') return scoreJsonSchema(output, schema ?? {})
   return null
 }
