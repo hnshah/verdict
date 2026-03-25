@@ -69,6 +69,15 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     return
   }
 
+  // MoE concurrency warning
+  const moeModels = config.models.filter(m => m.tags?.includes('moe'))
+  if (moeModels.length > 0 && config.run.concurrency > 1) {
+    console.log(chalk.yellow(`  ⚠  MoE model(s) detected: ${moeModels.map(m => m.id).join(', ')}`))
+    console.log(chalk.yellow(`     concurrency is ${config.run.concurrency} — MoE models are memory-intensive.`))
+    console.log(chalk.yellow('     Set concurrency: 1 in your config to avoid memory pressure on Apple Silicon.'))
+    console.log()
+  }
+
   const spinner = ora({ prefixText: '  ', text: 'Starting...' }).start()
   let result
   try {
