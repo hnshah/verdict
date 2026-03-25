@@ -77,16 +77,52 @@ export async function discoverCommand(): Promise<void> {
   // MLX
   const mlxPort = Number(process.env['MLX_PORT']) || 8080
   const mlxRunning = await isMLXRunning(mlxPort)
+  let foundMoE = false
+
   if (mlxRunning) {
     const models = await discoverMLX([mlxPort])
     console.log(chalk.green(`  MLX           localhost:${mlxPort}      running (Apple Silicon)`))
     for (const m of models) {
       const moeTag = m.is_moe ? chalk.cyan(' [MoE]') : ''
       console.log(`    ${m.model.padEnd(50)}${moeTag}`)
+      if (m.is_moe) foundMoE = true
+    }
+    if (models.length > 0) {
+      console.log()
+      console.log(chalk.dim('  Add to verdict.yaml:'))
+      for (const m of models.slice(0, 2)) {
+        const concurrency = m.is_moe ? 1 : 2
+        const timeout = m.is_moe ? 180000 : 60000
+        const moeComment = m.is_moe ? '  # MoE: use concurrency:1, long timeout' : ''
+        console.log(chalk.dim(`    - id: ${m.id}${moeComment}`))
+        console.log(chalk.dim(`      provider: mlx`))
+        console.log(chalk.dim(`      model: ${m.model}`))
+        console.log(chalk.dim(`      tags: [${m.tags.join(', ')}]`))
+        if (m.is_moe) {
+          console.log(chalk.dim(`      timeout_ms: ${timeout}  # MoE models are slow — give them time`))
+          console.log(chalk.dim(`  # In run config: concurrency: ${concurrency}  # avoid memory pressure`))
+        }
+      }
     }
   } else {
     console.log(chalk.dim(`  MLX           localhost:${mlxPort}      not running`))
     console.log(chalk.dim('    Start: mlx_lm.server --model mlx-community/Llama-3.2-3B-Instruct-4bit'))
+  }
+
+  // Ollama MoE routing hint
+  const ollamaHosts2 = ['localhost:11434']
+  const ollamaRunning2 = await isOllamaRunning(ollamaHosts2[0])
+  if (ollamaRunning2) {
+    const ollamaModels = await discoverOllama(ollamaHosts2)
+    if (ollamaModels.some(m => m.is_moe)) foundMoE = true
+  }
+
+  if (foundMoE) {
+    console.log()
+    console.log(chalk.cyan('  MoE models detected.'))
+    console.log(chalk.dim('  Run the MoE benchmark to see expert-switching advantages vs dense models:'))
+    console.log(chalk.dim('    verdict run --pack moe'))
+    console.log(chalk.dim('  Tip: also run general.yaml on a comparable dense model to see the delta.'))
   }
 
   console.log()

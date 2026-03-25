@@ -1,30 +1,108 @@
 # eval-packs/moe.yaml
 name: MoE Benchmark
-version: 1.0.0
-description: Tasks that highlight Mixture-of-Experts model strengths. MoE models activate different experts per token, excelling at tasks that require switching between domains.
+version: 2.0.0
+description: |
+  Tasks designed to reveal MoE (Mixture-of-Experts) model advantages over dense models.
+  MoE models activate different expert sub-networks per token, excelling at tasks that
+  require simultaneous deep expertise across multiple domains. These cases are chosen to
+  expose that advantage — a capable dense model should score lower on average.
+  
+  Run this pack against a MoE model AND a comparable dense model to see the delta.
 
 cases:
   - id: moe-001
-    prompt: "Explain how mRNA vaccines work, then write a Python function that simulates a simple S-curve adoption model."
-    criteria: "Correct mRNA mechanism (spike protein, immune training). Working Python S-curve function (sigmoid or logistic), accepts time parameter."
-    tags: [multi-domain, biology, coding]
+    prompt: |
+      In a single response, do all three:
+      1. Explain how Transformer attention works mathematically (include the softmax(QK^T/sqrt(d_k))V formula)
+      2. Write a working Python implementation of scaled dot-product attention
+      3. Explain what goes wrong biologically when the blood-brain barrier breaks down in Alzheimer's disease
+      
+      Do not separate these into sections — weave all three into one coherent explanation.
+    criteria: |
+      All three present and correct:
+      - Correct attention formula with scaling factor sqrt(d_k) explained
+      - Working Python: Q, K, V matrices, softmax over scaled dot products, returns weighted V
+      - Correct Alzheimer's/BBB explanation: tight junction disruption, neuroinflammation, amyloid accumulation
+      - Response is coherent, not just three separate answers stapled together
+    tags: [multi-domain, ml, neuroscience, coding, simultaneous-expertise]
 
   - id: moe-002
-    prompt: "Solve: if x^2 - 5x + 6 = 0, find x. Then describe one real-world system this equation could model."
-    criteria: "Correct roots: x=2, x=3. Reasonable real-world application (spring, projectile, population model, etc.)"
-    tags: [math, reasoning, applied]
+    prompt: |
+      A startup is building a distributed system. Answer these simultaneously:
+      - What CAP theorem tradeoff should they make for a financial ledger? Why?
+      - Write the SQL schema (PostgreSQL) for that ledger with proper constraints
+      - What Byzantine fault tolerance approach makes sense at 100 nodes?
+      - Name the one musical concept (from jazz theory) that best describes how distributed consensus works
+    criteria: |
+      - CAP: correctly chooses CP over AP for financial data, explains consistency requirement
+      - Valid PostgreSQL schema: accounts + transactions tables, CHECK constraints, DECIMAL for amounts, foreign keys
+      - BFT: mentions PBFT or threshold signatures, explains 3f+1 node requirement
+      - Jazz analogy: valid (e.g., call-and-response, trading fours, unison) with defensible reasoning
+    tags: [multi-domain, systems, sql, distributed, music, simultaneous-expertise]
 
   - id: moe-003
-    prompt: "Translate this Python code to TypeScript, then explain the main type safety difference: def add(a, b): return a + b"
-    criteria: "Correct TypeScript with type annotations (number params + return type). Explanation mentions static typing."
-    tags: [coding, multi-language]
+    prompt: |
+      Translate this Python to idiomatic Rust, then explain:
+      1. Why the Rust version is memory-safe without garbage collection
+      2. The equivalent concept in immunology (how the immune system "borrows" and "returns" resources without leaking)
+      
+      Python:
+      def process_items(items: list[str]) -> dict[str, int]:
+          result = {}
+          for item in items:
+              result[item] = len(item)
+          return result
+    criteria: |
+      - Correct idiomatic Rust: HashMap<String, usize>, ownership transferred into map, no clone abuse
+      - Memory safety explanation: ownership, no dangling pointers, stack allocation
+      - Immunology analogy: valid (e.g., cytokine signaling, receptor recycling, endocytosis/exocytosis) correctly mapped to borrow/return concept
+    tags: [coding, rust, immunology, analogy, multi-domain]
 
   - id: moe-004
-    prompt: "Describe the French Revolution in 3 sentences, then identify 2 parallels to a modern political movement."
-    criteria: "Historically accurate summary. Two specific, defensible modern parallels named."
-    tags: [history, analysis, reasoning]
+    prompt: |
+      You are debugging two separate issues at the same time:
+      
+      Issue A — Python traceback:
+      ```
+      KeyError: 'user_id'
+      at line 47: return data['user_id']
+      ```
+      The data dict comes from JSON parsed from an API that sometimes returns snake_case and sometimes camelCase.
+      
+      Issue B — A patient's blood test shows: elevated creatinine (2.8 mg/dL), low GFR (28), normal blood pressure.
+      
+      For each: give the root cause and the fix. Then explain what these two problems have in common structurally.
+    criteria: |
+      - Issue A: root cause is inconsistent API key naming; fix is .get('user_id') or .get('userId') with fallback, or key normalization
+      - Issue B: root cause is chronic kidney disease stage 3b; elevated creatinine + low GFR with normal BP suggests intrinsic renal disease, not hypertensive
+      - Structural parallel: valid (both are schema/format inconsistency problems; external system produces unpredictable output; defensive handling needed)
+    tags: [debugging, coding, medicine, pattern-matching, multi-domain]
 
   - id: moe-005
-    prompt: "Write a SQL query to find the top 3 customers by revenue from an orders table (customer_id, amount, date). Then explain what index would speed it up."
-    criteria: "Correct SQL with GROUP BY, SUM, ORDER BY DESC, LIMIT 3. Reasonable index suggestion (customer_id or composite)."
-    tags: [coding, sql, performance]
+    prompt: |
+      Design a minimal but complete content moderation system for a social platform. Cover:
+      - The ML pipeline (what models, what features, what training signal)
+      - The legal/policy layer (GDPR, CSAM, jurisdiction conflicts)
+      - The human review queue design (prioritization, appeals, reviewer burnout)
+      - One adversarial attack on this system and how to defend it
+      
+      Be concrete. No generic "use machine learning" answers.
+    criteria: |
+      - ML: specific model types (text classifier, image hash, embedding similarity), training signal (human labels + user reports), threshold calibration
+      - Legal: mentions hash-matching for CSAM (PhotoDNA or equivalent), GDPR right to explanation, jurisdiction conflicts for political speech
+      - Human review: prioritization by severity/velocity, appeals chain, rotation to prevent burnout
+      - Adversarial: specific attack (adversarial text, pixel perturbation, ban evasion via paraphrase) with concrete defense
+    tags: [ml, policy, systems-design, security, multi-domain]
+
+  - id: moe-006
+    prompt: |
+      Three rapid-fire expert questions. Answer all three with full precision:
+      
+      1. (Cardiology) What is the mechanism by which ACE inhibitors reduce cardiac remodeling after MI?
+      2. (Compiler theory) What is the halting problem and why does it make general static analysis impossible?
+      3. (Options trading) What does a negative vega position mean and when would you want one?
+    criteria: |
+      - ACE inhibitors: blocks angiotensin II, reduces aldosterone, lowers preload/afterload, prevents fibrosis via RAAS inhibition
+      - Halting problem: undecidable by Turing's proof; no algorithm can determine for all programs whether they terminate; implies static analysis must be conservative or incomplete
+      - Negative vega: short volatility exposure; profits when implied vol decreases; desired when you expect volatility to compress (e.g., post-earnings, range-bound markets)
+    tags: [medicine, cs-theory, finance, breadth, simultaneous-expertise]
