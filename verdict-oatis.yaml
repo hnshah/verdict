@@ -1,0 +1,47 @@
+name: "Oatis Live Run — Perplexity sonar vs sonar-pro"
+
+models:
+  - id: sonar
+    base_url: "https://api.perplexity.ai"
+    api_key: "${PERPLEXITY_API_KEY}"
+    model: "sonar"
+    cost_per_1m_input: 1.00
+    cost_per_1m_output: 1.00
+    tags: [cloud, perplexity, fast]
+
+  - id: sonar-pro
+    base_url: "https://api.perplexity.ai"
+    api_key: "${PERPLEXITY_API_KEY}"
+    model: "sonar-pro"
+    cost_per_1m_input: 3.00
+    cost_per_1m_output: 15.00
+    tags: [cloud, perplexity, flagship]
+
+  - id: sonar-reasoning
+    base_url: "https://api.perplexity.ai"
+    api_key: "${PERPLEXITY_API_KEY}"
+    model: "sonar-reasoning"
+    cost_per_1m_input: 1.00
+    cost_per_1m_output: 5.00
+    tags: [cloud, perplexity, reasoning]
+
+judge:
+  model: sonar-pro
+  blind: true
+  rubric:
+    accuracy: 0.4
+    completeness: 0.4
+    conciseness: 0.2
+
+packs:
+  - ./eval-packs/general.yaml
+  - ./eval-packs/reasoning.yaml
+
+run:
+  concurrency: 3
+  retries: 2
+  cache: true
+
+output:
+  dir: ./results
+  formats: [json, markdown]
