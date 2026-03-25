@@ -47,7 +47,7 @@ export const ConfigSchema = z.object({
   }).default({}),
   output: z.object({
     dir: z.string().default('./results'),
-    formats: z.array(z.enum(['json', 'markdown'])).default(['json', 'markdown']),
+    formats: z.array(z.enum(['json', 'markdown', 'slack'])).default(['json', 'markdown']),
     delta: z.boolean().default(true),
   }).default({}),
 })
@@ -126,6 +126,59 @@ export interface RunResult {
   models: string[]
   cases: CaseResult[]
   summary: Record<string, ModelSummary>
+  synthesis?: SynthesisResult
+  baselineComparison?: BaselineComparison
+}
+
+// ─── Checkpoint ──────────────────────────────────────────────────────────────
+
+export interface Checkpoint {
+  runId: string
+  configHash: string
+  completedCaseIds: string[]
+  partialResults: CaseResult[]
+  startedAt: string
+}
+
+// ─── Synthesis ───────────────────────────────────────────────────────────────
+
+export interface SynthesisResult {
+  verdict: 'CLEAR' | 'LEAN' | 'INCONCLUSIVE'
+  recommendation: string
+  confidence: 'HIGH' | 'MEDIUM' | 'LOW'
+  keyFinding: string
+  caveats: string
+}
+
+// ─── Baseline ────────────────────────────────────────────────────────────────
+
+export interface BaselineDelta {
+  model: string
+  scoreA: number
+  scoreB: number
+  delta: number
+  pctChange: number
+  regression: boolean
+}
+
+export interface BaselineComparison {
+  baselineName: string
+  baselineDate: string
+  deltas: BaselineDelta[]
+  newModels: string[]
+  removedModels: string[]
+  regressionAlert: boolean
+}
+
+// ─── Slack ───────────────────────────────────────────────────────────────────
+
+export interface SlackCard {
+  winner: string
+  winnerScore: number
+  runId: string
+  synthesis?: SynthesisResult
+  regressionAlert: boolean
+  markdownPath: string
 }
 
 // ─── Discovery ───────────────────────────────────────────────────────────────

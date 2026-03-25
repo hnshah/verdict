@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import type { RunResult } from '../types/index.js'
+import type { RunResult, BaselineComparison, SynthesisResult } from '../types/index.js'
 
 export function printSummary(result: RunResult): void {
   const sorted = result.models
@@ -77,4 +77,45 @@ export function printCaseDetail(
     const bar = '|'.repeat(scoreDisplay) + chalk.dim('.'.repeat(10 - scoreDisplay))
     console.log(`    ${chalk.dim(id.padEnd(22))} ${bar} ${score.total.toFixed(1)}  ${chalk.dim(score.reasoning.slice(0, 60))}`)
   }
+}
+
+export function printBaselineComparison(comparison: BaselineComparison): void {
+  console.log()
+  console.log(chalk.bold(`  Baseline comparison (vs "${comparison.baselineName}")`))
+  console.log(chalk.dim(`  Baseline date: ${comparison.baselineDate}`))
+  console.log(chalk.dim('  ' + '-'.repeat(60)))
+
+  for (const d of comparison.deltas) {
+    const arrow = d.delta > 0 ? chalk.green('↑') : d.delta < 0 ? chalk.red('↓') : chalk.dim('—')
+    const deltaStr = d.delta > 0 ? chalk.green(`+${d.delta.toFixed(2)}`) : d.delta < 0 ? chalk.red(d.delta.toFixed(2)) : chalk.dim('0.00')
+    const pct = d.pctChange > 0 ? chalk.green(`+${d.pctChange.toFixed(1)}%`) : d.pctChange < 0 ? chalk.red(`${d.pctChange.toFixed(1)}%`) : chalk.dim('0.0%')
+    const warn = d.regression ? chalk.red(' ⚠️  REGRESSION') : ''
+    console.log(`  ${arrow} ${d.model.padEnd(22)} ${d.scoreA.toFixed(2)} → ${d.scoreB.toFixed(2)}  ${deltaStr} (${pct})${warn}`)
+  }
+
+  for (const m of comparison.newModels) {
+    console.log(`  ${chalk.green('+')} ${m.padEnd(22)} ${chalk.green('new')}`)
+  }
+  for (const m of comparison.removedModels) {
+    console.log(`  ${chalk.red('-')} ${m.padEnd(22)} ${chalk.red('removed')}`)
+  }
+
+  if (comparison.regressionAlert) {
+    console.log()
+    console.log(chalk.red.bold('  ⚠️  REGRESSION ALERT: One or more models dropped > 0.5pts vs baseline'))
+  }
+  console.log()
+}
+
+export function printSynthesis(synthesis: SynthesisResult): void {
+  console.log()
+  console.log(chalk.bold('  Synthesis'))
+  console.log(chalk.dim('  ' + '-'.repeat(60)))
+  const verdictColor = synthesis.verdict === 'CLEAR' ? chalk.green : synthesis.verdict === 'LEAN' ? chalk.yellow : chalk.red
+  console.log(`  ${chalk.bold('Verdict:')}        ${verdictColor(synthesis.verdict)}`)
+  console.log(`  ${chalk.bold('Confidence:')}     ${synthesis.confidence}`)
+  console.log(`  ${chalk.bold('Recommendation:')} ${synthesis.recommendation}`)
+  console.log(`  ${chalk.bold('Key finding:')}    ${synthesis.keyFinding}`)
+  console.log(`  ${chalk.bold('Caveats:')}        ${chalk.dim(synthesis.caveats)}`)
+  console.log()
 }
