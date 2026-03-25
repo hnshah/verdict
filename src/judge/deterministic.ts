@@ -74,6 +74,13 @@ export function scoreToolCall(
   expectedArgs?: Record<string, unknown>
 ): JudgeScore {
   if (!toolCalls || toolCalls.length === 0) {
+    // If we expected NO tool call (empty string), this is correct!
+    if (expectedTool === '') {
+      return {
+        accuracy: 10, completeness: 10, conciseness: 10, total: 10,
+        reasoning: 'Correctly avoided calling any tool.',
+      }
+    }
     return {
       accuracy: 0, completeness: 0, conciseness: 0, total: 0,
       reasoning: 'No tool calls made.',
