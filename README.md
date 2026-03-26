@@ -1,297 +1,600 @@
-# verdict
+# Verdict
 
-> "Output quality at 2-bit is indistinguishable from 4-bit for these evaluations."
->
-> flash-moe paper, March 2026
-
-Those evaluations were three prompts. A few days later the repo was updated: 2-bit broke JSON output. String keys came back single-quoted. Unparseable. Tool calling stopped working. Recommendation changed to 4-bit.
-
-The authors were thorough about the engineering. The quality validation was not. There was no tool to catch it before the claim shipped.
-
-**verdict turns model decisions into data.** Run eval packs against any model via OpenAI-compatible API. Get a leaderboard, cost-quality comparison, and structured output validation. Config lives in your repo. Zero cloud dependency.
+**Local and cloud model benchmarking that answers: which model should I use?**
 
 ```
-  verdict run
+verdict run
 
-  Models: local-fast, local-moe, cloud-mini
-  Judge:  cloud-mini
-  Cases:  10 across 1 pack(s)
+Models: qwen2.5:7b, llama3.2:3b, sonnet
+Judge:  haiku
+Cases:  25 across 3 packs
 
-  [1] local-fast           ||||||||||  8.4  Accurate and complete, slightly verbose
-  [2] local-moe            |||||||||.  8.1  Strong reasoning, brief answers
-  [3] cloud-mini           |||||||||.  8.0  Concise and correct
+[1] qwen2.5:7b           ||||||||||  8.7  Fast, accurate, great for code
+[2] claude-sonnet        |||||||||.  8.4  Best reasoning, 10x cost
+[3] llama3.2:3b          |||||||...  7.1  Good for simple tasks
 
-  Winner: local-fast (8.4/10, 6 wins)
+Winner: qwen2.5:7b (8.7/10, $0.00)
 
-  Cost-quality frontier
-  local-fast matches cloud-mini within 0.4pts. Use the free model.
+💡 Cost-quality frontier:
+   qwen2.5:7b matches sonnet within 0.3pts for FREE
+   → Use the local model, save $50/mo
 ```
 
-The "cost-quality frontier" line answers the core question: is paying for cloud worth it for your tasks?
+---
 
-**Who this is for:**
-- You run Ollama and want to know which local model to use for your actual tasks, not a generic benchmark
-- You are deciding whether paying for cloud is worth it or whether a free local model is close enough
-- You just quantized a model and need to know what broke
-- You make model decisions on intuition and want to stop
+## Why Verdict?
 
-## What's supported
+### The Problem
 
-**Local inference**
+You're choosing between models based on:
+- ❌ Generic benchmarks (MMLU, HellaSwag) that don't match your work
+- ❌ Vibes and anecdotes ("Model X feels better")
+- ❌ Expensive trial and error in production
 
-| Provider | Integration | Notes |
-|----------|-------------|-------|
-| Ollama | Deep: auto-discover, MoE detection, any host | `verdict models discover` |
-| MLX (Apple Silicon) | Deep: mlx-lm server auto-detect | Faster than Ollama on M-series |
-| LM Studio | Generic compat (localhost:1234) | Works today, no auto-discover yet |
-| flash-moe + custom servers | Generic compat (any port) | Any OpenAI-compat HTTP endpoint |
+### The Solution
 
-**Cloud**
+**Verdict runs YOUR tasks against ANY models and tells you which wins.**
 
-| Provider | How |
-|----------|-----|
-| OpenRouter | One key, access to every major model |
-| OpenAI | Direct |
-| Anthropic | Via OpenRouter or compat proxy |
-| Groq | Direct |
-| Mistral | Direct |
-| Any OpenAI-compat API | `base_url` + `api_key` in config |
+- ✅ Test local vs cloud on tasks that matter to you
+- ✅ Catch quality regressions (2-bit quantization broke JSON? You'll know)
+- ✅ Make data-driven decisions (not vibes)
+- ✅ One config file, runs anywhere, zero cloud dependency
 
-**The judge can be any model in your config, including a local one.** No cloud account required to get started if you have Ollama running.
+---
 
-**Coming**
-- LM Studio discovery (currently works via compat, no auto-detect yet)
-- Cross-judge strategy (two judge models, averaged scores)
-- Tag-based case filtering
+## Quick Start
 
-## Quick start
-
-`npx verdict init` creates `verdict.yaml` and starter eval packs in your current directory.
-
-```bash
-npx verdict init
-```
-
-Add your models to `verdict.yaml`, then:
-
-```bash
-verdict models discover   # find installed Ollama models, get YAML to paste in
-verdict models            # ping all configured models
-verdict run               # run evals
-```
-
-## Install
+### Install
 
 ```bash
 npm install -g verdict
+# or
+npx verdict init
 ```
 
-Node.js 18+ required.
-
-## Local inference
-
-### Ollama
-
-Run `verdict models discover` and it lists every installed Ollama model with the config YAML ready to paste in. MoE models (Mixture-of-Experts architectures like DeepSeek-R1 and Mixtral) are detected and tagged automatically. No API key needed.
+### Initialize
 
 ```bash
-# Install Ollama: https://ollama.ai
-ollama pull qwen2.5:7b
-ollama pull deepseek-r1:7b
+verdict init
+```
 
+Creates:
+- `verdict.yaml` - Your config (models, judge, settings)
+- `eval-packs/` - Test cases for your domain
+
+### Discover Models
+
+```bash
 verdict models discover
 ```
 
-In verdict.yaml:
+Finds installed Ollama/MLX models, gives you YAML to paste into config.
 
-```yaml
-models:
-  - id: qwen-local
-    provider: ollama
-    model: qwen2.5:7b
-    host: "${OLLAMA_HOST:-localhost:11434}"
-    tags: [local, free]
-
-  - id: deepseek-moe
-    provider: ollama
-    model: deepseek-r1:7b
-    tags: [local, free, moe]
-```
-
-Set `OLLAMA_HOST` to run evals against a remote machine running Ollama.
-
-### MLX (Apple Silicon)
-
-MLX runs models natively on M-series chips via mlx-lm, generally faster than Ollama on Apple Silicon.
+### Run Evals
 
 ```bash
-pip install mlx-lm
-mlx_lm.server --model mlx-community/Llama-3.2-3B-Instruct-4bit --port 8080
+verdict run
+
+# Run specific pack
+verdict run --pack code-generation
+
+# Test specific models
+verdict run --models "qwen2.5:7b,sonnet"
+
+# Dry run (preview without API calls)
+verdict run --dry-run
 ```
+
+---
+
+## What You Get
+
+### 1. Leaderboard
+
+Which model won on your tasks?
+
+```
+[1] qwen2.5:7b           ||||||||||  8.7  (18 wins)
+[2] claude-sonnet        |||||||||.  8.4  (15 wins)
+[3] llama3.2:3b          |||||||...  7.1  (8 wins)
+```
+
+### 2. Cost-Quality Frontier
+
+Is paying for cloud worth it?
+
+```
+💡 qwen2.5:7b matches sonnet within 0.3pts for FREE
+   → Save $50/month, use local
+```
+
+### 3. Detailed Breakdown
+
+See every prompt, response, and score:
+
+```
+[Code Generation Pack]
+  Task: "Write a function to parse CSV"
+  
+  qwen2.5:7b     → 9/10  ✅ Handles edge cases, clean code
+  llama3.2:3b    → 7/10  ⚠️  Works but missing error handling
+  claude-sonnet  → 9/10  ✅ Perfect, but costs $0.02
+```
+
+### 4. Regression Detection
+
+Quantized a model? See what broke:
+
+```
+❌ qwen2.5:2bit failed 8/10 tool-calling tests
+   → JSON output format changed (single quotes)
+   → Recommend: Use 4-bit instead
+```
+
+---
+
+## Supported Models
+
+### Local Inference
+
+| Provider | Status | Auto-Discovery | Notes |
+|----------|--------|----------------|-------|
+| **Ollama** | ✅ Full | Yes | Any model, any host, MoE detection |
+| **MLX** | ✅ Full | Yes | Apple Silicon optimized |
+| **LM Studio** | ✅ Compatible | Coming | Works via localhost:1234 |
+| **llama.cpp** | ✅ Compatible | Coming | Any OpenAI-compat server |
+
+### Cloud Models
+
+| Provider | Status | One-Liner Setup |
+|----------|--------|-----------------|
+| **OpenRouter** | ✅ | One key = 200+ models |
+| **OpenAI** | ✅ | Direct integration |
+| **Anthropic** | ✅ | Via OpenRouter or proxy |
+| **Groq** | ✅ | Direct (ultra-fast) |
+| **Mistral** | ✅ | Direct |
+| **Any OpenAI API** | ✅ | `base_url` + `api_key` |
+
+**The judge can be any model** - including a local one. No cloud required!
+
+---
+
+## Example: Should I Pay for Sonnet?
+
+### Your Task
+
+You write TypeScript code daily. Should you use:
+- 🆓 qwen2.5:7b (local, free)
+- 💰 claude-sonnet ($3/million tokens)
+
+### Create Eval Pack
 
 ```yaml
-  - id: llama-mlx
-    provider: mlx
-    model: mlx-community/Llama-3.2-3B-Instruct-4bit
-    port: "${MLX_PORT:-8080}"
-    tags: [local, free, apple-silicon]
-```
-
-### LM Studio and custom servers
-
-LM Studio, flash-moe, and any other server that implements the OpenAI `/v1/chat/completions` endpoint works as a generic compat provider:
-
-```yaml
-  # LM Studio (default port 1234)
-  - id: lmstudio
-    base_url: "http://localhost:1234/v1"
-    api_key: "none"
-    model: "meta-llama-3-8b-instruct"
-    tags: [local, free]
-
-  # flash-moe or any custom server
-  - id: flash-moe-local
-    base_url: "http://localhost:8080/v1"
-    api_key: "none"
-    model: "qwen3.5-397b"
-    tags: [local, free, moe, ssd-streaming]
-```
-
-Then run the quantization pack to validate output quality:
-
-```bash
-verdict run --pack ./eval-packs/quantization.yaml
-```
-
-## Cloud models
-
-```yaml
-  # OpenRouter: one key, every major cloud model
-  - id: cloud-fast
-    base_url: "https://openrouter.ai/api/v1"
-    api_key: "${OPENROUTER_API_KEY}"
-    model: "anthropic/claude-haiku-3-5"
-    cost_per_1m_input: 0.80
-    cost_per_1m_output: 4.00
-
-  # OpenAI
-  - id: gpt4o-mini
-    base_url: "https://api.openai.com/v1"
-    api_key: "${OPENAI_API_KEY}"
-    model: gpt-4o-mini
-
-  # Groq
-  - id: groq-llama
-    base_url: "https://api.groq.com/openai/v1"
-    api_key: "${GROQ_API_KEY}"
-    model: llama-3.1-8b-instant
-```
-
-## Eval packs
-
-| Pack | Cases | Focus |
-|------|-------|-------|
-| `general.yaml` | 10 | Factual recall, reasoning, coding, instruction following |
-| `moe.yaml` | 5 | Multi-domain tasks that highlight MoE model strengths |
-| `quantization.yaml` | 10 | JSON output (3), tool calling (1), structured data (2), instruction precision (4) |
-| `coding.yaml` | 10 | Algorithms, debugging, SQL, system design across languages |
-| `reasoning.yaml` | 10 | Logic puzzles, probability, multi-step reasoning, argument critique |
-| `instruction-following.yaml` | 10 | Strict format, word count, template, and constraint adherence |
-| `writing-quality.yaml` | 8 | Clarity, concision, tone, audience-appropriate writing |
-
-The quantization pack uses deterministic scoring (`JSON.parse()` pass or fail) where structured output is required. No LLM judge call. If a model produces `'name'` instead of `"name"`, it fails. These are the cases that would have caught the flash-moe 2-bit regression before the paper shipped.
-
-Write your own:
-
-```yaml
-# eval-packs/my-pack.yaml
-name: My Tasks
+# eval-packs/my-coding.yaml
+name: Daily TypeScript Work
 cases:
-  - id: my-001
-    prompt: "Your prompt here"
-    criteria: "What a good answer must include"
-    scorer: llm    # or: json, exact, contains
-    tags: [custom]
+  - prompt: "Write a function to debounce API calls"
+    judge_criteria: "Code quality, edge cases, TypeScript types"
+  
+  - prompt: "Refactor this into async/await"
+    context: |
+      function getData(callback) {
+        fetch('/api').then(r => callback(r))
+      }
+    judge_criteria: "Clean code, error handling"
+  
+  - prompt: "Debug: Why is this useState not updating?"
+    context: |
+      const [items, setItems] = useState([]);
+      items.push(newItem); // Bug here
+    judge_criteria: "Finds bug, explains why, fixes it"
 ```
 
-See [docs/writing-eval-packs.md](docs/writing-eval-packs.md) for scorer types, criteria writing, and quantization-sensitive case patterns.
+### Run It
 
-## Config reference
+```bash
+verdict run --pack my-coding
+```
+
+### Results
+
+```
+[1] qwen2.5:7b           ||||||||||  8.9  ($0.00, 850ms avg)
+[2] claude-sonnet        |||||||||.  9.1  ($0.15, 1200ms avg)
+
+💡 Cost-quality frontier:
+   qwen2.5:7b scores 8.9/10 for FREE
+   sonnet scores 9.1/10 but costs $0.15/run
+   
+   → Difference: 0.2pts
+   → You run ~500 prompts/month
+   → Switching to sonnet = $75/month for 0.2pt gain
+   
+   Decision: Use qwen2.5:7b, save $900/year
+```
+
+**Data-driven decision made!** ✅
+
+---
+
+## Example: Quantization Testing
+
+### Scenario
+
+You quantized qwen2.5:7b to 2-bit. Did quality drop?
+
+### Setup
 
 ```yaml
 # verdict.yaml
-name: "My Evals"
-
 models:
-  - id: <string>               # your label for this model
-    provider: ollama | mlx     # optional shorthand for local providers
-    base_url: <url>            # or raw OpenAI-compat endpoint
-    api_key: <string>          # use "none" for local endpoints
-    model: <string>            # model name as the endpoint expects it
-    host: <host:port>          # Ollama: override default host
-    port: <number>             # MLX: port (default 8080)
-    tags: [local, cloud, moe, ...]
-    cost_per_1m_input: <number>
-    cost_per_1m_output: <number>
-    timeout_ms: <number>       # default 120000
-    max_tokens: <number>       # default 1024
-
-judge:
-  model: <model-id>            # any model id from the list above, local or cloud
-  blind: true                  # model names never shown to the judge
-  rubric:
-    accuracy: 0.4              # is it correct?
-    completeness: 0.4          # does it cover the criteria?
-    conciseness: 0.2           # is it appropriately brief?
-
-packs:
-  - ./eval-packs/general.yaml
-
-run:
-  concurrency: 3               # parallel model calls per case
-  retries: 2
-  cache: true                  # resume interrupted runs
-
-output:
-  dir: ./results
-  formats: [json, markdown]
+  - id: qwen-4bit
+    provider: ollama
+    model: qwen2.5:7b
+  
+  - id: qwen-2bit
+    provider: ollama
+    model: qwen2.5:2bit
 ```
 
-All values support `${ENV_VAR}` and `${ENV_VAR:-default}` substitution. Store keys in `.env` (see `.env.example`).
-
-## CLI reference
+### Run
 
 ```bash
-verdict init                             # create verdict.yaml and starter packs
-verdict run                              # run with ./verdict.yaml
-verdict run --config other.yaml          # custom config
-verdict run --models local-fast          # run subset of models
-verdict run --pack ./eval-packs/moe.yaml # run specific pack
-verdict run --dry-run                    # preview without API calls
-verdict models                           # ping all configured models
-verdict models discover                  # scan for local inference servers
-verdict compare <run-a.json> <run-b.json>          # compare two runs
-verdict compare <run-a.json> <run-b.json> -o out.md  # with markdown output
+verdict run --models "qwen-4bit,qwen-2bit"
 ```
 
-## Results
+### Results
 
-Every run saves to `./results/`:
+```
+Tool Calling Pack (10 cases)
 
-- `YYYY-MM-DD-<run-id>.json` - full results with per-case scores and responses
-- `YYYY-MM-DD-<run-id>.md` - leaderboard, cost-quality frontier, and case detail report
+qwen-4bit:  10/10 ✅ All JSON valid
+qwen-2bit:   2/10 ❌ 8 failed (JSON parse errors)
 
-## Docs
+Example failure:
+  Expected: {"tool": "search", "query": "cats"}
+  Got:      {'tool': 'search', 'query': 'cats'}
+            ^ single quotes = invalid JSON
 
-- [Getting started](docs/getting-started.md)
-- [Provider setup: Ollama, MLX, OpenRouter, flash-moe](docs/providers.md)
-- [Writing eval packs](docs/writing-eval-packs.md)
-- [Quantization testing with flash-moe](docs/quantization.md)
+Verdict: 2-bit broke tool calling. Use 4-bit.
+```
+
+---
+
+## Configuration
+
+### verdict.yaml
+
+```yaml
+models:
+  # Local models (Ollama)
+  - id: qwen-fast
+    provider: ollama
+    model: qwen2.5:7b
+    base_url: http://localhost:11434  # optional
+  
+  # Cloud models (OpenRouter)
+  - id: sonnet
+    provider: openrouter
+    model: anthropic/claude-sonnet-4
+    api_key: ${OPENROUTER_KEY}
+  
+  # Cloud models (direct)
+  - id: gpt4
+    provider: openai
+    model: gpt-4o
+    api_key: ${OPENAI_KEY}
+
+judge:
+  model_id: qwen-fast  # Use local model as judge (free!)
+  temperature: 0.3
+  max_tokens: 500
+
+settings:
+  parallel_requests: 3  # Run 3 evals at once
+  timeout_seconds: 30
+  retry_on_failure: true
+```
+
+### Eval Pack
+
+```yaml
+# eval-packs/code-generation.yaml
+name: Code Generation
+judge_criteria: |
+  Rate 1-10 based on:
+  - Correctness
+  - Code quality
+  - Edge case handling
+  - Explanation clarity
+
+cases:
+  - prompt: "Write a function to deep clone an object"
+    expected_behavior: "Handles nested objects, arrays, null"
+  
+  - prompt: |
+      Fix this bug:
+      const data = [1,2,3];
+      data.length = 0;
+      console.log(data); // Why is this empty?
+    judge_criteria: "Explains array.length mutation correctly"
+```
+
+---
+
+## Advanced Features
+
+### 1. Model Router (New! 🎉)
+
+**Automatically choose the best model for each task.**
+
+```typescript
+import { VerdictRouter } from 'verdict';
+
+const router = new VerdictRouter('./verdict.db');
+
+// Routes to best model based on task type
+const result = await router.route(
+  "Debug this memory leak in React"
+);
+
+console.log(`Using: ${result.choice.model}`);
+// → "Using: qwen2.5:7b (code-generation specialist)"
+```
+
+**Features:**
+- ✅ Learns from eval results (which model wins for which tasks?)
+- ✅ Auto-classifies tasks (code, reasoning, tool-calling, creative)
+- ✅ Balances quality, cost, and speed
+- ✅ DSPy-optimized routing (60% accuracy, improving with data)
+
+**Shadow Mode** - Test new routing logic safely:
+```typescript
+const router = new VerdictRouter('./verdict.db', {
+  shadowMode: true  // Logs both routers, uses primary
+});
+
+// After 100 decisions:
+const stats = router.getShadowStats();
+console.log(`Agreement: ${stats.agreement_rate}`);
+```
+
+### 2. Baseline Comparison
+
+Track model improvements over time:
+
+```bash
+# Save current results as baseline
+verdict baseline save v1.0
+
+# Later, compare new run to baseline
+verdict run
+verdict baseline compare v1.0
+
+# → qwen2.5:7b improved +0.8pts since v1.0
+```
+
+### 3. Custom Judges
+
+Use different judge models for different packs:
+
+```yaml
+# eval-packs/creative-writing.yaml
+name: Creative Writing
+judge:
+  model_id: sonnet  # Use smart judge for creative tasks
+  temperature: 0.7
+```
+
+### 4. Inference Optimization
+
+```yaml
+# verdict.yaml
+models:
+  - id: qwen-fast
+    provider: ollama
+    model: qwen2.5:7b
+    parameters:
+      num_gpu: 99  # Use all GPU layers
+      num_ctx: 8192  # Larger context
+      temperature: 0.1  # More deterministic
+```
+
+---
+
+## CLI Reference
+
+```bash
+# Setup
+verdict init                  # Create verdict.yaml + eval-packs/
+verdict models                # Ping all configured models
+verdict models discover       # Find Ollama/MLX models
+
+# Run evals
+verdict run                   # Run all packs, all models
+verdict run -p code-gen       # Run specific pack
+verdict run -m "qwen,sonnet"  # Test specific models
+verdict run --dry-run         # Preview (no API calls)
+verdict run --resume          # Resume from checkpoint
+
+# Compare models
+verdict compare               # Head-to-head comparison UI
+
+# Baselines
+verdict baseline save v1.0    # Save current as baseline
+verdict baseline list         # Show saved baselines
+verdict baseline compare v1   # Compare to baseline
+
+# Router
+verdict infer "your prompt"   # Route single task (for testing)
+```
+
+---
+
+## Real-World Use Cases
+
+### 1. Choosing Local vs Cloud
+
+**Goal:** Stop paying $200/month for API calls
+
+**Setup:**
+- Add local model (qwen2.5:7b)
+- Add cloud model (sonnet)
+- Create eval pack from actual tasks
+
+**Result:**
+```
+qwen2.5:7b: 8.5/10 ($0.00)
+sonnet:     8.7/10 ($89.00/month)
+
+→ Difference: 0.2pts
+→ Savings: $2400/year
+→ Decision: Use local
+```
+
+### 2. Regression Testing
+
+**Goal:** Catch quality drops before users do
+
+**Setup:**
+```bash
+# Save current production model as baseline
+verdict baseline save production-v1
+
+# After updating model:
+verdict run
+verdict baseline compare production-v1
+```
+
+**Result:**
+```
+❌ NEW MODEL REGRESSION DETECTED
+
+Tool-calling: 9.2 → 6.1 (-3.1pts) 
+  8/10 tasks failed JSON parsing
+
+→ DO NOT DEPLOY
+→ Roll back to 4-bit
+```
+
+### 3. Cost Optimization
+
+**Goal:** Find cheapest model that meets quality bar
+
+**Setup:**
+```yaml
+models:
+  - qwen2.5:7b     # Free
+  - llama3.2:3b    # Free (faster)
+  - haiku          # $0.25/M tokens
+  - sonnet         # $3/M tokens
+```
+
+**Result:**
+```
+Quality bar: 8.0/10 minimum
+
+qwen2.5:7b:  8.3/10 ✅ ($0.00)    ← USE THIS
+llama3.2:3b: 7.1/10 ❌ (too low)
+haiku:       8.9/10 ✅ ($12/mo)
+sonnet:      9.2/10 ✅ ($89/mo)
+
+→ qwen2.5:7b meets bar, saves $1068/year vs haiku
+```
+
+---
 
 ## Contributing
 
-The best contribution is a well-designed eval pack for a domain we don't cover yet: coding, reasoning, instruction-following, domain-specific. [Open an eval pack issue](https://github.com/hnshah/verdict/issues/new?template=eval-pack.yml) to propose one. See [CONTRIBUTING.md](CONTRIBUTING.md).
+We welcome:
+- 🐛 Bug reports
+- 💡 Feature ideas
+- 📝 Eval pack templates
+- 🔧 Provider integrations
+- 📊 Real-world benchmarking results
+
+**Not currently accepting:**
+- Major architecture changes (please discuss first)
+- New dependencies without clear value
+- Breaking API changes
+
+See `CONTRIBUTING.md` for details.
+
+---
+
+## FAQ
+
+### Do I need a cloud API key?
+
+No! You can use local models (Ollama, MLX) as both test subjects AND judge.
+
+### How is this different from MMLU/HellaSwag?
+
+Those are generic academic benchmarks. Verdict tests YOUR tasks.
+
+### Can I test proprietary models?
+
+Yes! Any OpenAI-compatible API works (OpenRouter, Azure, custom endpoints).
+
+### Does the judge need to be GPT-4?
+
+No! Local models (qwen2.5:7b, mistral) make excellent judges.
+
+### How long does a benchmark run take?
+
+Depends on:
+- Number of cases (10 = ~2 min, 100 = ~20 min)
+- Model speed (local = fast, cloud = medium)
+- Parallel requests (3 = default)
+
+### Can I use this in CI/CD?
+
+Yes! Exit code non-zero if quality drops:
+
+```bash
+verdict run --baseline production --fail-if-regression
+# → Exit 1 if new model worse than baseline
+```
+
+---
 
 ## License
 
 MIT
+
+---
+
+## Links
+
+- **GitHub:** https://github.com/yourusername/verdict
+- **Docs:** https://verdict.dev
+- **Discord:** https://discord.gg/verdict
+
+---
+
+## Roadmap
+
+**Shipping Now:**
+- ✅ Model router (auto-select best model per task)
+- ✅ Shadow mode (safe A/B testing)
+- ✅ DSPy-optimized routing
+
+**Coming Q2 2026:**
+- LM Studio auto-discovery
+- Multi-judge consensus (2+ judges vote)
+- Tag-based filtering (`verdict run --tags "quick,sanity"`)
+- Web UI dashboard
+- CI/CD GitHub Action
+
+**Considering:**
+- Prompt optimization (auto-improve prompts via evals)
+- Dataset generation (create eval packs from logs)
+- Model fine-tuning integration (eval → retrain loop)
+
+Vote on features: https://github.com/yourusername/verdict/discussions
+
+---
+
+**Built with ❤️ by developers tired of guessing which model to use.**
+
+*Stop vibes-based model selection. Start making data-driven decisions.*

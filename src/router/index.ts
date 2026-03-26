@@ -8,6 +8,7 @@ import { randomUUID } from 'crypto';
 import { TaskClassifier } from './classifier.js';
 import { ModelSelector } from './selector.js';
 import { RouterStorage } from './storage.js';
+import { DSPyRouter, ShadowModeLogger, type DSPyRouterConfig } from './dspy-router.js';
 import type {
   TaskCategory,
   TaskRun,
@@ -21,13 +22,24 @@ import { DEFAULT_ROUTER_CONFIG } from './types.js';
 export class VerdictRouter {
   private classifier: TaskClassifier;
   private storage: RouterStorage;
+  private dspyRouter?: DSPyRouter;
+  private shadowLogger?: ShadowModeLogger;
+  private shadowMode: boolean = false;
 
   constructor(
     private dbPath: string,
-    private config: RouterConfig = DEFAULT_ROUTER_CONFIG as RouterConfig
+    private config: RouterConfig = DEFAULT_ROUTER_CONFIG as RouterConfig,
+    dspyConfig?: DSPyRouterConfig
   ) {
     this.classifier = new TaskClassifier();
     this.storage = new RouterStorage(dbPath, config);
+    
+    // Initialize DSPy router if config provided
+    if (dspyConfig) {
+      this.dspyRouter = new DSPyRouter(dspyConfig);
+      this.shadowLogger = new ShadowModeLogger();
+      this.shadowMode = true;
+    }
   }
 
   /**
@@ -40,28 +52,57 @@ export class VerdictRouter {
     classification: Classification;
     choice: ModelChoice;
     runId: string;
+    shadow?: { dspy: any; heuristic: any };
   }> {
-    // 1. Classify task
+    // 1. Classify task (heuristic)
     const classification = this.classifier.classify(prompt, constraints.category);
 
     // 2. Get performance data for this category
     const performanceData = this.storage.getPerformanceForCategory(classification.category);
     const preferences = this.storage.getPreferences();
 
-    // 3. Select best model
+    // 3. Select best model (heuristic)
     const perfMap = new Map<string, any[]>();
     perfMap.set(classification.category, performanceData);
     
     const selector = new ModelSelector(this.config, perfMap, preferences);
     const choice = selector.select(classification.category, constraints);
 
-    // 4. Create run record
+    // 4. Shadow mode: Compare with DSPy router
+    let shadowData: { dspy: any; heuristic: any } | undefined;
+    
+    if (this.shadowMode && this.dspyRouter && this.shadowLogger) {
+      try {
+        const dspyDecision = await this.dspyRouter.route(prompt);
+        
+        const heuristicData = {
+          category: classification.category,
+          complexity: classification.complexity || 'moderate',
+          model: choice.model,
+        };
+        
+        const dspyData = dspyDecision ? {
+          category: dspyDecision.category,
+          complexity: dspyDecision.complexity,
+          model: dspyDecision.model || dspyDecision.recommended_model || 'unknown',
+        } : null;
+        
+        this.shadowLogger.log(prompt, heuristicData, dspyData);
+        
+        shadowData = { dspy: dspyData, heuristic: heuristicData };
+      } catch (error) {
+        console.warn('[Shadow Mode] DSPy routing failed:', error);
+      }
+    }
+
+    // 5. Create run record
     const runId = randomUUID();
 
     return {
       classification,
       choice,
       runId,
+      shadow: shadowData,
     };
   }
 
@@ -106,6 +147,23 @@ export class VerdictRouter {
   }
 
   /**
+   * Get shadow mode statistics
+   */
+  getShadowStats() {
+    if (!this.shadowLogger) return null;
+    return this.shadowLogger.getSummary();
+  }
+
+  /**
+   * Flush shadow logs to disk
+   */
+  async flushShadowLogs(): Promise<void> {
+    if (this.shadowLogger) {
+      await this.shadowLogger.flush();
+    }
+  }
+
+  /**
    * Close storage
    */
   close(): void {
@@ -114,3 +172,4 @@ export class VerdictRouter {
 }
 
 export * from './types.js';
+export { DSPyRouter, ShadowModeLogger, type DSPyRouterConfig } from './dspy-router.js';
