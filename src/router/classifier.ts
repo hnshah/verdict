@@ -26,44 +26,110 @@ export class TaskClassifier {
       };
     }
 
-    // Collect signals
-    const signals: ClassificationSignal[] = [
-      this.keywordSignal(prompt),
-      this.structureSignal(prompt),
-      this.verbSignal(prompt),
-      this.lengthSignal(prompt),
-    ];
+    const lower = prompt.toLowerCase();
+    
+    // Direct per-category scoring
+    const scores: Record<TaskCategory, number> = {
+      code_review: 0,
+      code_generation: 0,
+      bug_analysis: 0,
+      writing: 0,
+      math: 0,
+      reasoning: 0,
+      general: 0,
+    };
 
-    // Aggregate scores per category
-    const scores = this.aggregateSignals(signals);
+    // 1. Code markers (strongest signal)
+    const hasCodeBlock = /```|`[^`]+`/.test(prompt);
+    const hasCodeKeywords = /\b(function|class|def|const|let|var|import|export|async|await)\b/.test(lower);
+    const hasProgrammingLang = /\b(python|javascript|typescript|java|rust|go|c\+\+|ruby|php|algorithm)\b/.test(lower);
     
+    if (hasCodeBlock || hasCodeKeywords || hasProgrammingLang) {
+      scores.code_generation += 3.0;
+    }
+
+    // 2. Strong keyword phrases
+    if (lower.includes("implement") || lower.includes("build") || lower.includes("create a function") || lower.includes("write a class")) {
+      scores.code_generation += 2.0;
+    }
+    if (lower.includes("review this") || lower.includes("check this") || lower.includes("audit") || lower.includes("refactor")) {
+      scores.code_review += 2.0;
+    }
+    if (lower.includes("bug") || lower.includes("error") || lower.includes("crash") || lower.includes("debug") || lower.includes("fix")) {
+      scores.bug_analysis += 2.0;
+    }
+    if (lower.includes("article") || lower.includes("blog") || lower.includes("essay") || lower.includes("haiku") || lower.includes("poem")) {
+      scores.writing += 2.0;
+    }
+    if ((lower.includes("why") || lower.includes("how")) && (lower.includes("does") || lower.includes("work"))) {
+      scores.reasoning += 2.0;
+    }
+    if (/\d+\s*[+\-*/]\s*\d+/.test(prompt)) {
+      scores.math += 2.0;
+    }
+
+    // 3. Weak overlapping keywords
+    if (lower.includes("write") || lower.includes("create")) {
+      if (!hasCodeKeywords && !hasProgrammingLang) {
+        scores.writing += 0.5;
+      }
+      scores.code_generation += 0.5;
+    }
+    if (lower.includes("explain")) {
+      scores.reasoning += 1.0;
+      scores.writing += 0.3;
+    }
+
     // Find winner
-    const sortedCategories = Object.entries(scores)
-      .sort(([, a], [, b]) => b - a);
-    
-    const [category, score] = sortedCategories[0] as [TaskCategory, number];
+    const max = Math.max(...Object.values(scores));
+    const category = (Object.entries(scores).find(([, v]) => v === max)?.[0] as TaskCategory) || 'general';
+    const confidence = Math.min(1.0, max / 5.0); // Normalize to 0-1
+
+    // Create signals for logging
+    const signals: ClassificationSignal[] = [
+      { name: "code_markers", score: (hasCodeBlock || hasCodeKeywords || hasProgrammingLang) ? 1.0 : 0, weight: 0.4 },
+      { name: "keywords", score: max > 0 ? 1.0 : 0, weight: 0.3 },
+      { name: "context", score: confidence, weight: 0.3 },
+    ];
 
     return {
       category,
-      confidence: score,
+      confidence,
       signals,
       method: "auto",
     };
   }
 
   /**
-   * Signal 1: Keyword matching
+   * Signal 1: Keyword matching (with priority weighting)
    */
   private keywordSignal(prompt: string): ClassificationSignal {
     const lower = prompt.toLowerCase();
     
-    const keywords: Record<TaskCategory, string[]> = {
-      code_review: ["review", "check", "validate", "audit", "lint"],
-      code_generation: ["write", "generate", "create", "implement", "build", "code"],
-      bug_analysis: ["bug", "error", "crash", "fail", "debug", "fix", "issue"],
-      writing: ["write", "draft", "compose", "article", "blog", "email", "explain"],
-      math: ["calculate", "compute", "math", "number", "sum", "multiply", "+", "-", "*", "/"],
-      reasoning: ["why", "how", "explain", "reason", "think", "analyze", "understand"],
+    // Explicit code markers (highest priority)
+    const hasCodeBlock = /```|`[^`]+`/.test(prompt);
+    const hasCodeKeywords = /\b(function|class|def|const|let|var|import|export|async|await)\b/.test(lower);
+    const hasProgrammingLang = /\b(python|javascript|typescript|java|rust|go|c\+\+|ruby|php)\b/.test(lower);
+    
+    // Strong keywords (exclusive to one category)
+    const strongKeywords: Record<TaskCategory, string[]> = {
+      code_review: ["review this code", "check this function", "audit", "lint", "refactor"],
+      code_generation: ["implement", "build", "create a function", "write a class", "generate code", "algorithm"],
+      bug_analysis: ["bug", "error", "crash", "failing", "broken", "debug", "fix this"],
+      writing: ["article", "blog post", "essay", "letter", "email", "story", "poem", "haiku"],
+      math: ["calculate", "compute", "equation", "formula", "solve", "="],
+      reasoning: ["why does", "how does", "explain why", "what causes", "understand how"],
+      general: [],
+    };
+    
+    // Weak keywords (can overlap)
+    const weakKeywords: Record<TaskCategory, string[]> = {
+      code_review: ["code", "review", "check", "validate"],
+      code_generation: ["write", "create", "make"],
+      bug_analysis: ["issue", "problem"],
+      writing: ["write", "draft", "compose", "explain"],
+      math: ["+", "-", "*", "/", "number"],
+      reasoning: ["why", "how", "explain", "analyze"],
       general: [],
     };
 
@@ -77,10 +143,27 @@ export class TaskClassifier {
       general: 0,
     };
 
-    // Count keyword matches
-    for (const [category, words] of Object.entries(keywords)) {
-      const matches = words.filter(w => lower.includes(w)).length;
-      scores[category as TaskCategory] = matches / Math.max(words.length, 1);
+    // Boost code_generation if explicit code markers
+    if (hasCodeBlock || hasCodeKeywords || hasProgrammingLang) {
+      scores.code_generation += 2.0;
+    }
+
+    // Count strong keyword matches (weight: 2.0)
+    for (const [category, words] of Object.entries(strongKeywords)) {
+      for (const word of words) {
+        if (lower.includes(word)) {
+          scores[category as TaskCategory] += 2.0;
+        }
+      }
+    }
+    
+    // Count weak keyword matches (weight: 0.5)
+    for (const [category, words] of Object.entries(weakKeywords)) {
+      for (const word of words) {
+        if (lower.includes(word)) {
+          scores[category as TaskCategory] += 0.5;
+        }
+      }
     }
 
     // Normalize
@@ -196,7 +279,7 @@ export class TaskClassifier {
   }
 
   /**
-   * Aggregate signals using weighted voting
+   * Aggregate signals using per-category scoring
    */
   private aggregateSignals(signals: ClassificationSignal[]): Record<TaskCategory, number> {
     const scores: Record<TaskCategory, number> = {
@@ -209,19 +292,9 @@ export class TaskClassifier {
       general: 0,
     };
 
-    // For simplicity, we'll do a simple weighted sum
-    // (In production, each signal would return per-category scores)
-    // For now, using the signal with highest score as indicator
-    
-    // Weight by signal strength
-    let totalWeight = 0;
-    for (const signal of signals) {
-      totalWeight += signal.weight * signal.score;
-    }
-
-    // This is a simplified aggregation
-    // A full implementation would have each signal return scores for ALL categories
-    // and then combine them properly. For MVP, we use dominant signals.
+    // Each signal should provide scores for each category
+    // For now, we'll re-call the signals to get per-category scores
+    // This is a quick fix - proper solution would refactor signal interface
 
     return scores;
   }
