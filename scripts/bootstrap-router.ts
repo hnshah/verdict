@@ -74,6 +74,32 @@ function inferCategory(packName: string, prompt: string): string {
   return 'writing'; // Default
 }
 
+/**
+ * Normalize model names to match config
+ * Prevents qwen7b vs qwen2.5:7b mismatches
+ */
+function normalizeModelName(importedName: string, configModels: string[]): string {
+  // Try exact match first
+  if (configModels.includes(importedName)) {
+    return importedName;
+  }
+  
+  // Try fuzzy match (qwen7b → qwen2.5:7b, llama32-3b → llama3.2:3b)
+  const fuzzy = configModels.find((m: string) => {
+    const baseName = (name: string) => name.replace(/[0-9:.]/g, '').toLowerCase();
+    return baseName(m) === baseName(importedName);
+  });
+  
+  if (fuzzy) {
+    console.log(`  ⚠️  Mapping ${importedName} → ${fuzzy}`);
+    return fuzzy;
+  }
+  
+  // No match - skip this model
+  console.warn(`  ⚠️  Model ${importedName} not in config, skipping...`);
+  return ''; // Empty string = skip
+}
+
 async function bootstrap() {
   console.log('🔄 Bootstrapping Verdict Router with eval data...\n');
 
