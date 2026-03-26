@@ -1,0 +1,55 @@
+name: Data Analysis
+description: Test models on data interpretation, statistics, and analytical reasoning
+
+cases:
+  - prompt: |
+      Given this CSV data:
+      
+      product,sales_q1,sales_q2,sales_q3,sales_q4
+      Widget A,15000,18000,22000,25000
+      Widget B,8000,7500,9000,12000
+      Widget C,12000,11000,10000,8000
+      
+      1. Calculate year-over-year growth for each product
+      2. Identify trends and patterns
+      3. Recommend which product to invest in and why
+    expected: |
+      - Widget A: Strong consistent growth (67% YoY)
+      - Widget B: Volatile but recovering (50% YoY)
+      - Widget C: Declining trend (-33% YoY)
+      Recommendation: Invest in Widget A (proven growth trajectory)
+    
+  - prompt: |
+      Analyze this A/B test result:
+      
+      Variant A: 1000 visitors, 50 conversions (5.0%)
+      Variant B: 1000 visitors, 65 conversions (6.5%)
+      
+      Is this difference statistically significant? Should we ship B?
+    expected: Should mention sample size, confidence intervals, and not jump to conclusions without proper statistical test (chi-square or z-test).
+
+  - prompt: |
+      Customer churn data:
+      - Month 1: 100 customers, 5 churned
+      - Month 2: 95 customers, 8 churned
+      - Month 3: 87 customers, 12 churned
+      
+      What's happening and what should we do?
+    expected: Accelerating churn rate (5% → 8.4% → 13.8%). Urgent action needed. Should recommend cohort analysis and customer interviews.
+
+  - prompt: |
+      Sales funnel conversion rates:
+      - Landing page → Sign up: 20%
+      - Sign up → Trial: 80%
+      - Trial → Paid: 15%
+      
+      Where should we focus optimization efforts?
+    expected: Trial → Paid (15%) is the biggest bottleneck. Improving this by even 5% would have major revenue impact.
+
+  - prompt: |
+      Average order value over time:
+      Jan: $45, Feb: $42, Mar: $39, Apr: $41, May: $38
+      
+      Linear regression shows -$1.75/month decline. 
+      What does this mean and what should we investigate?
+    expected: Should mention investigating product mix changes, discount usage, customer segment shifts, or seasonal patterns. Not just accept the trend.

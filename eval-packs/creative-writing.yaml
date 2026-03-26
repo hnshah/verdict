@@ -1,0 +1,39 @@
+name: Creative Writing
+description: Test models on storytelling, creativity, and engaging prose
+
+cases:
+  - prompt: |
+      Write the opening paragraph of a mystery novel. The detective just received a case that seems impossible.
+    expected: Should have compelling hook, establish character voice, create intrigue, strong imagery
+
+  - prompt: |
+      You're a pirate captain giving a motivational speech before battling a sea monster. 100 words max.
+    expected: Should capture pirate vernacular, build excitement, show leadership, memorable imagery
+
+  - prompt: |
+      Write a haiku about debugging code at 3 AM.
+    expected: Should follow 5-7-5 syllable structure, capture the experience emotionally and visually
+
+  - prompt: |
+      Create a product tagline for:
+      - An AI-powered coffee maker
+      - That learns your preferences
+      - And orders beans automatically
+    expected: Should be concise (under 10 words), memorable, convey key benefit without jargon
+
+  - prompt: |
+      Write a 2-sentence scary story. Make it genuinely unsettling.
+    expected: Should use psychological horror techniques, strong ending, leave reader disturbed
+
+  - prompt: |
+      Explain quantum entanglement as if you're a stand-up comedian.
+    expected: Should be funny, accessible, actually explain the concept correctly, good analogies
+
+  - prompt: |
+      Write an email subject line that gets a busy CEO to open a cold sales email.
+      Product: Team productivity software.
+    expected: Should be personalized, curiosity-driven or value-driven, not spammy, under 50 chars
+
+  - prompt: |
+      Create a choose-your-own-adventure story opening (just the first choice).
+    expected: Should establish setting/character, present clear choice with stakes, engaging voice
