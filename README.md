@@ -598,3 +598,7 @@ Vote on features: https://github.com/yourusername/verdict/discussions
 **Built with ❤️ by developers tired of guessing which model to use.**
 
 *Stop vibes-based model selection. Start making data-driven decisions.*
+
+---
+
+Developed with cloud and local AI assistance.
