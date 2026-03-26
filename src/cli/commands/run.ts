@@ -17,6 +17,7 @@ interface RunOptions {
   dryRun?: boolean
   resume?: boolean
   question?: string
+  noStore?: boolean
 }
 
 export async function runCommand(opts: RunOptions): Promise<void> {
@@ -122,6 +123,24 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   const base = path.join(config.output.dir, `${ts}-${result.run_id}`)
 
   fs.writeFileSync(`${base}.json`, JSON.stringify(result, null, 2))
+
+  // Persist to SQLite unless --no-store
+  if (!opts.noStore) {
+    try {
+      const { getDb, initSchema, saveRunResult } = await import('../../db/client.js')
+      const db = getDb()
+      initSchema(db)
+      const packName = opts.pack ?? config.packs[0] ?? 'unknown'
+      // Extract pack basename without path/extension
+      const packLabel = packName.replace(/^.*\//, '').replace(/\.ya?ml$/, '')
+      saveRunResult(db, result, packLabel)
+      db.close()
+      console.log(chalk.dim(`  stored: ~/.verdict/results.db`))
+    } catch (err) {
+      console.warn(chalk.yellow(`  warning: failed to store results in DB: ${err instanceof Error ? err.message : err}`))
+    }
+  }
+
   if (config.output.formats.includes('markdown')) {
     fs.writeFileSync(`${base}.md`, generateMarkdownReport(result))
     console.log(chalk.dim(`  report: ${base}.md`))
