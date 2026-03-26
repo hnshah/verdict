@@ -5,6 +5,9 @@ import { modelsCommand, discoverCommand } from './commands/models.js'
 import { initCommand } from './commands/init.js'
 import { compareCommand } from './commands/compare.js'
 import { baselineSaveCommand, baselineListCommand, baselineCompareCommand } from './commands/baseline.js'
+import { historyCommand } from './commands/history.js'
+import { routeCommand } from './commands/route.js'
+import { serveCommand } from './commands/serve.js'
 
 const program = new Command()
 
@@ -28,6 +31,7 @@ program
   .option('--dry-run', 'Preview without calling any APIs')
   .option('--resume', 'Resume from last checkpoint')
   .option('--question <text>', 'Question for synthesis agent to answer after eval')
+  .option('--no-store', 'Skip persisting results to SQLite database')
   .action(runCommand)
 
 const models = program
@@ -67,5 +71,32 @@ baseline
   .description('Compare most recent run against a named baseline')
   .option('-c, --config <path>', 'Config file', './verdict.yaml')
   .action(baselineCompareCommand)
+
+program
+  .command('history')
+  .description('View eval history from local database')
+  .option('--model <id>', 'Filter by model ID')
+  .option('--pack <name>', 'Filter by eval pack')
+  .option('--since <time>', 'Filter by time (e.g., 7d, 24h, 30d, 1w)')
+  .option('--limit <n>', 'Number of rows to show', '20')
+  .option('--sort <field>', 'Sort by: date (default), score')
+  .option('--trend', 'Show sparkline score trends per model')
+  .action(historyCommand)
+
+program
+  .command('route <prompt>')
+  .description('Route a prompt to the best model based on eval history')
+  .option('--type <type>', 'Task type hint (reasoning, coding, summarize, fast)')
+  .option('--prefer <pref>', 'Prefer model type (local)')
+  .option('--min-score <n>', 'Minimum acceptable score')
+  .option('--dry-run', 'Show selected model without running inference')
+  .option('--model <id>', 'Force a specific model')
+  .action(routeCommand)
+
+program
+  .command('serve')
+  .description('Start OpenAI-compatible HTTP proxy with smart routing')
+  .option('--port <n>', 'Port to listen on', '4000')
+  .action(serveCommand)
 
 program.parse()
