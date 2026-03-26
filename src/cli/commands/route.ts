@@ -45,7 +45,18 @@ export async function routeCommand(prompt: string, opts: RouteCommandOpts): Prom
     })
 
     if (!selected) {
-      console.error(chalk.red('  No model found matching criteria. Run `verdict run` first to build eval history.'))
+      console.error(chalk.red('  ❌ No model found matching criteria'))
+      console.log()
+      console.log(chalk.yellow('  💡 Next steps:'))
+      console.log(chalk.dim('     1. Run `verdict init` to create verdict.yaml'))
+      console.log(chalk.dim('     2. Configure your models in verdict.yaml'))
+      console.log(chalk.dim('     3. Run `verdict run` to build eval history'))
+      console.log(chalk.dim('     4. Then try `verdict route` again'))
+      console.log()
+      if (opts.type || opts.prefer || opts.minScore) {
+        console.log(chalk.dim('  Or try without filters: verdict route "your prompt"'))
+        console.log()
+      }
       db.close()
       process.exit(1)
     }
