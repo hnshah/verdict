@@ -1,0 +1,23 @@
+name: "Tool Edge Cases"
+
+models:
+  - id: qwen7b
+    provider: ollama
+    model: "qwen2.5:7b"
+    timeout_ms: 60000
+    max_tokens: 512
+
+judge:
+  model: qwen7b
+  blind: false
+
+packs:
+  - ./eval-packs/tool-edge-cases.yaml
+
+run:
+  concurrency: 1
+  retries: 0
+
+output:
+  dir: ./results
+  formats: [json, markdown]

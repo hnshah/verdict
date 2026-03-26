@@ -1,0 +1,157 @@
+name: OSS Contribution Quality
+description: Evaluate models for real OSS contribution tasks - bug analysis, code review, fix quality
+
+cases:
+  # Code review quality
+  - id: code-review-1
+    prompt: |
+      Review this pull request change:
+      
+      ```typescript
+      - if (this.qmd.searchMode === "search") {
+      -   return false;
+      - }
+      + // Embeddings should always run during indexing, regardless of search mode
+      ```
+      
+      Is this a good change? Why or why not?
+    criteria: |
+      Should identify:
+      1. Removes unnecessary early return
+      2. Comment explains reasoning
+      3. Separates indexing concern from search-time concern
+      4. Good change overall
+    tags: [code-review, quality]
+
+  # Bug root cause analysis
+  - id: bug-analysis-1
+    prompt: |
+      A user reports: "QMD memory search returns empty results even though files are indexed."
+      
+      Looking at the code, what's the most likely root cause?
+      
+      ```typescript
+      private shouldRunEmbed(force?: boolean): boolean {
+        if (this.qmd.searchMode === "search") {
+          return false;  // Skip embeddings for BM25-only mode
+        }
+        // ... rest of logic
+      }
+      ```
+    criteria: |
+      Should identify:
+      1. searchMode="search" is the default
+      2. This causes embeddings to never run
+      3. Without embeddings, vector search fails
+      4. The condition is wrong (confuses indexing with search)
+    tags: [bug-analysis, debugging]
+
+  # Fix quality assessment
+  - id: fix-quality-1
+    prompt: |
+      Which fix is better for "tool calling scorer always returns 0/10 when no tool calls made"?
+      
+      Fix A:
+      ```typescript
+      if (!toolCalls || toolCalls.length === 0) {
+        return { total: 0, reasoning: 'No tool calls made.' }
+      }
+      ```
+      
+      Fix B:
+      ```typescript
+      if (!toolCalls || toolCalls.length === 0) {
+        if (expectedTool === '') {
+          return { total: 10, reasoning: 'Correctly avoided calling any tool.' }
+        }
+        return { total: 0, reasoning: 'No tool calls made.' }
+      }
+      ```
+    criteria: |
+      Should prefer Fix B because:
+      1. Handles both positive (should call) and negative (should NOT call) cases
+      2. Empty expectedTool indicates no call expected
+      3. Returns 10/10 for correct avoidance
+      4. More complete solution
+    tags: [fix-quality, edge-cases]
+
+  # Test case design
+  - id: test-design-1
+    prompt: |
+      Design a test case for: "JSON extraction should work when model wraps JSON in explanatory text"
+      
+      What should the test include?
+    criteria: |
+      Should mention:
+      1. Input with JSON inside markdown fences
+      2. Explanatory text before/after the JSON
+      3. Verify JSON is extracted correctly
+      4. Test both success and failure cases
+      5. Check edge cases (no fences, malformed JSON)
+    tags: [testing, design]
+
+  # PR description quality
+  - id: pr-description-1
+    prompt: |
+      Write a commit message for:
+      - Fixed tool call scorer to return 10/10 when expectedTool is empty and no tools called
+      - Previously returned 0/10 incorrectly
+      - Now handles negative test cases
+    criteria: |
+      Should include:
+      1. Clear one-line summary
+      2. Explains before/after behavior
+      3. Mentions impact (can now test tool restraint)
+      4. Optional: How bug was discovered
+    tags: [communication, pr-craft]
+
+  # Code pattern recognition
+  - id: pattern-recognition-1
+    prompt: |
+      This code has a bug. What pattern would prevent it?
+      
+      ```typescript
+      const stripped = text
+        .replace(/^```(?:json)?\s*/i, '')
+        .replace(/\s*```$/, '')
+        .trim()
+      ```
+      
+      Input: "Here's an example:\n\n```json\n{...}\n```\n\nExplanation..."
+      Result: Fails to extract JSON
+    criteria: |
+      Should identify:
+      1. Regex only removes fences at start/end of entire string
+      2. Doesn't extract JSON from within text
+      3. Need to match/extract the fence content, not just remove fences
+      4. Better pattern: match ```...``` and extract capture group
+    tags: [patterns, debugging]
+
+  # Error message quality
+  - id: error-message-1
+    prompt: |
+      Improve this error message:
+      
+      "Invalid JSON: Certainly! Here's an example of a user profile based on your"
+      
+      Context: JSON scorer failed to extract JSON from model output with explanatory text
+    criteria: |
+      Should suggest:
+      1. More helpful message (e.g., "No JSON found" or "Could not extract JSON")
+      2. Don't show truncated model output (confusing)
+      3. Maybe suggest what format is expected
+      4. Distinguish between "no JSON" vs "malformed JSON"
+    tags: [ux, error-messages]
+
+  # Regression test design
+  - id: regression-test-1
+    prompt: |
+      After fixing "JSON extraction from explanatory text", what regression tests should we add?
+    criteria: |
+      Should mention:
+      1. Test JSON with text before fence
+      2. Test JSON with text after fence  
+      3. Test JSON with text on both sides
+      4. Test without fences (fallback to regex)
+      5. Test edge cases (empty JSON, arrays, nested)
+    tags: [testing, regression]

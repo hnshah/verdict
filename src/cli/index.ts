@@ -5,6 +5,7 @@ import { modelsCommand, discoverCommand } from './commands/models.js'
 import { initCommand } from './commands/init.js'
 import { compareCommand } from './commands/compare.js'
 import { baselineSaveCommand, baselineListCommand, baselineCompareCommand } from './commands/baseline.js'
+import { inferCommand } from './commands/infer.js'
 
 const program = new Command()
 
@@ -29,6 +30,19 @@ program
   .option('--resume', 'Resume from last checkpoint')
   .option('--question <text>', 'Question for synthesis agent to answer after eval')
   .action(runCommand)
+
+program
+  .command('infer <prompt>')
+  .description('Smart inference routing — auto-pick best model for the task')
+  .option('-c, --config <path>', 'Config file', './verdict.yaml')
+  .option('--category <type>', 'Force category (skip auto-detection)')
+  .option('--max-latency <ms>', 'Maximum latency in milliseconds', parseInt)
+  .option('--min-quality <score>', 'Minimum quality score (0-10)', parseFloat)
+  .option('--prefer-local', 'Prefer local models over cloud')
+  .option('--model <id>', 'Override model selection (for corrections)')
+  .option('--explain', 'Show why model was chosen')
+  .option('--dry-run', 'Show selection without running inference')
+  .action(inferCommand)
 
 const models = program
   .command('models')

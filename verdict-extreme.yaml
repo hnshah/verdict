@@ -1,0 +1,24 @@
+name: "Extreme Edge Cases"
+
+models:
+  - id: qwen7b
+    provider: ollama
+    model: "qwen2.5:7b"
+    timeout_ms: 90000
+    max_tokens: 1024
+
+judge:
+  model: qwen7b
+  blind: false
+
+packs:
+  - ./eval-packs/extreme-edge-cases.yaml
+
+run:
+  concurrency: 1
+  retries: 0
+  cache: false
+
+output:
+  dir: ./results
+  formats: [json, markdown]

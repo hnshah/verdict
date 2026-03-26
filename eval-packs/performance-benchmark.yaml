@@ -1,0 +1,82 @@
+name: Performance Benchmark
+description: Test response time, quality vs speed tradeoffs
+
+cases:
+  # Quick tasks (should be <1s)
+  - id: perf-simple-math
+    prompt: "What is 7 * 8?"
+    criteria: "Answer is 56"
+    scorer: contains
+    expected: "56"
+    tags: [performance, fast, math]
+
+  - id: perf-yes-no
+    prompt: "Is Paris the capital of France? Answer yes or no."
+    criteria: "Answer is yes"
+    scorer: contains
+    expected: "yes"
+    tags: [performance, fast, factual]
+
+  # Medium tasks (should be 1-3s)
+  - id: perf-short-code
+    prompt: "Write a Python function to reverse a string"
+    criteria: "Should have function definition, parameter, return reversed string"
+    tags: [performance, medium, code]
+
+  - id: perf-json-gen
+    prompt: "Generate JSON for a person with name and age"
+    criteria: "Valid JSON with name and age fields"
+    scorer: json
+    tags: [performance, medium, json]
+
+  # Complex tasks (3-10s acceptable)
+  - id: perf-code-review
+    prompt: |
+      Review this code for bugs:
+      ```typescript
+      function divide(a: number, b: number) {
+        return a / b;
+      }
+      ```
+    criteria: "Should identify division by zero issue"
+    tags: [performance, complex, review]
+
+  - id: perf-bug-analysis
+    prompt: |
+      Find the bug:
+      ```python
+      def process(items):
+        total = 0
+        for i in range(len(items)):
+          total += items[i+1]
+        return total
+      ```
+    criteria: "Should identify off-by-one error (i+1 with range(len))"
+    tags: [performance, complex, debugging]
+
+  # Conciseness vs completeness
+  - id: perf-concise
+    prompt: "Explain binary search in one sentence"
+    criteria: "Short, accurate explanation of binary search"
+    tags: [performance, concise]
+
+  - id: perf-detailed
+    prompt: "Explain binary search algorithm in detail with example"
+    criteria: "Comprehensive explanation with steps and example"
+    tags: [performance, detailed]
+
+  # Batch operations simulation
+  - id: perf-batch-1
+    prompt: "List 5 programming languages"
+    criteria: "Should list exactly 5 languages"
+    tags: [performance, batch]
+
+  - id: perf-batch-2
+    prompt: "Name 3 databases"
+    criteria: "Should list exactly 3 databases"
+    tags: [performance, batch]
+
+  - id: perf-batch-3
+    prompt: "Give 4 sorting algorithms"
+    criteria: "Should list exactly 4 sorting algorithms"
+    tags: [performance, batch]

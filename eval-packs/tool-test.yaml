@@ -1,0 +1,22 @@
+name: Tool Calling Test
+description: Test tool calling functionality
+
+cases:
+  - id: tool-simple
+    prompt: "What's the weather in San Francisco?"
+    criteria: "Calls get_weather tool with location: San Francisco"
+    scorer: tool_call
+    expected_tool: get_weather
+    expected_args:
+      location: "San Francisco"
+    tools:
+      - name: get_weather
+        description: "Get current weather for a location"
+        parameters:
+          type: object
+          properties:
+            location:
+              type: string
+              description: "City name"
+          required: ["location"]
+    tags: [tools]

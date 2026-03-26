@@ -1,0 +1,174 @@
+name: Verdict Stress Test
+description: Push Verdict harder - complex scenarios, edge cases, potential bugs
+
+cases:
+  # JSON Schema validation
+  - id: json-schema-test
+    prompt: "Generate a user profile with name (string), age (number), and active (boolean)"
+    criteria: "Valid JSON matching schema"
+    scorer: jsonschema
+    schema:
+      type: object
+      required: ["name", "age", "active"]
+      properties:
+        name:
+          type: string
+        age:
+          type: number
+        active:
+          type: boolean
+    tags: [json, schema]
+
+  # Exact match scorer
+  - id: exact-match-test
+    prompt: "What is the capital of France? Answer with just the city name, nothing else."
+    criteria: "Exact match: Paris"
+    scorer: exact
+    expected: "Paris"
+    tags: [exact, factual]
+
+  # Contains scorer
+  - id: contains-test
+    prompt: "Write a sentence about machine learning"
+    criteria: "Must contain the phrase 'machine learning'"
+    scorer: contains
+    expected: "machine learning"
+    tags: [contains, flexible]
+
+  # Multiple tools - confusability
+  - id: confusable-tools
+    prompt: "Calculate 15 * 23"
+    criteria: "Should use calculator, not search or weather"
+    scorer: tool_call
+    expected_tool: calculator
+    expected_args:
+      operation: "multiply"
+      a: 15
+      b: 23
+    tools:
+      - name: search_web
+        description: "Search the internet"
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+      - name: get_weather
+        description: "Get weather"
+        parameters:
+          type: object
+          properties:
+            location:
+              type: string
+      - name: calculator
+        description: "Perform mathematical calculations"
+        parameters:
+          type: object
+          properties:
+            operation:
+              type: string
+              enum: ["add", "subtract", "multiply", "divide"]
+            a:
+              type: number
+            b:
+              type: number
+          required: ["operation", "a", "b"]
+    tags: [tools, confusability, math]
+
+  # Tool with partial args
+  - id: partial-args
+    prompt: "Send an email to bob@example.com with subject 'Hello'"
+    criteria: "Calls send_email with to and subject, may omit body"
+    scorer: tool_call
+    expected_tool: send_email
+    expected_args:
+      to: "bob@example.com"
+      subject: "Hello"
+    tools:
+      - name: send_email
+        description: "Send an email"
+        parameters:
+          type: object
+          properties:
+            to:
+              type: string
+            subject:
+              type: string
+            body:
+              type: string
+          required: ["to", "subject"]
+    tags: [tools, args, partial]
+
+  # Empty response edge case
+  - id: empty-response
+    prompt: ""
+    criteria: "Should handle empty prompt gracefully"
+    tags: [edge, empty]
+
+  # Very long prompt
+  - id: long-prompt
+    prompt: "Explain quantum computing in detail, covering superposition, entanglement, quantum gates, quantum algorithms like Shor's algorithm and Grover's algorithm, quantum error correction, decoherence, the difference between quantum and classical computing, current state of quantum hardware, challenges in building quantum computers, and future applications in cryptography, drug discovery, and optimization problems."
+    criteria: "Comprehensive explanation covering multiple aspects of quantum computing"
+    tags: [long, complex]
+
+  # Unicode and special chars
+  - id: unicode-test
+    prompt: "Translate 'Hello' to Chinese and Japanese"
+    criteria: "Should include 你好 (Chinese) and こんにちは (Japanese)"
+    scorer: contains
+    expected: "你好"
+    tags: [unicode, i18n]
+
+  # Multiple tool calls in sequence
+  - id: multi-tool-sequence
+    prompt: "First calculate 5+3, then search for 'weather' using that result"
+    criteria: "Should call calculator first, may call search second"
+    scorer: tool_call
+    expected_tool: calculator
+    expected_args:
+      operation: "add"
+      a: 5
+      b: 3
+    tools:
+      - name: calculator
+        description: "Calculate"
+        parameters:
+          type: object
+          properties:
+            operation:
+              type: string
+            a:
+              type: number
+            b:
+              type: number
+      - name: search_web
+        description: "Search"
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+    tags: [tools, sequence, multi]
+
+  # JSON with nested structure
+  - id: nested-json
+    prompt: "Generate a nested user object with address (street, city, country)"
+    criteria: "Nested JSON structure with address object"
+    scorer: jsonschema
+    schema:
+      type: object
+      required: ["name", "address"]
+      properties:
+        name:
+          type: string
+        address:
+          type: object
+          required: ["street", "city", "country"]
+          properties:
+            street:
+              type: string
+            city:
+              type: string
+            country:
+              type: string
+    tags: [json, nested]

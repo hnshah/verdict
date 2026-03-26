@@ -1,0 +1,159 @@
+name: Code Generation Quality
+description: Test models on actual code generation tasks - TypeScript, Python, bug fixes
+
+cases:
+  # TypeScript interface generation
+  - id: ts-interface-1
+    prompt: |
+      Create a TypeScript interface for a User with:
+      - name (string, required)
+      - email (string, required)
+      - age (number, optional)
+      - roles (array of strings, optional)
+    criteria: |
+      Should have:
+      1. Proper TypeScript syntax
+      2. All fields with correct types
+      3. Optional fields marked with ?
+      4. Array type for roles
+    tags: [typescript, interfaces]
+
+  # Bug fix implementation
+  - id: bugfix-1
+    prompt: |
+      Fix this bug:
+      
+      ```typescript
+      function extractJson(text: string): string {
+        return text.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+      }
+      ```
+      
+      Problem: Fails when text has content before the fence like "Here's an example:\n```json\n{...}\n```"
+    criteria: |
+      Should:
+      1. Use regex to match and extract fence content
+      2. Handle text before/after fence
+      3. Return extracted JSON, not modified input
+      4. Use capture groups
+    tags: [bugfix, regex]
+
+  # Python data processing
+  - id: python-processing-1
+    prompt: |
+      Write Python code to:
+      1. Read a JSON file
+      2. Filter items where status == "active"
+      3. Sort by created_at descending
+      4. Return top 10
+    criteria: |
+      Should include:
+      1. json.load() or similar
+      2. List comprehension or filter()
+      3. sorted() with key and reverse
+      4. Slice [:10]
+      5. Error handling
+    tags: [python, data]
+
+  # Error handling
+  - id: error-handling-1
+    prompt: |
+      Add error handling to:
+      
+      ```typescript
+      const data = JSON.parse(response);
+      return data.results.map(r => r.id);
+      ```
+    criteria: |
+      Should handle:
+      1. JSON parse errors
+      2. Missing results field
+      3. Null/undefined values
+      4. Return safe default or throw clear error
+    tags: [error-handling, typescript]
+
+  # Test case writing
+  - id: test-case-1
+    prompt: |
+      Write a test for this function:
+      
+      ```typescript
+      function scoreToolCall(
+        toolCalls: ToolCall[] | undefined,
+        expectedTool: string
+      ): number {
+        if (!toolCalls?.length) {
+          return expectedTool === '' ? 10 : 0;
+        }
+        return toolCalls.some(t => t.name === expectedTool) ? 10 : 0;
+      }
+      ```
+    criteria: |
+      Should test:
+      1. No tool calls + empty expected = 10
+      2. No tool calls + expected tool = 0
+      3. Correct tool called = 10
+      4. Wrong tool called = 0
+      5. Multiple tools, one matches = 10
+    tags: [testing, typescript]
+
+  # Refactoring
+  - id: refactor-1
+    prompt: |
+      Refactor this to be more maintainable:
+      
+      ```typescript
+      const stripped = text
+        .replace(/^```(?:json)?\s*/i, '')
+        .replace(/\s*```$/, '')
+        .trim();
+      
+      if (stripped.startsWith('{') || stripped.startsWith('[')) {
+        try {
+          return JSON.parse(stripped);
+        } catch { return null; }
+      }
+      return null;
+      ```
+    criteria: |
+      Should:
+      1. Extract to separate function
+      2. Add descriptive name
+      3. Add comments
+      4. Handle edge cases explicitly
+      5. Return type annotation
+    tags: [refactoring, clean-code]
+
+  # API design
+  - id: api-design-1
+    prompt: |
+      Design a function signature for:
+      "Score a model's response against expected output using different scoring methods (exact, contains, LLM judge)"
+    criteria: |
+      Should include:
+      1. Function name describes purpose
+      2. Parameters for response, expected, scoring method
+      3. Return type (score + reasoning)
+      4. TypeScript types
+      5. Optional parameters where appropriate
+    tags: [api-design, typescript]
+
+  # Documentation
+  - id: documentation-1
+    prompt: |
+      Write JSDoc for:
+      
+      ```typescript
+      function extractJson(text: string): string | null {
+        const match = text.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
+        return match ? match[1].trim() : null;
+      }
+      ```
+    criteria: |
+      Should include:
+      1. Description of what function does
+      2. @param for text parameter
+      3. @returns describing return value
+      4. Examples of usage
+      5. Edge cases mentioned
+    tags: [documentation, jsdoc]
