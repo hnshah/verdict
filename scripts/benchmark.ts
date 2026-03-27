@@ -166,8 +166,8 @@ async function main(): Promise<void> {
   let config: any
   try {
     const configPath = resolve(process.cwd(), 'verdict.yaml')
-    const yaml = await import('yaml')
-    config = yaml.parse(readFileSync(configPath, 'utf-8'))
+    const yaml = await import('js-yaml')
+    config = yaml.load(readFileSync(configPath, 'utf-8'))
   } catch (err) {
     console.error(chalk.red('❌ Error: Could not load verdict.yaml'))
     console.error(chalk.dim('Run `verdict init` first'))
