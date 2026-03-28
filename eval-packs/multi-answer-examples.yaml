@@ -1,0 +1,49 @@
+# eval-packs/multi-answer-examples.yaml
+name: Multi-Answer Examples
+version: 1.0.0
+description: Demonstrates the array expected syntax — multiple correct answers per case (OR logic)
+
+cases:
+  - id: multi-001
+    description: "Capital of Japan — accepts English or Japanese spelling"
+    category: factual
+    prompt: "What is the capital of Japan? Reply with just the city name."
+    criteria: "Single correct city name"
+    expected:
+      - "Tokyo"
+      - "tokyo"
+      - "Tōkyō"
+    scorer: exact
+    tags: [factual, multi-answer]
+
+  - id: multi-002
+    description: "Abbreviation for 'as soon as possible' — multiple accepted forms"
+    prompt: "What is the common abbreviation for 'as soon as possible'? Reply with just the abbreviation."
+    criteria: "Correct abbreviation"
+    expected:
+      - "ASAP"
+      - "asap"
+      - "A.S.A.P."
+    scorer: exact
+    tags: [factual, multi-answer]
+
+  - id: multi-003
+    description: "Contains scorer with multiple accepted keywords"
+    category: technical
+    prompt: "Name a popular JavaScript runtime that runs outside the browser."
+    criteria: "Mentions a valid JS runtime"
+    expected:
+      - "Node"
+      - "Deno"
+      - "Bun"
+    scorer: contains
+    tags: [technical, multi-answer]
+
+  - id: multi-004
+    description: "Single string expected still works (backward compat)"
+    category: factual
+    prompt: "What is 2 + 2? Reply with just the number."
+    criteria: "Correct answer"
+    expected: "4"
+    scorer: exact
+    tags: [factual, single-answer]
