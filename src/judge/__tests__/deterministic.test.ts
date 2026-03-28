@@ -5,6 +5,7 @@ import {
   scoreContains,
   scoreToolCall,
   scoreJsonSchema,
+  scoreRegex,
   isDeterministic,
   scoreDeterministic,
 } from '../deterministic.js'
@@ -229,6 +230,40 @@ describe('deterministic scorers', () => {
     })
   })
 
+  describe('scoreRegex', () => {
+    it('scores matching output as 10/10', () => {
+      const result = scoreRegex('The answer is 42.', '\\d+')
+      expect(result.total).toBe(10)
+    })
+
+    it('scores non-matching output as 0/10', () => {
+      const result = scoreRegex('No numbers here', '^\\d+$')
+      expect(result.total).toBe(0)
+      expect(result.reasoning).toContain('does not match')
+    })
+
+    it('handles invalid regex pattern gracefully', () => {
+      const result = scoreRegex('anything', '[invalid')
+      expect(result.total).toBe(0)
+      expect(result.reasoning).toContain('Invalid regex pattern')
+    })
+
+    it('supports /pattern/flags format', () => {
+      const result = scoreRegex('Hello World', '/hello/i')
+      expect(result.total).toBe(10)
+    })
+
+    it('supports global and multiline flags', () => {
+      const result = scoreRegex('line1\nline2', '/^line2$/m')
+      expect(result.total).toBe(10)
+    })
+
+    it('works without slash format', () => {
+      const result = scoreRegex('test@example.com', '[a-z]+@[a-z]+\\.[a-z]+')
+      expect(result.total).toBe(10)
+    })
+  })
+
   describe('isDeterministic', () => {
     it('returns true for deterministic scorers', () => {
       expect(isDeterministic('json')).toBe(true)
@@ -236,6 +271,7 @@ describe('deterministic scorers', () => {
       expect(isDeterministic('contains')).toBe(true)
       expect(isDeterministic('jsonschema')).toBe(true)
       expect(isDeterministic('tool_call')).toBe(true)
+      expect(isDeterministic('regex')).toBe(true)
     })
 
     it('returns false for non-deterministic scorers', () => {
@@ -265,6 +301,12 @@ describe('deterministic scorers', () => {
 
     it('dispatches to scoreJsonSchema', () => {
       const result = scoreDeterministic('jsonschema', '{"a": 1}', undefined, { required: ['a'], properties: { a: { type: 'number' } } })
+      expect(result).not.toBeNull()
+      expect(result!.total).toBe(10)
+    })
+
+    it('dispatches to scoreRegex', () => {
+      const result = scoreDeterministic('regex', 'abc123', '\\d+')
       expect(result).not.toBeNull()
       expect(result!.total).toBe(10)
     })

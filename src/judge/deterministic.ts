@@ -215,8 +215,37 @@ export function scoreJsonSchema(output: string, schema: Record<string, unknown>)
   }
 }
 
+export function scoreRegex(output: string, pattern: string): JudgeScore {
+  let regex: RegExp
+  try {
+    // Support /pattern/flags format
+    const slashMatch = pattern.match(/^\/(.+)\/([gimsuy]*)$/)
+    if (slashMatch) {
+      regex = new RegExp(slashMatch[1], slashMatch[2])
+    } else {
+      regex = new RegExp(pattern)
+    }
+  } catch (err) {
+    return {
+      accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+      reasoning: `Invalid regex pattern: ${err instanceof Error ? err.message : err}`,
+    }
+  }
+
+  if (regex.test(output)) {
+    return {
+      accuracy: 10, completeness: 10, conciseness: 10, total: 10,
+      reasoning: `Output matches regex pattern: ${pattern}`,
+    }
+  }
+  return {
+    accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+    reasoning: `Output does not match regex pattern: ${pattern}`,
+  }
+}
+
 export function isDeterministic(scorer: string): boolean {
-  return scorer === 'json' || scorer === 'exact' || scorer === 'contains' || scorer === 'jsonschema' || scorer === 'tool_call'
+  return scorer === 'json' || scorer === 'exact' || scorer === 'contains' || scorer === 'jsonschema' || scorer === 'tool_call' || scorer === 'regex'
 }
 
 export function scoreDeterministic(
@@ -226,5 +255,6 @@ export function scoreDeterministic(
   if (scorer === 'exact') return scoreExact(output, expected ?? '')
   if (scorer === 'contains') return scoreContains(output, expected ?? '')
   if (scorer === 'jsonschema') return scoreJsonSchema(output, schema ?? {})
+  if (scorer === 'regex') return scoreRegex(output, expected ?? '')
   return null
 }

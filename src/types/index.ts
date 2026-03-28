@@ -80,8 +80,9 @@ export const EvalCaseSchema = z.object({
   tags: z.array(z.string()).default([]),
   // scorer: 'llm' uses LLM judge (default), 'json' parses output as JSON (pass/fail),
   // 'exact' checks exact string match, 'contains' checks substring presence,
-  // 'jsonschema' validates JSON output against a schema, 'tool_call' scores tool usage
-  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'jsonschema', 'tool_call']).default('llm'),
+  // 'jsonschema' validates JSON output against a schema, 'tool_call' scores tool usage,
+  // 'regex' checks output against a regex pattern (expected field is the pattern)
+  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'jsonschema', 'tool_call', 'regex']).default('llm'),
   schema: z.record(z.unknown()).optional(),
   turns: z.array(z.object({
     role: z.enum(['user', 'assistant']),

@@ -1,0 +1,34 @@
+name: Regex Scorer Examples
+description: Demonstrates the regex scorer — checks model output against regular expression patterns
+category: pattern-matching
+
+cases:
+  - id: regex-email-extraction
+    description: "Model output must contain a valid email address"
+    category: pattern-matching
+    prompt: |
+      What is the support email for Acme Corp? Reply with just the email address.
+    scorer: regex
+    expected: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
+    criteria: "Output contains a valid email address"
+    tags: [regex, extraction]
+
+  - id: regex-iso-date
+    description: "Model output must contain an ISO 8601 date"
+    category: pattern-matching
+    prompt: |
+      What is today's date? Reply in ISO 8601 format (YYYY-MM-DD).
+    scorer: regex
+    expected: "\\d{4}-\\d{2}-\\d{2}"
+    criteria: "Output contains a date in YYYY-MM-DD format"
+    tags: [regex, date-format]
+
+  - id: regex-hex-color
+    description: "Model output must contain a hex color code"
+    category: pattern-matching
+    prompt: |
+      What is the hex color code for pure red? Reply with just the color code.
+    scorer: regex
+    expected: "/^#([0-9a-f]{6}|[0-9a-f]{3})$/i"
+    criteria: "Output is a valid hex color code like #FF0000"
+    tags: [regex, color-format]
