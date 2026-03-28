@@ -3,7 +3,7 @@ import { defineConfig } from 'tsup'
 export default defineConfig({
   entry: ['src/cli/index.ts'],
   format: ['esm'],
-  target: 'node22',
+  target: 'node18',
   outDir: 'dist/cli',
   clean: true,
   // Do NOT use shims:true — it injects a fetch polyfill that conflicts with
