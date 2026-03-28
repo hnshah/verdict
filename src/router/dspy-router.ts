@@ -66,33 +66,36 @@ export class DSPyRouter {
    * Convert DSPy decision to Verdict Classification format
    */
   toClassification(decision: DSPyRoutingDecision): Classification {
-    const model = decision.model || decision.recommended_model || 'unknown';
     return {
       category: this.mapCategory(decision.category),
-      complexity: this.mapComplexity(decision.complexity),
       confidence: decision.confidence || 0.8,
-      reasoning: decision.reasoning || `DSPy: ${decision.category} → ${model}`,
+      signals: [],
+      method: 'auto',
     };
   }
 
   private mapCategory(category: string): Classification['category'] {
     const map: Record<string, Classification['category']> = {
-      'tool-calling': 'tool-calling',
+      'tool-calling': 'general',
+      'tool_call': 'general',
       'reasoning': 'reasoning',
-      'code-generation': 'code-generation',
+      'code-generation': 'code_generation',
+      'code_generation': 'code_generation',
+      'code-review': 'code_review',
+      'code_review': 'code_review',
+      'bug-analysis': 'bug_analysis',
+      'bug_analysis': 'bug_analysis',
+      'writing': 'writing',
       'general': 'general',
-      'creative': 'creative',
+      'math': 'math',
+      'creative': 'writing',
     };
-    return map[category] || 'general';
+    return map[category] ?? 'general';
   }
 
-  private mapComplexity(complexity: string): Classification['complexity'] {
-    const map: Record<string, Classification['complexity']> = {
-      'simple': 'simple',
-      'moderate': 'moderate',
-      'complex': 'complex',
-    };
-    return map[complexity] || 'moderate';
+  private mapComplexity(complexity: string): string {
+    const valid = ['simple', 'moderate', 'complex'];
+    return valid.includes(complexity) ? complexity : 'moderate';
   }
 
   /**
@@ -117,12 +120,12 @@ export interface ShadowModeLog {
   prompt: string;
   heuristic: {
     category: string;
-    complexity: string;
+    complexity?: string;
     model: string;
   };
   dspy: {
     category: string;
-    complexity: string;
+    complexity?: string;
     model: string;
   } | null;
   agreement: boolean;
@@ -142,8 +145,8 @@ export class ShadowModeLogger {
    */
   log(
     prompt: string,
-    heuristic: { category: string; complexity: string; model: string },
-    dspy: { category: string; complexity: string; model: string } | null
+    heuristic: { category: string; complexity?: string; model: string },
+    dspy: { category: string; complexity?: string; model: string } | null
   ): void {
     const entry: ShadowModeLog = {
       timestamp: new Date().toISOString(),
@@ -161,8 +164,8 @@ export class ShadowModeLogger {
   }
 
   private checkAgreement(
-    heuristic: { category: string; complexity: string; model: string },
-    dspy: { category: string; complexity: string; model: string } | null
+    heuristic: { category: string; complexity?: string; model: string },
+    dspy: { category: string; complexity?: string; model: string } | null
   ): boolean {
     if (!dspy) return false;
     
@@ -174,8 +177,8 @@ export class ShadowModeLogger {
   }
 
   private getDisagreementType(
-    heuristic: { category: string; complexity: string; model: string },
-    dspy: { category: string; complexity: string; model: string }
+    heuristic: { category: string; complexity?: string; model: string },
+    dspy: { category: string; complexity?: string; model: string }
   ): 'category' | 'complexity' | 'model' | 'all' {
     const categoryMatch = heuristic.category === dspy.category;
     const complexityMatch = heuristic.complexity === dspy.complexity;
