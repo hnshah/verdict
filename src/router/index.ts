@@ -6,7 +6,7 @@
 
 import { randomUUID } from 'crypto';
 import { TaskClassifier } from './classifier.js';
-import { ModelSelector } from './selector.js';
+import { selectModel } from './selector.js';
 import { RouterStorage } from './storage.js';
 import { DSPyRouter, ShadowModeLogger, type DSPyRouterConfig } from './dspy-router.js';
 import type {
@@ -61,12 +61,29 @@ export class VerdictRouter {
     const performanceData = this.storage.getPerformanceForCategory(classification.category);
     const preferences = this.storage.getPreferences();
 
-    // 3. Select best model (heuristic)
-    const perfMap = new Map<string, any[]>();
-    perfMap.set(classification.category, performanceData);
-    
-    const selector = new ModelSelector(this.config, perfMap, preferences);
-    const choice = selector.select(classification.category, constraints);
+    // 3. Select best model using eval history
+    const selected = selectModel(this.storage.db, {
+      taskType: classification.category,
+      preferLocal: constraints.preferLocal,
+      minScore: constraints.minQuality,
+    });
+    const choice: ModelChoice = selected
+      ? {
+          model: selected.modelId,
+          reason: selected.reason,
+          expectedScore: selected.score,
+          expectedLatency: 0,
+          confidence: classification.confidence,
+          isExploration: false,
+        }
+      : {
+          model: 'unknown',
+          reason: 'No eval history — run `verdict run` first to build model performance data',
+          expectedScore: 0,
+          expectedLatency: 0,
+          confidence: 0,
+          isExploration: true,
+        };
 
     // 4. Shadow mode: Compare with DSPy router
     let shadowData: { dspy: any; heuristic: any } | undefined;
@@ -77,7 +94,6 @@ export class VerdictRouter {
         
         const heuristicData = {
           category: classification.category,
-          complexity: classification.complexity || 'moderate',
           model: choice.model,
         };
         
