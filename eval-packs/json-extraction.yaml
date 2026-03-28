@@ -1,0 +1,93 @@
+name: JSON Extraction
+description: Test models on structured data extraction and JSON formatting
+
+cases:
+  - prompt: |
+      Extract contact information from this email and return as JSON:
+      
+      "Hi, I'm Sarah Chen from Acme Corp. You can reach me at sarah.chen@acme.com or call my office at (555) 123-4567. Our address is 123 Market St, San Francisco, CA 94103."
+      
+      Format: {"name": "...", "email": "...", "phone": "...", "company": "...", "address": "..."}
+    expected: Valid JSON with all fields correctly extracted
+
+  - prompt: |
+      Parse this invoice into JSON:
+      
+      Invoice #INV-2024-001
+      Date: March 15, 2024
+      Bill To: John Smith
+      
+      Items:
+      - Widget A (qty: 2) @ $50.00 = $100.00
+      - Widget B (qty: 1) @ $75.00 = $75.00
+      
+      Subtotal: $175.00
+      Tax (8%): $14.00
+      Total: $189.00
+    expected: Properly nested JSON with invoice details, items array, and totals
+
+  - prompt: |
+      Convert this recipe to structured JSON:
+      
+      Chocolate Chip Cookies
+      Prep: 15 min, Cook: 12 min, Servings: 24
+      
+      Ingredients:
+      - 2 cups flour
+      - 1 tsp baking soda
+      - 1 cup butter
+      - 3/4 cup sugar
+      - 1 cup chocolate chips
+      
+      Instructions:
+      1. Preheat oven to 375°F
+      2. Mix dry ingredients
+      3. Cream butter and sugar
+      4. Combine and add chocolate chips
+      5. Bake 12 minutes
+    expected: JSON with recipe metadata, ingredients with measurements, ordered steps
+
+  - prompt: |
+      Extract product specs from this description:
+      
+      "The X1 Pro laptop features a 15.6-inch 4K display, Intel Core i7-13700H processor, 32GB DDR5 RAM, 1TB NVMe SSD, and NVIDIA RTX 4060 GPU. Weighs 4.2 lbs. Battery life up to 8 hours. Ports: 3x USB-C, 2x USB-A, HDMI 2.1, SD card reader. Price: $1,899."
+    expected: Structured JSON with display, CPU, RAM, storage, GPU, weight, battery, ports array, price
+
+  - prompt: |
+      Convert this meeting transcript snippet to JSON events:
+      
+      [10:00] Sarah: Let's start with the Q1 results.
+      [10:02] John: Revenue was $2.5M, up 15% from Q4.
+      [10:05] Sarah: Great! What about expenses?
+      [10:07] John: $1.8M, slightly over budget.
+      [10:10] Sarah: We'll need to discuss cost optimization next week.
+    expected: Array of events with timestamp, speaker, message, maybe action items extracted
+
+  - prompt: |
+      Extract key info from this support ticket:
+      
+      Ticket #12345
+      From: angry.customer@email.com
+      Subject: App keeps crashing
+      Priority: High
+      Tags: bug, mobile, iOS
+      
+      "The app crashes every time I try to upload a photo. I'm on iPhone 14, iOS 17.2. This has been happening since the update 3 days ago. Need this fixed ASAP."
+    expected: JSON with ticket metadata, customer details, issue description, device info, urgency indicators
+
+  - prompt: |
+      Parse this calendar entry:
+      
+      Team Standup
+      Monday, March 25, 2024 at 9:00 AM - 9:30 AM (Pacific Time)
+      Location: Conference Room B / Zoom: https://zoom.us/j/123456
+      Attendees: Sarah Chen, John Doe, Mary Johnson
+      Recurring: Every weekday
+      Reminder: 15 minutes before
+    expected: Structured event JSON with datetime, duration, location, attendees array, recurrence rule, reminder
+
+  - prompt: |
+      Extract flight information:
+      
+      Your flight UA1234 from San Francisco (SFO) to New York (JFK) departs on April 15, 2024 at 8:30 AM and arrives at 5:15 PM local time. Seat 12A. Gate B22. Terminal 3.
+    expected: JSON with flight number, origin/dest codes, departure/arrival times with dates, seat, gate, terminal

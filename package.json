@@ -20,6 +20,7 @@
     "build": "tsup",
     "prepublishOnly": "npm run build && npm run typecheck",
     "dev": "npx tsx src/cli/index.ts",
+    "benchmark": "npx tsx scripts/benchmark.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

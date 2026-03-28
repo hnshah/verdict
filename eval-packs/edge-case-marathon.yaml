@@ -1,0 +1,172 @@
+name: Edge Case Marathon
+description: Every edge case we can think of - Unicode, empty inputs, huge inputs, special chars
+
+cases:
+  # Empty everything
+  - id: edge-empty-prompt
+    prompt: ""
+    criteria: "Should handle empty prompt gracefully without crashing"
+    tags: [edge, empty]
+
+  - id: edge-whitespace-only
+    prompt: "   \n\t  \n   "
+    criteria: "Should handle whitespace-only input"
+    tags: [edge, whitespace]
+
+  # Unicode stress
+  - id: edge-emoji
+    prompt: "Explain this: 🚀🔥💯🎯🐛✅❌🎉"
+    criteria: "Should handle emoji correctly and explain them"
+    tags: [edge, unicode, emoji]
+
+  - id: edge-mixed-scripts
+    prompt: "Translate: Hello (English), 你好 (Chinese), こんにちは (Japanese), Привет (Russian), مرحبا (Arabic)"
+    criteria: "Should handle multiple writing systems"
+    tags: [edge, unicode, multilingual]
+
+  # Very long inputs
+  - id: edge-long-repeated
+    prompt: "Count the words: test test test test test test test test test test test test test test test test test test test test"
+    criteria: "Should count repeated words (20 total)"
+    scorer: contains
+    expected: "20"
+    tags: [edge, long, counting]
+
+  # Special characters
+  - id: edge-special-chars
+    prompt: "Escape these special regex chars: . * + ? ^ $ { } [ ] ( ) | \\"
+    criteria: "Should handle special characters without breaking"
+    tags: [edge, special-chars]
+
+  # Nested quotes
+  - id: edge-nested-quotes
+    prompt: "Parse: {\"message\": \"He said \\\"hello\\\" to me\"}"
+    criteria: "Should handle nested quotes in JSON"
+    tags: [edge, quotes, json]
+
+  # Mixed content
+  - id: edge-mixed-content
+    prompt: |
+      Extract JSON from this mess:
+      
+      Random text before...
+      
+      ```python
+      code = "not json"
+      ```
+      
+      ```json
+      {"name": "test"}
+      ```
+      
+      More text after...
+    criteria: "Should extract the JSON block, not the Python block"
+    scorer: contains
+    expected: '{"name": "test"}'
+    tags: [edge, mixed-content]
+
+  # Malformed JSON variations
+  - id: edge-json-trailing-comma
+    prompt: 'Return this as-is: {"a": 1, "b": 2,}'
+    criteria: "Should detect trailing comma as invalid JSON"
+    scorer: json
+    tags: [edge, json, invalid]
+
+  - id: edge-json-single-quotes
+    prompt: "Return this as-is: {'a': 1}"
+    criteria: "Should detect single quotes as invalid JSON"
+    scorer: json
+    tags: [edge, json, invalid]
+
+  - id: edge-json-comments
+    prompt: 'Return: {"a": 1 /* comment */, "b": 2}'
+    criteria: "Should detect comments as invalid JSON"
+    scorer: json
+    tags: [edge, json, invalid]
+
+  # Numbers edge cases
+  - id: edge-very-large-number
+    prompt: "What is 999999999999999999999 + 1?"
+    criteria: "Should handle very large numbers"
+    tags: [edge, numbers, large]
+
+  - id: edge-scientific-notation
+    prompt: "What is 1.5e10 in regular notation?"
+    criteria: "Should understand scientific notation (15000000000)"
+    scorer: contains
+    expected: "15"
+    tags: [edge, numbers, scientific]
+
+  # Tool calling edge cases
+  - id: edge-tool-empty-params
+    prompt: "Get random number"
+    criteria: "Calls get_random with no params needed"
+    scorer: tool_call
+    expected_tool: get_random
+    tools:
+      - name: get_random
+        description: "Get random number"
+        parameters:
+          type: object
+          properties: {}
+    tags: [edge, tools, empty-params]
+
+  - id: edge-tool-optional-params
+    prompt: "Search for 'test'"
+    criteria: "Calls search, may or may not include optional limit param"
+    scorer: tool_call
+    expected_tool: search
+    expected_args:
+      query: "test"
+    tools:
+      - name: search
+        description: "Search"
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+            limit:
+              type: number
+          required: ["query"]
+    tags: [edge, tools, optional]
+
+  # Case sensitivity variations
+  - id: edge-case-mixed
+    prompt: "Say 'HeLLo WoRLd' exactly"
+    criteria: "Exact match should handle mixed case"
+    scorer: exact
+    expected: "HeLLo WoRLd"
+    tags: [edge, case, exact]
+
+  # Line breaks and formatting
+  - id: edge-multiline
+    prompt: |
+      Format this as:
+      Line 1
+      Line 2
+      Line 3
+    criteria: "Should preserve line breaks"
+    scorer: contains
+    expected: "Line 1\nLine 2\nLine 3"
+    tags: [edge, formatting, multiline]
+
+  # Null and undefined handling
+  - id: edge-null-value
+    prompt: 'Return JSON: {"value": null}'
+    criteria: "Should handle null values in JSON"
+    scorer: json
+    tags: [edge, json, null]
+
+  # Array edge cases  
+  - id: edge-empty-array
+    prompt: "Return an empty array in JSON"
+    criteria: "Valid JSON: []"
+    scorer: json
+    tags: [edge, json, array, empty]
+
+  - id: edge-nested-arrays
+    prompt: "Return JSON: [[1,2],[3,4],[5,6]]"
+    criteria: "Should handle nested arrays"
+    scorer: json
+    tags: [edge, json, array, nested]

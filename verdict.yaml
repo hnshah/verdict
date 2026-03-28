@@ -1,0 +1,31 @@
+models:
+  # Local models via Ollama
+  - id: qwen2.5:7b
+    model: qwen2.5:7b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [local, fast, code]
+    
+  - id: llama3.2:3b
+    model: llama3.2:3b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [local, small]
+
+judge:
+  model_id: qwen2.5:7b
+  provider: ollama
+  base_url: http://localhost:11434/v1
+  temperature: 0.1
+
+eval_packs:
+  - general
+  - quick-test
+
+settings:
+  parallel: 3
+  timeout_ms: 30000
+  retry_on_failure: true
+  num_retries: 2

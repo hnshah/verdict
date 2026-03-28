@@ -1,0 +1,139 @@
+name: Extreme Edge Cases
+description: Push Verdict to its limits - find breaking points
+
+cases:
+  # Test: Malformed JSON that looks valid
+  - id: almost-json
+    prompt: "Output this exact text: {name: 'test', age: 25}"
+    criteria: "Should detect invalid JSON (missing quotes around keys)"
+    scorer: json
+    tags: [json, edge, invalid]
+
+  # Test: Empty JSON
+  - id: empty-json-object
+    prompt: "Return an empty JSON object"
+    criteria: "Valid JSON: {}"
+    scorer: json
+    tags: [json, empty]
+
+  # Test: JSON array
+  - id: json-array
+    prompt: "Return a JSON array with 3 numbers"
+    criteria: "Valid JSON array"
+    scorer: json
+    tags: [json, array]
+
+  # Test: Very similar tool names (confusability)
+  - id: similar-tool-names
+    prompt: "Read the contents of file.txt"
+    criteria: "Should call read_file, not write_file or list_files"
+    scorer: tool_call
+    expected_tool: read_file
+    expected_args:
+      path: "file.txt"
+    tools:
+      - name: read_file
+        description: "Read file contents"
+        parameters:
+          type: object
+          properties:
+            path:
+              type: string
+      - name: write_file
+        description: "Write to file"
+        parameters:
+          type: object
+          properties:
+            path:
+              type: string
+            content:
+              type: string
+      - name: list_files
+        description: "List files in directory"
+        parameters:
+          type: object
+          properties:
+            directory:
+              type: string
+    tags: [tools, confusability, high]
+
+  # Test: Tool with no required parameters
+  - id: tool-no-params
+    prompt: "Get current time"
+    criteria: "Calls get_time with no parameters"
+    scorer: tool_call
+    expected_tool: get_time
+    tools:
+      - name: get_time
+        description: "Get current time"
+        parameters:
+          type: object
+          properties: {}
+    tags: [tools, no-params]
+
+  # Test: Case sensitivity in exact match
+  - id: case-sensitive-exact
+    prompt: "What is the capital of France? Answer: PARIS"
+    criteria: "Exact match should be case-insensitive"
+    scorer: exact
+    expected: "paris"
+    tags: [exact, case]
+
+  # Test: Whitespace handling
+  - id: whitespace-exact
+    prompt: "Say 'hello' with no extra words"
+    criteria: "Should match despite extra whitespace"
+    scorer: exact
+    expected: "  hello  "
+    tags: [exact, whitespace]
+
+  # Test: Multiple correct tools (ambiguous)
+  - id: ambiguous-tools
+    prompt: "Find information about Python programming"
+    criteria: "Could use search_web or search_docs - either acceptable"
+    scorer: tool_call
+    expected_tool: search_web
+    tools:
+      - name: search_web
+        description: "Search the internet"
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+      - name: search_docs
+        description: "Search documentation"
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+    tags: [tools, ambiguous]
+
+  # Test: Tool with enum parameter
+  - id: tool-enum-param
+    prompt: "Sort this list in descending order"
+    criteria: "Calls sort with direction=desc"
+    scorer: tool_call
+    expected_tool: sort
+    expected_args:
+      direction: "desc"
+    tools:
+      - name: sort
+        description: "Sort items"
+        parameters:
+          type: object
+          properties:
+            direction:
+              type: string
+              enum: ["asc", "desc"]
+          required: ["direction"]
+    tags: [tools, enum]
+
+  # Test: Substring contains vs exact
+  - id: contains-vs-exact
+    prompt: "Write about artificial intelligence and machine learning"
+    criteria: "Must contain both 'artificial intelligence' and 'machine learning'"
+    scorer: contains
+    expected: "artificial intelligence"
+    tags: [contains, partial]

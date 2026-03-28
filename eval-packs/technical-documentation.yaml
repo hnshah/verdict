@@ -1,0 +1,55 @@
+name: Technical Documentation
+description: Test models on clear technical writing, API docs, and developer-focused content
+
+cases:
+  - prompt: |
+      Write API documentation for this function:
+      
+      ```python
+      def calculate_score(values: List[float], weights: Optional[List[float]] = None) -> float:
+          if weights:
+              return sum(v * w for v, w in zip(values, weights))
+          return sum(values) / len(values)
+      ```
+    expected: Should include description, parameters with types, return value, examples, edge cases (empty list, mismatched lengths)
+
+  - prompt: |
+      Explain to a junior developer what a "race condition" is. Use a real-world analogy.
+    expected: Should use concrete analogy (bank account, shopping cart), explain why it's dangerous, show code example, mention solutions (locks, transactions)
+
+  - prompt: |
+      Write a README introduction for a new Python library called "fastcache" that provides in-memory caching with TTL support.
+    expected: Should have: what it does, key features, quick install, minimal example, when to use it, link to full docs
+
+  - prompt: |
+      Write release notes for version 2.0 that includes:
+      - Breaking change: removed deprecated `old_method()`
+      - New feature: async support
+      - Bug fix: memory leak in cache
+    expected: Should highlight breaking changes prominently, migration guide, emphasize new capabilities, organized by category
+
+  - prompt: |
+      Create a troubleshooting guide for "Connection timeout" error in a database client library.
+    expected: Should have: common causes (network, firewall, wrong host), how to diagnose (ping, telnet, logs), solutions ordered by likelihood, preventive measures
+
+  - prompt: |
+      Write a "Getting Started" tutorial for a REST API. First endpoint: `GET /users/{id}`
+    expected: Should include: prerequisites, auth setup, example request with curl, example response, common errors, next steps
+
+  - prompt: |
+      Document this complex SQL query for future maintainers:
+      
+      ```sql
+      SELECT u.name, COUNT(DISTINCT o.id) as orders, SUM(o.total) as revenue
+      FROM users u
+      LEFT JOIN orders o ON u.id = o.user_id AND o.status = 'completed'
+      WHERE u.created_at > DATE_SUB(NOW(), INTERVAL 30 DAY)
+      GROUP BY u.id
+      HAVING COUNT(DISTINCT o.id) > 5
+      ORDER BY revenue DESC;
+      ```
+    expected: Should explain purpose, break down each clause, explain LEFT JOIN vs INNER JOIN choice, why DISTINCT matters, business context
+
+  - prompt: |
+      Write error message text for: User tried to delete a record that's referenced by other tables.
+    expected: Should be user-friendly, explain what happened, why it failed, what to do instead (delete references first or cascade), maybe show which records

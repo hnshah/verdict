@@ -1,7 +1,5 @@
-# eval-packs/reasoning.yaml
-name: Reasoning
-version: 1.0.0
-description: 10 cases testing multi-step reasoning, logic puzzles, math, and chain-of-thought quality.
+name: Complex Reasoning
+description: Test logical reasoning, problem-solving, edge case analysis
 
 cases:
   - id: reason-001
@@ -73,3 +71,157 @@ cases:
     prompt: "Critique this argument: 'We should ban video games because studies show kids who play video games are more aggressive. Clearly, video games cause aggression.'"
     criteria: "Identifies correlation vs causation fallacy. Points out: aggressive kids may seek out violent games (reverse causation), confounding variables (parenting, pre-existing traits), publication bias in studies. Doesn't just assert 'correlation isn't causation' — explains the specific alternative explanations."
     tags: [reasoning, logic, critical-thinking]
+  # Root cause analysis
+  - id: reasoning-root-cause-1
+    prompt: |
+      System behavior:
+      - Files are indexed successfully (24 files)
+      - Vectors count shows 0
+      - Memory search returns empty
+      - searchMode is set to "search" (default)
+      - Code: if (searchMode === "search") { return false; // skip embeddings }
+      
+      What's the root cause chain?
+    criteria: |
+      Should identify:
+      1. Default searchMode prevents embeddings
+      2. No embeddings = no vectors
+      3. No vectors = empty search results
+      4. The conditional conflates indexing with search-time behavior
+      5. Fix: Remove the searchMode check from indexing
+    tags: [reasoning, debugging]
+
+  # Edge case prediction
+  - id: reasoning-edge-cases-1
+    prompt: |
+      This code extracts JSON from markdown:
+      
+      ```typescript
+      const match = text.match(/```json\s*\n?(.*?)\n?```/s);
+      return match ? match[1] : null;
+      ```
+      
+      What edge cases will break it?
+    criteria: |
+      Should mention:
+      1. Non-greedy (.*?) might match too little with nested braces
+      2. Assumes 'json' language specifier (won't match just ```)
+      3. Single-line JSON might not work (expects \n)
+      4. Multiple JSON blocks (only gets first)
+      5. Malformed fences (unclosed, wrong order)
+    tags: [reasoning, edge-cases]
+
+  # Performance analysis
+  - id: reasoning-performance-1
+    prompt: |
+      Compare these approaches:
+      
+      A: Run 3 models sequentially (timeout: 60s each)
+      B: Run 3 models in parallel (timeout: 60s each)
+      
+      For 10 test cases, what's the total time?
+    criteria: |
+      Should calculate:
+      1. Sequential: 10 cases × 3 models × 60s = 1800s (30 min)
+      2. Parallel: 10 cases × 60s = 600s (10 min)
+      3. 3x faster with parallel
+      4. BUT: concurrency=1 needed for Ollama (GPU contention)
+      5. Trade-off: speed vs resource usage
+    tags: [reasoning, performance]
+
+  # Trade-off analysis
+  - id: reasoning-tradeoffs-1
+    prompt: |
+      Should we use:
+      A) Exact match scoring (0 or 10, no middle ground)
+      B) LLM judge scoring (0-10 scale, nuanced)
+      
+      For testing "model should avoid calling tools when not needed"?
+    criteria: |
+      Should analyze:
+      1. Exact: Fast, deterministic, binary
+      2. LLM: Slow, may vary, nuanced
+      3. For this case: Exact is better (clear success/fail)
+      4. Tool not called = success, tool called = fail
+      5. No need for nuanced scoring here
+    tags: [reasoning, design-decisions]
+
+  # Debugging strategy
+  - id: reasoning-debug-1
+    prompt: |
+      Bug: JSON schema validation always fails with "missing required field: name"
+      
+      The response is:
+      ```json
+      {
+        "user": {
+          "name": "John",
+          "age": 30
+        }
+      }
+      ```
+      
+      Schema expects: {name, age}
+      
+      What's wrong and how to debug?
+    criteria: |
+      Should identify:
+      1. Response has extra "user" wrapper
+      2. Schema expects {name} at root, but got {user: {name}}
+      3. This is schema mismatch, not extraction bug
+      4. To debug: Log extracted JSON vs schema
+      5. Fix: Either change schema or instruct model better
+    tags: [reasoning, debugging]
+
+  # System design
+  - id: reasoning-system-1
+    prompt: |
+      Design a caching strategy for LLM eval results where:
+      - Same input should reuse cached response
+      - Cache should survive process restarts
+      - Cache should be invalidated if model changes
+      - Need to handle 1000s of cached entries
+      
+      What approach?
+    criteria: |
+      Should include:
+      1. Hash input + model config for cache key
+      2. Store in filesystem (JSON files or SQLite)
+      3. Include model version in key
+      4. LRU or TTL for cleanup
+      5. Consider storage size limits
+    tags: [reasoning, system-design]
+
+  # Impact analysis
+  - id: reasoning-impact-1
+    prompt: |
+      If we change tool calling scorer from:
+      - Old: Always return 0 when no tools called
+      - New: Return 10 if expectedTool is empty, else 0
+      
+      What existing test cases might break?
+    criteria: |
+      Should identify:
+      1. Tests expecting 0 when no tool + empty expected
+      2. Negative test cases (avoid tools)
+      3. Tests might need updating
+      4. But this is CORRECT behavior change
+      5. Breaking tests is OK if behavior is now right
+    tags: [reasoning, impact-analysis]
+
+  # Complexity estimation
+  - id: reasoning-complexity-1
+    prompt: |
+      Estimate complexity for:
+      "Add support for comparing N models instead of just 2"
+      
+      Current: Run model A, run model B, compare
+      New: Run models [A,B,C,D,...], compare all
+    criteria: |
+      Should mention:
+      1. Runner: Minimal change (already loops)
+      2. Judge: Need to compare N responses (pairwise or ranked)
+      3. Leaderboard: Need to show N models (already does)
+      4. Config: Already supports array of models
+      5. Estimated: Low complexity, mostly works already
+    tags: [reasoning, estimation]

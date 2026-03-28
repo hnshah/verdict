@@ -1,0 +1,13 @@
+name: Quick Dogfooding Test
+description: Minimal test to verify Verdict works
+
+cases:
+  - id: simple-math
+    prompt: "What is 2 + 2?"
+    criteria: "Answer is 4"
+    tags: [math, easy]
+    
+  - id: simple-reasoning
+    prompt: "If a train travels 60 miles per hour for 2 hours, how far does it go?"
+    criteria: "Answer is 120 miles with clear calculation shown"
+    tags: [reasoning, math]

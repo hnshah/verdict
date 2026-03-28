@@ -1,0 +1,56 @@
+name: Tool Calling Edge Cases
+description: Test edge cases to find bugs
+
+cases:
+  # Test: Multiple tools, model chooses wrong one
+  - id: wrong-tool
+    prompt: "Send an email to bob@example.com"
+    criteria: "Should call send_email, not get_weather"
+    scorer: tool_call
+    expected_tool: send_email
+    tools:
+      - name: get_weather
+        description: "Get weather"
+        parameters:
+          type: object
+          properties:
+            location:
+              type: string
+      - name: send_email
+        description: "Send an email"
+        parameters:
+          type: object
+          properties:
+            to:
+              type: string
+            subject:
+              type: string
+    tags: [tools, confusability]
+
+  # Test: No tools provided
+  - id: no-tool-call
+    prompt: "Just tell me the time"
+    criteria: "Should not call any tool"
+    scorer: tool_call
+    expected_tool: ""
+    tags: [tools, negative]
+    
+  # Test: Missing required argument
+  - id: missing-arg
+    prompt: "What's the weather?"
+    criteria: "Calls get_weather but should specify location"
+    scorer: tool_call
+    expected_tool: get_weather
+    expected_args:
+      location: "San Francisco"
+    tools:
+      - name: get_weather
+        description: "Get weather for a location"
+        parameters:
+          type: object
+          properties:
+            location:
+              type: string
+              description: "City name"
+          required: ["location"]
+    tags: [tools, args]
