@@ -1,0 +1,117 @@
+name: Tool Calling Advanced
+description: Test tool calling with argument validation, multi-tool scenarios, and refusal cases
+category: tool-calling
+
+cases:
+  - id: tool-weather-city
+    description: "Extracts city name and calls weather tool correctly"
+    category: tool-calling
+    prompt: "What's the weather like in Tokyo right now?"
+    scorer: tool_call
+    expected_tool: get_weather
+    expected_args:
+      city: "Tokyo"
+    tools:
+      - name: get_weather
+        description: "Get current weather conditions for a city"
+        parameters:
+          type: object
+          required: [city]
+          properties:
+            city:
+              type: string
+              description: "Name of the city"
+    criteria: "Calls get_weather with city: Tokyo"
+    tags: [tool-calling, extraction]
+
+  - id: tool-search-query
+    description: "Forms a good search query and calls search tool"
+    category: tool-calling
+    prompt: "Can you look up the latest news about OpenAI?"
+    scorer: tool_call
+    expected_tool: web_search
+    expected_args:
+      query: "OpenAI"
+    tools:
+      - name: web_search
+        description: "Search the web for information"
+        parameters:
+          type: object
+          required: [query]
+          properties:
+            query:
+              type: string
+              description: "Search query"
+    criteria: "Calls web_search with a query containing 'OpenAI'"
+    tags: [tool-calling, search]
+
+  - id: tool-calendar-create
+    description: "Creates a calendar event with correct parameters"
+    category: tool-calling
+    prompt: "Schedule a meeting called 'Product Review' for tomorrow at 3pm."
+    scorer: tool_call
+    expected_tool: create_event
+    expected_args:
+      title: "Product Review"
+    tools:
+      - name: create_event
+        description: "Create a calendar event"
+        parameters:
+          type: object
+          required: [title, time]
+          properties:
+            title:
+              type: string
+              description: "Event title"
+            time:
+              type: string
+              description: "ISO 8601 datetime or natural language time"
+    criteria: "Calls create_event with title: Product Review and some time value"
+    tags: [tool-calling, calendar]
+
+  - id: tool-no-call-needed
+    description: "Does NOT call a tool when the question can be answered directly"
+    category: tool-calling
+    prompt: "What is 15 multiplied by 8?"
+    scorer: tool_call
+    expected_tool: ""
+    tools:
+      - name: calculator
+        description: "Perform arithmetic calculations"
+        parameters:
+          type: object
+          required: [expression]
+          properties:
+            expression:
+              type: string
+              description: "Math expression to evaluate"
+    criteria: "Answers 120 directly without calling the calculator tool — simple arithmetic doesn't require a tool call"
+    tags: [tool-calling, no-call]
+
+  - id: tool-send-email-subject
+    description: "Extracts recipient and subject correctly for send_email tool"
+    category: tool-calling
+    prompt: "Send an email to sarah@example.com with subject 'Q1 Report Ready'"
+    scorer: tool_call
+    expected_tool: send_email
+    expected_args:
+      to: "sarah@example.com"
+      subject: "Q1 Report Ready"
+    tools:
+      - name: send_email
+        description: "Send an email message"
+        parameters:
+          type: object
+          required: [to, subject]
+          properties:
+            to:
+              type: string
+              description: "Recipient email address"
+            subject:
+              type: string
+              description: "Email subject line"
+            body:
+              type: string
+              description: "Email body text"
+    criteria: "Calls send_email with to: sarah@example.com and subject: Q1 Report Ready"
+    tags: [tool-calling, email]

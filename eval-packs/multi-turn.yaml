@@ -1,0 +1,94 @@
+name: Multi-Turn Conversations
+description: Test model memory and context retention across multi-turn exchanges
+category: multi-turn
+
+cases:
+  - id: multi-turn-name-recall
+    description: "Basic name recall across a conversation turn"
+    category: multi-turn
+    turns:
+      - role: user
+        content: "Hi, my name is Jordan and I'm building a SaaS for dentists."
+      - role: assistant
+        content: "__model__"
+      - role: user
+        content: "What's my name and what am I building?"
+    scorer: contains
+    expected: "Jordan"
+    criteria: "Correctly recalls the user's name from earlier in the conversation"
+    tags: [multi-turn, memory]
+
+  - id: multi-turn-context-accumulation
+    description: "Accumulates multiple facts across turns"
+    category: multi-turn
+    turns:
+      - role: user
+        content: "I have a budget of $5000 and I need to build a mobile app."
+      - role: assistant
+        content: "__model__"
+      - role: user
+        content: "I also need it to work offline."
+      - role: assistant
+        content: "__model__"
+      - role: user
+        content: "Summarize my requirements in one sentence."
+    scorer: llm
+    criteria: "Summary includes: mobile app, $5000 budget, and offline requirement — all three facts from earlier turns"
+    tags: [multi-turn, accumulation]
+
+  - id: multi-turn-correction
+    description: "Model updates its understanding when corrected"
+    category: multi-turn
+    turns:
+      - role: user
+        content: "The capital of Australia is Sydney."
+      - role: assistant
+        content: "__model__"
+      - role: user
+        content: "Actually I was wrong. What is the real capital of Australia?"
+    scorer: contains
+    expected: "Canberra"
+    criteria: "After being told the original statement was wrong, correctly identifies Canberra as the capital"
+    tags: [multi-turn, correction]
+
+  - id: multi-turn-math-state
+    description: "Tracks a running total across multiple arithmetic steps"
+    category: multi-turn
+    turns:
+      - role: user
+        content: "Let's track a score. Start at 0."
+      - role: assistant
+        content: "__model__"
+      - role: user
+        content: "Add 15."
+      - role: assistant
+        content: "__model__"
+      - role: user
+        content: "Subtract 7."
+      - role: assistant
+        content: "__model__"
+      - role: user
+        content: "What's the current score?"
+    scorer: contains
+    expected: "8"
+    criteria: "Correctly tracks 0 + 15 - 7 = 8 across multiple turns"
+    tags: [multi-turn, arithmetic]
+
+  - id: multi-turn-preference-recall
+    description: "Recalls user preference stated several turns ago"
+    category: multi-turn
+    turns:
+      - role: user
+        content: "I prefer Python over JavaScript for backend work."
+      - role: assistant
+        content: "__model__"
+      - role: user
+        content: "I'm thinking about building a REST API."
+      - role: assistant
+        content: "__model__"
+      - role: user
+        content: "What language would you recommend for me based on my preferences?"
+    scorer: contains
+    expected: "Python"
+    criteria: "Recommends Python, recalling the preference stated at the start of the conversation"
+    tags: [multi-turn, preference]

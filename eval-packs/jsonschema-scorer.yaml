@@ -1,0 +1,92 @@
+name: JSON Schema Scorer
+description: Test the jsonschema scorer — validates structured output against inline schemas without LLM judge
+category: structured-output
+
+cases:
+  - id: jsonschema-contact-extract
+    description: "Extract contact info and validate all required fields match schema"
+    category: structured-output
+    prompt: |
+      Extract contact info from this text and return as JSON:
+      "Hi, I'm Alex Torres from NovaCorp. Email: alex@novacorp.io, phone: 415-555-0192."
+    scorer: jsonschema
+    schema:
+      type: object
+      required: [name, email, phone, company]
+      properties:
+        name: { type: string }
+        email: { type: string }
+        phone: { type: string }
+        company: { type: string }
+    criteria: "Return JSON with name, email, phone, and company fields"
+    tags: [jsonschema, extraction]
+
+  - id: jsonschema-product-extract
+    description: "Extract product data with numeric fields — tests type checking"
+    category: structured-output
+    prompt: |
+      Extract product info as JSON from:
+      "The ZX500 headphones cost $149.99 and weigh 250 grams. Rating: 4.7 stars."
+    scorer: jsonschema
+    schema:
+      type: object
+      required: [name, price, weight_grams, rating]
+      properties:
+        name: { type: string }
+        price: { type: number }
+        weight_grams: { type: number }
+        rating: { type: number }
+    criteria: "Return JSON with name (string), price (number), weight_grams (number), rating (number)"
+    tags: [jsonschema, numeric-types]
+
+  - id: jsonschema-event-extract
+    description: "Calendar event extraction — tests nested and optional fields"
+    category: structured-output
+    prompt: |
+      Parse this into JSON: "Team sync on Monday April 7 at 2pm PT. Duration: 30 min. Location: Zoom."
+    scorer: jsonschema
+    schema:
+      type: object
+      required: [title, date, time, duration_min]
+      properties:
+        title: { type: string }
+        date: { type: string }
+        time: { type: string }
+        duration_min: { type: number }
+        location: { type: string }
+    criteria: "Return JSON with title, date, time, duration_min (number), and optionally location"
+    tags: [jsonschema, calendar]
+
+  - id: jsonschema-invoice-totals
+    description: "Invoice parsing — verifies numeric totals are numbers not strings"
+    category: structured-output
+    prompt: |
+      Parse this invoice as JSON:
+      "Invoice #INV-007. Subtotal: 200.00, Tax: 16.00, Total: 216.00. Customer: Brenda Hall."
+    scorer: jsonschema
+    schema:
+      type: object
+      required: [invoice_number, subtotal, tax, total, customer]
+      properties:
+        invoice_number: { type: string }
+        subtotal: { type: number }
+        tax: { type: number }
+        total: { type: number }
+        customer: { type: string }
+    criteria: "Return JSON with invoice_number, subtotal, tax, total (all numeric), and customer"
+    tags: [jsonschema, finance]
+
+  - id: jsonschema-api-response
+    description: "Model produces API-style response object with status and data"
+    category: structured-output
+    prompt: |
+      A user asked: "What is 2 + 2?" Return a JSON API response with status and answer fields.
+    scorer: jsonschema
+    schema:
+      type: object
+      required: [status, answer]
+      properties:
+        status: { type: string }
+        answer: { type: number }
+    criteria: "Return JSON with status (string) and answer (number: 4)"
+    tags: [jsonschema, api-format]
