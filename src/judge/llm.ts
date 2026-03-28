@@ -1,6 +1,28 @@
 import OpenAI from 'openai'
 import type { ModelConfig, JudgeConfig, JudgeScore } from '../types/index.js'
 
+const judgeClientCache = new Map<string, OpenAI>()
+
+function getOrCreateJudgeClient(baseUrl: string, apiKey: string): OpenAI {
+  const key = baseUrl + ':::' + apiKey
+  if (!judgeClientCache.has(key)) {
+    judgeClientCache.set(key, new OpenAI({
+      baseURL: baseUrl,
+      apiKey,
+      timeout: 30_000,
+      defaultHeaders: {
+        'HTTP-Referer': 'https://github.com/hnshah/verdict',
+        'X-Title': 'verdict',
+      },
+    }))
+  }
+  return judgeClientCache.get(key)!
+}
+
+export function clearJudgeClientCache(): void {
+  judgeClientCache.clear()
+}
+
 function buildPrompt(prompt: string, criteria: string, response: string, rubric: JudgeConfig['rubric']): string {
   return `You are an impartial evaluator. You do not know which AI model produced this response.
 
@@ -54,15 +76,8 @@ export async function judgeResponse(
   const baseURL = judgeModel.base_url
   if (!baseURL) throw new Error(`Judge model '${judgeModel.id}' has no base_url`)
 
-  const client = new OpenAI({
-    baseURL,
-    apiKey: judgeModel.api_key === 'none' ? 'no-key-required' : judgeModel.api_key,
-    timeout: 30_000,
-    defaultHeaders: {
-      'HTTP-Referer': 'https://github.com/hnshah/verdict',
-      'X-Title': 'verdict',
-    },
-  })
+  const apiKey = judgeModel.api_key === 'none' ? 'no-key-required' : (judgeModel.api_key ?? 'ollama')
+  const client = getOrCreateJudgeClient(baseURL, apiKey)
 
   const result = await client.chat.completions.create({
     model: judgeModel.model,

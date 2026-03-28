@@ -10,6 +10,28 @@ import OpenAI from 'openai'
 import fs from 'fs'
 import type { ModelConfig, ModelResponse, ToolDef } from '../types/index.js'
 
+const clientCache = new Map<string, OpenAI>()
+
+function getOrCreateClient(baseUrl: string, apiKey: string, timeout?: number): OpenAI {
+  const key = baseUrl + ':::' + apiKey
+  if (!clientCache.has(key)) {
+    clientCache.set(key, new OpenAI({
+      baseURL: baseUrl,
+      apiKey,
+      timeout,
+      defaultHeaders: {
+        'HTTP-Referer': 'https://github.com/hnshah/verdict',
+        'X-Title': 'verdict',
+      },
+    }))
+  }
+  return clientCache.get(key)!
+}
+
+export function clearClientCache(): void {
+  clientCache.clear()
+}
+
 function loadImageAsBase64(imagePath: string): string | null {
   try {
     if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
@@ -51,16 +73,8 @@ export async function callModel(
   const baseURL = config.base_url
   if (!baseURL) throw new Error(`Model '${config.id}' has no base_url`)
 
-  const client = new OpenAI({
-    baseURL,
-    apiKey: config.api_key === 'none' ? 'no-key-required' : config.api_key,
-    timeout: config.timeout_ms,
-    defaultHeaders: {
-      // Required by some providers (OpenRouter, etc.)
-      'HTTP-Referer': 'https://github.com/hnshah/verdict',
-      'X-Title': 'verdict',
-    },
-  })
+  const apiKey = config.api_key === 'none' ? 'no-key-required' : (config.api_key ?? 'ollama')
+  const client = getOrCreateClient(baseURL, apiKey, config.timeout_ms)
 
   const start = Date.now()
 
@@ -121,15 +135,8 @@ export async function callModelMultiTurn(
   const baseURL = config.base_url
   if (!baseURL) throw new Error(`Model '${config.id}' has no base_url`)
 
-  const client = new OpenAI({
-    baseURL,
-    apiKey: config.api_key === 'none' ? 'no-key-required' : config.api_key,
-    timeout: config.timeout_ms,
-    defaultHeaders: {
-      'HTTP-Referer': 'https://github.com/hnshah/verdict',
-      'X-Title': 'verdict',
-    },
-  })
+  const apiKey = config.api_key === 'none' ? 'no-key-required' : (config.api_key ?? 'ollama')
+  const client = getOrCreateClient(baseURL, apiKey, config.timeout_ms)
 
   const start = Date.now()
 
@@ -174,15 +181,8 @@ export async function callModelWithTools(
   const baseURL = config.base_url
   if (!baseURL) throw new Error(`Model '${config.id}' has no base_url`)
 
-  const client = new OpenAI({
-    baseURL,
-    apiKey: config.api_key === 'none' ? 'no-key-required' : config.api_key,
-    timeout: config.timeout_ms,
-    defaultHeaders: {
-      'HTTP-Referer': 'https://github.com/hnshah/verdict',
-      'X-Title': 'verdict',
-    },
-  })
+  const apiKey = config.api_key === 'none' ? 'no-key-required' : (config.api_key ?? 'ollama')
+  const client = getOrCreateClient(baseURL, apiKey, config.timeout_ms)
 
   const start = Date.now()
 
