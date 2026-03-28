@@ -102,8 +102,7 @@ git checkout -b feat/new-feature-name
 
 **Code style:**
 - TypeScript for all source code
-- ESLint for linting (run `npm run lint`)
-- Prettier for formatting (run `npm run format`)
+- Run `npm run typecheck` before submitting
 
 **Commit messages:**
 ```bash
@@ -120,6 +119,9 @@ git commit -m "fixed stuff"
 ### 4. Test Your Changes
 
 ```bash
+# Type-check
+npm run typecheck
+
 # Run test suite
 npm test
 
@@ -262,17 +264,19 @@ throw new Error('Model not found');
 src/
   cli/          # CLI commands
   core/         # Core eval engine
-  providers/    # Model providers (ollama, openai, etc.)
+  daemon/       # Background daemon
+  db/           # Database layer
   judge/        # Judge logic
-  router/       # Model routing
+  providers/    # Model providers (ollama, mlx, OpenAI-compat)
   reporter/     # Output formatting
+  router/       # Model routing
   types/        # TypeScript types
 ```
 
-**One concern per file:**
-- `ollama-provider.ts` - Ollama integration only
-- `openai-provider.ts` - OpenAI integration only
-- Don't mix providers in one file
+**Provider layout:**
+- `compat.ts` — universal OpenAI-compatible inference (`callModel`, `callModelMultiTurn`, etc.)
+- `ollama.ts` — Ollama-specific discovery and helpers
+- `mlx.ts` — MLX-specific discovery and helpers
 
 ---
 
@@ -292,34 +296,15 @@ npm test
 
 **Example:**
 ```typescript
-describe('OllamaProvider', () => {
-  it('discovers installed models', async () => {
-    const provider = new OllamaProvider();
-    const models = await provider.discover();
-    
-    expect(models).toBeInstanceOf(Array);
-    expect(models.length).toBeGreaterThan(0);
-  });
+import { discoverOllama } from '../providers/ollama.js';
 
-  it('handles connection errors gracefully', async () => {
-    const provider = new OllamaProvider({ baseUrl: 'http://invalid' });
-    
-    await expect(provider.discover()).rejects.toThrow();
+describe('discoverOllama', () => {
+  it('returns an array of discovered models', async () => {
+    const models = await discoverOllama();
+    expect(models).toBeInstanceOf(Array);
   });
 });
 ```
-
-### Integration Tests
-
-```bash
-npm run test:integration
-```
-
-**Test real workflows:**
-- Model discovery
-- Running evals end-to-end
-- Config parsing
-- Provider communication
 
 ### Manual Testing
 
@@ -348,79 +333,78 @@ Before submitting PR:
 
 ## Adding a Provider
 
-**Example: Adding LM Studio**
+Verdict uses a **functional architecture** — no provider base classes. All inference goes
+through the universal OpenAI-compatible client in `src/providers/compat.ts` (`callModel`).
+Provider-specific files only handle **discovery** (finding running instances and listing
+available models).
 
-### 1. Create Provider File
+**Example: Adding LM Studio discovery**
+
+### 1. Create Discovery File
 
 ```typescript
-// src/providers/lmstudio-provider.ts
+// src/providers/lmstudio.ts
 
-import { BaseProvider } from './base.js';
-import type { Model, InferRequest, InferResponse } from '../types/index.js';
+import http from 'http'
+import type { DiscoveredModel } from '../types/index.js'
 
-export class LMStudioProvider extends BaseProvider {
-  constructor(
-    private baseUrl: string = 'http://localhost:1234'
-  ) {
-    super('lmstudio');
-  }
+const DEFAULT_PORT = 1234
 
-  async discover(): Promise<Model[]> {
-    // Auto-detect running models
-    const response = await fetch(`${this.baseUrl}/v1/models`);
-    const data = await response.json();
-    
-    return data.data.map((model: any) => ({
-      id: model.id,
-      provider: 'lmstudio',
-      name: model.id,
-      base_url: this.baseUrl,
-    }));
-  }
+function httpGet(port: number, path: string, timeoutMs = 2000): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const req = http.request({
+      hostname: 'localhost', port, path, method: 'GET', timeout: timeoutMs,
+    }, res => {
+      let body = ''
+      res.on('data', c => body += c)
+      res.on('end', () => resolve(body))
+    })
+    req.on('error', reject)
+    req.on('timeout', () => { req.destroy(); reject(new Error('timeout')) })
+    req.end()
+  })
+}
 
-  async infer(request: InferRequest): Promise<InferResponse> {
-    const response = await fetch(`${this.baseUrl}/v1/chat/completions`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: request.model,
-        messages: request.messages,
-        temperature: request.temperature,
-      }),
-    });
-    
-    const data = await response.json();
-    return {
-      text: data.choices[0].message.content,
-      usage: data.usage,
-    };
+export async function discoverLMStudio(
+  port: number = DEFAULT_PORT
+): Promise<DiscoveredModel[]> {
+  try {
+    const body = await httpGet(port, '/v1/models')
+    const data = JSON.parse(body) as { data?: Array<{ id: string }> }
+    const base_url = `http://localhost:${port}/v1`
+
+    return (data.data ?? []).map(m => ({
+      provider: 'lmstudio' as const,
+      id: m.id.replace(/[^a-z0-9]/gi, '-').toLowerCase(),
+      model: m.id,
+      base_url,
+      tags: ['local', 'free'],
+    }))
+  } catch {
+    return [] // LM Studio not running
   }
 }
 ```
 
-### 2. Register Provider
+Inference already works — any model discovered with a `base_url` pointing at an
+OpenAI-compatible endpoint is called via `callModel` in `compat.ts`.
+
+### 2. Add Tests
 
 ```typescript
-// src/providers/index.ts
+// src/providers/lmstudio.test.ts
 
-export { LMStudioProvider } from './lmstudio-provider.js';
+import { discoverLMStudio } from './lmstudio.js'
+
+describe('discoverLMStudio', () => {
+  it('returns an empty array when LM Studio is not running', async () => {
+    const models = await discoverLMStudio(19999) // unlikely port
+    expect(models).toEqual([])
+  })
+})
 ```
 
-### 3. Add Tests
-
-```typescript
-// src/providers/lmstudio-provider.test.ts
-
-describe('LMStudioProvider', () => {
-  it('discovers models', async () => {
-    const provider = new LMStudioProvider();
-    const models = await provider.discover();
-    expect(models).toBeInstanceOf(Array);
-  });
-});
-```
-
-### 4. Update Docs
+### 3. Update Docs
 
 Add to README.md:
 ```markdown
@@ -512,9 +496,9 @@ npm version major  # 0.3.0 → 1.0.0
 ### 3. Build & Test
 
 ```bash
-npm run build
+npm run typecheck
 npm test
-npm run test:integration
+npm run build
 ```
 
 ### 4. Publish
