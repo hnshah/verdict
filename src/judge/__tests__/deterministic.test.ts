@@ -5,6 +5,7 @@ import {
   scoreContains,
   scoreToolCall,
   scoreJsonSchema,
+  scoreMultipleChoice,
   isDeterministic,
   scoreDeterministic,
 } from '../deterministic.js'
@@ -73,6 +74,21 @@ describe('deterministic scorers', () => {
       expect(result.reasoning).toContain('want')
       expect(result.reasoning).toContain('got')
     })
+
+    it('scores 10/10 when output matches any element in expected array', () => {
+      const result = scoreExact('paris', ['Paris', 'paris', 'PARIS'])
+      expect(result.total).toBe(10)
+    })
+
+    it('scores 0/10 when output matches none of expected array', () => {
+      const result = scoreExact('london', ['Paris', 'Berlin'])
+      expect(result.total).toBe(0)
+    })
+
+    it('handles single-element array same as string', () => {
+      const result = scoreExact('hello', ['hello'])
+      expect(result.total).toBe(10)
+    })
   })
 
   describe('scoreContains', () => {
@@ -93,6 +109,21 @@ describe('deterministic scorers', () => {
 
     it('handles empty expected', () => {
       const result = scoreContains('anything', '')
+      expect(result.total).toBe(10)
+    })
+
+    it('scores 10/10 when output contains any element in expected array', () => {
+      const result = scoreContains('The answer is 42', ['42', '43', '44'])
+      expect(result.total).toBe(10)
+    })
+
+    it('scores 0/10 when output contains none of expected array', () => {
+      const result = scoreContains('The answer is 42', ['43', '44', '45'])
+      expect(result.total).toBe(0)
+    })
+
+    it('handles single-element array same as string', () => {
+      const result = scoreContains('hello world', ['world'])
       expect(result.total).toBe(10)
     })
   })
@@ -229,6 +260,55 @@ describe('deterministic scorers', () => {
     })
   })
 
+  describe('scoreMultipleChoice', () => {
+    it('scores exact letter match as 10/10', () => {
+      const result = scoreMultipleChoice('C', 'C')
+      expect(result.total).toBe(10)
+      expect(result.reasoning).toContain('Exact match')
+    })
+
+    it('is case-insensitive for exact match', () => {
+      const result = scoreMultipleChoice('c', 'C')
+      expect(result.total).toBe(10)
+    })
+
+    it('trims whitespace for exact match', () => {
+      const result = scoreMultipleChoice('  B  ', 'B')
+      expect(result.total).toBe(10)
+    })
+
+    it('scores letter in sentence as 8/10', () => {
+      const result = scoreMultipleChoice('The answer is C', 'C')
+      expect(result.total).toBe(8)
+      expect(result.reasoning).toContain('extra text')
+    })
+
+    it('scores wrong letter as 0/10', () => {
+      const result = scoreMultipleChoice('A', 'C')
+      expect(result.total).toBe(0)
+      expect(result.reasoning).toContain('Wrong choice')
+      expect(result.reasoning).toContain('"C"')
+      expect(result.reasoning).toContain('"A"')
+    })
+
+    it('scores no letter found as 0/10', () => {
+      const result = scoreMultipleChoice('I think the answer is photosynthesis', 'B')
+      expect(result.total).toBe(0)
+      expect(result.reasoning).toContain('No choice letter')
+    })
+
+    it('handles custom choices array', () => {
+      const result = scoreMultipleChoice('E', 'E', ['opt1', 'opt2', 'opt3', 'opt4', 'opt5'])
+      expect(result.total).toBe(10)
+    })
+
+    it('detects wrong letter in verbose output', () => {
+      const result = scoreMultipleChoice('I believe the correct answer is B because...', 'D')
+      expect(result.total).toBe(0)
+      expect(result.reasoning).toContain('Wrong choice')
+    })
+  })
+
   describe('isDeterministic', () => {
     it('returns true for deterministic scorers', () => {
       expect(isDeterministic('json')).toBe(true)
@@ -236,6 +316,7 @@ describe('deterministic scorers', () => {
       expect(isDeterministic('contains')).toBe(true)
       expect(isDeterministic('jsonschema')).toBe(true)
       expect(isDeterministic('tool_call')).toBe(true)
+      expect(isDeterministic('multiple_choice')).toBe(true)
     })
 
     it('returns false for non-deterministic scorers', () => {
@@ -267,6 +348,18 @@ describe('deterministic scorers', () => {
       const result = scoreDeterministic('jsonschema', '{"a": 1}', undefined, { required: ['a'], properties: { a: { type: 'number' } } })
       expect(result).not.toBeNull()
       expect(result!.total).toBe(10)
+    })
+
+    it('dispatches to scoreMultipleChoice', () => {
+      const result = scoreDeterministic('multiple_choice', 'C', 'C')
+      expect(result).not.toBeNull()
+      expect(result!.total).toBe(10)
+    })
+
+    it('dispatches to scoreMultipleChoice with choices', () => {
+      const result = scoreDeterministic('multiple_choice', 'The answer is C', 'C', undefined, ['opt1', 'opt2', 'opt3'])
+      expect(result).not.toBeNull()
+      expect(result!.total).toBe(8)
     })
 
     it('returns null for unknown scorer', () => {

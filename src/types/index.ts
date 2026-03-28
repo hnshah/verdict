@@ -76,13 +76,14 @@ export const EvalCaseSchema = z.object({
   ideal_latency_ms: z.number().optional(),
   prompt: z.string().default(''),
   criteria: z.string(),
-  expected: z.string().optional(),
+  expected: z.union([z.string(), z.array(z.string())]).optional(),
   tags: z.array(z.string()).default([]),
   // scorer: 'llm' uses LLM judge (default), 'json' parses output as JSON (pass/fail),
   // 'exact' checks exact string match, 'contains' checks substring presence,
   // 'jsonschema' validates JSON output against a schema, 'tool_call' scores tool usage
-  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'jsonschema', 'tool_call']).default('llm'),
+  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'jsonschema', 'tool_call', 'multiple_choice']).default('llm'),
   schema: z.record(z.unknown()).optional(),
+  choices: z.array(z.string()).optional(),
   turns: z.array(z.object({
     role: z.enum(['user', 'assistant']),
     content: z.string(),

@@ -1,0 +1,48 @@
+name: Multiple Choice Examples
+description: Test the multiple_choice scorer — validates A/B/C/D letter answers
+
+cases:
+  - id: mcq-capital-city
+    description: "Basic geography multiple choice — expects exact letter"
+    category: factual
+    prompt: |
+      What is the capital of France?
+      A) London
+      B) Berlin
+      C) Paris
+      D) Madrid
+    scorer: multiple_choice
+    expected: "C"
+    choices: ["London", "Berlin", "Paris", "Madrid"]
+    criteria: "Select the correct capital of France"
+    tags: [multiple-choice, factual, easy]
+
+  - id: mcq-photosynthesis
+    description: "Biology multiple choice — tests science knowledge"
+    category: factual
+    prompt: |
+      Which organelle is responsible for photosynthesis?
+      A) Mitochondria
+      B) Chloroplast
+      C) Ribosome
+      D) Nucleus
+    scorer: multiple_choice
+    expected: "B"
+    choices: ["Mitochondria", "Chloroplast", "Ribosome", "Nucleus"]
+    criteria: "Identify the organelle responsible for photosynthesis"
+    tags: [multiple-choice, factual, science]
+
+  - id: mcq-http-status
+    description: "Technical multiple choice — HTTP status codes"
+    category: technical
+    prompt: |
+      Which HTTP status code indicates 'Not Found'?
+      A) 200
+      B) 301
+      C) 404
+      D) 500
+    scorer: multiple_choice
+    expected: "C"
+    choices: ["200", "301", "404", "500"]
+    criteria: "Identify the HTTP status code for Not Found"
+    tags: [multiple-choice, technical, web]
