@@ -19,12 +19,17 @@ interface RunOptions {
   question?: string
   noStore?: boolean
   category?: string[]
+  json?: boolean
 }
 
 export async function runCommand(opts: RunOptions): Promise<void> {
-  console.log()
-  console.log(chalk.bold('  verdict') + chalk.dim(' run'))
-  console.log()
+  // When --json is set, suppress all non-JSON stdout output.
+  // Informational messages go to stderr; only the final JSON goes to stdout.
+  const log = opts.json ? (...args: unknown[]) => { process.stderr.write(args.join(' ') + '\n') } : console.log.bind(console)
+
+  log()
+  log(chalk.bold('  verdict') + chalk.dim(' run'))
+  log()
 
   let config
   try {
@@ -55,40 +60,40 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   const categoryFilter = opts.category && opts.category.length > 0 ? opts.category : undefined
 
   const totalCases = packs.reduce((n, p) => n + p.cases.length, 0)
-  console.log(`  ${chalk.bold('Models:')} ${config.models.map(m => chalk.cyan(m.id)).join(', ')}`)
-  console.log(`  ${chalk.bold('Judge: ')} ${chalk.cyan(config.judge.model)}`)
+  log(`  ${chalk.bold('Models:')} ${config.models.map(m => chalk.cyan(m.id)).join(', ')}`)
+  log(`  ${chalk.bold('Judge: ')} ${chalk.cyan(config.judge.model)}`)
   if (categoryFilter) {
     const filteredCount = packs.reduce((n, p) => n + p.cases.filter(c => c.category && categoryFilter.includes(c.category)).length, 0)
-    console.log(`  ${chalk.bold('Cases:')} ${filteredCount} across ${packs.length} pack(s) ${chalk.dim(`(filtered: ${categoryFilter.join(', ')})`)}`)
+    log(`  ${chalk.bold('Cases:')} ${filteredCount} across ${packs.length} pack(s) ${chalk.dim(`(filtered: ${categoryFilter.join(', ')})`)}`)
   } else {
-    console.log(`  ${chalk.bold('Cases:')} ${totalCases} across ${packs.length} pack(s)`)
+    log(`  ${chalk.bold('Cases:')} ${totalCases} across ${packs.length} pack(s)`)
   }
-  if (opts.resume) console.log(`  ${chalk.bold('Resume:')} ${chalk.yellow('enabled')}`)
-  if (opts.question) console.log(`  ${chalk.bold('Question:')} ${chalk.yellow(opts.question)}`)
-  console.log()
+  if (opts.resume) log(`  ${chalk.bold('Resume:')} ${chalk.yellow('enabled')}`)
+  if (opts.question) log(`  ${chalk.bold('Question:')} ${chalk.yellow(opts.question)}`)
+  log()
 
   if (opts.dryRun) {
-    console.log(chalk.yellow('  dry run: no API calls made'))
+    log(chalk.yellow('  dry run: no API calls made'))
     for (const pack of packs) {
-      console.log(`\n  ${chalk.bold(pack.name)}`)
+      log(`\n  ${chalk.bold(pack.name)}`)
       for (const c of pack.cases) {
-        console.log(`    ${chalk.dim(c.id.padEnd(22))} ${c.prompt.slice(0, 60)}`)
+        log(`    ${chalk.dim(c.id.padEnd(22))} ${c.prompt.slice(0, 60)}`)
       }
     }
-    console.log()
+    log()
     return
   }
 
   // MoE concurrency warning
   const moeModels = config.models.filter(m => m.tags?.includes('moe'))
   if (moeModels.length > 0 && config.run.concurrency > 1) {
-    console.log(chalk.yellow(`  ⚠  MoE model(s) detected: ${moeModels.map(m => m.id).join(', ')}`))
-    console.log(chalk.yellow(`     concurrency is ${config.run.concurrency} — MoE models are memory-intensive.`))
-    console.log(chalk.yellow('     Set concurrency: 1 in your config to avoid memory pressure on Apple Silicon.'))
-    console.log()
+    log(chalk.yellow(`  ⚠  MoE model(s) detected: ${moeModels.map(m => m.id).join(', ')}`))
+    log(chalk.yellow(`     concurrency is ${config.run.concurrency} — MoE models are memory-intensive.`))
+    log(chalk.yellow('     Set concurrency: 1 in your config to avoid memory pressure on Apple Silicon.'))
+    log()
   }
 
-  const spinner = ora({ prefixText: '  ', text: 'Starting...' }).start()
+  const spinner = ora({ prefixText: '  ', text: 'Starting...', stream: opts.json ? process.stderr : process.stdout }).start()
   let result
   try {
     result = await runEvals(config, packs, msg => { spinner.text = msg }, opts.resume, categoryFilter)
@@ -98,33 +103,54 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     process.exit(1)
   }
 
-  for (const c of result.cases) printCaseDetail(c.case_id, c.prompt, c.scores)
-  printSummary(result)
+  if (!opts.json) {
+    for (const c of result.cases) printCaseDetail(c.case_id, c.prompt, c.scores)
+    printSummary(result)
+  }
 
   // Auto-compare with default baseline if it exists
   const defaultBaseline = loadBaseline('default')
   if (defaultBaseline) {
     const comparison = compareWithBaseline(defaultBaseline, result, 'default')
     result.baselineComparison = comparison
-    printBaselineComparison(comparison)
+    if (!opts.json) printBaselineComparison(comparison)
   }
 
   // Synthesis agent
   if (opts.question) {
     const judgeModel = config.models.find(m => m.id === config.judge.model)
     if (judgeModel) {
-      const synthSpinner = ora({ prefixText: '  ', text: 'Synthesizing...' }).start()
+      const synthSpinner = ora({ prefixText: '  ', text: 'Synthesizing...', stream: opts.json ? process.stderr : process.stdout }).start()
       try {
         const synthesis = await synthesizeRun(
           judgeModel, config.judge, opts.question, result, result.baselineComparison
         )
         result.synthesis = synthesis
         synthSpinner.succeed('Synthesis complete')
-        printSynthesis(synthesis)
+        if (!opts.json) printSynthesis(synthesis)
       } catch (err) {
         synthSpinner.fail(chalk.red(`Synthesis failed: ${err instanceof Error ? err.message : String(err)}`))
       }
     }
+  }
+
+  // Output JSON to stdout when --json is set
+  if (opts.json) {
+    const summaryArray = result.models
+      .map(id => result.summary[id])
+      .filter(Boolean)
+      .sort((a, b) => b.avg_total - a.avg_total)
+    const jsonOutput = {
+      verdictVersion: '0.2.0',
+      timestamp: result.timestamp,
+      packs: packs.map(p => p.name),
+      models: result.models,
+      results: result.cases,
+      summary: summaryArray,
+      ...(result.synthesis ? { synthesis: result.synthesis } : {}),
+      ...(result.baselineComparison ? { baselineComparison: result.baselineComparison } : {}),
+    }
+    process.stdout.write(JSON.stringify(jsonOutput, null, 2) + '\n')
   }
 
   fs.mkdirSync(config.output.dir, { recursive: true })
@@ -144,7 +170,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
       const packLabel = packName.replace(/^.*\//, '').replace(/\.ya?ml$/, '')
       saveRunResult(db, result, packLabel)
       db.close()
-      console.log(chalk.dim(`  stored: ~/.verdict/results.db`))
+      log(chalk.dim(`  stored: ~/.verdict/results.db`))
     } catch (err) {
       console.warn(chalk.yellow(`  warning: failed to store results in DB: ${err instanceof Error ? err.message : err}`))
     }
@@ -152,7 +178,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
 
   if (config.output.formats.includes('markdown')) {
     fs.writeFileSync(`${base}.md`, generateMarkdownReport(result))
-    console.log(chalk.dim(`  report: ${base}.md`))
+    log(chalk.dim(`  report: ${base}.md`))
   }
   if (config.output.formats.includes('slack')) {
     const sorted = result.models
@@ -169,8 +195,8 @@ export async function runCommand(opts: RunOptions): Promise<void> {
       markdownPath: `${base}.md`,
     }
     fs.writeFileSync(`${base}.slack-card.json`, JSON.stringify(slackCard, null, 2))
-    console.log(chalk.dim(`  slack:  ${base}.slack-card.json`))
+    log(chalk.dim(`  slack:  ${base}.slack-card.json`))
   }
-  console.log(chalk.dim(`  raw:    ${base}.json`))
-  console.log()
+  log(chalk.dim(`  raw:    ${base}.json`))
+  log()
 }
