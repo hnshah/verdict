@@ -92,6 +92,21 @@ export function scoreContains(output: string, expected: string): JudgeScore {
   }
 }
 
+export function scoreFuzzyMatch(output: string, expected: string): JudgeScore {
+  const a = output.trim().toLowerCase()
+  const b = expected.trim().toLowerCase()
+  if (a.includes(b) || b.includes(a)) {
+    return {
+      accuracy: 10, completeness: 10, conciseness: 10, total: 10,
+      reasoning: `Fuzzy match: "${a.slice(0, 40)}" ↔ "${b.slice(0, 40)}"`,
+    }
+  }
+  return {
+    accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+    reasoning: `No fuzzy match: "${a.slice(0, 40)}" does not contain and is not contained by "${b.slice(0, 40)}"`,
+  }
+}
+
 export function scoreToolCall(
   toolCalls: ToolCallResult[] | undefined,
   expectedTool: string,
@@ -216,7 +231,7 @@ export function scoreJsonSchema(output: string, schema: Record<string, unknown>)
 }
 
 export function isDeterministic(scorer: string): boolean {
-  return scorer === 'json' || scorer === 'exact' || scorer === 'contains' || scorer === 'jsonschema' || scorer === 'tool_call'
+  return scorer === 'json' || scorer === 'exact' || scorer === 'contains' || scorer === 'fuzzy_match' || scorer === 'jsonschema' || scorer === 'tool_call'
 }
 
 export function scoreDeterministic(
@@ -225,6 +240,7 @@ export function scoreDeterministic(
   if (scorer === 'json') return scoreJson(output)
   if (scorer === 'exact') return scoreExact(output, expected ?? '')
   if (scorer === 'contains') return scoreContains(output, expected ?? '')
+  if (scorer === 'fuzzy_match') return scoreFuzzyMatch(output, expected ?? '')
   if (scorer === 'jsonschema') return scoreJsonSchema(output, schema ?? {})
   return null
 }

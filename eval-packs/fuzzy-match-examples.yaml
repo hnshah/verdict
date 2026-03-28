@@ -1,0 +1,31 @@
+name: Fuzzy Match Examples
+description: Demonstrates the fuzzy_match scorer — bidirectional contains (a in b OR b in a). Use when the expected answer may be contained in a longer response, or when a short output should match against a longer expected string.
+category: scoring-examples
+
+cases:
+  - id: fuzzy-capital-city
+    description: "Short output 'Paris' should match expected 'Paris, France'"
+    category: scoring-examples
+    prompt: "What is the capital of France? Answer in one word."
+    scorer: fuzzy_match
+    expected: "Paris, France"
+    criteria: "Output 'Paris' should fuzzy-match 'Paris, France'"
+    tags: [fuzzy-match, geography]
+
+  - id: fuzzy-number-format
+    description: "Output '4' should match expected '4.0' or '4 (four)'"
+    category: scoring-examples
+    prompt: "What is 2 + 2? Give just the number."
+    scorer: fuzzy_match
+    expected: "4"
+    criteria: "Numeric answer 4 in any reasonable format"
+    tags: [fuzzy-match, math]
+
+  - id: fuzzy-name-in-sentence
+    description: "Output sentence containing 'Einstein' matches expected 'Einstein'"
+    category: scoring-examples
+    prompt: "Who developed the theory of general relativity?"
+    scorer: fuzzy_match
+    expected: "Einstein"
+    criteria: "Response should mention Einstein"
+    tags: [fuzzy-match, factual]

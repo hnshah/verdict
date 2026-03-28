@@ -3,6 +3,7 @@ import {
   scoreJson,
   scoreExact,
   scoreContains,
+  scoreFuzzyMatch,
   scoreToolCall,
   scoreJsonSchema,
   isDeterministic,
@@ -275,3 +276,30 @@ describe('deterministic scorers', () => {
     })
   })
 })
+
+  describe('scoreFuzzyMatch', () => {
+    it('passes when output contains expected', () => {
+      const result = scoreFuzzyMatch('The answer is Paris, France', 'Paris')
+      expect(result.total).toBe(10)
+    })
+
+    it('passes when expected contains output (reverse direction)', () => {
+      const result = scoreFuzzyMatch('Paris', 'Paris, France')
+      expect(result.total).toBe(10)
+    })
+
+    it('is case-insensitive', () => {
+      const result = scoreFuzzyMatch('PARIS', 'paris')
+      expect(result.total).toBe(10)
+    })
+
+    it('fails when neither string contains the other', () => {
+      const result = scoreFuzzyMatch('Berlin', 'Paris')
+      expect(result.total).toBe(0)
+    })
+
+    it('passes on exact match', () => {
+      const result = scoreFuzzyMatch('42', '42')
+      expect(result.total).toBe(10)
+    })
+  })
