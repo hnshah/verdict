@@ -71,6 +71,9 @@ export interface ToolCallResult {
 
 export const EvalCaseSchema = z.object({
   id: z.string(),
+  description: z.string().optional(),
+  category: z.string().optional(),
+  ideal_latency_ms: z.number().optional(),
   prompt: z.string().default(''),
   criteria: z.string(),
   expected: z.string().optional(),
@@ -129,6 +132,7 @@ export interface CaseResult {
   responses: Record<string, ModelResponse>
   scores: Record<string, JudgeScore>
   winner?: string
+  solve_rates?: Record<string, number>
 }
 
 export interface ModelSummary {
@@ -138,10 +142,12 @@ export interface ModelSummary {
   avg_completeness: number
   avg_conciseness: number
   avg_latency_ms: number
+  avg_tokens_per_sec: number
   total_cost_usd: number
   win_rate: number
   wins: number
   cases_run: number
+  avg_solve_rate: number
 }
 
 export interface RunResult {

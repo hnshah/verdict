@@ -49,9 +49,38 @@ CREATE TABLE IF NOT EXISTS models_registry (
   total_runs INTEGER DEFAULT 0
 )` as const
 
+export const CREATE_JOBS = `
+CREATE TABLE IF NOT EXISTS jobs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  type TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'queued',
+  model_id TEXT,
+  input TEXT,
+  output TEXT,
+  error TEXT,
+  priority INTEGER DEFAULT 0,
+  queued_at TEXT NOT NULL DEFAULT (datetime('now')),
+  started_at TEXT,
+  completed_at TEXT,
+  metadata TEXT
+)` as const
+
+export const CREATE_WATCHED_MODELS = `
+CREATE TABLE IF NOT EXISTS watched_models (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  model_id TEXT UNIQUE NOT NULL,
+  provider TEXT NOT NULL,
+  first_detected TEXT NOT NULL DEFAULT (datetime('now')),
+  last_seen TEXT,
+  auto_eval INTEGER DEFAULT 1,
+  eval_pack TEXT DEFAULT 'general'
+)` as const
+
 /** All schema creation statements in order. */
 export const ALL_SCHEMAS = [
   CREATE_EVAL_RESULTS,
   CREATE_QUESTION_RESULTS,
   CREATE_MODELS_REGISTRY,
+  CREATE_JOBS,
+  CREATE_WATCHED_MODELS,
 ] as const

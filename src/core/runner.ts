@@ -76,11 +76,14 @@ export async function runEvals(
   config: Config,
   packs: EvalPack[],
   onProgress?: (msg: string) => void,
-  resume?: boolean
+  resume?: boolean,
+  categoryFilter?: string[]
 ): Promise<RunResult> {
   const configHash = computeConfigHash(config)
   const log = onProgress ?? (() => {})
-  const allCases = packs.flatMap(p => p.cases)
+  const allCases = packs.flatMap(p =>
+    categoryFilter ? p.cases.filter(c => c.category !== undefined && categoryFilter.includes(c.category)) : p.cases
+  )
   const modelIds = config.models.map(m => m.id)
 
   // Resume from checkpoint if requested
@@ -106,8 +109,8 @@ export async function runEvals(
   for (const id of modelIds) {
     summary[id] = {
       model_id: id, avg_total: 0, avg_accuracy: 0, avg_completeness: 0,
-      avg_conciseness: 0, avg_latency_ms: 0, total_cost_usd: 0,
-      win_rate: 0, wins: 0, cases_run: 0,
+      avg_conciseness: 0, avg_latency_ms: 0, avg_tokens_per_sec: 0,
+      total_cost_usd: 0, win_rate: 0, wins: 0, cases_run: 0, avg_solve_rate: 0,
     }
   }
 

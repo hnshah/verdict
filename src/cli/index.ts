@@ -8,6 +8,8 @@ import { baselineSaveCommand, baselineListCommand, baselineCompareCommand } from
 import { historyCommand } from './commands/history.js'
 import { routeCommand } from './commands/route.js'
 import { serveCommand } from './commands/serve.js'
+import { daemonStartCommand, daemonStopCommand, daemonStatusCommand, daemonLogsCommand, daemonWorkerCommand } from './commands/daemon.js'
+import { watchCommand } from './commands/watch.js'
 
 const program = new Command()
 
@@ -32,6 +34,7 @@ program
   .option('--resume', 'Resume from last checkpoint')
   .option('--question <text>', 'Question for synthesis agent to answer after eval')
   .option('--no-store', 'Skip persisting results to SQLite database')
+  .option('--category <categories...>', 'Filter cases by category (repeatable)')
   .action(runCommand)
 
 const models = program
@@ -98,5 +101,43 @@ program
   .description('Start OpenAI-compatible HTTP proxy with smart routing')
   .option('--port <n>', 'Port to listen on', '4000')
   .action(serveCommand)
+
+const daemon = program
+  .command('daemon')
+  .description('Background job daemon for running evals, summarization, research, and batch jobs')
+
+daemon
+  .command('start')
+  .description('Start the daemon in the background')
+  .action(daemonStartCommand)
+
+daemon
+  .command('stop')
+  .description('Stop the running daemon')
+  .action(daemonStopCommand)
+
+daemon
+  .command('status')
+  .description('Show daemon status (queue depth, current job, uptime)')
+  .action(daemonStatusCommand)
+
+daemon
+  .command('logs')
+  .description('Tail daemon log file')
+  .option('--tail <n>', 'Number of lines to show', '50')
+  .action(daemonLogsCommand)
+
+daemon
+  .command('worker')
+  .description(false as unknown as string) // hidden internal command
+  .action(daemonWorkerCommand)
+
+program
+  .command('watch')
+  .description('Poll local backends for new models')
+  .option('--continuous', 'Poll continuously (foreground)')
+  .option('--interval <seconds>', 'Poll interval in seconds', '60')
+  .option('--no-auto-eval', 'Detect but do not auto-queue evals')
+  .action(watchCommand)
 
 program.parse()

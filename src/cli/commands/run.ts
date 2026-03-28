@@ -18,6 +18,7 @@ interface RunOptions {
   resume?: boolean
   question?: string
   noStore?: boolean
+  category?: string[]
 }
 
 export async function runCommand(opts: RunOptions): Promise<void> {
@@ -50,10 +51,18 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     catch (err) { console.error(chalk.red(`  ${err instanceof Error ? err.message : err}`)); process.exit(1) }
   }
 
+  // Normalize category filter
+  const categoryFilter = opts.category && opts.category.length > 0 ? opts.category : undefined
+
   const totalCases = packs.reduce((n, p) => n + p.cases.length, 0)
   console.log(`  ${chalk.bold('Models:')} ${config.models.map(m => chalk.cyan(m.id)).join(', ')}`)
   console.log(`  ${chalk.bold('Judge: ')} ${chalk.cyan(config.judge.model)}`)
-  console.log(`  ${chalk.bold('Cases:')} ${totalCases} across ${packs.length} pack(s)`)
+  if (categoryFilter) {
+    const filteredCount = packs.reduce((n, p) => n + p.cases.filter(c => c.category && categoryFilter.includes(c.category)).length, 0)
+    console.log(`  ${chalk.bold('Cases:')} ${filteredCount} across ${packs.length} pack(s) ${chalk.dim(`(filtered: ${categoryFilter.join(', ')})`)}`)
+  } else {
+    console.log(`  ${chalk.bold('Cases:')} ${totalCases} across ${packs.length} pack(s)`)
+  }
   if (opts.resume) console.log(`  ${chalk.bold('Resume:')} ${chalk.yellow('enabled')}`)
   if (opts.question) console.log(`  ${chalk.bold('Question:')} ${chalk.yellow(opts.question)}`)
   console.log()
@@ -82,7 +91,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   const spinner = ora({ prefixText: '  ', text: 'Starting...' }).start()
   let result
   try {
-    result = await runEvals(config, packs, msg => { spinner.text = msg }, opts.resume)
+    result = await runEvals(config, packs, msg => { spinner.text = msg }, opts.resume, categoryFilter)
     spinner.succeed('Done')
   } catch (err) {
     spinner.fail(chalk.red(err instanceof Error ? err.message : String(err)))

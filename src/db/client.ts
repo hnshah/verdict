@@ -10,6 +10,31 @@ import os from 'os'
 import { ALL_SCHEMAS } from './schema.js'
 import type { RunResult } from '../types/index.js'
 
+/** Data for inserting a new job. */
+export interface JobInsert {
+  type: string
+  model_id?: string
+  input?: string
+  priority?: number
+  metadata?: string
+}
+
+/** A row from the jobs table. */
+export interface JobRow {
+  id: number
+  type: string
+  status: string
+  model_id: string | null
+  input: string | null
+  output: string | null
+  error: string | null
+  priority: number
+  queued_at: string
+  started_at: string | null
+  completed_at: string | null
+  metadata: string | null
+}
+
 /** Options for querying eval history. */
 export interface HistoryOpts {
   modelId?: string
@@ -205,6 +230,65 @@ function detectProvider(modelId: string): string | null {
   if (lower.includes('groq')) return 'groq'
   if (lower.includes('sonar')) return 'openrouter'
   return null
+}
+
+/** Inserts a job into the queue and returns its id. */
+export function addJob(db: Database.Database, job: JobInsert): number {
+  const stmt = db.prepare(`
+    INSERT INTO jobs (type, model_id, input, priority, metadata)
+    VALUES (@type, @model_id, @input, @priority, @metadata)
+  `)
+  const info = stmt.run({
+    type: job.type,
+    model_id: job.model_id ?? null,
+    input: job.input ?? null,
+    priority: job.priority ?? 0,
+    metadata: job.metadata ?? null,
+  })
+  return Number(info.lastInsertRowid)
+}
+
+/** Updates fields on an existing job. */
+export function updateJob(db: Database.Database, id: number, update: Partial<JobRow>): void {
+  const fields: string[] = []
+  const params: Record<string, unknown> = { id }
+
+  for (const key of ['status', 'model_id', 'output', 'error', 'started_at', 'completed_at', 'metadata'] as const) {
+    if (key in update) {
+      fields.push(`${key} = @${key}`)
+      params[key] = update[key]
+    }
+  }
+
+  if (fields.length === 0) return
+
+  db.prepare(`UPDATE jobs SET ${fields.join(', ')} WHERE id = @id`).run(params)
+}
+
+/** Picks the next queued job by priority desc, then queued_at asc. Returns null if queue is empty. */
+export function getNextJob(db: Database.Database): JobRow | null {
+  return (db.prepare(
+    `SELECT * FROM jobs WHERE status = 'queued' ORDER BY priority DESC, queued_at ASC LIMIT 1`
+  ).get() as JobRow | undefined) ?? null
+}
+
+/** Query jobs with optional status filter and limit. */
+export function getJobs(db: Database.Database, opts: { status?: string; limit?: number } = {}): JobRow[] {
+  const conditions: string[] = []
+  const params: Record<string, unknown> = {}
+
+  if (opts.status) {
+    conditions.push('status = @status')
+    params.status = opts.status
+  }
+
+  const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+  const limit = opts.limit ?? 50
+  params.limit = limit
+
+  return db.prepare(
+    `SELECT * FROM jobs ${where} ORDER BY queued_at DESC LIMIT @limit`
+  ).all(params) as JobRow[]
 }
 
 /**

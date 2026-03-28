@@ -5,51 +5,71 @@ description: 10 cases testing multi-step reasoning, logic puzzles, math, and cha
 
 cases:
   - id: reason-001
+    description: "Tests resistance to intuitive-but-wrong answers with algebraic reasoning"
+    category: reasoning
     prompt: "A bat and a ball cost $1.10 total. The bat costs $1.00 more than the ball. How much does the ball cost? Show your reasoning."
     criteria: "Correct answer: $0.05. Must show algebraic or logical reasoning — not just guess $0.10. Explains why the intuitive answer is wrong."
     tags: [math, logic, classic]
 
   - id: reason-002
+    description: "Tests lateral thinking with the classic light switch heat puzzle"
+    category: reasoning
     prompt: "Three switches outside a room each control one of three light bulbs inside. You can flip switches however you want, but can only enter the room once. How do you figure out which switch controls which bulb?"
     criteria: "Correct solution using heat: turn on switch 1 for several minutes, turn it off, turn on switch 2, enter room. Hot+off = switch 1. On = switch 2. Cold+off = switch 3."
     tags: [logic, puzzle, lateral-thinking]
 
   - id: reason-003
+    description: "Tests multi-step procedural reasoning with water jug problem"
+    category: reasoning
     prompt: "If you have a 3-gallon jug and a 5-gallon jug with no measurement markings, how do you measure exactly 4 gallons of water?"
     criteria: "Valid solution sequence. At least one correct path: fill 5, pour into 3, dump 3, pour remaining 2 from 5 into 3, fill 5 again, pour from 5 into 3 (which needs 1 gallon) → 4 gallons remain in 5-jug."
     tags: [logic, puzzle, medium]
 
   - id: reason-004
+    description: "Tests understanding of percentage arithmetic and compounding"
+    category: reasoning
     prompt: "A store reduces a price by 20%, then increases it by 20%. Is the final price higher, lower, or the same as the original? By how much?"
     criteria: "Final price is LOWER than original. 80% × 120% = 96% of original. 4% lower. Shows the arithmetic — not just states the answer."
     tags: [math, reasoning, percentages]
 
   - id: reason-005
+    description: "Tests classic logic puzzle solving with liars and truth-tellers"
+    category: reasoning
     prompt: "You're in a room with two doors. One leads to freedom, one to a lion. Two guards know which is which. One always lies, one always tells the truth. You can ask one guard one question. What do you ask?"
     criteria: "Classic solution: ask either guard 'What would the other guard say is the door to freedom?' — then take the opposite door. Explains why this works for both guards."
     tags: [logic, classic, hard]
 
   - id: reason-006
+    description: "Tests syllogistic transitive reasoning with abstract terms"
+    category: reasoning
     prompt: "If all Bloops are Razzies, and all Razzies are Lazzies, are all Bloops definitely Lazzies? What kind of logical inference is this?"
     criteria: "Yes, all Bloops are Lazzies. This is syllogistic/transitive reasoning (deductive logic). If A⊆B and B⊆C then A⊆C."
     tags: [logic, deductive, easy]
 
   - id: reason-007
+    description: "Tests careful step-by-step reasoning with the snail climbing problem"
+    category: reasoning
     prompt: "A snail is at the bottom of a 10-foot well. Each day it climbs 3 feet, each night it slides back 2 feet. How many days to escape?"
     criteria: "8 days. Net gain 1 foot/day but on day 8 it reaches 10 feet (starts day 8 at 7 feet, climbs 3 to 10, out). Common wrong answer is 10. Must account for escaping during the day climb."
     tags: [math, logic, classic]
 
   - id: reason-008
+    description: "Tests Bayesian probability reasoning and base rate awareness"
+    category: reasoning
     prompt: "A doctor has 1000 patients. One has a rare disease affecting 1 in 1000 people. A test for the disease is 99% accurate (1% false positive rate). A random patient tests positive. What's the probability they actually have the disease?"
     criteria: "~50%. Uses Bayes theorem: P(disease|positive) = (0.001 × 0.99) / (0.001 × 0.99 + 0.999 × 0.01) ≈ 9%. Wait — actually ~9%, not 50%. Key insight: base rate matters enormously. False positives swamp true positives."
     tags: [probability, bayes, hard]
 
   - id: reason-009
+    description: "Tests complex combinatorial reasoning with the 12-ball balance puzzle"
+    category: reasoning
     prompt: "You have 12 balls, one of which is either heavier or lighter than the others (you don't know which). Using a balance scale with only 3 weighings, find the odd ball and determine if it's heavier or lighter."
     criteria: "Correct 3-weighing strategy exists. First weighing: 4 vs 4. Branch logic for equal/unequal cases. Identifies the odd ball and its direction in exactly 3 weighings. Explanation should be systematic."
     tags: [logic, puzzle, hard]
 
   - id: reason-010
+    description: "Tests critical analysis and identification of logical fallacies"
+    category: reasoning
     prompt: "Critique this argument: 'We should ban video games because studies show kids who play video games are more aggressive. Clearly, video games cause aggression.'"
     criteria: "Identifies correlation vs causation fallacy. Points out: aggressive kids may seek out violent games (reverse causation), confounding variables (parenting, pre-existing traits), publication bias in studies. Doesn't just assert 'correlation isn't causation' — explains the specific alternative explanations."
     tags: [reasoning, logic, critical-thinking]

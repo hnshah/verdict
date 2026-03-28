@@ -6,17 +6,19 @@ description: |
   MoE models activate different expert sub-networks per token, excelling at tasks that
   require simultaneous deep expertise across multiple domains. These cases are chosen to
   expose that advantage — a capable dense model should score lower on average.
-  
+
   Run this pack against a MoE model AND a comparable dense model to see the delta.
 
 cases:
   - id: moe-001
+    description: "Tests simultaneous expertise across ML math, Python coding, and neuroscience"
+    category: reasoning
     prompt: |
       In a single response, do all three:
       1. Explain how Transformer attention works mathematically (include the softmax(QK^T/sqrt(d_k))V formula)
       2. Write a working Python implementation of scaled dot-product attention
       3. Explain what goes wrong biologically when the blood-brain barrier breaks down in Alzheimer's disease
-      
+
       Do not separate these into sections — weave all three into one coherent explanation.
     criteria: |
       All three present and correct:
@@ -27,6 +29,8 @@ cases:
     tags: [multi-domain, ml, neuroscience, coding, simultaneous-expertise]
 
   - id: moe-002
+    description: "Tests cross-domain expertise in distributed systems, SQL, BFT, and music theory"
+    category: reasoning
     prompt: |
       A startup is building a distributed system. Answer these simultaneously:
       - What CAP theorem tradeoff should they make for a financial ledger? Why?
@@ -41,11 +45,13 @@ cases:
     tags: [multi-domain, systems, sql, distributed, music, simultaneous-expertise]
 
   - id: moe-003
+    description: "Tests cross-language translation with memory safety and immunology analogy"
+    category: coding
     prompt: |
       Translate this Python to idiomatic Rust, then explain:
       1. Why the Rust version is memory-safe without garbage collection
       2. The equivalent concept in immunology (how the immune system "borrows" and "returns" resources without leaking)
-      
+
       Python:
       def process_items(items: list[str]) -> dict[str, int]:
           result = {}
@@ -59,18 +65,20 @@ cases:
     tags: [coding, rust, immunology, analogy, multi-domain]
 
   - id: moe-004
+    description: "Tests parallel debugging across software and medical domains"
+    category: reasoning
     prompt: |
       You are debugging two separate issues at the same time:
-      
+
       Issue A — Python traceback:
       ```
       KeyError: 'user_id'
       at line 47: return data['user_id']
       ```
       The data dict comes from JSON parsed from an API that sometimes returns snake_case and sometimes camelCase.
-      
+
       Issue B — A patient's blood test shows: elevated creatinine (2.8 mg/dL), low GFR (28), normal blood pressure.
-      
+
       For each: give the root cause and the fix. Then explain what these two problems have in common structurally.
     criteria: |
       - Issue A: root cause is inconsistent API key naming; fix is .get('user_id') or .get('userId') with fallback, or key normalization
@@ -79,13 +87,15 @@ cases:
     tags: [debugging, coding, medicine, pattern-matching, multi-domain]
 
   - id: moe-005
+    description: "Tests system design spanning ML, legal/policy, and human operations"
+    category: technical
     prompt: |
       Design a minimal but complete content moderation system for a social platform. Cover:
       - The ML pipeline (what models, what features, what training signal)
       - The legal/policy layer (GDPR, CSAM, jurisdiction conflicts)
       - The human review queue design (prioritization, appeals, reviewer burnout)
       - One adversarial attack on this system and how to defend it
-      
+
       Be concrete. No generic "use machine learning" answers.
     criteria: |
       - ML: specific model types (text classifier, image hash, embedding similarity), training signal (human labels + user reports), threshold calibration
@@ -95,9 +105,11 @@ cases:
     tags: [ml, policy, systems-design, security, multi-domain]
 
   - id: moe-006
+    description: "Tests rapid expert recall across cardiology, compiler theory, and options trading"
+    category: factual
     prompt: |
       Three rapid-fire expert questions. Answer all three with full precision:
-      
+
       1. (Cardiology) What is the mechanism by which ACE inhibitors reduce cardiac remodeling after MI?
       2. (Compiler theory) What is the halting problem and why does it make general static analysis impossible?
       3. (Options trading) What does a negative vega position mean and when would you want one?

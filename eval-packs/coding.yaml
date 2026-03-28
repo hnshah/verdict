@@ -5,51 +5,71 @@ description: 10 coding tasks across languages and difficulties — algorithms, d
 
 cases:
   - id: code-001
+    description: "Tests classic two-sum algorithm implementation in Python"
+    category: coding
     prompt: "Write a Python function that finds the two numbers in a list that sum to a target value. Return their indices. Assume exactly one solution exists."
     criteria: "Correct O(n) solution using a hash map. Returns tuple/list of two indices. Handles the case where the same element can't be used twice."
     tags: [python, algorithms, easy]
 
   - id: code-002
+    description: "Tests JavaScript debugging ability with recursive array flattening"
+    category: coding
     prompt: "Debug this JavaScript: function flatten(arr) { return arr.reduce((acc, val) => acc.concat(val), []); } — it only flattens one level deep. Fix it to flatten arrays of any depth."
     criteria: "Correct recursive or iterative solution. Works for arbitrarily nested arrays. Preserves non-array values."
     tags: [javascript, debugging, medium]
 
   - id: code-003
+    description: "Tests SQL query writing with JOINs, aggregation, and ordering"
+    category: coding
     prompt: "Write a SQL query that finds the top 3 customers by total order value from tables: orders(id, customer_id, amount) and customers(id, name). Include customer name and total."
     criteria: "Uses JOIN, GROUP BY, SUM, ORDER BY DESC, LIMIT 3. Correct column references. Returns name + total."
     tags: [sql, medium]
 
   - id: code-004
+    description: "Tests implementation of LRU cache with O(1) operations"
+    category: coding
     prompt: "Implement a basic LRU (Least Recently Used) cache in Python with get(key) and put(key, value) methods. Capacity is set at init. Both operations must be O(1)."
     criteria: "O(1) for both ops — requires OrderedDict or doubly-linked-list + hashmap. Evicts least recently used on capacity overflow. Correct get/put interface."
     tags: [python, data-structures, hard]
 
   - id: code-005
+    description: "Tests ability to identify Go closure variable capture bug"
+    category: coding
     prompt: "What's wrong with this Go code? func main() { var wg sync.WaitGroup; for i := 0; i < 5; i++ { wg.Add(1); go func() { defer wg.Done(); fmt.Println(i) }() }; wg.Wait() }"
     criteria: "Identifies the closure variable capture bug — all goroutines capture the same 'i', likely printing 5 five times. Fix: pass i as an argument to the goroutine function."
     tags: [go, debugging, concurrency, medium]
 
   - id: code-006
+    description: "Tests TypeScript generics knowledge with groupBy utility"
+    category: coding
     prompt: "Write a TypeScript generic function `groupBy<T>(arr: T[], key: keyof T): Record<string, T[]>` that groups an array of objects by a given key."
     criteria: "Correct TypeScript generics. Uses keyof T constraint. Returns Record<string, T[]>. Handles missing/undefined keys gracefully."
     tags: [typescript, generics, medium]
 
   - id: code-007
+    description: "Tests BST validation with proper range constraint propagation"
+    category: coding
     prompt: "Given a binary tree, write a function to check if it's a valid BST (Binary Search Tree). Don't just compare each node to its parent — consider the full range constraint."
     criteria: "Passes min/max bounds through recursion. Handles equal values (typically not allowed in BST). Correct base case for null nodes."
     tags: [algorithms, trees, hard]
 
   - id: code-008
+    description: "Tests refactoring ability to eliminate code duplication"
+    category: coding
     prompt: "Refactor this code to remove duplication: if (type === 'admin') { log('admin action'); audit('admin', userId); } if (type === 'user') { log('user action'); audit('user', userId); } if (type === 'guest') { log('guest action'); audit('guest', userId); }"
     criteria: "Single code path for all types. Eliminates duplication. Readable and maintainable. Works correctly for all three types."
     tags: [refactoring, easy]
 
   - id: code-009
+    description: "Tests bash one-liner fluency for file system operations"
+    category: coding
     prompt: "Write a bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing size and path."
     criteria: "Uses find or du. Sorts by size numerically. Outputs top 5. Shows human-readable or byte sizes with file paths. Works on macOS and Linux."
     tags: [bash, shell, easy]
 
   - id: code-010
+    description: "Tests multi-tenant SaaS data model design and indexing strategy"
+    category: coding
     prompt: "Design the data model (tables + key fields) for a multi-tenant SaaS app where each tenant has users, projects, and tasks. Tasks belong to projects, projects belong to tenants. Consider indexing strategy."
     criteria: "Correct tenant isolation (tenant_id on all tables). User-tenant membership table. Proper foreign keys. Suggests composite indexes (tenant_id + ...) for query performance."
     tags: [system-design, databases, hard]
