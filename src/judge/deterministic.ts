@@ -221,18 +221,22 @@ export function scoreJsonSchema(output: string, schema: Record<string, unknown>)
   }
 }
 
-export function scoreFuzzyMatch(output: string, expected: string): JudgeScore {
+export function scoreFuzzyMatch(output: string, expected: string | string[]): JudgeScore {
   const a = output.trim().toLowerCase()
-  const b = expected.trim().toLowerCase()
-  if (a.includes(b) || b.includes(a)) {
-    return {
-      accuracy: 10, completeness: 10, conciseness: 10, total: 10,
-      reasoning: `Fuzzy match: "${a.slice(0, 40)}" ↔ "${b.slice(0, 40)}"`,
+  const candidates = Array.isArray(expected) ? expected : [expected]
+  for (const candidate of candidates) {
+    const b = candidate.trim().toLowerCase()
+    if (a.includes(b) || b.includes(a)) {
+      return {
+        accuracy: 10, completeness: 10, conciseness: 10, total: 10,
+        reasoning: `Fuzzy match: "${a.slice(0, 40)}" ↔ "${b.slice(0, 40)}"`,
+      }
     }
   }
+  const label = candidates.length === 1 ? candidates[0].slice(0, 40) : `[${candidates.map(c => c.slice(0, 20)).join(', ')}]`
   return {
     accuracy: 0, completeness: 0, conciseness: 0, total: 0,
-    reasoning: `No fuzzy match: "${a.slice(0, 40)}" does not contain and is not contained by "${b.slice(0, 40)}"`,
+    reasoning: `No fuzzy match: "${a.slice(0, 40)}" does not match "${label}"`,
   }
 }
 
@@ -274,7 +278,7 @@ export function scoreMultipleChoice(output: string, expected: string, choices?: 
 
   return {
     accuracy: 0, completeness: 0, conciseness: 0, total: 0,
-    reasoning: `Wrong choice: expected "${expectedLetter}", found "${found[0]}" in output.`,
+    reasoning: `Wrong choice: expected "${expectedLetter}", found "${found.join(', ')}"`,
   }
 }
 
@@ -290,7 +294,7 @@ export function scoreDeterministic(
   if (scorer === 'json') return scoreJson(output)
   if (scorer === 'exact') return scoreExact(output, expected ?? '')
   if (scorer === 'contains') return scoreContains(output, expected ?? '')
-  if (scorer === 'fuzzy_match') return scoreFuzzyMatch(output, expectedStr)
+  if (scorer === 'fuzzy_match') return scoreFuzzyMatch(output, expected ?? '')
   if (scorer === 'jsonschema') return scoreJsonSchema(output, schema ?? {})
   if (scorer === 'multiple_choice') return scoreMultipleChoice(output, expectedStr, choices)
   return null

@@ -366,5 +366,29 @@ describe('deterministic scorers', () => {
       const result = scoreDeterministic('llm', 'text')
       expect(result).toBeNull()
     })
+
+    it('dispatches to scoreExact with array expected', () => {
+      const result = scoreDeterministic('exact', 'paris', ['Paris', 'Berlin'])
+      expect(result).not.toBeNull()
+      expect(result!.total).toBe(10)
+    })
+
+    it('dispatches to scoreContains with array expected', () => {
+      const result = scoreDeterministic('contains', 'I live in Paris', ['Paris', 'Berlin'])
+      expect(result).not.toBeNull()
+      expect(result!.total).toBe(10)
+    })
+
+    it('dispatches to scoreExact with array expected - no match', () => {
+      const result = scoreDeterministic('exact', 'london', ['Paris', 'Berlin'])
+      expect(result).not.toBeNull()
+      expect(result!.total).toBe(0)
+    })
+
+    it('dispatches to scoreContains with array expected - no match', () => {
+      const result = scoreDeterministic('contains', 'I live in London', ['Paris', 'Berlin'])
+      expect(result).not.toBeNull()
+      expect(result!.total).toBe(0)
+    })
   })
 })
