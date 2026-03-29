@@ -90,6 +90,13 @@ export async function callModel(
     }
   }
 
+  const debug = process.env['VERDICT_DEBUG'] === '1'
+
+  if (debug) {
+    process.stderr.write(`[debug] callModel ${config.id} (${config.model}) → ${baseURL}\n`)
+    process.stderr.write(`[debug] prompt: ${typeof messageContent === 'string' ? messageContent.slice(0, 200) : '[vision]'}\n`)
+  }
+
   try {
     const response = await client.chat.completions.create({
       model: config.model,
@@ -107,10 +114,17 @@ export async function callModel(
         + (output_tokens / 1_000_000) * config.cost_per_1m_output
       : 0
 
+    if (debug) {
+      process.stderr.write(`[debug] response: ${text.slice(0, 200)} (${input_tokens}in/${output_tokens}out, ${latency_ms}ms)\n`)
+    }
+
     return { model_id: config.id, text, input_tokens, output_tokens, latency_ms, cost_usd }
 
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err)
+    if (debug) {
+      process.stderr.write(`[debug] error from ${config.id}: ${msg}\n`)
+    }
     // If vision content failed, retry without image
     if (imagePath && attempt === 0) {
       console.warn(`[verdict] Vision not supported by ${config.model}, retrying text-only`)

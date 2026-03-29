@@ -21,6 +21,8 @@ interface RunOptions {
   category?: string[]
   json?: boolean
   failIfRegression?: boolean
+  verbose?: boolean
+  debug?: boolean
 }
 
 export async function runCommand(opts: RunOptions): Promise<void> {
@@ -94,10 +96,30 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     log()
   }
 
+  // --debug: enable request/response logging in providers
+  if (opts.debug) {
+    process.env['VERDICT_DEBUG'] = '1'
+    log(chalk.dim('  [debug] VERDICT_DEBUG enabled — provider requests will be logged'))
+    log()
+  }
+
+  // --verbose: print each case result as it completes
+  const onProgress = opts.verbose || opts.debug
+    ? (msg: string) => {
+        // In verbose mode, print case completions directly instead of just updating the spinner
+        if (msg.includes('✓') || msg.includes('✗') || msg.includes('case')) {
+          spinner.clear()
+          log(chalk.dim(`  ${msg}`))
+        } else {
+          spinner.text = msg
+        }
+      }
+    : (msg: string) => { spinner.text = msg }
+
   const spinner = ora({ prefixText: '  ', text: 'Starting...', stream: opts.json ? process.stderr : process.stdout }).start()
   let result
   try {
-    result = await runEvals(config, packs, msg => { spinner.text = msg }, opts.resume, categoryFilter)
+    result = await runEvals(config, packs, onProgress, opts.resume, categoryFilter)
     spinner.succeed('Done')
   } catch (err) {
     spinner.fail(chalk.red(err instanceof Error ? err.message : String(err)))
