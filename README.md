@@ -81,8 +81,14 @@ verdict run --pack code-generation
 # Test specific models
 verdict run --models "qwen2.5:7b,sonnet"
 
+# Filter cases by category
+verdict run --category reasoning
+
 # Dry run (preview without API calls)
 verdict run --dry-run
+
+# CI/CD mode (JSON output, fail on regression)
+verdict run --json --fail-if-regression
 ```
 
 ---
@@ -115,7 +121,7 @@ See every prompt, response, and score:
 ```
 [Code Generation Pack]
   Task: "Write a function to parse CSV"
-  
+
   qwen2.5:7b     → 9/10  ✅ Handles edge cases, clean code
   llama3.2:3b    → 7/10  ⚠️  Works but missing error handling
   claude-sonnet  → 9/10  ✅ Perfect, but costs $0.02
@@ -146,8 +152,8 @@ Quantized a model? See what broke:
 
 ### Cloud Models
 
-| Provider | Status | One-Liner Setup |
-|----------|--------|-----------------|
+| Provider | Status | Notes |
+|----------|--------|-------|
 | **OpenRouter** | ✅ | One key = 200+ models |
 | **OpenAI** | ✅ | Direct integration |
 | **Anthropic** | ✅ | Via OpenRouter or proxy |
@@ -175,14 +181,14 @@ name: Daily TypeScript Work
 cases:
   - prompt: "Write a function to debounce API calls"
     judge_criteria: "Code quality, edge cases, TypeScript types"
-  
+
   - prompt: "Refactor this into async/await"
     context: |
       function getData(callback) {
         fetch('/api').then(r => callback(r))
       }
     judge_criteria: "Clean code, error handling"
-  
+
   - prompt: "Debug: Why is this useState not updating?"
     context: |
       const [items, setItems] = useState([]);
@@ -205,15 +211,13 @@ verdict run --pack my-coding
 💡 Cost-quality frontier:
    qwen2.5:7b scores 8.9/10 for FREE
    sonnet scores 9.1/10 but costs $0.15/run
-   
+
    → Difference: 0.2pts
    → You run ~500 prompts/month
    → Switching to sonnet = $75/month for 0.2pt gain
-   
+
    Decision: Use qwen2.5:7b, save $900/year
 ```
-
-**Data-driven decision made!** ✅
 
 ---
 
@@ -231,7 +235,7 @@ models:
   - id: qwen-4bit
     provider: ollama
     model: qwen2.5:7b
-  
+
   - id: qwen-2bit
     provider: ollama
     model: qwen2.5:2bit
@@ -272,13 +276,13 @@ models:
     provider: ollama
     model: qwen2.5:7b
     base_url: http://localhost:11434  # optional
-  
+
   # Cloud models (OpenRouter)
   - id: sonnet
     provider: openrouter
     model: anthropic/claude-sonnet-4
     api_key: ${OPENROUTER_KEY}
-  
+
   # Cloud models (direct)
   - id: gpt4
     provider: openai
@@ -311,55 +315,84 @@ judge_criteria: |
 cases:
   - prompt: "Write a function to deep clone an object"
     expected_behavior: "Handles nested objects, arrays, null"
-  
+    category: coding
+
   - prompt: |
       Fix this bug:
       const data = [1,2,3];
       data.length = 0;
       console.log(data); // Why is this empty?
     judge_criteria: "Explains array.length mutation correctly"
+    category: debugging
 ```
 
 ---
 
 ## Advanced Features
 
-### 1. Model Router (New! 🎉)
+### 1. Model Router
 
-**Automatically choose the best model for each task.**
+**Automatically route prompts to the best model based on eval history.**
 
-```typescript
-import { VerdictRouter } from 'verdict';
+```bash
+# Route a prompt to the best model
+verdict route "Debug this memory leak in React"
 
-const router = new VerdictRouter('./verdict.db');
+# Force a specific task type
+verdict route "Summarize this document" --type summarize
 
-// Routes to best model based on task type
-const result = await router.route(
-  "Debug this memory leak in React"
-);
+# Prefer local models only
+verdict route "Write unit tests" --prefer local
 
-console.log(`Using: ${result.choice.model}`);
-// → "Using: qwen2.5:7b (code-generation specialist)"
+# Dry run — show which model would be selected without running
+verdict route "your prompt" --dry-run
 ```
 
-**Features:**
-- ✅ Learns from eval results (which model wins for which tasks?)
-- ✅ Auto-classifies tasks (code, reasoning, tool-calling, creative)
-- ✅ Balances quality, cost, and speed
-- ✅ DSPy-optimized routing (60% accuracy, improving with data)
+### 2. OpenAI-Compatible Proxy
 
-**Shadow Mode** - Test new routing logic safely:
-```typescript
-const router = new VerdictRouter('./verdict.db', {
-  shadowMode: true  // Logs both routers, uses primary
-});
+Run verdict as a local HTTP server that automatically routes requests to the best model:
 
-// After 100 decisions:
-const stats = router.getShadowStats();
-console.log(`Agreement: ${stats.agreement_rate}`);
+```bash
+verdict serve --port 4000
 ```
 
-### 2. Baseline Comparison
+Point any OpenAI client at `http://localhost:4000` — verdict selects the model based on eval history.
+
+### 3. Background Daemon
+
+Run evals, batch jobs, and synthesis in the background:
+
+```bash
+verdict daemon start   # Start background daemon
+verdict daemon status  # Show queue depth, current job, uptime
+verdict daemon logs    # Tail daemon logs
+verdict daemon stop    # Stop the daemon
+```
+
+### 4. Watch for New Models
+
+Automatically detect when new local models are installed:
+
+```bash
+verdict watch                         # Poll once
+verdict watch --continuous            # Poll continuously (foreground)
+verdict watch --interval 120          # Poll every 2 minutes
+verdict watch --no-auto-eval          # Detect but don't auto-queue evals
+```
+
+### 5. Eval History
+
+Query past eval results from the local SQLite database:
+
+```bash
+verdict history                       # Recent results
+verdict history --model qwen2.5:7b    # Filter by model
+verdict history --pack code-gen       # Filter by pack
+verdict history --since 7d --trend    # Last 7 days with sparkline trends
+verdict history --sort score          # Sort by score
+```
+
+### 6. Baseline Comparison
 
 Track model improvements over time:
 
@@ -374,7 +407,16 @@ verdict baseline compare v1.0
 # → qwen2.5:7b improved +0.8pts since v1.0
 ```
 
-### 3. Custom Judges
+### 7. Config Validation
+
+Check your config for errors before running:
+
+```bash
+verdict validate
+verdict validate ./path/to/verdict.yaml
+```
+
+### 8. Custom Judges
 
 Use different judge models for different packs:
 
@@ -386,47 +428,56 @@ judge:
   temperature: 0.7
 ```
 
-### 4. Inference Optimization
-
-```yaml
-# verdict.yaml
-models:
-  - id: qwen-fast
-    provider: ollama
-    model: qwen2.5:7b
-    parameters:
-      num_gpu: 99  # Use all GPU layers
-      num_ctx: 8192  # Larger context
-      temperature: 0.1  # More deterministic
-```
-
 ---
 
 ## CLI Reference
 
 ```bash
 # Setup
-verdict init                  # Create verdict.yaml + eval-packs/
-verdict models                # Ping all configured models
-verdict models discover       # Find Ollama/MLX models
+verdict init                            # Create verdict.yaml + eval-packs/
+verdict validate [config]               # Check config for errors
+verdict models                          # Ping all configured models
+verdict models discover                 # Find Ollama/MLX models
 
 # Run evals
-verdict run                   # Run all packs, all models
-verdict run -p code-gen       # Run specific pack
-verdict run -m "qwen,sonnet"  # Test specific models
-verdict run --dry-run         # Preview (no API calls)
-verdict run --resume          # Resume from checkpoint
+verdict run                             # Run all packs, all models
+verdict run -p code-gen                 # Run specific pack
+verdict run -m "qwen,sonnet"            # Test specific models
+verdict run --category reasoning        # Filter cases by category
+verdict run --dry-run                   # Preview (no API calls)
+verdict run --resume                    # Resume from checkpoint
+verdict run --verbose                   # Print each result as it completes
+verdict run --debug                     # Log raw provider requests
+verdict run --json                      # JSON output (for CI/CD)
+verdict run --fail-if-regression        # Exit 1 if regression vs baseline
 
-# Compare models
-verdict compare               # Head-to-head comparison UI
+# Compare and history
+verdict compare <run-a.json> <run-b.json>  # Compare two result files
+verdict history                             # View eval history
+verdict history --model qwen2.5:7b          # Filter by model
+verdict history --since 7d --trend          # Sparkline trends
 
 # Baselines
-verdict baseline save v1.0    # Save current as baseline
-verdict baseline list         # Show saved baselines
-verdict baseline compare v1   # Compare to baseline
+verdict baseline save v1.0              # Save current as baseline
+verdict baseline list                   # Show saved baselines
+verdict baseline compare v1             # Compare to baseline
 
-# Router
-verdict infer "your prompt"   # Route single task (for testing)
+# Routing and serving
+verdict route <prompt>                  # Route prompt to best model
+verdict route <prompt> --prefer local   # Prefer local models
+verdict route <prompt> --dry-run        # Show selected model only
+verdict serve                           # Start OpenAI-compat proxy (port 4000)
+verdict serve --port 8080               # Custom port
+
+# Daemon
+verdict daemon start                    # Start background daemon
+verdict daemon stop                     # Stop daemon
+verdict daemon status                   # Show queue depth and uptime
+verdict daemon logs                     # Tail daemon logs
+
+# Watch
+verdict watch                           # Detect new local models
+verdict watch --continuous              # Poll continuously
 ```
 
 ---
@@ -456,7 +507,6 @@ sonnet:     8.7/10 ($89.00/month)
 
 **Goal:** Catch quality drops before users do
 
-**Setup:**
 ```bash
 # Save current production model as baseline
 verdict baseline save production-v1
@@ -468,20 +518,26 @@ verdict baseline compare production-v1
 
 **Result:**
 ```
-❌ NEW MODEL REGRESSION DETECTED
+❌ REGRESSION DETECTED
 
-Tool-calling: 9.2 → 6.1 (-3.1pts) 
+Tool-calling: 9.2 → 6.1 (-3.1pts)
   8/10 tasks failed JSON parsing
 
 → DO NOT DEPLOY
 → Roll back to 4-bit
 ```
 
-### 3. Cost Optimization
+### 3. CI/CD Quality Gate
+
+```bash
+verdict run --json --fail-if-regression
+# → Exit 1 if new model worse than baseline
+```
+
+### 4. Cost Optimization
 
 **Goal:** Find cheapest model that meets quality bar
 
-**Setup:**
 ```yaml
 models:
   - qwen2.5:7b     # Free
@@ -526,7 +582,7 @@ See `CONTRIBUTING.md` for details.
 
 ### Do I need a cloud API key?
 
-No! You can use local models (Ollama, MLX) as both test subjects AND judge.
+No. Local models (Ollama, MLX) work as both test subjects and judge.
 
 ### How is this different from MMLU/HellaSwag?
 
@@ -534,11 +590,11 @@ Those are generic academic benchmarks. Verdict tests YOUR tasks.
 
 ### Can I test proprietary models?
 
-Yes! Any OpenAI-compatible API works (OpenRouter, Azure, custom endpoints).
+Yes. Any OpenAI-compatible API works (OpenRouter, Azure, custom endpoints).
 
 ### Does the judge need to be GPT-4?
 
-No! Local models (qwen2.5:7b, mistral) make excellent judges.
+No. Local models (qwen2.5:7b, mistral) make excellent judges.
 
 ### How long does a benchmark run take?
 
@@ -549,10 +605,10 @@ Depends on:
 
 ### Can I use this in CI/CD?
 
-Yes! Exit code non-zero if quality drops:
+Yes. Exit code non-zero if quality drops:
 
 ```bash
-verdict run --baseline production --fail-if-regression
+verdict run --fail-if-regression
 # → Exit 1 if new model worse than baseline
 ```
 
@@ -566,39 +622,31 @@ MIT
 
 ## Links
 
-- **GitHub:** https://github.com/yourusername/verdict
-- **Docs:** https://verdict.dev
-- **Discord:** https://discord.gg/verdict
+- **GitHub:** https://github.com/hnshah/verdict
+- **Issues:** https://github.com/hnshah/verdict/issues
+- **Discussions:** https://github.com/hnshah/verdict/discussions
 
 ---
 
 ## Roadmap
 
-**Shipping Now:**
+**Shipped:**
+- ✅ SQLite persistence + eval history
 - ✅ Model router (auto-select best model per task)
-- ✅ Shadow mode (safe A/B testing)
-- ✅ DSPy-optimized routing
+- ✅ OpenAI-compatible serve mode
+- ✅ Background daemon with job queue
+- ✅ Watch mode (auto-detect new local models)
+- ✅ Config validation
 
-**Coming Q2 2026:**
+**Coming:**
 - LM Studio auto-discovery
 - Multi-judge consensus (2+ judges vote)
-- Tag-based filtering (`verdict run --tags "quick,sanity"`)
 - Web UI dashboard
 - CI/CD GitHub Action
-
-**Considering:**
 - Prompt optimization (auto-improve prompts via evals)
-- Dataset generation (create eval packs from logs)
-- Model fine-tuning integration (eval → retrain loop)
-
-Vote on features: https://github.com/yourusername/verdict/discussions
 
 ---
 
-**Built with ❤️ by developers tired of guessing which model to use.**
+**Built for developers tired of guessing which model to use.**
 
 *Stop vibes-based model selection. Start making data-driven decisions.*
-
----
-
-Developed with cloud and local AI assistance.
