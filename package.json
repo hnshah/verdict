@@ -3,6 +3,14 @@
   "version": "0.2.0",
   "description": "LLM eval framework. Benchmark local and cloud models with one config file.",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "bin": {
     "verdict": "./dist/cli/index.js"
   },
