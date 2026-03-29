@@ -1,6 +1,9 @@
 node_modules/
 dist/
-results/
+results/private/
 .env
 *.log
 .DS_Store
+
+# Track public results for publishing
+!results/public/

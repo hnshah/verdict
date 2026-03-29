@@ -11,6 +11,8 @@ import { serveCommand } from './commands/serve.js'
 import { daemonStartCommand, daemonStopCommand, daemonStatusCommand, daemonLogsCommand, daemonWorkerCommand } from './commands/daemon.js'
 import { watchCommand } from './commands/watch.js'
 import { validateCommand } from './commands/validate.js'
+import { publishCommand } from './commands/publish.js'
+import { leaderboardCommand } from './commands/leaderboard.js'
 
 const program = new Command()
 
@@ -151,5 +153,19 @@ program
   .action((config: string | undefined, _opts: unknown) => {
     return validateCommand({ config: config ?? './verdict.yaml' })
   })
+
+program
+  .command('publish')
+  .description('Publish private results to public leaderboard')
+  .option('--result <path>', 'Specific result JSON file to publish')
+  .option('--dry-run', 'Preview what would be published')
+  .action(publishCommand)
+
+program
+  .command('leaderboard')
+  .description('Generate HTML leaderboard from public results')
+  .option('-o, --output <path>', 'Output file path', 'docs/index.html')
+  .option('--format <type>', 'Output format (html, markdown)', 'html')
+  .action(leaderboardCommand)
 
 program.parse()

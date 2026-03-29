@@ -1,0 +1,293 @@
+{
+  "run_id": "2026-03-25T22-37-07",
+  "name": "Extreme Edge Cases",
+  "timestamp": "2026-03-25T22:37:17.726Z",
+  "models": [
+    "qwen7b"
+  ],
+  "cases": [
+    {
+      "case_id": "almost-json",
+      "prompt": "Output this exact text: {name: 'test', age: 25}",
+      "criteria": "Should detect invalid JSON (missing quotes around keys)",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "{name: 'test', age: 25}",
+          "input_tokens": 46,
+          "output_tokens": 12,
+          "latency_ms": 324,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 2,
+          "completeness": 2,
+          "conciseness": 2,
+          "total": 2,
+          "reasoning": "JSON structure found but parse failed: Expected property name or '}' in JSON at position 1 (line 1 column 2)"
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "empty-json-object",
+      "prompt": "Return an empty JSON object",
+      "criteria": "Valid JSON: {}",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "```json\n{}\n```",
+          "input_tokens": 34,
+          "output_tokens": 6,
+          "latency_ms": 175,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "Valid JSON output."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "json-array",
+      "prompt": "Return a JSON array with 3 numbers",
+      "criteria": "Valid JSON array",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "```json\n[12, 45, 78]\n```",
+          "input_tokens": 37,
+          "output_tokens": 17,
+          "latency_ms": 250,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "Valid JSON output."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "similar-tool-names",
+      "prompt": "Read the contents of file.txt",
+      "criteria": "Should call read_file, not write_file or list_files",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "",
+          "input_tokens": 218,
+          "output_tokens": 21,
+          "latency_ms": 385,
+          "cost_usd": 0,
+          "tool_calls": [
+            {
+              "name": "read_file",
+              "arguments": {
+                "path": "file.txt"
+              }
+            }
+          ]
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 8,
+          "completeness": 8,
+          "conciseness": 8,
+          "total": 8,
+          "reasoning": "Correct tool: read_file; arg 'path' correct"
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "tool-no-params",
+      "prompt": "Get current time",
+      "criteria": "Calls get_time with no parameters",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "",
+          "input_tokens": 136,
+          "output_tokens": 16,
+          "latency_ms": 276,
+          "cost_usd": 0,
+          "tool_calls": [
+            {
+              "name": "get_time",
+              "arguments": {}
+            }
+          ]
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 6,
+          "completeness": 6,
+          "conciseness": 6,
+          "total": 6,
+          "reasoning": "Correct tool: get_time"
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "case-sensitive-exact",
+      "prompt": "What is the capital of France? Answer: PARIS",
+      "criteria": "Exact match should be case-insensitive",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "The capital of France is Paris.",
+          "input_tokens": 40,
+          "output_tokens": 8,
+          "latency_ms": 168,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Expected \"paris\", got \"The capital of France is Paris.\""
+        }
+      }
+    },
+    {
+      "case_id": "whitespace-exact",
+      "prompt": "Say 'hello' with no extra words",
+      "criteria": "Should match despite extra whitespace",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "Hello.",
+          "input_tokens": 37,
+          "output_tokens": 3,
+          "latency_ms": 118,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Expected \"  hello  \", got \"Hello.\""
+        }
+      }
+    },
+    {
+      "case_id": "ambiguous-tools",
+      "prompt": "Find information about Python programming",
+      "criteria": "Could use search_web or search_docs - either acceptable",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "",
+          "input_tokens": 176,
+          "output_tokens": 21,
+          "latency_ms": 353,
+          "cost_usd": 0,
+          "tool_calls": [
+            {
+              "name": "search_web",
+              "arguments": {
+                "query": "Python programming"
+              }
+            }
+          ]
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 6,
+          "completeness": 6,
+          "conciseness": 6,
+          "total": 6,
+          "reasoning": "Correct tool: search_web"
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "tool-enum-param",
+      "prompt": "Sort this list in descending order",
+      "criteria": "Calls sort with direction=desc",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "Sure, could you please provide me with the list that needs to be sorted?",
+          "input_tokens": 152,
+          "output_tokens": 17,
+          "latency_ms": 287,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "No tool calls made."
+        }
+      }
+    },
+    {
+      "case_id": "contains-vs-exact",
+      "prompt": "Write about artificial intelligence and machine learning",
+      "criteria": "Must contain both 'artificial intelligence' and 'machine learning'",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "Artificial Intelligence (AI) and Machine Learning (ML) have become integral parts of our daily lives, transforming industries from healthcare to entertainment. These technologies enable computers to learn from data, identify patterns, and make decisions with minimal human intervention.\n\n### Artificial Intelligence: The Broader Perspective\n\nArtificial Intelligence is a broad field that encompasses the development of intelligent machines capable of performing tasks that typically require human intelligence. This includes reasoning, problem-solving, perception, learning, understanding natural language, and more. AI systems can be categorized into three main types:\n\n1. **Narrow or Weak AI**: These are designed to perform specific tasks, such as voice recognition, image classification, or playing chess. Examples include virtual assistants like Siri and Alexa.\n\n2. **General or Strong AI**: This type of AI is capable of understanding, learning, and applying knowledge across a wide range of tasks, similar to human intelligence. While we have not yet achieved this level of AI, researchers are working towards it.\n\n3. **Superintelligent AI**: A hypothetical form of artificial general intelligence that surpasses human cognitive abilities in every domain. The concept is often discussed in the context of potential risks and benefits.\n\n### Machine Learning: A Subset of AI\n\nMachine learning is a subset of AI that focuses on developing algorithms and statistical models to enable machines to improve their performance over time without explicit programming. It involves training models using large datasets, allowing them to learn from examples and make predictions or decisions based on new data.\n\n#### Key Components of Machine Learning:\n\n1. **Supervised Learning**: Involves training a model with labeled data, where the correct output is known for each input. Common applications include image recognition and predictive analytics.\n\n2. **Unsupervised Learning**: Deals with unlabeled data, aiming to find patterns or structure within it. Clustering and anomaly detection are examples of unsupervised learning tasks.\n\n3. **Reinforcement Learning**: Involves training agents to make decisions in an environment by receiving rewards or penalties for their actions. This is used in areas like game playing and robotics.\n\n4. **Deep Learning**: A subset of machine learning that uses neural networks with multiple layers to learn complex representations from data. It has been particularly successful in fields such as computer vision, natural language processing, and speech recognition.\n\n### Applications of AI and ML\n\nThe applications of AI and ML are vast and continue to expand:\n\n- **Healthcare**: AI can assist in diagnosing diseases, predicting patient outcomes, and developing personalized treatment plans.\n  \n- **Finance**: Used for fraud detection, risk assessment, algorithmic trading, and customer service through chatbots.\n\n- **Retail**: Enhances customer experience with recommendation systems, inventory management, and supply chain optimization.\n\n- **Transportation**: Self-driving cars rely on AI to process sensor data and make real-time decisions. Autonomous drones are also becoming more common in various industries.\n\n- **Entertainment**: Personalized content recommendations, virtual assistants, and interactive gaming experiences all benefit from AI technologies.\n\n### Challenges and Ethical Considerations\n\nWhile the benefits of AI and ML are significant, there are also challenges and ethical considerations:\n\n1. **Bias and Fairness**: AI systems can inherit biases present in their training data, leading to unfair outcomes.\n   \n2. **Privacy**: Collecting large amounts of data for training models raises concerns about privacy and data security.\n\n3. **Job Displacement**: Automation through AI could lead to job losses in certain sectors but also create new opportunities.\n\n4. **Transparency and Explainability**: Complex ML models can be difficult to interpret, making it hard to understand how decisions are made.\n\n5. **Security**: As AI systems become more integrated into critical infrastructure, they face increased risks of cyberattacks.\n\n### Future Directions\n\nThe future of AI and ML looks promising as researchers continue to push the boundaries of what these technologies can achieve. Advancements in areas like quantum computing could further enhance computational capabilities, while ongoing efforts to improve model interpretability will help address ethical concerns.\n\nIn conclusion, artificial intelligence and machine learning are rapidly evolving fields with transformative potential across various sectors. As we move forward, it is crucial to balance innovation with responsible development and deployment of these technologies.",
+          "input_tokens": 36,
+          "output_tokens": 845,
+          "latency_ms": 8079,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "Contains expected string \"artificial intelligence\"."
+        }
+      },
+      "winner": "qwen7b"
+    }
+  ],
+  "summary": {
+    "qwen7b": {
+      "model_id": "qwen7b",
+      "avg_total": 5.2,
+      "avg_accuracy": 5.2,
+      "avg_completeness": 5.2,
+      "avg_conciseness": 5.2,
+      "avg_latency_ms": 1041.5,
+      "total_cost_usd": 0,
+      "win_rate": 70,
+      "wins": 7,
+      "cases_run": 10
+    }
+  }
+}

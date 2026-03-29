@@ -1,0 +1,490 @@
+{
+  "run_id": "2026-03-25T22-40-30",
+  "name": "OSS Contribution - Real Work Comparison",
+  "timestamp": "2026-03-25T22:43:00.625Z",
+  "models": [
+    "qwen7b",
+    "llama32-3b",
+    "qwen14b"
+  ],
+  "cases": [
+    {
+      "case_id": "code-review-1",
+      "prompt": "Review this pull request change:\n\n```typescript\n- if (this.qmd.searchMode === \"search\") {\n-   return false;\n- }\n+ // Embeddings should always run during indexing, regardless of search mode\n```\n\nIs this a good change? Why or why not?\n",
+      "criteria": "Should identify:\n1. Removes unnecessary early return\n2. Comment explains reasoning\n3. Separates indexing concern from search-time concern\n4. Good change overall\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "The change you've proposed is a significant shift in the logic of your code. Let's break down the reasoning behind it:\n\n### Original Code:\n```typescript\nif (this.qmd.searchMode === \"search\") {\n  return false;\n}\n```\n\nThis original condition checks if `searchMode` is set to `\"search\"`, and if so, returns `false`. This suggests that in certain contexts, when the search mode is active, some operation or behavior should be disabled.\n\n### Proposed Change:\n```typescript\n// Embeddings should always run during indexing, regardless of search mode\n```\n\nThis comment indicates a new rule: embeddings should always run during indexing, no matter what the `searchMode` is. This change effectively removes the conditional check and ensures that the operation will always proceed as intended.\n\n### Evaluation:\n\n1. **Clarity**: The original code was clear about its condition for returning `false`. The proposed comment, however, does not provide a specific return value or behavior; it just states a rule.\n2. **Consistency**: If embeddings should indeed run regardless of the search mode, this change is appropriate and makes the intent clearer.\n3. **Maintainability**: Removing conditional checks can sometimes make the code simpler to understand and maintain, as there are fewer paths to follow.\n\n### Potential Issues:\n- **Side Effects**: Ensure that running embeddings during indexing does not have unintended side effects or conflicts with other parts of your application.\n- **Documentation**: The comment should be updated to reflect the new behavior clearly. It might be better to replace the comment with a more explicit return statement, such as `return true;`.\n\n### Suggested Change:\nIf you want to make this change and ensure clarity, consider updating it like this:\n\n```typescript\n// Embeddings should always run during indexing, regardless of search mode\nreturn true;\n```\n\nThis way, the code is both clear and functional.\n\n### Conclusion:\nThe proposed change is good if embeddings should indeed always run. However, you might want to add a return statement for clarity and ensure that this new rule does not introduce any unintended behavior.",
+          "input_tokens": 86,
+          "output_tokens": 426,
+          "latency_ms": 4235,
+          "cost_usd": 0
+        },
+        "llama32-3b": {
+          "model_id": "llama32-3b",
+          "text": "This is a good change.\n\nThe original code had a conditional statement that would prevent the embeddings from running when the `searchMode` was set to \"search\". However, the comment suggests that embeddings should always run during indexing, regardless of search mode. This makes sense because embeddings are typically used for indexing and retrieval purposes, not just for searching.\n\nBy removing the conditional statement, this change ensures that embeddings will always be executed during indexing, which is likely the intended behavior.",
+          "input_tokens": 82,
+          "output_tokens": 95,
+          "latency_ms": 2087,
+          "cost_usd": 0
+        },
+        "qwen14b": {
+          "model_id": "qwen14b",
+          "text": "To properly evaluate whether the proposed change is good, we need to consider several factors:\n\n1. **Purpose and Context**: The original code checks if `this.qmd.searchMode` is `\"search\"` and returns `false`. This suggests that under certain conditions (when in search mode), some operation should not proceed. The comment in the new code states that embeddings should always run during indexing, regardless of the search mode.\n\n2. **Behavior Change**: By removing the conditional check and adding a comment, the change implies that the logic around running embeddings is now unconditional for indexing operations. This means that if `this.qmd.searchMode` was previously used to control whether embeddings were processed (and it prevented them from being processed in \"search\" mode), this change forces embeddings to run unconditionally during indexing.\n\n3. **Consistency and Readability**: The comment provides clarity about the intent of the code, which is beneficial for future maintainers who might need to understand why certain logic was implemented. However, if the context around `this.qmd.searchMode` has changed significantly or if there are other parts of the system that rely on this mode being respected, removing the conditional check could introduce unexpected behavior.\n\n4. **Testing**: If this change is made, it should be accompanied by appropriate tests to ensure that embeddings run as expected during indexing and do not cause issues in other modes (like search).\n\n### Conclusion\nThe change appears to be good if:\n- The logic around `this.qmd.searchMode` has evolved such that the previous conditional check is no longer necessary.\n- Embeddings should indeed always run during indexing, regardless of the mode.\n- There are sufficient tests and documentation updates to reflect this new behavior.\n\nHowever, it might not be a good change if:\n- Removing the condition introduces unintended side effects or breaks existing functionality in other parts of the system.\n- The comment does not fully capture all nuances of why the conditional check was removed.\n\nIn summary, without additional context about how `this.qmd.searchMode` is used elsewhere and whether this change aligns with broader architectural decisions, it's difficult to definitively say if this is a good or bad change. It would be wise to review related code paths and ensure that this modification does not break any existing assumptions or behaviors in the system.",
+          "input_tokens": 86,
+          "output_tokens": 463,
+          "latency_ms": 11760,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 9,
+          "total": 7.8,
+          "reasoning": "The response addresses the criteria but could be more detailed in explaining potential issues and suggesting improvements."
+        },
+        "llama32-3b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response accurately explains the change but could be more detailed in addressing all evaluation criteria and slightly concise."
+        },
+        "qwen14b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 6,
+          "total": 7.2,
+          "reasoning": "The response adequately evaluates the change but lacks detailed analysis of specific criteria and could be more concise."
+        }
+      },
+      "winner": "llama32-3b"
+    },
+    {
+      "case_id": "bug-analysis-1",
+      "prompt": "A user reports: \"QMD memory search returns empty results even though files are indexed.\"\n\nLooking at the code, what's the most likely root cause?\n\n```typescript\nprivate shouldRunEmbed(force?: boolean): boolean {\n  if (this.qmd.searchMode === \"search\") {\n    return false;  // Skip embeddings for BM25-only mode\n  }\n  // ... rest of logic\n}\n```\n",
+      "criteria": "Should identify:\n1. searchMode=\"search\" is the default\n2. This causes embeddings to never run\n3. Without embeddings, vector search fails\n4. The condition is wrong (confuses indexing with search)\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "Based on the provided code snippet, it appears that the function `shouldRunEmbed` is used to determine whether embedding should be run. The most likely root cause for the issue where memory search returns empty results even though files are indexed could be related to how this function interacts with the search mode.\n\nHere's a breakdown of the logic in the provided code:\n\n1. If `this.qmd.searchMode` is set to `\"search\"`, the function immediately returns `false`. This means that embedding will not be run if the search mode is set to \"search\".\n\n2. The rest of the logic (which isn't shown here) would determine whether embeddings should still be run, but based on the current snippet, it seems that in the \"search\" mode, embeddings are skipped.\n\nGiven this context, the most likely root cause could be:\n\n- **Search Mode is Set to \"search\":** If `this.qmd.searchMode` is set to `\"search\"`, then the function will always return `false`, meaning no embedding will be run. This would result in memory search returning empty results even if files are indexed.\n\nTo verify this, you can check the value of `this.qmd.searchMode`. Here's an example of how you might do that:\n\n```typescript\nconsole.log(this.qmd.searchMode);  // Check the current mode\n```\n\nIf `this.qmd.searchMode` is indeed set to `\"search\"`, then you need to either change it or modify the logic in `shouldRunEmbed` to ensure embeddings are run even when in \"search\" mode.\n\nHere's an example of how you might adjust the function:\n\n```typescript\nprivate shouldRunEmbed(force?: boolean): boolean {\n  if (this.qmd.searchMode === \"search\") {\n    return true;  // Allow embeddings for BM25-only mode as well\n  }\n  // ... rest of logic\n}\n```\n\nThis change would ensure that embedding is run even when the search mode is set to `\"search\"`, which might resolve the issue.",
+          "input_tokens": 113,
+          "output_tokens": 414,
+          "latency_ms": 4067,
+          "cost_usd": 0
+        },
+        "llama32-3b": {
+          "model_id": "llama32-3b",
+          "text": "The most likely root cause is that the `force` parameter is not being set to a value other than `undefined`, which means it's defaulting to its initial value, potentially causing an empty search result.\n\nIn TypeScript, if you don't provide a value for a function parameter, it defaults to its initial value. In this case, since `force` has a default value of `false`, when the function is called without providing a value, `force` will be `false`. \n\nThis could lead to an empty search result because the condition `this.qmd.searchMode === \"search\"` would not be met, causing the function to return `false`.\n\nTo fix this issue, you should ensure that the `force` parameter is always provided with a valid value. You can do this by adding a default value for `force` or by requiring it as an argument.\n\nHere's how you could modify your code:\n\n```typescript\nprivate shouldRunEmbed(force: boolean = false): boolean {\n  if (this.qmd.searchMode === \"search\" && !force) {\n    return false;  // Skip embeddings for BM25-only mode\n  }\n  // ... rest of logic\n}\n```\n\nAlternatively, you could require the `force` parameter:\n\n```typescript\nprivate shouldRunEmbed(force: boolean): boolean {\n  if (this.qmd.searchMode === \"search\" && !force) {\n    return false;  // Skip embeddings for BM25-only mode\n  }\n  // ... rest of logic\n}\n```\n\nIn this case, you would need to call the function with a valid value for `force`, like so:\n\n```typescript\nthis.shouldRunEmbed(true);  // Run embedding even in search mode\nthis.shouldRunEmbed(false); // Skip embedding in search mode\n```",
+          "input_tokens": 108,
+          "output_tokens": 365,
+          "latency_ms": 2361,
+          "cost_usd": 0
+        },
+        "qwen14b": {
+          "model_id": "qwen14b",
+          "text": "Based on the provided code snippet, it appears that there is a conditional check in place to skip embedding operations when `this.qmd.searchMode` is set to `\"search\"`. This suggests that if the search mode is specifically configured for BM25-only (a retrieval model), then embeddings are not run.\n\nGiven this context, here are some potential root causes for why QMD memory search might return empty results even though files are indexed:\n\n1. **Search Mode Configuration**: If `this.qmd.searchMode` is set to `\"search\"`, the embedding process will be skipped entirely. This means that if your retrieval mechanism relies on embeddings (e.g., semantic similarity), it won't work as expected because no embeddings would have been generated for the documents.\n\n2. **Indexing Process**: Ensure that files are being indexed correctly and that the indexing process is not failing silently. Check logs or add debug statements to verify that all necessary files are indeed being processed during indexing.\n\n3. **Search Query Matching**: If your search queries do not match any of the indexed content due to differences in text representation (e.g., stemming, tokenization), you might get empty results even if documents exist in the index.\n\n4. **BM25 Configuration Issues**: Ensure that BM25 is properly configured and functioning as expected for exact matches or keyword-based searches. If there are issues with how BM25 is set up, it could lead to no relevant documents being returned despite them existing in the index.\n\nTo troubleshoot further:\n\n- Verify the value of `this.qmd.searchMode` when running a search.\n- Check if embeddings are generated and stored correctly for non-\"search\" modes.\n- Ensure that your indexing process includes all necessary steps (e.g., tokenization, BM25 indexing) and that there are no errors during this phase.\n- Validate the search queries against indexed content to ensure they match expected patterns.\n\nIf `this.qmd.searchMode` is indeed set to `\"search\"` and you need semantic search capabilities, consider changing it or implementing a hybrid approach where both embeddings and BM25 are utilized.",
+          "input_tokens": 113,
+          "output_tokens": 426,
+          "latency_ms": 7540,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response correctly identifies the issue with search mode and suggests a fix, but could be more explicit about embeddings being necessary for vector search."
+        },
+        "llama32-3b": {
+          "accuracy": 3,
+          "completeness": 2,
+          "conciseness": 5,
+          "total": 3,
+          "reasoning": "The response incorrectly identifies the issue and does not address the root cause related to searchMode being set to 'search' by default, which prevents embeddings from running."
+        },
+        "qwen14b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 9,
+          "total": 7.8,
+          "reasoning": "The response correctly identifies the issue with searchMode but could be more explicit about the need to run embeddings for semantic search and might have missed mentioning that the condition should allow embeddings during indexing."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "fix-quality-1",
+      "prompt": "Which fix is better for \"tool calling scorer always returns 0/10 when no tool calls made\"?\n\nFix A:\n```typescript\nif (!toolCalls || toolCalls.length === 0) {\n  return { total: 0, reasoning: 'No tool calls made.' }\n}\n```\n\nFix B:\n```typescript\nif (!toolCalls || toolCalls.length === 0) {\n  if (expectedTool === '') {\n    return { total: 10, reasoning: 'Correctly avoided calling any tool.' }\n  }\n  return { total: 0, reasoning: 'No tool calls made.' }\n}\n```\n",
+      "criteria": "Should prefer Fix B because:\n1. Handles both positive (should call) and negative (should NOT call) cases\n2. Empty expectedTool indicates no call expected\n3. Returns 10/10 for correct avoidance\n4. More complete solution\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "To determine which fix is better for the issue \"tool calling scorer always returns 0/10 when no tool calls made,\" we need to consider the context and requirements of the scoring logic. Let's break down both fixes:\n\n### Fix A:\n```typescript\nif (!toolCalls || toolCalls.length === 0) {\n  return { total: 0, reasoning: 'No tool calls made.' }\n}\n```\n\n- **Pros**:\n  - Simple and straightforward.\n  - Ensures that if no tool calls are made, the score is set to `0` with a clear reason.\n\n- **Cons**:\n  - Does not account for any specific conditions or exceptions related to expected behavior when no tools are called.\n\n### Fix B:\n```typescript\nif (!toolCalls || toolCalls.length === 0) {\n  if (expectedTool === '') {\n    return { total: 10, reasoning: 'Correctly avoided calling any tool.' }\n  }\n  return { total: 0, reasoning: 'No tool calls made.' }\n}\n```\n\n- **Pros**:\n  - Adds a condition to handle the scenario where `expectedTool` is an empty string.\n  - This can be useful if there are specific cases where not making tool calls is expected and should result in a higher score.\n\n- **Cons**:\n  - Introduces additional complexity by checking for the state of `expectedTool`.\n  - May lead to confusion or errors if the logic around `expectedTool` is not well-defined or consistently applied.\n\n### Recommendation:\n\nIf the scoring system has specific rules where not making tool calls should result in a score of `10` when `expectedTool` is an empty string, then **Fix B** might be appropriate. However, if such a condition does not exist and the default behavior (returning `0` for no tool calls) is sufficient, **Fix A** is simpler and more straightforward.\n\n### Conclusion:\n\n- If there are no specific conditions related to `expectedTool`, use **Fix A**.\n- If there are specific conditions where not making tool calls should result in a score of `10`, then use **Fix B**.\n\nGiven the problem statement, it seems that the default behavior (no tool calls made results in a score of `0`) is what you want. Therefore, **Fix A** would be the better choice:\n\n```typescript\nif (!toolCalls || toolCalls.length === 0) {\n  return { total: 0, reasoning: 'No tool calls made.' }\n}\n```\n\nThis fix ensures that the scoring logic remains simple and directly addresses the issue at hand.",
+          "input_tokens": 159,
+          "output_tokens": 540,
+          "latency_ms": 5330,
+          "cost_usd": 0
+        },
+        "llama32-3b": {
+          "model_id": "llama32-3b",
+          "text": "Fix A is better for the given scenario. Here's why:\n\n1. **Simplicity**: Fix A is more straightforward and easier to understand. It directly returns an object with `total` set to 0 when no tool calls are present.\n2. **Consistency**: Fix A maintains consistency in its return value, which is a good practice for predictable API behavior.\n3. **Avoidance of unnecessary checks**: By not checking the `expectedTool` variable, Fix A avoids introducing an additional condition that could lead to confusion or errors.\n\nFix B has some issues:\n\n1. **Conditional logic**: The conditional check for `expectedTool` adds complexity and makes the code harder to read.\n2. **Inconsistent behavior**: If `expectedTool` is not empty, the function returns a `total` value of 10, which seems unusual. Fix A's return value of 0 is more intuitive in this context.\n3. **Potential for errors**: The check for an empty `expectedTool` variable could lead to unexpected behavior if not handled correctly.\n\nIn summary, Fix A provides a clear and simple solution that avoids unnecessary complexity and ensures consistent behavior.",
+          "input_tokens": 153,
+          "output_tokens": 234,
+          "latency_ms": 1610,
+          "cost_usd": 0
+        },
+        "qwen14b": {
+          "model_id": "qwen14b",
+          "text": "To determine which fix is better for the issue where \"tool calling scorer always returns 0/10 when no tool calls are made,\" we need to consider the context and requirements of the scoring system.\n\n### Fix A:\n```typescript\nif (!toolCalls || toolCalls.length === 0) {\n  return { total: 0, reasoning: 'No tool calls made.' }\n}\n```\n- **Pros**:\n  - Simple and straightforward.\n  - Clearly indicates that no tool calls were made by returning a score of `0`.\n  - Consistent with the idea that not using tools when they are needed is penalized.\n\n- **Cons**:\n  - Does not account for scenarios where avoiding tool calls might be correct (e.g., if the expected behavior is to avoid calling any tool).\n\n### Fix B:\n```typescript\nif (!toolCalls || toolCalls.length === 0) {\n  if (expectedTool === '') {\n    return { total: 10, reasoning: 'Correctly avoided calling any tool.' }\n  }\n  return { total: 0, reasoning: 'No tool calls made.' }\n}\n```\n- **Pros**:\n  - More nuanced and context-aware.\n  - Accounts for the scenario where avoiding tool calls is expected (e.g., when `expectedTool` is an empty string).\n  - Provides a higher score (`10`) if no tool calls were made but it was correct to do so.\n\n- **Cons**:\n  - Slightly more complex due to the additional condition.\n  - Requires knowledge of what `expectedTool` means in different contexts, which might not be clear without further documentation or context.\n\n### Conclusion\nFix B is better because it provides a more accurate and nuanced scoring mechanism. It correctly rewards scenarios where avoiding tool calls was the expected behavior (e.g., when no tools should have been used), while still penalizing unnecessary tool usage appropriately.\n\nTherefore, **Fix B** is recommended as it handles both cases—when not using any tool is correct and when it's incorrect to avoid using a required tool.",
+          "input_tokens": 159,
+          "output_tokens": 424,
+          "latency_ms": 7597,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 10,
+          "total": 8.8,
+          "reasoning": "The response accurately evaluates both fixes but could have provided more context on the expected behavior of expectedTool."
+        },
+        "llama32-3b": {
+          "accuracy": 8,
+          "completeness": 6,
+          "conciseness": 10,
+          "total": 7.6,
+          "reasoning": "The response addresses the criteria but misses key points about Fix B's benefits and does not fully evaluate its merits."
+        },
+        "qwen14b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response accurately evaluates both fixes but could be more explicit about the criteria and slightly more concise."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "test-design-1",
+      "prompt": "Design a test case for: \"JSON extraction should work when model wraps JSON in explanatory text\"\n\nWhat should the test include?\n",
+      "criteria": "Should mention:\n1. Input with JSON inside markdown fences\n2. Explanatory text before/after the JSON\n3. Verify JSON is extracted correctly\n4. Test both success and failure cases\n5. Check edge cases (no fences, malformed JSON)\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "To design a comprehensive test case for the scenario where JSON extraction works even when the model wraps JSON in explanatory text, you need to consider various aspects of the system's behavior. Here’s a structured approach:\n\n### Test Case: JSON Extraction with Explanatory Text\n\n#### Objective:\nVerify that the system correctly extracts and processes JSON data from strings that contain both JSON content and additional explanatory text.\n\n#### Pre-conditions:\n1. The input string contains valid JSON data.\n2. The input string also includes some form of explanatory or non-JSON text before, after, or around the JSON data.\n3. The system is configured to handle such mixed-content inputs.\n\n#### Test Data:\n1. **Input String 1:**\n   ```json\n   \"This is an example where we have some explanatory text followed by a JSON object.\"\n   {\n       \"name\": \"John Doe\",\n       \"age\": 30,\n       \"email\": \"john.doe@example.com\"\n   }\n   ```\n\n2. **Input String 2:**\n   ```json\n   \"Here is another example with JSON data embedded in the middle of some text.\"\n   {\n       \"address\": \"123 Main St, Anytown USA\",\n       \"phone\": \"+1-555-1234\"\n   }\n   ```\n\n3. **Input String 3:**\n   ```json\n   \"The following JSON object is part of a larger document with some introductory text.\"\n   {\n       \"company\": \"Acme Corp\",\n       \"location\": \"New York, NY\"\n   }\n   ```\n\n#### Steps:\n1. **Step 1:** Input the first string into the system.\n2. **Step 2:** Verify that the JSON object is correctly extracted and processed.\n3. **Step 3:** Repeat steps 1-2 for each of the other input strings.\n\n#### Expected Results:\n1. The system should successfully parse the JSON objects from all three input strings, ignoring any non-JSON text.\n2. The parsed JSON data should be returned in a structured format (e.g., as a dictionary or object) that can be further processed by subsequent steps in the application.\n3. Any errors or warnings related to parsing should be logged and handled appropriately.\n\n#### Post-conditions:\n1. Ensure that the system does not alter the original input string during processing.\n2. Verify that any non-JSON text is properly ignored or stripped out before JSON extraction.\n3. Check that the extracted JSON data matches the expected structure and values.\n\n### Test Case Documentation\n\n**Test Case ID:** TC001\n\n**Description:** Verify JSON extraction from strings containing explanatory text.\n\n**Pre-conditions:**\n- Input string contains valid JSON data.\n- Input string includes additional non-JSON text.\n- System is configured to handle mixed-content inputs.\n\n**Input Data:**\n- String 1: `\"This is an example where we have some explanatory text followed by a JSON object.\" { \"name\": \"John Doe\", \"age\": 30, \"email\": \"john.doe@example.com\" }`\n- String 2: `\"Here is another example with JSON data embedded in the middle of some text.\" { \"address\": \"123 Main St, Anytown USA\", \"phone\": \"+1-555-1234\" }`\n- String 3: `\"The following JSON object is part of a larger document with some introductory text.\" { \"company\": \"Acme Corp\", \"location\": \"New York, NY\" }`\n\n**Expected Results:**\n- JSON objects are correctly extracted.\n- Non-JSON text is ignored or stripped out.\n- Parsed JSON data matches expected structure and values.\n\n**Post-conditions:**\n- Original input string remains unchanged.\n- System handles mixed-content inputs gracefully.\n- Any errors/warnings are logged appropriately.\n\n### Test Execution\n1. **Test String 1:**\n   - Input: `\"This is an example where we have some explanatory text followed by a JSON object.\" { \"name\": \"John Doe\", \"age\": 30, \"email\": \"john.doe@example.com\" }`\n   - Expected Output: `{\"name\": \"John Doe\", \"age\": 30, \"email\": \"john.doe@example.com\"}`\n2. **Test String 2:**\n   - Input: `\"Here is another example with JSON data embedded in the middle of some text.\" { \"address\": \"123 Main St, Anytown USA\", \"phone\": \"+1-555-1234\" }`\n   - Expected Output: `{\"address\": \"123 Main St, Anytown USA\", \"phone\": \"+1-555-1234\"}`\n3. **Test String 3:**\n   - Input: `\"The following JSON object is part of a larger document with some introductory text.\" { \"company\": \"Acme Corp\", \"location\": \"New York, NY\" }`\n   - Expected Output: `{\"company\": \"Acme Corp\", \"location\": \"New York, NY\"}`\n\nBy following this test case, you can ensure that the system handles JSON extraction correctly even when it is embedded within explanatory text.",
+          "input_tokens": 54,
+          "output_tokens": 1077,
+          "latency_ms": 10343,
+          "cost_usd": 0
+        },
+        "llama32-3b": {
+          "model_id": "llama32-3b",
+          "text": "Here's a suggested test case for the given scenario:\n\n**Test Case:** \"JSON extraction should work when model wraps JSON in explanatory text\"\n\n**Preconditions:**\n\n1. The model is configured to wrap JSON data in explanatory text.\n2. A sample JSON string is provided as input.\n\n**Steps:**\n\n1. Input a sample JSON string into the model, ensuring that it contains explanatory text wrapping the JSON data (e.g., \"This is an example of JSON data: {key: 'value'}\").\n2. Verify that the model extracts the JSON data correctly from the input string.\n3. Check that the extracted JSON data is in its original format, without any additional processing or modification.\n\n**Expected Results:**\n\n1. The model successfully extracts the JSON data from the input string.\n2. The extracted JSON data matches the original JSON string provided as input.\n3. The explanatory text wrapping the JSON data is not included in the extracted JSON data.\n\n**Test Data:**\n\n* Sample JSON string: \"This is an example of JSON data: {key: 'value'}\"\n* Expected output: Extracted JSON data: {key: 'value'}\n\n**Edge Cases:**\n\n1. Test with different types of explanatory text wrapping the JSON data (e.g., quotes, parentheses, etc.).\n2. Test with varying levels of complexity in the explanatory text (e.g., multiple lines, nested structures, etc.).\n3. Test with edge cases like empty or null explanatory text.\n\n**Test Tools:**\n\n* Use a testing framework that supports JSON parsing and extraction, such as JSONLint or JSDoc.\n* Utilize a model testing library to simulate user input and verify the output.\n\nBy following this test case, you can ensure that your model correctly extracts JSON data from input strings wrapped in explanatory text.",
+          "input_tokens": 50,
+          "output_tokens": 367,
+          "latency_ms": 2371,
+          "cost_usd": 0
+        },
+        "qwen14b": {
+          "model_id": "qwen14b",
+          "text": "To design a test case for ensuring that JSON extraction works correctly even when the model wraps the JSON content within explanatory or descriptive text, you need to consider several aspects:\n\n### Test Case Title:\nExtracting JSON from Text with Explanatory Content\n\n### Objective:\nVerify that the system can accurately extract and parse JSON data embedded in a larger block of text containing additional non-JSON information.\n\n### Assumptions:\n1. The system has a method or function for identifying and extracting JSON content.\n2. The JSON content is well-formed and valid when isolated from other text.\n3. The surrounding text does not interfere with the parsing process.\n\n### Test Scenario:\n\n#### Given:\nA string containing explanatory text followed by a JSON object, like this:\n\n```\nHere is some information about user data: {\"name\": \"John Doe\", \"age\": 25, \"email\": \"john.doe@example.com\"}\n```\n\n#### When:\nThe system attempts to extract and parse the JSON content from the given string.\n\n#### Then:\n- The extracted JSON should be correctly parsed into a Python dictionary or similar object.\n- The non-JSON text (\"Here is some information about user data: \") should not interfere with the extraction process.\n\n### Test Steps:\n\n1. **Setup**: Define the input string containing explanatory text and embedded JSON.\n   ```python\n   test_string = \"Here is some information about user data: {\"name\": \"John Doe\", \"age\": 25, \"email\": \"john.doe@example.com\"}\"\n   ```\n\n2. **Execution**:\n   - Call the function or method responsible for extracting and parsing JSON from text.\n     ```python\n     extracted_json = extract_and_parse_json(test_string)\n     ```\n   \n3. **Verification**: \n   - Check if `extracted_json` is a dictionary with expected keys and values.\n     ```python\n     assert isinstance(extracted_json, dict), \"Extracted content should be a dictionary.\"\n     assert 'name' in extracted_json, \"Name field not found in JSON.\"\n     assert 'age' in extracted_json, \"Age field not found in JSON.\"\n     assert 'email' in extracted_json, \"Email field not found in JSON.\"\n     ```\n\n4. **Edge Cases**:\n   - Test with multiple instances of JSON within the text.\n   - Include cases where JSON is at different positions (beginning, middle, end) relative to explanatory text.\n   - Handle scenarios where there are no spaces between the explanatory text and JSON content.\n\n### Example Edge Case:\n\n#### Given:\nA string with multiple pieces of information and multiple JSON objects:\n\n```\nUser data: {\"name\": \"John Doe\", \"age\": 25}. Additional info: {\"email\": \"john.doe@example.com\"}\n```\n\n#### When:\nThe system attempts to extract all JSON content.\n\n#### Then:\n- The system should be able to identify and parse both JSON objects correctly.\n- Ensure that the parsing function can handle multiple JSON instances without errors or misinterpretations.\n\n### Expected Outcome:\n\nUpon successful execution of the test, the system should accurately extract and parse JSON data from text containing explanatory information. This ensures robustness in handling real-world scenarios where JSON might be embedded within larger blocks of text.\n\nThis test case helps ensure that your application can reliably process and utilize JSON data even when it is not isolated but rather part of a more complex textual context.",
+          "input_tokens": 54,
+          "output_tokens": 689,
+          "latency_ms": 11959,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 6,
+          "total": 7.2,
+          "reasoning": "The response covers the main aspects but lacks specific details on handling edge cases and malformed JSON, and includes unnecessary markdown fences in test data."
+        },
+        "llama32-3b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 6,
+          "total": 7.2,
+          "reasoning": "The response covers most criteria but lacks specific failure cases and checks for malformed JSON or lack of markdown fences."
+        },
+        "qwen14b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 6,
+          "total": 7.2,
+          "reasoning": "The response covers the main aspects but lacks specific details on handling malformed JSON and edge cases like no markdown fences. It also does not explicitly mention testing failure scenarios."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "pr-description-1",
+      "prompt": "Write a commit message for:\n- Fixed tool call scorer to return 10/10 when expectedTool is empty and no tools called\n- Previously returned 0/10 incorrectly\n- Now handles negative test cases\n",
+      "criteria": "Should include:\n1. Clear one-line summary\n2. Explains before/after behavior\n3. Mentions impact (can now test tool restraint)\n4. Optional: How bug was discovered\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "```\nFix tool call scorer to handle empty expectedTools correctly\n\nPreviously, the tool call scorer was returning 0/10 when `expectedTool` was empty and no tools were actually called, which was incorrect. This commit updates the logic so that it now returns 10/10 in this scenario, properly handling negative test cases.\n```",
+          "input_tokens": 75,
+          "output_tokens": 72,
+          "latency_ms": 854,
+          "cost_usd": 0
+        },
+        "llama32-3b": {
+          "model_id": "llama32-3b",
+          "text": "Here's a possible commit message:\n\n`fix: ToolCallScorer returns correct score for empty expectedTool and no tools called`\n\nOr, following the conventional commit message format:\n\n```\nfix: ToolCallScorer returns correct score for empty expectedTool and no tools called\n\nCorrects issue where ToolCallScorer returned 0/10 instead of 10/10 when expectedTool is empty and no tools are called. Now handles negative test cases.\n```",
+          "input_tokens": 68,
+          "output_tokens": 93,
+          "latency_ms": 768,
+          "cost_usd": 0
+        },
+        "qwen14b": {
+          "model_id": "qwen14b",
+          "text": "```\nfix: Correct tool call scorer to return 10/10 for no-tool calls with empty expectedTool\n\nPreviously, the tool call scorer would return 0/10 when no tools were called and `expectedTool` was an empty array. This commit fixes the scorer to correctly return 10/10 in such cases, aligning with the requirement that a test where no tools are expected should pass if no tools are called.\n\nThis change also ensures that negative test cases (where calling unexpected tools should fail) continue to function as intended.\n```",
+          "input_tokens": 75,
+          "output_tokens": 116,
+          "latency_ms": 2213,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 10,
+          "completeness": 8,
+          "conciseness": 9,
+          "total": 9,
+          "reasoning": "The response is accurate and concise but could include the impact of fixing the bug, such as enabling testing for tool restraint."
+        },
+        "llama32-3b": {
+          "accuracy": 10,
+          "completeness": 8,
+          "conciseness": 9,
+          "total": 9,
+          "reasoning": "The commit message accurately describes the fix and its impact, but could include a brief mention of how the bug was discovered to improve completeness."
+        },
+        "qwen14b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 8,
+          "total": 9.6,
+          "reasoning": "The response accurately describes the fix and its impact, addresses all criteria without unnecessary padding."
+        }
+      },
+      "winner": "qwen14b"
+    },
+    {
+      "case_id": "pattern-recognition-1",
+      "prompt": "This code has a bug. What pattern would prevent it?\n\n```typescript\nconst stripped = text\n  .replace(/^```(?:json)?\\s*/i, '')\n  .replace(/\\s*```$/, '')\n  .trim()\n```\n\nInput: \"Here's an example:\\n\\n```json\\n{...}\\n```\\n\\nExplanation...\"\nResult: Fails to extract JSON\n",
+      "criteria": "Should identify:\n1. Regex only removes fences at start/end of entire string\n2. Doesn't extract JSON from within text\n3. Need to match/extract the fence content, not just remove fences\n4. Better pattern: match ```...``` and extract capture group\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "The code you provided is intended to strip leading and trailing code blocks (indicated by `````) from the input text, but it seems to be failing when there are other characters before or after the code block. The issue lies in how the regular expressions are constructed.\n\nHere's a breakdown of what might be going wrong:\n\n1. **Leading Code Block**: The pattern `^```(?:json)?\\s*` is used to match leading code blocks, but it only matches if there is no \"json\" keyword after the opening triple backticks.\n2. **Trailing Code Block**: The pattern `\\s*```$` is used to match trailing code blocks, which looks for a closing triple backtick at the end of the string.\n\nTo ensure that the JSON content within the code block is correctly extracted and not removed by `trim()`, you should adjust the regular expressions. Here's an improved version:\n\n```typescript\nconst stripped = text\n  .replace(/^```(?:json)?\\s*/, '') // Remove leading code blocks (with optional \"json\" keyword)\n  .replace(/\\s*```$/, '')          // Remove trailing code blocks\n  .trim();                         // Trim any remaining whitespace\n\n// Ensure the JSON content is not removed by trim()\nconst jsonContent = text.match(/```(?:json)?\\s*(.*?)\\s*```/i)?.[1] || '';\n\nif (jsonContent) {\n    console.log(jsonContent); // This will print the extracted JSON content\n} else {\n    console.log('No JSON content found.');\n}\n```\n\n### Explanation:\n- **Leading Code Block**: `^```(?:json)?\\s*` matches a leading code block that may or may not have \"json\" after the opening triple backticks.\n- **Trailing Code Block**: `\\s*```$` matches a trailing code block at the end of the string.\n- **Trimming**: The `trim()` function is used to remove any leading and trailing whitespace from the entire text, but it does not affect the content within the code blocks.\n- **Extracting JSON Content**: A regular expression `/```(?:json)?\\s*(.*?)\\s*```/i` is used to find the content between the code blocks. The `.*?` part captures any characters (non-greedy) in between, which should be the JSON content.\n\nThis approach ensures that the JSON content within the code block is not removed by `trim()` and can be extracted separately if needed.",
+          "input_tokens": 109,
+          "output_tokens": 508,
+          "latency_ms": 4999,
+          "cost_usd": 0
+        },
+        "llama32-3b": {
+          "model_id": "llama32-3b",
+          "text": "The pattern used in the code is not sufficient to prevent this bug. The issue arises because the `replace` method does not account for the case where the input text contains a comment that starts with \"```json\" but is followed by other characters.\n\nTo fix this, you can use a more complex regular expression that matches both the start and end of the code block, regardless of whether it's JSON or another language. Here's an updated pattern:\n\n```typescript\nconst stripped = text\n  .replace(/^```(?:json|python|java)?\\s*/i, '')\n  .replace(/\\s*```$/, '')\n  .trim()\n```\n\nThis pattern will match the start and end of code blocks for \"json\", \"python\", and \"java\" languages. However, it may not cover all possible programming languages.\n\nA more robust solution would be to use a library like `prettier` or `js-beautify` that can parse the code block and determine its language automatically. Alternatively, you could use a regular expression that matches the syntax of multiple programming languages:\n\n```typescript\nconst stripped = text\n  .replace(/^#.*?\\n\\n```(.*?)\\n```\\s*$/mi, (match, group1) => {\n    return group1.trim();\n  })\n  .trim()\n```\n\nThis pattern uses a capture group to extract the code block content and then trims it. The `#.*?\\n\\n` part matches the start of a comment that contains the language syntax, and the `\\s*` after the end of the code block ensures that any trailing whitespace is removed.\n\nNote: This solution assumes that the input text is well-formed and does not contain any unexpected characters or syntax.",
+          "input_tokens": 105,
+          "output_tokens": 352,
+          "latency_ms": 2286,
+          "cost_usd": 0
+        },
+        "qwen14b": {
+          "model_id": "qwen14b",
+          "text": "The provided code snippet is intended to strip out the backticks and optional `json` label from a block of text that might contain JSON data enclosed in triple backticks (`` ``` ``). However, it seems like there's an issue with handling cases where the input string contains newlines or additional whitespace around the JSON content.\n\nTo address this properly, you need to ensure that:\n\n1. The regex patterns correctly handle leading and trailing spaces.\n2. The replacement logic accounts for multiple lines of text within the backticks.\n\nHere’s a revised version of your code with improved handling:\n\n```typescript\nconst stripped = text.replace(/^```(?:\\s*json\\s*)?\\n?/, '').replace(/\\n?```$/, '');\n```\n\nExplanation:\n- `^```(?:\\s*json\\s*)?\\n?`: This pattern matches the start of the string (`^`) followed by three backticks, an optional space-separated word \"json\", and any number of spaces. It also allows for a newline character after this sequence.\n- `\\n?```$`: This pattern matches zero or one newline characters before the closing triple backticks at the end of the string.\n\nHowever, if you want to ensure that all leading and trailing whitespace is removed properly, including newlines, you can further refine it:\n\n```typescript\nconst stripped = text.replace(/^```(?:\\s*json\\s*)?\\n*/, '').replace(/\\n*```$/, '');\n```\n\nThis version ensures that any number of spaces or newlines before the opening triple backticks and after the closing triple backticks are removed.\n\nTo ensure robustness, you might also want to trim leading and trailing whitespace from the result:\n\n```typescript\nconst stripped = text.replace(/^```(?:\\s*json\\s*)?\\n*/, '').replace(/\\n*```$/, '').trim();\n```\n\nThis should handle cases where there is additional whitespace around the JSON content more effectively.",
+          "input_tokens": 109,
+          "output_tokens": 386,
+          "latency_ms": 6874,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 6,
+          "total": 7.2,
+          "reasoning": "The response addresses the issues with the regex patterns but introduces a new variable jsonContent which is not necessary for the original task of stripping fences. It also does not fully address extracting JSON from within text if it's surrounded by other content."
+        },
+        "llama32-3b": {
+          "accuracy": 5,
+          "completeness": 6,
+          "conciseness": 7,
+          "total": 5.8,
+          "reasoning": "The response addresses the issue but introduces unnecessary complexity and incorrect assumptions about input format, missing key points like extracting JSON from within text."
+        },
+        "qwen14b": {
+          "accuracy": 6,
+          "completeness": 5,
+          "conciseness": 7,
+          "total": 5.8,
+          "reasoning": "The response addresses some aspects but misses the core issue of extracting content within fences and focuses on removing them instead."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "error-message-1",
+      "prompt": "Improve this error message:\n\n\"Invalid JSON: Certainly! Here's an example of a user profile based on your\"\n\nContext: JSON scorer failed to extract JSON from model output with explanatory text\n",
+      "criteria": "Should suggest:\n1. More helpful message (e.g., \"No JSON found\" or \"Could not extract JSON\")\n2. Don't show truncated model output (confusing)\n3. Maybe suggest what format is expected\n4. Distinguish between \"no JSON\" vs \"malformed JSON\"\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "Certainly! Here’s an improved version of the error message:\n\n```\nError: Invalid JSON Format\nExplanation: The system was unable to extract valid JSON from your response. Please ensure that the JSON data is correctly formatted and includes proper syntax, such as correct use of curly braces {} and square brackets [], and properly quoted keys and values.\n\nExample of a valid user profile:\n```json\n{\n  \"username\": \"john_doe\",\n  \"email\": \"john.doe@example.com\",\n  \"age\": 30,\n  \"preferences\": {\n    \"language\": \"English\",\n    \"timezone\": \"UTC\"\n  }\n}\n```\n```\n\nThis message provides clear instructions and an example to help the user understand and correct the issue.",
+          "input_tokens": 68,
+          "output_tokens": 151,
+          "latency_ms": 1609,
+          "cost_usd": 0
+        },
+        "llama32-3b": {
+          "model_id": "llama32-3b",
+          "text": "Here is an improved version of the error message:\n\n\"Failed to parse JSON response. The output contains non-JSON data: 'Certainly! Here's an example of a user profile based on your'.\"\n\nThis revised message is more concise and informative, clearly indicating that the issue is with parsing the JSON response and providing a hint about what went wrong.\n\nAlternatively, you could also consider adding additional context or details to help diagnose the issue, such as:\n\n\"Failed to parse JSON response. The output contains non-JSON data: 'Certainly! Here's an example of a user profile based on your'. This may indicate that the model is returning explanatory text instead of structured JSON data.\"\n\nThis adds more specificity and helps users understand what might be causing the issue.",
+          "input_tokens": 64,
+          "output_tokens": 152,
+          "latency_ms": 1130,
+          "cost_usd": 0
+        },
+        "qwen14b": {
+          "model_id": "qwen14b",
+          "text": "To improve the error message for the context provided, it should be clear and provide actionable information. Here’s a revised version:\n\n\"Error: The response is not valid JSON. It appears there's additional text ('Certainly! Here's an example of a user profile based on your') that needs to be removed or properly formatted as part of the JSON structure.\"\n\nThis message clearly indicates what went wrong (invalid JSON) and provides context about why it might have happened, which can help in correcting the issue.",
+          "input_tokens": 68,
+          "output_tokens": 101,
+          "latency_ms": 1965,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 6,
+          "total": 8,
+          "reasoning": "The message is clear and provides useful information but could be more concise without losing helpfulness."
+        },
+        "llama32-3b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 6,
+          "total": 7.2,
+          "reasoning": "The response addresses the issue of non-JSON data but could be more specific about distinguishing between no JSON and malformed JSON, and it includes unnecessary model output text."
+        },
+        "qwen14b": {
+          "accuracy": 7,
+          "completeness": 6,
+          "conciseness": 8,
+          "total": 6.8,
+          "reasoning": "The message correctly identifies the issue but could be more precise about distinguishing between no JSON and malformed JSON, and it provides too much context from the model output."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "regression-test-1",
+      "prompt": "After fixing \"JSON extraction from explanatory text\", what regression tests should we add?\n",
+      "criteria": "Should mention:\n1. Test JSON with text before fence\n2. Test JSON with text after fence  \n3. Test JSON with text on both sides\n4. Test without fences (fallback to regex)\n5. Test edge cases (empty JSON, arrays, nested)\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "When you've fixed an issue with JSON extraction from explanatory text, it's important to ensure that the changes have not introduced any new bugs or issues. Here are some steps and types of regression tests you can consider adding:\n\n### 1. Unit Tests\n- **Edge Cases**: Test boundary conditions such as empty strings, null inputs, very long texts, and texts with special characters.\n- **Format Validation**: Ensure that the extracted JSON is correctly formatted (e.g., correct keys, values, nesting).\n- **Specific Patterns**: If your text has specific patterns or keywords, test those to ensure they are correctly identified.\n\n### 2. Integration Tests\n- **End-to-End Testing**: Test the entire process from input text to output JSON.\n- **Mock Data**: Use mock data that closely resembles real-world scenarios but is easier to control and predict outcomes for testing purposes.\n\n### 3. Performance Tests\n- **Load Testing**: If performance was an issue before, ensure it remains stable after the fix.\n- **Stress Testing**: Test with a large volume of data or under high load conditions.\n\n### 4. Regression Tests\n- **Reproduce Original Issue**: Ensure that the original bug is no longer present.\n- **Consistency Checks**: Verify that the output JSON matches expected results for known inputs.\n\n### 5. User Acceptance Testing (UAT)\n- **Real-world Scenarios**: Test with real user data to ensure it works as expected in production-like environments.\n- **Feedback Loop**: Gather feedback from users or stakeholders who interact with the system.\n\n### Example Test Cases\n\n#### Unit Tests\n```python\ndef test_empty_string():\n    assert extract_json(\"\") == {}\n\ndef test_null_input():\n    assert extract_json(None) is None\n\ndef test_special_characters():\n    text = \"This is a test! @#$%^&*()\"\n    expected = {\"text\": \"This is a test! @#$%^&*()\"}\n    assert extract_json(text) == expected\n```\n\n#### Integration Tests\n```python\ndef test_integration_with_mock_data():\n    mock_text = \"Explain: {\\\"key1\\\": \\\"value1\\\", \\\"key2\\\": [1, 2, 3]}\"\n    expected_output = {\"key1\": \"value1\", \"key2\": [1, 2, 3]}\n    assert extract_json(mock_text) == expected_output\n```\n\n#### Performance Tests\n```python\ndef test_performance_with_large_data():\n    large_text = \"A very long text with many words and special characters... \" * 10000\n    start_time = time.time()\n    result = extract_json(large_text)\n    end_time = time.time()\n    assert (end_time - start_time) < 5.0  # Ensure it completes within 5 seconds\n```\n\n#### Regression Tests\n```python\ndef test_regression_with_known_input():\n    known_text = \"Explain: {\\\"name\\\": \\\"John\\\", \\\"age\\\": 30}\"\n    expected_output = {\"name\": \"John\", \"age\": 30}\n    assert extract_json(known_text) == expected_output\n```\n\nBy covering these areas, you can ensure that the fix is robust and reliable.",
+          "input_tokens": 45,
+          "output_tokens": 658,
+          "latency_ms": 6372,
+          "cost_usd": 0
+        },
+        "llama32-3b": {
+          "model_id": "llama32-3b",
+          "text": "To ensure the reliability and accuracy of the JSON extraction functionality, it's essential to write comprehensive regression tests. Here are some test ideas:\n\n1. **Edge cases**:\n\t* Test with empty or null input strings.\n\t* Test with strings containing only whitespace characters.\n\t* Test with strings containing special characters (e.g., punctuation, emojis).\n2. **Format variations**:\n\t* Test with different formatting styles (e.g., curly braces, square brackets, quotes).\n\t* Test with varying levels of indentation and spacing.\n3. **JSON structure variations**:\n\t* Test with nested JSON objects and arrays.\n\t* Test with repeated keys in JSON objects.\n4. **Data types**:\n\t* Test with strings containing numbers, dates, and times.\n\t* Test with strings containing special characters (e.g., commas, semicolons).\n5. **Boundary cases**:\n\t* Test with short and long input strings.\n\t* Test with strings containing multiple JSON objects or arrays.\n6. **Error handling**:\n\t* Test that the function raises an error when encountering invalid JSON syntax.\n\t* Test that the function handles parsing errors gracefully (e.g., returns a default value).\n7. **Performance testing**:\n\t* Measure the execution time of the function for large input strings.\n\t* Test the function's performance with different hardware configurations.\n\nSome example test cases using Python and the `unittest` framework:\n\n```python\nimport unittest\nfrom your_module import extract_json\n\nclass TestJsonExtraction(unittest.TestCase):\n    def test_empty_string(self):\n        self.assertIsNone(extract_json(\"\"))\n\n    def test_whitespace_only(self):\n        self.assertEqual(extract_json(\"   \"), \"\")\n\n    def test_special_characters(self):\n        self.assertEqual(extract_json(\"Hello, world!\"), {\"Hello\": \"world!\"})\n\n    # Add more tests here...\n```\n\nRemember to write comprehensive and well-structured tests that cover various scenarios. This will help ensure the reliability and accuracy of your JSON extraction functionality.",
+          "input_tokens": 41,
+          "output_tokens": 407,
+          "latency_ms": 2592,
+          "cost_usd": 0
+        },
+        "qwen14b": {
+          "model_id": "qwen14b",
+          "text": "When you've fixed an issue related to JSON extraction from explanatory text, it's important to ensure that the fix doesn't break other parts of your application and that similar issues don't arise in the future. Here are some steps and types of regression tests you might consider adding:\n\n1. **Unit Tests for JSON Extraction**:\n   - Write unit tests specifically targeting the JSON extraction logic.\n   - Ensure these tests cover various edge cases, such as empty strings, malformed JSON, and different data structures.\n\n2. **Integration Tests**:\n   - Test how the fixed component interacts with other parts of your application.\n   - Include scenarios where the extracted JSON is used in subsequent operations or passed to other services.\n\n3. **End-to-End (E2E) Tests**:\n   - Run E2E tests that simulate real user interactions and workflows involving JSON extraction.\n   - Ensure these tests cover all possible paths through your application, including error handling and fallback mechanisms.\n\n4. **Performance Testing**:\n   - If performance was a concern before the fix, ensure that the new implementation doesn't introduce any performance bottlenecks.\n   - Test under different load conditions to see how well the system handles stress.\n\n5. **Security Tests**:\n   - Ensure that the JSON extraction process does not introduce security vulnerabilities such as injection attacks or data leakage.\n   - Validate input and output for potential security risks.\n\n6. **Validation of Explanatory Text Parsing Logic**:\n   - Write tests to validate how well your system parses explanatory text into structured JSON.\n   - Include tests with complex, nested structures and various types of data (strings, numbers, arrays, objects).\n\n7. **Boundary Condition Testing**:\n   - Test the limits of what your extraction logic can handle, such as very large strings or deeply nested JSON structures.\n\n8. **Compatibility Tests**:\n   - If your application supports multiple versions of a library or framework used for JSON processing, ensure compatibility across these versions.\n   \n9. **User Acceptance Testing (UAT)**:\n   - Have end users test the functionality to confirm that it meets their needs and expectations without introducing new issues.\n\n10. **Automated Regression Tests**:\n    - Integrate your tests into a continuous integration/continuous deployment (CI/CD) pipeline.\n    - Run these tests automatically with every code change to catch regressions early.\n\nBy adding these types of regression tests, you can help ensure that the fix for JSON extraction from explanatory text is robust and reliable, while also maintaining the stability of other parts of your application.",
+          "input_tokens": 45,
+          "output_tokens": 517,
+          "latency_ms": 9044,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 8,
+          "completeness": 5,
+          "conciseness": 7,
+          "total": 6.6,
+          "reasoning": "The response covers various testing types but misses specific criteria like JSON with text before and after fences, fallback to regex without fences, and edge cases for JSON structure."
+        },
+        "llama32-3b": {
+          "accuracy": 6,
+          "completeness": 3,
+          "conciseness": 7,
+          "total": 5,
+          "reasoning": "The response covers some aspects but misses the specific criteria mentioned in the question, such as testing JSON with text before and after fences, fallback to regex without fences, and edge cases for empty JSON, arrays, nested structures."
+        },
+        "qwen14b": {
+          "accuracy": 8,
+          "completeness": 5,
+          "conciseness": 7,
+          "total": 6.6,
+          "reasoning": "The response covers a broad range of testing types but misses specific criteria related to text before and after fences, fallback to regex, and edge cases for JSON structure."
+        }
+      },
+      "winner": "qwen7b"
+    }
+  ],
+  "summary": {
+    "qwen7b": {
+      "model_id": "qwen7b",
+      "avg_total": 7.85,
+      "avg_accuracy": 8.63,
+      "avg_completeness": 7.25,
+      "avg_conciseness": 7.5,
+      "avg_latency_ms": 4726.125,
+      "total_cost_usd": 0,
+      "win_rate": 75,
+      "wins": 6,
+      "cases_run": 8
+    },
+    "llama32-3b": {
+      "model_id": "llama32-3b",
+      "avg_total": 6.63,
+      "avg_accuracy": 7.13,
+      "avg_completeness": 5.88,
+      "avg_conciseness": 7.13,
+      "avg_latency_ms": 1900.625,
+      "total_cost_usd": 0,
+      "win_rate": 12.5,
+      "wins": 1,
+      "cases_run": 8
+    },
+    "qwen14b": {
+      "model_id": "qwen14b",
+      "avg_total": 7.4,
+      "avg_accuracy": 8,
+      "avg_completeness": 6.88,
+      "avg_conciseness": 7.25,
+      "avg_latency_ms": 7369,
+      "total_cost_usd": 0,
+      "win_rate": 12.5,
+      "wins": 1,
+      "cases_run": 8
+    }
+  }
+}

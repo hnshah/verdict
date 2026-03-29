@@ -1,0 +1,117 @@
+{
+  "run_id": "2026-03-26T02-48-15",
+  "name": "My Evals",
+  "timestamp": "2026-03-26T02:48:27.805Z",
+  "models": [
+    "qwen2.5:7b",
+    "llama3.2:3b"
+  ],
+  "cases": [
+    {
+      "case_id": "simple-math",
+      "prompt": "What is 2 + 2?",
+      "criteria": "Answer is 4",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "2 + 2 equals 4.",
+          "input_tokens": 37,
+          "output_tokens": 9,
+          "latency_ms": 3455,
+          "cost_usd": 0
+        },
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "2 + 2 = 4.",
+          "input_tokens": 33,
+          "output_tokens": 9,
+          "latency_ms": 3241,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly states that 2 + 2 equals 4, addresses all criteria without additional information, and is concise."
+        },
+        "llama3.2:3b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly answers the question and meets all criteria without unnecessary information."
+        }
+      },
+      "winner": "qwen2.5:7b"
+    },
+    {
+      "case_id": "simple-reasoning",
+      "prompt": "If a train travels 60 miles per hour for 2 hours, how far does it go?",
+      "criteria": "Answer is 120 miles with clear calculation shown",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "To find out how far the train goes, you can use the formula:\n\n\\[ \\text{Distance} = \\text{Speed} \\times \\text{Time} \\]\n\nGiven that the speed is 60 miles per hour and the time is 2 hours, you would calculate it as follows:\n\n\\[ \\text{Distance} = 60 \\, \\text{miles/hour} \\times 2 \\, \\text{hours} = 120 \\, \\text{miles} \\]\n\nSo, the train travels 120 miles.",
+          "input_tokens": 50,
+          "output_tokens": 120,
+          "latency_ms": 1221,
+          "cost_usd": 0
+        },
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "To find the distance traveled by the train, you need to multiply its speed (60 miles per hour) by the time it traveled (2 hours).\n\nDistance = Speed x Time\n= 60 miles/hour x 2 hours\n= 120 miles\n\nSo, the train travels 120 miles in 2 hours.",
+          "input_tokens": 45,
+          "output_tokens": 66,
+          "latency_ms": 578,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly calculates the distance and addresses all criteria succinctly."
+        },
+        "llama3.2:3b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly calculates the distance and addresses all criteria while being clear and concise."
+        }
+      },
+      "winner": "qwen2.5:7b"
+    }
+  ],
+  "summary": {
+    "qwen2.5:7b": {
+      "model_id": "qwen2.5:7b",
+      "avg_total": 10,
+      "avg_accuracy": 10,
+      "avg_completeness": 10,
+      "avg_conciseness": 10,
+      "avg_latency_ms": 2338,
+      "total_cost_usd": 0,
+      "win_rate": 100,
+      "wins": 2,
+      "cases_run": 2
+    },
+    "llama3.2:3b": {
+      "model_id": "llama3.2:3b",
+      "avg_total": 10,
+      "avg_accuracy": 10,
+      "avg_completeness": 10,
+      "avg_conciseness": 10,
+      "avg_latency_ms": 1909.5,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 2
+    }
+  }
+}
