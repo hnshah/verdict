@@ -3,6 +3,7 @@ import fs from 'fs'
 import chalk from 'chalk'
 import ora from 'ora'
 import { loadConfig, loadEvalPack } from '../../core/config.js'
+import { registryResolve } from '../../core/registry.js'
 import { runEvals } from '../../core/runner.js'
 import { synthesizeRun } from '../../core/synthesis.js'
 import { loadBaseline, compareWithBaseline } from '../../core/baseline.js'
@@ -13,6 +14,7 @@ import type { SlackCard } from '../../types/index.js'
 interface RunOptions {
   config: string
   pack?: string
+  eval?: string
   models?: string
   dryRun?: boolean
   resume?: boolean
@@ -52,7 +54,27 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   }
 
   const configDir = path.dirname(path.resolve(opts.config))
-  const packPaths = opts.pack ? opts.pack.split(',').map(p => p.trim()) : config.packs
+
+  // Resolve pack paths: --eval (registry lookup) takes precedence, then --pack, then config
+  let packPaths: string[]
+  if (opts.eval) {
+    const names = opts.eval.split(',').map(n => n.trim())
+    packPaths = []
+    for (const name of names) {
+      const resolved = registryResolve(name)
+      if (!resolved) {
+        console.error(chalk.red(`  eval '${name}' not found in registry or as a file path`))
+        console.error(chalk.dim(`  run 'verdict eval list' to see registered evals`))
+        process.exit(1)
+      }
+      packPaths.push(resolved)
+    }
+  } else if (opts.pack) {
+    packPaths = opts.pack.split(',').map(p => p.trim())
+  } else {
+    packPaths = config.packs
+  }
+
   const packs = []
   for (const p of packPaths) {
     try { packs.push(loadEvalPack(p, configDir)) }
