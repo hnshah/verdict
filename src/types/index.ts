@@ -106,7 +106,11 @@ export const EvalPackSchema = z.object({
   name: z.string(),
   version: z.string().default('1.0.0'),
   description: z.string().optional(),
-  cases: z.array(EvalCaseSchema),
+  cases: z.array(EvalCaseSchema).default([]),
+  samples_file: z.string().optional(),
+  // Pack-level defaults applied to JSONL cases that don't specify these fields
+  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex']).optional(),
+  criteria: z.string().optional(),
 })
 export type EvalPack = z.infer<typeof EvalPackSchema>
 

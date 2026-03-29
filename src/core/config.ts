@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import yaml from 'js-yaml'
-import { ConfigSchema, EvalPackSchema, type Config, type EvalPack } from '../types/index.js'
+import { ConfigSchema, EvalPackSchema, EvalCaseSchema, type Config, type EvalPack } from '../types/index.js'
 
 function resolveEnvVars(value: unknown): unknown {
   if (typeof value === 'string') {
@@ -63,13 +63,71 @@ export function loadEvalPack(packPath: string, configDir: string): EvalPack {
     throw new Error(`Invalid eval pack ${packPath}:\n${issues}`)
   }
 
-  // Resolve image paths relative to pack file directory
+  const pack = result.data
   const packDir = path.dirname(fullPath)
-  for (const evalCase of result.data.cases) {
+
+  // Load JSONL samples file if specified
+  if (pack.samples_file) {
+    const jsonlCases = loadJsonlSamples(pack.samples_file, packDir, pack)
+    pack.cases = [...pack.cases, ...jsonlCases]
+  }
+
+  // Must have at least one case after merging
+  if (pack.cases.length === 0) {
+    throw new Error(`Eval pack ${packPath} has no cases (inline or from samples_file)`)
+  }
+
+  // Resolve image paths relative to pack file directory
+  for (const evalCase of pack.cases) {
     if (evalCase.image && !evalCase.image.startsWith('http://') && !evalCase.image.startsWith('https://')) {
       evalCase.image = path.resolve(packDir, evalCase.image)
     }
   }
 
-  return result.data
+  return pack
+}
+
+function loadJsonlSamples(
+  samplesFile: string,
+  packDir: string,
+  pack: { scorer?: string; criteria?: string },
+): EvalPack['cases'] {
+  const samplesPath = path.isAbsolute(samplesFile)
+    ? samplesFile
+    : path.resolve(packDir, samplesFile)
+
+  if (!fs.existsSync(samplesPath)) {
+    throw new Error(`Samples file not found: ${samplesPath}`)
+  }
+
+  const content = fs.readFileSync(samplesPath, 'utf8')
+  const lines = content.split('\n').filter(line => line.trim() !== '')
+  const cases: EvalPack['cases'] = []
+
+  for (let i = 0; i < lines.length; i++) {
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(lines[i])
+    } catch {
+      throw new Error(`Invalid JSON on line ${i + 1} of ${samplesPath}`)
+    }
+
+    // Apply pack-level defaults: scorer and criteria
+    const caseData = parsed as Record<string, unknown>
+    if (pack.scorer && caseData['scorer'] === undefined) {
+      caseData['scorer'] = pack.scorer
+    }
+    if (pack.criteria && caseData['criteria'] === undefined) {
+      caseData['criteria'] = pack.criteria
+    }
+
+    const caseResult = EvalCaseSchema.safeParse(caseData)
+    if (!caseResult.success) {
+      const issues = caseResult.error.issues.map(i => `  ${i.path.join('.')}: ${i.message}`).join('\n')
+      throw new Error(`Invalid case on line ${i + 1} of ${samplesPath}:\n${issues}`)
+    }
+    cases.push(caseResult.data)
+  }
+
+  return cases
 }

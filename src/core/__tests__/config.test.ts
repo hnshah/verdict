@@ -247,3 +247,162 @@ cases:
     expect(() => loadEvalPack(packPath, dir)).toThrow(/Invalid eval pack/)
   })
 })
+
+// ─── JSONL samples_file support ──────────────────────────────────────────────
+
+describe('loadEvalPack with samples_file', () => {
+  let dir: string
+
+  beforeEach(() => { dir = makeTempDir() })
+  afterEach(() => { fs.rmSync(dir, { recursive: true }) })
+
+  it('loads cases from a JSONL file', () => {
+    const jsonl = [
+      '{"id": "case-001", "prompt": "What is 2+2?", "expected": "4", "criteria": "Correct answer"}',
+      '{"id": "case-002", "prompt": "Capital of France?", "expected": "Paris", "criteria": "Correct city"}',
+    ].join('\n')
+    writeFile(dir, 'samples.jsonl', jsonl)
+    const packPath = writeFile(dir, 'pack.yaml', `
+name: JSONL Pack
+samples_file: ./samples.jsonl
+scorer: contains
+criteria: Default criteria
+`)
+    const pack = loadEvalPack(packPath, dir)
+    expect(pack.cases).toHaveLength(2)
+    expect(pack.cases[0].id).toBe('case-001')
+    expect(pack.cases[0].prompt).toBe('What is 2+2?')
+    expect(pack.cases[1].id).toBe('case-002')
+    expect(pack.cases[1].expected).toBe('Paris')
+  })
+
+  it('applies pack-level scorer default to JSONL cases', () => {
+    const jsonl = '{"id": "case-001", "prompt": "What is 2+2?", "expected": "4", "criteria": "Correct"}'
+    writeFile(dir, 'samples.jsonl', jsonl)
+    const packPath = writeFile(dir, 'pack.yaml', `
+name: JSONL Pack
+samples_file: ./samples.jsonl
+scorer: exact
+criteria: Default criteria
+`)
+    const pack = loadEvalPack(packPath, dir)
+    expect(pack.cases[0].scorer).toBe('exact')
+  })
+
+  it('applies pack-level criteria default to JSONL cases', () => {
+    const jsonl = '{"id": "case-001", "prompt": "What is 2+2?", "expected": "4"}'
+    writeFile(dir, 'samples.jsonl', jsonl)
+    const packPath = writeFile(dir, 'pack.yaml', `
+name: JSONL Pack
+samples_file: ./samples.jsonl
+criteria: Pack-level criteria
+`)
+    const pack = loadEvalPack(packPath, dir)
+    expect(pack.cases[0].criteria).toBe('Pack-level criteria')
+  })
+
+  it('JSONL case-level fields override pack-level defaults', () => {
+    const jsonl = '{"id": "case-001", "prompt": "Test", "criteria": "Case criteria", "scorer": "contains"}'
+    writeFile(dir, 'samples.jsonl', jsonl)
+    const packPath = writeFile(dir, 'pack.yaml', `
+name: JSONL Pack
+samples_file: ./samples.jsonl
+scorer: exact
+criteria: Pack-level criteria
+`)
+    const pack = loadEvalPack(packPath, dir)
+    expect(pack.cases[0].scorer).toBe('contains')
+    expect(pack.cases[0].criteria).toBe('Case criteria')
+  })
+
+  it('merges inline cases with JSONL cases', () => {
+    const jsonl = '{"id": "jsonl-001", "prompt": "From JSONL", "criteria": "Test"}'
+    writeFile(dir, 'samples.jsonl', jsonl)
+    const packPath = writeFile(dir, 'pack.yaml', `
+name: Mixed Pack
+samples_file: ./samples.jsonl
+cases:
+  - id: inline-001
+    prompt: Inline case
+    criteria: Test
+`)
+    const pack = loadEvalPack(packPath, dir)
+    expect(pack.cases).toHaveLength(2)
+    expect(pack.cases[0].id).toBe('inline-001')
+    expect(pack.cases[1].id).toBe('jsonl-001')
+  })
+
+  it('supports absolute paths for samples_file', () => {
+    const jsonl = '{"id": "case-001", "prompt": "Test", "criteria": "Test"}'
+    const jsonlPath = writeFile(dir, 'samples.jsonl', jsonl)
+    const packPath = writeFile(dir, 'pack.yaml', `
+name: Abs JSONL Pack
+samples_file: ${jsonlPath}
+`)
+    const pack = loadEvalPack(packPath, dir)
+    expect(pack.cases).toHaveLength(1)
+    expect(pack.cases[0].id).toBe('case-001')
+  })
+
+  it('throws when samples_file does not exist', () => {
+    const packPath = writeFile(dir, 'pack.yaml', `
+name: Missing JSONL Pack
+samples_file: ./missing.jsonl
+`)
+    expect(() => loadEvalPack(packPath, dir)).toThrow(/Samples file not found/)
+  })
+
+  it('throws on invalid JSON in JSONL file', () => {
+    writeFile(dir, 'bad.jsonl', '{"id": "ok", "prompt": "test", "criteria": "test"}\nnot valid json')
+    const packPath = writeFile(dir, 'pack.yaml', `
+name: Bad JSONL Pack
+samples_file: ./bad.jsonl
+`)
+    expect(() => loadEvalPack(packPath, dir)).toThrow(/Invalid JSON on line 2/)
+  })
+
+  it('throws on invalid case schema in JSONL file', () => {
+    writeFile(dir, 'bad-schema.jsonl', '{"prompt": "missing id", "criteria": "test"}')
+    const packPath = writeFile(dir, 'pack.yaml', `
+name: Bad Schema Pack
+samples_file: ./bad-schema.jsonl
+`)
+    expect(() => loadEvalPack(packPath, dir)).toThrow(/Invalid case on line 1/)
+  })
+
+  it('throws when pack has no cases and no samples_file', () => {
+    const packPath = writeFile(dir, 'empty.yaml', `
+name: Empty Pack
+`)
+    expect(() => loadEvalPack(packPath, dir)).toThrow(/has no cases/)
+  })
+
+  it('skips blank lines in JSONL file', () => {
+    const jsonl = [
+      '{"id": "case-001", "prompt": "First", "criteria": "Test"}',
+      '',
+      '{"id": "case-002", "prompt": "Second", "criteria": "Test"}',
+      '   ',
+    ].join('\n')
+    writeFile(dir, 'blanks.jsonl', jsonl)
+    const packPath = writeFile(dir, 'pack.yaml', `
+name: Blanks Pack
+samples_file: ./blanks.jsonl
+`)
+    const pack = loadEvalPack(packPath, dir)
+    expect(pack.cases).toHaveLength(2)
+  })
+
+  it('resolves image paths in JSONL cases relative to pack dir', () => {
+    const imgPath = path.join(dir, 'test-image.png')
+    fs.writeFileSync(imgPath, Buffer.from([0x89, 0x50, 0x4E, 0x47]))
+    const jsonl = '{"id": "vision-001", "prompt": "Describe", "criteria": "Test", "image": "test-image.png"}'
+    writeFile(dir, 'samples.jsonl', jsonl)
+    const packPath = writeFile(dir, 'pack.yaml', `
+name: Vision JSONL Pack
+samples_file: ./samples.jsonl
+`)
+    const pack = loadEvalPack(packPath, dir)
+    expect(pack.cases[0].image).toBe(path.resolve(dir, 'test-image.png'))
+  })
+})
