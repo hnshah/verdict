@@ -4,6 +4,7 @@ import {
   scoreExact,
   scoreContains,
   scoreFuzzyMatch,
+  scoreRegex,
   scoreToolCall,
   scoreJsonSchema,
   isDeterministic,
@@ -301,5 +302,37 @@ describe('deterministic scorers', () => {
     it('passes on exact match', () => {
       const result = scoreFuzzyMatch('42', '42')
       expect(result.total).toBe(10)
+    })
+  })
+
+  describe('scoreRegex', () => {
+    it('passes when output matches a raw pattern', () => {
+      const result = scoreRegex('The answer is 42', '\\d+')
+      expect(result.total).toBe(10)
+    })
+
+    it('fails when output does not match', () => {
+      const result = scoreRegex('no digits here', '^\\d+$')
+      expect(result.total).toBe(0)
+    })
+
+    it('supports /pattern/flags syntax (case-insensitive)', () => {
+      const result = scoreRegex('Hello World', '/hello/i')
+      expect(result.total).toBe(10)
+    })
+
+    it('returns 0 with explanation on invalid regex', () => {
+      const result = scoreRegex('test', '[invalid(')
+      expect(result.total).toBe(0)
+      expect(result.reasoning).toMatch(/Invalid regex/)
+    })
+
+    it('scoreDeterministic dispatches to regex scorer', () => {
+      const result = scoreDeterministic('regex', 'foo123bar', '\\d+')
+      expect(result?.total).toBe(10)
+    })
+
+    it('isDeterministic returns true for regex', () => {
+      expect(isDeterministic('regex')).toBe(true)
     })
   })

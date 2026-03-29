@@ -1,6 +1,9 @@
 import OpenAI from 'openai'
 import type { ModelConfig, JudgeConfig, RunResult, SynthesisResult, BaselineComparison } from '../types/index.js'
 
+// Module-level client cache — avoids creating a new OpenAI instance per synthesis call.
+const synthesisClientCache = new Map<string, OpenAI>()
+
 function buildSynthesisPrompt(
   question: string,
   result: RunResult,
@@ -72,15 +75,21 @@ export async function synthesizeRun(
   const baseURL = judgeModel.base_url
   if (!baseURL) throw new Error(`Judge model '${judgeModel.id}' has no base_url`)
 
-  const client = new OpenAI({
-    baseURL,
-    apiKey: judgeModel.api_key === 'none' ? 'no-key-required' : judgeModel.api_key,
-    timeout: judgeModel.timeout_ms,
-    defaultHeaders: {
-      'HTTP-Referer': 'https://github.com/hnshah/verdict',
-      'X-Title': 'verdict',
-    },
-  })
+  const apiKey = judgeModel.api_key === 'none' ? 'no-key-required' : judgeModel.api_key
+  const cacheKey = `${baseURL}:::${apiKey}`
+  let client = synthesisClientCache.get(cacheKey)
+  if (!client) {
+    client = new OpenAI({
+      baseURL,
+      apiKey,
+      timeout: judgeModel.timeout_ms,
+      defaultHeaders: {
+        'HTTP-Referer': 'https://github.com/hnshah/verdict',
+        'X-Title': 'verdict',
+      },
+    })
+    synthesisClientCache.set(cacheKey, client)
+  }
 
   const prompt = buildSynthesisPrompt(question, result, baselineDelta)
 

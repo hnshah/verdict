@@ -20,6 +20,7 @@ interface RunOptions {
   noStore?: boolean
   category?: string[]
   json?: boolean
+  failIfRegression?: boolean
 }
 
 export async function runCommand(opts: RunOptions): Promise<void> {
@@ -114,6 +115,27 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     const comparison = compareWithBaseline(defaultBaseline, result, 'default')
     result.baselineComparison = comparison
     if (!opts.json) printBaselineComparison(comparison)
+  }
+
+  // --fail-if-regression: exit 1 if any model regressed vs baseline
+  if (opts.failIfRegression && result.baselineComparison) {
+    const regressions = result.baselineComparison.deltas.filter(d => d.regression)
+    if (regressions.length > 0) {
+      const msg = `  ⚠  Regression detected in ${regressions.length} model(s): ${regressions.map(r => `${r.model} (${r.delta > 0 ? '+' : ''}${r.delta.toFixed(2)})`).join(', ')}`
+      if (opts.json) {
+        process.stderr.write(msg + '\n')
+      } else {
+        log(chalk.red(msg))
+      }
+      process.exit(1)
+    }
+  } else if (opts.failIfRegression && !defaultBaseline) {
+    const msg = `  ⚠  --fail-if-regression: no default baseline found. Run 'verdict baseline save default' first.`
+    if (opts.json) {
+      process.stderr.write(msg + '\n')
+    } else {
+      log(chalk.yellow(msg))
+    }
   }
 
   // Synthesis agent
