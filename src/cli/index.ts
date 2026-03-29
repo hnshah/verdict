@@ -37,6 +37,8 @@ program
   .option('--no-store', 'Skip persisting results to SQLite database')
   .option('--category <categories...>', 'Filter cases by category (repeatable)')
   .option('--json', 'Output results as JSON to stdout (for CI/CD pipelines)')
+  .option('--verbose', 'Show model call results, scores, and timing as they happen')
+  .option('--debug', 'Show verbose output plus raw API request/response bodies')
   .action(runCommand)
 
 const models = program

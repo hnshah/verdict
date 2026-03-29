@@ -5,6 +5,7 @@ import type { Config, EvalPack, RunResult, ModelSummary, CaseResult, Checkpoint 
 import { callModel, callModelMultiTurn, callModelWithTools } from '../providers/compat.js'
 import { judgeResponse } from '../judge/llm.js'
 import { scoreDeterministic, isDeterministic, scoreToolCall } from '../judge/deterministic.js'
+import { log as vlog } from '../utils/logger.js'
 
 export function computeConfigHash(config: Config): string {
   const key = JSON.stringify({ models: config.models.map(m => m.id), judge: config.judge.model, packs: config.packs })
@@ -144,14 +145,20 @@ export async function runEvals(
       continue
     }
 
+    const caseStart = Date.now()
     log(`${evalCase.id}: running ${modelIds.length} model(s)`)
     const caseResult: CaseResult = {
       case_id: evalCase.id, prompt: evalCase.prompt,
       criteria: evalCase.criteria, responses: {}, scores: {},
     }
 
+    vlog('debug', `case ${evalCase.id}: prompt = ${evalCase.prompt}`)
+    if (evalCase.criteria) vlog('debug', `case ${evalCase.id}: criteria = ${evalCase.criteria}`)
+
     // Run all models concurrently (chunked)
     const jobs = config.models.map(m => async () => {
+      vlog('debug', `${evalCase.id} -> ${m.id}: sending prompt to ${m.model} at ${m.base_url}`)
+      const modelStart = Date.now()
       let resp
       if (evalCase.scorer === 'tool_call' && evalCase.tools && evalCase.tools.length > 0) {
         resp = await callModelWithTools(m, evalCase.prompt, evalCase.tools)
@@ -160,9 +167,13 @@ export async function runEvals(
       } else {
         resp = await callModel(m, evalCase.prompt, 0, evalCase.image)
       }
+      const modelDuration = Date.now() - modelStart
       caseResult.responses[m.id] = resp
       if (resp.cost_usd) summary[m.id].total_cost_usd += resp.cost_usd
       summary[m.id].avg_latency_ms += resp.latency_ms
+
+      vlog('verbose', `${evalCase.id} -> ${m.id}: ${modelDuration}ms, ${resp.input_tokens}+${resp.output_tokens} tokens${resp.error ? `, error: ${resp.error}` : ''}`)
+      vlog('debug', `${evalCase.id} -> ${m.id}: response body`, resp.text)
     })
     for (let i = 0; i < jobs.length; i += concurrency) {
       await Promise.all(jobs.slice(i, i + concurrency).map(fn => fn()))
@@ -188,9 +199,12 @@ export async function runEvals(
         } else if (usesDeterministic) {
           score = scoreDeterministic(evalCase.scorer, resp.text, evalCase.expected, evalCase.schema, evalCase.choices)!
         } else {
+          vlog('debug', `${evalCase.id} -> ${modelId}: sending to judge (${judgeModel.model})`)
           score = await judgeResponse(judgeModel, config.judge, evalCase.prompt, evalCase.criteria, resp.text)
         }
         caseResult.scores[modelId] = score
+        vlog('verbose', `${evalCase.id} -> ${modelId}: score=${score.total}/10 (acc=${score.accuracy} comp=${score.completeness} conc=${score.conciseness})`)
+        if (score.reasoning) vlog('debug', `${evalCase.id} -> ${modelId}: reasoning`, score.reasoning)
         summary[modelId].avg_accuracy += score.accuracy
         summary[modelId].avg_completeness += score.completeness
         summary[modelId].avg_conciseness += score.conciseness
@@ -209,6 +223,9 @@ export async function runEvals(
       .filter(([, s]) => s.total > 0)
       .sort((a, b) => b[1].total - a[1].total)[0]
     if (winner) { caseResult.winner = winner[0]; summary[winner[0]].wins++ }
+
+    const caseDuration = Date.now() - caseStart
+    vlog('verbose', `${evalCase.id}: completed in ${caseDuration}ms${winner ? `, winner: ${winner[0]}` : ''}`)
 
     cases.push(caseResult)
 

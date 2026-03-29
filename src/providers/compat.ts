@@ -9,6 +9,7 @@
 import OpenAI from 'openai'
 import fs from 'fs'
 import type { ModelConfig, ModelResponse, ToolDef } from '../types/index.js'
+import { log as vlog } from '../utils/logger.js'
 
 const clientCache = new Map<string, OpenAI>()
 
@@ -91,6 +92,14 @@ export async function callModel(
   }
 
   try {
+    const requestBody = {
+      model: config.model,
+      messages: [{ role: 'user', content: typeof messageContent === 'string' ? messageContent : '[multipart content]' }],
+      max_tokens: config.max_tokens,
+      temperature: 0.0,
+    }
+    vlog('debug', `callModel ${config.id}: request`, JSON.stringify(requestBody))
+
     const response = await client.chat.completions.create({
       model: config.model,
       messages: [{ role: 'user', content: messageContent }],
@@ -106,6 +115,8 @@ export async function callModel(
       ? (input_tokens / 1_000_000) * config.cost_per_1m_input
         + (output_tokens / 1_000_000) * config.cost_per_1m_output
       : 0
+
+    vlog('debug', `callModel ${config.id}: response`, text)
 
     return { model_id: config.id, text, input_tokens, output_tokens, latency_ms, cost_usd }
 
@@ -141,6 +152,8 @@ export async function callModelMultiTurn(
   const start = Date.now()
 
   try {
+    vlog('debug', `callModelMultiTurn ${config.id}: ${messages.length} messages`, JSON.stringify(messages))
+
     const response = await client.chat.completions.create({
       model: config.model,
       messages: messages as OpenAI.ChatCompletionMessageParam[],
@@ -156,6 +169,8 @@ export async function callModelMultiTurn(
       ? (input_tokens / 1_000_000) * config.cost_per_1m_input
         + (output_tokens / 1_000_000) * config.cost_per_1m_output
       : 0
+
+    vlog('debug', `callModelMultiTurn ${config.id}: response`, text)
 
     return { model_id: config.id, text, input_tokens, output_tokens, latency_ms, cost_usd }
 
@@ -196,6 +211,8 @@ export async function callModelWithTools(
   }))
 
   try {
+    vlog('debug', `callModelWithTools ${config.id}: prompt + ${tools.length} tool(s)`, JSON.stringify({ prompt, tools: tools.map(t => t.name) }))
+
     const response = await client.chat.completions.create({
       model: config.model,
       messages: [{ role: 'user', content: prompt }],
@@ -219,6 +236,8 @@ export async function callModelWithTools(
       name: tc.function.name,
       arguments: JSON.parse(tc.function.arguments) as Record<string, unknown>,
     }))
+
+    vlog('debug', `callModelWithTools ${config.id}: response`, JSON.stringify({ text, tool_calls }))
 
     return { model_id: config.id, text, input_tokens, output_tokens, latency_ms, cost_usd, tool_calls }
 

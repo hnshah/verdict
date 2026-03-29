@@ -1,5 +1,6 @@
 import OpenAI from 'openai'
 import type { ModelConfig, JudgeConfig, JudgeScore } from '../types/index.js'
+import { log as vlog } from '../utils/logger.js'
 
 const judgeClientCache = new Map<string, OpenAI>()
 
@@ -79,14 +80,18 @@ export async function judgeResponse(
   const apiKey = judgeModel.api_key === 'none' ? 'no-key-required' : (judgeModel.api_key ?? 'ollama')
   const client = getOrCreateJudgeClient(baseURL, apiKey)
 
+  const judgePrompt = buildPrompt(prompt, criteria, response, config.rubric)
+  vlog('debug', `judge ${judgeModel.id}: request`, judgePrompt)
+
   const result = await client.chat.completions.create({
     model: judgeModel.model,
-    messages: [{ role: 'user', content: buildPrompt(prompt, criteria, response, config.rubric) }],
+    messages: [{ role: 'user', content: judgePrompt }],
     max_tokens: 256,
     temperature: 0.0,
   })
 
   const text = result.choices[0]?.message?.content ?? ''
+  vlog('debug', `judge ${judgeModel.id}: response`, text)
   const parsed = parseJudgeJson(text)
   if (!parsed) throw new Error(`Judge returned non-JSON: ${text.slice(0, 200)}`)
 
