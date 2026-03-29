@@ -8,7 +8,7 @@ Thanks for your interest in improving Verdict! This guide will help you contribu
 
 ```bash
 # 1. Fork the repo
-gh repo fork yourusername/verdict
+gh repo fork hnshah/verdict
 
 # 2. Clone your fork
 git clone https://github.com/YOUR_USERNAME/verdict.git
@@ -50,7 +50,7 @@ npm test
 - Translation to other languages
 
 **Bug Fixes:**
-- See [issues labeled `bug`](https://github.com/yourusername/verdict/labels/bug)
+- See [issues labeled `bug`](https://github.com/hnshah/verdict/labels/bug)
 
 ### 💡 Medium Priority
 
@@ -79,7 +79,7 @@ npm test
 
 ### 1. Pick an Issue
 
-- Browse [open issues](https://github.com/yourusername/verdict/issues)
+- Browse [open issues](https://github.com/hnshah/verdict/issues)
 - Look for `good first issue` or `help wanted` labels
 - Comment saying you'd like to work on it
 
@@ -530,8 +530,7 @@ git push --tags
 
 **Stuck? Ask us!**
 
-- 💬 [Discord](https://discord.gg/verdict)
-- 🐛 [GitHub Issues](https://github.com/yourusername/verdict/issues)
+- 🐛 [GitHub Issues](https://github.com/hnshah/verdict/issues)
 - 📧 Email: verdictdevs@example.com
 
 **Before asking:**

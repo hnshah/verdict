@@ -566,9 +566,8 @@ MIT
 
 ## Links
 
-- **GitHub:** https://github.com/yourusername/verdict
-- **Docs:** https://verdict.dev
-- **Discord:** https://discord.gg/verdict
+- **GitHub:** https://github.com/hnshah/verdict
+- **npm:** https://www.npmjs.com/package/verdict
 
 ---
 
@@ -591,7 +590,7 @@ MIT
 - Dataset generation (create eval packs from logs)
 - Model fine-tuning integration (eval → retrain loop)
 
-Vote on features: https://github.com/yourusername/verdict/discussions
+Vote on features: https://github.com/hnshah/verdict/discussions
 
 ---
 
