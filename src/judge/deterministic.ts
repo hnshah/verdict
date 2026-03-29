@@ -62,19 +62,16 @@ export function scoreJson(output: string): JudgeScore {
   }
 }
 
-export function scoreExact(output: string, expected: string): JudgeScore {
+export function scoreExact(output: string, expected: string | string[]): JudgeScore {
   const got = output.trim().toLowerCase()
-  const want = expected.trim().toLowerCase()
-  if (got === want) {
-    return {
-      accuracy: 10, completeness: 10, conciseness: 10, total: 10,
-      reasoning: 'Exact match.',
+  const candidates = Array.isArray(expected) ? expected : [expected]
+  for (const candidate of candidates) {
+    if (got === candidate.trim().toLowerCase()) {
+      return { accuracy: 10, completeness: 10, conciseness: 10, total: 10, reasoning: 'Exact match.' }
     }
   }
-  return {
-    accuracy: 0, completeness: 0, conciseness: 0, total: 0,
-    reasoning: `Expected "${expected.slice(0, 40)}", got "${output.trim().slice(0, 40)}"`,
-  }
+  const label = candidates.length === 1 ? candidates[0].slice(0, 40) : `[${candidates.map(c => c.slice(0, 20)).join(', ')}]`
+  return { accuracy: 0, completeness: 0, conciseness: 0, total: 0, reasoning: `Expected "${label}", got "${output.trim().slice(0, 40)}"` }
 }
 
 export function scoreContains(output: string, expected: string): JudgeScore {
@@ -104,6 +101,35 @@ export function scoreFuzzyMatch(output: string, expected: string): JudgeScore {
   return {
     accuracy: 0, completeness: 0, conciseness: 0, total: 0,
     reasoning: `No fuzzy match: "${a.slice(0, 40)}" does not contain and is not contained by "${b.slice(0, 40)}"`,
+  }
+}
+
+export function scoreRegex(output: string, pattern: string): JudgeScore {
+  let re: RegExp
+  try {
+    // Support /pattern/flags syntax or raw pattern string
+    const flagsMatch = pattern.match(/^\/(.+)\/([gimsuy]*)$/)
+    if (flagsMatch) {
+      re = new RegExp(flagsMatch[1], flagsMatch[2])
+    } else {
+      re = new RegExp(pattern)
+    }
+  } catch (err) {
+    return {
+      accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+      reasoning: `Invalid regex pattern "${pattern}": ${err instanceof Error ? err.message : err}`,
+    }
+  }
+
+  if (re.test(output)) {
+    return {
+      accuracy: 10, completeness: 10, conciseness: 10, total: 10,
+      reasoning: `Output matches regex /${re.source}/${re.flags}.`,
+    }
+  }
+  return {
+    accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+    reasoning: `Output does not match /${re.source}/${re.flags}. Got: "${output.trim().slice(0, 60)}"`,
   }
 }
 
@@ -230,17 +256,44 @@ export function scoreJsonSchema(output: string, schema: Record<string, unknown>)
   }
 }
 
+export function scoreMultipleChoice(output: string, expected: string, choices?: string[]): JudgeScore {
+  const expectedLetter = expected.trim().toUpperCase()
+  const trimmedOutput = output.trim()
+  const trimmedUpper = trimmedOutput.toUpperCase()
+
+  if (trimmedUpper === expectedLetter) {
+    return { accuracy: 10, completeness: 10, conciseness: 10, total: 10, reasoning: `Exact match: "${expectedLetter}".` }
+  }
+
+  const validLetters = choices ? choices.map((_, i) => String.fromCharCode(65 + i)) : ['A', 'B', 'C', 'D']
+  const found: string[] = []
+  for (const letter of validLetters) {
+    if (new RegExp(`\\b${letter}\\b`, 'i').test(trimmedOutput)) found.push(letter)
+  }
+
+  if (found.length === 0) {
+    return { accuracy: 0, completeness: 0, conciseness: 0, total: 0, reasoning: `No choice letter found in output: "${trimmedOutput.slice(0, 60)}"` }
+  }
+  if (found.includes(expectedLetter)) {
+    return { accuracy: 8, completeness: 8, conciseness: 8, total: 8, reasoning: `Expected letter "${expectedLetter}" found in output with extra text.` }
+  }
+  return { accuracy: 0, completeness: 0, conciseness: 0, total: 0, reasoning: `Wrong choice: expected "${expectedLetter}", found "${found[0]}" in output.` }
+}
+
 export function isDeterministic(scorer: string): boolean {
-  return scorer === 'json' || scorer === 'exact' || scorer === 'contains' || scorer === 'fuzzy_match' || scorer === 'jsonschema' || scorer === 'tool_call'
+  return scorer === 'json' || scorer === 'exact' || scorer === 'contains' || scorer === 'fuzzy_match' || scorer === 'regex' || scorer === 'jsonschema' || scorer === 'tool_call'
 }
 
 export function scoreDeterministic(
-  scorer: string, output: string, expected?: string, schema?: Record<string, unknown>
+  scorer: string, output: string, expected?: string | string[], schema?: Record<string, unknown>, choices?: string[]
 ): JudgeScore | null {
+  const expectedStr = typeof expected === 'string' ? expected : (expected?.[0] ?? '')
   if (scorer === 'json') return scoreJson(output)
   if (scorer === 'exact') return scoreExact(output, expected ?? '')
-  if (scorer === 'contains') return scoreContains(output, expected ?? '')
-  if (scorer === 'fuzzy_match') return scoreFuzzyMatch(output, expected ?? '')
+  if (scorer === 'contains') return scoreContains(output, expectedStr)
+  if (scorer === 'fuzzy_match') return scoreFuzzyMatch(output, expectedStr)
   if (scorer === 'jsonschema') return scoreJsonSchema(output, schema ?? {})
+  if (scorer === 'multiple_choice') return scoreMultipleChoice(output, expectedStr, choices)
+  if (scorer === 'regex') return scoreRegex(output, expectedStr)
   return null
 }
