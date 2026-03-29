@@ -5,6 +5,7 @@ import ora from 'ora'
 import os from 'os'
 import { execSync } from 'child_process'
 import type { RunResult } from '../../types/index.js'
+import { getHuggingFaceLink, getOllamaLink, getModelDisplayName } from '../../utils/model-links.js'
 
 interface LeaderboardOptions {
   output?: string
@@ -439,6 +440,9 @@ function generateHTML(models: ModelStats[], totalResults: number, hardware: Hard
  */
 function generateModelPage(model: ModelStats, hardware: HardwareInfo): string {
   const now = new Date().toISOString().split('T')[0]
+  const displayName = getModelDisplayName(model.model)
+  const hfLink = getHuggingFaceLink(model.model)
+  const ollamaLink = getOllamaLink(model.model)
   
   // Sort runs by timestamp (newest first)
   const sortedRuns = [...model.runs].sort((a, b) => 
@@ -451,7 +455,7 @@ function generateModelPage(model: ModelStats, hardware: HardwareInfo): string {
     return `
       <tr>
         <td>${date}<br><small style="color: #7f8c8d;">${time}</small></td>
-        <td>${run.packName}</td>
+        <td><a href="../runs/${run.runId}.html" style="color: #3498db;">${run.packName}</a></td>
         <td><strong>${run.avgScore.toFixed(1)}</strong></td>
         <td>${Math.round(run.avgLatency)}ms</td>
         <td>${run.cases}</td>
@@ -575,9 +579,20 @@ function generateModelPage(model: ModelStats, hardware: HardwareInfo): string {
   <a href="../index.html" class="back-link">← Back to Leaderboard</a>
   
   <header>
-    <h1>${model.model}</h1>
+    <h1>${displayName}</h1>
     <p class="subtitle">Benchmark Results</p>
+    <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      ${hfLink ? `<a href="${hfLink}" target="_blank" style="color: #3498db; text-decoration: none; padding: 0.5rem 1rem; background: white; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🤗 HuggingFace</a>` : ''}
+      <a href="${ollamaLink}" target="_blank" style="color: #3498db; text-decoration: none; padding: 0.5rem 1rem; background: white; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🦙 Ollama</a>
+    </div>
   </header>
+
+  <div style="margin: 2rem 0; padding: 1rem; background: #ecf0f1; border-radius: 8px; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🖥️ ${hardware.cpu}</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">💾 ${hardware.ram}</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🔢 ${model.cases} cases</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">📊 ${model.totalRuns} runs</span>
+  </div>
 
   <div class="stats">
     <div class="stat-card">
