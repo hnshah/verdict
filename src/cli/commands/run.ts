@@ -20,6 +20,7 @@ interface RunOptions {
   noStore?: boolean
   category?: string[]
   json?: boolean
+  failIfRegression?: boolean
 }
 
 export async function runCommand(opts: RunOptions): Promise<void> {
@@ -173,6 +174,44 @@ export async function runCommand(opts: RunOptions): Promise<void> {
       log(chalk.dim(`  stored: ~/.verdict/results.db`))
     } catch (err) {
       console.warn(chalk.yellow(`  warning: failed to store results in DB: ${err instanceof Error ? err.message : err}`))
+    }
+  }
+
+  // Check for regressions against historical best scores in DB
+  if (opts.failIfRegression && !opts.noStore) {
+    try {
+      const { getDb, initSchema, getHistoricalBest } = await import('../../db/client.js')
+      const checkDb = getDb()
+      initSchema(checkDb)
+      const packName = opts.pack ?? config.packs[0] ?? 'unknown'
+      const packLabel = packName.replace(/^.*\//, '').replace(/\.ya?ml$/, '')
+      const REGRESSION_THRESHOLD = 0.5
+      const regressions: Array<{ model: string; current: number; best: number }> = []
+
+      for (const modelId of result.models) {
+        const summary = result.summary[modelId]
+        if (!summary) continue
+        const best = getHistoricalBest(checkDb, modelId, packLabel)
+        // Skip if no prior history (first run) or if current run IS the best
+        if (best === null) continue
+        if (summary.avg_total < best - REGRESSION_THRESHOLD) {
+          regressions.push({ model: modelId, current: summary.avg_total, best })
+        }
+      }
+
+      checkDb.close()
+
+      if (regressions.length > 0) {
+        log()
+        log(chalk.red.bold('  REGRESSION DETECTED'))
+        for (const r of regressions) {
+          log(chalk.red(`    ${r.model}: ${r.current.toFixed(2)} < historical best ${r.best.toFixed(2)} (threshold: ${REGRESSION_THRESHOLD})`))
+        }
+        log()
+        process.exit(1)
+      }
+    } catch (err) {
+      console.warn(chalk.yellow(`  warning: regression check failed: ${err instanceof Error ? err.message : err}`))
     }
   }
 

@@ -37,6 +37,7 @@ program
   .option('--no-store', 'Skip persisting results to SQLite database')
   .option('--category <categories...>', 'Filter cases by category (repeatable)')
   .option('--json', 'Output results as JSON to stdout (for CI/CD pipelines)')
+  .option('--fail-if-regression', 'Exit with code 1 if any model scores lower than its historical best')
   .action(runCommand)
 
 const models = program

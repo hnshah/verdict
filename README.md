@@ -552,9 +552,13 @@ Depends on:
 Yes! Exit code non-zero if quality drops:
 
 ```bash
-verdict run --baseline production --fail-if-regression
-# → Exit 1 if new model worse than baseline
+verdict run --fail-if-regression
+# → Exit 1 if any model scores lower than its historical best (stored in SQLite)
 ```
+
+The `--fail-if-regression` flag compares each model's current average score against its
+historical best for the same eval pack. A regression is flagged when the score drops by
+more than 0.5 points. First runs (no history) are always treated as the baseline.
 
 ---
 

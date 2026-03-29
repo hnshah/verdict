@@ -292,6 +292,17 @@ export function getJobs(db: Database.Database, opts: { status?: string; limit?: 
 }
 
 /**
+ * Returns the historical best avg score for a given model+pack combination.
+ * Returns null if no prior runs exist for this model+pack.
+ */
+export function getHistoricalBest(db: Database.Database, modelId: string, pack: string): number | null {
+  const row = db.prepare(
+    'SELECT MAX(score) as best FROM eval_results WHERE model_id = @modelId AND pack = @pack'
+  ).get({ modelId, pack }) as { best: number | null } | undefined
+  return row?.best ?? null
+}
+
+/**
  * Parse a relative time string like "7d", "24h", "30d", "1w" into a Date.
  * Returns null if the format is not recognized.
  */

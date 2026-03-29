@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import Database from 'better-sqlite3'
-import { initSchema, saveRunResult, queryHistory, parseSince } from '../client.js'
+import { initSchema, saveRunResult, queryHistory, parseSince, getHistoricalBest } from '../client.js'
 import type { RunResult } from '../../types/index.js'
 
 function createTestDb(): Database.Database {
@@ -298,6 +298,66 @@ describe('client', () => {
       const now = new Date()
       const diff = now.getTime() - result!.getTime()
       expect(diff).toBeGreaterThan(29 * 24 * 60 * 60 * 1000)
+    })
+  })
+
+  describe('getHistoricalBest', () => {
+    it('returns null when no history exists', () => {
+      expect(getHistoricalBest(db, 'nonexistent-model', 'general')).toBeNull()
+    })
+
+    it('returns the best score for a model+pack', () => {
+      saveRunResult(db, makeRunResult(), 'general')
+      const best = getHistoricalBest(db, 'qwen2.5:32b', 'general')
+      expect(best).toBe(9.2)
+    })
+
+    it('returns the highest score across multiple runs', () => {
+      saveRunResult(db, makeRunResult(), 'general')
+      saveRunResult(db, makeRunResult({
+        run_id: 'test-run-2',
+        summary: {
+          'qwen2.5:32b': {
+            model_id: 'qwen2.5:32b',
+            avg_total: 9.8,
+            avg_accuracy: 10,
+            avg_completeness: 10,
+            avg_conciseness: 10,
+            avg_latency_ms: 1100,
+            avg_tokens_per_sec: 0,
+            total_cost_usd: 0,
+            win_rate: 100,
+            wins: 1,
+            cases_run: 1,
+            avg_solve_rate: 0,
+          },
+          'llama4:8b': {
+            model_id: 'llama4:8b',
+            avg_total: 8.7,
+            avg_accuracy: 8,
+            avg_completeness: 9,
+            avg_conciseness: 9,
+            avg_latency_ms: 800,
+            avg_tokens_per_sec: 0,
+            total_cost_usd: 0,
+            win_rate: 0,
+            wins: 0,
+            cases_run: 1,
+            avg_solve_rate: 0,
+          },
+        },
+      }), 'general')
+
+      expect(getHistoricalBest(db, 'qwen2.5:32b', 'general')).toBe(9.8)
+    })
+
+    it('scopes best score to the correct pack', () => {
+      saveRunResult(db, makeRunResult(), 'general')
+      saveRunResult(db, makeRunResult({ run_id: 'test-run-2' }), 'reasoning')
+
+      expect(getHistoricalBest(db, 'qwen2.5:32b', 'general')).toBe(9.2)
+      expect(getHistoricalBest(db, 'qwen2.5:32b', 'reasoning')).toBe(9.2)
+      expect(getHistoricalBest(db, 'qwen2.5:32b', 'nonexistent')).toBeNull()
     })
   })
 })
