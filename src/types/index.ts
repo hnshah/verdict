@@ -70,6 +70,15 @@ export interface ToolCallResult {
 
 // ─── Eval packs ──────────────────────────────────────────────────────────────
 
+export const ScorerEnum = z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex', 'javascript'])
+
+export const AssertionSchema = z.object({
+  scorer: ScorerEnum,
+  expected: z.union([z.string(), z.array(z.string())]).optional(),
+  schema: z.record(z.unknown()).optional(),
+})
+export type Assertion = z.infer<typeof AssertionSchema>
+
 export const EvalCaseSchema = z.object({
   id: z.string(),
   description: z.string().optional(),
@@ -84,10 +93,12 @@ export const EvalCaseSchema = z.object({
   // 'exact' checks exact string match, 'contains' checks substring presence,
   // 'jsonschema' validates JSON output against a schema, 'tool_call' scores tool usage
   // 'multiple_choice' scores A/B/C/D answers; 'regex' matches patterns
-  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex', 'javascript']).default('llm'),
+  scorer: ScorerEnum.default('llm'),
   // For scorer: 'javascript' — the JS function body receiving (output, expected) that returns a number 0-10.
   // SECURITY: This executes user-provided code via new Function(). This is intentional — the user controls the config.
   scorer_code: z.string().optional(),
+  // Multi-assertion: run multiple scorers against the same output, score = min of all
+  assertions: z.array(AssertionSchema).optional(),
   choices: z.array(z.string()).optional(),
   schema: z.record(z.unknown()).optional(),
   turns: z.array(z.object({

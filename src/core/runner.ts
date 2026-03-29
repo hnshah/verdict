@@ -1,10 +1,42 @@
 import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
-import type { Config, EvalPack, RunResult, ModelSummary, CaseResult, Checkpoint } from '../types/index.js'
+import type { Config, EvalPack, RunResult, ModelSummary, CaseResult, Checkpoint, JudgeScore, Assertion } from '../types/index.js'
 import { callModel, callModelMultiTurn, callModelWithTools } from '../providers/compat.js'
 import { judgeResponse } from '../judge/llm.js'
 import { scoreDeterministic, isDeterministic, scoreToolCall } from '../judge/deterministic.js'
+
+export function scoreAssertion(
+  assertion: Assertion,
+  output: string,
+  toolCalls?: import('../types/index.js').ToolCallResult[]
+): JudgeScore | null {
+  if (assertion.scorer === 'tool_call') {
+    const expectedStr = typeof assertion.expected === 'string' ? assertion.expected : (assertion.expected?.[0] ?? '')
+    return scoreToolCall(toolCalls, expectedStr)
+  }
+  if (isDeterministic(assertion.scorer)) {
+    return scoreDeterministic(assertion.scorer, output, assertion.expected, assertion.schema)
+  }
+  // LLM scorer not supported in assertions (requires criteria/prompt context)
+  return null
+}
+
+export function aggregateScores(scores: JudgeScore[]): JudgeScore {
+  if (scores.length === 0) {
+    return { accuracy: 0, completeness: 0, conciseness: 0, total: 0, reasoning: 'No assertions scored.' }
+  }
+  // Use minimum — all assertions must pass
+  const min = (field: keyof JudgeScore) =>
+    Math.min(...scores.map(s => s[field] as number))
+  return {
+    accuracy: min('accuracy'),
+    completeness: min('completeness'),
+    conciseness: min('conciseness'),
+    total: min('total'),
+    reasoning: scores.map((s, i) => `[${i + 1}] ${s.reasoning}`).join(' | '),
+  }
+}
 
 export function computeConfigHash(config: Config): string {
   const key = JSON.stringify({ models: config.models.map(m => m.id), judge: config.judge.model, packs: config.packs })
@@ -171,7 +203,7 @@ export async function runEvals(
 
     // Judge each response (blind or deterministic)
     const usesDeterministic = isDeterministic(evalCase.scorer)
-    if (!usesDeterministic) log(`${evalCase.id}: judging`)
+    if (!usesDeterministic && !evalCase.assertions) log(`${evalCase.id}: judging`)
 
     for (const [modelId, resp] of Object.entries(caseResult.responses)) {
       const hasContent = resp.text || (evalCase.scorer === 'tool_call' && resp.tool_calls?.length)
@@ -183,8 +215,17 @@ export async function runEvals(
         continue
       }
       try {
-        let score
-        if (evalCase.scorer === 'tool_call') {
+        let score: JudgeScore
+
+        if (evalCase.assertions && evalCase.assertions.length > 0) {
+          // Multi-assertion mode: run each assertion, aggregate with min
+          const assertionScores: JudgeScore[] = []
+          for (const assertion of evalCase.assertions) {
+            const s = scoreAssertion(assertion, resp.text, resp.tool_calls)
+            if (s) assertionScores.push(s)
+          }
+          score = aggregateScores(assertionScores)
+        } else if (evalCase.scorer === 'tool_call') {
           score = scoreToolCall(resp.tool_calls, evalCase.expected_tool ?? '', evalCase.expected_args)
         } else if (usesDeterministic) {
           score = scoreDeterministic(evalCase.scorer, resp.text, evalCase.expected, evalCase.schema, evalCase.choices, evalCase.scorer_code)!
