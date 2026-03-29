@@ -266,6 +266,7 @@ Verdict: 2-bit broke tool calling. Use 4-bit.
 ### verdict.yaml
 
 ```yaml
+version: "1.0"
 models:
   # Local models (Ollama)
   - id: qwen-fast

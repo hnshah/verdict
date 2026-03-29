@@ -13,6 +13,7 @@ export async function initCommand(opts: { yes?: boolean }): Promise<void> {
 
   const config = `# verdict.yaml
 # All values support \${ENV_VAR} and \${ENV_VAR:-default} substitution.
+version: "1.0"
 name: "My Evals"
 
 models:
