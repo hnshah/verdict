@@ -36,6 +36,7 @@ export const JudgeConfigSchema = z.object({
 export type JudgeConfig = z.infer<typeof JudgeConfigSchema>
 
 export const ConfigSchema = z.object({
+  version: z.string().regex(/^[0-9]+\.[0-9]+$/).optional(),
   name: z.string().default('My Evals'),
   models: z.array(ModelConfigSchema).min(1),
   judge: JudgeConfigSchema,

@@ -119,6 +119,57 @@ packs:
     expect(result.errors.some(e => e.includes('not found'))).toBe(true)
   })
 
+  it('accepts a valid version field', () => {
+    const configPath = writeConfig('verdict.yaml', `
+version: "0.0"
+name: Test
+models:
+  - id: m1
+    model: m1
+    provider: ollama
+judge:
+  model: m1
+packs: []
+`)
+    const result = validateConfig(configPath)
+    expect(result.valid).toBe(true)
+    expect(result.warnings).toHaveLength(0)
+  })
+
+  it('rejects invalid version format', () => {
+    const configPath = writeConfig('verdict.yaml', `
+version: "1.0.0"
+name: Test
+models:
+  - id: m1
+    model: m1
+    provider: ollama
+judge:
+  model: m1
+packs: []
+`)
+    const result = validateConfig(configPath)
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('version'))).toBe(true)
+  })
+
+  it('warns when config version major differs from package major', () => {
+    const configPath = writeConfig('verdict.yaml', `
+version: "99.0"
+name: Test
+models:
+  - id: m1
+    model: m1
+    provider: ollama
+judge:
+  model: m1
+packs: []
+`)
+    const result = validateConfig(configPath)
+    expect(result.valid).toBe(true)
+    expect(result.warnings.some(w => w.includes('may not be compatible'))).toBe(true)
+  })
+
   it('reports error for invalid eval pack schema', () => {
     const packPath = writeConfig('bad-pack.yaml', `
 name: Bad Pack

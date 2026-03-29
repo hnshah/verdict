@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import yaml from 'js-yaml'
 import chalk from 'chalk'
 import { ConfigSchema } from '../../types/index.js'
@@ -27,6 +28,7 @@ interface ValidateOptions {
 export interface ValidationResult {
   valid: boolean
   errors: string[]
+  warnings: string[]
   summary: {
     models: number
     packs: number
@@ -34,15 +36,29 @@ export interface ValidationResult {
   }
 }
 
+function getPackageVersion(): string {
+  try {
+    const pkgPath = path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      '../../../package.json'
+    )
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
+    return pkg.version ?? '0.0.0'
+  } catch {
+    return '0.0.0'
+  }
+}
+
 export function validateConfig(configPath: string): ValidationResult {
   const errors: string[] = []
+  const warnings: string[] = []
   const summary = { models: 0, packs: 0, scorers: new Set<string>() }
 
   // 1. Check file exists
   const fullPath = path.resolve(configPath)
   if (!fs.existsSync(fullPath)) {
     errors.push(`Config file not found: ${fullPath}`)
-    return { valid: false, errors, summary }
+    return { valid: false, errors, warnings, summary }
   }
 
   // 2. Parse YAML
@@ -53,7 +69,7 @@ export function validateConfig(configPath: string): ValidationResult {
     const yamlErr = e as yaml.YAMLException
     const line = yamlErr.mark?.line != null ? ` (line ${yamlErr.mark.line + 1})` : ''
     errors.push(`YAML syntax error${line}: ${yamlErr.reason || yamlErr.message}`)
-    return { valid: false, errors, summary }
+    return { valid: false, errors, warnings, summary }
   }
 
   // 3. Resolve env vars and validate against Zod schema
@@ -64,10 +80,20 @@ export function validateConfig(configPath: string): ValidationResult {
       const pathStr = issue.path.join('.')
       errors.push(`Schema error at ${pathStr}: ${issue.message}`)
     }
-    return { valid: false, errors, summary }
+    return { valid: false, errors, warnings, summary }
   }
 
   const config = result.data
+
+  // 3b. Check config version compatibility
+  if (config.version) {
+    const configMajor = config.version.split('.')[0]
+    const pkgVersion = getPackageVersion()
+    const pkgMajor = pkgVersion.split('.')[0]
+    if (configMajor !== pkgMajor) {
+      warnings.push(`Config version ${config.version} may not be compatible with verdict ${pkgVersion}`)
+    }
+  }
   summary.models = config.models.length
   summary.packs = config.packs.length
 
@@ -114,16 +140,19 @@ export function validateConfig(configPath: string): ValidationResult {
     }
   }
 
-  return { valid: errors.length === 0, errors, summary }
+  return { valid: errors.length === 0, errors, warnings, summary }
 }
 
 export async function validateCommand(opts: ValidateOptions): Promise<void> {
   console.log(chalk.bold('\n  verdict') + chalk.dim(' validate\n'))
 
-  const { valid, errors, summary } = validateConfig(opts.config)
+  const { valid, errors, warnings, summary } = validateConfig(opts.config)
 
   if (valid) {
     console.log(chalk.green('  ✅ Config valid') + chalk.dim(` — ${opts.config}\n`))
+    for (const warn of warnings) {
+      console.log(chalk.yellow(`  ⚠ ${warn}`))
+    }
     console.log(chalk.dim('  Summary:'))
     console.log(chalk.dim(`    Models:  ${summary.models}`))
     console.log(chalk.dim(`    Packs:   ${summary.packs}`))
