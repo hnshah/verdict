@@ -1,0 +1,39 @@
+name: JavaScript Scorer Examples
+description: Demonstrates the javascript custom scorer — write a JS function body that receives (output, expected) and returns a number 0-10.
+category: scoring-examples
+
+cases:
+  - id: js-word-count
+    description: "Score based on word count — closer to 50 words scores higher"
+    category: scoring-examples
+    prompt: "Write a short paragraph about the moon. Aim for about 50 words."
+    scorer: javascript
+    scorer_code: |
+      const words = output.trim().split(/\s+/).length;
+      const diff = Math.abs(words - 50);
+      if (diff <= 5) return 10;
+      if (diff <= 15) return 7;
+      if (diff <= 30) return 4;
+      return 1;
+    criteria: "Output should be approximately 50 words"
+    tags: [javascript, custom-scorer]
+
+  - id: js-json-key-check
+    description: "Check that JSON output has specific keys and value types"
+    category: scoring-examples
+    prompt: "Return a JSON object with keys: name (string), age (number), active (boolean)."
+    scorer: javascript
+    expected: '{"name": "string", "age": "number", "active": "boolean"}'
+    scorer_code: |
+      try {
+        const obj = JSON.parse(output);
+        let score = 0;
+        if (typeof obj.name === 'string') score += 3;
+        if (typeof obj.age === 'number') score += 3;
+        if (typeof obj.active === 'boolean') score += 4;
+        return score;
+      } catch (e) {
+        return 0;
+      }
+    criteria: "Output must be valid JSON with correct key types"
+    tags: [javascript, custom-scorer, json]

@@ -7,6 +7,7 @@ import {
   scoreRegex,
   scoreToolCall,
   scoreJsonSchema,
+  scoreJavascript,
   isDeterministic,
   scoreDeterministic,
 } from '../deterministic.js'
@@ -334,5 +335,73 @@ describe('deterministic scorers', () => {
 
     it('isDeterministic returns true for regex', () => {
       expect(isDeterministic('regex')).toBe(true)
+    })
+  })
+
+  describe('scoreJavascript', () => {
+    it('returns score from valid function body', () => {
+      const result = scoreJavascript('hello', undefined, 'return output === "hello" ? 10 : 0')
+      expect(result.total).toBe(10)
+    })
+
+    it('uses expected parameter', () => {
+      const result = scoreJavascript('hello', 'hello', 'return output === expected ? 10 : 0')
+      expect(result.total).toBe(10)
+    })
+
+    it('returns 0 when expected does not match', () => {
+      const result = scoreJavascript('hello', 'world', 'return output === expected ? 10 : 0')
+      expect(result.total).toBe(0)
+    })
+
+    it('clamps score to 0-10 range', () => {
+      const result = scoreJavascript('test', undefined, 'return 99')
+      expect(result.total).toBe(10)
+    })
+
+    it('clamps negative scores to 0', () => {
+      const result = scoreJavascript('test', undefined, 'return -5')
+      expect(result.total).toBe(0)
+    })
+
+    it('returns 0 with error message when function throws', () => {
+      const result = scoreJavascript('test', undefined, 'throw new Error("boom")')
+      expect(result.total).toBe(0)
+      expect(result.reasoning).toContain('boom')
+    })
+
+    it('returns 0 when function returns non-number', () => {
+      const result = scoreJavascript('test', undefined, 'return "not a number"')
+      expect(result.total).toBe(0)
+      expect(result.reasoning).toContain('must return a number')
+    })
+
+    it('returns 0 when function returns NaN', () => {
+      const result = scoreJavascript('test', undefined, 'return NaN')
+      expect(result.total).toBe(0)
+      expect(result.reasoning).toContain('must return a number')
+    })
+
+    it('returns 0 when code is empty string', () => {
+      const result = scoreJavascript('test', undefined, '')
+      expect(result.total).toBe(0)
+      expect(result.reasoning).toContain('must return a number')
+    })
+
+    it('sets all dimensions equal to total', () => {
+      const result = scoreJavascript('test', undefined, 'return 7')
+      expect(result.accuracy).toBe(7)
+      expect(result.completeness).toBe(7)
+      expect(result.conciseness).toBe(7)
+      expect(result.total).toBe(7)
+    })
+
+    it('isDeterministic returns true for javascript', () => {
+      expect(isDeterministic('javascript')).toBe(true)
+    })
+
+    it('scoreDeterministic dispatches to javascript scorer', () => {
+      const result = scoreDeterministic('javascript', 'hello', 'hello', undefined, undefined, 'return output === expected ? 10 : 0')
+      expect(result?.total).toBe(10)
     })
   })

@@ -256,6 +256,35 @@ export function scoreJsonSchema(output: string, schema: Record<string, unknown>)
   }
 }
 
+/**
+ * Execute a user-provided JavaScript function body to score output.
+ * The code receives (output, expected) and must return a number 0-10.
+ * SECURITY: This uses new Function() to execute user-provided code. This is intentional —
+ * the user controls the eval config and chooses to use the javascript scorer.
+ */
+export function scoreJavascript(output: string, expected: string | undefined, code: string): JudgeScore {
+  try {
+    const fn = new Function('output', 'expected', code) as (output: string, expected: string | undefined) => unknown
+    const result = fn(output, expected)
+    if (typeof result !== 'number' || isNaN(result)) {
+      return {
+        accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+        reasoning: `scorer_code must return a number 0-10, got ${typeof result}: ${String(result).slice(0, 60)}`,
+      }
+    }
+    const clamped = Math.max(0, Math.min(10, result))
+    return {
+      accuracy: clamped, completeness: clamped, conciseness: clamped, total: clamped,
+      reasoning: `JavaScript scorer returned ${clamped}.`,
+    }
+  } catch (err) {
+    return {
+      accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+      reasoning: `JavaScript scorer error: ${err instanceof Error ? err.message : err}`,
+    }
+  }
+}
+
 export function scoreMultipleChoice(output: string, expected: string, choices?: string[]): JudgeScore {
   const expectedLetter = expected.trim().toUpperCase()
   const trimmedOutput = output.trim()
@@ -281,11 +310,11 @@ export function scoreMultipleChoice(output: string, expected: string, choices?: 
 }
 
 export function isDeterministic(scorer: string): boolean {
-  return scorer === 'json' || scorer === 'exact' || scorer === 'contains' || scorer === 'fuzzy_match' || scorer === 'regex' || scorer === 'jsonschema' || scorer === 'tool_call'
+  return scorer === 'json' || scorer === 'exact' || scorer === 'contains' || scorer === 'fuzzy_match' || scorer === 'regex' || scorer === 'jsonschema' || scorer === 'tool_call' || scorer === 'javascript'
 }
 
 export function scoreDeterministic(
-  scorer: string, output: string, expected?: string | string[], schema?: Record<string, unknown>, choices?: string[]
+  scorer: string, output: string, expected?: string | string[], schema?: Record<string, unknown>, choices?: string[], scorerCode?: string
 ): JudgeScore | null {
   const expectedStr = typeof expected === 'string' ? expected : (expected?.[0] ?? '')
   if (scorer === 'json') return scoreJson(output)
@@ -295,5 +324,6 @@ export function scoreDeterministic(
   if (scorer === 'jsonschema') return scoreJsonSchema(output, schema ?? {})
   if (scorer === 'multiple_choice') return scoreMultipleChoice(output, expectedStr, choices)
   if (scorer === 'regex') return scoreRegex(output, expectedStr)
+  if (scorer === 'javascript') return scoreJavascript(output, expectedStr || undefined, scorerCode ?? '')
   return null
 }
