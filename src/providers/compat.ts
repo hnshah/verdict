@@ -68,7 +68,8 @@ export async function callModel(
   config: ModelConfig,
   prompt: string,
   attempt = 0,
-  imagePath?: string
+  imagePath?: string,
+  systemPrompt?: string
 ): Promise<ModelResponse> {
   const baseURL = config.base_url
   if (!baseURL) throw new Error(`Model '${config.id}' has no base_url`)
@@ -90,10 +91,16 @@ export async function callModel(
     }
   }
 
+  const messages: OpenAI.ChatCompletionMessageParam[] = []
+  if (systemPrompt) {
+    messages.push({ role: 'system', content: systemPrompt })
+  }
+  messages.push({ role: 'user', content: messageContent })
+
   try {
     const response = await client.chat.completions.create({
       model: config.model,
-      messages: [{ role: 'user', content: messageContent }],
+      messages,
       max_tokens: config.max_tokens,
       temperature: 0.0,
     })
@@ -114,11 +121,11 @@ export async function callModel(
     // If vision content failed, retry without image
     if (imagePath && attempt === 0) {
       console.warn(`[verdict] Vision not supported by ${config.model}, retrying text-only`)
-      return callModel(config, prompt, attempt + 1)
+      return callModel(config, prompt, attempt + 1, undefined, systemPrompt)
     }
     if (attempt < 2) {
       await new Promise(r => setTimeout(r, 1000 * (attempt + 1)))
-      return callModel(config, prompt, attempt + 1, imagePath)
+      return callModel(config, prompt, attempt + 1, imagePath, systemPrompt)
     }
     return {
       model_id: config.id, text: '', input_tokens: 0,
@@ -130,7 +137,8 @@ export async function callModel(
 export async function callModelMultiTurn(
   config: ModelConfig,
   messages: Array<{ role: string; content: string }>,
-  attempt = 0
+  attempt = 0,
+  systemPrompt?: string
 ): Promise<ModelResponse> {
   const baseURL = config.base_url
   if (!baseURL) throw new Error(`Model '${config.id}' has no base_url`)
@@ -140,10 +148,16 @@ export async function callModelMultiTurn(
 
   const start = Date.now()
 
+  const allMessages: Array<{ role: string; content: string }> = []
+  if (systemPrompt) {
+    allMessages.push({ role: 'system', content: systemPrompt })
+  }
+  allMessages.push(...messages)
+
   try {
     const response = await client.chat.completions.create({
       model: config.model,
-      messages: messages as OpenAI.ChatCompletionMessageParam[],
+      messages: allMessages as OpenAI.ChatCompletionMessageParam[],
       max_tokens: config.max_tokens,
       temperature: 0.0,
     })
@@ -163,7 +177,7 @@ export async function callModelMultiTurn(
     const msg = err instanceof Error ? err.message : String(err)
     if (attempt < 2) {
       await new Promise(r => setTimeout(r, 1000 * (attempt + 1)))
-      return callModelMultiTurn(config, messages, attempt + 1)
+      return callModelMultiTurn(config, messages, attempt + 1, systemPrompt)
     }
     return {
       model_id: config.id, text: '', input_tokens: 0,
@@ -176,7 +190,8 @@ export async function callModelWithTools(
   config: ModelConfig,
   prompt: string,
   tools: ToolDef[],
-  attempt = 0
+  attempt = 0,
+  systemPrompt?: string
 ): Promise<ModelResponse> {
   const baseURL = config.base_url
   if (!baseURL) throw new Error(`Model '${config.id}' has no base_url`)
@@ -195,10 +210,16 @@ export async function callModelWithTools(
     },
   }))
 
+  const messages: OpenAI.ChatCompletionMessageParam[] = []
+  if (systemPrompt) {
+    messages.push({ role: 'system', content: systemPrompt })
+  }
+  messages.push({ role: 'user', content: prompt })
+
   try {
     const response = await client.chat.completions.create({
       model: config.model,
-      messages: [{ role: 'user', content: prompt }],
+      messages,
       tools: openaiTools,
       tool_choice: 'auto',
       max_tokens: config.max_tokens,
@@ -226,7 +247,7 @@ export async function callModelWithTools(
     const msg = err instanceof Error ? err.message : String(err)
     if (attempt < 2) {
       await new Promise(r => setTimeout(r, 1000 * (attempt + 1)))
-      return callModelWithTools(config, prompt, tools, attempt + 1)
+      return callModelWithTools(config, prompt, tools, attempt + 1, systemPrompt)
     }
     return {
       model_id: config.id, text: '', input_tokens: 0,
