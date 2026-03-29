@@ -8,6 +8,7 @@ import { getDb, initSchema } from '../../db/client.js'
 import { selectModel } from '../../router/selector.js'
 import { callModel, callModelMultiTurn } from '../../providers/compat.js'
 import type { ModelConfig } from '../../types/index.js'
+import { buildModelConfig } from '../../utils/model-config.js'
 import type Database from 'better-sqlite3'
 
 interface ServeCommandOpts {
@@ -21,46 +22,6 @@ function parseAutoModel(model: string): { isAuto: boolean; taskType?: string } {
   return { isAuto: false }
 }
 
-/** Build a minimal ModelConfig for a selected model. */
-function buildModelConfig(modelId: string, provider: string): ModelConfig {
-  const config: ModelConfig = {
-    id: modelId,
-    model: modelId,
-    api_key: 'none',
-    tags: [],
-    port: 8080,
-    timeout_ms: 120_000,
-    max_tokens: 4096,
-  }
-
-  switch (provider) {
-    case 'ollama': {
-      const host = process.env.OLLAMA_HOST ?? 'http://localhost:11434'
-      config.base_url = host.endsWith('/v1') ? host : `${host}/v1`
-      break
-    }
-    case 'mlx': {
-      const port = process.env.MLX_PORT ?? '8080'
-      config.base_url = `http://localhost:${port}/v1`
-      break
-    }
-    case 'openrouter':
-      config.base_url = 'https://openrouter.ai/api/v1'
-      config.api_key = process.env.OPENROUTER_API_KEY ?? 'none'
-      break
-    case 'openai':
-      config.base_url = 'https://api.openai.com/v1'
-      config.api_key = process.env.OPENAI_API_KEY ?? 'none'
-      break
-    default: {
-      const host = process.env.OLLAMA_HOST ?? 'http://localhost:11434'
-      config.base_url = host.endsWith('/v1') ? host : `${host}/v1`
-      break
-    }
-  }
-
-  return config
-}
 
 /** Read the full request body as a string. */
 function readBody(req: http.IncomingMessage): Promise<string> {
