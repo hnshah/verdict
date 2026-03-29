@@ -87,6 +87,35 @@ verdict run --dry-run
 
 ---
 
+## Library Usage
+
+Use Verdict programmatically in your own Node.js code:
+
+```bash
+npm install verdict
+```
+
+```typescript
+import { loadConfig, loadEvalPack, runEvals } from 'verdict'
+import type { VerdictConfig, EvalResult } from 'verdict'
+
+// Load config and eval packs
+const config = loadConfig('./verdict.yaml')
+const pack = loadEvalPack('./eval-packs/general.yaml', '.')
+
+// Run evals
+const result: EvalResult = await runEvals(config, [pack], (msg) => {
+  console.log(msg)
+})
+
+// Use results
+for (const [modelId, summary] of Object.entries(result.summary)) {
+  console.log(`${modelId}: ${summary.avg_total}/10 (${summary.win_rate}% wins)`)
+}
+```
+
+---
+
 ## What You Get
 
 ### 1. Leaderboard
