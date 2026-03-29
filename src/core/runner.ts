@@ -186,7 +186,7 @@ export async function runEvals(
         if (evalCase.scorer === 'tool_call') {
           score = scoreToolCall(resp.tool_calls, evalCase.expected_tool ?? '', evalCase.expected_args)
         } else if (usesDeterministic) {
-          score = scoreDeterministic(evalCase.scorer, resp.text, evalCase.expected, evalCase.schema, evalCase.choices)!
+          score = scoreDeterministic(evalCase.scorer, resp.text, evalCase.expected, evalCase.schema, evalCase.choices, evalCase.scorer_code)!
         } else {
           score = await judgeResponse(judgeModel, config.judge, evalCase.prompt, evalCase.criteria, resp.text)
         }

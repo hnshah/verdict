@@ -82,7 +82,10 @@ export const EvalCaseSchema = z.object({
   // 'exact' checks exact string match, 'contains' checks substring presence,
   // 'jsonschema' validates JSON output against a schema, 'tool_call' scores tool usage
   // 'multiple_choice' scores A/B/C/D answers; 'regex' matches patterns
-  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex']).default('llm'),
+  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex', 'javascript']).default('llm'),
+  // For scorer: 'javascript' — the JS function body receiving (output, expected) that returns a number 0-10.
+  // SECURITY: This executes user-provided code via new Function(). This is intentional — the user controls the config.
+  scorer_code: z.string().optional(),
   choices: z.array(z.string()).optional(),
   schema: z.record(z.unknown()).optional(),
   turns: z.array(z.object({
