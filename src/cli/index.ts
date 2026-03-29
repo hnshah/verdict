@@ -10,6 +10,7 @@ import { routeCommand } from './commands/route.js'
 import { serveCommand } from './commands/serve.js'
 import { daemonStartCommand, daemonStopCommand, daemonStatusCommand, daemonLogsCommand, daemonWorkerCommand } from './commands/daemon.js'
 import { watchCommand } from './commands/watch.js'
+import { validateCommand } from './commands/validate.js'
 
 const program = new Command()
 
@@ -139,5 +140,12 @@ program
   .option('--interval <seconds>', 'Poll interval in seconds', '60')
   .option('--no-auto-eval', 'Detect but do not auto-queue evals')
   .action(watchCommand)
+
+program
+  .command('validate [config]')
+  .description('Check a verdict.yaml config for errors without running evals')
+  .action((config: string | undefined, _opts: unknown) => {
+    return validateCommand({ config: config ?? './verdict.yaml' })
+  })
 
 program.parse()
