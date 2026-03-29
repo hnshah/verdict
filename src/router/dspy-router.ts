@@ -4,12 +4,12 @@
  * Wraps the Python DSPy router for comparison with heuristic router
  */
 
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { join } from 'path';
 import type { Classification } from './types.js';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 export interface DSPyRouterConfig {
   pythonPath?: string;
@@ -43,12 +43,16 @@ export class DSPyRouter {
    */
   async route(prompt: string): Promise<DSPyRoutingDecision | null> {
     try {
-      const command = `${this.pythonPath} ${this.scriptPath} ${JSON.stringify(prompt)}`;
-      
-      const { stdout, stderr } = await execAsync(command, {
-        timeout: this.timeout,
-        maxBuffer: 10 * 1024 * 1024, // 10MB
-      });
+      // Use execFile instead of exec to prevent shell injection from user-supplied prompt.
+      // The prompt is passed as a discrete argument, never interpolated into a shell string.
+      const { stdout, stderr } = await execFileAsync(
+        this.pythonPath,
+        [this.scriptPath, prompt],
+        {
+          timeout: this.timeout,
+          maxBuffer: 10 * 1024 * 1024, // 10MB
+        }
+      );
 
       if (stderr && !stderr.includes('Warning')) {
         console.warn('[DSPy Router] stderr:', stderr);
