@@ -14,6 +14,7 @@ import { validateCommand } from './commands/validate.js'
 import { publishCommand } from './commands/publish.js'
 import { leaderboardCommand } from './commands/leaderboard.js'
 import { reportCommand } from './commands/report.js'
+import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } from './commands/eval.js'
 
 const program = new Command()
 
@@ -33,6 +34,7 @@ program
   .description('Run evals')
   .option('-c, --config <path>', 'Config file', './verdict.yaml')
   .option('-p, --pack <names>', 'Run specific pack(s), comma-separated')
+  .option('-e, --eval <names>', 'Run named eval(s) from registry, comma-separated')
   .option('-m, --models <ids>', 'Run specific model(s), comma-separated')
   .option('--dry-run', 'Preview without calling any APIs')
   .option('--resume', 'Resume from last checkpoint')
@@ -175,5 +177,28 @@ program
   .option('--result <path>', 'Path to result JSON file', { required: true })
   .option('--output <path>', 'Output HTML file path (default: docs/runs/<run_id>.html)')
   .action((opts: any) => reportCommand({ result: opts.result, output: opts.output }))
+const evalCmd = program
+  .command('eval')
+  .description('Manage the named eval registry')
+
+evalCmd
+  .command('add <name> <path>')
+  .description('Register an eval pack under a name')
+  .action(evalAddCommand)
+
+evalCmd
+  .command('remove <name>')
+  .description('Remove an eval from the registry')
+  .action(evalRemoveCommand)
+
+evalCmd
+  .command('list')
+  .description('Show all registered evals')
+  .action(evalListCommand)
+
+evalCmd
+  .command('init')
+  .description('Auto-register built-in eval packs')
+  .action(evalInitCommand)
 
 program.parse()

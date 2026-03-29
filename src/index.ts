@@ -26,6 +26,19 @@ export { runEvals, computeConfigHash, loadCheckpoint, getCheckpointPath } from '
 // ─── Config + pack loader ─────────────────────────────────────────────────────
 export { loadConfig, loadEvalPack } from './core/config.js'
 
+// ─── Eval registry ──────────────────────────────────────────────────────────
+export {
+  loadRegistry,
+  saveRegistry,
+  registryAdd,
+  registryRemove,
+  registryList,
+  registryResolve,
+  registerBuiltinPacks,
+  getRegistryPath,
+} from './core/registry.js'
+export type { Registry } from './core/registry.js'
+
 // ─── Judges ──────────────────────────────────────────────────────────────────
 export {
   judgeResponse,
