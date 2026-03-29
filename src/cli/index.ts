@@ -36,6 +36,7 @@ program
   .option('--question <text>', 'Question for synthesis agent to answer after eval')
   .option('--no-store', 'Skip persisting results to SQLite database')
   .option('--category <categories...>', 'Filter cases by category (repeatable)')
+  .option('--json', 'Output results as JSON to stdout (for CI/CD pipelines)')
   .action(runCommand)
 
 const models = program
