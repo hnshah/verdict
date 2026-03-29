@@ -172,6 +172,47 @@ export interface ModelSummary {
   avg_solve_rate: number
 }
 
+export interface HardwareInfo {
+  cpu: string
+  cpu_cores: number
+  cpu_arch: string
+  ram_gb: number
+  gpu?: string
+  os: string
+  os_version: string
+}
+
+export interface EnvironmentInfo {
+  verdict_version: string
+  node_version: string
+  provider_versions: {
+    ollama?: string
+    mlx?: string
+  }
+}
+
+export interface EvalPackMetadata {
+  file: string
+  description?: string
+  tags?: string[]
+  difficulty?: string
+  total_cases: number
+  source?: string
+  source_url?: string
+}
+
+export interface ReproducibilityInfo {
+  command: string
+  config_file: string
+  model_configs: Record<string, {
+    provider?: string
+    model: string
+    temperature?: number
+    max_tokens: number
+    quantization?: string
+  }>
+}
+
 export interface RunResult {
   run_id: string
   name: string
@@ -181,6 +222,16 @@ export interface RunResult {
   summary: Record<string, ModelSummary>
   synthesis?: SynthesisResult
   baselineComparison?: BaselineComparison
+  // NEW: Comprehensive metadata
+  hardware?: HardwareInfo
+  environment?: EnvironmentInfo
+  eval_pack?: EvalPackMetadata
+  judge?: {
+    model: string
+    temperature: number
+    scoring_dimensions: string[]
+  }
+  reproducibility?: ReproducibilityInfo
 }
 
 // ─── Checkpoint ──────────────────────────────────────────────────────────────

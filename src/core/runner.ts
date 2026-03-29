@@ -1,10 +1,94 @@
 import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
+import { execSync } from 'child_process'
 import type { Config, EvalPack, RunResult, ModelSummary, CaseResult, Checkpoint, JudgeScore, Assertion } from '../types/index.js'
 import { callModel, callModelMultiTurn, callModelWithTools } from '../providers/compat.js'
 import { judgeResponse } from '../judge/llm.js'
 import { scoreDeterministic, isDeterministic, scoreToolCall } from '../judge/deterministic.js'
+import { detectHardware, toRunResultFormat } from './hardware.js'
+
+/**
+ * Detect environment information
+ */
+function detectEnvironment(): { verdict_version: string, node_version: string, provider_versions: { ollama?: string, mlx?: string } } {
+  const verdictVersion = '0.2.0' // TODO: Read from package.json
+  const nodeVersion = process.version
+  
+  const providerVersions: { ollama?: string, mlx?: string } = {}
+  
+  // Try to get Ollama version
+  try {
+    const ollamaVersion = execSync('ollama --version 2>/dev/null || true', { encoding: 'utf-8' }).trim()
+    if (ollamaVersion) {
+      const match = ollamaVersion.match(/ollama version is ([\d.]+)/)
+      if (match) providerVersions.ollama = match[1]
+    }
+  } catch {}
+  
+  // MLX version detection could go here
+  // (would need to check if MLX server is running and query it)
+  
+  return {
+    verdict_version: verdictVersion,
+    node_version: nodeVersion,
+    provider_versions: providerVersions
+  }
+}
+
+/**
+ * Extract eval pack metadata
+ */
+function extractEvalPackMetadata(packs: EvalPack[]): {
+  file: string
+  description?: string
+  tags?: string[]
+  difficulty?: string
+  total_cases: number
+  source?: string
+  source_url?: string
+} | undefined {
+  if (packs.length === 0) return undefined
+  
+  // Use first pack for now (could combine multiple later)
+  const pack = packs[0]
+  
+  return {
+    file: 'eval-packs/' + (pack.name.toLowerCase().replace(/\s+/g, '-')) + '.yaml', // Approximation
+    description: pack.description,
+    total_cases: pack.cases.length,
+    // TODO: Extract these from pack metadata if available
+  }
+}
+
+/**
+ * Build reproducibility command
+ */
+function buildReproCommand(config: Config, packNames: string[], modelIds: string[]): string {
+  const packArg = packNames.length === 1 ? `-p ${packNames[0]}` : `-p ${packNames.join(',')}`
+  const modelArg = modelIds.length === 1 ? `-m ${modelIds[0]}` : `-m ${modelIds.join(',')}`
+  
+  return `verdict run -c verdict.yaml ${packArg} ${modelArg}`
+}
+
+/**
+ * Build model configs for reproducibility
+ */
+function buildModelConfigs(config: Config): Record<string, any> {
+  const configs: Record<string, any> = {}
+  
+  for (const model of config.models) {
+    configs[model.id] = {
+      provider: model.provider,
+      model: model.model,
+      temperature: 0.7, // TODO: Get from actual config if available
+      max_tokens: model.max_tokens,
+      // TODO: Add quantization if available from model metadata
+    }
+  }
+  
+  return configs
+}
 
 export function scoreAssertion(
   assertion: Assertion,
@@ -281,9 +365,32 @@ export async function runEvals(
     }
   }
 
+  // Collect metadata
+  const hardware = detectHardware()
+  const environment = detectEnvironment()
+  const evalPackMetadata = extractEvalPackMetadata(packs)
+  const packNames = packs.map(p => p.name)
+  
   return {
-    run_id: runId, name: config.name,
+    run_id: runId,
+    name: config.name,
     timestamp: new Date().toISOString(),
-    models: modelIds, cases, summary,
+    models: modelIds,
+    cases,
+    summary,
+    // NEW: Complete metadata
+    hardware: toRunResultFormat(hardware),
+    environment,
+    eval_pack: evalPackMetadata,
+    judge: {
+      model: config.judge.model,
+      temperature: 0, // Judge uses temp=0 by default
+      scoring_dimensions: ['accuracy', 'completeness', 'conciseness']
+    },
+    reproducibility: {
+      command: buildReproCommand(config, packNames, modelIds),
+      config_file: 'verdict.yaml',
+      model_configs: buildModelConfigs(config)
+    }
   }
 }

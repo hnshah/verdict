@@ -84,3 +84,26 @@ export function getHardwareSummary(hw: HardwareInfo): string {
 
   return parts.join(' • ')
 }
+
+/**
+ * Convert to RunResult format (normalized)
+ */
+export function toRunResultFormat(hw: HardwareInfo): {
+  cpu: string
+  cpu_cores: number
+  cpu_arch: string
+  ram_gb: number
+  gpu?: string
+  os: string
+  os_version: string
+} {
+  return {
+    cpu: hw.cpu,
+    cpu_cores: hw.cpuCores,
+    cpu_arch: hw.cpuArch,
+    ram_gb: hw.ramGB,
+    gpu: hw.gpu,
+    os: hw.os,
+    os_version: hw.osVersion
+  }
+}
