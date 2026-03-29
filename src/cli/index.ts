@@ -13,6 +13,7 @@ import { watchCommand } from './commands/watch.js'
 import { validateCommand } from './commands/validate.js'
 import { publishCommand } from './commands/publish.js'
 import { leaderboardCommand } from './commands/leaderboard.js'
+import { reportCommand } from './commands/report.js'
 
 const program = new Command()
 
@@ -167,5 +168,12 @@ program
   .option('-o, --output <path>', 'Output file path', 'docs/index.html')
   .option('--format <type>', 'Output format (html, markdown)', 'html')
   .action(leaderboardCommand)
+
+program
+  .command('report')
+  .description('Generate detailed HTML report from a result file')
+  .option('--result <path>', 'Path to result JSON file', { required: true })
+  .option('--output <path>', 'Output HTML file path (default: docs/runs/<run_id>.html)')
+  .action((opts: any) => reportCommand({ result: opts.result, output: opts.output }))
 
 program.parse()
