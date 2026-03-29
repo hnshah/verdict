@@ -76,6 +76,7 @@ export const EvalCaseSchema = z.object({
   category: z.string().optional(),
   ideal_latency_ms: z.number().optional(),
   prompt: z.string().default(''),
+  system_prompt: z.string().optional(),
   criteria: z.string(),
   expected: z.union([z.string(), z.array(z.string())]).optional(),
   tags: z.array(z.string()).default([]),

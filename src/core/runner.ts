@@ -39,7 +39,8 @@ function deleteCheckpoint(outputDir: string): void {
 
 async function runMultiTurn(
   modelConfig: import('../types/index.js').ModelConfig,
-  turns: Array<{ role: 'user' | 'assistant'; content: string }>
+  turns: Array<{ role: 'user' | 'assistant'; content: string }>,
+  systemPrompt?: string
 ): Promise<import('../types/index.js').ModelResponse> {
   const messages: Array<{ role: string; content: string }> = []
   let lastResponse: import('../types/index.js').ModelResponse | null = null
@@ -47,7 +48,7 @@ async function runMultiTurn(
   for (const turn of turns) {
     if (turn.role === 'assistant' && turn.content === '__model__') {
       // Call the model with conversation history so far
-      const resp = await callModelMultiTurn(modelConfig, messages)
+      const resp = await callModelMultiTurn(modelConfig, messages, 0, systemPrompt)
       messages.push({ role: 'assistant', content: resp.text })
       lastResponse = resp
     } else {
@@ -58,7 +59,7 @@ async function runMultiTurn(
   // If the last turn is a user message, we need one final model call
   const lastTurn = turns[turns.length - 1]
   if (lastTurn.role === 'user') {
-    const resp = await callModelMultiTurn(modelConfig, messages)
+    const resp = await callModelMultiTurn(modelConfig, messages, 0, systemPrompt)
     lastResponse = resp
   }
 
@@ -154,11 +155,11 @@ export async function runEvals(
     const jobs = config.models.map(m => async () => {
       let resp
       if (evalCase.scorer === 'tool_call' && evalCase.tools && evalCase.tools.length > 0) {
-        resp = await callModelWithTools(m, evalCase.prompt, evalCase.tools)
+        resp = await callModelWithTools(m, evalCase.prompt, evalCase.tools, 0, evalCase.system_prompt)
       } else if (evalCase.turns && evalCase.turns.length > 0) {
-        resp = await runMultiTurn(m, evalCase.turns)
+        resp = await runMultiTurn(m, evalCase.turns, evalCase.system_prompt)
       } else {
-        resp = await callModel(m, evalCase.prompt, 0, evalCase.image)
+        resp = await callModel(m, evalCase.prompt, 0, evalCase.image, evalCase.system_prompt)
       }
       caseResult.responses[m.id] = resp
       if (resp.cost_usd) summary[m.id].total_cost_usd += resp.cost_usd

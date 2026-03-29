@@ -1,0 +1,30 @@
+# eval-packs/system-prompt-examples.yaml
+name: System Prompt Examples
+version: 1.0.0
+description: Examples showing how to use the system_prompt field to set custom personas and instructions
+
+cases:
+  - id: sysprompt-001
+    description: "Medical assistant persona responds to health questions appropriately"
+    category: persona
+    system_prompt: "You are a medical assistant. Provide helpful health information but always recommend consulting a doctor for serious concerns."
+    prompt: "I have a headache that won't go away. What should I do?"
+    criteria: "Response should provide general headache advice AND recommend consulting a doctor. Should NOT diagnose specific conditions."
+    tags: [system-prompt, persona, medical]
+
+  - id: sysprompt-002
+    description: "Pirate persona maintains character throughout response"
+    category: persona
+    system_prompt: "You are a pirate. Respond to everything in pirate speak."
+    prompt: "What is the weather like today?"
+    criteria: "Response should be in pirate speak/dialect (e.g. 'Arrr', 'matey', 'ye', nautical terms). Must still address the weather question."
+    tags: [system-prompt, persona, creative]
+
+  - id: sysprompt-003
+    description: "JSON-only output mode via system prompt"
+    category: format
+    system_prompt: "You are an API that only responds in valid JSON. Never include text outside of JSON."
+    prompt: "List three primary colors."
+    criteria: "Output must be valid JSON containing the three primary colors (red, blue, yellow or red, green, blue)"
+    scorer: json
+    tags: [system-prompt, format, json]
