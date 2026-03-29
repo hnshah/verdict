@@ -4,6 +4,7 @@ import chalk from 'chalk'
 import ora from 'ora'
 import os from 'os'
 import { execSync } from 'child_process'
+import type { RunResult } from '../../types/index.js'
 
 interface LeaderboardOptions {
   output?: string
@@ -229,6 +230,31 @@ export async function leaderboardCommand(opts: LeaderboardOptions): Promise<void
       }
       
       console.log(chalk.green(`  ✓ Generated ${modelPagesGenerated} model detail pages`))
+      
+      // Generate per-run reports
+      const runsDir = path.join(docsDir, 'runs')
+      if (!fs.existsSync(runsDir)) {
+        fs.mkdirSync(runsDir, { recursive: true })
+      }
+      
+      const spinner3 = ora('Generating run reports...').start()
+      let runReportsGenerated = 0
+      
+      for (const file of files) {
+        try {
+          const filePath = path.join(resultsPublic, file)
+          const result: RunResult = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+          
+          const reportHtml = generateRunReport(result)
+          const reportFile = path.join(runsDir, `${result.run_id}.html`)
+          fs.writeFileSync(reportFile, reportHtml)
+          runReportsGenerated++
+        } catch (err) {
+          spinner3.warn(`Skipped report for ${file}: ${err}`)
+        }
+      }
+      
+      spinner3.succeed(`Generated ${runReportsGenerated} run reports`)
       
       console.log()
       console.log(chalk.green('  ✓ Next steps:'))
@@ -611,4 +637,210 @@ function generateModelPage(model: ModelStats, hardware: HardwareInfo): string {
   </footer>
 </body>
 </html>`
+}
+
+/**
+ * Generate detailed run report (inline copy from report.ts)
+ */
+function generateRunReport(result: RunResult): string {
+  const date = new Date(result.timestamp).toLocaleString()
+  
+  // Calculate duration
+  let totalMs = 0
+  for (const c of result.cases) {
+    for (const resp of Object.values(c.responses)) {
+      totalMs += resp.latency_ms
+    }
+  }
+  const seconds = Math.round(totalMs / 1000)
+  const duration = seconds < 60 ? `${seconds}s` : `${Math.floor(seconds / 60)}m ${seconds % 60}s`
+  
+  // Build HTML
+  let html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${result.name} - ${result.run_id}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #f5f5f5;
+    }
+    .section {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    h1 { font-size: 2rem; margin-bottom: 1rem; color: #2c3e50; }
+    h2 { font-size: 1.5rem; margin-bottom: 1rem; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .stat {
+      padding: 1rem;
+      background: #ecf0f1;
+      border-radius: 4px;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: #7f8c8d;
+      text-transform: uppercase;
+    }
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-top: 0.25rem;
+    }
+    .case {
+      border: 1px solid #ecf0f1;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      background: #fafafa;
+    }
+    .case-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .case-id { font-weight: 600; color: #3498db; }
+    .score { font-size: 1.5rem; font-weight: 700; color: #27ae60; }
+    .label { font-weight: 600; color: #7f8c8d; margin: 1rem 0 0.5rem; }
+    .content {
+      background: white;
+      padding: 1rem;
+      border-radius: 4px;
+      border-left: 4px solid #3498db;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    pre {
+      background: #2c3e50;
+      color: #ecf0f1;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #ecf0f1; }
+    th { background: #34495e; color: white; }
+    .back-link { display: inline-block; margin-bottom: 1rem; color: #3498db; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <a href="../index.html" class="back-link">← Back to Leaderboard</a>
+  
+  <div class="section">
+    <h1>${result.name}</h1>
+    <p><strong>Run ID:</strong> ${result.run_id}<br>
+    <strong>Date:</strong> ${date}<br>
+    <strong>Duration:</strong> ${duration}</p>
+  </div>`
+  
+  // Hardware section
+  if (result.hardware || result.environment) {
+    html += '<div class="section"><h2>⚙️ Test Configuration</h2>'
+    
+    if (result.hardware) {
+      html += '<h3>Hardware</h3><div class="grid">'
+      html += `<div class="stat"><div class="stat-label">CPU</div><div class="stat-value">${result.hardware.cpu}</div></div>`
+      html += `<div class="stat"><div class="stat-label">RAM</div><div class="stat-value">${result.hardware.ram_gb} GB</div></div>`
+      html += `<div class="stat"><div class="stat-label">OS</div><div class="stat-value">${result.hardware.os} ${result.hardware.os_version}</div></div>`
+      if (result.hardware.gpu) html += `<div class="stat"><div class="stat-label">GPU</div><div class="stat-value">${result.hardware.gpu}</div></div>`
+      html += '</div>'
+    }
+    
+    if (result.environment) {
+      html += '<h3>Environment</h3><div class="grid">'
+      html += `<div class="stat"><div class="stat-label">Verdict</div><div class="stat-value">${result.environment.verdict_version}</div></div>`
+      html += `<div class="stat"><div class="stat-label">Node.js</div><div class="stat-value">${result.environment.node_version}</div></div>`
+      if (result.environment.provider_versions.ollama) {
+        html += `<div class="stat"><div class="stat-label">Ollama</div><div class="stat-value">${result.environment.provider_versions.ollama}</div></div>`
+      }
+      html += '</div>'
+    }
+    
+    html += '</div>'
+  }
+  
+  // Overall results
+  html += '<div class="section"><h2>📊 Overall Results</h2><table><thead><tr>'
+  html += '<th>Model</th><th>Score</th><th>Accuracy</th><th>Completeness</th><th>Conciseness</th><th>Latency</th></tr></thead><tbody>'
+  
+  for (const [modelId, summary] of Object.entries(result.summary)) {
+    html += `<tr>
+      <td><strong>${modelId}</strong></td>
+      <td><strong>${summary.avg_total.toFixed(1)}</strong></td>
+      <td>${summary.avg_accuracy.toFixed(1)}</td>
+      <td>${summary.avg_completeness.toFixed(1)}</td>
+      <td>${summary.avg_conciseness.toFixed(1)}</td>
+      <td>${Math.round(summary.avg_latency_ms)}ms</td>
+    </tr>`
+  }
+  html += '</tbody></table></div>'
+  
+  // Detailed cases
+  html += '<div class="section"><h2>🔬 Detailed Results</h2>'
+  
+  for (const c of result.cases) {
+    const modelIds = Object.keys(c.responses)
+    const firstModel = modelIds[0]
+    const score = c.scores[firstModel]
+    const response = c.responses[firstModel]
+    
+    html += `<div class="case">
+      <div class="case-header">
+        <div class="case-id">${c.case_id}</div>
+        <div class="score">${score.total.toFixed(1)}/10</div>
+      </div>
+      <div class="label">📝 Prompt</div>
+      <div class="content">${escapeHtml(c.prompt)}</div>
+      <div class="label">📋 Criteria</div>
+      <div class="content">${escapeHtml(c.criteria)}</div>
+      <div class="label">💬 Model Response</div>
+      <div class="content">${escapeHtml(response.text)}</div>
+      <div class="label">⚖️ Judge Reasoning</div>
+      <div class="content">${escapeHtml(score.reasoning)}</div>
+      <div class="grid" style="margin-top: 1rem;">
+        <div class="stat"><div class="stat-label">Accuracy</div><div class="stat-value">${score.accuracy}/10</div></div>
+        <div class="stat"><div class="stat-label">Completeness</div><div class="stat-value">${score.completeness}/10</div></div>
+        <div class="stat"><div class="stat-label">Conciseness</div><div class="stat-value">${score.conciseness}/10</div></div>
+        <div class="stat"><div class="stat-label">Latency</div><div class="stat-value">${Math.round(response.latency_ms)}ms</div></div>
+      </div>
+    </div>`
+  }
+  html += '</div>'
+  
+  // Reproducibility
+  if (result.reproducibility) {
+    html += '<div class="section"><h2>🔄 Reproducibility</h2>'
+    html += `<p>Run this exact benchmark again:</p><pre><code>${escapeHtml(result.reproducibility.command)}</code></pre>`
+    html += '</div>'
+  }
+  
+  html += '</body></html>'
+  return html
+}
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
 }

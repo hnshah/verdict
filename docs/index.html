@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verdict Leaderboard - Local LLM Benchmarks</title>
+  <meta name="description" content="Real local LLM benchmarks on Apple Silicon">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #f5f5f5;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+    .subtitle {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+    }
+    .meta {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 1rem;
+      text-align: left;
+    }
+    th {
+      background: #34495e;
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+    tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+    tr:hover {
+      background: #e8f4f8;
+    }
+    td:first-child {
+      font-size: 1.2rem;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 3rem;
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+    .footer a {
+      color: #3498db;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      h1 { font-size: 1.8rem; }
+      .meta { flex-direction: column; gap: 0.5rem; }
+      th, td { padding: 0.75rem 0.5rem; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏆 Verdict Leaderboard</h1>
+    <p class="subtitle">Local LLM Benchmarks</p>
+    <div class="meta">
+      <span>📅 Updated: 2026-03-29</span>
+      <span>📊 1 benchmark runs</span>
+      <span>🤖 1 models</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Model</th>
+            <th>Score</th>
+            <th>Latency</th>
+            <th>Runs</th>
+            <th>Cases</th>
+          </tr>
+        </thead>
+        <tbody>
+      <tr>
+        <td>🥇</td>
+        <td><strong><a href="models/qwen7b.html" style="color: #2c3e50; text-decoration: none;">qwen7b</a></strong></td>
+        <td>10.0</td>
+        <td>1801ms</td>
+        <td>1</td>
+        <td>2</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div style="background: #ecf0f1; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+      <h3 style="color: #2c3e50; margin-bottom: 1rem;">⚙️ Test Hardware</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; text-align: left; max-width: 800px; margin: 0 auto;">
+        <div>
+          <strong>CPU:</strong><br>Apple M3 Ultra
+        </div>
+        <div>
+          <strong>Memory:</strong><br>256 GB
+        </div>
+        <div>
+          <strong>OS:</strong><br>macOS 25.3.0
+        </div>
+        
+      </div>
+    </div>
+    <p>Powered by <a href="https://github.com/hnshah/verdict" target="_blank">Verdict</a></p>
+    <p>Data: <a href="../results/public/" target="_blank">JSON Results</a></p>
+  </footer>
+</body>
+</html>
