@@ -1,0 +1,63 @@
+# eval-packs/multi-assertion-examples.yaml
+name: Multi-Assertion Examples
+version: 1.0.0
+description: Demonstrates multi-assertion support — each case checks multiple conditions against the same output
+
+cases:
+  - id: multi-001
+    description: "Response must contain a keyword AND be valid JSON"
+    category: multi-assertion
+    prompt: "Return a JSON object with a 'city' field set to 'Paris'."
+    criteria: "Must return valid JSON containing the city Paris"
+    scorer: llm
+    assertions:
+      - scorer: json
+      - scorer: contains
+        expected: "Paris"
+    tags: [multi-assertion, json, contains]
+
+  - id: multi-002
+    description: "Response must be valid JSON AND match a schema"
+    category: multi-assertion
+    prompt: "Return a JSON object with fields: name (string), age (number), active (boolean)."
+    criteria: "Must return valid JSON matching the required schema"
+    scorer: llm
+    assertions:
+      - scorer: json
+      - scorer: jsonschema
+        schema:
+          type: object
+          required: [name, age, active]
+          properties:
+            name: { type: string }
+            age: { type: number }
+            active: { type: boolean }
+    tags: [multi-assertion, json, jsonschema]
+
+  - id: multi-003
+    description: "Response must contain a keyword AND match a regex pattern"
+    category: multi-assertion
+    prompt: "What is 15 * 7? Reply with just the number."
+    criteria: "Must contain the number 105"
+    scorer: llm
+    assertions:
+      - scorer: contains
+        expected: "105"
+      - scorer: regex
+        expected: "\\b105\\b"
+    tags: [multi-assertion, contains, regex]
+
+  - id: multi-004
+    description: "Response must exactly match one of the accepted answers"
+    category: multi-assertion
+    prompt: "What is the chemical symbol for gold?"
+    criteria: "Must answer Au"
+    scorer: llm
+    assertions:
+      - scorer: exact
+        expected:
+          - "Au"
+          - "au"
+      - scorer: regex
+        expected: "/^Au$/i"
+    tags: [multi-assertion, exact, regex]
