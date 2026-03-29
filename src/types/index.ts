@@ -102,7 +102,8 @@ export const EvalPackSchema = z.object({
   name: z.string(),
   version: z.string().default('1.0.0'),
   description: z.string().optional(),
-  cases: z.array(EvalCaseSchema),
+  dataset: z.string().optional(),
+  cases: z.array(EvalCaseSchema).default([]),
 })
 export type EvalPack = z.infer<typeof EvalPackSchema>
 

@@ -2,8 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import yaml from 'js-yaml'
 import chalk from 'chalk'
-import { ConfigSchema } from '../../types/index.js'
-import { EvalPackSchema } from '../../types/index.js'
+import { ConfigSchema, EvalPackSchema, EvalCaseSchema } from '../../types/index.js'
 
 function resolveEnvVars(value: unknown): unknown {
   if (typeof value === 'string') {
@@ -106,6 +105,34 @@ export function validateConfig(configPath: string): ValidationResult {
       } else {
         for (const c of packResult.data.cases) {
           summary.scorers.add(c.scorer)
+        }
+        // Validate JSONL dataset if specified
+        if (packResult.data.dataset) {
+          const packDir = path.dirname(packFullPath)
+          const datasetPath = path.isAbsolute(packResult.data.dataset)
+            ? packResult.data.dataset
+            : path.resolve(packDir, packResult.data.dataset)
+          if (!fs.existsSync(datasetPath)) {
+            errors.push(`Pack "${packPath}": dataset file not found: ${packResult.data.dataset}`)
+          } else {
+            const lines = fs.readFileSync(datasetPath, 'utf8').split('\n')
+              .filter(l => l.trim() !== '' && !l.trimStart().startsWith('//'))
+            for (let i = 0; i < lines.length; i++) {
+              try {
+                const parsed = JSON.parse(lines[i])
+                const caseResult = EvalCaseSchema.safeParse(parsed)
+                if (!caseResult.success) {
+                  for (const issue of caseResult.error.issues) {
+                    errors.push(`Pack "${packPath}" dataset line ${i + 1} → ${issue.path.join('.')}: ${issue.message}`)
+                  }
+                } else {
+                  summary.scorers.add(caseResult.data.scorer)
+                }
+              } catch {
+                errors.push(`Pack "${packPath}" dataset line ${i + 1}: invalid JSON`)
+              }
+            }
+          }
         }
       }
     } catch (e) {

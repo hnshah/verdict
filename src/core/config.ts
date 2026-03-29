@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import yaml from 'js-yaml'
-import { ConfigSchema, EvalPackSchema, type Config, type EvalPack } from '../types/index.js'
+import { ConfigSchema, EvalPackSchema, EvalCaseSchema, type Config, type EvalPack } from '../types/index.js'
 
 function resolveEnvVars(value: unknown): unknown {
   if (typeof value === 'string') {
@@ -49,6 +49,27 @@ export function loadConfig(configPath: string): Config {
   return normalizeModels(result.data)
 }
 
+export function loadJsonlCases(jsonlPath: string): EvalPack['cases'] {
+  const content = fs.readFileSync(jsonlPath, 'utf8')
+  const lines = content.split('\n').filter(line => line.trim() !== '' && !line.trimStart().startsWith('//'))
+  const cases: EvalPack['cases'] = []
+  for (let i = 0; i < lines.length; i++) {
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(lines[i])
+    } catch {
+      throw new Error(`Invalid JSON at ${jsonlPath} line ${i + 1}`)
+    }
+    const result = EvalCaseSchema.safeParse(parsed)
+    if (!result.success) {
+      const issues = result.error.issues.map(iss => `${iss.path.join('.')}: ${iss.message}`).join(', ')
+      throw new Error(`Invalid eval case at ${jsonlPath} line ${i + 1}: ${issues}`)
+    }
+    cases.push(result.data)
+  }
+  return cases
+}
+
 export function loadEvalPack(packPath: string, configDir: string): EvalPack {
   const fullPath = path.isAbsolute(packPath)
     ? packPath
@@ -63,13 +84,27 @@ export function loadEvalPack(packPath: string, configDir: string): EvalPack {
     throw new Error(`Invalid eval pack ${packPath}:\n${issues}`)
   }
 
-  // Resolve image paths relative to pack file directory
+  const pack = result.data
   const packDir = path.dirname(fullPath)
-  for (const evalCase of result.data.cases) {
+
+  // Load JSONL dataset if specified
+  if (pack.dataset) {
+    const datasetPath = path.isAbsolute(pack.dataset)
+      ? pack.dataset
+      : path.resolve(packDir, pack.dataset)
+    if (!fs.existsSync(datasetPath)) {
+      throw new Error(`Dataset file not found: ${datasetPath} (referenced in ${packPath})`)
+    }
+    const jsonlCases = loadJsonlCases(datasetPath)
+    pack.cases = [...pack.cases, ...jsonlCases]
+  }
+
+  // Resolve image paths relative to pack file directory
+  for (const evalCase of pack.cases) {
     if (evalCase.image && !evalCase.image.startsWith('http://') && !evalCase.image.startsWith('https://')) {
       evalCase.image = path.resolve(packDir, evalCase.image)
     }
   }
 
-  return result.data
+  return pack
 }

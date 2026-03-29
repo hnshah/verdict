@@ -1,0 +1,9 @@
+name: JSONL Dataset Example
+version: 1.0.0
+description: Demonstrates loading eval cases from an external JSONL file
+
+# Load cases from a JSONL file (one JSON object per line)
+dataset: ./examples/coding-cases.jsonl
+
+# You can also include inline cases alongside the dataset — they'll be merged
+cases: []

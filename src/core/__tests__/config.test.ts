@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import { loadConfig, loadEvalPack } from '../config.js'
+import { loadConfig, loadEvalPack, loadJsonlCases } from '../config.js'
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
@@ -16,6 +16,7 @@ function makeTempDir(): string {
 
 function writeFile(dir: string, filename: string, content: string): string {
   const fullPath = path.join(dir, filename)
+  fs.mkdirSync(path.dirname(fullPath), { recursive: true })
   fs.writeFileSync(fullPath, content, 'utf8')
   return fullPath
 }
@@ -134,6 +135,68 @@ judge:
   })
 })
 
+// ─── loadJsonlCases ───────────────────────────────────────────────────────────
+
+describe('loadJsonlCases', () => {
+  let dir: string
+
+  beforeEach(() => { dir = makeTempDir() })
+  afterEach(() => { fs.rmSync(dir, { recursive: true, force: true }) })
+
+  it('parses valid JSONL file', () => {
+    const p = writeFile(dir, 'cases.jsonl', [
+      '{"id": "c1", "prompt": "Hello", "criteria": "Be nice"}',
+      '{"id": "c2", "prompt": "World", "criteria": "Be helpful", "scorer": "exact", "expected": "test"}',
+    ].join('\n'))
+    const cases = loadJsonlCases(p)
+    expect(cases).toHaveLength(2)
+    expect(cases[0].id).toBe('c1')
+    expect(cases[1].scorer).toBe('exact')
+  })
+
+  it('skips blank lines', () => {
+    const p = writeFile(dir, 'cases.jsonl', [
+      '{"id": "c1", "prompt": "Hello", "criteria": "Be nice"}',
+      '',
+      '  ',
+      '{"id": "c2", "prompt": "World", "criteria": "Be helpful"}',
+    ].join('\n'))
+    const cases = loadJsonlCases(p)
+    expect(cases).toHaveLength(2)
+  })
+
+  it('skips comment lines starting with //', () => {
+    const p = writeFile(dir, 'cases.jsonl', [
+      '// This is a comment',
+      '{"id": "c1", "prompt": "Hello", "criteria": "Be nice"}',
+      '  // Another comment',
+      '{"id": "c2", "prompt": "World", "criteria": "Be helpful"}',
+    ].join('\n'))
+    const cases = loadJsonlCases(p)
+    expect(cases).toHaveLength(2)
+  })
+
+  it('throws on invalid JSON', () => {
+    const p = writeFile(dir, 'bad.jsonl', 'not json\n')
+    expect(() => loadJsonlCases(p)).toThrow('Invalid JSON at')
+    expect(() => loadJsonlCases(p)).toThrow('line 1')
+  })
+
+  it('throws on invalid eval case schema', () => {
+    const p = writeFile(dir, 'bad-schema.jsonl', '{"id": "c1"}\n')
+    expect(() => loadJsonlCases(p)).toThrow('Invalid eval case at')
+    expect(() => loadJsonlCases(p)).toThrow('line 1')
+  })
+
+  it('applies defaults for optional fields', () => {
+    const p = writeFile(dir, 'defaults.jsonl',
+      '{"id": "c1", "prompt": "Hello", "criteria": "Test"}\n')
+    const cases = loadJsonlCases(p)
+    expect(cases[0].scorer).toBe('llm')
+    expect(cases[0].tags).toEqual([])
+  })
+})
+
 // ─── loadEvalPack ─────────────────────────────────────────────────────────────
 
 describe('loadEvalPack', () => {
@@ -193,7 +256,6 @@ cases:
   })
 
   it('resolves relative image paths', () => {
-    // Create a dummy image file
     const imgPath = path.join(dir, 'test-image.png')
     fs.writeFileSync(imgPath, Buffer.from([0x89, 0x50, 0x4E, 0x47]))
     const packPath = writeFile(dir, 'vision.yaml', `
@@ -232,7 +294,6 @@ cases:
     criteria: Test
     scorer: llm
 `)
-    // Call with absolute path and a different configDir
     const pack = loadEvalPack(absPackPath, '/some/other/dir')
     expect(pack.name).toBe('Abs Pack')
   })
@@ -245,5 +306,73 @@ cases:
     criteria: Test
 `)
     expect(() => loadEvalPack(packPath, dir)).toThrow(/Invalid eval pack/)
+  })
+})
+
+// ─── loadEvalPack with JSONL dataset ─────────────────────────────────────────
+
+describe('loadEvalPack with dataset', () => {
+  let dir: string
+
+  beforeEach(() => { dir = makeTempDir() })
+  afterEach(() => { fs.rmSync(dir, { recursive: true, force: true }) })
+
+  it('loads cases from JSONL dataset', () => {
+    writeFile(dir, 'cases.jsonl', [
+      '{"id": "c1", "prompt": "Hello", "criteria": "Be nice"}',
+      '{"id": "c2", "prompt": "World", "criteria": "Be helpful"}',
+    ].join('\n'))
+    const packPath = writeFile(dir, 'pack.yaml', [
+      'name: Test Pack',
+      'dataset: ./cases.jsonl',
+      'cases: []',
+    ].join('\n'))
+
+    const pack = loadEvalPack(packPath, dir)
+    expect(pack.cases).toHaveLength(2)
+    expect(pack.cases[0].id).toBe('c1')
+    expect(pack.cases[1].id).toBe('c2')
+  })
+
+  it('merges inline cases with dataset cases', () => {
+    writeFile(dir, 'cases.jsonl',
+      '{"id": "ds1", "prompt": "From dataset", "criteria": "Test"}\n')
+    const packPath = writeFile(dir, 'pack.yaml', [
+      'name: Merged Pack',
+      'dataset: ./cases.jsonl',
+      'cases:',
+      '  - id: inline1',
+      '    prompt: From inline',
+      '    criteria: Test',
+    ].join('\n'))
+
+    const pack = loadEvalPack(packPath, dir)
+    expect(pack.cases).toHaveLength(2)
+    expect(pack.cases[0].id).toBe('inline1')
+    expect(pack.cases[1].id).toBe('ds1')
+  })
+
+  it('throws when dataset file not found', () => {
+    const packPath = writeFile(dir, 'pack.yaml', [
+      'name: Missing Dataset',
+      'dataset: ./nonexistent.jsonl',
+      'cases: []',
+    ].join('\n'))
+
+    expect(() => loadEvalPack(packPath, dir)).toThrow('Dataset file not found')
+  })
+
+  it('works without dataset field (backward compatible)', () => {
+    const packPath = writeFile(dir, 'pack.yaml', [
+      'name: No Dataset',
+      'cases:',
+      '  - id: c1',
+      '    prompt: Hello',
+      '    criteria: Test',
+    ].join('\n'))
+
+    const pack = loadEvalPack(packPath, dir)
+    expect(pack.cases).toHaveLength(1)
+    expect(pack.dataset).toBeUndefined()
   })
 })

@@ -374,7 +374,31 @@ verdict baseline compare v1.0
 # → qwen2.5:7b improved +0.8pts since v1.0
 ```
 
-### 3. Custom Judges
+### 3. JSONL Dataset Files
+
+For large-scale evals (100s-1000s of cases), keep cases in external JSONL files instead of inline YAML:
+
+```jsonl
+{"id": "case-001", "prompt": "What is 2+2?", "criteria": "Correct: 4", "expected": "4", "scorer": "contains"}
+{"id": "case-002", "prompt": "Write a hello world in Python", "criteria": "Valid Python print statement", "scorer": "llm"}
+```
+
+Reference the JSONL file from your eval pack:
+
+```yaml
+# eval-packs/large-dataset.yaml
+name: Large Dataset
+dataset: ./data/cases.jsonl
+
+# Optional: inline cases are merged with the dataset
+cases: []
+```
+
+Each line in the JSONL file must be a valid JSON object matching the eval case schema (`id`, `prompt`, `criteria` are required). You can use any scorer and all other eval case fields (`expected`, `tags`, `category`, etc.).
+
+See `eval-packs/jsonl-example.yaml` for a working example.
+
+### 4. Custom Judges
 
 Use different judge models for different packs:
 
@@ -386,7 +410,7 @@ judge:
   temperature: 0.7
 ```
 
-### 4. Inference Optimization
+### 5. Inference Optimization
 
 ```yaml
 # verdict.yaml
