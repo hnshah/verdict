@@ -240,6 +240,7 @@ export async function leaderboardCommand(opts: LeaderboardOptions): Promise<void
       
       const spinner3 = ora('Generating run reports...').start()
       let runReportsGenerated = 0
+      const allResults: Record<string, RunResult[]> = {} // Track results by model
       
       for (const file of files) {
         try {
@@ -250,12 +251,28 @@ export async function leaderboardCommand(opts: LeaderboardOptions): Promise<void
           const reportFile = path.join(runsDir, `${result.run_id}.html`)
           fs.writeFileSync(reportFile, reportHtml)
           runReportsGenerated++
+          
+          // Track results for each model
+          for (const modelId of result.models) {
+            if (!allResults[modelId]) allResults[modelId] = []
+            allResults[modelId].push(result)
+          }
         } catch (err) {
           spinner3.warn(`Skipped report for ${file}: ${err}`)
         }
       }
       
       spinner3.succeed(`Generated ${runReportsGenerated} run reports`)
+      
+      // Regenerate model pages with best cases
+      const spinner4 = ora('Adding best cases to model pages...').start()
+      for (const model of sortedModels) {
+        const modelResults = allResults[model.model] || []
+        const modelHtml = generateModelPage(model, hardware, modelResults)
+        const modelFile = path.join(modelsDir, `${model.model.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.html`)
+        fs.writeFileSync(modelFile, modelHtml)
+      }
+      spinner4.succeed(`Enhanced ${sortedModels.length} model pages with best cases`)
       
       console.log()
       console.log(chalk.green('  ✓ Next steps:'))
@@ -438,7 +455,7 @@ function generateHTML(models: ModelStats[], totalResults: number, hardware: Hard
 /**
  * Generate model detail page
  */
-function generateModelPage(model: ModelStats, hardware: HardwareInfo): string {
+function generateModelPage(model: ModelStats, hardware: HardwareInfo, results: RunResult[] = []): string {
   const now = new Date().toISOString().split('T')[0]
   const displayName = getModelDisplayName(model.model)
   const hfLink = getHuggingFaceLink(model.model)
@@ -614,6 +631,8 @@ function generateModelPage(model: ModelStats, hardware: HardwareInfo): string {
   </div>
 
   <main>
+    ${generateBestCases(model.model, results)}
+    
     <div class="card">
       <table>
         <thead>
@@ -858,4 +877,93 @@ function escapeHtml(text: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;')
+}
+
+/**
+ * Generate best cases section for model page
+ */
+function generateBestCases(modelId: string, results: RunResult[]): string {
+  if (results.length === 0) return ''
+  
+  // Collect all cases for this model across all results
+  const allCases: Array<{case: any, score: any, response: any, result: RunResult}> = []
+  
+  for (const result of results) {
+    for (const c of result.cases) {
+      if (c.scores[modelId] && c.responses[modelId]) {
+        allCases.push({
+          case: c,
+          score: c.scores[modelId],
+          response: c.responses[modelId],
+          result
+        })
+      }
+    }
+  }
+  
+  // Sort by score (highest first)
+  allCases.sort((a, b) => b.score.total - a.score.total)
+  
+  // Take top 2 cases
+  const topCases = allCases.slice(0, 2)
+  
+  if (topCases.length === 0) return ''
+  
+  let html = `
+    <div class="card" style="border-left: 4px solid #27ae60;">
+      <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: #27ae60;">⭐ Best Performance</h2>
+      <p style="color: #7f8c8d; margin-bottom: 1.5rem;">Showing top ${topCases.length} cases by score</p>`
+  
+  for (const {case: c, score, response} of topCases) {
+    const scorePercent = (score.total / 10) * 100
+    html += `
+      <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 style="font-size: 1.1rem; color: #2c3e50;">${c.case_id}</h3>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">${score.total.toFixed(1)}/10</div>
+        </div>
+        
+        <div style="margin: 1rem 0;">
+          <strong style="color: #7f8c8d;">📝 Prompt:</strong>
+          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">${escapeHtml(c.prompt)}</pre>
+        </div>
+        
+        <div style="margin: 1rem 0;">
+          <strong style="color: #7f8c8d;">📋 Criteria:</strong>
+          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">${escapeHtml(c.criteria)}</pre>
+        </div>
+        
+        <div style="margin: 1rem 0;">
+          <strong style="color: #7f8c8d;">💬 Model Response:</strong>
+          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>${escapeHtml(response.text)}</code></pre>
+        </div>
+        
+        <div style="margin: 1rem 0;">
+          <strong style="color: #7f8c8d;">⚖️ Judge Reasoning:</strong>
+          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">${escapeHtml(score.reasoning)}</div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
+          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
+            <div style="font-size: 0.85rem; color: #7f8c8d;">Accuracy</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">${score.accuracy}/10</div>
+          </div>
+          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
+            <div style="font-size: 0.85rem; color: #7f8c8d;">Completeness</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">${score.completeness}/10</div>
+          </div>
+          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
+            <div style="font-size: 0.85rem; color: #7f8c8d;">Conciseness</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">${score.conciseness}/10</div>
+          </div>
+          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
+            <div style="font-size: 0.85rem; color: #7f8c8d;">Latency</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">${Math.round(response.latency_ms)}ms</div>
+          </div>
+        </div>
+      </div>`
+  }
+  
+  html += `</div>`
+  return html
 }
