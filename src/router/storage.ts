@@ -12,7 +12,7 @@ import Database from 'better-sqlite3';
 import type { TaskRun, ModelPerformance, UserPreference, RouterConfig, TaskCategory } from './types.js';
 
 export class RouterStorage {
-  private db: Database.Database;
+  db: Database.Database;
 
   constructor(dbPath: string, private config: RouterConfig) {
     this.db = new Database(dbPath);
