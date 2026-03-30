@@ -1,6 +1,7 @@
 import OpenAI from 'openai'
 import type { ModelConfig, JudgeConfig, JudgeScore } from '../types/index.js'
 import { callOpenClaw, type OpenClawConfig } from '../providers/openclaw.js'
+import { callSubAgent, type SubAgentConfig } from '../providers/subagent.js'
 
 const judgeClientCache = new Map<string, OpenAI>()
 
@@ -81,6 +82,10 @@ export async function judgeResponse(
   // Route to OpenClaw if provider is openclaw
   if (judgeModel.provider === 'openclaw') {
     const result = await callOpenClaw(judgePrompt, judgeModel as OpenClawConfig)
+    text = result.text
+  } else if (judgeModel.provider === 'subagent') {
+    // Route to sub-agent if provider is subagent
+    const result = await callSubAgent(judgePrompt, judgeModel as SubAgentConfig)
     text = result.text
   } else {
     // Standard OpenAI-compatible path

@@ -1,0 +1,513 @@
+name: Python Coding Excellence
+description: Comprehensive Python script evaluation - data processing, API clients, CLI tools, error handling
+
+cases:
+  # Data processing fundamentals
+  - id: python-json-processing
+    prompt: |
+      Write a Python script that:
+      1. Reads a JSON file containing a list of users
+      2. Filters users where age >= 18 and status == "active"
+      3. Sorts by registration_date (newest first)
+      4. Writes top 20 to output.json
+      
+      Include error handling for file operations and invalid data.
+    
+    criteria: |
+      MUST HAVE:
+      - json.load() with file handling
+      - List comprehension or filter() for both conditions
+      - sorted() with lambda/key function and reverse=True
+      - json.dump() with proper formatting
+      - try/except for FileNotFoundError and JSONDecodeError
+      - Handles missing fields gracefully
+      
+      QUALITY:
+      - Clear variable names
+      - Proper Python conventions (snake_case)
+      - Type hints if used
+      - No bare excepts
+    
+    tags: [python, data-processing, json, fundamentals]
+
+  # API client with error handling
+  - id: python-api-client
+    prompt: |
+      Create a Python function that fetches data from a REST API with retry logic:
+      
+      ```python
+      def fetch_with_retry(url: str, max_retries: int = 3) -> dict:
+          """
+          Fetch JSON data from URL with exponential backoff retry.
+          Raises exception after max_retries failed attempts.
+          """
+          pass  # implement this
+      ```
+      
+      Requirements:
+      - Use requests library
+      - Retry on network errors and 5xx status codes
+      - Exponential backoff (1s, 2s, 4s)
+      - Don't retry on 4xx errors
+      - Log each attempt
+    
+    criteria: |
+      MUST HAVE:
+      - requests.get() or equivalent
+      - for loop or while loop for retries
+      - response.raise_for_status() or status code check
+      - Exception handling for requests.RequestException
+      - time.sleep() with exponential backoff (2**attempt)
+      - Returns response.json()
+      - Raises exception after max_retries
+      
+      QUALITY:
+      - Status code checking (only retry 5xx)
+      - Clean error messages
+      - Type hints
+      - Proper logging
+    
+    tags: [python, api, requests, retry-logic, networking]
+
+  # File system operations
+  - id: python-file-batch-rename
+    prompt: |
+      Write a Python script that batch renames files in a directory:
+      - Find all .txt files
+      - Rename them from "report_YYYY-MM-DD.txt" to "YYYYMMDD_report.txt"
+      - Skip files that don't match pattern
+      - Print summary of renamed files
+      
+      Use pathlib, not os.path.
+    
+    criteria: |
+      MUST HAVE:
+      - pathlib.Path usage (not os.path)
+      - .glob('*.txt') or .iterdir() with filtering
+      - regex to extract date components
+      - Path.rename() method
+      - Validation before rename (don't break on bad filenames)
+      - Print or return list of changes
+      
+      QUALITY:
+      - Handles edge cases (file already exists)
+      - Clear error messages
+      - Dry-run option mentioned or implemented
+      - Type hints
+    
+    tags: [python, filesystem, pathlib, regex]
+
+  # CLI tool with argparse
+  - id: python-cli-tool
+    prompt: |
+      Create a CLI tool that analyzes a CSV file:
+      
+      ```bash
+      python analyze.py data.csv --column price --operation mean
+      ```
+      
+      Support operations: mean, median, sum, count
+      Include --help output and error handling.
+    
+    criteria: |
+      MUST HAVE:
+      - argparse.ArgumentParser setup
+      - Positional argument for filename
+      - --column and --operation flags
+      - csv.DictReader or pandas.read_csv
+      - Implementation of all 4 operations
+      - if __name__ == '__main__' guard
+      - Error handling for missing file/column
+      
+      QUALITY:
+      - Help text for each argument
+      - Type validation for operation
+      - Clean output formatting
+      - Handles empty file or no data
+    
+    tags: [python, cli, argparse, csv]
+
+  # Data validation and cleaning
+  - id: python-data-validation
+    prompt: |
+      Write a function that validates and cleans user data:
+      
+      ```python
+      def validate_user(data: dict) -> dict:
+          """
+          Validate user data and return cleaned version.
+          
+          Rules:
+          - email: required, must contain @
+          - age: optional, must be 0-120 if present
+          - name: required, strip whitespace
+          - tags: optional list, remove duplicates
+          
+          Raises ValueError with clear message if validation fails.
+          """
+          pass
+      ```
+    
+    criteria: |
+      MUST HAVE:
+      - Check for required fields (raise ValueError if missing)
+      - Email validation (contains '@' and '.')
+      - Age range check (0-120)
+      - String strip() for name
+      - List deduplication for tags (set conversion)
+      - Raise ValueError with specific field mentioned
+      - Returns dict with cleaned data
+      
+      QUALITY:
+      - Separate validation checks (not all in one if)
+      - Clear error messages ("email must contain @")
+      - Preserve fields not being validated
+      - Type hints
+    
+    tags: [python, validation, data-cleaning]
+
+  # Async HTTP requests
+  - id: python-async-batch
+    prompt: |
+      Write an async function that fetches multiple URLs concurrently:
+      
+      ```python
+      async def fetch_all(urls: list[str]) -> list[dict]:
+          """
+          Fetch all URLs concurrently using aiohttp.
+          Return list of responses in same order as input.
+          Handle individual failures gracefully.
+          """
+          pass
+      ```
+      
+      Use aiohttp and asyncio.gather().
+    
+    criteria: |
+      MUST HAVE:
+      - async def function signature
+      - aiohttp.ClientSession usage
+      - asyncio.gather() or asyncio.create_task()
+      - Returns list in same order as input
+      - Handles exceptions per request (not crash all)
+      - await session.get(url)
+      - Proper session cleanup (async with)
+      
+      QUALITY:
+      - return_exceptions=True in gather() or try/except per task
+      - Type hints with list[dict]
+      - Clear error handling
+      - Async context manager for session
+    
+    tags: [python, async, aiohttp, concurrency]
+
+  # Context manager implementation
+  - id: python-context-manager
+    prompt: |
+      Implement a context manager for timing code execution:
+      
+      ```python
+      with Timer("API call"):
+          response = fetch_data()
+      # Should print: "API call took 1.23s"
+      ```
+      
+      Include proper __enter__ and __exit__ methods.
+    
+    criteria: |
+      MUST HAVE:
+      - Class with __enter__ and __exit__ methods
+      - time.time() or time.perf_counter() for timing
+      - Store start time in __enter__
+      - Calculate duration in __exit__
+      - Print formatted output with label
+      - Return self from __enter__
+      - Proper __exit__ signature (exc_type, exc_val, exc_tb)
+      
+      QUALITY:
+      - Format duration to 2 decimal places
+      - Handle exceptions (return False to propagate)
+      - Optional: make it a decorator too
+      - Type hints
+    
+    tags: [python, context-manager, timing, best-practices]
+
+  # List comprehension & generators
+  - id: python-comprehensions
+    prompt: |
+      Write a function that processes a large log file efficiently:
+      
+      ```python
+      def extract_errors(logfile: str) -> list[dict]:
+          """
+          Extract ERROR lines from log, parse timestamp and message.
+          Return list of {timestamp, message} dicts.
+          
+          Log format: "2024-01-15 10:30:45 ERROR Failed to connect"
+          
+          Must handle files too large to fit in memory.
+          """
+          pass
+      ```
+    
+    criteria: |
+      MUST HAVE:
+      - Generator or yield for memory efficiency
+      - File iteration (not .read() all at once)
+      - Filter for lines containing "ERROR"
+      - String split or regex to parse timestamp and message
+      - Returns or yields dicts with timestamp and message keys
+      - with open() context manager
+      
+      QUALITY:
+      - Generator expression or yield (memory efficient)
+      - Clear parsing logic
+      - Handles malformed lines gracefully
+      - Type hints
+    
+    tags: [python, generators, file-processing, memory-efficient]
+
+  # Error handling patterns
+  - id: python-error-handling
+    prompt: |
+      Refactor this code to have better error handling:
+      
+      ```python
+      def process_user(user_id):
+          user = db.get_user(user_id)
+          profile = api.fetch_profile(user.email)
+          result = calculate_score(profile.data)
+          return result
+      ```
+      
+      Handle: missing user, API failures, invalid data, calculation errors.
+    
+    criteria: |
+      MUST HAVE:
+      - Check if user exists (if user is None)
+      - try/except around API call (requests.RequestException or similar)
+      - try/except around calculate_score (ValueError or similar)
+      - Specific exception types (not bare except)
+      - Return None or raise with clear message on error
+      - OR use Optional return type and handle each None
+      
+      QUALITY:
+      - Separate try/except blocks for different operations
+      - Log errors appropriately
+      - Clear error messages
+      - Early returns for error cases
+      - Type hints with Optional
+    
+    tags: [python, error-handling, best-practices]
+
+  # Testing with fixtures
+  - id: python-pytest
+    prompt: |
+      Write pytest tests for this function:
+      
+      ```python
+      def calculate_discount(price: float, user_type: str) -> float:
+          if price < 0:
+              raise ValueError("Price cannot be negative")
+          if user_type == "premium":
+              return price * 0.8  # 20% off
+          elif user_type == "regular":
+              return price * 0.95  # 5% off
+          else:
+              return price
+      ```
+      
+      Include happy path, edge cases, and error cases.
+    
+    criteria: |
+      MUST HAVE:
+      - At least 5 test functions
+      - Test negative price (pytest.raises)
+      - Test each user_type
+      - Test edge case (price = 0)
+      - Use assert with clear comparisons
+      - Proper test function names (test_*)
+      
+      QUALITY:
+      - Parametrized tests (pytest.mark.parametrize)
+      - Clear test names describing what they test
+      - Fixture for common test data (if applicable)
+      - Test floating point comparison carefully
+    
+    tags: [python, testing, pytest]
+
+  # Dictionary operations & data structures
+  - id: python-dict-ops
+    prompt: |
+      Write a function that merges multiple dictionaries with conflict resolution:
+      
+      ```python
+      def merge_configs(*configs: dict, strategy: str = "last") -> dict:
+          """
+          Merge multiple config dicts with conflict resolution.
+          
+          Strategies:
+          - "first": keep first value seen
+          - "last": keep last value seen
+          - "sum": sum numeric values
+          
+          Raises ValueError for invalid strategy.
+          """
+          pass
+      ```
+    
+    criteria: |
+      MUST HAVE:
+      - *configs parameter for variable args
+      - result = {} initialization
+      - Iterate through all configs
+      - Handle each strategy correctly
+      - Raise ValueError for unknown strategy
+      - Return merged dict
+      - Works with nested dicts (at least 1 level)
+      
+      QUALITY:
+      - Strategy dispatch (dict or if/elif)
+      - Type checking for "sum" strategy
+      - Clear error messages
+      - Type hints
+      - Handles empty input
+    
+    tags: [python, dictionaries, data-structures]
+
+  # Regular expressions
+  - id: python-regex-parsing
+    prompt: |
+      Write a function that parses email addresses from text:
+      
+      ```python
+      def extract_emails(text: str) -> list[str]:
+          """
+          Extract all valid email addresses from text.
+          Return unique emails in lowercase.
+          
+          Valid: user@example.com, name.last@domain.co.uk
+          Invalid: @example.com, user@, user..name@test.com
+          """
+          pass
+      ```
+    
+    criteria: |
+      MUST HAVE:
+      - import re
+      - Regex pattern for email (reasonable, not RFC perfect)
+      - re.findall() or re.finditer()
+      - Convert to lowercase
+      - Remove duplicates (set conversion)
+      - Return as list
+      - Handles no matches (empty list)
+      
+      QUALITY:
+      - Pattern handles common cases (., -, _)
+      - Sorted output for consistency
+      - No false positives for invalid formats
+      - Clear regex pattern
+    
+    tags: [python, regex, text-processing]
+
+  # Class design & OOP
+  - id: python-class-design
+    prompt: |
+      Design a Cache class with TTL (time-to-live):
+      
+      ```python
+      cache = Cache(ttl=60)  # 60 seconds
+      cache.set("key", "value")
+      cache.get("key")  # returns "value"
+      # After 60 seconds
+      cache.get("key")  # returns None
+      ```
+      
+      Include __init__, get, set, and cleanup of expired entries.
+    
+    criteria: |
+      MUST HAVE:
+      - __init__ method with ttl parameter
+      - Internal dict for storage
+      - Store timestamp with each value
+      - get() checks if expired
+      - set() stores value with current time
+      - Returns None for expired/missing keys
+      - time.time() for timestamps
+      
+      QUALITY:
+      - Type hints for methods
+      - Optional: cleanup() method to remove expired
+      - Optional: __len__ or __contains__
+      - Clear attribute names
+      - Docstrings for public methods
+    
+    tags: [python, oop, class-design, caching]
+
+  # Functional programming
+  - id: python-functional
+    prompt: |
+      Rewrite this imperative code in a functional style:
+      
+      ```python
+      def process_data(items):
+          result = []
+          for item in items:
+              if item['active']:
+                  score = item['value'] * 2
+                  if score > 10:
+                      result.append({'id': item['id'], 'score': score})
+          return sorted(result, key=lambda x: x['score'], reverse=True)
+      ```
+      
+      Use map, filter, and list comprehension.
+    
+    criteria: |
+      MUST HAVE:
+      - Single comprehension or chained map/filter
+      - No for loops
+      - Same logic (filter active, multiply by 2, filter > 10)
+      - Same output format
+      - Sorted by score descending
+      
+      QUALITY:
+      - Readable (not overly nested)
+      - Uses comprehension over map/filter if clearer
+      - Type hints
+      - No side effects
+    
+    tags: [python, functional-programming, comprehensions]
+
+  # Database operations (SQLite)
+  - id: python-sqlite
+    prompt: |
+      Write a function that queries a SQLite database safely:
+      
+      ```python
+      def get_users_by_status(db_path: str, status: str) -> list[dict]:
+          """
+          Get all users with given status from SQLite database.
+          
+          Table schema: users (id, name, email, status)
+          
+          Use parameterized queries to prevent SQL injection.
+          """
+          pass
+      ```
+    
+    criteria: |
+      MUST HAVE:
+      - import sqlite3
+      - sqlite3.connect() with context manager or try/finally
+      - Parameterized query (? placeholder)
+      - cursor.execute(query, (status,))
+      - fetchall() and convert to list of dicts
+      - Connection cleanup
+      
+      QUALITY:
+      - Row factory for dict conversion
+      - Handles database not found
+      - Type hints
+      - Clear variable names
+    
+    tags: [python, database, sqlite, security]

@@ -10,6 +10,7 @@ import OpenAI from 'openai'
 import fs from 'fs'
 import type { ModelConfig, ModelResponse, ToolDef } from '../types/index.js'
 import { callOpenClaw, type OpenClawConfig } from './openclaw.js'
+import { callSubAgent, type SubAgentConfig } from './subagent.js'
 
 const clientCache = new Map<string, OpenAI>()
 
@@ -75,6 +76,11 @@ export async function callModel(
   // Route to OpenClaw provider if specified
   if (config.provider === 'openclaw') {
     return callOpenClaw(prompt, config as OpenClawConfig)
+  }
+  
+  // Route to sub-agent provider if specified
+  if (config.provider === 'subagent') {
+    return callSubAgent(prompt, config as SubAgentConfig)
   }
   
   const baseURL = config.base_url
@@ -166,6 +172,12 @@ export async function callModelMultiTurn(
     return callOpenClaw(prompt, config as OpenClawConfig)
   }
   
+  // Route to sub-agent provider if specified
+  if (config.provider === 'subagent') {
+    const prompt = messages.map(m => `${m.role}: ${m.content}`).join('\n\n')
+    return callSubAgent(prompt, config as SubAgentConfig)
+  }
+  
   const baseURL = config.base_url
   if (!baseURL) throw new Error(`Model '${config.id}' has no base_url`)
 
@@ -223,6 +235,12 @@ export async function callModelWithTools(
   if (config.provider === 'openclaw') {
     // OpenClaw doesn't support tools in this simple provider yet
     return callOpenClaw(prompt, config as OpenClawConfig)
+  }
+  
+  // Route to sub-agent provider if specified
+  if (config.provider === 'subagent') {
+    // Sub-agents don't support explicit tools, but can use OpenClaw tools
+    return callSubAgent(prompt, config as SubAgentConfig)
   }
   
   const baseURL = config.base_url

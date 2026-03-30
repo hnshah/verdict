@@ -1,0 +1,103 @@
+name: Python Quick Test
+description: 3 essential Python coding tasks for quick evaluation
+
+cases:
+  # Data processing fundamentals
+  - id: python-json-processing
+    prompt: |
+      Write a Python script that:
+      1. Reads a JSON file containing a list of users
+      2. Filters users where age >= 18 and status == "active"
+      3. Sorts by registration_date (newest first)
+      4. Writes top 20 to output.json
+      
+      Include error handling for file operations and invalid data.
+    
+    criteria: |
+      MUST HAVE:
+      - json.load() with file handling
+      - List comprehension or filter() for both conditions
+      - sorted() with lambda/key function and reverse=True
+      - json.dump() with proper formatting
+      - try/except for FileNotFoundError and JSONDecodeError
+      - Handles missing fields gracefully
+      
+      QUALITY:
+      - Clear variable names
+      - Proper Python conventions (snake_case)
+      - Type hints if used
+      - No bare excepts
+    
+    tags: [python, data-processing, json]
+
+  # API client with error handling
+  - id: python-api-client
+    prompt: |
+      Create a Python function that fetches data from a REST API with retry logic:
+      
+      ```python
+      def fetch_with_retry(url: str, max_retries: int = 3) -> dict:
+          """
+          Fetch JSON data from URL with exponential backoff retry.
+          Raises exception after max_retries failed attempts.
+          """
+          pass  # implement this
+      ```
+      
+      Requirements:
+      - Use requests library
+      - Retry on network errors and 5xx status codes
+      - Exponential backoff (1s, 2s, 4s)
+      - Don't retry on 4xx errors
+      - Log each attempt
+    
+    criteria: |
+      MUST HAVE:
+      - requests.get() or equivalent
+      - for loop or while loop for retries
+      - response.raise_for_status() or status code check
+      - Exception handling for requests.RequestException
+      - time.sleep() with exponential backoff (2**attempt)
+      - Returns response.json()
+      - Raises exception after max_retries
+      
+      QUALITY:
+      - Status code checking (only retry 5xx)
+      - Clean error messages
+      - Type hints
+      - Proper logging
+    
+    tags: [python, api, requests, retry-logic]
+
+  # Error handling patterns
+  - id: python-error-handling
+    prompt: |
+      Refactor this code to have better error handling:
+      
+      ```python
+      def process_user(user_id):
+          user = db.get_user(user_id)
+          profile = api.fetch_profile(user.email)
+          result = calculate_score(profile.data)
+          return result
+      ```
+      
+      Handle: missing user, API failures, invalid data, calculation errors.
+    
+    criteria: |
+      MUST HAVE:
+      - Check if user exists (if user is None)
+      - try/except around API call (requests.RequestException or similar)
+      - try/except around calculate_score (ValueError or similar)
+      - Specific exception types (not bare except)
+      - Return None or raise with clear message on error
+      - OR use Optional return type and handle each None
+      
+      QUALITY:
+      - Separate try/except blocks for different operations
+      - Log errors appropriately
+      - Clear error messages
+      - Early returns for error cases
+      - Type hints with Optional
+    
+    tags: [python, error-handling]
