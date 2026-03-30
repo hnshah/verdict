@@ -83,6 +83,14 @@ export const AssertionSchema = z.object({
 })
 export type Assertion = z.infer<typeof AssertionSchema>
 
+export const JudgeStyleEnum = z.enum(['standard', 'cot_classify'])
+
+export const CotChoiceSchema = z.object({
+  letter: z.string(),
+  score: z.number(),
+})
+export type CotChoice = z.infer<typeof CotChoiceSchema>
+
 export const EvalCaseSchema = z.object({
   id: z.string(),
   description: z.string().optional(),
@@ -115,6 +123,12 @@ export const EvalCaseSchema = z.object({
   expected_args: z.record(z.unknown()).optional(),
   judge_type: z.enum(['llm', 'reference', 'keyword']).default('llm'),
   max_tokens: z.number().optional(),
+  // judge_style: 'standard' uses direct JSON scoring (default), 'cot_classify' uses chain-of-thought
+  // reasoning followed by a letter choice mapped to a score band (more accurate for open-ended tasks)
+  judge_style: JudgeStyleEnum.default('standard'),
+  // cot_choices: letter-to-score mapping for cot_classify, e.g. [{letter: "A", score: 0}, ...]
+  // Defaults to [A=0, B=2, C=5, D=8, E=10] if not specified
+  cot_choices: z.array(CotChoiceSchema).optional(),
 })
 export type EvalCase = z.infer<typeof EvalCaseSchema>
 
@@ -127,6 +141,7 @@ export const EvalPackSchema = z.object({
   // Pack-level defaults applied to JSONL cases that don't specify these fields
   scorer: z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex']).optional(),
   criteria: z.string().optional(),
+  judge_style: JudgeStyleEnum.optional(),
 })
 export type EvalPack = z.infer<typeof EvalPackSchema>
 

@@ -4,7 +4,7 @@ import crypto from 'crypto'
 import { execSync } from 'child_process'
 import type { Config, EvalPack, RunResult, ModelSummary, CaseResult, Checkpoint, JudgeScore, Assertion } from '../types/index.js'
 import { callModel, callModelMultiTurn, callModelWithTools } from '../providers/compat.js'
-import { judgeResponse } from '../judge/llm.js'
+import { judgeResponse, judgeResponseCot } from '../judge/llm.js'
 import { scoreDeterministic, isDeterministic, scoreToolCall } from '../judge/deterministic.js'
 import { detectHardware, toRunResultFormat } from './hardware.js'
 
@@ -313,6 +313,8 @@ export async function runEvals(
           score = scoreToolCall(resp.tool_calls, evalCase.expected_tool ?? '', evalCase.expected_args)
         } else if (usesDeterministic) {
           score = scoreDeterministic(evalCase.scorer, resp.text, evalCase.expected, evalCase.schema, evalCase.choices, evalCase.scorer_code)!
+        } else if (evalCase.judge_style === 'cot_classify') {
+          score = await judgeResponseCot(judgeModel, config.judge, evalCase.prompt, evalCase.criteria, resp.text, evalCase.cot_choices)
         } else {
           score = await judgeResponse(judgeModel, config.judge, evalCase.prompt, evalCase.criteria, resp.text)
         }
