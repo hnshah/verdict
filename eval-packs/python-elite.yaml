@@ -1,0 +1,481 @@
+name: Python Elite Coding Assessment
+description: 11/10 tier Python evaluation - production-grade code, real-world complexity, professional standards
+
+metadata:
+  difficulty: elite
+  estimated_time: 60_minutes
+  pass_score: 8.0
+  elite_score: 9.5
+
+cases:
+  # 1. DISTRIBUTED TASK QUEUE
+  - id: python-distributed-queue
+    prompt: |
+      Design and implement a distributed task queue system in Python:
+      
+      Requirements:
+      - Redis-backed queue (redis-py library)
+      - Worker pool with graceful shutdown
+      - Task retry with exponential backoff
+      - Dead letter queue for failed tasks
+      - Health check endpoint
+      - Monitoring/metrics
+      
+      Core classes needed:
+      - TaskQueue: enqueue, dequeue, acknowledge
+      - Worker: process tasks with timeout
+      - RetryPolicy: handle backoff logic
+      
+      Handle: network failures, worker crashes, poison pills
+    
+    criteria: |
+      ARCHITECTURE (3 points):
+      - Clean separation: Queue, Worker, RetryPolicy classes
+      - Redis connection pooling
+      - Proper abstraction layers
+      
+      RELIABILITY (3 points):
+      - Graceful shutdown (SIGTERM handling)
+      - Transaction safety (Redis MULTI/EXEC)
+      - Idempotency checks
+      - Dead letter queue after max retries
+      
+      ERROR HANDLING (2 points):
+      - Redis connection failures
+      - Task timeout enforcement
+      - Poison pill detection
+      - Circuit breaker pattern
+      
+      CODE QUALITY (2 points):
+      - Type hints throughout
+      - Comprehensive docstrings
+      - Clean variable names
+      - Proper logging
+      - No race conditions
+    
+    expected: |
+      Production-ready task queue with:
+      - Multi-worker concurrency
+      - Retry logic (1s, 2s, 4s, 8s, 16s)
+      - Metrics (processed, failed, retried)
+      - Clean shutdown (finish current, reject new)
+      - Redis pipeline optimization
+    
+    tags: [distributed-systems, redis, concurrency, production, elite]
+
+  # 2. HIGH-PERFORMANCE DATA PIPELINE
+  - id: python-data-pipeline
+    prompt: |
+      Build a high-performance data processing pipeline:
+      
+      Input: 1GB CSV file with user events (user_id, event_type, timestamp, metadata)
+      
+      Pipeline stages:
+      1. Stream CSV (don't load all into memory)
+      2. Parse and validate each record
+      3. Aggregate by user_id (count events, calculate metrics)
+      4. Sort by total_events descending
+      5. Write top 10K users to Parquet
+      
+      Constraints:
+      - Memory efficient (max 100MB overhead)
+      - Process 1M rows/second on M3 Ultra
+      - Handle malformed rows gracefully
+      - Progress reporting every 100K rows
+      
+      Use: pandas, pyarrow, multiprocessing
+    
+    criteria: |
+      PERFORMANCE (3 points):
+      - Streaming CSV read (not pd.read_csv all at once)
+      - Batch processing (chunk size optimization)
+      - Multiprocessing for CPU-bound work
+      - Efficient aggregation (not naive loop)
+      
+      MEMORY EFFICIENCY (2 points):
+      - Generator-based pipeline
+      - Chunked processing
+      - Memory profiling awareness
+      - No unnecessary data copies
+      
+      DATA QUALITY (2 points):
+      - Schema validation
+      - Null handling
+      - Type coercion
+      - Error records logged
+      
+      PRODUCTION READINESS (3 points):
+      - Progress bar (tqdm)
+      - Metrics (rows/sec, errors, memory)
+      - Graceful error handling
+      - Resumable from checkpoint
+      - Output validation
+    
+    expected: |
+      Pipeline that:
+      - Processes 1M rows in <1 second
+      - Uses <100MB memory regardless of input size
+      - Handles malformed data
+      - Produces valid Parquet output
+      - Logs comprehensive metrics
+    
+    tags: [data-engineering, performance, pandas, parquet, elite]
+
+  # 3. ASYNC WEB SCRAPER WITH RATE LIMITING
+  - id: python-async-scraper
+    prompt: |
+      Build a production-grade async web scraper:
+      
+      Requirements:
+      - Scrape product data from paginated API
+      - Rate limit: 100 requests/minute
+      - Retry failed requests (5xx, timeout)
+      - Parse HTML/JSON responses
+      - Store results in SQLite
+      - Respect robots.txt
+      - User-agent rotation
+      - Proxy support
+      
+      Handle:
+      - Rate limit exceeded (429)
+      - Connection timeouts
+      - Malformed responses
+      - Duplicate detection
+      
+      Use: aiohttp, asyncio, beautifulsoup4, sqlite3
+    
+    criteria: |
+      CONCURRENCY (3 points):
+      - async/await throughout
+      - Semaphore for rate limiting
+      - Connection pooling
+      - Graceful backpressure
+      
+      RELIABILITY (3 points):
+      - Exponential backoff retry
+      - Circuit breaker (stop after N failures)
+      - Deduplication (don't re-scrape)
+      - Checkpoint/resume support
+      
+      RESPECTFUL SCRAPING (2 points):
+      - robots.txt parser
+      - User-agent rotation
+      - Rate limit compliance
+      - Polite delays
+      
+      CODE QUALITY (2 points):
+      - Clean async context managers
+      - Type hints
+      - Comprehensive error handling
+      - Structured logging
+      - Metrics (success rate, latency)
+    
+    expected: |
+      Scraper that:
+      - Maintains exactly 100 req/min
+      - Retries intelligently
+      - Never duplicates
+      - Respects robots.txt
+      - Produces clean SQLite database
+      - Logs all errors with context
+    
+    tags: [async, scraping, rate-limiting, production, elite]
+
+  # 4. ROBUST API CLIENT WITH OAUTH2
+  - id: python-oauth2-client
+    prompt: |
+      Implement a production-grade OAuth2 API client:
+      
+      Requirements:
+      - OAuth2 authorization code flow
+      - Token refresh before expiry
+      - Thread-safe token storage
+      - Request retry with backoff
+      - Response caching (5 min TTL)
+      - Rate limit handling (429)
+      - Request signing (HMAC)
+      - Comprehensive logging
+      
+      Client should:
+      - Auto-refresh expired tokens
+      - Cache responses intelligently
+      - Handle all HTTP error codes
+      - Provide clean async/sync APIs
+      - Support pagination
+      
+      Use: requests-oauthlib, cachetools, threading
+    
+    criteria: |
+      OAUTH IMPLEMENTATION (3 points):
+      - Correct authorization code flow
+      - Token refresh logic
+      - Secure token storage
+      - Thread-safe access
+      
+      RELIABILITY (3 points):
+      - Retry with exponential backoff
+      - Circuit breaker pattern
+      - Timeout handling
+      - Connection pooling
+      
+      CACHING (2 points):
+      - TTL-based cache
+      - Cache key generation
+      - Cache invalidation
+      - Cache hit/miss metrics
+      
+      API DESIGN (2 points):
+      - Clean method signatures
+      - Type hints
+      - Context manager support
+      - Pagination abstraction
+      - Comprehensive docstrings
+    
+    expected: |
+      Client that:
+      - Never makes request with expired token
+      - Caches aggressively
+      - Retries intelligently
+      - Thread-safe
+      - Production-ready error handling
+      - Metrics (requests, cache hits, errors)
+    
+    tags: [oauth, api-client, caching, threading, elite]
+
+  # 5. REAL-TIME METRICS AGGREGATOR
+  - id: python-metrics-aggregator
+    prompt: |
+      Build a real-time metrics aggregation system:
+      
+      Input: Stream of metric events (name, value, tags, timestamp)
+      Output: Per-minute aggregates (count, sum, min, max, p50, p95, p99)
+      
+      Requirements:
+      - Sliding window aggregation (last 60 seconds)
+      - Low latency (<10ms per event)
+      - Thread-safe (multiple producers)
+      - Memory bounded (max 10MB)
+      - Percentile estimation (t-digest)
+      - Export to Prometheus format
+      
+      Handle:
+      - High throughput (100K events/sec)
+      - Out-of-order events
+      - Tag cardinality explosion
+      - Memory pressure
+      
+      Use: collections, threading, heapq
+    
+    criteria: |
+      PERFORMANCE (4 points):
+      - O(1) or O(log n) insertion
+      - Efficient sliding window
+      - Lock-free where possible
+      - Memory pooling
+      - No GC pressure
+      
+      CORRECTNESS (3 points):
+      - Accurate percentiles
+      - Thread-safe updates
+      - Handle out-of-order
+      - Proper window boundaries
+      
+      PRODUCTION FEATURES (3 points):
+      - Prometheus exporter
+      - Cardinality limits
+      - Memory alerts
+      - Metrics about metrics
+      - Clean shutdown
+    
+    expected: |
+      Aggregator that:
+      - Handles 100K events/sec
+      - <10ms p99 latency
+      - Accurate percentiles (t-digest)
+      - Bounded memory
+      - Prometheus-compatible output
+      - No data loss on shutdown
+    
+    tags: [metrics, performance, threading, algorithms, elite]
+
+  # 6. DATABASE MIGRATION FRAMEWORK
+  - id: python-db-migrations
+    prompt: |
+      Design a database migration framework like Alembic/Flyway:
+      
+      Features:
+      - Version tracking (applied migrations)
+      - Forward/rollback support
+      - Transaction safety
+      - Multiple database support (SQLite, Postgres)
+      - Dry-run mode
+      - Migration validation
+      - Dependency resolution
+      
+      Migration format:
+      ```python
+      def upgrade(conn):
+          conn.execute("CREATE TABLE users ...")
+      
+      def downgrade(conn):
+          conn.execute("DROP TABLE users")
+      ```
+      
+      Handle: failed migrations, partial applies, concurrent execution
+    
+    criteria: |
+      ARCHITECTURE (3 points):
+      - Clean migration discovery
+      - Version ordering (semantic)
+      - Dependency graph
+      - Plugin system for DB backends
+      
+      SAFETY (3 points):
+      - Transaction per migration
+      - Rollback on failure
+      - Lock table (prevent concurrent)
+      - Checksum validation
+      
+      FEATURES (2 points):
+      - Dry-run mode
+      - Migration generation
+      - Status reporting
+      - Squashing old migrations
+      
+      CODE QUALITY (2 points):
+      - Type hints
+      - Comprehensive tests implied
+      - Clear error messages
+      - Logging
+      - Documentation
+    
+    expected: |
+      Framework that:
+      - Never leaves DB in inconsistent state
+      - Prevents concurrent migrations
+      - Validates migration files
+      - Supports multiple DBs
+      - Rollback works reliably
+      - Clear status reporting
+    
+    tags: [database, migrations, transactions, architecture, elite]
+
+  # 7. MACHINE LEARNING INFERENCE SERVER
+  - id: python-ml-inference
+    prompt: |
+      Build a production ML inference server (FastAPI):
+      
+      Requirements:
+      - Load model once at startup (pickle/ONNX)
+      - /predict endpoint (batch support)
+      - Request validation (pydantic)
+      - Response caching
+      - Rate limiting (per IP)
+      - Metrics (latency, throughput)
+      - Health checks
+      - Graceful shutdown
+      
+      Performance targets:
+      - <50ms p95 latency
+      - 1000 req/sec
+      - Batch processing for efficiency
+      
+      Use: FastAPI, pydantic, prometheus_client
+    
+    criteria: |
+      API DESIGN (2 points):
+      - RESTful endpoints
+      - Pydantic models
+      - Proper status codes
+      - Error responses
+      
+      PERFORMANCE (3 points):
+      - Model loaded once (not per request)
+      - Batch inference
+      - Connection pooling
+      - Async where beneficial
+      
+      PRODUCTION FEATURES (3 points):
+      - Prometheus metrics
+      - Health/readiness checks
+      - Rate limiting
+      - Request validation
+      - Response caching
+      
+      CODE QUALITY (2 points):
+      - Type hints throughout
+      - Clean separation (routes, models, inference)
+      - Comprehensive logging
+      - Configuration management
+    
+    expected: |
+      Server that:
+      - Serves <50ms p95
+      - Handles 1K req/sec
+      - Never crashes on bad input
+      - Exports Prometheus metrics
+      - Graceful shutdown
+      - Production-ready
+    
+    tags: [fastapi, ml, production, performance, elite]
+
+  # 8. EVENT SOURCING IMPLEMENTATION
+  - id: python-event-sourcing
+    prompt: |
+      Implement an event sourcing system:
+      
+      Components:
+      - Event store (append-only log)
+      - Aggregate (domain entity)
+      - Command handler
+      - Event replay
+      - Snapshot support (every N events)
+      
+      Example aggregate: BankAccount
+      - Commands: Deposit, Withdraw
+      - Events: Deposited, Withdrawn
+      - Invariants: Balance >= 0
+      
+      Requirements:
+      - Optimistic concurrency (version checking)
+      - Event serialization (JSON)
+      - Snapshot optimization
+      - Query: current state from events
+      
+      Handle: concurrent writes, replay performance, storage growth
+    
+    criteria: |
+      ARCHITECTURE (3 points):
+      - Clean event store abstraction
+      - Aggregate base class
+      - Command/Event separation
+      - Snapshot strategy
+      
+      CORRECTNESS (3 points):
+      - Optimistic concurrency control
+      - Invariant enforcement
+      - Event ordering guarantee
+      - Idempotency
+      
+      PERFORMANCE (2 points):
+      - Snapshot loading
+      - Efficient replay
+      - Batch event writes
+      - Memory management
+      
+      CODE QUALITY (2 points):
+      - Type hints
+      - Clean domain model
+      - Comprehensive docstrings
+      - Test-friendly design
+    
+    expected: |
+      System that:
+      - Replays 10K events in <100ms
+      - Prevents concurrent write conflicts
+      - Enforces business rules
+      - Snapshots every 100 events
+      - Never loses events
+      - Query aggregates efficiently
+    
+    tags: [event-sourcing, ddd, architecture, patterns, elite]
