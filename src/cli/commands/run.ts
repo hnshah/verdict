@@ -146,7 +146,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   const spinner = ora({ prefixText: '  ', text: 'Starting...', stream: opts.json ? process.stderr : process.stdout }).start()
   let result
   try {
-    result = await runEvals(config, packs, onProgress, opts.resume, categoryFilter)
+    result = await runEvals(config, packs, onProgress, opts.resume, categoryFilter, true) // preload enabled
     spinner.succeed('Done')
   } catch (err) {
     spinner.fail(chalk.red(err instanceof Error ? err.message : String(err)))

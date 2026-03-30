@@ -7,6 +7,7 @@ import { callModel, callModelMultiTurn, callModelWithTools } from '../providers/
 import { judgeResponse, judgeResponseCot } from '../judge/llm.js'
 import { scoreDeterministic, isDeterministic, scoreToolCall } from '../judge/deterministic.js'
 import { detectHardware, toRunResultFormat } from './hardware.js'
+import { preloadModels } from './preload.js'
 
 /**
  * Detect environment information
@@ -194,7 +195,8 @@ export async function runEvals(
   packs: EvalPack[],
   onProgress?: (msg: string) => void,
   resume?: boolean,
-  categoryFilter?: string[]
+  categoryFilter?: string[],
+  preload: boolean = true
 ): Promise<RunResult> {
   const configHash = computeConfigHash(config)
   const log = onProgress ?? (() => {})
@@ -202,6 +204,11 @@ export async function runEvals(
     categoryFilter ? p.cases.filter(c => c.category !== undefined && categoryFilter.includes(c.category)) : p.cases
   )
   const modelIds = config.models.map(m => m.id)
+
+  // Pre-load models if enabled
+  if (preload) {
+    await preloadModels(config.models, false)
+  }
 
   // Resume from checkpoint if requested
   let checkpoint: Checkpoint | null = null

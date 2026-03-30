@@ -6,7 +6,26 @@ Comprehensive evaluation suites for testing model capabilities.
 
 ## Available Packs
 
-### 🐍 python-coding.yaml (NEW!)
+### 🎯 general-workflow.yaml (NEW!)
+**8 cases** | Real-world daily tasks
+
+**Coverage:**
+- Research (persona generation, JTBD scoring)
+- Coding (TypeScript functions, debugging)
+- Analysis (pattern extraction, statistics)
+- Speed tests (quick Python/analysis tasks)
+
+**Difficulty:** Easy to Medium  
+**Best for:** Validating models for daily work (not academic benchmarks)
+
+**Usage:**
+```bash
+verdict run -c config.yaml -p eval-packs/general-workflow.yaml
+```
+
+---
+
+### 🐍 python-coding.yaml
 **15 cases** | Python scripting excellence
 
 **Coverage:**

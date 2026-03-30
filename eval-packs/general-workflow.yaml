@@ -1,0 +1,153 @@
+name: "General Workflow Tasks"
+description: "Real-world tasks across research, coding, and analysis - not academic benchmarks"
+
+cases:
+  # Research Tasks
+  - id: persona-generation
+    prompt: |
+      Create a realistic B2B SaaS product manager persona. Include:
+      - Demographics (age, location, company size)
+      - Job context (responsibilities, team structure)
+      - Pain points (3-4 specific frustrations)
+      - Goals (what they're trying to achieve)
+      - Tech stack preferences
+      
+      Make it realistic, not generic. Base on actual PMM patterns.
+    
+    criteria: |
+      MUST HAVE:
+      - Specific demographics (not "30-40" but actual age)
+      - Named frustrations (not "communication issues")
+      - Realistic company context
+      - Believable technical preferences
+      
+      QUALITY:
+      - Feels like a real person
+      - Details are consistent
+      - Not stereotypical/cliché
+    
+    tags: [research, personas, easy]
+  
+  - id: outcome-importance-rating
+    prompt: |
+      You're a product manager evaluating an AI coding assistant.
+      
+      Rate the importance of this outcome (0-10):
+      "Minimize the time it takes to understand what code dependencies are required"
+      
+      Explain your reasoning in 1-2 sentences.
+    
+    criteria: |
+      MUST HAVE:
+      - Rating between 0-10
+      - Clear reasoning
+      - Considers PM perspective
+      
+      QUALITY:
+      - Reasoning reflects real priorities
+      - Not generic ("important for efficiency")
+      - Shows understanding of PM needs
+    
+    tags: [research, jtbd, easy]
+  
+  # Coding Tasks
+  - id: typescript-function
+    prompt: |
+      Write a TypeScript function that:
+      - Takes an array of objects with { id: string, score: number }
+      - Returns the top N items by score
+      - Handles edge cases (empty array, N > length)
+      - Include type definitions and JSDoc
+    
+    criteria: |
+      MUST HAVE:
+      - Correct TypeScript syntax
+      - Proper type definitions
+      - Edge case handling
+      - JSDoc comments
+      
+      QUALITY:
+      - Clean, readable code
+      - Appropriate variable names
+      - Efficient implementation
+    
+    tags: [coding, typescript, easy]
+  
+  - id: debug-analysis
+    prompt: |
+      A Node.js eval script keeps dying silently after 40 minutes.
+      pmset logs show: "caffeinate ClientDied" at exact timestamp.
+      The command used: `caffeinate -i npm run dev -- run --config eval.yaml`
+      
+      What's the root cause and how do you fix it?
+    
+    criteria: |
+      MUST HAVE:
+      - Identifies caffeinate -i limitation
+      - Suggests -dims flags
+      - Explains system sleep vs idle sleep
+      
+      QUALITY:
+      - Shows understanding of macOS sleep
+      - Provides verification method
+      - Suggests prevention strategy
+    
+    tags: [coding, debugging, medium]
+  
+  # Analysis Tasks
+  - id: pattern-extraction
+    prompt: |
+      Given this data from user testing:
+      - User A: Failed at signup (couldn't find pricing)
+      - User B: Failed at signup (confused by integration options)
+      - User C: Failed at signup (needed to know if it works with their CI)
+      - User D: Completed signup (existing customer)
+      - User E: Failed at signup (wanted to see trust indicators)
+      
+      What's the core pattern across failures?
+    
+    criteria: |
+      MUST HAVE:
+      - Identifies common thread
+      - Distinguishes from D (success case)
+      - Actionable insight
+      
+      QUALITY:
+      - Not surface-level ("signup is confusing")
+      - Shows analytical thinking
+      - Suggests root cause
+    
+    tags: [analysis, patterns, medium]
+  
+  - id: ci-calculation
+    prompt: |
+      Dataset: 50 users tested a feature
+      - 36 succeeded (72%)
+      - 14 failed (28%)
+      
+      Calculate the 95% confidence interval for the success rate.
+      Show your work.
+    
+    criteria: |
+      MUST HAVE:
+      - Correct CI formula
+      - Shows calculation steps
+      - Final interval (lower, upper)
+      
+      QUALITY:
+      - Uses proper statistical method
+      - Interprets result correctly
+      - Clear explanation
+    
+    tags: [analysis, statistics, medium]
+  
+  # Speed Test
+  - id: quick-code
+    prompt: "Write a Python function that reverses a string"
+    criteria: "Working code, handles edge cases"
+    tags: [coding, python, easy]
+  
+  - id: quick-analysis
+    prompt: "List 3 ways to validate if a homepage is clear to first-time visitors"
+    criteria: "Specific methods, not generic ('ask users')"
+    tags: [analysis, research, easy]
