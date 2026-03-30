@@ -15,6 +15,7 @@ import { publishCommand } from './commands/publish.js'
 import { leaderboardCommand } from './commands/leaderboard.js'
 import { reportCommand } from './commands/report.js'
 import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } from './commands/eval.js'
+import { contributeCommand } from './commands/contribute.js'
 import { dashboardGenerateCommand, dashboardValidateCommand, dashboardPreviewCommand, dashboardServeCommand, dashboardDeployCommand } from './commands/dashboard.js'
 
 const program = new Command()
@@ -241,5 +242,15 @@ dashboard
   .option('-r, --results <dir>', 'Results directory', './results')
   .option('-o, --output <dir>', 'Output directory for deploy artifacts', './dashboard/published')
   .action(dashboardDeployCommand)
+
+program
+  .command('contribute')
+  .description('Upload a result JSON to the shared dashboard repo (no git required)')
+  .requiredOption('-r, --result <file>', 'Path to result JSON file')
+  .option('--repo <owner/repo>', 'Target GitHub repo', 'hnshah/verdict')
+  .option('--token <token>', 'GitHub PAT with Contents write permission (or set GITHUB_TOKEN)')
+  .option('--author <name>', 'Bot name shown in commit message')
+  .option('--dry-run', 'Show what would be uploaded without doing it')
+  .action(contributeCommand)
 
 program.parse()
