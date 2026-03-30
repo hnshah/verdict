@@ -19,16 +19,12 @@
  * console.log(result.summary)
  * ```
  */
-export { loadConfig, loadEvalPack } from './core/config.js'
-export { runEvals } from './core/runner.js'
-export { judgeResponse } from './judge/llm.js'
-export { scoreDeterministic } from './judge/deterministic.js'
-export { VerdictRouter } from './router/index.js'
 
 // ─── Core runner ─────────────────────────────────────────────────────────────
 export { runEvals, computeConfigHash, loadCheckpoint, getCheckpointPath } from './core/runner.js'
 
 // ─── Config + pack loader ─────────────────────────────────────────────────────
+export { loadConfig, loadEvalPack } from './core/config.js'
 
 // ─── Eval registry ──────────────────────────────────────────────────────────
 export {
@@ -44,10 +40,12 @@ export {
 export type { Registry } from './core/registry.js'
 
 // ─── Judges ──────────────────────────────────────────────────────────────────
+export {
   judgeResponse,
   clearJudgeClientCache,
 } from './judge/llm.js'
 
+export {
   scoreJson,
   scoreExact,
   scoreContains,
@@ -63,7 +61,11 @@ export type { Registry } from './core/registry.js'
 // ─── Reporters ───────────────────────────────────────────────────────────────
 export { generateMarkdownReport } from './reporter/markdown.js'
 
+// ─── Router ──────────────────────────────────────────────────────────────────
+export { VerdictRouter } from './router/index.js'
+
 // ─── Database ────────────────────────────────────────────────────────────────
+export {
   getDb,
   initSchema,
   saveRunResult,
