@@ -10,6 +10,7 @@ import OpenAI from 'openai'
 import fs from 'fs'
 import type { ModelConfig, ModelResponse, ToolDef } from '../types/index.js'
 import { callOpenClaw, type OpenClawConfig } from './openclaw.js'
+import { log as vlog } from '../utils/logger.js'
 
 const clientCache = new Map<string, OpenAI>()
 
@@ -97,12 +98,6 @@ export async function callModel(
     }
   }
 
-  const debug = process.env['VERDICT_DEBUG'] === '1'
-
-  if (debug) {
-    process.stderr.write(`[debug] callModel ${config.id} (${config.model}) → ${baseURL}\n`)
-    process.stderr.write(`[debug] prompt: ${typeof messageContent === 'string' ? messageContent.slice(0, 200) : '[vision]'}\n`)
-  }
   const messages: OpenAI.ChatCompletionMessageParam[] = []
   if (systemPrompt) {
     messages.push({ role: 'system', content: systemPrompt })
@@ -110,6 +105,14 @@ export async function callModel(
   messages.push({ role: 'user', content: messageContent })
 
   try {
+    const requestBody = {
+      model: config.model,
+      messages: [{ role: 'user', content: typeof messageContent === 'string' ? messageContent : '[multipart content]' }],
+      max_tokens: config.max_tokens,
+      temperature: 0.0,
+    }
+    vlog('debug', `callModel ${config.id}: request`, JSON.stringify(requestBody))
+
     const response = await client.chat.completions.create({
       model: config.model,
       messages,
@@ -126,17 +129,12 @@ export async function callModel(
         + (output_tokens / 1_000_000) * config.cost_per_1m_output
       : 0
 
-    if (debug) {
-      process.stderr.write(`[debug] response: ${text.slice(0, 200)} (${input_tokens}in/${output_tokens}out, ${latency_ms}ms)\n`)
-    }
+    vlog('debug', `callModel ${config.id}: response`, text)
 
     return { model_id: config.id, text, input_tokens, output_tokens, latency_ms, cost_usd }
 
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err)
-    if (debug) {
-      process.stderr.write(`[debug] error from ${config.id}: ${msg}\n`)
-    }
     // If vision content failed, retry without image
     if (imagePath && attempt === 0) {
       console.warn(`[verdict] Vision not supported by ${config.model}, retrying text-only`)
@@ -181,6 +179,8 @@ export async function callModelMultiTurn(
   allMessages.push(...messages)
 
   try {
+    vlog('debug', `callModelMultiTurn ${config.id}: ${messages.length} messages`, JSON.stringify(messages))
+
     const response = await client.chat.completions.create({
       model: config.model,
       messages: allMessages as OpenAI.ChatCompletionMessageParam[],
@@ -196,6 +196,8 @@ export async function callModelMultiTurn(
       ? (input_tokens / 1_000_000) * config.cost_per_1m_input
         + (output_tokens / 1_000_000) * config.cost_per_1m_output
       : 0
+
+    vlog('debug', `callModelMultiTurn ${config.id}: response`, text)
 
     return { model_id: config.id, text, input_tokens, output_tokens, latency_ms, cost_usd }
 
@@ -249,6 +251,8 @@ export async function callModelWithTools(
   messages.push({ role: 'user', content: prompt })
 
   try {
+    vlog('debug', `callModelWithTools ${config.id}: prompt + ${tools.length} tool(s)`, JSON.stringify({ prompt, tools: tools.map(t => t.name) }))
+
     const response = await client.chat.completions.create({
       model: config.model,
       messages,
@@ -272,6 +276,8 @@ export async function callModelWithTools(
       name: tc.function.name,
       arguments: JSON.parse(tc.function.arguments) as Record<string, unknown>,
     }))
+
+    vlog('debug', `callModelWithTools ${config.id}: response`, JSON.stringify({ text, tool_calls }))
 
     return { model_id: config.id, text, input_tokens, output_tokens, latency_ms, cost_usd, tool_calls }
 
