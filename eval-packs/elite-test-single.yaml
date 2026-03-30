@@ -1,0 +1,37 @@
+name: Elite Test - Single Case
+description: Test one elite case to verify system works
+
+cases:
+  - id: python-distributed-queue
+    prompt: |
+      Design and implement a distributed task queue system in Python:
+      
+      Requirements:
+      - Redis-backed queue (redis-py library)
+      - Worker pool with graceful shutdown
+      - Task retry with exponential backoff
+      - Dead letter queue for failed tasks
+      
+      Core classes needed:
+      - TaskQueue: enqueue, dequeue, acknowledge
+      - Worker: process tasks with timeout
+      - RetryPolicy: handle backoff logic
+    
+    criteria: |
+      ARCHITECTURE (3 points):
+      - Clean separation: Queue, Worker, RetryPolicy classes
+      - Redis connection pooling
+      - Proper abstraction layers
+      
+      RELIABILITY (3 points):
+      - Graceful shutdown (SIGTERM handling)
+      - Task retry logic
+      - Dead letter queue after max retries
+      
+      CODE QUALITY (4 points):
+      - Type hints throughout
+      - Comprehensive docstrings
+      - Clean variable names
+      - Proper error handling
+    
+    tags: [distributed-systems, redis, elite]

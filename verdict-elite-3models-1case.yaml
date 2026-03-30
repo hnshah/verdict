@@ -1,0 +1,35 @@
+name: Elite - 3 Models 1 Case Test
+
+models:
+  - id: phi4-14b
+    provider: ollama
+    model: phi4:14b
+    base_url: http://localhost:11434/v1
+    api_key: none
+  
+  - id: qwen3-coder-30b
+    provider: ollama
+    model: qwen3-coder:30b
+    base_url: http://localhost:11434/v1
+    api_key: none
+  
+  - id: qwen2.5-coder-14b
+    provider: ollama
+    model: qwen2.5-coder:14b
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+judge:
+  model: phi4-14b
+  temperature: 0.0
+
+packs:
+  - ./eval-packs/elite-test-single.yaml  # Just 1 case
+
+settings:
+  parallel: 1
+  timeout_ms: 300000
+
+output:
+  dir: ./results
+  format: json

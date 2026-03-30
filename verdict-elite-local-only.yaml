@@ -1,0 +1,48 @@
+name: Elite Python - Local Models Only
+
+models:
+  # CHAMPION: CLI building king
+  - id: phi4-14b
+    provider: ollama
+    model: phi4:14b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [elite, local, microsoft]
+  
+  # ARMY WINNER: 30B specialist
+  - id: qwen3-coder-30b
+    provider: ollama
+    model: qwen3-coder:30b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [elite, local, specialist, heavyweight]
+  
+  # STRONG PERFORMER: 14B coding specialist
+  - id: qwen2.5-coder-14b
+    provider: ollama
+    model: qwen2.5-coder:14b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [elite, local, specialist]
+
+judge:
+  # Use local model as judge too
+  model: phi4-14b
+  temperature: 0.0
+  rubric:
+    architecture: 0.30
+    reliability: 0.30
+    performance: 0.20
+    code_quality: 0.20
+
+packs:
+  - ./eval-packs/python-elite.yaml
+
+settings:
+  parallel: 1
+  timeout_ms: 300000
+  retry_on_failure: false
+
+output:
+  dir: ./results
+  format: json

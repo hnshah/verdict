@@ -1,0 +1,23 @@
+name: Elite Test - Single Case
+
+models:
+  - id: phi4-14b
+    provider: ollama
+    model: phi4:14b
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+judge:
+  model: phi4-14b
+  temperature: 0.0
+
+packs:
+  - ./eval-packs/elite-test-single.yaml
+
+settings:
+  parallel: 1
+  timeout_ms: 180000
+
+output:
+  dir: ./results
+  format: json

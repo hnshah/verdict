@@ -1,0 +1,54 @@
+name: Elite Python Hardcore - Top Local Models Only
+
+models:
+  # CHAMPION: CLI building king
+  - id: phi4-14b
+    provider: ollama
+    model: phi4:14b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [elite, local, microsoft]
+  
+  # ARMY WINNER: 30B specialist
+  - id: qwen3-coder-30b
+    provider: ollama
+    model: qwen3-coder:30b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [elite, local, specialist, heavyweight]
+  
+  # STRONG PERFORMER: 14B coding specialist
+  - id: qwen2.5-coder-14b
+    provider: ollama
+    model: qwen2.5-coder:14b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [elite, local, specialist]
+  
+  # API BASELINE: Claude Sonnet
+  - id: sonnet
+    provider: openclaw
+    model: anthropic/claude-sonnet-4-5
+    agent_id: ren
+    tags: [elite, api, premium]
+
+judge:
+  model: sonnet
+  temperature: 0.0
+  rubric:
+    architecture: 0.30    # Clean design, separation of concerns
+    reliability: 0.30     # Error handling, edge cases
+    performance: 0.20     # Efficiency, optimization
+    code_quality: 0.20    # Professional standards
+
+packs:
+  - ./eval-packs/python-elite.yaml
+
+settings:
+  parallel: 1           # Sequential - these are HARD
+  timeout_ms: 300000    # 5 min per case (complex!)
+  retry_on_failure: false
+
+output:
+  dir: ./results
+  format: json

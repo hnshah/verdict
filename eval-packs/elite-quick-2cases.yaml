@@ -1,0 +1,45 @@
+name: Elite Quick - 2 Critical Cases
+description: Test 2 hardest elite cases for faster results
+
+cases:
+  # CASE 1: Distributed systems (already tested, phi4 won)
+  - id: python-distributed-queue
+    prompt: |
+      Design and implement a distributed task queue system in Python:
+      
+      Requirements:
+      - Redis-backed queue (redis-py library)
+      - Worker pool with graceful shutdown
+      - Task retry with exponential backoff
+      - Dead letter queue for failed tasks
+      
+      Core classes: TaskQueue, Worker, RetryPolicy
+    
+    criteria: |
+      ARCHITECTURE (3 points): Clean separation, Redis connection pooling
+      RELIABILITY (3 points): Graceful shutdown, retry logic, dead letter queue  
+      CODE QUALITY (4 points): Type hints, docstrings, error handling
+    
+    tags: [distributed-systems, redis, elite]
+
+  # CASE 2: ML inference (specialist's best shot)
+  - id: python-ml-inference
+    prompt: |
+      Build a production ML inference server:
+      
+      Requirements:
+      - FastAPI application
+      - Model loading/versioning (multiple models)
+      - Batch inference endpoint
+      - Health check + metrics
+      - Request validation
+      - Async processing
+      
+      Support: Loading sklearn/torch models, batching requests, monitoring
+    
+    criteria: |
+      ARCHITECTURE (3 points): Clean API design, model management, async
+      PERFORMANCE (3 points): Batch processing, efficient inference, caching
+      PRODUCTION (4 points): Validation, error handling, monitoring, versioning
+    
+    tags: [ml, fastapi, production, elite]
