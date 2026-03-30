@@ -14,6 +14,9 @@ import {
   // config
   loadConfig,
   loadEvalPack,
+  // programmatic API
+  runEvals,
+  VerdictRouter,
   // judges
   judgeResponse,
   clearJudgeClientCache,
@@ -324,15 +327,8 @@ describe('parseSince', () => {
 
   it('returns null for invalid input', () => {
     expect(parseSince('invalid')).toBeNull()
-import { describe, it, expect } from 'vitest'
-import {
-  loadConfig,
-  loadEvalPack,
-  runEvals,
-  judgeResponse,
-  scoreDeterministic,
-  VerdictRouter,
-} from '../index.js'
+  })
+})
 
 describe('programmatic API exports', () => {
   it('exports loadConfig as a function', () => {

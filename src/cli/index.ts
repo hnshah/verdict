@@ -239,7 +239,7 @@ dashboard
   .description('Generate dashboard for deployment')
   .option('--to <target>', 'Deployment target (github-pages, cloudflare-pages)', 'github-pages')
   .option('-r, --results <dir>', 'Results directory', './results')
-  .option('-o, --output <dir>', 'Output directory for deploy artifacts', './published')
+  .option('-o, --output <dir>', 'Output directory for deploy artifacts', './dashboard/published')
   .action(dashboardDeployCommand)
 
 program.parse()
