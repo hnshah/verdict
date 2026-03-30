@@ -324,5 +324,88 @@ describe('parseSince', () => {
 
   it('returns null for invalid input', () => {
     expect(parseSince('invalid')).toBeNull()
+import { describe, it, expect } from 'vitest'
+import {
+  loadConfig,
+  loadEvalPack,
+  runEvals,
+  judgeResponse,
+  scoreDeterministic,
+  VerdictRouter,
+} from '../index.js'
+
+describe('programmatic API exports', () => {
+  it('exports loadConfig as a function', () => {
+    expect(typeof loadConfig).toBe('function')
+  })
+
+  it('exports loadEvalPack as a function', () => {
+    expect(typeof loadEvalPack).toBe('function')
+  })
+
+  it('exports runEvals as a function', () => {
+    expect(typeof runEvals).toBe('function')
+  })
+
+  it('exports judgeResponse as a function', () => {
+    expect(typeof judgeResponse).toBe('function')
+  })
+
+  it('exports scoreDeterministic as a function', () => {
+    expect(typeof scoreDeterministic).toBe('function')
+  })
+
+  it('exports VerdictRouter as a class', () => {
+    expect(typeof VerdictRouter).toBe('function')
+    expect(VerdictRouter.prototype).toBeDefined()
+  })
+})
+
+describe('scoreDeterministic via public API', () => {
+  it('scores exact match', () => {
+    const result = scoreDeterministic('exact', 'hello', 'hello')
+    expect(result).not.toBeNull()
+    expect(result!.total).toBe(10)
+  })
+
+  it('scores exact mismatch', () => {
+    const result = scoreDeterministic('exact', 'hello', 'world')
+    expect(result).not.toBeNull()
+    expect(result!.total).toBe(0)
+  })
+
+  it('scores contains match', () => {
+    const result = scoreDeterministic('contains', 'hello world', 'world')
+    expect(result).not.toBeNull()
+    expect(result!.total).toBe(10)
+  })
+
+  it('scores valid JSON', () => {
+    const result = scoreDeterministic('json', '{"key": "value"}')
+    expect(result).not.toBeNull()
+    expect(result!.total).toBe(10)
+  })
+
+  it('scores regex match', () => {
+    const result = scoreDeterministic('regex', 'abc123', '\\d+')
+    expect(result).not.toBeNull()
+    expect(result!.total).toBe(10)
+  })
+
+  it('returns null for unknown scorer', () => {
+    const result = scoreDeterministic('unknown', 'test')
+    expect(result).toBeNull()
+  })
+})
+
+describe('loadConfig error handling', () => {
+  it('throws on missing config file', () => {
+    expect(() => loadConfig('/nonexistent/path.yaml')).toThrow('Config not found')
+  })
+})
+
+describe('loadEvalPack error handling', () => {
+  it('throws on missing pack file', () => {
+    expect(() => loadEvalPack('/nonexistent/pack.yaml', '/tmp')).toThrow('Eval pack not found')
   })
 })
