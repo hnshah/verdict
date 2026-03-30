@@ -16,13 +16,17 @@ Based on benchmarks:
 import argparse
 import json
 import time
-from pathlib import Path
-from typing import List, Dict, Any, Optional
 from concurrent.futures import ProcessPoolExecutor, as_completed
-import torch
-from transformers import LightOnOcrForConditionalGeneration, LightOnOcrProcessor
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import pypdfium2 as pdfium
+import torch
 from PIL import Image
+from transformers import (
+    LightOnOcrForConditionalGeneration,
+    LightOnOcrProcessor,
+)
 
 
 class OCRBatchProcessor:
