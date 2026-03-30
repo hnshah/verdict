@@ -1,9 +1,31 @@
 node_modules/
 dist/
-results/private/
+coverage/
+
+# Local results (generated at runtime)
+results/
+!results/public/
+
+# Local dev artifacts
 .env
 *.log
 .DS_Store
+.verdict-shadow-logs.jsonl
+benchmark-results.json
 
-# Track public results for publishing
-!results/public/
+# Agent working notes (never commit these)
+SPRINT-CONTRACT*.md
+COMPILED-BUILD-FIX.md
+FEEDBACK-RESPONSE.md
+DOCUMENTATION-UPGRADE-COMPLETE.md
+README-OLD.md
+SESSION-SUMMARY.md
+ELITE-*.md
+LIGHTON-*.md
+OVERNIGHT-*.md
+CLI-BENCHMARK-ANALYSIS.md
+CLI-MODEL-PREDICTIONS.md
+CLI-RESULTS-DEEP-DIVE.md
+VERA-FEATURES.md
+VERA-DASHBOARD-INTEGRATION.md
+analysis-template.md
