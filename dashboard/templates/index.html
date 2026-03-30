@@ -312,23 +312,43 @@
     // Dashboard data is injected here by the generate command
     const DASHBOARD_DATA = /*__DASHBOARD_DATA__*/null;
 
-    function init() {
-      if (!DASHBOARD_DATA) {
+    async function loadDashboardData() {
+      // If data was baked in by `verdict dashboard generate`, use it directly
+      if (DASHBOARD_DATA) return DASHBOARD_DATA;
+
+      // Try fetching dashboard-data.json from same directory (for static deployments)
+      try {
+        const url = new URL('dashboard-data.json', window.location.href);
+        const resp = await fetch(url.toString());
+        if (resp.ok) {
+          return await resp.json();
+        }
+      } catch (_) {
+        // fetch failed, fall through to error state
+      }
+      return null;
+    }
+
+    async function init() {
+      const data = await loadDashboardData();
+      if (!data) {
         document.getElementById('scoreboard').innerHTML =
-          '<p style="text-align:center;color:#6c757d;padding:2rem;">No data loaded. Generate dashboard data with: <code>verdict dashboard generate</code></p>';
+          '<p style="text-align:center;color:#6c757d;padding:2rem;">No data loaded. ' +
+          'Either run <code>verdict dashboard generate</code> or place a <code>dashboard-data.json</code> ' +
+          'file alongside this HTML.</p>';
         return;
       }
 
-      renderMeta(DASHBOARD_DATA.meta);
-      renderScoreboard(DASHBOARD_DATA);
-      renderCases(DASHBOARD_DATA);
-      setupFilters(DASHBOARD_DATA);
+      renderMeta(data.meta);
+      renderScoreboard(data);
+      renderCases(data);
+      setupFilters(data);
     }
 
     function renderMeta(meta) {
       const bar = document.getElementById('metaBar');
       bar.innerHTML = [
-        `<span class="chip">${meta.total_models || Object.keys(DASHBOARD_DATA.models).length} models</span>`,
+        `<span class="chip">${meta.total_models || 0} models</span>`,
         `<span class="chip">${meta.total_cases} cases</span>`,
         `<span class="chip">${meta.total_runs} runs</span>`,
         `<span class="chip">Updated: ${meta.last_updated}</span>`

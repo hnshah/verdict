@@ -40,3 +40,28 @@ To serve on GitHub Pages, push this directory and set Pages source to `/dashboar
 
 Edit `dashboard/templates/index.html` to modify the dashboard UI.
 The template uses vanilla JS + Tailwind CDN — no build step required.
+## How Data Gets Into the Dashboard
+
+The dashboard supports two data loading modes:
+
+### Mode 1: Baked-in data (default)
+`verdict dashboard generate` injects data directly into the HTML at build time.
+The resulting HTML is fully self-contained — no server needed, works offline.
+```bash
+verdict dashboard generate --output my-results.html
+```
+
+### Mode 2: Dynamic load (for static deployments like Cloudflare Pages)
+Deploy the template HTML + a `dashboard-data.json` file in the same directory.
+The dashboard will fetch the JSON automatically on load.
+```bash
+# Generate the data file
+verdict dashboard generate  # outputs dashboard-data.json
+
+# Then deploy both files:
+# dashboard/templates/index.html → your hosting root
+# dashboard-data.json → same directory as index.html
+```
+
+This is the right approach for Vera-style Cloudflare Pages deployments where
+you want to update data without redeploying the HTML template.
