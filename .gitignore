@@ -28,3 +28,17 @@ CLI-RESULTS-DEEP-DIVE.md
 VERA-FEATURES.md
 VERA-DASHBOARD-INTEGRATION.md
 analysis-template.md
+# Root-level bot session artifacts (never commit these)
+*-ANALYSIS.md
+*-OPPORTUNITIES.md
+*-PLAN.md
+*-SETUP.md
+*-COMPLETE.md
+*-FINDINGS.md
+*-RESULTS.md
+*-COMMENT*.md
+ocr-*.py
+model-router.py
+pyproject.toml
+*.sh
+!scripts/*.sh
