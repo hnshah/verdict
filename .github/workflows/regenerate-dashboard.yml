@@ -1,0 +1,47 @@
+name: Regenerate Dashboard
+
+# Triggers whenever a bot contributes a new result via `verdict contribute`
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dashboard/published/*.json'
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build verdict
+        run: npm run build
+
+      - name: Generate dashboard-data.json from all contributed results
+        run: |
+          COUNT=$(ls dashboard/published/*.json 2>/dev/null | grep -v dashboard-data | wc -l | tr -d ' ')
+          echo "Regenerating dashboard from $COUNT result files..."
+          node dist/cli/index.js dashboard generate \
+            --results dashboard/published \
+            --output dashboard/published/dashboard-data.json
+          echo "✅ dashboard-data.json updated"
+
+      - name: Commit updated dashboard data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(dashboard): regenerate dashboard-data.json [skip ci]"
+          file_pattern: "dashboard/published/dashboard-data.json"
+          commit_user_name: "Verdict Dashboard Bot"
+          commit_user_email: "bot@verdict.dev"
