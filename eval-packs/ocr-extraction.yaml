@@ -1,0 +1,193 @@
+name: OCR Extraction Quality
+description: Test OCR accuracy on receipts, documents, forms, and complex layouts
+
+metadata:
+  difficulty: specialist
+  domain: vision-ocr
+  estimated_time: 20_minutes
+  requires: vision_model
+
+cases:
+  # Case 1: Receipt extraction (structured data)
+  - id: ocr-receipt-structured
+    prompt: |
+      Extract ALL text from this receipt image in structured format.
+      
+      Include:
+      - Store/business name
+      - Date and time
+      - Items with prices
+      - Totals
+      - Any reference numbers
+      
+      Output format: Clean structured text or JSON
+      
+      Image URL: https://huggingface.co/datasets/hf-internal-testing/fixtures_ocr/resolve/main/SROIE-receipt.jpeg
+    
+    criteria: |
+      ACCURACY (4 points):
+      - All text extracted correctly
+      - Numbers accurate (prices, dates, IDs)
+      - No hallucinated text
+      - No missing information
+      
+      STRUCTURE (3 points):
+      - Logical organization (header, items, totals)
+      - Reading order correct (top to bottom)
+      - Relationships preserved (item → price)
+      
+      COMPLETENESS (3 points):
+      - All fields extracted
+      - Table structure if present
+      - Formatting/layout hints
+    
+    expected: |
+      Complete extraction with:
+      - Document No: TD01167104
+      - Date: 25/12/2018 8:13:39 PM
+      - Cashier: MANIS
+      - Item: KF MODELLING CLAY KIDDY FISH
+      - Quantity: 1 PC
+      - Price: RM 9.000
+      - Amount: RM 9.00
+      - Total: RM 9.00
+    
+    tags: [ocr, receipt, structured-data, vision]
+
+  # Case 2: Invoice with table (complex layout)
+  - id: ocr-invoice-table
+    prompt: |
+      Extract the complete invoice data from this image.
+      
+      Pay special attention to:
+      - Invoice header (number, date, addresses)
+      - Line items table (description, quantity, price, amount)
+      - Subtotal, tax, total
+      - Terms/notes at bottom
+      
+      Preserve table structure where present.
+      
+      [Provide sample invoice image URL]
+    
+    criteria: |
+      ACCURACY (4 points):
+      - Header fields 100% correct
+      - All line items accurate
+      - Math adds up (subtotal + tax = total)
+      - Addresses complete
+      
+      TABLE HANDLING (3 points):
+      - Column structure preserved
+      - Row associations correct
+      - Headers identified
+      
+      FORMATTING (3 points):
+      - Currency symbols preserved
+      - Date format maintained
+      - Address line breaks logical
+    
+    tags: [ocr, invoice, tables, business-documents, vision]
+
+  # Case 3: Form with handwriting (challenging)
+  - id: ocr-handwritten-form
+    prompt: |
+      Extract data from this filled form containing both printed and handwritten text.
+      
+      Distinguish between:
+      - Pre-printed labels/fields
+      - Handwritten entries
+      
+      Output both types clearly labeled.
+      
+      [Provide form with handwriting URL]
+    
+    criteria: |
+      ACCURACY (4 points):
+      - Printed text 100% accurate
+      - Handwritten text reasonably accurate (80%+)
+      - No confusion between printed/handwritten
+      
+      FIELD ASSOCIATION (3 points):
+      - Labels matched to values
+      - Form structure preserved
+      - Checkboxes/selections identified
+      
+      READABILITY (3 points):
+      - Challenging handwriting attempted
+      - Uncertain characters marked or noted
+      - Context used for disambiguation
+    
+    tags: [ocr, handwriting, forms, challenging, vision]
+
+  # Case 4: Scientific paper (LaTeX, formulas)
+  - id: ocr-scientific-paper
+    prompt: |
+      Extract text from this scientific paper page containing:
+      - Regular paragraph text
+      - Mathematical formulas
+      - Subscripts/superscripts
+      - Special characters
+      
+      Represent formulas in LaTeX or clear text notation.
+      
+      Image: First page of arXiv paper with equations
+      
+      [Provide academic paper page URL]
+    
+    criteria: |
+      TEXT ACCURACY (3 points):
+      - Body text 100% correct
+      - Paragraph structure preserved
+      - Citations/references correct
+      
+      FORMULA HANDLING (4 points):
+      - Formulas extracted (LaTeX preferred)
+      - Subscripts/superscripts correct
+      - Special symbols accurate
+      - Inline vs display distinction
+      
+      LAYOUT (3 points):
+      - Multi-column if present
+      - Section headers identified
+      - Figure captions extracted
+    
+    tags: [ocr, academic, latex, formulas, vision]
+
+  # Case 5: Multi-column newspaper (complex layout)
+  - id: ocr-newspaper-columns
+    prompt: |
+      Extract text from this newspaper page with multiple columns.
+      
+      Requirements:
+      - Correct reading order (column by column, top to bottom)
+      - Preserve article boundaries
+      - Extract headlines with hierarchy
+      - Handle text wrapping around images
+      
+      [Provide multi-column newspaper image URL]
+    
+    criteria: |
+      READING ORDER (4 points):
+      - Columns processed in correct sequence
+      - Articles not mixed
+      - Top-to-bottom within columns
+      - Image captions in context
+      
+      LAYOUT UNDERSTANDING (3 points):
+      - Headlines larger/bold recognized
+      - Bylines identified
+      - Article separations clear
+      
+      COMPLETENESS (3 points):
+      - All text extracted
+      - No skipped columns
+      - Image captions included
+    
+    tags: [ocr, newspaper, multi-column, layout, vision]
+
+# Notes for judges:
+# - Vision models should output extracted text
+# - Compare against ground truth (provide reference OCR)
+# - Small OCR errors acceptable if overall accuracy high
+# - Structure/layout understanding is as important as raw text
+# - LightOn OCR-2-1B should be baseline/reference
