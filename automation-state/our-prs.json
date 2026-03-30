@@ -1,6 +1,6 @@
 {
   "author": "hnshah",
-  "lastChecked": "2026-03-30T22:50:00Z",
+  "lastChecked": "2026-03-30T23:39:00Z",
   "trackedPRs": [
     {
       "number": 54990,
@@ -8,9 +8,8 @@
       "title": "security(54737): sanitize group metadata to prevent prompt injection",
       "url": "https://github.com/openclaw/openclaw/pull/54990",
       "updatedAt": "2026-03-26T07:19:04Z",
-      "status": "CI_FAILED",
-      "commentsCount": 2,
-      "lastCommentAuthor": "hnshah"
+      "status": "PENDING_REVIEW",
+      "commentsCount": 2
     },
     {
       "number": 275,
@@ -27,9 +26,8 @@
       "title": "fix(telegram): add 'callback_data:' prefix to inline button callbacks",
       "url": "https://github.com/openclaw/openclaw/pull/54962",
       "updatedAt": "2026-03-26T06:35:08Z",
-      "status": "REVIEWED",
-      "commentsCount": 1,
-      "lastCommentAuthor": "greptile-apps"
+      "status": "PENDING_REVIEW",
+      "commentsCount": 1
     },
     {
       "number": 11095,
@@ -38,9 +36,7 @@
       "url": "https://github.com/pnpm/pnpm/pull/11095",
       "updatedAt": "2026-03-27T22:35:43Z",
       "status": "MAINTAINER_FEEDBACK",
-      "commentsCount": 8,
-      "lastCommentAuthor": "dasa",
-      "lastCommentDate": "2026-03-27T22:35:42Z"
+      "commentsCount": 8
     },
     {
       "number": 86,
@@ -48,10 +44,8 @@
       "title": "feat(watchlist): implement delivery webhook dispatch",
       "url": "https://github.com/mvanhorn/last30days-skill/pull/86",
       "updatedAt": "2026-03-28T15:45:51Z",
-      "status": "MAINTAINER_FEEDBACK",
-      "commentsCount": 2,
-      "lastCommentAuthor": "mvanhorn",
-      "lastCommentDate": "2026-03-28T15:45:50Z"
+      "status": "DEFERRED_V3",
+      "commentsCount": 2
     },
     {
       "number": 85,
@@ -59,10 +53,8 @@
       "title": "fix(watchlist): store HN and Polymarket findings from research runs",
       "url": "https://github.com/mvanhorn/last30days-skill/pull/85",
       "updatedAt": "2026-03-28T15:45:51Z",
-      "status": "MAINTAINER_FEEDBACK",
-      "commentsCount": 2,
-      "lastCommentAuthor": "mvanhorn",
-      "lastCommentDate": "2026-03-28T15:45:51Z"
+      "status": "DEFERRED_V3",
+      "commentsCount": 2
     },
     {
       "number": 15052,
@@ -79,9 +71,8 @@
       "title": "feat: extend scanning window from 30 to 90 days",
       "url": "https://github.com/mvanhorn/last30days-skill/pull/84",
       "updatedAt": "2026-03-25T19:56:23Z",
-      "status": "PENDING_REVIEW",
-      "commentsCount": 2,
-      "lastCommentAuthor": "hnshah"
+      "status": "DEFERRED_V3",
+      "commentsCount": 2
     },
     {
       "number": 18939,
@@ -89,9 +80,8 @@
       "title": "fix(kanban): move drag-and-drop placeholder inside innerRef container",
       "url": "https://github.com/twentyhq/twenty/pull/18939",
       "updatedAt": "2026-03-25T01:37:20Z",
-      "status": "CI_FAILED",
-      "commentsCount": 1,
-      "lastCommentAuthor": "github-actions"
+      "status": "PENDING_REVIEW",
+      "commentsCount": 1
     },
     {
       "number": 5803,
@@ -99,7 +89,7 @@
       "title": "docs: add documentation for .or() method",
       "url": "https://github.com/colinhacks/zod/pull/5803",
       "updatedAt": "2026-03-24T19:54:15Z",
-      "status": "CI_FAILED",
+      "status": "PENDING_REVIEW",
       "commentsCount": 0
     },
     {
@@ -108,7 +98,7 @@
       "title": "docs: add documentation for .and() method",
       "url": "https://github.com/colinhacks/zod/pull/5802",
       "updatedAt": "2026-03-24T19:35:05Z",
-      "status": "CI_FAILED",
+      "status": "PENDING_REVIEW",
       "commentsCount": 0
     },
     {
@@ -127,8 +117,7 @@
       "url": "https://github.com/KittenML/KittenTTS/pull/121",
       "updatedAt": "2026-03-27T02:24:26Z",
       "status": "PENDING_REVIEW",
-      "commentsCount": 2,
-      "lastCommentAuthor": "hnshah"
+      "commentsCount": 2
     },
     {
       "number": 53451,
@@ -136,9 +125,8 @@
       "title": "fix: Suppress misleading port warning for dual-stack loopback listeners",
       "url": "https://github.com/openclaw/openclaw/pull/53451",
       "updatedAt": "2026-03-24T20:15:31Z",
-      "status": "REVIEWED",
-      "commentsCount": 3,
-      "lastCommentAuthor": "hnshah"
+      "status": "PENDING_REVIEW",
+      "commentsCount": 3
     },
     {
       "number": 12746,
@@ -146,9 +134,8 @@
       "title": "fix: URL encode database credentials to handle special characters",
       "url": "https://github.com/langfuse/langfuse/pull/12746",
       "updatedAt": "2026-03-24T05:18:53Z",
-      "status": "CI_PENDING",
-      "commentsCount": 1,
-      "lastCommentAuthor": "CLAassistant"
+      "status": "PENDING_REVIEW",
+      "commentsCount": 1
     },
     {
       "number": 2747,
@@ -156,9 +143,8 @@
       "title": "Sort selected users first in filter dropdowns",
       "url": "https://github.com/basecamp/fizzy/pull/2747",
       "updatedAt": "2026-03-26T17:38:37Z",
-      "status": "REVIEWED",
-      "commentsCount": 2,
-      "lastCommentAuthor": "hnshah"
+      "status": "PENDING_REVIEW",
+      "commentsCount": 2
     },
     {
       "number": 33,
@@ -184,9 +170,8 @@
       "title": "docs: update macOS OpenCV install command (fixes #6091)",
       "url": "https://github.com/google-ai-edge/mediapipe/pull/6257",
       "updatedAt": "2026-03-23T14:42:47Z",
-      "status": "CI_FAILED",
-      "commentsCount": 1,
-      "lastCommentAuthor": "google-cla"
+      "status": "PENDING_REVIEW",
+      "commentsCount": 1
     },
     {
       "number": 97,

@@ -42,3 +42,4 @@ model-router.py
 pyproject.toml
 *.sh
 !scripts/*.sh
+automation-state/WEBHOOK-SECRET.txt
