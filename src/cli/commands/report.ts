@@ -42,7 +42,7 @@ export async function reportCommand(opts: ReportOptions): Promise<void> {
   const html = generateDetailedReport(result)
 
   // Determine output path
-  const outputPath = opts.output || path.join('docs/runs', `${result.run_id}.html`)
+  const outputPath = opts.output || path.join('dashboard/published/runs', `${result.run_id}.html`)
   
   // Ensure directory exists
   const outputDir = path.dirname(outputPath)

@@ -199,7 +199,7 @@ export async function leaderboardCommand(opts: LeaderboardOptions): Promise<void
 
   // Generate HTML if requested
   const format = opts.format || 'html'
-  const output = opts.output || (format === 'html' ? 'docs/index.html' : 'leaderboard.md')
+  const output = opts.output || (format === 'html' ? 'dashboard/published/index.html' : 'leaderboard.md')
 
   if (format === 'html') {
     const spinner2 = ora('Generating HTML...').start()

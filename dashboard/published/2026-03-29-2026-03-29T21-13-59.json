@@ -1,0 +1,267 @@
+{
+  "run_id": "2026-03-29T21-13-59",
+  "name": "Comprehensive Stress Test - ALL PACKS",
+  "timestamp": "2026-03-29T21:14:40.035Z",
+  "models": [
+    "qwen7b"
+  ],
+  "cases": [
+    {
+      "case_id": "ts-interface-1",
+      "prompt": "Create a TypeScript interface for a User with:\n- name (string, required)\n- email (string, required)\n- age (number, optional)\n- roles (array of strings, optional)\n",
+      "criteria": "Should have:\n1. Proper TypeScript syntax\n2. All fields with correct types\n3. Optional fields marked with ?\n4. Array type for roles\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "Certainly! Below is a TypeScript interface that defines the structure you've described:\n\n```typescript\ninterface User {\n    name: string;\n    email: string;\n    age?: number; // Optional property\n    roles?: string[]; // Optional array property\n}\n```\n\n### Explanation:\n- `name`: A required string.\n- `email`: A required string.\n- `age`: An optional number (denoted by the `?`).\n- `roles`: An optional array of strings (also denoted by the `?`).\n\nYou can use this interface to define and validate user objects in your TypeScript code. Here's an example of how you might create a user object using this interface:\n\n```typescript\nconst user: User = {\n    name: \"John Doe\",\n    email: \"john.doe@example.com\",\n    age: 30,\n    roles: [\"admin\", \"user\"]\n};\n\n// Or with optional properties:\nconst user2: User = {\n    name: \"Jane Smith\",\n    email: \"jane.smith@example.com\"\n};\n```\n\nThis setup ensures that any object conforming to the `User` interface will have a `name` and `email`, but may optionally include an `age` and/or `roles`.",
+          "input_tokens": 68,
+          "output_tokens": 255,
+          "latency_ms": 2583,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response accurately defines the TypeScript interface with all required and optional fields correctly specified."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "bugfix-1",
+      "prompt": "Fix this bug:\n\n```typescript\nfunction extractJson(text: string): string {\n  return text.replace(/^```json\\s*/, '').replace(/\\s*```$/, '');\n}\n```\n\nProblem: Fails when text has content before the fence like \"Here's an example:\\n```json\\n{...}\\n```\"\n",
+      "criteria": "Should:\n1. Use regex to match and extract fence content\n2. Handle text before/after fence\n3. Return extracted JSON, not modified input\n4. Use capture groups\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "The issue with your current implementation is that it removes everything up to and including the first occurrence of `^```json\\s*` and everything after the last occurrence of `\\s*```$`. This can cause problems if there are other lines before or after the JSON code block.\n\nTo handle this correctly, you should look for a specific marker (like \"JSON:\" or any unique identifier) within the text to ensure that only the intended JSON content is extracted. Here's an improved version of your function:\n\n```typescript\nfunction extractJson(text: string): string {\n  // Look for a line containing \"JSON:\" and capture everything after it until the next fence.\n  const match = text.match(/(?<=\\n)(.*?)(?=^```)/s);\n  \n  if (match) {\n    return match[0].trim();\n  } else {\n    return '';\n  }\n}\n```\n\n### Explanation:\n- `/(?<=\\n)(.*?)(?=^` - This regular expression uses a positive lookbehind `(?<=\\n)` to ensure that the match starts after a newline character, and a positive lookahead `(?=^```)` to ensure it ends before the next fence.\n  - `.*?` is a non-greedy match for any characters (except newline) between the markers.\n- `.trim()` removes leading and trailing whitespace from the extracted content.\n\n### Example Usage:\n```typescript\nconst text = `\nHere's an example:\nJSON:\n{\n  \"name\": \"John\",\n  \"age\": 30,\n  \"city\": \"New York\"\n}\n`;\n\nconsole.log(extractJson(text)); // Output: {\n//   \"name\": \"John\",\n//   \"age\": 30,\n//   \"city\": \"New York\"\n// }\n```\n\nThis approach ensures that only the content between the markers is extracted, even if there are other lines before or after the JSON block.",
+          "input_tokens": 93,
+          "output_tokens": 393,
+          "latency_ms": 3854,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 8,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 8.4,
+          "reasoning": "The response provides a correct and functional solution that addresses the criteria, but it could be more concise by removing unnecessary explanations."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "python-processing-1",
+      "prompt": "Write Python code to:\n1. Read a JSON file\n2. Filter items where status == \"active\"\n3. Sort by created_at descending\n4. Return top 10\n",
+      "criteria": "Should include:\n1. json.load() or similar\n2. List comprehension or filter()\n3. sorted() with key and reverse\n4. Slice [:10]\n5. Error handling\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "Certainly! Below is a Python script that reads a JSON file, filters the items where `status` is `\"active\"`, sorts them by `created_at` in descending order, and returns the top 10 results.\n\n```python\nimport json\n\ndef read_and_process_json(file_path):\n    # Step 1: Read the JSON file\n    with open(file_path, 'r') as file:\n        data = json.load(file)\n    \n    # Step 2: Filter items where status == \"active\"\n    active_items = [item for item in data if item.get('status') == 'active']\n    \n    # Step 3: Sort by created_at descending\n    sorted_active_items = sorted(active_items, key=lambda x: x['created_at'], reverse=True)\n    \n    # Step 4: Return top 10\n    top_10_items = sorted_active_items[:10]\n    \n    return top_10_items\n\n# Example usage:\nfile_path = 'path/to/your/json/file.json'\ntop_10_results = read_and_process_json(file_path)\nprint(top_10_results)\n```\n\n### Explanation:\n\n- **Step 1:** The script opens and reads the JSON file using `json.load()`.\n- **Step 2:** A list comprehension is used to filter out items where the `status` key equals `\"active\"`.\n- **Step 3:** The filtered items are sorted by the `created_at` field in descending order.\n- **Step 4:** The top 10 items from the sorted list are returned.\n\n### Example JSON File (`file.json`):\n\n```json\n[\n    {\"id\": 1, \"status\": \"active\", \"created_at\": \"2023-09-01T15:00:00Z\"},\n    {\"id\": 2, \"status\": \"inactive\", \"created_at\": \"2023-08-30T14:00:00Z\"},\n    {\"id\": 3, \"status\": \"active\", \"created_at\": \"2023-09-05T16:00:00Z\"},\n    {\"id\": 4, \"status\": \"active\", \"created_at\": \"2023-08-25T17:00:00Z\"},\n    {\"id\": 5, \"status\": \"inactive\", \"created_at\": \"2023-09-02T18:00:00Z\"}\n]\n```\n\n### Output:\n\n```python\n[\n    {'id': 3, 'status': 'active', 'created_at': '2023-09-05T16:00:00Z'},\n    {'id': 1, 'status': 'active', 'created_at': '2023-09-01T15:00:00Z'},\n    {'id': 4, 'status': 'active', 'created_at': '2023-08-25T17:00:00Z'}\n]\n```\n\nThis output shows the top 3 active items sorted by `created_at` in descending order. Adjust the file path and JSON structure as needed for your specific use case.",
+          "input_tokens": 67,
+          "output_tokens": 695,
+          "latency_ms": 6707,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response accurately addresses all specified criteria and is concise without padding."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "error-handling-1",
+      "prompt": "Add error handling to:\n\n```typescript\nconst data = JSON.parse(response);\nreturn data.results.map(r => r.id);\n```\n",
+      "criteria": "Should handle:\n1. JSON parse errors\n2. Missing results field\n3. Null/undefined values\n4. Return safe default or throw clear error\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "Certainly! Adding error handling is crucial to ensure that your code can gracefully handle unexpected situations, such as invalid JSON or missing `results` in the response. Here's how you can add error handling to your TypeScript code:\n\n```typescript\ntry {\n    const data = JSON.parse(response);\n    if (Array.isArray(data.results)) {\n        return data.results.map(r => r.id);\n    } else {\n        throw new Error(\"Response does not contain an array under 'results'\");\n    }\n} catch (error) {\n    console.error(\"Error parsing response:\", error);\n    // You can handle the error appropriately, e.g., by returning an empty array or throwing a custom error\n    return [];\n}\n```\n\n### Explanation:\n1. **Try-Catch Block**: The `try` block attempts to parse the JSON and process it.\n2. **Array Check**: After parsing, we check if `data.results` is an array using `Array.isArray()`. If not, we throw an error.\n3. **Error Handling**: In the `catch` block, any errors that occur during parsing are caught, logged, and handled appropriately (in this case, by returning an empty array).\n\nThis approach ensures that your code can handle both JSON parsing errors and unexpected data structures in a robust manner.",
+          "input_tokens": 55,
+          "output_tokens": 260,
+          "latency_ms": 2570,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 8,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 8.4,
+          "reasoning": "The response accurately addresses the criteria by handling JSON parse errors and missing results field, but it does not explicitly handle null/undefined values or return a safe default. It also could be more concise by combining some checks."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "test-case-1",
+      "prompt": "Write a test for this function:\n\n```typescript\nfunction scoreToolCall(\n  toolCalls: ToolCall[] | undefined,\n  expectedTool: string\n): number {\n  if (!toolCalls?.length) {\n    return expectedTool === '' ? 10 : 0;\n  }\n  return toolCalls.some(t => t.name === expectedTool) ? 10 : 0;\n}\n```\n",
+      "criteria": "Should test:\n1. No tool calls + empty expected = 10\n2. No tool calls + expected tool = 0\n3. Correct tool called = 10\n4. Wrong tool called = 0\n5. Multiple tools, one matches = 10\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "To write a test for the `scoreToolCall` function, we can use a testing framework like Jest. Below is an example of how you might set up and run tests using Jest.\n\nFirst, ensure that you have Jest installed in your project:\n\n```bash\nnpm install --save-dev jest\n```\n\nNext, create or update your test file (e.g., `scoreToolCall.test.ts`):\n\n```typescript\nimport { scoreToolCall } from './path-to-your-file';\n\ndescribe('scoreToolCall', () => {\n  test('returns 10 when expected tool is empty and no tool calls are provided', () => {\n    const result = scoreToolCall([], '');\n    expect(result).toBe(10);\n  });\n\n  test('returns 10 when the expected tool name matches one of the tool calls', () => {\n    const toolCalls = [\n      { name: 'toolA' },\n      { name: 'toolB' },\n      { name: 'expectedTool' }\n    ];\n    const result = scoreToolCall(toolCalls, 'expectedTool');\n    expect(result).toBe(10);\n  });\n\n  test('returns 0 when the expected tool name does not match any of the tool calls', () => {\n    const toolCalls = [\n      { name: 'toolA' },\n      { name: 'toolB' }\n    ];\n    const result = scoreToolCall(toolCalls, 'expectedTool');\n    expect(result).toBe(0);\n  });\n\n  test('returns 10 when expected tool is empty and there are tool calls', () => {\n    const toolCalls = [\n      { name: 'toolA' },\n      { name: 'toolB' }\n    ];\n    const result = scoreToolCall(toolCalls, '');\n    expect(result).toBe(10);\n  });\n\n  test('returns 0 when expected tool is not empty and no matching tool call exists', () => {\n    const toolCalls = [\n      { name: 'toolA' },\n      { name: 'toolB' }\n    ];\n    const result = scoreToolCall(toolCalls, 'expectedTool');\n    expect(result).toBe(0);\n  });\n});\n```\n\nMake sure to replace `./path-to-your-file` with the actual path to your file containing the `scoreToolCall` function.\n\nTo run the tests, you can use the following command:\n\n```bash\nnpx jest\n```\n\nThis will execute all the test cases and provide feedback on whether they pass or fail.",
+          "input_tokens": 112,
+          "output_tokens": 514,
+          "latency_ms": 4998,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The evaluation meets all specified criteria accurately and concisely addresses the requirements."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "refactor-1",
+      "prompt": "Refactor this to be more maintainable:\n\n```typescript\nconst stripped = text\n  .replace(/^```(?:json)?\\s*/i, '')\n  .replace(/\\s*```$/, '')\n  .trim();\n\nif (stripped.startsWith('{') || stripped.startsWith('[')) {\n  try {\n    return JSON.parse(stripped);\n  } catch { return null; }\n}\nreturn null;\n```\n",
+      "criteria": "Should:\n1. Extract to separate function\n2. Add descriptive name\n3. Add comments\n4. Handle edge cases explicitly\n5. Return type annotation\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "Certainly! To make the code more maintainable, we can break it down into smaller functions and add comments for clarity. Here's a refactored version:\n\n```typescript\nfunction stripCodeBlocks(text: string): string {\n    // Remove leading and trailing code block delimiters if present.\n    return text\n        .replace(/^```(?:json)?\\s*/i, '')\n        .replace(/\\s*```$/, '')\n        .trim();\n}\n\nfunction parseJsonIfPossible(strippedText: string): any | null {\n    // Check if the stripped text starts with a JSON object or array.\n    if (strippedText.startsWith('{') || strippedText.startsWith('[')) {\n        try {\n            return JSON.parse(strippedText);\n        } catch {\n            // If parsing fails, return null.\n            return null;\n        }\n    }\n    // Return null if the text does not start with a JSON object or array.\n    return null;\n}\n\nfunction processText(text: string): any | null {\n    const stripped = stripCodeBlocks(text);\n    return parseJsonIfPossible(stripped);\n}\n\n// Example usage:\nconst inputText = \"```json\\n{\\n  \\\"key\\\": \\\"value\\\"\\n}\\n```\";\nconst result = processText(inputText);\nconsole.log(result); // Output: { key: 'value' }\n```\n\n### Explanation:\n\n1. **`stripCodeBlocks` Function**: This function handles the removal of code block delimiters and any leading or trailing whitespace.\n2. **`parseJsonIfPossible` Function**: This function checks if the stripped text starts with a JSON object or array and attempts to parse it. If parsing fails, it returns `null`.\n3. **`processText` Function**: This is the main function that combines the above two functions to process the input text.\n\nThis refactoring makes each part of the logic more modular and easier to understand and maintain.",
+          "input_tokens": 112,
+          "output_tokens": 389,
+          "latency_ms": 3830,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The refactored code meets all the specified criteria and is accurate, complete, and concise."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "api-design-1",
+      "prompt": "Design a function signature for:\n\"Score a model's response against expected output using different scoring methods (exact, contains, LLM judge)\"\n",
+      "criteria": "Should include:\n1. Function name describes purpose\n2. Parameters for response, expected, scoring method\n3. Return type (score + reasoning)\n4. TypeScript types\n5. Optional parameters where appropriate\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "Certainly! Below is a proposed function signature for scoring a model's response against an expected output using various scoring methods:\n\n```python\ndef score_response(model_output: str, expected_output: str, scoring_method: str) -> float:\n    \"\"\"\n    Scores the model's response against the expected output based on the specified scoring method.\n\n    :param model_output: The output generated by the language model.\n    :param expected_output: The expected or correct output to compare against.\n    :param scoring_method: The method used for scoring, which can be 'exact', 'contains', or 'llm_judge'.\n    :return: A score indicating how well the model's response matches the expected output. \n             - For 'exact': 1.0 if exact match, 0.0 otherwise.\n             - For 'contains': 1.0 if expected_output is a substring of model_output, 0.0 otherwise.\n             - For 'llm_judge': A score between 0.0 and 1.0 based on the LLM's judgment (hypothetical implementation).\n    \"\"\"\n    pass\n```\n\n### Explanation:\n- **model_output**: The string output generated by the language model that needs to be scored.\n- **expected_output**: The reference or expected string against which the `model_output` is compared.\n- **scoring_method**: A string indicating the scoring method to use. It can take one of three values: `'exact'`, `'contains'`, or `'llm_judge'`.\n\n### Scoring Methods:\n1. **Exact Match (`'exact'`)**: \n   - Returns `1.0` if `model_output` is exactly equal to `expected_output`.\n   - Returns `0.0` otherwise.\n\n2. **Contains (`'contains'`)**:\n   - Returns `1.0` if `expected_output` is a substring of `model_output`.\n   - Returns `0.0` otherwise.\n\n3. **LLM Judge (`'llm_judge'`)**:\n   - This method would involve some form of judgment or evaluation by the LLM itself, possibly using natural language understanding techniques to determine how well the response matches the expected output.\n   - The return value is a float between `0.0` and `1.0`, where `1.0` indicates a perfect match.\n\n### Example Usage:\n```python\nscore = score_response(\"The quick brown fox\", \"quick brown\", 'contains')\nprint(score)  # Output: 1.0\n\nscore = score_response(\"The quick brown fox jumps over the lazy dog\", \"lazy dog\", 'exact')\nprint(score)  # Output: 0.0\n\nscore = score_response(\"The quick brown fox\", \"A quick brown fox\", 'llm_judge')\nprint(score)  # Output: 0.8 (hypothetical value)\n```\n\nThis function signature and scoring methods provide a flexible way to evaluate model responses based on different criteria, which can be useful in various applications such as natural language processing, chatbot evaluations, or general text generation tasks.",
+          "input_tokens": 57,
+          "output_tokens": 637,
+          "latency_ms": 6169,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 8,
+          "completeness": 10,
+          "conciseness": 9,
+          "total": 9,
+          "reasoning": "Accurate content and criteria addressed. Minor room for improvement in conciseness by removing unnecessary words."
+        }
+      },
+      "winner": "qwen7b"
+    },
+    {
+      "case_id": "documentation-1",
+      "prompt": "Write JSDoc for:\n\n```typescript\nfunction extractJson(text: string): string | null {\n  const match = text.match(/```(?:json)?\\s*\\n?([\\s\\S]*?)\\n?```/);\n  return match ? match[1].trim() : null;\n}\n```\n",
+      "criteria": "Should include:\n1. Description of what function does\n2. @param for text parameter\n3. @returns describing return value\n4. Examples of usage\n5. Edge cases mentioned\n",
+      "responses": {
+        "qwen7b": {
+          "model_id": "qwen7b",
+          "text": "Certainly! Below is the JSDoc comment for the provided TypeScript function:\n\n```typescript\n/**\n * Extracts JSON content enclosed in triple backticks (```) with an optional \"json\" keyword from a given string.\n *\n * @param text - The input string containing the JSON content.\n * @returns The extracted JSON content as a string, or null if no match is found.\n */\nfunction extractJson(text: string): string | null {\n  const match = text.match(/```(?:json)?\\s*\\n?([\\s\\S]*?)\\n?```/);\n  return match ? match[1].trim() : null;\n}\n```\n\n### Explanation of the JSDoc:\n- **`@param text - The input string containing the JSON content.`**: Describes the parameter `text`, which is expected to be a string that may contain JSON content enclosed in triple backticks.\n- **`@returns The extracted JSON content as a string, or null if no match is found.`**: Describes what the function returns. It will return the trimmed JSON content as a string if a match is found; otherwise, it returns `null`.\n\nThis JSDoc comment provides clear documentation for the function's purpose and expected behavior.",
+          "input_tokens": 92,
+          "output_tokens": 251,
+          "latency_ms": 2512,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen7b": {
+          "accuracy": 9,
+          "completeness": 10,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The JSDoc is accurate and complete, but it could be slightly more concise by removing unnecessary spaces."
+        }
+      },
+      "winner": "qwen7b"
+    }
+  ],
+  "summary": {
+    "qwen7b": {
+      "model_id": "qwen7b",
+      "avg_total": 9.38,
+      "avg_accuracy": 9.13,
+      "avg_completeness": 9.75,
+      "avg_conciseness": 9.13,
+      "avg_latency_ms": 4152.875,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 100,
+      "wins": 8,
+      "cases_run": 8,
+      "avg_solve_rate": 0
+    }
+  },
+  "hardware": {
+    "cpu": "Apple M3 Ultra",
+    "cpu_cores": 32,
+    "cpu_arch": "arm64",
+    "ram_gb": 256,
+    "os": "macOS",
+    "os_version": "25.3.0"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v22.22.1",
+    "provider_versions": {
+      "ollama": "0.18.3"
+    }
+  },
+  "eval_pack": {
+    "file": "eval-packs/code-generation-quality.yaml",
+    "description": "Test models on actual code generation tasks - TypeScript, Python, bug fixes",
+    "total_cases": 8
+  },
+  "judge": {
+    "model": "qwen7b",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p Code Generation Quality -m qwen7b",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "qwen7b": {
+        "provider": "ollama",
+        "model": "qwen2.5:7b",
+        "temperature": 0.7,
+        "max_tokens": 2048
+      }
+    }
+  }
+}

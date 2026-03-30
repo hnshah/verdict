@@ -2,9 +2,8 @@ node_modules/
 dist/
 coverage/
 
-# Local results (generated at runtime)
+# Local results (generated at runtime — use dashboard/published/ for committed snapshots)
 results/
-!results/public/
 
 # Local dev artifacts
 .env
