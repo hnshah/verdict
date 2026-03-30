@@ -1,5 +1,5 @@
 import OpenAI from 'openai'
-import type { ModelConfig, JudgeConfig, JudgeScore } from '../types/index.js'
+import type { ModelConfig, JudgeConfig, JudgeScore, CotChoice } from '../types/index.js'
 import { callOpenClaw, type OpenClawConfig } from '../providers/openclaw.js'
 import { callSubAgent, type SubAgentConfig } from '../providers/subagent.js'
 
@@ -131,5 +131,132 @@ export async function judgeResponse(
     conciseness,
     total,
     reasoning: typeof parsed.reasoning === 'string' ? parsed.reasoning : '',
+  }
+}
+
+// ─── Chain-of-thought classify ──────────────────────────────────────────────
+
+const DEFAULT_COT_CHOICES: CotChoice[] = [
+  { letter: 'A', score: 0 },
+  { letter: 'B', score: 2 },
+  { letter: 'C', score: 5 },
+  { letter: 'D', score: 8 },
+  { letter: 'E', score: 10 },
+]
+
+export function buildCotPrompt(
+  prompt: string,
+  criteria: string,
+  response: string,
+  choices: CotChoice[]
+): string {
+  const choiceList = choices.map(c => c.letter).join(', ')
+  const bandDesc = choices.map(c => `${c.letter} = ${c.score}/10`).join(', ')
+
+  return `You are an impartial evaluator. You do not know which AI model produced this response.
+
+Question: ${prompt}
+
+Evaluation Criteria: ${criteria}
+
+Response to evaluate:
+${response}
+
+First, reason step-by-step about the quality of the response. Consider accuracy, completeness, and conciseness relative to the criteria. Write your reasoning in plain text — do NOT output any structured format yet.
+
+After your reasoning, pick exactly one letter from [${choiceList}] that best represents the overall quality.
+The score bands are: ${bandDesc}.
+
+On the very last line of your response, output ONLY the single letter of your choice. Nothing else on that line.`
+}
+
+export function extractCotChoice(text: string, choices: CotChoice[]): CotChoice | null {
+  const validLetters = new Set(choices.map(c => c.letter.toUpperCase()))
+
+  // Look at the last non-empty line
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0)
+  if (lines.length === 0) return null
+
+  const lastLine = lines[lines.length - 1].toUpperCase()
+  // Check if last line is exactly a single valid letter
+  if (lastLine.length === 1 && validLetters.has(lastLine)) {
+    return choices.find(c => c.letter.toUpperCase() === lastLine) ?? null
+  }
+
+  // Fallback: check if last line starts with a letter followed by non-alpha (e.g. "A." or "A)")
+  const match = lastLine.match(/^([A-Z])(?:\W|$)/)
+  if (match && validLetters.has(match[1])) {
+    return choices.find(c => c.letter.toUpperCase() === match[1]) ?? null
+  }
+
+  // Last resort: scan from the end for any standalone valid letter
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const lineUpper = lines[i].toUpperCase()
+    // Match a standalone letter (word boundary on both sides)
+    for (const choice of choices) {
+      const letter = choice.letter.toUpperCase()
+      const regex = new RegExp(`\\b${letter}\\b`)
+      if (regex.test(lineUpper) && lineUpper.length <= 3) {
+        return choice
+      }
+    }
+  }
+
+  return null
+}
+
+export async function judgeResponseCot(
+  judgeModel: ModelConfig,
+  config: JudgeConfig,
+  prompt: string,
+  criteria: string,
+  response: string,
+  cotChoices?: CotChoice[]
+): Promise<JudgeScore> {
+  const choices = cotChoices && cotChoices.length > 0 ? cotChoices : DEFAULT_COT_CHOICES
+
+  let text: string
+
+  // Route to OpenClaw if provider is openclaw
+  if (judgeModel.provider === 'openclaw') {
+    const result = await callOpenClaw(buildCotPrompt(prompt, criteria, response, choices), judgeModel as OpenClawConfig)
+    text = result.text
+  } else {
+    const baseURL = judgeModel.base_url
+    if (!baseURL) throw new Error(`Judge model '${judgeModel.id}' has no base_url`)
+
+    const apiKey = judgeModel.api_key === 'none' ? 'no-key-required' : (judgeModel.api_key ?? 'ollama')
+    const client = getOrCreateJudgeClient(baseURL, apiKey)
+
+    const result = await client.chat.completions.create({
+      model: judgeModel.model,
+      messages: [{ role: 'user', content: buildCotPrompt(prompt, criteria, response, choices) }],
+      max_tokens: 1024,
+      temperature: 0.0,
+    })
+
+    text = result.choices[0]?.message?.content ?? ''
+  }
+
+  const chosen = extractCotChoice(text, choices)
+  if (!chosen) {
+    throw new Error(`cot_classify: could not extract choice from judge response. Last 200 chars: ${text.slice(-200)}`)
+  }
+
+  const score = Math.min(10, Math.max(0, chosen.score))
+
+  // Extract reasoning: everything before the final choice line
+  const lines = text.split('\n')
+  const reasoningLines = lines.slice(0, -1).filter(l => l.trim().length > 0)
+  const reasoning = reasoningLines.length > 0
+    ? reasoningLines[reasoningLines.length - 1].slice(0, 200)
+    : `Chose ${chosen.letter}`
+
+  return {
+    accuracy: score,
+    completeness: score,
+    conciseness: score,
+    total: score,
+    reasoning: `[cot_classify=${chosen.letter}] ${reasoning}`,
   }
 }
