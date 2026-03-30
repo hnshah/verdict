@@ -15,7 +15,7 @@ import { publishCommand } from './commands/publish.js'
 import { leaderboardCommand } from './commands/leaderboard.js'
 import { reportCommand } from './commands/report.js'
 import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } from './commands/eval.js'
-import { dashboardGenerateCommand, dashboardValidateCommand, dashboardPreviewCommand } from './commands/dashboard.js'
+import { dashboardGenerateCommand, dashboardValidateCommand, dashboardPreviewCommand, dashboardServeCommand, dashboardDeployCommand } from './commands/dashboard.js'
 
 const program = new Command()
 
@@ -226,5 +226,20 @@ dashboard
   .option('-i, --input <path>', 'Input dashboard-data.json file', 'dashboard-data.json')
   .option('-p, --port <n>', 'Port to listen on', '3000')
   .action(dashboardPreviewCommand)
+
+dashboard
+  .command('serve')
+  .description('Serve dashboard locally from results directory (auto-refreshes)')
+  .option('-r, --results <dir>', 'Results directory', './results')
+  .option('-p, --port <n>', 'Port to listen on', '8080')
+  .action(dashboardServeCommand)
+
+dashboard
+  .command('deploy')
+  .description('Generate dashboard for deployment')
+  .option('--to <target>', 'Deployment target (github-pages, cloudflare-pages)', 'github-pages')
+  .option('-r, --results <dir>', 'Results directory', './results')
+  .option('-o, --output <dir>', 'Output directory for deploy artifacts', './published')
+  .action(dashboardDeployCommand)
 
 program.parse()
