@@ -1,0 +1,94 @@
+name: Local Model Army - Python Coding Benchmark
+
+models:
+  # Small models (fast)
+  - id: llama3.2-3b
+    provider: ollama
+    model: llama3.2:3b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [local, small, fast]
+  
+  # Medium models (7-14B)
+  - id: qwen2.5-7b
+    provider: ollama
+    model: qwen2.5:7b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [local, medium, general]
+  
+  - id: qwen2.5-coder-14b
+    provider: ollama
+    model: qwen2.5-coder:14b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [local, medium, coding]
+  
+  - id: phi4-14b
+    provider: ollama
+    model: phi4:14b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [local, medium, microsoft]
+  
+  - id: deepseek-r1-14b
+    provider: ollama
+    model: deepseek-r1:14b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [local, medium, reasoning]
+  
+  # Large models (30-32B)
+  - id: qwen2.5-coder-32b
+    provider: ollama
+    model: qwen2.5-coder:32b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [local, large, coding]
+  
+  - id: qwen3-coder-30b
+    provider: ollama
+    model: qwen3-coder:30b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [local, large, coding]
+  
+  - id: deepseek-r1-32b
+    provider: ollama
+    model: deepseek-r1:32b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [local, large, reasoning]
+  
+  # API comparison
+  - id: haiku
+    provider: openclaw
+    model: anthropic/claude-haiku-4-5
+    agent_id: ren
+    tags: [api, fast]
+  
+  - id: sonnet
+    provider: openclaw
+    model: anthropic/claude-sonnet-4-5
+    agent_id: ren
+    tags: [api, premium]
+
+judge:
+  model: sonnet
+  temperature: 0.1
+  rubric:
+    accuracy: 0.4
+    completeness: 0.4
+    conciseness: 0.2
+
+packs:
+  - ./eval-packs/python-quick.yaml
+
+settings:
+  parallel: 4
+  timeout_ms: 180000
+  retry_on_failure: false
+
+output:
+  dir: ./results
+  format: json
