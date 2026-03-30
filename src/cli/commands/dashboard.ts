@@ -109,7 +109,7 @@ export async function dashboardGenerateCommand(opts: GenerateOptions): Promise<v
   const spinner = ora('Scanning results...').start()
 
   const files = fs.readdirSync(resultsDir)
-    .filter(f => f.endsWith('.json'))
+    .filter(f => f.endsWith('.json') && f !== 'dashboard-data.json')
 
   if (files.length === 0) {
     spinner.fail('No result JSON files found')
@@ -459,7 +459,7 @@ export async function dashboardServeCommand(opts: ServeOptions): Promise<void> {
     process.exit(1)
   }
 
-  const files = fs.readdirSync(resultsDir).filter(f => f.endsWith('.json'))
+  const files = fs.readdirSync(resultsDir).filter(f => f.endsWith('.json') && f !== 'dashboard-data.json')
   if (files.length === 0) {
     console.error(chalk.red('  ✗ No result JSON files found'))
     console.log(chalk.dim('  Run some evals first:'))
@@ -479,7 +479,7 @@ export async function dashboardServeCommand(opts: ServeOptions): Promise<void> {
 
   const server = createServer((_req, res) => {
     // Re-aggregate on every request for live reloading
-    const currentFiles = fs.readdirSync(resultsDir).filter(f => f.endsWith('.json'))
+    const currentFiles = fs.readdirSync(resultsDir).filter(f => f.endsWith('.json') && f !== 'dashboard-data.json')
     const dashboardData = aggregateResults(resultsDir, currentFiles)
     const template = fs.readFileSync(templatePath, 'utf-8')
     const html = template.replace('/*__DASHBOARD_DATA__*/null', JSON.stringify(dashboardData))
@@ -512,7 +512,7 @@ export async function dashboardDeployCommand(opts: DeployOptions): Promise<void>
 
   const spinner = ora('Generating dashboard...').start()
 
-  const files = fs.readdirSync(resultsDir).filter(f => f.endsWith('.json'))
+  const files = fs.readdirSync(resultsDir).filter(f => f.endsWith('.json') && f !== 'dashboard-data.json')
   if (files.length === 0) {
     spinner.fail('No result JSON files found')
     process.exit(1)

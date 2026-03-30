@@ -3,229 +3,541 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verdict Leaderboard - Local LLM Benchmarks</title>
-  <meta name="description" content="Real local LLM benchmarks on Apple Silicon">
+  <title>Verdict Dashboard</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
       line-height: 1.6;
-      color: #333;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-      background: #f5f5f5;
+      color: #1a1a2e;
+      background: #f0f2f5;
     }
-    header {
+    .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+
+    /* Header */
+    .header {
       text-align: center;
-      margin-bottom: 3rem;
+      padding: 2rem 0 1rem;
     }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      color: #2c3e50;
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a1a2e;
     }
-    .subtitle {
-      color: #7f8c8d;
-      font-size: 1.1rem;
+    .header .subtitle {
+      color: #6c757d;
+      font-size: 1rem;
+      margin-top: 0.25rem;
     }
-    .meta {
+    .meta-bar {
       display: flex;
       justify-content: center;
       gap: 2rem;
-      margin: 2rem 0;
-      color: #7f8c8d;
-      font-size: 0.9rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
     }
-    .card {
+    .meta-bar .chip {
       background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #495057;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      padding: 0.6rem 1rem;
+      border: 1px solid #dee2e6;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      overflow: hidden;
+      font-size: 0.9rem;
+      background: white;
+    }
+    .search-box:focus { outline: none; border-color: #4a6cf7; }
+    .filter-select {
+      padding: 0.6rem 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      background: white;
+      cursor: pointer;
+    }
+
+    /* Scoreboard */
+    .scoreboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
       margin-bottom: 2rem;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    .model-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: default;
     }
-    th, td {
-      padding: 1rem;
-      text-align: left;
+    .model-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     }
-    th {
-      background: #34495e;
-      color: white;
+    .model-card .rank {
+      font-size: 0.75rem;
       font-weight: 600;
+      color: #6c757d;
       text-transform: uppercase;
-      font-size: 0.85rem;
       letter-spacing: 0.5px;
     }
-    tr:nth-child(even) {
-      background: #f8f9fa;
+    .model-card .rank.gold { color: #f59e0b; }
+    .model-card .rank.silver { color: #6b7280; }
+    .model-card .rank.bronze { color: #b45309; }
+    .model-card .model-name {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin: 0.25rem 0 0.75rem;
     }
-    tr:hover {
-      background: #e8f4f8;
+    .model-card .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
     }
-    td:first-child {
-      font-size: 1.2rem;
+    .model-card .big-score {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #4a6cf7;
     }
-    .footer {
-      text-align: center;
-      margin-top: 3rem;
-      color: #7f8c8d;
+    .model-card .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #f0f2f5;
+    }
+    .model-card .stat-item {
+      font-size: 0.8rem;
+    }
+    .model-card .stat-item .label { color: #6c757d; }
+    .model-card .stat-item .value { font-weight: 600; color: #1a1a2e; }
+
+    /* Cases table */
+    .cases-section { margin-top: 2rem; }
+    .cases-section h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: #1a1a2e;
+    }
+    .case-card {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+    .case-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .case-header:hover { background: #f8f9fa; }
+    .case-header .case-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .case-header .case-id {
+      font-weight: 600;
+      color: #4a6cf7;
       font-size: 0.9rem;
     }
-    .footer a {
-      color: #3498db;
-      text-decoration: none;
+    .case-header .case-name {
+      color: #495057;
+      font-size: 0.9rem;
     }
-    .footer a:hover {
-      text-decoration: underline;
+    .case-header .suite-badge {
+      background: #e8eaff;
+      color: #4a6cf7;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
     }
+    .case-header .toggle { color: #6c757d; font-size: 1.2rem; }
+    .case-body {
+      display: none;
+      padding: 0 1.5rem 1.5rem;
+      border-top: 1px solid #f0f2f5;
+    }
+    .case-body.open { display: block; }
+    .case-body .prompt-section {
+      margin-top: 1rem;
+    }
+    .case-body .prompt-section .label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #6c757d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+    .case-body .prompt-text {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .run-scores {
+      margin-top: 1rem;
+    }
+    .run-scores table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .run-scores th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      background: #f8f9fa;
+      color: #6c757d;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .run-scores td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #f0f2f5;
+    }
+    .score-badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .score-high { background: #d4edda; color: #155724; }
+    .score-mid { background: #fff3cd; color: #856404; }
+    .score-low { background: #f8d7da; color: #721c24; }
+
+    /* Reasoning popover */
+    .reasoning-btn {
+      background: none;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.75rem;
+      color: #6c757d;
+      cursor: pointer;
+    }
+    .reasoning-btn:hover { background: #f8f9fa; }
+    .reasoning-text {
+      display: none;
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background: #f0f7ff;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: #495057;
+      border-left: 3px solid #4a6cf7;
+    }
+    .reasoning-text.open { display: block; }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: #6c757d;
+      font-size: 0.85rem;
+    }
+    .footer a { color: #4a6cf7; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
     @media (max-width: 768px) {
-      body { padding: 1rem; }
-      h1 { font-size: 1.8rem; }
-      .meta { flex-direction: column; gap: 0.5rem; }
-      th, td { padding: 0.75rem 0.5rem; font-size: 0.9rem; }
+      .container { padding: 1rem; }
+      .scoreboard { grid-template-columns: 1fr; }
+      .meta-bar { gap: 0.5rem; }
+      .controls { flex-direction: column; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🏆 Verdict Leaderboard</h1>
-    <p class="subtitle">Local LLM Benchmarks</p>
-    <div class="meta">
-      <span>📅 Updated: 2026-03-30</span>
-      <span>📊 4 benchmark runs</span>
-      <span>🤖 11 models</span>
+  <div class="container">
+    <div class="header">
+      <h1>Verdict Dashboard</h1>
+      <p class="subtitle">LLM Evaluation Results</p>
+      <div class="meta-bar" id="metaBar"></div>
     </div>
-  </header>
 
-  <main>
-    <div class="card">
-      <table>
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Model</th>
-            <th>Score</th>
-            <th>Latency</th>
-            <th>Runs</th>
-            <th>Cases</th>
-          </tr>
-        </thead>
-        <tbody>
-      <tr>
-        <td>🥇</td>
-        <td><strong><a href="models/qwen7b.html" style="color: #2c3e50; text-decoration: none;">qwen7b</a></strong></td>
-        <td>9.4</td>
-        <td>4153ms</td>
-        <td>2</td>
-        <td>10</td>
-      </tr>
-      <tr>
-        <td>🥈</td>
-        <td><strong><a href="models/phi4-14b.html" style="color: #2c3e50; text-decoration: none;">phi4-14b</a></strong></td>
-        <td>7.8</td>
-        <td>21481ms</td>
-        <td>2</td>
-        <td>8</td>
-      </tr>
-      <tr>
-        <td>🥉</td>
-        <td><strong><a href="models/qwen3-coder-30b.html" style="color: #2c3e50; text-decoration: none;">qwen3-coder-30b</a></strong></td>
-        <td>7.7</td>
-        <td>27042ms</td>
-        <td>2</td>
-        <td>8</td>
-      </tr>
-      <tr>
-        <td>4.</td>
-        <td><strong><a href="models/qwen2-5-coder-14b.html" style="color: #2c3e50; text-decoration: none;">qwen2.5-coder-14b</a></strong></td>
-        <td>7.6</td>
-        <td>24780ms</td>
-        <td>2</td>
-        <td>8</td>
-      </tr>
-      <tr>
-        <td>5.</td>
-        <td><strong><a href="models/qwen2-5-coder-32b.html" style="color: #2c3e50; text-decoration: none;">qwen2.5-coder-32b</a></strong></td>
-        <td>6.6</td>
-        <td>42463ms</td>
-        <td>1</td>
-        <td>3</td>
-      </tr>
-      <tr>
-        <td>6.</td>
-        <td><strong><a href="models/qwen2-5-7b.html" style="color: #2c3e50; text-decoration: none;">qwen2.5-7b</a></strong></td>
-        <td>6.2</td>
-        <td>8471ms</td>
-        <td>2</td>
-        <td>8</td>
-      </tr>
-      <tr>
-        <td>7.</td>
-        <td><strong><a href="models/sonnet.html" style="color: #2c3e50; text-decoration: none;">sonnet</a></strong></td>
-        <td>4.9</td>
-        <td>31786ms</td>
-        <td>1</td>
-        <td>3</td>
-      </tr>
-      <tr>
-        <td>8.</td>
-        <td><strong><a href="models/llama3-2-3b.html" style="color: #2c3e50; text-decoration: none;">llama3.2-3b</a></strong></td>
-        <td>4.9</td>
-        <td>13245ms</td>
-        <td>1</td>
-        <td>3</td>
-      </tr>
-      <tr>
-        <td>9.</td>
-        <td><strong><a href="models/haiku.html" style="color: #2c3e50; text-decoration: none;">haiku</a></strong></td>
-        <td>3.7</td>
-        <td>107421ms</td>
-        <td>2</td>
-        <td>8</td>
-      </tr>
-      <tr>
-        <td>10.</td>
-        <td><strong><a href="models/deepseek-r1-14b.html" style="color: #2c3e50; text-decoration: none;">deepseek-r1-14b</a></strong></td>
-        <td>2.9</td>
-        <td>40899ms</td>
-        <td>1</td>
-        <td>3</td>
-      </tr>
-      <tr>
-        <td>11.</td>
-        <td><strong><a href="models/deepseek-r1-32b.html" style="color: #2c3e50; text-decoration: none;">deepseek-r1-32b</a></strong></td>
-        <td>2.7</td>
-        <td>47175ms</td>
-        <td>1</td>
-        <td>3</td>
-      </tr>
-        </tbody>
-      </table>
+    <div class="controls">
+      <input type="text" class="search-box" id="searchBox" placeholder="Search cases...">
+      <select class="filter-select" id="suiteFilter">
+        <option value="">All Suites</option>
+      </select>
+      <select class="filter-select" id="modelFilter">
+        <option value="">All Models</option>
+      </select>
     </div>
-  </main>
 
-  <footer class="footer">
-    <div style="background: #ecf0f1; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
-      <h3 style="color: #2c3e50; margin-bottom: 1rem;">⚙️ Test Hardware</h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; text-align: left; max-width: 800px; margin: 0 auto;">
-        <div>
-          <strong>CPU:</strong><br>Apple M3 Ultra
-        </div>
-        <div>
-          <strong>Memory:</strong><br>256 GB
-        </div>
-        <div>
-          <strong>OS:</strong><br>macOS 25.3.0
-        </div>
-        
-      </div>
+    <div class="scoreboard" id="scoreboard"></div>
+
+    <div class="cases-section">
+      <h2>Test Cases (<span id="caseCount">0</span>)</h2>
+      <div id="casesList"></div>
     </div>
-    <p>Powered by <a href="https://github.com/hnshah/verdict" target="_blank">Verdict</a></p>
-    <p>Data: <a href="../results/public/" target="_blank">JSON Results</a></p>
-  </footer>
+
+    <div class="footer">
+      <p>Generated by <a href="https://github.com/hnshah/verdict" target="_blank">Verdict</a></p>
+    </div>
+  </div>
+
+  <script>
+    // Dashboard data is injected here by the generate command
+    const DASHBOARD_DATA = /*__DASHBOARD_DATA__*/null;
+
+    async function loadDashboardData() {
+      // If data was baked in by `verdict dashboard generate`, use it directly
+      if (DASHBOARD_DATA) return DASHBOARD_DATA;
+
+      // Try fetching dashboard-data.json from same directory (for static deployments)
+      try {
+        const url = new URL('dashboard-data.json', window.location.href);
+        const resp = await fetch(url.toString());
+        if (resp.ok) {
+          return await resp.json();
+        }
+      } catch (_) {
+        // fetch failed, fall through to error state
+      }
+      return null;
+    }
+
+    async function init() {
+      const data = await loadDashboardData();
+      if (!data) {
+        document.getElementById('scoreboard').innerHTML =
+          '<p style="text-align:center;color:#6c757d;padding:2rem;">No data loaded. ' +
+          'Either run <code>verdict dashboard generate</code> or place a <code>dashboard-data.json</code> ' +
+          'file alongside this HTML.</p>';
+        return;
+      }
+
+      renderMeta(data.meta);
+      renderScoreboard(data);
+      renderCases(data);
+      setupFilters(data);
+    }
+
+    function renderMeta(meta) {
+      const bar = document.getElementById('metaBar');
+      bar.innerHTML = [
+        `<span class="chip">${meta.total_models || 0} models</span>`,
+        `<span class="chip">${meta.total_cases} cases</span>`,
+        `<span class="chip">${meta.total_runs} runs</span>`,
+        `<span class="chip">Updated: ${meta.last_updated}</span>`
+      ].join('');
+    }
+
+    function renderScoreboard(data) {
+      const container = document.getElementById('scoreboard');
+      // Aggregate scores per model across all cases and runs
+      const modelScores = {};
+      for (const [modelId, modelInfo] of Object.entries(data.models)) {
+        modelScores[modelId] = { name: modelInfo.name, totalScore: 0, count: 0, totalLatency: 0, latencyCount: 0 };
+      }
+
+      for (const c of data.cases) {
+        for (const run of c.runs) {
+          for (const [modelId, score] of Object.entries(run.scores || {})) {
+            if (modelScores[modelId] && typeof score.total === 'number') {
+              modelScores[modelId].totalScore += score.total;
+              modelScores[modelId].count++;
+            }
+          }
+          for (const [modelId, resp] of Object.entries(run.responses || {})) {
+            if (modelScores[modelId] && typeof resp.latency_ms === 'number') {
+              modelScores[modelId].totalLatency += resp.latency_ms;
+              modelScores[modelId].latencyCount++;
+            }
+          }
+        }
+      }
+
+      const sorted = Object.entries(modelScores)
+        .map(([id, s]) => ({
+          id,
+          name: s.name,
+          avgScore: s.count > 0 ? s.totalScore / s.count : 0,
+          avgLatency: s.latencyCount > 0 ? s.totalLatency / s.latencyCount : 0,
+          cases: s.count
+        }))
+        .sort((a, b) => b.avgScore - a.avgScore);
+
+      container.innerHTML = sorted.map((m, i) => {
+        const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+        const rankLabel = i === 0 ? '1st' : i === 1 ? '2nd' : i === 2 ? '3rd' : `#${i + 1}`;
+        return `
+          <div class="model-card">
+            <div class="rank ${rankClass}">${rankLabel}</div>
+            <div class="model-name">${escapeHtml(m.name)}</div>
+            <div class="score-row">
+              <span class="big-score">${m.avgScore.toFixed(1)}</span>
+              <span style="color:#6c757d;font-size:0.85rem">/10</span>
+            </div>
+            <div class="stats">
+              <div class="stat-item"><span class="label">Latency</span><br><span class="value">${Math.round(m.avgLatency)}ms</span></div>
+              <div class="stat-item"><span class="label">Cases</span><br><span class="value">${m.cases}</span></div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderCases(data, searchTerm, suiteFilter, modelFilter) {
+      const container = document.getElementById('casesList');
+      let cases = data.cases;
+
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        cases = cases.filter(c =>
+          c.id.toLowerCase().includes(term) ||
+          (c.name && c.name.toLowerCase().includes(term)) ||
+          (c.prompt && c.prompt.toLowerCase().includes(term))
+        );
+      }
+      if (suiteFilter) {
+        cases = cases.filter(c => c.suite === suiteFilter);
+      }
+
+      document.getElementById('caseCount').textContent = cases.length;
+
+      container.innerHTML = cases.map((c, idx) => {
+        const allModels = Object.keys(data.models);
+        let runsHtml = '';
+
+        for (const run of c.runs) {
+          const rows = allModels
+            .filter(mid => !modelFilter || mid === modelFilter)
+            .map(mid => {
+              const score = run.scores?.[mid];
+              const resp = run.responses?.[mid];
+              if (!score && !resp) return '';
+              const total = score?.total ?? 0;
+              const cls = total >= 7 ? 'score-high' : total >= 4 ? 'score-mid' : 'score-low';
+              const reasoning = score?.reasoning || '';
+              const reasoningId = `reason-${c.id}-${run.run_id}-${mid}`.replace(/[^a-zA-Z0-9-]/g, '_');
+              return `<tr>
+                <td><strong>${escapeHtml(data.models[mid]?.name || mid)}</strong></td>
+                <td><span class="score-badge ${cls}">${total.toFixed(1)}</span></td>
+                <td>${resp?.latency_ms ? Math.round(resp.latency_ms) + 'ms' : '-'}</td>
+                <td>
+                  ${reasoning ? `<button class="reasoning-btn" onclick="toggleReasoning('${reasoningId}')">View</button>
+                  <div class="reasoning-text" id="${reasoningId}">${escapeHtml(reasoning)}</div>` : '-'}
+                </td>
+              </tr>`;
+            }).filter(Boolean).join('');
+
+          if (rows) {
+            runsHtml += `
+              <div class="run-scores">
+                <div style="font-size:0.75rem;color:#6c757d;margin-bottom:0.5rem">Run: ${escapeHtml(run.run_id)}</div>
+                <table>
+                  <thead><tr><th>Model</th><th>Score</th><th>Latency</th><th>Reasoning</th></tr></thead>
+                  <tbody>${rows}</tbody>
+                </table>
+              </div>`;
+          }
+        }
+
+        return `
+          <div class="case-card" data-suite="${escapeHtml(c.suite || '')}">
+            <div class="case-header" onclick="toggleCase(${idx})">
+              <div class="case-info">
+                <span class="case-id">${escapeHtml(c.id)}</span>
+                <span class="case-name">${escapeHtml(c.name || '')}</span>
+                ${c.suite ? `<span class="suite-badge">${escapeHtml(c.suite)}</span>` : ''}
+              </div>
+              <span class="toggle" id="toggle-${idx}">+</span>
+            </div>
+            <div class="case-body" id="case-${idx}">
+              <div class="prompt-section">
+                <div class="label">Prompt</div>
+                <div class="prompt-text">${escapeHtml(c.prompt || '')}</div>
+              </div>
+              ${runsHtml}
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function setupFilters(data) {
+      const suites = new Set();
+      data.cases.forEach(c => { if (c.suite) suites.add(c.suite); });
+
+      const suiteSelect = document.getElementById('suiteFilter');
+      for (const s of [...suites].sort()) {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        suiteSelect.appendChild(opt);
+      }
+
+      const modelSelect = document.getElementById('modelFilter');
+      for (const [id, info] of Object.entries(data.models)) {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = info.name || id;
+        modelSelect.appendChild(opt);
+      }
+
+      const applyFilters = () => {
+        renderCases(data,
+          document.getElementById('searchBox').value,
+          suiteSelect.value,
+          modelSelect.value
+        );
+      };
+
+      document.getElementById('searchBox').addEventListener('input', applyFilters);
+      suiteSelect.addEventListener('change', applyFilters);
+      modelSelect.addEventListener('change', applyFilters);
+    }
+
+    function toggleCase(idx) {
+      const body = document.getElementById('case-' + idx);
+      const toggle = document.getElementById('toggle-' + idx);
+      body.classList.toggle('open');
+      toggle.textContent = body.classList.contains('open') ? '-' : '+';
+    }
+
+    function toggleReasoning(id) {
+      document.getElementById(id).classList.toggle('open');
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const d = document.createElement('div');
+      d.textContent = text;
+      return d.innerHTML;
+    }
+
+    init();
+  </script>
 </body>
 </html>
