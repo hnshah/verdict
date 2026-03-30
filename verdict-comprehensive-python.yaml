@@ -1,0 +1,43 @@
+name: Comprehensive Python Benchmark
+
+models:
+  # Local powerhouse
+  - id: qwen-local
+    provider: ollama
+    model: qwen2.5-coder:7b
+    base_url: http://localhost:11434/v1
+    api_key: none
+    tags: [local, coding, baseline]
+  
+  # API models via OpenClaw
+  - id: haiku
+    provider: openclaw
+    model: anthropic/claude-haiku-4-5
+    agent_id: ren
+    tags: [api, fast, cheap]
+  
+  - id: sonnet
+    provider: openclaw
+    model: anthropic/claude-sonnet-4-5
+    agent_id: ren
+    tags: [api, reasoning, premium]
+
+judge:
+  model: sonnet
+  temperature: 0.1
+  rubric:
+    accuracy: 0.4
+    completeness: 0.4
+    conciseness: 0.2
+
+packs:
+  - ./eval-packs/python-coding.yaml
+
+settings:
+  parallel: 2
+  timeout_ms: 180000
+  retry_on_failure: false
+
+output:
+  dir: ./results
+  format: json
