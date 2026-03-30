@@ -125,25 +125,25 @@
   <div style="margin: 2rem 0; padding: 1rem; background: #ecf0f1; border-radius: 8px; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
     <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🖥️ Apple M3 Ultra</span>
     <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">💾 256 GB</span>
-    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🔢 3 cases</span>
-    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">📊 1 runs</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🔢 8 cases</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">📊 2 runs</span>
   </div>
 
   <div class="stats">
     <div class="stat-card">
-      <div class="stat-value">5.2</div>
+      <div class="stat-value">3.7</div>
       <div class="stat-label">Average Score</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">37793ms</div>
+      <div class="stat-value">107421ms</div>
       <div class="stat-label">Average Latency</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">1</div>
+      <div class="stat-value">2</div>
       <div class="stat-label">Total Runs</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">3</div>
+      <div class="stat-value">8</div>
       <div class="stat-label">Cases Tested</div>
     </div>
   </div>
@@ -368,113 +368,113 @@ Use `process_user()` when you want strict error handling, or `process_user_safe(
       </div>
       <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h3 style="font-size: 1.1rem; color: #2c3e50;">python-api-client</h3>
-          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">4.0/10</div>
+          <h3 style="font-size: 1.1rem; color: #2c3e50;">cli-colored-output</h3>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">7.6/10</div>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">📝 Prompt:</strong>
-          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Create a Python function that fetches data from a REST API with retry logic:
+          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Build a CLI log viewer with colored output:
 
-```python
-def fetch_with_retry(url: str, max_retries: int = 3) -&gt; dict:
-    &quot;&quot;&quot;
-    Fetch JSON data from URL with exponential backoff retry.
-    Raises exception after max_retries failed attempts.
-    &quot;&quot;&quot;
-    pass  # implement this
+```bash
+python logview.py server.log --level ERROR
 ```
 
-Requirements:
-- Use requests library
-- Retry on network errors and 5xx status codes
-- Exponential backoff (1s, 2s, 4s)
-- Don&#039;t retry on 4xx errors
-- Log each attempt
+Parse log lines, filter by level, colorize:
+- ERROR: red
+- WARNING: yellow  
+- INFO: green
+- DEBUG: gray
 </pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">📋 Criteria:</strong>
           <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">MUST HAVE:
-- requests.get() or equivalent
-- for loop or while loop for retries
-- response.raise_for_status() or status code check
-- Exception handling for requests.RequestException
-- time.sleep() with exponential backoff (2**attempt)
-- Returns response.json()
-- Raises exception after max_retries
+- argparse for filename and --level filter
+- Read log file line by line
+- Parse log level (regex or .split())
+- Filter by --level if provided
+- ANSI color codes OR colorama library
+- Print colored output
 
 QUALITY:
-- Status code checking (only retry 5xx)
-- Clean error messages
-- Type hints
-- Proper logging
+- Handles logs without level prefix
+- --level is optional (show all if not provided)
+- Color constants defined clearly
+- Works on Windows (colorama.init() if using colorama)
 </pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">💬 Model Response:</strong>
-          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>I&#039;ll create a robust implementation with proper error handling and logging:
+          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>I&#039;ll build a CLI log viewer with colored output that parses and filters log files.
 
-I&#039;ve created a production-ready implementation with these features:
+Now let me create a sample log file for testing:
 
-## Key Features ✅
+Now let&#039;s make the script executable and test it:
 
-1. **Exponential Backoff**: 1s → 2s → 4s between retries
-2. **Smart Retry Logic**: 
-   - ✅ Retries on 5xx errors and network failures
-   - ❌ No retry on 4xx client errors
-3. **Comprehensive Logging**: Each attempt logged with context
-4. **Error Handling**: Proper exception propagation
-5. **Type Hints**: Full typing support
-6. **Configurable**: Timeout and custom headers support
+Perfect! Now let&#039;s test different levels and the colored output:
 
-## Usage Examples
+Excellent! Let me create a quick README to document the tool:
 
-```python
-# Basic usage
-data = fetch_with_retry(&quot;https://api.example.com/data&quot;)
+Perfect! Let&#039;s verify the help output looks good:
 
-# With custom retries
-data = fetch_with_retry(&quot;https://api.example.com/data&quot;, max_retries=5)
+## ✅ Done!
 
-# With headers
-headers = {&quot;Authorization&quot;: &quot;Bearer token&quot;}
-data = fetch_with_retry(&quot;https://api.example.com/data&quot;, headers=headers)
+I&#039;ve built a complete CLI log viewer with these features:
+
+### **What it does:**
+- ✅ Parses multiple common log formats automatically
+- ✅ Colors output by log level (ERROR=red, WARNING=yellow, INFO=green, DEBUG=gray)
+- ✅ Filters by minimum log level (`--level ERROR` shows ERROR and CRITICAL)
+- ✅ Auto-detects TTY and disables colors when piped
+- ✅ Shows summary statistics of filtered/total lines
+
+### **Files created:**
+- `logview.py` - The main CLI tool (executable, ~250 lines)
+- `server.log` - Sample log file for testing
+- `README_logview.md` - Full documentation
+
+### **Usage examples:**
+```bash
+# Show all logs with colors
+python3 logview.py server.log
+
+# Only errors (shows 6/30 lines)
+python3 logview.py server.log --level ERROR
+
+# Warnings and above (shows 10/30 lines)
+python3 logview.py server.log --level WARNING
+
+# Pipe to other tools
+python3 logview.py server.log --level ERROR | grep &quot;payment&quot;
 ```
 
-## Error Behavior
-
-- **Network errors** (ConnectionError, Timeout): Retry with backoff
-- **5xx errors**: Retry with backoff
-- **4xx errors**: Immediate failure, no retry
-- **Invalid JSON**: Immediate failure, no retry
-
-You can test it by running `python fetch_with_retry.py` - it includes working examples!</code></pre>
+The tool handles edge cases well: encoding errors, keyboard interrupts, missing files, and automatically disables colors when output is piped. No external dependencies - pure Python stdlib!</code></pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">⚖️ Judge Reasoning:</strong>
-          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Response describes correct approach but critically fails to provide the actual implementation code despite claiming to have created it.</div>
+          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">All requirements addressed with extras, but actual code not shown for verification and response includes verbose testing/documentation beyond core ask.</div>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Accuracy</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">5/10</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">7/10</div>
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Completeness</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">3/10</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">9/10</div>
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Conciseness</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">4/10</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">6/10</div>
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Latency</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">30391ms</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">107640ms</div>
           </div>
         </div>
       </div></div>
@@ -492,6 +492,14 @@ You can test it by running `python fetch_with_retry.py` - it includes working ex
           </tr>
         </thead>
         <tbody>
+      <tr>
+        <td>3/29/2026<br><small style="color: #7f8c8d;">11:02:53 PM</small></td>
+        <td><a href="../runs/2026-03-30T05-44-25.html" style="color: #3498db;">CLI Building Benchmark - Local Models</a></td>
+        <td><strong>3.7</strong></td>
+        <td>107421ms</td>
+        <td>5</td>
+        <td><a href="../../results/public/2026-03-30-2026-03-30T05-44-25.json" target="_blank" style="color: #3498db;">JSON</a></td>
+      </tr>
       <tr>
         <td>3/29/2026<br><small style="color: #7f8c8d;">8:19:33 PM</small></td>
         <td><a href="../runs/2026-03-30T03-01-56.html" style="color: #3498db;">Local Model Army - Python Coding Benchmark</a></td>

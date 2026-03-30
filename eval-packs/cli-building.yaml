@@ -1,0 +1,163 @@
+name: CLI Tool Building
+description: Building command-line tools with argparse, error handling, and user-friendly interfaces
+
+cases:
+  - id: cli-basic-argparse
+    prompt: |
+      Create a CLI tool that analyzes a CSV file:
+      
+      ```bash
+      python analyze.py data.csv --column price --operation mean
+      ```
+      
+      Support operations: mean, median, sum, count
+      Include --help output and error handling.
+    
+    criteria: |
+      MUST HAVE:
+      - argparse.ArgumentParser setup
+      - Positional argument for filename
+      - --column and --operation flags
+      - csv.DictReader or pandas.read_csv
+      - Implementation of all 4 operations
+      - if __name__ == '__main__' guard
+      - Error handling for missing file/column
+      
+      QUALITY:
+      - Help text for each argument
+      - Type validation for operation
+      - Clean output formatting
+      - Handles empty file or no data
+    
+    tags: [cli, argparse, csv, python]
+
+  - id: cli-subcommands
+    prompt: |
+      Build a CLI tool with subcommands like git:
+      
+      ```bash
+      python tasks.py add "Buy groceries" --priority high
+      python tasks.py list --filter priority=high
+      python tasks.py complete 3
+      ```
+      
+      Use argparse subparsers. Store tasks in tasks.json.
+    
+    criteria: |
+      MUST HAVE:
+      - ArgumentParser with add_subparsers()
+      - Three subparsers: add, list, complete
+      - add: text argument + --priority flag (high/medium/low)
+      - list: --filter optional flag
+      - complete: task_id argument
+      - JSON persistence (read/write tasks.json)
+      - Generates unique IDs for tasks
+      
+      QUALITY:
+      - Help text for each subcommand
+      - Validation (priority choices, task_id exists)
+      - Clean output (formatted task list)
+      - Error messages that guide user
+    
+    tags: [cli, argparse, subcommands, json, python]
+
+  - id: cli-interactive
+    prompt: |
+      Create an interactive CLI prompt system:
+      
+      ```python
+      def setup_wizard():
+          """
+          Interactive setup wizard that:
+          1. Asks for username (validates not empty)
+          2. Asks for email (validates contains @)
+          3. Asks for theme (choice: dark/light)
+          4. Confirms settings before saving
+          5. Writes to config.json
+          """
+          pass
+      ```
+      
+      Use input() for prompts, validate each step, allow retry on invalid input.
+    
+    criteria: |
+      MUST HAVE:
+      - input() calls for each setting
+      - Validation loops (while True with break on valid)
+      - Username: not empty/whitespace
+      - Email: contains @ and .
+      - Theme: exactly "dark" or "light"
+      - Confirmation prompt (y/n)
+      - json.dump() to config.json if confirmed
+      
+      QUALITY:
+      - Clear prompts with examples
+      - Error messages explain what's wrong
+      - Shows entered values in confirmation
+      - Handles Ctrl+C gracefully (try/except KeyboardInterrupt)
+    
+    tags: [cli, interactive, validation, python]
+
+  - id: cli-progress-bar
+    prompt: |
+      Write a CLI tool that downloads multiple files with progress indication:
+      
+      ```python
+      def download_files(urls: list[str], output_dir: str):
+          """
+          Download files with progress bar.
+          Show: current file, percentage, speed, ETA.
+          """
+          pass
+      ```
+      
+      Can use tqdm or implement simple text-based progress.
+    
+    criteria: |
+      MUST HAVE:
+      - Loop through urls
+      - requests.get() with stream=True
+      - Chunks download (iter_content)
+      - Progress indication (tqdm OR custom percentage display)
+      - Writes to output_dir/filename
+      - Shows which file is downloading
+      
+      QUALITY:
+      - File size shown
+      - Download speed calculated
+      - ETA if possible
+      - Handles network errors gracefully
+      - Creates output_dir if missing
+    
+    tags: [cli, progress, download, python]
+
+  - id: cli-colored-output
+    prompt: |
+      Build a CLI log viewer with colored output:
+      
+      ```bash
+      python logview.py server.log --level ERROR
+      ```
+      
+      Parse log lines, filter by level, colorize:
+      - ERROR: red
+      - WARNING: yellow  
+      - INFO: green
+      - DEBUG: gray
+    
+    criteria: |
+      MUST HAVE:
+      - argparse for filename and --level filter
+      - Read log file line by line
+      - Parse log level (regex or .split())
+      - Filter by --level if provided
+      - ANSI color codes OR colorama library
+      - Print colored output
+      
+      QUALITY:
+      - Handles logs without level prefix
+      - --level is optional (show all if not provided)
+      - Color constants defined clearly
+      - Works on Windows (colorama.init() if using colorama)
+    
+    tags: [cli, colors, logs, python]

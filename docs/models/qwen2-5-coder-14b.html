@@ -125,25 +125,25 @@
   <div style="margin: 2rem 0; padding: 1rem; background: #ecf0f1; border-radius: 8px; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
     <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🖥️ Apple M3 Ultra</span>
     <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">💾 256 GB</span>
-    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🔢 3 cases</span>
-    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">📊 1 runs</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🔢 8 cases</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">📊 2 runs</span>
   </div>
 
   <div class="stats">
     <div class="stat-card">
-      <div class="stat-value">7.1</div>
+      <div class="stat-value">7.6</div>
       <div class="stat-label">Average Score</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">18441ms</div>
+      <div class="stat-value">24780ms</div>
       <div class="stat-label">Average Latency</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">1</div>
+      <div class="stat-value">2</div>
       <div class="stat-label">Total Runs</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">3</div>
+      <div class="stat-value">8</div>
       <div class="stat-label">Cases Tested</div>
     </div>
   </div>
@@ -293,123 +293,144 @@ if __name__ == &quot;__main__&quot;:
       </div>
       <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h3 style="font-size: 1.1rem; color: #2c3e50;">python-api-client</h3>
-          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">7.2/10</div>
+          <h3 style="font-size: 1.1rem; color: #2c3e50;">cli-interactive</h3>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">8.2/10</div>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">📝 Prompt:</strong>
-          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Create a Python function that fetches data from a REST API with retry logic:
+          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Create an interactive CLI prompt system:
 
 ```python
-def fetch_with_retry(url: str, max_retries: int = 3) -&gt; dict:
+def setup_wizard():
     &quot;&quot;&quot;
-    Fetch JSON data from URL with exponential backoff retry.
-    Raises exception after max_retries failed attempts.
+    Interactive setup wizard that:
+    1. Asks for username (validates not empty)
+    2. Asks for email (validates contains @)
+    3. Asks for theme (choice: dark/light)
+    4. Confirms settings before saving
+    5. Writes to config.json
     &quot;&quot;&quot;
-    pass  # implement this
+    pass
 ```
 
-Requirements:
-- Use requests library
-- Retry on network errors and 5xx status codes
-- Exponential backoff (1s, 2s, 4s)
-- Don&#039;t retry on 4xx errors
-- Log each attempt
+Use input() for prompts, validate each step, allow retry on invalid input.
 </pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">📋 Criteria:</strong>
           <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">MUST HAVE:
-- requests.get() or equivalent
-- for loop or while loop for retries
-- response.raise_for_status() or status code check
-- Exception handling for requests.RequestException
-- time.sleep() with exponential backoff (2**attempt)
-- Returns response.json()
-- Raises exception after max_retries
+- input() calls for each setting
+- Validation loops (while True with break on valid)
+- Username: not empty/whitespace
+- Email: contains @ and .
+- Theme: exactly &quot;dark&quot; or &quot;light&quot;
+- Confirmation prompt (y/n)
+- json.dump() to config.json if confirmed
 
 QUALITY:
-- Status code checking (only retry 5xx)
-- Clean error messages
-- Type hints
-- Proper logging
+- Clear prompts with examples
+- Error messages explain what&#039;s wrong
+- Shows entered values in confirmation
+- Handles Ctrl+C gracefully (try/except KeyboardInterrupt)
 </pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">💬 Model Response:</strong>
-          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>To implement the `fetch_with_retry` function with the specified requirements, you can use the `requests` library to handle HTTP requests and implement a retry mechanism with exponential backoff. Here&#039;s how you can do it:
+          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>To create an interactive CLI prompt system using Python, you can follow the structure below. This script will guide the user through setting up their configuration by asking for a username, email, theme preference, and confirming the settings before saving them to a `config.json` file.
+
+Here&#039;s how you can implement this:
 
 ```python
-import requests
-import time
-from requests.exceptions import RequestException
+import json
 
-def fetch_with_retry(url: str, max_retries: int = 3) -&gt; dict:
-    &quot;&quot;&quot;
-    Fetch JSON data from URL with exponential backoff retry.
-    Raises exception after max_retries failed attempts.
-    &quot;&quot;&quot;
-    attempt = 0
-    while attempt &lt; max_retries:
-        try:
-            response = requests.get(url)
-            # Check for successful status codes (2xx)
-            if response.status_code &gt;= 200 and response.status_code &lt; 300:
-                return response.json()
-            elif response.status_code &gt;= 500:
-                print(f&quot;Attempt {attempt + 1} failed with status code: {response.status_code}&quot;)
-            else:
-                # Don&#039;t retry on 4xx errors
-                raise Exception(f&quot;Client error: {response.status_code}&quot;)
-        except RequestException as e:
-            print(f&quot;Attempt {attempt + 1} failed with exception: {e}&quot;)
+def get_username():
+    while True:
+        username = input(&quot;Please enter your username: &quot;).strip()
+        if username:
+            return username
+        else:
+            print(&quot;Username cannot be empty. Please try again.&quot;)
 
-        # Exponential backoff
-        time.sleep(2 ** attempt)
-        attempt += 1
+def get_email():
+    while True:
+        email = input(&quot;Please enter your email: &quot;).strip()
+        if &quot;@&quot; in email and &quot;.&quot; in email:
+            return email
+        else:
+            print(&quot;Invalid email format. Please try again.&quot;)
 
-    # If all attempts fail, raise an exception
-    raise Exception(&quot;Max retries reached. All attempts failed.&quot;)
+def get_theme():
+    while True:
+        theme = input(&quot;Please choose a theme (dark/light): &quot;).strip().lower()
+        if theme in [&#039;dark&#039;, &#039;light&#039;]:
+            return theme
+        else:
+            print(&quot;Invalid theme choice. Please enter &#039;dark&#039; or &#039;light&#039;.&quot;)
 
-# Example usage:
-# data = fetch_with_retry(&#039;https://api.example.com/data&#039;)
+def confirm_settings(username, email, theme):
+    while True:
+        confirmation = input(f&quot;Please confirm your settings:\n&quot;
+                             f&quot;Username: {username}\n&quot;
+                             f&quot;Email: {email}\n&quot;
+                             f&quot;Theme: {theme}\n&quot;
+                             &quot;Are these correct? (yes/no): &quot;).strip().lower()
+        if confirmation == &#039;yes&#039;:
+            return True
+        elif confirmation == &#039;no&#039;:
+            return False
+        else:
+            print(&quot;Invalid input. Please enter &#039;yes&#039; or &#039;no&#039;.&quot;)
+
+def save_config(username, email, theme):
+    config = {
+        &quot;username&quot;: username,
+        &quot;email&quot;: email,
+        &quot;theme&quot;: theme
+    }
+    with open(&#039;config.json&#039;, &#039;w&#039;) as file:
+        json.dump(config, file, indent=4)
+    print(&quot;Configuration saved successfully to config.json.&quot;)
+
+def setup_wizard():
+    print(&quot;Welcome to the Setup Wizard!&quot;)
+    
+    username = get_username()
+    email = get_email()
+    theme = get_theme()
+    
+    if confirm_settings(username, email, theme):
+        save_config(username, email, theme)
+    else:
+        print(&quot;Setup cancelled. No changes were saved.&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    setup_wizard()
 ```
 
 ### Explanation:
 
-1. **Imports**: We import necessary modules: `requests` for making HTTP requests, `time` for handling delays, and `RequestException` from `requests.exceptions` to catch network-related errors.
+1. **get_username()**: Prompts the user to enter a username and ensures it&#039;s not empty.
+2. **get_email()**: Prompts the user to enter an email and checks if it contains &quot;@&quot; and &quot;.&quot;.
+3. **get_theme()**: Prompts the user to choose between &#039;dark&#039; or &#039;light&#039; themes.
+4. **confirm_settings()**: Displays the entered settings and asks for confirmation.
+5. **save_config()**: Saves the configuration to a `config.json` file in JSON format.
+6. **setup_wizard()**: Orchestrates the entire setup process by calling the above functions in sequence.
 
-2. **Function Definition**: The function `fetch_with_retry` takes a URL and an optional `max_retries` parameter (default is 3).
-
-3. **Retry Loop**: We use a `while` loop to attempt the request up to `max_retries` times.
-
-4. **Request Handling**:
-   - We make a GET request to the specified URL.
-   - If the response status code is in the 2xx range, we return the JSON data.
-   - If the status code is in the 5xx range, we log the failure and continue retrying.
-   - For 4xx errors, we raise an exception immediately as these are client-side errors that should not be retried.
-
-5. **Exception Handling**: We catch `RequestException` to handle network-related errors gracefully.
-
-6. **Exponential Backoff**: After each failed attempt, we wait for a time duration that doubles with each retry (1s, 2s, 4s).
-
-7. **Max Retries Reached**: If all attempts fail, an exception is raised indicating that the maximum number of retries has been reached.
-
-This function provides a robust way to handle transient errors and network issues when fetching data from a REST API.</code></pre>
+This script ensures that each input is validated, and the user can retry if they enter invalid data. The final settings are confirmed before being saved to a configuration file.</code></pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">⚖️ Judge Reasoning:</strong>
-          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Implements all core requirements correctly but uses print() instead of proper logging module, which is explicitly required.</div>
+          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Code is correct and functional but missing the explicitly required KeyboardInterrupt handling and uses yes/no instead of y/n for confirmation.</div>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Accuracy</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">7/10</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">9/10</div>
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Completeness</div>
@@ -417,11 +438,11 @@ This function provides a robust way to handle transient errors and network issue
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Conciseness</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">8/10</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">9/10</div>
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Latency</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">18310ms</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">21456ms</div>
           </div>
         </div>
       </div></div>
@@ -439,6 +460,14 @@ This function provides a robust way to handle transient errors and network issue
           </tr>
         </thead>
         <tbody>
+      <tr>
+        <td>3/29/2026<br><small style="color: #7f8c8d;">11:02:53 PM</small></td>
+        <td><a href="../runs/2026-03-30T05-44-25.html" style="color: #3498db;">CLI Building Benchmark - Local Models</a></td>
+        <td><strong>7.6</strong></td>
+        <td>24780ms</td>
+        <td>5</td>
+        <td><a href="../../results/public/2026-03-30-2026-03-30T05-44-25.json" target="_blank" style="color: #3498db;">JSON</a></td>
+      </tr>
       <tr>
         <td>3/29/2026<br><small style="color: #7f8c8d;">8:19:33 PM</small></td>
         <td><a href="../runs/2026-03-30T03-01-56.html" style="color: #3498db;">Local Model Army - Python Coding Benchmark</a></td>

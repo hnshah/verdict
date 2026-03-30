@@ -1,0 +1,616 @@
+{
+  "run_id": "2026-03-30T05-44-25",
+  "name": "CLI Building Benchmark - Local Models",
+  "timestamp": "2026-03-30T06:02:53.440Z",
+  "models": [
+    "qwen3-coder-30b",
+    "phi4-14b",
+    "qwen2.5-coder-14b",
+    "qwen2.5-7b",
+    "haiku"
+  ],
+  "cases": [
+    {
+      "case_id": "cli-basic-argparse",
+      "prompt": "Create a CLI tool that analyzes a CSV file:\n\n```bash\npython analyze.py data.csv --column price --operation mean\n```\n\nSupport operations: mean, median, sum, count\nInclude --help output and error handling.\n",
+      "criteria": "MUST HAVE:\n- argparse.ArgumentParser setup\n- Positional argument for filename\n- --column and --operation flags\n- csv.DictReader or pandas.read_csv\n- Implementation of all 4 operations\n- if __name__ == '__main__' guard\n- Error handling for missing file/column\n\nQUALITY:\n- Help text for each argument\n- Type validation for operation\n- Clean output formatting\n- Handles empty file or no data\n",
+      "responses": {
+        "phi4-14b": {
+          "model_id": "phi4-14b",
+          "text": "To create a command-line interface (CLI) tool in Python that analyzes a CSV file with specified operations on a given column, you can use the `argparse` module for parsing command-line arguments. Below is an example implementation of such a tool:\n\n```python\nimport argparse\nimport csv\nimport sys\n\ndef calculate_mean(numbers):\n    return sum(numbers) / len(numbers)\n\ndef calculate_median(numbers):\n    numbers.sort()\n    n = len(numbers)\n    mid = n // 2\n    if n % 2 == 0:\n        return (numbers[mid - 1] + numbers[mid]) / 2\n    else:\n        return numbers[mid]\n\ndef analyze_csv(file_path, column_name, operation):\n    try:\n        with open(file_path, newline='') as csvfile:\n            reader = csv.DictReader(csvfile)\n            values = []\n            \n            for row in reader:\n                if column_name in row and row[column_name]:\n                    try:\n                        value = float(row[column_name])\n                        values.append(value)\n                    except ValueError:\n                        print(f\"Warning: Non-numeric data '{row[column_name]}' found in column '{column_name}'. Skipping.\")\n            \n            if not values:\n                raise ValueError(f\"No valid numeric data found in column '{column_name}'.\")\n\n            if operation == 'mean':\n                result = calculate_mean(values)\n            elif operation == 'median':\n                result = calculate_median(values)\n            elif operation == 'sum':\n                result = sum(values)\n            elif operation == 'count':\n                result = len(values)\n            else:\n                raise ValueError(f\"Unsupported operation '{operation}'. Supported operations are: mean, median, sum, count.\")\n\n            print(f\"{operation.capitalize()} of column '{column_name}': {result}\")\n\n    except FileNotFoundError:\n        print(f\"Error: File '{file_path}' not found.\")\n        sys.exit(1)\n    except Exception as e:\n        print(f\"An error occurred: {e}\")\n        sys.exit(1)\n\ndef main():\n    parser = argparse.ArgumentParser(description=\"Analyze a CSV file for specified column and operation.\")\n    parser.add_argument('csv_file', type=str, help='Path to the CSV file.')\n    parser.add_argument('--column', required=True, type=str, help='Column name to analyze.')\n    parser.add_argument('--operation', required=True, choices=['mean', 'median', 'sum', 'count'], \n                        help=\"Operation to perform: mean, median, sum, count.\")\n    \n    args = parser.parse_args()\n\n    analyze_csv(args.csv_file, args.column, args.operation)\n\nif __name__ == \"__main__\":\n    main()\n```\n\n### Explanation:\n\n1. **Argument Parsing**: The `argparse` module is used to define and parse command-line arguments. It requires the path to a CSV file, a column name, and an operation.\n\n2. **Operations**: Supported operations are mean, median, sum, and count. Functions for calculating these statistics are defined separately.\n\n3. **CSV Reading**: The `csv.DictReader` is used to read the CSV file as dictionaries, allowing easy access to columns by name.\n\n4. **Error Handling**:\n   - Checks if the file exists.\n   - Handles non-numeric data in the specified column with a warning and skips such entries.\n   - Validates that at least one valid numeric entry exists in the column.\n   - Provides feedback for unsupported operations.\n\n5. **Output**: The result of the operation is printed to the console.\n\n6. **Help Output**: `argparse` automatically generates help output when the `--help` flag is used.\n\nTo run this script, save it as `analyze.py` and execute it from the command line with the appropriate arguments:\n\n```bash\npython analyze.py data.csv --column price --operation mean\n```\n\nThis will calculate and print the mean of the values in the \"price\" column.",
+          "input_tokens": 56,
+          "output_tokens": 787,
+          "latency_ms": 21989,
+          "cost_usd": 0
+        },
+        "qwen2.5-coder-14b": {
+          "model_id": "qwen2.5-coder-14b",
+          "text": "To create a CLI tool in Python that analyzes a CSV file based on the specified column and operation, you can use the `argparse` module for command-line argument parsing. Below is an example implementation of such a tool:\n\n```python\nimport argparse\nimport csv\nfrom statistics import mean, median\n\ndef analyze_csv(file_path, column_name, operation):\n    try:\n        with open(file_path, mode='r', newline='') as file:\n            reader = csv.DictReader(file)\n            data = [row[column_name] for row in reader if column_name in row]\n            \n            # Convert data to float\n            numeric_data = []\n            for value in data:\n                try:\n                    numeric_data.append(float(value))\n                except ValueError:\n                    print(f\"Warning: Non-numeric value '{value}' ignored.\")\n            \n            if not numeric_data:\n                raise ValueError(\"No valid numeric data found in the specified column.\")\n            \n            # Perform operation\n            result = None\n            if operation == 'mean':\n                result = mean(numeric_data)\n            elif operation == 'median':\n                result = median(numeric_data)\n            elif operation == 'sum':\n                result = sum(numeric_data)\n            elif operation == 'count':\n                result = len(numeric_data)\n            else:\n                raise ValueError(f\"Unsupported operation: {operation}\")\n            \n            return result\n    except FileNotFoundError:\n        print(f\"Error: The file '{file_path}' was not found.\")\n    except KeyError:\n        print(f\"Error: Column '{column_name}' does not exist in the CSV file.\")\n    except Exception as e:\n        print(f\"An error occurred: {e}\")\n\ndef main():\n    parser = argparse.ArgumentParser(description='Analyze a CSV file based on a specified column and operation.')\n    parser.add_argument('file_path', type=str, help='Path to the CSV file')\n    parser.add_argument('--column', required=True, type=str, help='Column name to analyze')\n    parser.add_argument('--operation', required=True, choices=['mean', 'median', 'sum', 'count'], help='Operation to perform on the column data')\n\n    args = parser.parse_args()\n\n    result = analyze_csv(args.file_path, args.column, args.operation)\n    if result is not None:\n        print(f\"Result: {result}\")\n\nif __name__ == '__main__':\n    main()\n```\n\n### Explanation:\n\n1. **Argument Parsing**: The `argparse` module is used to define and parse command-line arguments. The tool requires the path to a CSV file, a column name, and an operation.\n\n2. **CSV Reading**: The `csv.DictReader` is used to read the CSV file into a dictionary format, which makes it easy to access columns by their names.\n\n3. **Data Conversion**: The data from the specified column is converted to floats. Non-numeric values are ignored with a warning message.\n\n4. **Operations**: The tool supports four operations: mean, median, sum, and count. It uses Python's built-in `statistics` module for mean and median calculations.\n\n5. **Error Handling**: The tool includes error handling for file not found, column not found, and unsupported operations.\n\n6. **Help Output**: The `--help` option is automatically provided by `argparse`, which displays usage information when invoked.\n\n### Usage:\n\nTo use the tool, save it to a file named `analyze.py` and run it from the command line with the appropriate arguments:\n\n```bash\npython analyze.py data.csv --column price --operation mean\n```\n\nThis will calculate the mean of the values in the \"price\" column of the `data.csv` file.",
+          "input_tokens": 75,
+          "output_tokens": 744,
+          "latency_ms": 25961,
+          "cost_usd": 0
+        },
+        "qwen3-coder-30b": {
+          "model_id": "qwen3-coder-30b",
+          "text": "```python\n#!/usr/bin/env python3\n\"\"\"\nCSV Analyzer CLI Tool\n\nAnalyzes CSV files and performs statistical operations on specified columns.\n\"\"\"\n\nimport argparse\nimport csv\nimport sys\nfrom typing import List, Union, Optional\nimport statistics\n\ndef read_csv_column(filename: str, column_name: str) -> List[Union[int, float]]:\n    \"\"\"\n    Read a specific column from a CSV file.\n    \n    Args:\n        filename (str): Path to the CSV file\n        column_name (str): Name of the column to read\n        \n    Returns:\n        List[Union[int, float]]: List of numeric values from the column\n        \n    Raises:\n        FileNotFoundError: If the file doesn't exist\n        ValueError: If the column doesn't exist or contains non-numeric data\n    \"\"\"\n    try:\n        with open(filename, 'r', newline='', encoding='utf-8') as file:\n            reader = csv.DictReader(file)\n            \n            # Check if column exists\n            if column_name not in reader.fieldnames:\n                raise ValueError(f\"Column '{column_name}' not found in CSV file. Available columns: {reader.fieldnames}\")\n            \n            values = []\n            for row_num, row in enumerate(reader, start=2):  # Start at 2 since header is row 1\n                value = row[column_name].strip()\n                if value == '':\n                    continue  # Skip empty values\n                \n                try:\n                    # Try to convert to int first, then float\n                    if '.' in value:\n                        values.append(float(value))\n                    else:\n                        values.append(int(value))\n                except ValueError:\n                    raise ValueError(f\"Non-numeric value '{value}' found in column '{column_name}' at row {row_num}\")\n            \n            if not values:\n                raise ValueError(f\"No numeric values found in column '{column_name}'\")\n                \n            return values\n            \n    except FileNotFoundError:\n        raise FileNotFoundError(f\"File '{filename}' not found\")\n\ndef calculate_mean(values: List[Union[int, float]]) -> float:\n    \"\"\"Calculate the mean of a list of numbers.\"\"\"\n    return sum(values) / len(values)\n\ndef calculate_median(values: List[Union[int, float]]) -> float:\n    \"\"\"Calculate the median of a list of numbers.\"\"\"\n    return statistics.median(values)\n\ndef calculate_sum(values: List[Union[int, float]]) -> Union[int, float]:\n    \"\"\"Calculate the sum of a list of numbers.\"\"\"\n    return sum(values)\n\ndef calculate_count(values: List[Union[int, float]]) -> int:\n    \"\"\"Calculate the count of numbers in a list.\"\"\"\n    return len(values)\n\ndef perform_operation(values: List[Union[int, float]], operation: str) -> Union[float, int]:\n    \"\"\"\n    Perform the specified operation on the values.\n    \n    Args:\n        values (List[Union[int, float]]): List of numeric values\n        operation (str): Operation to perform\n        \n    Returns:\n        Union[float, int]: Result of the operation\n        \n    Raises:\n        ValueError: If operation is not supported\n    \"\"\"\n    operations = {\n        'mean': calculate_mean,\n        'median': calculate_median,\n        'sum': calculate_sum,\n        'count': calculate_count\n    }\n    \n    if operation not in operations:\n        raise ValueError(f\"Unsupported operation '{operation}'. Supported operations: {list(operations.keys())}\")\n    \n    return operations[operation](values)\n\ndef main():\n    \"\"\"Main function to parse arguments and run the analysis.\"\"\"\n    parser = argparse.ArgumentParser(\n        description=\"Analyze CSV files and perform statistical operations on columns\",\n        formatter_class=argparse.RawDescriptionHelpFormatter,\n        epilog=\"\"\"\nExamples:\n  %(prog)s data.csv --column price --operation mean\n  %(prog)s sales.csv --column revenue --operation sum\n  %(prog)s data.csv --column quantity --operation median\n  %(prog)s data.csv --column price --operation count\n        \"\"\"\n    )\n    \n    parser.add_argument(\n        'filename',\n        help='Path to the CSV file to analyze'\n    )\n    \n    parser.add_argument(\n        '--column',\n        '-c',\n        required=True,\n        help='Name of the column to analyze'\n    )\n    \n    parser.add_argument(\n        '--operation',\n        '-o',\n        required=True,\n        choices=['mean', 'median', 'sum', 'count'],\n        help='Operation to perform on the column'\n    )\n    \n    args = parser.parse_args()\n    \n    try:\n        # Read the column data\n        values = read_csv_column(args.filename, args.column)\n        \n        # Perform the operation\n        result = perform_operation(values, args.operation)\n        \n        # Display result\n        print(f\"{args.operation.capitalize()}: {result}\")\n        \n    except (FileNotFoundError, ValueError) as e:\n        print(f\"Error: {e}\", file=sys.stderr)\n        sys.exit(1)\n    except Exception as e:\n        print(f\"Unexpected error: {e}\", file=sys.stderr)\n        sys.exit(1)\n\nif __name__ == \"__main",
+          "input_tokens": 55,
+          "output_tokens": 1024,
+          "latency_ms": 28093,
+          "cost_usd": 0
+        },
+        "qwen2.5-7b": {
+          "model_id": "qwen2.5-7b",
+          "text": "Sure! Below is an example of how you can create a simple command-line interface (CLI) tool using Python to analyze a CSV file. This tool will support the operations `mean`, `median`, `sum`, and `count` for a specified column.\n\nFirst, ensure you have Python installed on your system. Then, you can create a script named `analyze.py`.\n\n```python\nimport csv\nimport sys\n\ndef read_csv(file_path):\n    \"\"\"Reads a CSV file and returns its content as a list of dictionaries.\"\"\"\n    with open(file_path, mode='r', newline='') as csvfile:\n        reader = csv.DictReader(csvfile)\n        data = [row for row in reader]\n    return data\n\ndef calculate_mean(data, column_name):\n    \"\"\"Calculates the mean value of a specified column.\"\"\"\n    values = [float(row[column_name]) for row in data if column_name in row and row[column_name].isdigit()]\n    if not values:\n        raise ValueError(f\"No valid numeric data found in column '{column_name}'\")\n    return sum(values) / len(values)\n\ndef calculate_median(data, column_name):\n    \"\"\"Calculates the median value of a specified column.\"\"\"\n    values = [float(row[column_name]) for row in data if column_name in row and row[column_name].isdigit()]\n    if not values:\n        raise ValueError(f\"No valid numeric data found in column '{column_name}'\")\n    sorted_values = sorted(values)\n    n = len(sorted_values)\n    if n % 2 == 0:\n        return (sorted_values[n // 2 - 1] + sorted_values[n // 2]) / 2\n    else:\n        return sorted_values[n // 2]\n\ndef calculate_sum(data, column_name):\n    \"\"\"Calculates the sum of values in a specified column.\"\"\"\n    values = [float(row[column_name]) for row in data if column_name in row and row[column_name].isdigit()]\n    if not values:\n        raise ValueError(f\"No valid numeric data found in column '{column_name}'\")\n    return sum(values)\n\ndef calculate_count(data, column_name):\n    \"\"\"Calculates the count of non-empty entries in a specified column.\"\"\"\n    count = 0\n    for row in data:\n        if column_name in row and row[column_name]:\n            count += 1\n    return count\n\ndef main():\n    import argparse\n\n    parser = argparse.ArgumentParser(description=\"Analyze CSV file.\")\n    parser.add_argument(\"file_path\", type=str, help=\"Path to the CSV file\")\n    parser.add_argument(\"--column\", type=str, required=True, help=\"Column name for analysis\")\n    parser.add_argument(\"--operation\", choices=[\"mean\", \"median\", \"sum\", \"count\"], default=\"mean\", help=\"Operation to perform\")\n\n    args = parser.parse_args()\n\n    try:\n        data = read_csv(args.file_path)\n        if args.operation == \"mean\":\n            result = calculate_mean(data, args.column)\n        elif args.operation == \"median\":\n            result = calculate_median(data, args.column)\n        elif args.operation == \"sum\":\n            result = calculate_sum(data, args.column)\n        elif args.operation == \"count\":\n            result = calculate_count(data, args.column)\n\n        print(f\"Result: {result}\")\n    except Exception as e:\n        print(f\"Error: {e}\", file=sys.stderr)\n\nif __name__ == \"__main__\":\n    main()\n```\n\n### Explanation:\n\n1. **Reading the CSV File**: The `read_csv` function reads a CSV file and returns its content as a list of dictionaries, where each dictionary represents a row in the CSV.\n\n2. **Calculating Statistics**:\n   - `calculate_mean`: Computes the mean value for a specified column.\n   - `calculate_median`: Computes the median value for a specified column.\n   - `calculate_sum`: Computes the sum of values in a specified column.\n   - `calculate_count`: Counts non-empty entries in a specified column.\n\n3. **Command Line Interface**: The script uses the `argparse` module to handle command-line arguments, allowing users to specify the file path, column name, and operation.\n\n4. **Error Handling**: Basic error handling is included to manage cases where no valid data is found or other issues arise during execution.\n\n### Usage:\n\nTo run the tool, use the following command in your terminal:\n\n```bash\npython analyze.py data.csv --column price --operation mean\n```\n\nThis will calculate and print the mean value of the `price` column from the CSV file `data.csv`.\n\nFeel free to modify or extend this script as needed for more complex requirements!",
+          "input_tokens": 75,
+          "output_tokens": 939,
+          "latency_ms": 10185,
+          "cost_usd": 0
+        },
+        "haiku": {
+          "text": "I'll create a comprehensive CLI tool for CSV analysis with proper error handling and help documentation.\n\nNow let me create a sample CSV file for testing and demonstrate the tool:\n\nNow let's test the tool with various operations:\n\nNow let's test the help output:\n\nNow let's test error handling:\n\nPerfect! Let me create a README to document the tool:\n\n## Summary\n\nI've created a robust CSV analysis CLI tool with the following components:\n\n### **analyze.py** - Main CLI Tool\n- ✅ Supports all 4 operations: mean, median, sum, count\n- ✅ Comprehensive error handling for:\n  - Missing files\n  - Invalid column names (shows available columns)\n  - Non-numeric data for numeric operations\n  - Empty or malformed CSV files\n- ✅ Clean, professional `--help` output with examples\n- ✅ Uses pandas for reliable CSV parsing\n- ✅ Object-oriented design with CSVAnalyzer class\n- ✅ Proper exit codes for errors\n\n### **Key Features:**\n- **Smart type conversion**: Automatically converts columns to numeric for statistical operations\n- **Validation**: Checks file existence, column presence, and data compatibility\n- **User-friendly errors**: Shows available columns when user specifies an invalid one\n- **Flexible syntax**: Supports both long (`--column`) and short (`-c`) flags\n- **Clear output**: Formatted results showing file, column, operation, and result\n\n### **Tested scenarios:**\n- ✅ All operations work correctly\n- ✅ Help output is clear and informative\n- ✅ File not found error handled\n- ✅ Invalid column error handled\n- ✅ Non-numeric data error handled\n\nThe tool is production-ready and follows Python best practices for CLI applications!",
+          "latency_ms": 80792,
+          "model": "anthropic/claude-haiku-4-5",
+          "metadata": {
+            "provider": "openclaw",
+            "gateway_url": "http://127.0.0.1:18789",
+            "agent_id": "ren",
+            "usage": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "total_tokens": 0
+            },
+            "finish_reason": "stop"
+          }
+        }
+      },
+      "scores": {
+        "phi4-14b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 7,
+          "total": 9.4,
+          "reasoning": "Code is fully correct and meets all requirements with proper error handling, but the explanation section is somewhat verbose for what is straightforward implementation."
+        },
+        "qwen2.5-coder-14b": {
+          "accuracy": 7,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 8,
+          "reasoning": "Meets all requirements with good explanation, but has a subtle bug where KeyError handling won't catch missing columns due to list comprehension execution order."
+        },
+        "qwen3-coder-30b": {
+          "accuracy": 9,
+          "completeness": 7,
+          "conciseness": 7,
+          "total": 7.8,
+          "reasoning": "All required features present with correct logic, but code is cut off at the end leaving if __name__ guard incomplete, and implementation is verbose with extensive docstrings."
+        },
+        "qwen2.5-7b": {
+          "accuracy": 5,
+          "completeness": 7,
+          "conciseness": 8,
+          "total": 6.4,
+          "reasoning": "Critical bug: isdigit() fails for decimal numbers like prices (12.5), making it non-functional for typical CSV data; missing specific FileNotFoundError and KeyError handling."
+        },
+        "haiku": {
+          "accuracy": 2,
+          "completeness": 1,
+          "conciseness": 4,
+          "total": 2,
+          "reasoning": "Response contains only narrative descriptions claiming code was created and tested, but shows zero actual code implementation, making it impossible to verify any requirements were met."
+        }
+      },
+      "winner": "phi4-14b"
+    },
+    {
+      "case_id": "cli-subcommands",
+      "prompt": "Build a CLI tool with subcommands like git:\n\n```bash\npython tasks.py add \"Buy groceries\" --priority high\npython tasks.py list --filter priority=high\npython tasks.py complete 3\n```\n\nUse argparse subparsers. Store tasks in tasks.json.\n",
+      "criteria": "MUST HAVE:\n- ArgumentParser with add_subparsers()\n- Three subparsers: add, list, complete\n- add: text argument + --priority flag (high/medium/low)\n- list: --filter optional flag\n- complete: task_id argument\n- JSON persistence (read/write tasks.json)\n- Generates unique IDs for tasks\n\nQUALITY:\n- Help text for each subcommand\n- Validation (priority choices, task_id exists)\n- Clean output (formatted task list)\n- Error messages that guide user\n",
+      "responses": {
+        "phi4-14b": {
+          "model_id": "phi4-14b",
+          "text": "To build a command-line interface (CLI) tool similar to `git` with subcommands using Python's `argparse` module, we'll create a script named `tasks.py`. This script will handle adding, listing, and completing tasks stored in a JSON file (`tasks.json`). Here's how you can implement it:\n\n### Step-by-Step Implementation\n\n1. **Setup the Project Structure:**\n   - Create a directory for your project.\n   - Inside this directory, create two files: `tasks.py` and `tasks.json`.\n\n2. **Initialize `tasks.json`:**\n   - This file will store tasks in JSON format. Initially, it can be an empty list.\n\n```json\n[]\n```\n\n3. **Implement the CLI Tool (`tasks.py`):**\n\n```python\nimport argparse\nimport json\nimport os\n\n# Define the path to the tasks file\nTASKS_FILE = 'tasks.json'\n\ndef load_tasks():\n    \"\"\"Load tasks from the JSON file.\"\"\"\n    if not os.path.exists(TASKS_FILE):\n        return []\n    with open(TASKS_FILE, 'r') as f:\n        try:\n            return json.load(f)\n        except json.JSONDecodeError:\n            return []\n\ndef save_tasks(tasks):\n    \"\"\"Save tasks to the JSON file.\"\"\"\n    with open(TASKS_FILE, 'w') as f:\n        json.dump(tasks, f, indent=4)\n\ndef add_task(description, priority):\n    \"\"\"Add a new task.\"\"\"\n    tasks = load_tasks()\n    task_id = len(tasks) + 1\n    task = {\n        \"id\": task_id,\n        \"description\": description,\n        \"priority\": priority,\n        \"completed\": False\n    }\n    tasks.append(task)\n    save_tasks(tasks)\n    print(f\"Task added with ID {task_id}\")\n\ndef list_tasks(filter_priority=None):\n    \"\"\"List all tasks, optionally filtered by priority.\"\"\"\n    tasks = load_tasks()\n    for task in tasks:\n        if filter_priority and task['priority'] != filter_priority:\n            continue\n        status = \"Completed\" if task['completed'] else \"Pending\"\n        print(f\"{task['id']}: {task['description']} (Priority: {task['priority']}, Status: {status})\")\n\ndef complete_task(task_id):\n    \"\"\"Mark a task as completed.\"\"\"\n    tasks = load_tasks()\n    for task in tasks:\n        if task['id'] == int(task_id):\n            task['completed'] = True\n            save_tasks(tasks)\n            print(f\"Task {task_id} marked as completed.\")\n            return\n    print(f\"No task found with ID {task_id}\")\n\ndef main():\n    parser = argparse.ArgumentParser(description=\"Task Manager CLI\")\n    subparsers = parser.add_subparsers(dest='command', help='Subcommands')\n\n    # Add command\n    add_parser = subparsers.add_parser('add', help='Add a new task')\n    add_parser.add_argument('description', type=str, help='Description of the task')\n    add_parser.add_argument('--priority', type=str, choices=['low', 'medium', 'high'], required=True, help='Priority of the task')\n\n    # List command\n    list_parser = subparsers.add_parser('list', help='List all tasks')\n    list_parser.add_argument('--filter', type=lambda kv: kv.split(\"=\"), nargs=1, metavar=('KEY', 'VALUE'), help='Filter tasks by priority (e.g., --filter priority=high)')\n\n    # Complete command\n    complete_parser = subparsers.add_parser('complete', help='Mark a task as completed')\n    complete_parser.add_argument('task_id', type=int, help='ID of the task to mark as completed')\n\n    args = parser.parse_args()\n\n    if args.command == 'add':\n        add_task(args.description, args.priority)\n    elif args.command == 'list':\n        filter_priority = None\n        if args.filter:\n            key, value = args.filter[0]\n            if key == 'priority':\n                filter_priority = value\n        list_tasks(filter_priority)\n    elif args.command == 'complete':\n        complete_task(args.task_id)\n\nif __name__ == '__main__':\n    main()\n```\n\n### Explanation\n\n- **Loading and Saving Tasks:** The `load_tasks` function reads tasks from `tasks.json`, while `save_tasks` writes them back. If the file doesn't exist, it initializes an empty list.\n\n- **Subcommands:**\n  - **Add Task:** Uses `add_parser` to handle adding a new task with a description and priority.\n  - **List Tasks:** Uses `list_parser` to display tasks, optionally filtered by priority.\n  - **Complete Task:** Uses `complete_parser` to mark a task as completed using its ID.\n\n- **Argument Parsing:** The script uses `argparse` to define subcommands and their respective arguments. Each subcommand is associated with a function that performs the required action.\n\n### Usage\n\n- Add a task:  \n  ```bash\n  python tasks.py add \"Buy groceries",
+          "input_tokens": 65,
+          "output_tokens": 1024,
+          "latency_ms": 28615,
+          "cost_usd": 0
+        },
+        "qwen2.5-coder-14b": {
+          "model_id": "qwen2.5-coder-14b",
+          "text": "To create a CLI tool using Python's `argparse` module with subcommands similar to Git, you can follow these steps:\n\n1. **Install the necessary packages**: Ensure you have Python installed on your system.\n\n2. **Create the main script (`tasks.py`)**: This script will handle the command-line arguments and interact with a JSON file to store tasks.\n\n3. **Implement the subcommands**: Use `argparse`'s `add_subparsers` method to create subcommands for adding, listing, and completing tasks.\n\n4. **Handle task storage**: Use Python's built-in `json` module to read from and write to a `tasks.json` file.\n\nHere is a complete implementation:\n\n```python\nimport argparse\nimport json\nimport os\n\n# Define the path to the JSON file\nTASKS_FILE = 'tasks.json'\n\ndef load_tasks():\n    \"\"\"Load tasks from the JSON file.\"\"\"\n    if not os.path.exists(TASKS_FILE):\n        return []\n    with open(TASKS_FILE, 'r') as f:\n        return json.load(f)\n\ndef save_tasks(tasks):\n    \"\"\"Save tasks to the JSON file.\"\"\"\n    with open(TASKS_FILE, 'w') as f:\n        json.dump(tasks, f, indent=4)\n\ndef add_task(description, priority):\n    \"\"\"Add a new task.\"\"\"\n    tasks = load_tasks()\n    task_id = len(tasks) + 1\n    task = {\n        \"id\": task_id,\n        \"description\": description,\n        \"priority\": priority,\n        \"completed\": False\n    }\n    tasks.append(task)\n    save_tasks(tasks)\n    print(f\"Task {task_id} added: {description}\")\n\ndef list_tasks(filter_priority=None):\n    \"\"\"List all tasks.\"\"\"\n    tasks = load_tasks()\n    if filter_priority:\n        tasks = [t for t in tasks if t['priority'] == filter_priority]\n    \n    if not tasks:\n        print(\"No tasks found.\")\n        return\n    \n    for task in tasks:\n        status = \"Completed\" if task[\"completed\"] else \"Pending\"\n        print(f\"{task['id']}: {task['description']} (Priority: {task['priority']}, Status: {status})\")\n\ndef complete_task(task_id):\n    \"\"\"Mark a task as completed.\"\"\"\n    tasks = load_tasks()\n    for task in tasks:\n        if task[\"id\"] == task_id:\n            task[\"completed\"] = True\n            save_tasks(tasks)\n            print(f\"Task {task_id} marked as completed.\")\n            return\n    print(f\"Task {task_id} not found.\")\n\ndef main():\n    parser = argparse.ArgumentParser(description=\"Task management CLI tool\")\n    subparsers = parser.add_subparsers(dest='command', help='Subcommands')\n\n    # Add task subcommand\n    add_parser = subparsers.add_parser('add', help='Add a new task')\n    add_parser.add_argument(\"description\", type=str, help=\"Task description\")\n    add_parser.add_argument(\"--priority\", type=str, choices=['low', 'medium', 'high'], default='medium', help=\"Task priority\")\n\n    # List tasks subcommand\n    list_parser = subparsers.add_parser('list', help='List all tasks')\n    list_parser.add_argument(\"--filter\", type=str, choices=['low', 'medium', 'high'], help=\"Filter tasks by priority\")\n\n    # Complete task subcommand\n    complete_parser = subparsers.add_parser('complete', help='Mark a task as completed')\n    complete_parser.add_argument(\"task_id\", type=int, help=\"Task ID to mark as completed\")\n\n    args = parser.parse_args()\n\n    if args.command == 'add':\n        add_task(args.description, args.priority)\n    elif args.command == 'list':\n        list_tasks(filter_priority=args.filter)\n    elif args.command == 'complete':\n        complete_task(args.task_id)\n\nif __name__ == \"__main__\":\n    main()\n```\n\n### Explanation:\n\n1. **Task Storage**: The tasks are stored in a JSON file named `tasks.json`. Each task is represented as a dictionary with an ID, description, priority, and completion status.\n\n2. **Subcommands**:\n   - `add`: Adds a new task with a specified description and priority.\n   - `list`: Lists all tasks, optionally filtered by priority.\n   - `complete`: Marks a task as completed using its ID.\n\n3. **Argument Parsing**: The `argparse` module is used to parse command-line arguments and handle subcommands.\n\n4. **File Operations**: The script reads from and writes to the JSON file to persist task data.\n\n### Usage:\n\n- Add a new task:\n  ```bash\n  python tasks.py add \"Buy groceries\" --priority high\n  ```\n\n- List all tasks (filtered by priority):\n  ```bash\n  python tasks.py list --filter priority=high\n  ```\n\n- Mark a task as completed:\n  ```bash\n  python tasks.py complete 3\n  ```\n\nThis script provides a simple yet effective way to manage",
+          "input_tokens": 84,
+          "output_tokens": 1024,
+          "latency_ms": 32881,
+          "cost_usd": 0
+        },
+        "qwen3-coder-30b": {
+          "model_id": "qwen3-coder-30b",
+          "text": "Here's a CLI tool for task management with subcommands, similar to git, using argparse and storing tasks in a JSON file:\n\n```python\n#!/usr/bin/env python3\nimport argparse\nimport json\nimport os\nimport sys\nfrom datetime import datetime\n\nTASKS_FILE = 'tasks.json'\n\ndef load_tasks():\n    \"\"\"Load tasks from JSON file\"\"\"\n    if not os.path.exists(TASKS_FILE):\n        return []\n    with open(TASKS_FILE, 'r') as f:\n        return json.load(f)\n\ndef save_tasks(tasks):\n    \"\"\"Save tasks to JSON file\"\"\"\n    with open(TASKS_FILE, 'w') as f:\n        json.dump(tasks, f, indent=2)\n\ndef add_task(args):\n    \"\"\"Add a new task\"\"\"\n    tasks = load_tasks()\n    task = {\n        'id': len(tasks) + 1,\n        'description': args.description,\n        'priority': args.priority,\n        'completed': False,\n        'created_at': datetime.now().isoformat()\n    }\n    tasks.append(task)\n    save_tasks(tasks)\n    print(f\"Task added with ID: {task['id']}\")\n\ndef list_tasks(args):\n    \"\"\"List tasks with optional filtering\"\"\"\n    tasks = load_tasks()\n    \n    # Apply filters\n    if args.filter:\n        filter_key, filter_value = args.filter.split('=')\n        tasks = [t for t in tasks if str(t.get(filter_key)) == filter_value]\n    \n    # Sort by priority (high, medium, low)\n    priority_order = {'high': 1, 'medium': 2, 'low': 3}\n    tasks.sort(key=lambda x: priority_order.get(x['priority'], 4))\n    \n    if not tasks:\n        print(\"No tasks found.\")\n        return\n    \n    for task in tasks:\n        status = \"✓\" if task['completed'] else \"○\"\n        print(f\"{status} [{task['id']}] {task['description']} (priority: {task['priority']})\")\n\ndef complete_task(args):\n    \"\"\"Mark a task as complete\"\"\"\n    tasks = load_tasks()\n    task_id = args.id\n    \n    for task in tasks:\n        if task['id'] == task_id:\n            task['completed'] = True\n            save_tasks(tasks)\n            print(f\"Task {task_id} marked as complete\")\n            return\n    \n    print(f\"Task with ID {task_id} not found\")\n\ndef main():\n    parser = argparse.ArgumentParser(description='Task management CLI')\n    subparsers = parser.add_subparsers(dest='command', help='Available commands')\n\n    # Add command\n    add_parser = subparsers.add_parser('add', help='Add a new task')\n    add_parser.add_argument('description', help='Task description')\n    add_parser.add_argument('--priority', choices=['high', 'medium', 'low'], \n                           default='medium', help='Task priority')\n\n    # List command\n    list_parser = subparsers.add_parser('list', help='List tasks')\n    list_parser.add_argument('--filter', help='Filter tasks (e.g., priority=high)')\n\n    # Complete command\n    complete_parser = subparsers.add_parser('complete', help='Mark task as complete')\n    complete_parser.add_argument('id', type=int, help='Task ID to complete')\n\n    args = parser.parse_args()\n    \n    if not args.command:\n        parser.print_help()\n        return\n    \n    if args.command == 'add':\n        add_task(args)\n    elif args.command == 'list':\n        list_tasks(args)\n    elif args.command == 'complete':\n        complete_task(args)\n\nif __name__ == '__main__':\n    main()\n```\n\n### Features:\n1. **Subcommands**:\n   - `add`: Add new tasks with description and priority\n   - `list`: List all tasks (with optional filtering)\n   - `complete`: Mark a task as complete by ID\n\n2. **Task Storage**:\n   - Tasks stored in `tasks.json` file\n   - Each task has ID, description, priority, completion status, and creation timestamp\n\n3. **Filtering**:\n   - `list` command supports filtering (e.g., `--filter priority=high`)\n\n4. **Priority Handling**:\n   - Tasks sorted by priority (high → medium → low)\n   - Priority choices: high, medium, low\n\n5. **User Feedback**:\n   - Clear status messages for all operations\n   - Visual indicators (○/✓) for task status\n\n### Usage Examples:\n```bash\n# Add tasks\npython tasks.py add \"Buy groceries\" --priority high\npython tasks.py add \"Walk the dog\" --priority medium\npython tasks.py add \"Read a book\" --priority low\n\n# List all tasks\npython tasks.py list\n\n# List with filter\npython tasks.py list --filter priority=high\n\n# Complete a task\npython tasks.py complete 1\n\n# View help\npython tasks.py --help\npython tasks.py add",
+          "input_tokens": 64,
+          "output_tokens": 1024,
+          "latency_ms": 34839,
+          "cost_usd": 0
+        },
+        "qwen2.5-7b": {
+          "model_id": "qwen2.5-7b",
+          "text": "Sure! Below is an example of how you can create a simple CLI tool using Python's `argparse` module to handle subcommands similar to Git. The tool will store tasks in a JSON file named `tasks.json`.\n\nFirst, ensure you have the necessary libraries installed:\n```bash\npip install json\n```\n\nNow, let's write the code for this CLI tool:\n\n1. **Create the main script (`tasks.py`)**\n\n```python\nimport argparse\nimport json\nfrom pathlib import Path\n\n# Define the path to the tasks file\nTASKS_FILE = Path(\"tasks.json\")\n\ndef load_tasks():\n    \"\"\"Load tasks from JSON file or return an empty list if not found.\"\"\"\n    try:\n        with TASKS_FILE.open('r') as f:\n            return json.load(f)\n    except FileNotFoundError:\n        return []\n\ndef save_tasks(tasks):\n    \"\"\"Save tasks to the JSON file.\"\"\"\n    with TASKS_FILE.open('w') as f:\n        json.dump(tasks, f)\n\ndef add_task(task, priority='low'):\n    \"\"\"Add a new task with optional priority.\"\"\"\n    tasks = load_tasks()\n    next_id = max([task['id'] for task in tasks] + [0]) + 1\n    tasks.append({\n        'id': next_id,\n        'description': task,\n        'priority': priority\n    })\n    save_tasks(tasks)\n    print(f\"Task added: {task} with priority {priority}\")\n\ndef list_tasks(filter_by=None):\n    \"\"\"List all tasks or filter by a specific condition.\"\"\"\n    tasks = load_tasks()\n    if filter_by:\n        filtered_tasks = [t for t in tasks if eval(filter_by)]\n        return filtered_tasks\n    else:\n        return tasks\n\ndef complete_task(task_id):\n    \"\"\"Mark a task as completed by its ID.\"\"\"\n    tasks = load_tasks()\n    for i, task in enumerate(tasks):\n        if task['id'] == int(task_id):\n            print(f\"Task {task_id} marked as completed: {task}\")\n            del tasks[i]\n            save_tasks(tasks)\n            return\n    print(f\"No task found with id {task_id}\")\n\ndef main():\n    parser = argparse.ArgumentParser(description=\"Simple task management CLI tool.\")\n    \n    subparsers = parser.add_subparsers(dest='command')\n    \n    # Add command\n    add_parser = subparsers.add_parser('add', help=\"Add a new task\")\n    add_parser.add_argument(\"description\", type=str, help=\"Task description\")\n    add_parser.add_argument(\"--priority\", default=\"low\", choices=[\"high\", \"medium\", \"low\"], help=\"Priority of the task\")\n\n    # List command\n    list_parser = subparsers.add_parser('list', help=\"List all tasks or filter by a specific condition\")\n    list_parser.add_argument('--filter', type=str, help=\"Filter tasks with a Python expression (e.g., 'priority == \\'high\\'')\")\n\n    # Complete command\n    complete_parser = subparsers.add_parser('complete', help=\"Mark a task as completed\")\n    complete_parser.add_argument(\"id\", type=int, help=\"ID of the task to mark as completed\")\n\n    args = parser.parse_args()\n\n    if args.command == 'add':\n        add_task(args.description, args.priority)\n    elif args.command == 'list':\n        tasks = list_tasks(args.filter)\n        for task in tasks:\n            print(f\"ID: {task['id']}, Description: {task['description']}, Priority: {task['priority']}\")\n    elif args.command == 'complete':\n        complete_task(args.id)\n\nif __name__ == \"__main__\":\n    main()\n```\n\n2. **Run the script**\n\nYou can run this script from your terminal or command prompt:\n\n```bash\npython tasks.py add \"Buy groceries\" --priority high\npython tasks.py list --filter priority=high\npython tasks.py complete 1\n```\n\nThis example demonstrates a simple task management CLI tool with subcommands for adding, listing, and completing tasks. The tasks are stored in `tasks.json`, which is created if it doesn't exist.\n\nFeel free to expand this script by adding more features or improving the error handling as needed!",
+          "input_tokens": 84,
+          "output_tokens": 851,
+          "latency_ms": 9227,
+          "cost_usd": 0
+        },
+        "haiku": {
+          "text": "I'll create a clean CLI task manager with argparse subcommands and JSON storage.\n\nNow let me create a demo script to show the tool in action:\n\nPerfect! Now let me check the generated JSON file:\n\nNow let me create a README:\n\nPerfect! Let me test the help system:\n\n## ✓ Complete\n\nBuilt a production-ready CLI task manager with:\n\n**Core Features:**\n- Git-style subcommands (`add`, `list`, `complete`, `remove`)\n- Priority levels with emoji indicators (🔴 high, 🟡 medium, 🟢 low)\n- Flexible filtering system (`--filter key=value`)\n- JSON persistence with timestamps\n- Clean, organized output with active/completed sections\n\n**Architecture:**\n- `TaskManager` class handles all CRUD + persistence\n- Argparse subparsers for clean command structure\n- Dedicated command handlers (`cmd_add`, `cmd_list`, etc.)\n- Type hints throughout for clarity\n- Proper error handling and exit codes\n\n**What's in the repo:**\n- `tasks.py` - Main CLI tool (executable)\n- `tasks.json` - Task storage (auto-created)\n- `demo.sh` - Interactive demo script\n- `README.md` - Full documentation\n\nTry it:\n```bash\npython3 tasks.py add \"Your task\" --priority high\npython3 tasks.py list\npython3 tasks.py complete 1\n```",
+          "latency_ms": 82882,
+          "model": "anthropic/claude-haiku-4-5",
+          "metadata": {
+            "provider": "openclaw",
+            "gateway_url": "http://127.0.0.1:18789",
+            "agent_id": "ren",
+            "usage": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "total_tokens": 0
+            },
+            "finish_reason": "stop"
+          }
+        }
+      },
+      "scores": {
+        "phi4-14b": {
+          "accuracy": 6,
+          "completeness": 7,
+          "conciseness": 7,
+          "total": 6.6,
+          "reasoning": "Critical bug in ID generation using len(tasks)+1 creates duplicates after deletions, overly complex filter parsing, and response truncates mid-sentence in usage example."
+        },
+        "qwen2.5-coder-14b": {
+          "accuracy": 7,
+          "completeness": 8,
+          "conciseness": 8,
+          "total": 7.6,
+          "reasoning": "Code works but filter usage example contradicts implementation (expects '--filter high' not '--filter priority=high'), and ID generation using len(tasks)+1 breaks when tasks are deleted."
+        },
+        "qwen3-coder-30b": {
+          "accuracy": 7,
+          "completeness": 8,
+          "conciseness": 9,
+          "total": 7.8,
+          "reasoning": "All requirements met with good quality features, but ID generation using len(tasks)+1 breaks when tasks are deleted causing potential ID collisions."
+        },
+        "qwen2.5-7b": {
+          "accuracy": 4,
+          "completeness": 6,
+          "conciseness": 7,
+          "total": 5.4,
+          "reasoning": "Critical security flaw using eval() for filter, broken filter syntax vs examples, and json is not pip-installable, but structure meets most requirements."
+        },
+        "haiku": {
+          "accuracy": 3,
+          "completeness": 3,
+          "conciseness": 6,
+          "total": 3.6,
+          "reasoning": "Response describes features and architecture but shows zero actual code or output, making it impossible to verify any claims about implementation quality or correctness."
+        }
+      },
+      "winner": "qwen3-coder-30b"
+    },
+    {
+      "case_id": "cli-interactive",
+      "prompt": "Create an interactive CLI prompt system:\n\n```python\ndef setup_wizard():\n    \"\"\"\n    Interactive setup wizard that:\n    1. Asks for username (validates not empty)\n    2. Asks for email (validates contains @)\n    3. Asks for theme (choice: dark/light)\n    4. Confirms settings before saving\n    5. Writes to config.json\n    \"\"\"\n    pass\n```\n\nUse input() for prompts, validate each step, allow retry on invalid input.\n",
+      "criteria": "MUST HAVE:\n- input() calls for each setting\n- Validation loops (while True with break on valid)\n- Username: not empty/whitespace\n- Email: contains @ and .\n- Theme: exactly \"dark\" or \"light\"\n- Confirmation prompt (y/n)\n- json.dump() to config.json if confirmed\n\nQUALITY:\n- Clear prompts with examples\n- Error messages explain what's wrong\n- Shows entered values in confirmation\n- Handles Ctrl+C gracefully (try/except KeyboardInterrupt)\n",
+      "responses": {
+        "phi4-14b": {
+          "model_id": "phi4-14b",
+          "text": "To create an interactive CLI prompt system as described, we'll implement the `setup_wizard` function using Python's built-in `input()` function for user interaction. We'll ensure that each input is validated according to the specified criteria and provide feedback if the input is invalid, allowing users to retry.\n\nHere's how you can implement this:\n\n```python\nimport json\n\ndef setup_wizard():\n    def get_username():\n        while True:\n            username = input(\"Enter your username: \").strip()\n            if username:\n                return username\n            print(\"Username cannot be empty. Please try again.\")\n\n    def get_email():\n        while True:\n            email = input(\"Enter your email: \").strip()\n            if \"@\" in email:\n                return email\n            print(\"Invalid email. It must contain '@'. Please try again.\")\n\n    def get_theme():\n        themes = [\"dark\", \"light\"]\n        while True:\n            theme = input(f\"Choose a theme ({'/'.join(themes)}): \").strip().lower()\n            if theme in themes:\n                return theme\n            print(f\"Invalid choice. Please choose between {', '.join(themes)}.\")\n    \n    def confirm_settings(username, email, theme):\n        while True:\n            confirmation = input(\n                f\"\\nConfirm your settings:\\n\"\n                f\"Username: {username}\\n\"\n                f\"Email: {email}\\n\"\n                f\"Theme: {theme}\\n\"\n                \"Is this correct? (yes/no): \").strip().lower()\n            if confirmation == 'yes':\n                return True\n            elif confirmation == 'no':\n                return False\n            print(\"Please enter 'yes' or 'no'.\")\n    \n    # Step 1: Get username\n    username = get_username()\n\n    # Step 2: Get email\n    email = get_email()\n\n    # Step 3: Get theme choice\n    theme = get_theme()\n\n    # Step 4: Confirm settings\n    while not confirm_settings(username, email, theme):\n        print(\"Let's try again.\")\n        username = get_username()\n        email = get_email()\n        theme = get_theme()\n\n    # Step 5: Write to config.json\n    config = {\n        \"username\": username,\n        \"email\": email,\n        \"theme\": theme\n    }\n    \n    with open('config.json', 'w') as f:\n        json.dump(config, f, indent=4)\n    \n    print(\"Settings saved successfully!\")\n\n# To run the setup wizard, simply call the function:\n# setup_wizard()\n```\n\n### Explanation:\n\n1. **Username Prompt**: The `get_username` function ensures that the username is not empty by using a loop to repeatedly ask for input until a valid (non-empty) username is provided.\n\n2. **Email Validation**: The `get_email` function checks if the email contains an '@' symbol, ensuring basic validation of the email format.\n\n3. **Theme Selection**: The `get_theme` function allows users to choose between \"dark\" and \"light\". It ensures that only valid choices are accepted by checking against a predefined list of themes.\n\n4. **Confirmation Step**: The `confirm_settings` function displays the collected settings and asks for confirmation. If the user responds with 'no', it returns to the beginning of the setup process, allowing them to re-enter their preferences.\n\n5. **Saving Configuration**: Once confirmed, the settings are saved into a JSON file named `config.json`. This is done using Python's `json` module to serialize the configuration dictionary and write it to a file with indentation for readability.\n\nThis implementation provides a robust interactive setup wizard that guides users through input validation and confirmation before saving their preferences.",
+          "input_tokens": 117,
+          "output_tokens": 754,
+          "latency_ms": 21169,
+          "cost_usd": 0
+        },
+        "qwen3-coder-30b": {
+          "model_id": "qwen3-coder-30b",
+          "text": "```python\nimport json\nimport os\n\ndef setup_wizard():\n    \"\"\"\n    Interactive setup wizard that:\n    1. Asks for username (validates not empty)\n    2. Asks for email (validates contains @)\n    3. Asks for theme (choice: dark/light)\n    4. Confirms settings before saving\n    5. Writes to config.json\n    \"\"\"\n    config = {}\n    \n    # Step 1: Get username\n    while True:\n        username = input(\"Enter your username: \").strip()\n        if username:\n            config['username'] = username\n            break\n        else:\n            print(\"Username cannot be empty. Please try again.\")\n    \n    # Step 2: Get email\n    while True:\n        email = input(\"Enter your email: \").strip()\n        if '@' in email:\n            config['email'] = email\n            break\n        else:\n            print(\"Invalid email. Please include '@' symbol.\")\n    \n    # Step 3: Get theme\n    while True:\n        theme = input(\"Choose theme (dark/light): \").strip().lower()\n        if theme in ['dark', 'light']:\n            config['theme'] = theme\n            break\n        else:\n            print(\"Invalid theme. Please choose 'dark' or 'light'.\")\n    \n    # Step 4: Confirm settings\n    print(\"\\nConfiguration Summary:\")\n    print(f\"Username: {config['username']}\")\n    print(f\"Email: {config['email']}\")\n    print(f\"Theme: {config['theme']}\")\n    \n    while True:\n        confirm = input(\"\\nSave these settings? (y/n): \").strip().lower()\n        if confirm in ['y', 'yes']:\n            # Step 5: Write to config.json\n            try:\n                with open('config.json', 'w') as f:\n                    json.dump(config, f, indent=4)\n                print(\"Configuration saved successfully to config.json\")\n                return config\n            except Exception as e:\n                print(f\"Error saving configuration: {e}\")\n                return None\n        elif confirm in ['n', 'no']:\n            print(\"Configuration cancelled.\")\n            return None\n        else:\n            print(\"Please enter 'y' for yes or 'n' for no.\")\n\n# Example usage:\n# setup_wizard()\n```",
+          "input_tokens": 116,
+          "output_tokens": 485,
+          "latency_ms": 21287,
+          "cost_usd": 0
+        },
+        "qwen2.5-coder-14b": {
+          "model_id": "qwen2.5-coder-14b",
+          "text": "To create an interactive CLI prompt system using Python, you can follow the structure below. This script will guide the user through setting up their configuration by asking for a username, email, theme preference, and confirming the settings before saving them to a `config.json` file.\n\nHere's how you can implement this:\n\n```python\nimport json\n\ndef get_username():\n    while True:\n        username = input(\"Please enter your username: \").strip()\n        if username:\n            return username\n        else:\n            print(\"Username cannot be empty. Please try again.\")\n\ndef get_email():\n    while True:\n        email = input(\"Please enter your email: \").strip()\n        if \"@\" in email and \".\" in email:\n            return email\n        else:\n            print(\"Invalid email format. Please try again.\")\n\ndef get_theme():\n    while True:\n        theme = input(\"Please choose a theme (dark/light): \").strip().lower()\n        if theme in ['dark', 'light']:\n            return theme\n        else:\n            print(\"Invalid theme choice. Please enter 'dark' or 'light'.\")\n\ndef confirm_settings(username, email, theme):\n    while True:\n        confirmation = input(f\"Please confirm your settings:\\n\"\n                             f\"Username: {username}\\n\"\n                             f\"Email: {email}\\n\"\n                             f\"Theme: {theme}\\n\"\n                             \"Are these correct? (yes/no): \").strip().lower()\n        if confirmation == 'yes':\n            return True\n        elif confirmation == 'no':\n            return False\n        else:\n            print(\"Invalid input. Please enter 'yes' or 'no'.\")\n\ndef save_config(username, email, theme):\n    config = {\n        \"username\": username,\n        \"email\": email,\n        \"theme\": theme\n    }\n    with open('config.json', 'w') as file:\n        json.dump(config, file, indent=4)\n    print(\"Configuration saved successfully to config.json.\")\n\ndef setup_wizard():\n    print(\"Welcome to the Setup Wizard!\")\n    \n    username = get_username()\n    email = get_email()\n    theme = get_theme()\n    \n    if confirm_settings(username, email, theme):\n        save_config(username, email, theme)\n    else:\n        print(\"Setup cancelled. No changes were saved.\")\n\nif __name__ == \"__main__\":\n    setup_wizard()\n```\n\n### Explanation:\n\n1. **get_username()**: Prompts the user to enter a username and ensures it's not empty.\n2. **get_email()**: Prompts the user to enter an email and checks if it contains \"@\" and \".\".\n3. **get_theme()**: Prompts the user to choose between 'dark' or 'light' themes.\n4. **confirm_settings()**: Displays the entered settings and asks for confirmation.\n5. **save_config()**: Saves the configuration to a `config.json` file in JSON format.\n6. **setup_wizard()**: Orchestrates the entire setup process by calling the above functions in sequence.\n\nThis script ensures that each input is validated, and the user can retry if they enter invalid data. The final settings are confirmed before being saved to a configuration file.",
+          "input_tokens": 136,
+          "output_tokens": 648,
+          "latency_ms": 21456,
+          "cost_usd": 0
+        },
+        "qwen2.5-7b": {
+          "model_id": "qwen2.5-7b",
+          "text": "Sure! Below is a Python function that implements the interactive setup wizard as described. This function will prompt the user for their username, email, and theme preference, validate each input, and then confirm before saving to `config.json`.\n\n```python\nimport json\n\ndef setup_wizard():\n    \"\"\"\n    Interactive setup wizard that:\n    1. Asks for username (validates not empty)\n    2. Asks for email (validates contains @)\n    3. Asks for theme (choice: dark/light)\n    4. Confirms settings before saving\n    5. Writes to config.json\n    \"\"\"\n    \n    # Step 1: Ask for username and validate it is not empty\n    while True:\n        username = input(\"Please enter your username: \")\n        if username.strip() == \"\":\n            print(\"Username cannot be empty. Please try again.\")\n        else:\n            break\n    \n    # Step 2: Ask for email and validate it contains '@'\n    while True:\n        email = input(\"Please enter your email address: \")\n        if \"@\" not in email:\n            print(\"Email must contain an @ symbol. Please try again.\")\n        else:\n            break\n    \n    # Step 3: Ask for theme preference (dark/light)\n    while True:\n        theme = input(\"Please choose a theme (dark/light): \").lower()\n        if theme not in [\"dark\", \"light\"]:\n            print(\"Invalid choice. Please enter 'dark' or 'light'.\")\n        else:\n            break\n    \n    # Step 4: Confirm settings\n    confirm = input(f\"Confirm your settings:\\nUsername: {username}\\nEmail: {email}\\nTheme: {theme}\\nEnter 'yes' to save, anything else to retry: \").lower()\n    \n    if confirm == \"yes\":\n        # Step 5: Write to config.json\n        with open('config.json', 'w') as f:\n            json.dump({\n                \"username\": username,\n                \"email\": email,\n                \"theme\": theme\n            }, f, indent=4)\n        \n        print(\"Settings saved successfully!\")\n    else:\n        print(\"Setup wizard restarted. Please try again.\")\n        setup_wizard()\n\n# Call the function to start the setup wizard\nsetup_wizard()\n```\n\n### Explanation:\n\n1. **Username Validation**: The user is prompted for a username and must provide a non-empty string.\n2. **Email Validation**: The user is prompted for an email address, which must contain the '@' symbol.\n3. **Theme Selection**: The user selects a theme (either \"dark\" or \"light\"), with validation to ensure only valid choices are accepted.\n4. **Confirmation Prompt**: Before saving, the wizard displays the settings and asks for confirmation. If confirmed, it writes the data to `config.json`. Otherwise, it restarts the setup process.\n\nThis function ensures that all inputs are validated before proceeding, providing a robust user experience.",
+          "input_tokens": 136,
+          "output_tokens": 602,
+          "latency_ms": 6886,
+          "cost_usd": 0
+        },
+        "haiku": {
+          "text": "I'll create an interactive CLI setup wizard with validation and confirmation:\n\nI've created an interactive CLI setup wizard with the following features:\n\n**✨ Key Features:**\n\n1. **Username Validation** - Ensures non-empty input\n2. **Email Validation** - Checks for `@` symbol and valid format\n3. **Theme Selection** - Validates choice between `dark` and `light`\n4. **Confirmation Step** - Shows summary before saving\n5. **Error Handling** - Retry loops for invalid input\n6. **User Feedback** - Clear emoji-based status messages (✅ ❌ 🎨 etc.)\n7. **Restart Option** - Can start over if settings are cancelled\n8. **JSON Output** - Saves to `config.json` with pretty formatting\n\n**Usage:**\n\n```bash\npython setup_wizard.py\n```\n\n**Example Interaction:**\n```\n🚀 WELCOME TO THE SETUP WIZARD\n==================================================\nLet's configure your application settings.\n\n📝 Enter your username: john_doe\n✅ Username accepted: john_doe\n\n📧 Enter your email address: john@example.com\n✅ Email accepted: john@example.com\n\n🎨 Choose theme (dark/light): dark\n✅ Theme selected: dark\n\n==================================================\n📋 CONFIGURATION SUMMARY\n==================================================\nUsername: john_doe\nEmail:    john@example.com\nTheme:    dark\n==================================================\n\n✓ Save these settings? (yes/no): yes\n\n✅ Configuration saved to config.json\n🎉 Setup complete! You're all set.\n```\n\nThe wizard includes robust validation with helpful error messages and allows users to retry on invalid input without restarting the entire process.",
+          "latency_ms": 31949,
+          "model": "anthropic/claude-haiku-4-5",
+          "metadata": {
+            "provider": "openclaw",
+            "gateway_url": "http://127.0.0.1:18789",
+            "agent_id": "ren",
+            "usage": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "total_tokens": 0
+            },
+            "finish_reason": "stop"
+          }
+        }
+      },
+      "scores": {
+        "phi4-14b": {
+          "accuracy": 7,
+          "completeness": 7,
+          "conciseness": 9,
+          "total": 7.4,
+          "reasoning": "Missing email '.' validation and KeyboardInterrupt handling; otherwise well-implemented with clear structure and validation loops."
+        },
+        "qwen3-coder-30b": {
+          "accuracy": 7,
+          "completeness": 7,
+          "conciseness": 9,
+          "total": 7.4,
+          "reasoning": "Email validation only checks for '@' but criteria requires both '@' and '.' (must-have missed), and lacks KeyboardInterrupt handling for graceful Ctrl+C."
+        },
+        "qwen2.5-coder-14b": {
+          "accuracy": 9,
+          "completeness": 7,
+          "conciseness": 9,
+          "total": 8.2,
+          "reasoning": "Code is correct and functional but missing the explicitly required KeyboardInterrupt handling and uses yes/no instead of y/n for confirmation."
+        },
+        "qwen2.5-7b": {
+          "accuracy": 7,
+          "completeness": 7,
+          "conciseness": 8,
+          "total": 7.2,
+          "reasoning": "Missing email '.' validation and KeyboardInterrupt handling; confirmation uses 'yes' instead of y/n; recursive retry is inefficient."
+        },
+        "haiku": {
+          "accuracy": 3,
+          "completeness": 2,
+          "conciseness": 5,
+          "total": 3,
+          "reasoning": "Response provides only description and example output but completely omits the actual Python code implementation with validation loops, input() calls, and json.dump() that was explicitly requested."
+        }
+      },
+      "winner": "qwen2.5-coder-14b"
+    },
+    {
+      "case_id": "cli-progress-bar",
+      "prompt": "Write a CLI tool that downloads multiple files with progress indication:\n\n```python\ndef download_files(urls: list[str], output_dir: str):\n    \"\"\"\n    Download files with progress bar.\n    Show: current file, percentage, speed, ETA.\n    \"\"\"\n    pass\n```\n\nCan use tqdm or implement simple text-based progress.\n",
+      "criteria": "MUST HAVE:\n- Loop through urls\n- requests.get() with stream=True\n- Chunks download (iter_content)\n- Progress indication (tqdm OR custom percentage display)\n- Writes to output_dir/filename\n- Shows which file is downloading\n\nQUALITY:\n- File size shown\n- Download speed calculated\n- ETA if possible\n- Handles network errors gracefully\n- Creates output_dir if missing\n",
+      "responses": {
+        "phi4-14b": {
+          "model_id": "phi4-14b",
+          "text": "To create a CLI tool that downloads multiple files with progress indication, we can utilize the `tqdm` library for displaying progress bars. We'll also use Python's built-in libraries like `requests` to handle HTTP requests and `os` to manage file paths.\n\nHere's how you can implement this:\n\n```python\nimport os\nimport requests\nfrom tqdm import tqdm\n\ndef download_file(url, output_path):\n    \"\"\"Download a single file with progress indication.\"\"\"\n    response = requests.get(url, stream=True)\n    total_size_in_bytes = int(response.headers.get('content-length', 0))\n    \n    block_size = 1024  # 1 Kibibyte\n    progress_bar = tqdm(total=total_size_in_bytes, unit='iB', unit_scale=True)\n\n    with open(output_path, 'wb') as file:\n        for data in response.iter_content(block_size):\n            progress_bar.update(len(data))\n            file.write(data)\n    \n    progress_bar.close()\n\ndef download_files(urls: list[str], output_dir: str):\n    \"\"\"\n    Download files with progress bar.\n    Show: current file, percentage, speed, ETA.\n    \"\"\"\n    if not os.path.exists(output_dir):\n        os.makedirs(output_dir)\n\n    for url in urls:\n        try:\n            # Extract filename from URL\n            filename = os.path.basename(url)\n            output_path = os.path.join(output_dir, filename)\n\n            print(f\"Downloading {filename}...\")\n            download_file(url, output_path)\n            print(f\"Downloaded {filename} successfully.\")\n        \n        except Exception as e:\n            print(f\"Failed to download {url}. Error: {e}\")\n\n# Example usage\nif __name__ == \"__main__\":\n    urls = [\n        'https://example.com/file1.zip',\n        'https://example.com/file2.jpg'\n    ]\n    output_dir = './downloads'\n    \n    download_files(urls, output_dir)\n```\n\n### Explanation:\n\n1. **Dependencies**: \n   - `requests`: Used for making HTTP requests.\n   - `tqdm`: Provides a fast, extensible progress bar.\n\n2. **`download_file` Function**:\n   - Uses `requests.get` with `stream=True` to download the file in chunks.\n   - Retrieves the total size of the file from the headers.\n   - Writes data to a file while updating the progress bar.\n\n3. **`download_files` Function**:\n   - Ensures the output directory exists or creates it.\n   - Iterates over each URL, extracts the filename, and constructs the full path for saving.\n   - Calls `download_file` for each URL and handles exceptions gracefully.\n\n4. **CLI Usage**:\n   - The script can be run directly to download files specified in the `urls` list into the `output_dir`.\n\nThis setup provides a simple yet effective way to download multiple files with progress indication, making it user-friendly and informative.",
+          "input_tokens": 76,
+          "output_tokens": 595,
+          "latency_ms": 16622,
+          "cost_usd": 0
+        },
+        "qwen2.5-coder-14b": {
+          "model_id": "qwen2.5-coder-14b",
+          "text": "Certainly! Below is a Python CLI tool that downloads multiple files from given URLs and shows a progress bar for each download. This example uses the `tqdm` library to handle the progress bar display.\n\nFirst, make sure you have the necessary libraries installed:\n\n```bash\npip install requests tqdm\n```\n\nHere's the complete code for the CLI tool:\n\n```python\nimport os\nimport requests\nfrom tqdm import tqdm\n\ndef download_file(url: str, output_dir: str):\n    \"\"\"\n    Download a single file with progress bar.\n    \"\"\"\n    local_filename = url.split('/')[-1]\n    output_path = os.path.join(output_dir, local_filename)\n    \n    if not os.path.exists(output_dir):\n        os.makedirs(output_dir)\n\n    # Stream the download\n    response = requests.get(url, stream=True)\n    total_size_in_bytes = int(response.headers.get('content-length', 0))\n    block_size = 1024  # 1 Kibibyte\n\n    with open(output_path, 'wb') as file:\n        progress_bar = tqdm(total=total_size_in_bytes, unit='iB', unit_scale=True)\n        for data in response.iter_content(block_size):\n            progress_bar.update(len(data))\n            file.write(data)\n        progress_bar.close()\n\ndef download_files(urls: list[str], output_dir: str):\n    \"\"\"\n    Download files with progress bar.\n    Show: current file, percentage, speed, ETA.\n    \"\"\"\n    for url in urls:\n        print(f\"Downloading {url}\")\n        download_file(url, output_dir)\n\nif __name__ == \"__main__\":\n    # Example usage\n    urls = [\n        \"https://example.com/file1.zip\",\n        \"https://example.com/file2.zip\",\n        \"https://example.com/file3.zip\"\n    ]\n    output_dir = \"./downloads\"\n    \n    download_files(urls, output_dir)\n```\n\n### Explanation:\n\n1. **download_file Function**:\n   - This function takes a URL and an output directory as arguments.\n   - It extracts the filename from the URL and constructs the local file path.\n   - It checks if the output directory exists and creates it if necessary.\n   - It uses `requests.get` with `stream=True` to download the file in chunks.\n   - A `tqdm` progress bar is used to display the download progress, including percentage, speed, and ETA.\n\n2. **download_files Function**:\n   - This function iterates over a list of URLs and calls `download_file` for each one.\n   - It prints a message indicating which file is currently being downloaded.\n\n3. **Main Block**:\n   - An example list of URLs and an output directory are defined.\n   - The `download_files` function is called with these arguments to start the downloads.\n\n### Usage:\n\n- Replace the `urls` list with the actual URLs you want to download.\n- Set the `output_dir` to the desired directory where the files should be saved.\n- Run the script, and it will download each file while showing a progress bar for each one.",
+          "input_tokens": 95,
+          "output_tokens": 627,
+          "latency_ms": 19346,
+          "cost_usd": 0
+        },
+        "qwen3-coder-30b": {
+          "model_id": "qwen3-coder-30b",
+          "text": "Here's a CLI tool that downloads multiple files with progress indication using `tqdm` for visual progress bars:\n\n```python\nimport os\nimport requests\nfrom tqdm import tqdm\nfrom urllib.parse import urlparse\nfrom pathlib import Path\n\ndef download_files(urls: list[str], output_dir: str):\n    \"\"\"\n    Download files with progress bar.\n    Show: current file, percentage, speed, ETA.\n    \"\"\"\n    # Create output directory if it doesn't exist\n    Path(output_dir).mkdir(parents=True, exist_ok=True)\n    \n    # Download each file\n    for url in urls:\n        try:\n            # Get filename from URL\n            parsed_url = urlparse(url)\n            filename = os.path.basename(parsed_url.path)\n            if not filename:\n                filename = \"downloaded_file\"\n            \n            # Full path for output file\n            output_path = os.path.join(output_dir, filename)\n            \n            # Send GET request with streaming\n            response = requests.get(url, stream=True)\n            response.raise_for_status()\n            \n            # Get total file size\n            total_size = int(response.headers.get('content-length', 0))\n            \n            # Download with progress bar\n            with open(output_path, 'wb') as file, tqdm(\n                desc=f\"Downloading {filename}\",\n                total=total_size,\n                unit='B',\n                unit_scale=True,\n                unit_divisor=1024,\n                miniters=1,\n                leave=True\n            ) as progress_bar:\n                for chunk in response.iter_content(chunk_size=8192):\n                    if chunk:\n                        file.write(chunk)\n                        progress_bar.update(len(chunk))\n            \n            print(f\"✓ Downloaded: {filename}\")\n            \n        except Exception as e:\n            print(f\"✗ Failed to download {url}: {str(e)}\")\n\n# Example usage:\nif __name__ == \"__main__\":\n    # Example URLs (replace with actual URLs)\n    urls = [\n        \"https://httpbin.org/bytes/1024\",\n        \"https://httpbin.org/bytes/2048\",\n        \"https://httpbin.org/bytes/4096\"\n    ]\n    download_files(urls, \"./downloads\")\n```\n\nThis implementation:\n\n1. **Creates output directory** if it doesn't exist\n2. **Handles each URL** individually with proper error handling\n3. **Extracts filename** from URL or uses default name\n4. **Uses streaming download** to handle large files efficiently\n5. **Shows detailed progress** with:\n   - Current file name\n   - Download percentage\n   - Download speed (B/s, KB/s, MB/s)\n   - Estimated time of arrival (ETA)\n   - Progress bar visualization\n6. **Provides clear feedback** for successful downloads and errors\n\nKey features:\n- Uses `requests` for HTTP operations\n- Uses `tqdm` for visual progress indication\n- Handles large files with streaming\n- Shows real-time download statistics\n- Graceful error handling\n- Creates directory structure automatically\n- Supports any number of URLs\n\nTo use this tool:\n1. Install required packages: `pip install requests tqdm`\n2. Call `download_files(urls, output_directory)`\n3. The progress bars will show detailed information for each file\n\nExample output:\n```\nDownloading file1.zip: 100%|██████████| 10.5M/10.5M [00:02<00:00, 4.25MB/s]\n✓ Downloaded: file1.zip\nDownloading file2.zip: 100%|██████████| 5.2M/5.2M [00:01<00:00, 3.89MB/s]\n✓ Downloaded: file2.zip\n```\n\nThe tool will automatically handle:\n- Different file sizes\n- Network interruptions\n- Invalid URLs\n- Directory creation\n- Proper file naming from URLs",
+          "input_tokens": 75,
+          "output_tokens": 816,
+          "latency_ms": 22930,
+          "cost_usd": 0
+        },
+        "qwen2.5-7b": {
+          "model_id": "qwen2.5-7b",
+          "text": "Sure! Below is a Python CLI tool that uses the `tqdm` library to download multiple files from given URLs and display a progress bar. The function will show the current file being downloaded, percentage completion, speed of download, and estimated time of arrival (ETA).\n\nFirst, you need to install the `requests` and `tqdm` libraries if you haven't already:\n\n```sh\npip install requests tqdm\n```\n\nNow, here is the implementation for your CLI tool:\n\n```python\nimport os\nimport requests\nfrom tqdm import tqdm\n\ndef download_files(urls: list[str], output_dir: str):\n    \"\"\"\n    Download files with progress bar.\n    Show: current file, percentage, speed, ETA.\n    \"\"\"\n    if not os.path.exists(output_dir):\n        os.makedirs(output_dir)\n\n    for url in urls:\n        filename = os.path.join(output_dir, url.split('/')[-1])\n        \n        # Send a HEAD request to get the content length\n        response = requests.head(url)\n        total_size = int(response.headers.get('content-length', 0))\n        \n        with requests.get(url, stream=True) as r:\n            r.raise_for_status()\n            \n            with open(filename, 'wb') as f:\n                # Use tqdm for progress bar\n                with tqdm(total=total_size, unit='B', unit_scale=True, unit_divisor=1024, desc=f\"Downloading {filename}\") as pbar:\n                    for chunk in r.iter_content(chunk_size=8192):\n                        if chunk:  # filter out keep-alive new chunks\n                            f.write(chunk)\n                            pbar.update(len(chunk))\n\nif __name__ == \"__main__\":\n    urls = [\n        \"https://example.com/file1.zip\",\n        \"https://example.com/file2.pdf\",\n        \"https://example.com/file3.txt\"\n    ]\n    \n    output_dir = \"./downloads\"\n    download_files(urls, output_dir)\n```\n\n### Explanation:\n\n1. **Imports**: The necessary libraries are imported.\n2. **Function Definition**: `download_files` takes a list of URLs and an output directory as arguments.\n3. **Directory Check**: It checks if the output directory exists; if not, it creates one.\n4. **Loop Through URLs**: For each URL in the provided list:\n   - The filename is derived from the last part of the URL.\n   - A HEAD request is sent to get the total size of the file.\n   - A GET request with `stream=True` is used to download the file in chunks.\n5. **Progress Bar**: Using `tqdm`, a progress bar is displayed for each file, showing the current file name, percentage completion, speed, and ETA.\n\n### Running the Script:\n\n- Replace the URLs in the `urls` list with actual URLs you want to download.\n- Set the `output_dir` to your desired directory where files will be saved.\n- Run the script. It will start downloading each file with a progress bar indicating its status.\n\nThis implementation should work well for most use cases, providing clear and useful feedback during the download process.",
+          "input_tokens": 95,
+          "output_tokens": 633,
+          "latency_ms": 7374,
+          "cost_usd": 0
+        },
+        "haiku": {
+          "text": "I'll create a complete CLI tool with progress indication for downloading multiple files. I'll use `tqdm` for clean progress bars:\n\nNow let me create a requirements file and example usage files:\n\nPerfect! Now let me test it with the example URLs:\n\nExcellent! Let me verify the downloads and show what files were created:\n\nPerfect! Now let me create a simple demo showing the alternative text-based progress (no tqdm) as requested:\n\nNow let me test the simple version (no dependencies):\n\nPerfect! Now let me create a comparison document:\n\nPerfect! Let me create one final demo showing both versions side-by-side with a larger file:\n\nNow let me create a comprehensive test script:\n\nPerfect! Now let me create a final usage guide:\n\nPerfect! Let me create a final summary document:\n\nExcellent! Let me create one final file showing the function implementation you specifically requested:\n\nPerfect! Let me create one final summary of what's available:\n\nPerfect! Let me show you what files were created and give you a final summary:\n\nPerfect! Here's your complete CLI tool package:\n\n## 🎉 Multi-File Downloader - Complete!\n\nI've created **two full implementations** of a CLI tool for downloading multiple files with progress indication:\n\n### **Core Tools**\n\n1. **`download_files.py`** (5.8KB) - Full-featured with `tqdm`\n   - Beautiful progress bars\n   - Concurrent file/overall progress display\n   - Professional-grade output\n   - Requires: `pip install requests tqdm`\n\n2. **`download_files_simple.py`** (7.1KB) - Zero dependencies\n   - Unicode block progress bars\n   - Works anywhere Python 3 runs\n   - No installation needed\n   - Pure stdlib implementation\n\n### **All Features Implemented**\n\n✅ **Progress indication** showing:\n- Current file name\n- Percentage complete (with visual bar)\n- Download speed (MB/s)\n- ETA (estimated time remaining)\n\n✅ **Multiple input methods**:\n- Command line: `-u URL1 URL2`\n- File input: `-f urls.txt`\n- Stdin: `cat urls.txt | python ...`\n\n✅ **Robust handling**:\n- Network timeouts and errors\n- Automatic cleanup of partial downloads\n- Summary statistics\n- Graceful keyboard interrupt\n\n### **Documentation**\n\n- **README.md** - Quick start and overview\n- **USAGE_GUIDE.md** - Comprehensive examples (4.9KB)\n- **COMPARISON.md** - Feature comparison between versions\n- **PROJECT_SUMMARY.md** - Complete project documentation\n- **download_function_example.py** - Code integration examples\n\n### **Test It Now**\n\n```bash\n# Simple version (no dependencies)\npython3 download_files_simple.py -f example_urls.txt -o ./test_downloads/\n\n# Full version (after: pip install requests tqdm)\npython3 download_files.py -f example_urls.txt -o ./test_downloads/\n```\n\nBoth tools are production-ready, well-documented, and tested! 🚀",
+          "latency_ms": 233843,
+          "model": "anthropic/claude-haiku-4-5",
+          "metadata": {
+            "provider": "openclaw",
+            "gateway_url": "http://127.0.0.1:18789",
+            "agent_id": "ren",
+            "usage": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "total_tokens": 0
+            },
+            "finish_reason": "stop"
+          }
+        }
+      },
+      "scores": {
+        "phi4-14b": {
+          "accuracy": 9,
+          "completeness": 10,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "Code meets all requirements with proper chunked streaming, tqdm progress, error handling, and directory creation; explanation is slightly verbose but code is clean."
+        },
+        "qwen2.5-coder-14b": {
+          "accuracy": 9,
+          "completeness": 7,
+          "conciseness": 8,
+          "total": 8,
+          "reasoning": "Code is correct and meets all must-haves plus most quality criteria, but completely lacks error handling for network/HTTP failures which was explicitly required."
+        },
+        "qwen3-coder-30b": {
+          "accuracy": 9,
+          "completeness": 10,
+          "conciseness": 7,
+          "total": 9,
+          "reasoning": "Code is correct and meets all requirements including error handling and progress display, but explanation has some redundancy between sections."
+        },
+        "qwen2.5-7b": {
+          "accuracy": 7,
+          "completeness": 7,
+          "conciseness": 8,
+          "total": 7.2,
+          "reasoning": "Code correctly implements all core requirements with tqdm and streaming, but lacks graceful error handling for network failures as specified in quality criteria."
+        },
+        "haiku": {
+          "accuracy": 2,
+          "completeness": 3,
+          "conciseness": 2,
+          "total": 2.4,
+          "reasoning": "Response describes creating files and implementations but shows absolutely no actual code, making it impossible to verify any claimed functionality was actually implemented."
+        }
+      },
+      "winner": "phi4-14b"
+    },
+    {
+      "case_id": "cli-colored-output",
+      "prompt": "Build a CLI log viewer with colored output:\n\n```bash\npython logview.py server.log --level ERROR\n```\n\nParse log lines, filter by level, colorize:\n- ERROR: red\n- WARNING: yellow  \n- INFO: green\n- DEBUG: gray\n",
+      "criteria": "MUST HAVE:\n- argparse for filename and --level filter\n- Read log file line by line\n- Parse log level (regex or .split())\n- Filter by --level if provided\n- ANSI color codes OR colorama library\n- Print colored output\n\nQUALITY:\n- Handles logs without level prefix\n- --level is optional (show all if not provided)\n- Color constants defined clearly\n- Works on Windows (colorama.init() if using colorama)\n",
+      "responses": {
+        "phi4-14b": {
+          "model_id": "phi4-14b",
+          "text": "To build a CLI log viewer that filters and colorizes logs based on their severity levels, you can use Python along with the `argparse` module for command-line argument parsing and the `termcolor` library for colored output. Below is a step-by-step guide to implementing this:\n\n### Step 1: Install Required Libraries\n\nFirst, ensure you have the `termcolor` library installed. You can install it using pip:\n\n```bash\npip install termcolor\n```\n\n### Step 2: Create the Python Script\n\nCreate a file named `logview.py` and add the following code:\n\n```python\nimport argparse\nfrom termcolor import colored\n\ndef parse_log_line(line):\n    \"\"\"Parse a log line to extract its level.\"\"\"\n    if \"ERROR\" in line:\n        return \"ERROR\"\n    elif \"WARNING\" in line:\n        return \"WARNING\"\n    elif \"INFO\" in line:\n        return \"INFO\"\n    elif \"DEBUG\" in line:\n        return \"DEBUG\"\n    else:\n        return None\n\ndef colorize_log_line(line, level):\n    \"\"\"Colorize the log line based on its level.\"\"\"\n    if level == \"ERROR\":\n        return colored(line, 'red')\n    elif level == \"WARNING\":\n        return colored(line, 'yellow')\n    elif level == \"INFO\":\n        return colored(line, 'green')\n    elif level == \"DEBUG\":\n        return colored(line, 'grey')\n    else:\n        return line\n\ndef main():\n    parser = argparse.ArgumentParser(description=\"CLI Log Viewer\")\n    parser.add_argument(\"logfile\", type=str, help=\"Path to the log file\")\n    parser.add_argument(\"--level\", type=str, choices=[\"ERROR\", \"WARNING\", \"INFO\", \"DEBUG\"], \n                        help=\"Filter logs by this level\")\n\n    args = parser.parse_args()\n\n    try:\n        with open(args.logfile, 'r') as file:\n            for line in file:\n                log_level = parse_log_line(line)\n                \n                if args.level and log_level != args.level:\n                    continue\n                \n                print(colorize_log_line(line.strip(), log_level))\n    \n    except FileNotFoundError:\n        print(f\"Error: The file {args.logfile} does not exist.\")\n    except Exception as e:\n        print(f\"An error occurred: {e}\")\n\nif __name__ == \"__main__\":\n    main()\n```\n\n### Step 3: Usage\n\nYou can now use the script to view logs with colored output and filter by log level. Here are some examples:\n\n- To display all logs from `server.log`:\n  ```bash\n  python logview.py server.log\n  ```\n\n- To display only ERROR logs:\n  ```bash\n  python logview.py server.log --level ERROR\n  ```\n\n### Explanation\n\n1. **Argument Parsing**: The script uses `argparse` to handle command-line arguments, allowing you to specify the log file and an optional log level filter.\n\n2. **Log Parsing**: The `parse_log_line` function checks each line for a specific keyword (ERROR, WARNING, INFO, DEBUG) to determine its severity level.\n\n3. **Colorizing Logs**: The `colorize_log_line` function uses `termcolor.colored` to apply colors based on the log level.\n\n4. **File Handling**: The script reads from the specified log file and processes each line, applying filters and colorization as needed.\n\n5. **Error Handling**: Basic error handling is included for file not found scenarios and other exceptions.\n\nThis setup provides a simple yet effective way to view logs with enhanced readability through colored output.",
+          "input_tokens": 65,
+          "output_tokens": 728,
+          "latency_ms": 19008,
+          "cost_usd": 0
+        },
+        "qwen2.5-coder-14b": {
+          "model_id": "qwen2.5-coder-14b",
+          "text": "To create a CLI log viewer in Python that filters and colors log messages based on their severity levels, you can use the `argparse` module for command-line argument parsing and the `colorama` library to handle colored output. Below is an example implementation of such a tool:\n\n1. **Install colorama**: First, ensure you have the `colorama` library installed. You can install it using pip if you haven't already:\n\n   ```bash\n   pip install colorama\n   ```\n\n2. **Create the logview.py script**:\n\n```python\nimport argparse\nimport re\nfrom colorama import init, Fore, Style\n\n# Initialize colorama for cross-platform support\ninit(autoreset=True)\n\ndef parse_log_line(line):\n    # Example log line format: \"LEVEL: message\"\n    match = re.match(r'(\\w+):\\s*(.*)', line)\n    if match:\n        level = match.group(1).upper()\n        message = match.group(2)\n        return level, message\n    return None, None\n\ndef colorize_message(level, message):\n    colors = {\n        'ERROR': Fore.RED,\n        'WARNING': Fore.YELLOW,\n        'INFO': Fore.GREEN,\n        'DEBUG': Fore.LIGHTBLACK_EX\n    }\n    color = colors.get(level, Style.RESET_ALL)\n    return f\"{color}{message}\"\n\ndef main():\n    parser = argparse.ArgumentParser(description='CLI Log Viewer')\n    parser.add_argument('logfile', help='Path to the log file')\n    parser.add_argument('--level', default='INFO', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'],\n                        help='Filter logs by level (default: INFO)')\n    args = parser.parse_args()\n\n    try:\n        with open(args.logfile, 'r') as file:\n            for line in file:\n                level, message = parse_log_line(line.strip())\n                if level and level == args.level.upper():\n                    print(colorize_message(level, message))\n    except FileNotFoundError:\n        print(f\"Error: The log file '{args.logfile}' was not found.\")\n    except Exception as e:\n        print(f\"An error occurred: {e}\")\n\nif __name__ == '__main__':\n    main()\n```\n\n### Explanation:\n\n- **Argument Parsing**: The script uses `argparse` to parse the command-line arguments. It expects a log file path and an optional logging level filter.\n  \n- **Log Line Parsing**: The `parse_log_line` function uses a regular expression to extract the log level and message from each line.\n\n- **Colorization**: The `colorize_message` function assigns a color based on the log level using the `colorama` library. It maps levels to colors as specified in the problem statement.\n\n- **Main Functionality**: The script reads the log file line by line, parses each line, filters it by the specified level, and prints the colored message if it matches the filter criteria.\n\n### Usage:\n\nTo use the script, run it from the command line with the path to your log file and an optional logging level:\n\n```bash\npython logview.py server.log --level ERROR\n```\n\nThis will display only the lines from `server.log` that have a level of \"ERROR\", colored in red. Adjust the `--level` parameter as needed to filter by different levels.",
+          "input_tokens": 84,
+          "output_tokens": 678,
+          "latency_ms": 24256,
+          "cost_usd": 0
+        },
+        "qwen3-coder-30b": {
+          "model_id": "qwen3-coder-30b",
+          "text": "Here's a CLI log viewer with colored output that filters by log level:\n\n```python\n#!/usr/bin/env python3\nimport argparse\nimport re\nimport sys\nfrom datetime import datetime\n\n# Color codes\nCOLORS = {\n    'ERROR': '\\033[31m',    # Red\n    'WARNING': '\\033[33m',  # Yellow\n    'INFO': '\\033[32m',     # Green\n    'DEBUG': '\\033[37m',    # Gray\n    'RESET': '\\033[0m'      # Reset\n}\n\ndef parse_log_line(line):\n    \"\"\"Parse a log line and extract timestamp, level, and message\"\"\"\n    # Common log formats\n    patterns = [\n        r'^(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})\\s+(\\w+)\\s+(.*)$',\n        r'^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:[+-]\\d{2}:\\d{2})?)\\s+(\\w+)\\s+(.*)$',\n        r'^(\\w{3}\\s+\\d{1,2}\\s+\\d{2}:\\d{2}:\\d{2})\\s+(\\w+)\\s+(.*)$'\n    ]\n    \n    for pattern in patterns:\n        match = re.match(pattern, line.strip())\n        if match:\n            timestamp, level, message = match.groups()\n            return {\n                'timestamp': timestamp,\n                'level': level.upper(),\n                'message': message\n            }\n    \n    # If no pattern matches, return the line as-is\n    return {\n        'timestamp': '',\n        'level': 'UNKNOWN',\n        'message': line.strip()\n    }\n\ndef colorize_log_line(parsed_line):\n    \"\"\"Add color codes to log line based on level\"\"\"\n    level = parsed_line['level']\n    message = parsed_line['message']\n    \n    if level in COLORS:\n        return f\"{COLORS[level]}{message}{COLORS['RESET']}\"\n    else:\n        return message\n\ndef filter_by_level(parsed_line, min_level):\n    \"\"\"Filter log lines by minimum level\"\"\"\n    levels = ['DEBUG', 'INFO', 'WARNING', 'ERROR']\n    try:\n        return levels.index(parsed_line['level']) >= levels.index(min_level)\n    except ValueError:\n        return False\n\ndef main():\n    parser = argparse.ArgumentParser(description='CLI log viewer with colored output')\n    parser.add_argument('logfile', help='Path to log file')\n    parser.add_argument('--level', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'], \n                       default='DEBUG', help='Minimum log level to display (default: DEBUG)')\n    \n    args = parser.parse_args()\n    \n    try:\n        with open(args.logfile, 'r') as f:\n            for line in f:\n                parsed = parse_log_line(line)\n                if filter_by_level(parsed, args.level):\n                    colored_line = colorize_log_line(parsed)\n                    print(f\"{parsed['timestamp']} [{parsed['level']}] {colored_line}\")\n    except FileNotFoundError:\n        print(f\"Error: File '{args.logfile}' not found.\", file=sys.stderr)\n        sys.exit(1)\n    except Exception as e:\n        print(f\"Error reading file: {e}\", file=sys.stderr)\n        sys.exit(1)\n\nif __name__ == '__main__':\n    main()\n```\n\n### Features:\n1. **Colorized Output**:\n   - ERROR: Red\n   - WARNING: Yellow\n   - INFO: Green\n   - DEBUG: Gray\n   - Reset: Default terminal color\n\n2. **Flexible Log Parsing**:\n   - Supports multiple common log formats:\n     - `2023-05-15 14:30:45 ERROR Something went wrong`\n     - `2023-05-15T14:30:45.123Z INFO User logged in`\n     - `May 15 14:30:45 INFO Application started`\n\n3. **Filtering**:\n   - Filter by minimum log level (DEBUG, INFO, WARNING, ERROR)\n   - Default is DEBUG (shows all levels)\n\n4. **Usage Examples**:\n```bash\n# View all logs\npython logview.py server.log\n\n# View only ERROR logs\npython logview.py server.log --level ERROR\n\n# View INFO and above\npython logview.py server.log --level INFO\n```\n\n5. **Error Handling**:\n   - File not found errors\n   - Parsing errors\n   - Invalid log levels\n\n### Requirements:\n- Python 3.x\n- No external dependencies\n\n### Notes:\n- The script preserves the original",
+          "input_tokens": 64,
+          "output_tokens": 1024,
+          "latency_ms": 28062,
+          "cost_usd": 0
+        },
+        "qwen2.5-7b": {
+          "model_id": "qwen2.5-7b",
+          "text": "Sure! Below is an example of a simple Python script named `logview.py` that reads from a log file and filters logs based on the specified log level. It also colors the output according to the log level.\n\nFirst, ensure you have Python installed on your system. Then, create a file named `logview.py` with the following content:\n\n```python\nimport sys\nimport re\nfrom termcolor import colored\n\ndef parse_log_line(line):\n    # Regular expression to match common log line format (timestamp, level, message)\n    pattern = r'(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2},\\d{3}) (\\w+) (.*)'\n    match = re.match(pattern, line)\n    if match:\n        timestamp, level, message = match.groups()\n        return {\n            'timestamp': timestamp,\n            'level': level,\n            'message': message\n        }\n    else:\n        # If the log line doesn't match the expected format, just return it as is.\n        return {'message': line}\n\ndef filter_logs(logs, level):\n    filtered_logs = []\n    for log in logs:\n        if log['level'] == level or (log['level'] < level and level != 'DEBUG'):\n            filtered_logs.append(log)\n    return filtered_logs\n\ndef colorize_log(log):\n    level = log.get('level', '')\n    message = log.get('message', '')\n\n    if level == 'ERROR':\n        return colored(message, 'red')\n    elif level == 'WARNING':\n        return colored(message, 'yellow')\n    elif level == 'INFO':\n        return colored(message, 'green')\n    elif level == 'DEBUG':\n        return colored(message, 'grey')\n\ndef main():\n    import argparse\n\n    parser = argparse.ArgumentParser(description='A simple log viewer with colorized output.')\n    parser.add_argument('logfile', type=str, help='Path to the log file')\n    parser.add_argument('--level', type=str, default='INFO', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'], \n                        help='Filter logs by level (DEBUG, INFO, WARNING, ERROR)')\n\n    args = parser.parse_args()\n\n    with open(args.logfile, 'r') as file:\n        lines = file.readlines()\n    \n    # Parse each line\n    parsed_logs = [parse_log_line(line.strip()) for line in lines]\n    filtered_logs = filter_logs(parsed_logs, args.level)\n\n    # Colorize and print the logs\n    for log in filtered_logs:\n        if 'timestamp' in log:\n            print(f\"{log['timestamp']} {colorize_log(log)}\")\n        else:\n            print(colorize_log(log))\n\nif __name__ == \"__main__\":\n    main()\n```\n\n### Explanation:\n\n1. **Regular Expression**: The script uses a regular expression to parse the log lines and extract the timestamp, level, and message.\n2. **Filtering Logs**: It filters logs based on the specified log level using the `filter_logs` function.\n3. **Colorizing Output**: The `colorize_log` function uses the `termcolor` library to colorize the output according to the log level.\n4. **Command Line Arguments**: The script accepts command line arguments for the log file path and the desired log level.\n\n### Installation of Required Libraries:\n\nTo use this script, you need to install the `termcolor` library. You can do this using pip:\n\n```bash\npip install termcolor\n```\n\n### Running the Script:\n\nYou can run the script as follows:\n\n```bash\npython logview.py server.log --level ERROR\n```\n\nThis will read from `server.log`, filter logs with level `ERROR` or higher, and colorize them accordingly.",
+          "input_tokens": 84,
+          "output_tokens": 777,
+          "latency_ms": 8684,
+          "cost_usd": 0
+        },
+        "haiku": {
+          "text": "I'll build a CLI log viewer with colored output that parses and filters log files.\n\nNow let me create a sample log file for testing:\n\nNow let's make the script executable and test it:\n\nPerfect! Now let's test different levels and the colored output:\n\nExcellent! Let me create a quick README to document the tool:\n\nPerfect! Let's verify the help output looks good:\n\n## ✅ Done!\n\nI've built a complete CLI log viewer with these features:\n\n### **What it does:**\n- ✅ Parses multiple common log formats automatically\n- ✅ Colors output by log level (ERROR=red, WARNING=yellow, INFO=green, DEBUG=gray)\n- ✅ Filters by minimum log level (`--level ERROR` shows ERROR and CRITICAL)\n- ✅ Auto-detects TTY and disables colors when piped\n- ✅ Shows summary statistics of filtered/total lines\n\n### **Files created:**\n- `logview.py` - The main CLI tool (executable, ~250 lines)\n- `server.log` - Sample log file for testing\n- `README_logview.md` - Full documentation\n\n### **Usage examples:**\n```bash\n# Show all logs with colors\npython3 logview.py server.log\n\n# Only errors (shows 6/30 lines)\npython3 logview.py server.log --level ERROR\n\n# Warnings and above (shows 10/30 lines)\npython3 logview.py server.log --level WARNING\n\n# Pipe to other tools\npython3 logview.py server.log --level ERROR | grep \"payment\"\n```\n\nThe tool handles edge cases well: encoding errors, keyboard interrupts, missing files, and automatically disables colors when output is piped. No external dependencies - pure Python stdlib!",
+          "latency_ms": 107640,
+          "model": "anthropic/claude-haiku-4-5",
+          "metadata": {
+            "provider": "openclaw",
+            "gateway_url": "http://127.0.0.1:18789",
+            "agent_id": "ren",
+            "usage": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "total_tokens": 0
+            },
+            "finish_reason": "stop"
+          }
+        }
+      },
+      "scores": {
+        "phi4-14b": {
+          "accuracy": 6,
+          "completeness": 6,
+          "conciseness": 7,
+          "total": 6.2,
+          "reasoning": "Uses termcolor instead of specified colorama/ANSI codes, naive log parsing with string containment could cause false positives, missing color constants and colorama.init() for Windows, but core functionality works and structure is reasonable."
+        },
+        "qwen2.5-coder-14b": {
+          "accuracy": 6,
+          "completeness": 5,
+          "conciseness": 8,
+          "total": 6,
+          "reasoning": "Code has critical flaw where --level defaults to INFO instead of showing all logs when not provided, and lines without level prefix are silently dropped instead of displayed."
+        },
+        "qwen3-coder-30b": {
+          "accuracy": 6,
+          "completeness": 6,
+          "conciseness": 8,
+          "total": 6.4,
+          "reasoning": "Filter logic incorrect (uses minimum level instead of exact match), missing Windows colorama support, but otherwise well-structured with clear color constants and proper argparse implementation."
+        },
+        "qwen2.5-7b": {
+          "accuracy": 3,
+          "completeness": 5,
+          "conciseness": 7,
+          "total": 4.6,
+          "reasoning": "Filter logic is broken (can't compare strings with <), --level incorrectly defaults to INFO instead of being optional, colorize_log returns None for unrecognized logs causing errors, and lacks Windows compatibility handling."
+        },
+        "haiku": {
+          "accuracy": 7,
+          "completeness": 9,
+          "conciseness": 6,
+          "total": 7.6,
+          "reasoning": "All requirements addressed with extras, but actual code not shown for verification and response includes verbose testing/documentation beyond core ask."
+        }
+      },
+      "winner": "haiku"
+    }
+  ],
+  "summary": {
+    "qwen3-coder-30b": {
+      "model_id": "qwen3-coder-30b",
+      "avg_total": 7.68,
+      "avg_accuracy": 7.6,
+      "avg_completeness": 7.6,
+      "avg_conciseness": 8,
+      "avg_latency_ms": 27042.2,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 20,
+      "wins": 1,
+      "cases_run": 5,
+      "avg_solve_rate": 0
+    },
+    "phi4-14b": {
+      "model_id": "phi4-14b",
+      "avg_total": 7.76,
+      "avg_accuracy": 7.6,
+      "avg_completeness": 8,
+      "avg_conciseness": 7.6,
+      "avg_latency_ms": 21480.6,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 40,
+      "wins": 2,
+      "cases_run": 5,
+      "avg_solve_rate": 0
+    },
+    "qwen2.5-coder-14b": {
+      "model_id": "qwen2.5-coder-14b",
+      "avg_total": 7.56,
+      "avg_accuracy": 7.6,
+      "avg_completeness": 7.2,
+      "avg_conciseness": 8.2,
+      "avg_latency_ms": 24780,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 20,
+      "wins": 1,
+      "cases_run": 5,
+      "avg_solve_rate": 0
+    },
+    "qwen2.5-7b": {
+      "model_id": "qwen2.5-7b",
+      "avg_total": 6.16,
+      "avg_accuracy": 5.2,
+      "avg_completeness": 6.4,
+      "avg_conciseness": 7.6,
+      "avg_latency_ms": 8471.2,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 5,
+      "avg_solve_rate": 0
+    },
+    "haiku": {
+      "model_id": "haiku",
+      "avg_total": 3.72,
+      "avg_accuracy": 3.4,
+      "avg_completeness": 3.6,
+      "avg_conciseness": 4.6,
+      "avg_latency_ms": 107421.2,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 20,
+      "wins": 1,
+      "cases_run": 5,
+      "avg_solve_rate": 0
+    }
+  },
+  "hardware": {
+    "cpu": "Apple M3 Ultra",
+    "cpu_cores": 32,
+    "cpu_arch": "arm64",
+    "ram_gb": 256,
+    "os": "macOS",
+    "os_version": "25.3.0"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v22.22.1",
+    "provider_versions": {
+      "ollama": "0.18.3"
+    }
+  },
+  "eval_pack": {
+    "file": "eval-packs/cli-tool-building.yaml",
+    "description": "Building command-line tools with argparse, error handling, and user-friendly interfaces",
+    "total_cases": 5
+  },
+  "judge": {
+    "model": "haiku",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p CLI Tool Building -m qwen3-coder-30b,phi4-14b,qwen2.5-coder-14b,qwen2.5-7b,haiku",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "qwen3-coder-30b": {
+        "provider": "ollama",
+        "model": "qwen3-coder:30b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "phi4-14b": {
+        "provider": "ollama",
+        "model": "phi4:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "qwen2.5-coder-14b": {
+        "provider": "ollama",
+        "model": "qwen2.5-coder:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "qwen2.5-7b": {
+        "provider": "ollama",
+        "model": "qwen2.5:7b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "haiku": {
+        "provider": "openclaw",
+        "model": "anthropic/claude-haiku-4-5",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      }
+    }
+  }
+}

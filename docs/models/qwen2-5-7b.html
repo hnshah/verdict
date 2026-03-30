@@ -125,25 +125,25 @@
   <div style="margin: 2rem 0; padding: 1rem; background: #ecf0f1; border-radius: 8px; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
     <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🖥️ Apple M3 Ultra</span>
     <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">💾 256 GB</span>
-    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🔢 3 cases</span>
-    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">📊 1 runs</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🔢 8 cases</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">📊 2 runs</span>
   </div>
 
   <div class="stats">
     <div class="stat-card">
-      <div class="stat-value">5.9</div>
+      <div class="stat-value">6.2</div>
       <div class="stat-label">Average Score</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">12005ms</div>
+      <div class="stat-value">8471ms</div>
       <div class="stat-label">Average Latency</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">1</div>
+      <div class="stat-value">2</div>
       <div class="stat-label">Total Runs</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">3</div>
+      <div class="stat-value">8</div>
       <div class="stat-label">Cases Tested</div>
     </div>
   </div>
@@ -155,127 +155,125 @@
       <p style="color: #7f8c8d; margin-bottom: 1.5rem;">Showing top 2 cases by score</p>
       <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h3 style="font-size: 1.1rem; color: #2c3e50;">python-json-processing</h3>
-          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">7.0/10</div>
+          <h3 style="font-size: 1.1rem; color: #2c3e50;">cli-interactive</h3>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">7.2/10</div>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">📝 Prompt:</strong>
-          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Write a Python script that:
-1. Reads a JSON file containing a list of users
-2. Filters users where age &gt;= 18 and status == &quot;active&quot;
-3. Sorts by registration_date (newest first)
-4. Writes top 20 to output.json
+          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Create an interactive CLI prompt system:
 
-Include error handling for file operations and invalid data.
+```python
+def setup_wizard():
+    &quot;&quot;&quot;
+    Interactive setup wizard that:
+    1. Asks for username (validates not empty)
+    2. Asks for email (validates contains @)
+    3. Asks for theme (choice: dark/light)
+    4. Confirms settings before saving
+    5. Writes to config.json
+    &quot;&quot;&quot;
+    pass
+```
+
+Use input() for prompts, validate each step, allow retry on invalid input.
 </pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">📋 Criteria:</strong>
           <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">MUST HAVE:
-- json.load() with file handling
-- List comprehension or filter() for both conditions
-- sorted() with lambda/key function and reverse=True
-- json.dump() with proper formatting
-- try/except for FileNotFoundError and JSONDecodeError
-- Handles missing fields gracefully
+- input() calls for each setting
+- Validation loops (while True with break on valid)
+- Username: not empty/whitespace
+- Email: contains @ and .
+- Theme: exactly &quot;dark&quot; or &quot;light&quot;
+- Confirmation prompt (y/n)
+- json.dump() to config.json if confirmed
 
 QUALITY:
-- Clear variable names
-- Proper Python conventions (snake_case)
-- Type hints if used
-- No bare excepts
+- Clear prompts with examples
+- Error messages explain what&#039;s wrong
+- Shows entered values in confirmation
+- Handles Ctrl+C gracefully (try/except KeyboardInterrupt)
 </pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">💬 Model Response:</strong>
-          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>Certainly! Below is a Python script that accomplishes the tasks you&#039;ve described:
+          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>Sure! Below is a Python function that implements the interactive setup wizard as described. This function will prompt the user for their username, email, and theme preference, validate each input, and then confirm before saving to `config.json`.
 
 ```python
 import json
-from datetime import datetime
 
-def read_json_file(file_path):
-    &quot;&quot;&quot;Reads a JSON file and returns its content as a list of dictionaries.&quot;&quot;&quot;
-    try:
-        with open(file_path, &#039;r&#039;) as file:
-            users = json.load(file)
-    except FileNotFoundError:
-        print(f&quot;Error: The file {file_path} was not found.&quot;)
-        return []
-    except json.JSONDecodeError:
-        print(&quot;Error: Invalid JSON format in the file.&quot;)
-        return []
+def setup_wizard():
+    &quot;&quot;&quot;
+    Interactive setup wizard that:
+    1. Asks for username (validates not empty)
+    2. Asks for email (validates contains @)
+    3. Asks for theme (choice: dark/light)
+    4. Confirms settings before saving
+    5. Writes to config.json
+    &quot;&quot;&quot;
+    
+    # Step 1: Ask for username and validate it is not empty
+    while True:
+        username = input(&quot;Please enter your username: &quot;)
+        if username.strip() == &quot;&quot;:
+            print(&quot;Username cannot be empty. Please try again.&quot;)
+        else:
+            break
+    
+    # Step 2: Ask for email and validate it contains &#039;@&#039;
+    while True:
+        email = input(&quot;Please enter your email address: &quot;)
+        if &quot;@&quot; not in email:
+            print(&quot;Email must contain an @ symbol. Please try again.&quot;)
+        else:
+            break
+    
+    # Step 3: Ask for theme preference (dark/light)
+    while True:
+        theme = input(&quot;Please choose a theme (dark/light): &quot;).lower()
+        if theme not in [&quot;dark&quot;, &quot;light&quot;]:
+            print(&quot;Invalid choice. Please enter &#039;dark&#039; or &#039;light&#039;.&quot;)
+        else:
+            break
+    
+    # Step 4: Confirm settings
+    confirm = input(f&quot;Confirm your settings:\nUsername: {username}\nEmail: {email}\nTheme: {theme}\nEnter &#039;yes&#039; to save, anything else to retry: &quot;).lower()
+    
+    if confirm == &quot;yes&quot;:
+        # Step 5: Write to config.json
+        with open(&#039;config.json&#039;, &#039;w&#039;) as f:
+            json.dump({
+                &quot;username&quot;: username,
+                &quot;email&quot;: email,
+                &quot;theme&quot;: theme
+            }, f, indent=4)
+        
+        print(&quot;Settings saved successfully!&quot;)
     else:
-        return users
+        print(&quot;Setup wizard restarted. Please try again.&quot;)
+        setup_wizard()
 
-def filter_users(users):
-    &quot;&quot;&quot;Filters users where age &gt;= 18 and status == &#039;active&#039;.&quot;&quot;&quot;
-    filtered_users = [user for user in users if user.get(&#039;age&#039;, 0) &gt;= 18 and user.get(&#039;status&#039;, &#039;&#039;) == &#039;active&#039;]
-    return filtered_users
-
-def sort_users_by_registration_date(users):
-    &quot;&quot;&quot;Sorts the list of users by registration date (newest first).&quot;&quot;&quot;
-    try:
-        # Convert string to datetime for sorting
-        users.sort(key=lambda x: datetime.strptime(x[&#039;registration_date&#039;], &#039;%Y-%m-%d&#039;), reverse=True)
-    except KeyError:
-        print(&quot;Error: &#039;registration_date&#039; key not found in user data.&quot;)
-    return users
-
-def write_top_20_users(users, output_file):
-    &quot;&quot;&quot;Writes the top 20 filtered and sorted users to an output JSON file.&quot;&quot;&quot;
-    try:
-        with open(output_file, &#039;w&#039;) as file:
-            json.dump(users[:20], file, indent=4)
-    except IOError:
-        print(f&quot;Error: Could not write to {output_file}.&quot;)
-
-def main():
-    input_file = &quot;users.json&quot;
-    output_file = &quot;output.json&quot;
-
-    # Read the JSON file
-    users = read_json_file(input_file)
-
-    if not users:
-        return
-
-    # Filter users based on age and status
-    filtered_users = filter_users(users)
-
-    if not filtered_users:
-        print(&quot;No active users aged 18 or older found.&quot;)
-        return
-
-    # Sort by registration date (newest first)
-    sorted_users = sort_users_by_registration_date(filtered_users)
-
-    # Write top 20 to output.json
-    write_top_20_users(sorted_users, output_file)
-
-if __name__ == &quot;__main__&quot;:
-    main()
+# Call the function to start the setup wizard
+setup_wizard()
 ```
 
 ### Explanation:
-1. **Reading the JSON File**: The `read_json_file` function reads a JSON file and returns its content as a list of dictionaries.
-2. **Filtering Users**: The `filter_users` function filters users based on age (`age &gt;= 18`) and status (`status == &#039;active&#039;`).
-3. **Sorting by Registration Date**: The `sort_users_by_registration_date` function sorts the filtered users by their registration date in descending order (newest first). It uses a lambda function to convert the string representation of dates into datetime objects for proper sorting.
-4. **Writing Top 20 Users**: The `write_top_20_users` function writes the top 20 users from the sorted list to an output JSON file.
 
-### Error Handling:
-- File operations are handled with try-except blocks to catch and print appropriate error messages if the file is not found or if there&#039;s a JSON decoding issue.
-- Key errors are caught when sorting by `registration_date` to ensure that the key exists in each user dictionary.
+1. **Username Validation**: The user is prompted for a username and must provide a non-empty string.
+2. **Email Validation**: The user is prompted for an email address, which must contain the &#039;@&#039; symbol.
+3. **Theme Selection**: The user selects a theme (either &quot;dark&quot; or &quot;light&quot;), with validation to ensure only valid choices are accepted.
+4. **Confirmation Prompt**: Before saving, the wizard displays the settings and asks for confirmation. If confirmed, it writes the data to `config.json`. Otherwise, it restarts the setup process.
 
-This script should be run from a Python environment, and you need to have a valid `users.json` file with the appropriate structure.</code></pre>
+This function ensures that all inputs are validated before proceeding, providing a robust user experience.</code></pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">⚖️ Judge Reasoning:</strong>
-          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Uses .sort() instead of required sorted() function, missing ValueError handling for date parsing, but otherwise implements logic correctly with good error handling.</div>
+          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Missing email &#039;.&#039; validation and KeyboardInterrupt handling; confirmation uses &#039;yes&#039; instead of y/n; recursive retry is inefficient.</div>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
@@ -289,160 +287,151 @@ This script should be run from a Python environment, and you need to have a vali
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Conciseness</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">7/10</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">8/10</div>
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Latency</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">12294ms</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">6886ms</div>
           </div>
         </div>
       </div>
       <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h3 style="font-size: 1.1rem; color: #2c3e50;">python-api-client</h3>
-          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">5.4/10</div>
+          <h3 style="font-size: 1.1rem; color: #2c3e50;">cli-progress-bar</h3>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">7.2/10</div>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">📝 Prompt:</strong>
-          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Create a Python function that fetches data from a REST API with retry logic:
+          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Write a CLI tool that downloads multiple files with progress indication:
 
 ```python
-def fetch_with_retry(url: str, max_retries: int = 3) -&gt; dict:
+def download_files(urls: list[str], output_dir: str):
     &quot;&quot;&quot;
-    Fetch JSON data from URL with exponential backoff retry.
-    Raises exception after max_retries failed attempts.
+    Download files with progress bar.
+    Show: current file, percentage, speed, ETA.
     &quot;&quot;&quot;
-    pass  # implement this
+    pass
 ```
 
-Requirements:
-- Use requests library
-- Retry on network errors and 5xx status codes
-- Exponential backoff (1s, 2s, 4s)
-- Don&#039;t retry on 4xx errors
-- Log each attempt
+Can use tqdm or implement simple text-based progress.
 </pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">📋 Criteria:</strong>
           <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">MUST HAVE:
-- requests.get() or equivalent
-- for loop or while loop for retries
-- response.raise_for_status() or status code check
-- Exception handling for requests.RequestException
-- time.sleep() with exponential backoff (2**attempt)
-- Returns response.json()
-- Raises exception after max_retries
+- Loop through urls
+- requests.get() with stream=True
+- Chunks download (iter_content)
+- Progress indication (tqdm OR custom percentage display)
+- Writes to output_dir/filename
+- Shows which file is downloading
 
 QUALITY:
-- Status code checking (only retry 5xx)
-- Clean error messages
-- Type hints
-- Proper logging
+- File size shown
+- Download speed calculated
+- ETA if possible
+- Handles network errors gracefully
+- Creates output_dir if missing
 </pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">💬 Model Response:</strong>
-          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>Certainly! Below is the implementation of the `fetch_with_retry` function that meets your requirements. This function uses the `requests` library to make HTTP requests and implements exponential backoff with retries for network errors and 5xx status codes.
+          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>Sure! Below is a Python CLI tool that uses the `tqdm` library to download multiple files from given URLs and display a progress bar. The function will show the current file being downloaded, percentage completion, speed of download, and estimated time of arrival (ETA).
+
+First, you need to install the `requests` and `tqdm` libraries if you haven&#039;t already:
+
+```sh
+pip install requests tqdm
+```
+
+Now, here is the implementation for your CLI tool:
 
 ```python
-import logging
-import time
-from requests.exceptions import RequestException, ConnectionError, HTTPError
+import os
+import requests
+from tqdm import tqdm
 
-def fetch_with_retry(url: str, max_retries: int = 3) -&gt; dict:
+def download_files(urls: list[str], output_dir: str):
     &quot;&quot;&quot;
-    Fetch JSON data from URL with exponential backoff retry.
-    Raises exception after max_retries failed attempts.
+    Download files with progress bar.
+    Show: current file, percentage, speed, ETA.
     &quot;&quot;&quot;
-    retries = 0
-    base_delay = 1  # Initial delay in seconds
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
-    while retries &lt; max_retries:
-        try:
-            response = requests.get(url)
-            response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
+    for url in urls:
+        filename = os.path.join(output_dir, url.split(&#039;/&#039;)[-1])
+        
+        # Send a HEAD request to get the content length
+        response = requests.head(url)
+        total_size = int(response.headers.get(&#039;content-length&#039;, 0))
+        
+        with requests.get(url, stream=True) as r:
+            r.raise_for_status()
+            
+            with open(filename, &#039;wb&#039;) as f:
+                # Use tqdm for progress bar
+                with tqdm(total=total_size, unit=&#039;B&#039;, unit_scale=True, unit_divisor=1024, desc=f&quot;Downloading {filename}&quot;) as pbar:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        if chunk:  # filter out keep-alive new chunks
+                            f.write(chunk)
+                            pbar.update(len(chunk))
 
-            if response.status_code &gt;= 500:  # Retry on 5xx errors
-                logging.warning(f&quot;Retrying due to 5xx error: {response.status_code}&quot;)
-                time.sleep(base_delay * (2 ** retries))  # Exponential backoff
-                retries += 1
-            else:
-                return response.json()
-
-        except ConnectionError as e:
-            logging.error(f&quot;Connection error occurred: {e}&quot;)
-            time.sleep(base_delay * (2 ** retries))
-            retries += 1
-
-        except HTTPError as e:
-            if response.status_code &lt; 500:  # Do not retry on 4xx errors
-                raise e from None
-            else:
-                logging.warning(f&quot;Retrying due to 5xx error: {response.status_code}&quot;)
-                time.sleep(base_delay * (2 ** retries))
-                retries += 1
-
-        except RequestException as e:
-            logging.error(f&quot;Request failed: {e}&quot;)
-            time.sleep(base_delay * (2 ** retries))
-            retries += 1
-
-    raise Exception(&quot;Max retries exceeded&quot;)
-
-# Example usage
 if __name__ == &quot;__main__&quot;:
-    import requests
+    urls = [
+        &quot;https://example.com/file1.zip&quot;,
+        &quot;https://example.com/file2.pdf&quot;,
+        &quot;https://example.com/file3.txt&quot;
+    ]
     
-    url = &quot;https://api.example.com/data&quot;
-    
-    try:
-        data = fetch_with_retry(url)
-        print(data)
-    except Exception as e:
-        logging.error(f&quot;Failed to fetch data: {e}&quot;)
+    output_dir = &quot;./downloads&quot;
+    download_files(urls, output_dir)
 ```
 
 ### Explanation:
 
-1. **Logging**: The `logging` module is used to log each attempt.
-2. **Exponential Backoff**: The delay between retries increases exponentially (1s, 2s, 4s).
-3. **Retry Logic**:
-   - Retries are attempted for network errors (`ConnectionError`) and 5xx status codes.
-   - 4xx errors are not retried as they indicate client-side issues.
-4. **HTTP Error Handling**: The `response.raise_for_status()` method is used to raise an exception for HTTP errors (400-699).
-5. **Request Exception**: A generic `RequestException` is caught to handle any other request-related exceptions.
+1. **Imports**: The necessary libraries are imported.
+2. **Function Definition**: `download_files` takes a list of URLs and an output directory as arguments.
+3. **Directory Check**: It checks if the output directory exists; if not, it creates one.
+4. **Loop Through URLs**: For each URL in the provided list:
+   - The filename is derived from the last part of the URL.
+   - A HEAD request is sent to get the total size of the file.
+   - A GET request with `stream=True` is used to download the file in chunks.
+5. **Progress Bar**: Using `tqdm`, a progress bar is displayed for each file, showing the current file name, percentage completion, speed, and ETA.
 
-### Example Usage:
-The example usage at the bottom demonstrates how to use this function with a sample URL. Make sure to replace `&quot;https://api.example.com/data&quot;` with your actual API endpoint.
+### Running the Script:
 
-This implementation should meet your requirements for fetching data from a REST API with retry logic and exponential backoff.</code></pre>
+- Replace the URLs in the `urls` list with actual URLs you want to download.
+- Set the `output_dir` to your desired directory where files will be saved.
+- Run the script. It will start downloading each file with a progress bar indicating its status.
+
+This implementation should work well for most use cases, providing clear and useful feedback during the download process.</code></pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">⚖️ Judge Reasoning:</strong>
-          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Critical logic flaw where raise_for_status() prevents the 5xx status code check from ever executing, missing requests import at module level, and doesn&#039;t log each attempt as required.</div>
+          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Code correctly implements all core requirements with tqdm and streaming, but lacks graceful error handling for network failures as specified in quality criteria.</div>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Accuracy</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">4/10</div>
-          </div>
-          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
-            <div style="font-size: 0.85rem; color: #7f8c8d;">Completeness</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">6/10</div>
-          </div>
-          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
-            <div style="font-size: 0.85rem; color: #7f8c8d;">Conciseness</div>
             <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">7/10</div>
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
+            <div style="font-size: 0.85rem; color: #7f8c8d;">Completeness</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">7/10</div>
+          </div>
+          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
+            <div style="font-size: 0.85rem; color: #7f8c8d;">Conciseness</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">8/10</div>
+          </div>
+          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Latency</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">15078ms</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">7374ms</div>
           </div>
         </div>
       </div></div>
@@ -460,6 +449,14 @@ This implementation should meet your requirements for fetching data from a REST 
           </tr>
         </thead>
         <tbody>
+      <tr>
+        <td>3/29/2026<br><small style="color: #7f8c8d;">11:02:53 PM</small></td>
+        <td><a href="../runs/2026-03-30T05-44-25.html" style="color: #3498db;">CLI Building Benchmark - Local Models</a></td>
+        <td><strong>6.2</strong></td>
+        <td>8471ms</td>
+        <td>5</td>
+        <td><a href="../../results/public/2026-03-30-2026-03-30T05-44-25.json" target="_blank" style="color: #3498db;">JSON</a></td>
+      </tr>
       <tr>
         <td>3/29/2026<br><small style="color: #7f8c8d;">8:19:33 PM</small></td>
         <td><a href="../runs/2026-03-30T03-01-56.html" style="color: #3498db;">Local Model Army - Python Coding Benchmark</a></td>

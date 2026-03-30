@@ -125,25 +125,25 @@
   <div style="margin: 2rem 0; padding: 1rem; background: #ecf0f1; border-radius: 8px; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
     <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🖥️ Apple M3 Ultra</span>
     <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">💾 256 GB</span>
-    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🔢 3 cases</span>
-    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">📊 1 runs</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🔢 8 cases</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">📊 2 runs</span>
   </div>
 
   <div class="stats">
     <div class="stat-card">
-      <div class="stat-value">7.2</div>
+      <div class="stat-value">7.8</div>
       <div class="stat-label">Average Score</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">19537ms</div>
+      <div class="stat-value">21481ms</div>
       <div class="stat-label">Average Latency</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">1</div>
+      <div class="stat-value">2</div>
       <div class="stat-label">Total Runs</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">3</div>
+      <div class="stat-value">8</div>
       <div class="stat-label">Cases Tested</div>
     </div>
   </div>
@@ -155,234 +155,110 @@
       <p style="color: #7f8c8d; margin-bottom: 1.5rem;">Showing top 2 cases by score</p>
       <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h3 style="font-size: 1.1rem; color: #2c3e50;">python-api-client</h3>
-          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">8.0/10</div>
+          <h3 style="font-size: 1.1rem; color: #2c3e50;">cli-basic-argparse</h3>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">9.4/10</div>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">📝 Prompt:</strong>
-          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Create a Python function that fetches data from a REST API with retry logic:
+          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Create a CLI tool that analyzes a CSV file:
+
+```bash
+python analyze.py data.csv --column price --operation mean
+```
+
+Support operations: mean, median, sum, count
+Include --help output and error handling.
+</pre>
+        </div>
+        
+        <div style="margin: 1rem 0;">
+          <strong style="color: #7f8c8d;">📋 Criteria:</strong>
+          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">MUST HAVE:
+- argparse.ArgumentParser setup
+- Positional argument for filename
+- --column and --operation flags
+- csv.DictReader or pandas.read_csv
+- Implementation of all 4 operations
+- if __name__ == &#039;__main__&#039; guard
+- Error handling for missing file/column
+
+QUALITY:
+- Help text for each argument
+- Type validation for operation
+- Clean output formatting
+- Handles empty file or no data
+</pre>
+        </div>
+        
+        <div style="margin: 1rem 0;">
+          <strong style="color: #7f8c8d;">💬 Model Response:</strong>
+          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>To create a command-line interface (CLI) tool in Python that analyzes a CSV file with specified operations on a given column, you can use the `argparse` module for parsing command-line arguments. Below is an example implementation of such a tool:
 
 ```python
-def fetch_with_retry(url: str, max_retries: int = 3) -&gt; dict:
-    &quot;&quot;&quot;
-    Fetch JSON data from URL with exponential backoff retry.
-    Raises exception after max_retries failed attempts.
-    &quot;&quot;&quot;
-    pass  # implement this
-```
+import argparse
+import csv
+import sys
 
-Requirements:
-- Use requests library
-- Retry on network errors and 5xx status codes
-- Exponential backoff (1s, 2s, 4s)
-- Don&#039;t retry on 4xx errors
-- Log each attempt
-</pre>
-        </div>
-        
-        <div style="margin: 1rem 0;">
-          <strong style="color: #7f8c8d;">📋 Criteria:</strong>
-          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">MUST HAVE:
-- requests.get() or equivalent
-- for loop or while loop for retries
-- response.raise_for_status() or status code check
-- Exception handling for requests.RequestException
-- time.sleep() with exponential backoff (2**attempt)
-- Returns response.json()
-- Raises exception after max_retries
+def calculate_mean(numbers):
+    return sum(numbers) / len(numbers)
 
-QUALITY:
-- Status code checking (only retry 5xx)
-- Clean error messages
-- Type hints
-- Proper logging
-</pre>
-        </div>
-        
-        <div style="margin: 1rem 0;">
-          <strong style="color: #7f8c8d;">💬 Model Response:</strong>
-          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>```python
-import time
-import logging
-import requests
+def calculate_median(numbers):
+    numbers.sort()
+    n = len(numbers)
+    mid = n // 2
+    if n % 2 == 0:
+        return (numbers[mid - 1] + numbers[mid]) / 2
+    else:
+        return numbers[mid]
 
-def fetch_with_retry(url: str, max_retries: int = 3) -&gt; dict:
-    &quot;&quot;&quot;
-    Fetch JSON data from URL with exponential backoff retry.
-    Raises exception after max_retries failed attempts.
-    &quot;&quot;&quot;
-    attempt = 0
-    while attempt &lt; max_retries:
-        try:
-            response = requests.get(url)
-            if response.status_code &gt;= 500:  # Retry on server errors (5xx)
-                raise requests.exceptions.RequestException(f&quot;Server error: {response.status_code}&quot;)
-            elif response.status_code &gt;= 400:  # Do not retry on client errors (4xx)
-                response.raise_for_status()
-            return response.json()  # Return JSON data if successful
-        except requests.exceptions.RequestException as e:
-            attempt += 1
-            wait_time = 2 ** attempt  # Exponential backoff
-            logging.warning(f&quot;Attempt {attempt} failed: {e}. Retrying in {wait_time}s...&quot;)
-            time.sleep(wait_time)
-    raise Exception(&quot;Max retries exceeded&quot;)
-
-# Example usage
-if __name__ == &quot;__main__&quot;:
-    url = &quot;https://api.example.com/data&quot;
+def analyze_csv(file_path, column_name, operation):
     try:
-        data = fetch_with_retry(url)
-        print(data)
-    except Exception as e:
-        logging.error(f&quot;Failed to fetch data: {e}&quot;)
-```
-
-### Explanation:
-
-1. **Import Libraries**: Import necessary libraries (`time`, `logging`, and `requests`).
-
-2. **Function Definition**: Define the function `fetch_with_retry` with parameters `url` (the API endpoint) and `max_retries` (default is 3).
-
-3. **Retry Logic**:
-   - Initialize an attempt counter.
-   - Use a while loop to retry up to `max_retries`.
-   - Inside the try block, make a GET request using `requests.get(url)`.
-   - Check if the response status code indicates a server error (5xx). If so, raise an exception to trigger a retry.
-   - For client errors (4xx), use `response.raise_for_status()` to handle them without retrying.
-   - If successful, return the JSON data.
-
-4. **Exception Handling**:
-   - Catch exceptions related to network issues or server errors.
-   - Increment the attempt counter and calculate the wait time using exponential backoff (`2 ** attempt`).
-   - Log a warning message with details of the failed attempt and retry delay.
-   - Sleep for the calculated wait time before retrying.
-
-5. **Max Retries Exceeded**:
-   - If all retries are exhausted, raise an exception indicating that max retries have been exceeded.
-
-6. **Example Usage**: Demonstrate how to use the function in a script with logging configured to capture warnings and errors.
-
-This implementation ensures robust error handling and retry logic for fetching data from a REST API using exponential backoff.</code></pre>
-        </div>
-        
-        <div style="margin: 1rem 0;">
-          <strong style="color: #7f8c8d;">⚖️ Judge Reasoning:</strong>
-          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Code is functional and well-structured but backoff timing is 2s,4s,8s instead of required 1s,2s,4s due to incrementing attempt before calculating 2**attempt; explanation is thorough but slightly verbose.</div>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
-          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
-            <div style="font-size: 0.85rem; color: #7f8c8d;">Accuracy</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">8/10</div>
-          </div>
-          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
-            <div style="font-size: 0.85rem; color: #7f8c8d;">Completeness</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">8/10</div>
-          </div>
-          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
-            <div style="font-size: 0.85rem; color: #7f8c8d;">Conciseness</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">8/10</div>
-          </div>
-          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
-            <div style="font-size: 0.85rem; color: #7f8c8d;">Latency</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">22189ms</div>
-          </div>
-        </div>
-      </div>
-      <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h3 style="font-size: 1.1rem; color: #2c3e50;">python-json-processing</h3>
-          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">7.4/10</div>
-        </div>
-        
-        <div style="margin: 1rem 0;">
-          <strong style="color: #7f8c8d;">📝 Prompt:</strong>
-          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Write a Python script that:
-1. Reads a JSON file containing a list of users
-2. Filters users where age &gt;= 18 and status == &quot;active&quot;
-3. Sorts by registration_date (newest first)
-4. Writes top 20 to output.json
-
-Include error handling for file operations and invalid data.
-</pre>
-        </div>
-        
-        <div style="margin: 1rem 0;">
-          <strong style="color: #7f8c8d;">📋 Criteria:</strong>
-          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">MUST HAVE:
-- json.load() with file handling
-- List comprehension or filter() for both conditions
-- sorted() with lambda/key function and reverse=True
-- json.dump() with proper formatting
-- try/except for FileNotFoundError and JSONDecodeError
-- Handles missing fields gracefully
-
-QUALITY:
-- Clear variable names
-- Proper Python conventions (snake_case)
-- Type hints if used
-- No bare excepts
-</pre>
-        </div>
-        
-        <div style="margin: 1rem 0;">
-          <strong style="color: #7f8c8d;">💬 Model Response:</strong>
-          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>```python
-import json
-from datetime import datetime
-
-def read_json_file(file_path):
-    try:
-        with open(file_path, &#039;r&#039;) as file:
-            return json.load(file)
-    except FileNotFoundError:
-        print(f&quot;Error: The file {file_path} was not found.&quot;)
-        return None
-    except json.JSONDecodeError:
-        print(&quot;Error: Failed to decode JSON from the file.&quot;)
-        return None
-
-def write_json_file(data, file_path):
-    try:
-        with open(file_path, &#039;w&#039;) as file:
-            json.dump(data, file, indent=4)
-    except IOError:
-        print(f&quot;Error: Could not write to {file_path}.&quot;)
-
-def filter_and_sort_users(users):
-    filtered_users = []
-    
-    for user in users:
-        try:
-            age = int(user.get(&#039;age&#039;, 0))
-            status = user.get(&#039;status&#039;, &#039;&#039;)
-            registration_date = datetime.strptime(user[&#039;registration_date&#039;], &#039;%Y-%m-%d&#039;)
+        with open(file_path, newline=&#039;&#039;) as csvfile:
+            reader = csv.DictReader(csvfile)
+            values = []
             
-            if age &gt;= 18 and status == &quot;active&quot;:
-                filtered_users.append((user, registration_date))
-        except (ValueError, KeyError) as e:
-            print(f&quot;Warning: Skipping user due to invalid data - {e}&quot;)
-    
-    # Sort by registration_date descending
-    sorted_users = sorted(filtered_users, key=lambda x: x[1], reverse=True)
-    
-    return [user for user, _ in sorted_users]
+            for row in reader:
+                if column_name in row and row[column_name]:
+                    try:
+                        value = float(row[column_name])
+                        values.append(value)
+                    except ValueError:
+                        print(f&quot;Warning: Non-numeric data &#039;{row[column_name]}&#039; found in column &#039;{column_name}&#039;. Skipping.&quot;)
+            
+            if not values:
+                raise ValueError(f&quot;No valid numeric data found in column &#039;{column_name}&#039;.&quot;)
+
+            if operation == &#039;mean&#039;:
+                result = calculate_mean(values)
+            elif operation == &#039;median&#039;:
+                result = calculate_median(values)
+            elif operation == &#039;sum&#039;:
+                result = sum(values)
+            elif operation == &#039;count&#039;:
+                result = len(values)
+            else:
+                raise ValueError(f&quot;Unsupported operation &#039;{operation}&#039;. Supported operations are: mean, median, sum, count.&quot;)
+
+            print(f&quot;{operation.capitalize()} of column &#039;{column_name}&#039;: {result}&quot;)
+
+    except FileNotFoundError:
+        print(f&quot;Error: File &#039;{file_path}&#039; not found.&quot;)
+        sys.exit(1)
+    except Exception as e:
+        print(f&quot;An error occurred: {e}&quot;)
+        sys.exit(1)
 
 def main():
-    input_file_path = &#039;users.json&#039;
-    output_file_path = &#039;output.json&#039;
+    parser = argparse.ArgumentParser(description=&quot;Analyze a CSV file for specified column and operation.&quot;)
+    parser.add_argument(&#039;csv_file&#039;, type=str, help=&#039;Path to the CSV file.&#039;)
+    parser.add_argument(&#039;--column&#039;, required=True, type=str, help=&#039;Column name to analyze.&#039;)
+    parser.add_argument(&#039;--operation&#039;, required=True, choices=[&#039;mean&#039;, &#039;median&#039;, &#039;sum&#039;, &#039;count&#039;], 
+                        help=&quot;Operation to perform: mean, median, sum, count.&quot;)
+    
+    args = parser.parse_args()
 
-    users = read_json_file(input_file_path)
-    if users is None:
-        return
-
-    filtered_sorted_users = filter_and_sort_users(users)
-
-    # Get top 20 users
-    top_20_users = filtered_sorted_users[:20]
-
-    write_json_file(top_20_users, output_file_path)
+    analyze_csv(args.csv_file, args.column, args.operation)
 
 if __name__ == &quot;__main__&quot;:
     main()
@@ -390,36 +266,44 @@ if __name__ == &quot;__main__&quot;:
 
 ### Explanation:
 
-1. **Reading JSON File**: The `read_json_file` function attempts to open and read a JSON file. It includes error handling for file not found and JSON decoding errors.
+1. **Argument Parsing**: The `argparse` module is used to define and parse command-line arguments. It requires the path to a CSV file, a column name, and an operation.
 
-2. **Writing JSON File**: The `write_json_file` function writes data to a specified JSON file, with error handling for IO operations.
+2. **Operations**: Supported operations are mean, median, sum, and count. Functions for calculating these statistics are defined separately.
 
-3. **Filtering and Sorting Users**:
-   - The `filter_and_sort_users` function filters users based on age (&gt;= 18) and status (&quot;active&quot;).
-   - It handles potential errors in data conversion and missing keys.
-   - Users are sorted by their registration date, with the newest first.
+3. **CSV Reading**: The `csv.DictReader` is used to read the CSV file as dictionaries, allowing easy access to columns by name.
 
-4. **Main Function**: 
-   - Reads from &#039;users.json&#039;.
-   - Filters and sorts the users.
-   - Writes the top 20 users to &#039;output.json&#039;.
+4. **Error Handling**:
+   - Checks if the file exists.
+   - Handles non-numeric data in the specified column with a warning and skips such entries.
+   - Validates that at least one valid numeric entry exists in the column.
+   - Provides feedback for unsupported operations.
 
-This script ensures robustness against common file and data errors.</code></pre>
+5. **Output**: The result of the operation is printed to the console.
+
+6. **Help Output**: `argparse` automatically generates help output when the `--help` flag is used.
+
+To run this script, save it as `analyze.py` and execute it from the command line with the appropriate arguments:
+
+```bash
+python analyze.py data.csv --column price --operation mean
+```
+
+This will calculate and print the mean of the values in the &quot;price&quot; column.</code></pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">⚖️ Judge Reasoning:</strong>
-          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Works correctly with good error handling but fails to use list comprehension/filter() as explicitly required, and the tuple-unpacking approach is more complex than necessary.</div>
+          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Code is fully correct and meets all requirements with proper error handling, but the explanation section is somewhat verbose for what is straightforward implementation.</div>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Accuracy</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">8/10</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">10/10</div>
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Completeness</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">7/10</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">10/10</div>
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Conciseness</div>
@@ -427,7 +311,153 @@ This script ensures robustness against common file and data errors.</code></pre>
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Latency</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">16376ms</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">21989ms</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 style="font-size: 1.1rem; color: #2c3e50;">cli-progress-bar</h3>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">9.2/10</div>
+        </div>
+        
+        <div style="margin: 1rem 0;">
+          <strong style="color: #7f8c8d;">📝 Prompt:</strong>
+          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Write a CLI tool that downloads multiple files with progress indication:
+
+```python
+def download_files(urls: list[str], output_dir: str):
+    &quot;&quot;&quot;
+    Download files with progress bar.
+    Show: current file, percentage, speed, ETA.
+    &quot;&quot;&quot;
+    pass
+```
+
+Can use tqdm or implement simple text-based progress.
+</pre>
+        </div>
+        
+        <div style="margin: 1rem 0;">
+          <strong style="color: #7f8c8d;">📋 Criteria:</strong>
+          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">MUST HAVE:
+- Loop through urls
+- requests.get() with stream=True
+- Chunks download (iter_content)
+- Progress indication (tqdm OR custom percentage display)
+- Writes to output_dir/filename
+- Shows which file is downloading
+
+QUALITY:
+- File size shown
+- Download speed calculated
+- ETA if possible
+- Handles network errors gracefully
+- Creates output_dir if missing
+</pre>
+        </div>
+        
+        <div style="margin: 1rem 0;">
+          <strong style="color: #7f8c8d;">💬 Model Response:</strong>
+          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>To create a CLI tool that downloads multiple files with progress indication, we can utilize the `tqdm` library for displaying progress bars. We&#039;ll also use Python&#039;s built-in libraries like `requests` to handle HTTP requests and `os` to manage file paths.
+
+Here&#039;s how you can implement this:
+
+```python
+import os
+import requests
+from tqdm import tqdm
+
+def download_file(url, output_path):
+    &quot;&quot;&quot;Download a single file with progress indication.&quot;&quot;&quot;
+    response = requests.get(url, stream=True)
+    total_size_in_bytes = int(response.headers.get(&#039;content-length&#039;, 0))
+    
+    block_size = 1024  # 1 Kibibyte
+    progress_bar = tqdm(total=total_size_in_bytes, unit=&#039;iB&#039;, unit_scale=True)
+
+    with open(output_path, &#039;wb&#039;) as file:
+        for data in response.iter_content(block_size):
+            progress_bar.update(len(data))
+            file.write(data)
+    
+    progress_bar.close()
+
+def download_files(urls: list[str], output_dir: str):
+    &quot;&quot;&quot;
+    Download files with progress bar.
+    Show: current file, percentage, speed, ETA.
+    &quot;&quot;&quot;
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    for url in urls:
+        try:
+            # Extract filename from URL
+            filename = os.path.basename(url)
+            output_path = os.path.join(output_dir, filename)
+
+            print(f&quot;Downloading {filename}...&quot;)
+            download_file(url, output_path)
+            print(f&quot;Downloaded {filename} successfully.&quot;)
+        
+        except Exception as e:
+            print(f&quot;Failed to download {url}. Error: {e}&quot;)
+
+# Example usage
+if __name__ == &quot;__main__&quot;:
+    urls = [
+        &#039;https://example.com/file1.zip&#039;,
+        &#039;https://example.com/file2.jpg&#039;
+    ]
+    output_dir = &#039;./downloads&#039;
+    
+    download_files(urls, output_dir)
+```
+
+### Explanation:
+
+1. **Dependencies**: 
+   - `requests`: Used for making HTTP requests.
+   - `tqdm`: Provides a fast, extensible progress bar.
+
+2. **`download_file` Function**:
+   - Uses `requests.get` with `stream=True` to download the file in chunks.
+   - Retrieves the total size of the file from the headers.
+   - Writes data to a file while updating the progress bar.
+
+3. **`download_files` Function**:
+   - Ensures the output directory exists or creates it.
+   - Iterates over each URL, extracts the filename, and constructs the full path for saving.
+   - Calls `download_file` for each URL and handles exceptions gracefully.
+
+4. **CLI Usage**:
+   - The script can be run directly to download files specified in the `urls` list into the `output_dir`.
+
+This setup provides a simple yet effective way to download multiple files with progress indication, making it user-friendly and informative.</code></pre>
+        </div>
+        
+        <div style="margin: 1rem 0;">
+          <strong style="color: #7f8c8d;">⚖️ Judge Reasoning:</strong>
+          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Code meets all requirements with proper chunked streaming, tqdm progress, error handling, and directory creation; explanation is slightly verbose but code is clean.</div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
+          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
+            <div style="font-size: 0.85rem; color: #7f8c8d;">Accuracy</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">9/10</div>
+          </div>
+          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
+            <div style="font-size: 0.85rem; color: #7f8c8d;">Completeness</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">10/10</div>
+          </div>
+          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
+            <div style="font-size: 0.85rem; color: #7f8c8d;">Conciseness</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">8/10</div>
+          </div>
+          <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
+            <div style="font-size: 0.85rem; color: #7f8c8d;">Latency</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">16622ms</div>
           </div>
         </div>
       </div></div>
@@ -445,6 +475,14 @@ This script ensures robustness against common file and data errors.</code></pre>
           </tr>
         </thead>
         <tbody>
+      <tr>
+        <td>3/29/2026<br><small style="color: #7f8c8d;">11:02:53 PM</small></td>
+        <td><a href="../runs/2026-03-30T05-44-25.html" style="color: #3498db;">CLI Building Benchmark - Local Models</a></td>
+        <td><strong>7.8</strong></td>
+        <td>21481ms</td>
+        <td>5</td>
+        <td><a href="../../results/public/2026-03-30-2026-03-30T05-44-25.json" target="_blank" style="color: #3498db;">JSON</a></td>
+      </tr>
       <tr>
         <td>3/29/2026<br><small style="color: #7f8c8d;">8:19:33 PM</small></td>
         <td><a href="../runs/2026-03-30T03-01-56.html" style="color: #3498db;">Local Model Army - Python Coding Benchmark</a></td>

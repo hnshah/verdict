@@ -125,25 +125,25 @@
   <div style="margin: 2rem 0; padding: 1rem; background: #ecf0f1; border-radius: 8px; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
     <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🖥️ Apple M3 Ultra</span>
     <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">💾 256 GB</span>
-    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🔢 3 cases</span>
-    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">📊 1 runs</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">🔢 8 cases</span>
+    <span style="padding: 0.5rem 1rem; background: white; border-radius: 4px; font-size: 0.9rem;">📊 2 runs</span>
   </div>
 
   <div class="stats">
     <div class="stat-card">
-      <div class="stat-value">8.1</div>
+      <div class="stat-value">7.7</div>
       <div class="stat-label">Average Score</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">21240ms</div>
+      <div class="stat-value">27042ms</div>
       <div class="stat-label">Average Latency</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">1</div>
+      <div class="stat-value">2</div>
       <div class="stat-label">Total Runs</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">3</div>
+      <div class="stat-value">8</div>
       <div class="stat-label">Cases Tested</div>
     </div>
   </div>
@@ -365,129 +365,168 @@ Key improvements made:
       </div>
       <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h3 style="font-size: 1.1rem; color: #2c3e50;">python-api-client</h3>
-          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">8.6/10</div>
+          <h3 style="font-size: 1.1rem; color: #2c3e50;">cli-progress-bar</h3>
+          <div style="font-size: 1.5rem; font-weight: 700; color: #27ae60;">9.0/10</div>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">📝 Prompt:</strong>
-          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Create a Python function that fetches data from a REST API with retry logic:
+          <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">Write a CLI tool that downloads multiple files with progress indication:
 
 ```python
-def fetch_with_retry(url: str, max_retries: int = 3) -&gt; dict:
+def download_files(urls: list[str], output_dir: str):
     &quot;&quot;&quot;
-    Fetch JSON data from URL with exponential backoff retry.
-    Raises exception after max_retries failed attempts.
+    Download files with progress bar.
+    Show: current file, percentage, speed, ETA.
     &quot;&quot;&quot;
-    pass  # implement this
+    pass
 ```
 
-Requirements:
-- Use requests library
-- Retry on network errors and 5xx status codes
-- Exponential backoff (1s, 2s, 4s)
-- Don&#039;t retry on 4xx errors
-- Log each attempt
+Can use tqdm or implement simple text-based progress.
 </pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">📋 Criteria:</strong>
           <pre style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;">MUST HAVE:
-- requests.get() or equivalent
-- for loop or while loop for retries
-- response.raise_for_status() or status code check
-- Exception handling for requests.RequestException
-- time.sleep() with exponential backoff (2**attempt)
-- Returns response.json()
-- Raises exception after max_retries
+- Loop through urls
+- requests.get() with stream=True
+- Chunks download (iter_content)
+- Progress indication (tqdm OR custom percentage display)
+- Writes to output_dir/filename
+- Shows which file is downloading
 
 QUALITY:
-- Status code checking (only retry 5xx)
-- Clean error messages
-- Type hints
-- Proper logging
+- File size shown
+- Download speed calculated
+- ETA if possible
+- Handles network errors gracefully
+- Creates output_dir if missing
 </pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">💬 Model Response:</strong>
-          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>```python
-import requests
-import time
-import logging
+          <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;"><code>Here&#039;s a CLI tool that downloads multiple files with progress indication using `tqdm` for visual progress bars:
 
-def fetch_with_retry(url: str, max_retries: int = 3) -&gt; dict:
+```python
+import os
+import requests
+from tqdm import tqdm
+from urllib.parse import urlparse
+from pathlib import Path
+
+def download_files(urls: list[str], output_dir: str):
     &quot;&quot;&quot;
-    Fetch JSON data from URL with exponential backoff retry.
-    Raises exception after max_retries failed attempts.
+    Download files with progress bar.
+    Show: current file, percentage, speed, ETA.
     &quot;&quot;&quot;
-    logger = logging.getLogger(__name__)
+    # Create output directory if it doesn&#039;t exist
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
     
-    for attempt in range(max_retries + 1):
+    # Download each file
+    for url in urls:
         try:
-            logger.info(f&quot;Attempting to fetch data from {url} (attempt {attempt + 1})&quot;)
-            response = requests.get(url, timeout=10)
+            # Get filename from URL
+            parsed_url = urlparse(url)
+            filename = os.path.basename(parsed_url.path)
+            if not filename:
+                filename = &quot;downloaded_file&quot;
             
-            # Don&#039;t retry on 4xx errors
-            if 400 &lt;= response.status_code &lt; 500:
-                response.raise_for_status()
+            # Full path for output file
+            output_path = os.path.join(output_dir, filename)
             
-            # Retry on 5xx errors and network errors
-            if response.status_code &gt;= 500:
-                if attempt &lt; max_retries:
-                    wait_time = 2 ** attempt
-                    logger.warning(f&quot;Server error {response.status_code}, retrying in {wait_time}s&quot;)
-                    time.sleep(wait_time)
-                    continue
-                else:
-                    response.raise_for_status()
-            
-            # Success case
+            # Send GET request with streaming
+            response = requests.get(url, stream=True)
             response.raise_for_status()
-            return response.json()
             
-        except requests.exceptions.RequestException as e:
-            if attempt &lt; max_retries:
-                wait_time = 2 ** attempt
-                logger.warning(f&quot;Request failed: {e}, retrying in {wait_time}s&quot;)
-                time.sleep(wait_time)
-            else:
-                logger.error(f&quot;All retry attempts failed for {url}&quot;)
-                raise
-    
-    # This should never be reached due to the loop logic above
-    raise Exception(&quot;Unexpected error in fetch_with_retry&quot;)
+            # Get total file size
+            total_size = int(response.headers.get(&#039;content-length&#039;, 0))
+            
+            # Download with progress bar
+            with open(output_path, &#039;wb&#039;) as file, tqdm(
+                desc=f&quot;Downloading {filename}&quot;,
+                total=total_size,
+                unit=&#039;B&#039;,
+                unit_scale=True,
+                unit_divisor=1024,
+                miniters=1,
+                leave=True
+            ) as progress_bar:
+                for chunk in response.iter_content(chunk_size=8192):
+                    if chunk:
+                        file.write(chunk)
+                        progress_bar.update(len(chunk))
+            
+            print(f&quot;✓ Downloaded: {filename}&quot;)
+            
+        except Exception as e:
+            print(f&quot;✗ Failed to download {url}: {str(e)}&quot;)
+
+# Example usage:
+if __name__ == &quot;__main__&quot;:
+    # Example URLs (replace with actual URLs)
+    urls = [
+        &quot;https://httpbin.org/bytes/1024&quot;,
+        &quot;https://httpbin.org/bytes/2048&quot;,
+        &quot;https://httpbin.org/bytes/4096&quot;
+    ]
+    download_files(urls, &quot;./downloads&quot;)
 ```
 
 This implementation:
 
-1. **Uses requests library** to make HTTP requests
-2. **Implements exponential backoff** with wait times of 1s, 2s, 4s (2^0, 2^1, 2^2)
-3. **Retries on network errors** and 5xx status codes
-4. **Doesn&#039;t retry on 4xx errors** (client errors like 404, 403, etc.)
-5. **Logs each attempt** with appropriate log levels (INFO for attempts, WARNING for retries, ERROR for failures)
-6. **Handles timeouts** with a 10-second timeout
-7. **Returns JSON data** on successful fetch
-8. **Raises exceptions** after max_retries attempts are exhausted
+1. **Creates output directory** if it doesn&#039;t exist
+2. **Handles each URL** individually with proper error handling
+3. **Extracts filename** from URL or uses default name
+4. **Uses streaming download** to handle large files efficiently
+5. **Shows detailed progress** with:
+   - Current file name
+   - Download percentage
+   - Download speed (B/s, KB/s, MB/s)
+   - Estimated time of arrival (ETA)
+   - Progress bar visualization
+6. **Provides clear feedback** for successful downloads and errors
 
-The function will:
-- Log each attempt
-- Wait progressively longer between retries (1s, 2s, 4s)
-- Stop retrying on 4xx errors (client errors)
-- Continue retrying on 5xx errors (server errors) and network issues
-- Raise the final exception after all retries are exhausted</code></pre>
+Key features:
+- Uses `requests` for HTTP operations
+- Uses `tqdm` for visual progress indication
+- Handles large files with streaming
+- Shows real-time download statistics
+- Graceful error handling
+- Creates directory structure automatically
+- Supports any number of URLs
+
+To use this tool:
+1. Install required packages: `pip install requests tqdm`
+2. Call `download_files(urls, output_directory)`
+3. The progress bars will show detailed information for each file
+
+Example output:
+```
+Downloading file1.zip: 100%|██████████| 10.5M/10.5M [00:02&lt;00:00, 4.25MB/s]
+✓ Downloaded: file1.zip
+Downloading file2.zip: 100%|██████████| 5.2M/5.2M [00:01&lt;00:00, 3.89MB/s]
+✓ Downloaded: file2.zip
+```
+
+The tool will automatically handle:
+- Different file sizes
+- Network interruptions
+- Invalid URLs
+- Directory creation
+- Proper file naming from URLs</code></pre>
         </div>
         
         <div style="margin: 1rem 0;">
           <strong style="color: #7f8c8d;">⚖️ Judge Reasoning:</strong>
-          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Meets all requirements with proper retry logic and logging, but has redundant raise_for_status calls and the loop performs max_retries+1 attempts instead of max_retries attempts.</div>
+          <div style="background: white; padding: 1rem; border-radius: 4px; margin-top: 0.5rem; border-left: 4px solid #27ae60;">Code is correct and meets all requirements including error handling and progress display, but explanation has some redundancy between sections.</div>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Accuracy</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">8/10</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">9/10</div>
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Completeness</div>
@@ -499,7 +538,7 @@ The function will:
           </div>
           <div style="text-align: center; padding: 0.75rem; background: white; border-radius: 4px;">
             <div style="font-size: 0.85rem; color: #7f8c8d;">Latency</div>
-            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">15939ms</div>
+            <div style="font-size: 1.25rem; font-weight: 600; color: #2c3e50;">22930ms</div>
           </div>
         </div>
       </div></div>
@@ -517,6 +556,14 @@ The function will:
           </tr>
         </thead>
         <tbody>
+      <tr>
+        <td>3/29/2026<br><small style="color: #7f8c8d;">11:02:53 PM</small></td>
+        <td><a href="../runs/2026-03-30T05-44-25.html" style="color: #3498db;">CLI Building Benchmark - Local Models</a></td>
+        <td><strong>7.7</strong></td>
+        <td>27042ms</td>
+        <td>5</td>
+        <td><a href="../../results/public/2026-03-30-2026-03-30T05-44-25.json" target="_blank" style="color: #3498db;">JSON</a></td>
+      </tr>
       <tr>
         <td>3/29/2026<br><small style="color: #7f8c8d;">8:19:33 PM</small></td>
         <td><a href="../runs/2026-03-30T03-01-56.html" style="color: #3498db;">Local Model Army - Python Coding Benchmark</a></td>
