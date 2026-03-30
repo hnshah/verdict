@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Model Army - Python Coding Benchmark - 2026-03-30T03-01-56</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #f5f5f5;
+    }
+    .section {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    h1 { font-size: 2rem; margin-bottom: 1rem; color: #2c3e50; }
+    h2 { font-size: 1.5rem; margin-bottom: 1rem; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .stat {
+      padding: 1rem;
+      background: #ecf0f1;
+      border-radius: 4px;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: #7f8c8d;
+      text-transform: uppercase;
+    }
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-top: 0.25rem;
+    }
+    .case {
+      border: 1px solid #ecf0f1;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      background: #fafafa;
+    }
+    .case-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .case-id { font-weight: 600; color: #3498db; }
+    .score { font-size: 1.5rem; font-weight: 700; color: #27ae60; }
+    .label { font-weight: 600; color: #7f8c8d; margin: 1rem 0 0.5rem; }
+    .content {
+      background: white;
+      padding: 1rem;
+      border-radius: 4px;
+      border-left: 4px solid #3498db;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    pre {
+      background: #2c3e50;
+      color: #ecf0f1;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #ecf0f1; }
+    th { background: #34495e; color: white; }
+    .back-link { display: inline-block; margin-bottom: 1rem; color: #3498db; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <a href="../index.html" class="back-link">← Back to Leaderboard</a>
+  
+  <div class="section">
+    <h1>Local Model Army - Python Coding Benchmark</h1>
+    <p><strong>Run ID:</strong> 2026-03-30T03-01-56<br>
+    <strong>Date:</strong> 3/29/2026, 8:19:33 PM<br>
+    <strong>Duration:</strong> 14m 14s</p>
+  </div><div class="section"><h2>⚙️ Test Configuration</h2><h3>Hardware</h3><div class="grid"><div class="stat"><div class="stat-label">CPU</div><div class="stat-value">Apple M3 Ultra</div></div><div class="stat"><div class="stat-label">RAM</div><div class="stat-value">256 GB</div></div><div class="stat"><div class="stat-label">OS</div><div class="stat-value">macOS 25.3.0</div></div></div><h3>Environment</h3><div class="grid"><div class="stat"><div class="stat-label">Verdict</div><div class="stat-value">0.2.0</div></div><div class="stat"><div class="stat-label">Node.js</div><div class="stat-value">v22.22.1</div></div><div class="stat"><div class="stat-label">Ollama</div><div class="stat-value">0.18.3</div></div></div></div><div class="section"><h2>📊 Overall Results</h2><table><thead><tr><th>Model</th><th>Score</th><th>Accuracy</th><th>Completeness</th><th>Conciseness</th><th>Latency</th></tr></thead><tbody><tr>
+      <td><strong>llama3.2-3b</strong></td>
+      <td><strong>4.9</strong></td>
+      <td>4.3</td>
+      <td>5.0</td>
+      <td>6.0</td>
+      <td>13245ms</td>
+    </tr><tr>
+      <td><strong>qwen2.5-7b</strong></td>
+      <td><strong>5.9</strong></td>
+      <td>5.3</td>
+      <td>6.0</td>
+      <td>7.0</td>
+      <td>12005ms</td>
+    </tr><tr>
+      <td><strong>qwen2.5-coder-14b</strong></td>
+      <td><strong>7.1</strong></td>
+      <td>7.3</td>
+      <td>7.0</td>
+      <td>7.0</td>
+      <td>18441ms</td>
+    </tr><tr>
+      <td><strong>phi4-14b</strong></td>
+      <td><strong>7.2</strong></td>
+      <td>7.3</td>
+      <td>7.0</td>
+      <td>7.3</td>
+      <td>19537ms</td>
+    </tr><tr>
+      <td><strong>deepseek-r1-14b</strong></td>
+      <td><strong>4.4</strong></td>
+      <td>4.0</td>
+      <td>4.0</td>
+      <td>6.0</td>
+      <td>61349ms</td>
+    </tr><tr>
+      <td><strong>qwen2.5-coder-32b</strong></td>
+      <td><strong>6.6</strong></td>
+      <td>6.3</td>
+      <td>6.7</td>
+      <td>7.0</td>
+      <td>42463ms</td>
+    </tr><tr>
+      <td><strong>qwen3-coder-30b</strong></td>
+      <td><strong>8.1</strong></td>
+      <td>8.3</td>
+      <td>8.7</td>
+      <td>6.3</td>
+      <td>21240ms</td>
+    </tr><tr>
+      <td><strong>deepseek-r1-32b</strong></td>
+      <td><strong>4.1</strong></td>
+      <td>4.5</td>
+      <td>3.0</td>
+      <td>5.5</td>
+      <td>70762ms</td>
+    </tr><tr>
+      <td><strong>haiku</strong></td>
+      <td><strong>5.2</strong></td>
+      <td>5.7</td>
+      <td>5.0</td>
+      <td>4.7</td>
+      <td>37793ms</td>
+    </tr><tr>
+      <td><strong>sonnet</strong></td>
+      <td><strong>4.9</strong></td>
+      <td>5.0</td>
+      <td>4.3</td>
+      <td>6.0</td>
+      <td>31786ms</td>
+    </tr></tbody></table></div><div class="section"><h2>🔬 Detailed Results</h2><div class="case">
+      <div class="case-header">
+        <div class="case-id">python-json-processing</div>
+        <div class="score">7.0/10</div>
+      </div>
+      <div class="label">📝 Prompt</div>
+      <div class="content">Write a Python script that:
+1. Reads a JSON file containing a list of users
+2. Filters users where age &gt;= 18 and status == &quot;active&quot;
+3. Sorts by registration_date (newest first)
+4. Writes top 20 to output.json
+
+Include error handling for file operations and invalid data.
+</div>
+      <div class="label">📋 Criteria</div>
+      <div class="content">MUST HAVE:
+- json.load() with file handling
+- List comprehension or filter() for both conditions
+- sorted() with lambda/key function and reverse=True
+- json.dump() with proper formatting
+- try/except for FileNotFoundError and JSONDecodeError
+- Handles missing fields gracefully
+
+QUALITY:
+- Clear variable names
+- Proper Python conventions (snake_case)
+- Type hints if used
+- No bare excepts
+</div>
+      <div class="label">💬 Model Response</div>
+      <div class="content">Certainly! Below is a Python script that accomplishes the tasks you&#039;ve described:
+
+```python
+import json
+from datetime import datetime
+
+def read_json_file(file_path):
+    &quot;&quot;&quot;Reads a JSON file and returns its content as a list of dictionaries.&quot;&quot;&quot;
+    try:
+        with open(file_path, &#039;r&#039;) as file:
+            users = json.load(file)
+    except FileNotFoundError:
+        print(f&quot;Error: The file {file_path} was not found.&quot;)
+        return []
+    except json.JSONDecodeError:
+        print(&quot;Error: Invalid JSON format in the file.&quot;)
+        return []
+    else:
+        return users
+
+def filter_users(users):
+    &quot;&quot;&quot;Filters users where age &gt;= 18 and status == &#039;active&#039;.&quot;&quot;&quot;
+    filtered_users = [user for user in users if user.get(&#039;age&#039;, 0) &gt;= 18 and user.get(&#039;status&#039;, &#039;&#039;) == &#039;active&#039;]
+    return filtered_users
+
+def sort_users_by_registration_date(users):
+    &quot;&quot;&quot;Sorts the list of users by registration date (newest first).&quot;&quot;&quot;
+    try:
+        # Convert string to datetime for sorting
+        users.sort(key=lambda x: datetime.strptime(x[&#039;registration_date&#039;], &#039;%Y-%m-%d&#039;), reverse=True)
+    except KeyError:
+        print(&quot;Error: &#039;registration_date&#039; key not found in user data.&quot;)
+    return users
+
+def write_top_20_users(users, output_file):
+    &quot;&quot;&quot;Writes the top 20 filtered and sorted users to an output JSON file.&quot;&quot;&quot;
+    try:
+        with open(output_file, &#039;w&#039;) as file:
+            json.dump(users[:20], file, indent=4)
+    except IOError:
+        print(f&quot;Error: Could not write to {output_file}.&quot;)
+
+def main():
+    input_file = &quot;users.json&quot;
+    output_file = &quot;output.json&quot;
+
+    # Read the JSON file
+    users = read_json_file(input_file)
+
+    if not users:
+        return
+
+    # Filter users based on age and status
+    filtered_users = filter_users(users)
+
+    if not filtered_users:
+        print(&quot;No active users aged 18 or older found.&quot;)
+        return
+
+    # Sort by registration date (newest first)
+    sorted_users = sort_users_by_registration_date(filtered_users)
+
+    # Write top 20 to output.json
+    write_top_20_users(sorted_users, output_file)
+
+if __name__ == &quot;__main__&quot;:
+    main()
+```
+
+### Explanation:
+1. **Reading the JSON File**: The `read_json_file` function reads a JSON file and returns its content as a list of dictionaries.
+2. **Filtering Users**: The `filter_users` function filters users based on age (`age &gt;= 18`) and status (`status == &#039;active&#039;`).
+3. **Sorting by Registration Date**: The `sort_users_by_registration_date` function sorts the filtered users by their registration date in descending order (newest first). It uses a lambda function to convert the string representation of dates into datetime objects for proper sorting.
+4. **Writing Top 20 Users**: The `write_top_20_users` function writes the top 20 users from the sorted list to an output JSON file.
+
+### Error Handling:
+- File operations are handled with try-except blocks to catch and print appropriate error messages if the file is not found or if there&#039;s a JSON decoding issue.
+- Key errors are caught when sorting by `registration_date` to ensure that the key exists in each user dictionary.
+
+This script should be run from a Python environment, and you need to have a valid `users.json` file with the appropriate structure.</div>
+      <div class="label">⚖️ Judge Reasoning</div>
+      <div class="content">Uses .sort() instead of required sorted() function, missing ValueError handling for date parsing, but otherwise implements logic correctly with good error handling.</div>
+      <div class="grid" style="margin-top: 1rem;">
+        <div class="stat"><div class="stat-label">Accuracy</div><div class="stat-value">7/10</div></div>
+        <div class="stat"><div class="stat-label">Completeness</div><div class="stat-value">7/10</div></div>
+        <div class="stat"><div class="stat-label">Conciseness</div><div class="stat-value">7/10</div></div>
+        <div class="stat"><div class="stat-label">Latency</div><div class="stat-value">12294ms</div></div>
+      </div>
+    </div><div class="case">
+      <div class="case-header">
+        <div class="case-id">python-api-client</div>
+        <div class="score">2.8/10</div>
+      </div>
+      <div class="label">📝 Prompt</div>
+      <div class="content">Create a Python function that fetches data from a REST API with retry logic:
+
+```python
+def fetch_with_retry(url: str, max_retries: int = 3) -&gt; dict:
+    &quot;&quot;&quot;
+    Fetch JSON data from URL with exponential backoff retry.
+    Raises exception after max_retries failed attempts.
+    &quot;&quot;&quot;
+    pass  # implement this
+```
+
+Requirements:
+- Use requests library
+- Retry on network errors and 5xx status codes
+- Exponential backoff (1s, 2s, 4s)
+- Don&#039;t retry on 4xx errors
+- Log each attempt
+</div>
+      <div class="label">📋 Criteria</div>
+      <div class="content">MUST HAVE:
+- requests.get() or equivalent
+- for loop or while loop for retries
+- response.raise_for_status() or status code check
+- Exception handling for requests.RequestException
+- time.sleep() with exponential backoff (2**attempt)
+- Returns response.json()
+- Raises exception after max_retries
+
+QUALITY:
+- Status code checking (only retry 5xx)
+- Clean error messages
+- Type hints
+- Proper logging
+</div>
+      <div class="label">💬 Model Response</div>
+      <div class="content">Here&#039;s a Python function that fetches data from a REST API with retry logic using the `requests` library and the `logging` module for logging attempts:
+
+```python
+import requests
+import logging
+import time
+from functools import wraps
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format=&#039;%(asctime)s - %(levelname)s - %(message)s&#039;)
+
+def fetch_with_retry(url: str, max_retries: int = 3) -&gt; dict:
+    &quot;&quot;&quot;
+    Fetch JSON data from URL with exponential backoff retry.
+    Raises exception after max_retries failed attempts.
+    &quot;&quot;&quot;
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            for attempt in range(max_retries + 1):  # include the initial request
+                try:
+                    response = func(url, *args, **kwargs)
+                    if response.status_code &gt;= 500:  # 5xx status codes
+                        logging.warning(f&quot;Attempt {attempt+1} failed with status code {response.status_code}. Retrying in {2**attempt} seconds.&quot;)
+                        time.sleep(2**attempt)  # exponential backoff
+                    elif response.status_code &lt; 400:  # 4xx status codes, don&#039;t retry
+                        logging.warning(f&quot;Attempt {attempt+1} failed with status code {response.status_code}. Retrying in {2**attempt} seconds.&quot;)
+                        time.sleep(2**attempt)  # exponential backoff
+                    else:
+                        return response.json()
+                except requests.RequestException as e:
+                    logging.error(f&quot;Attempt {attempt+1} failed: {e}&quot;)
+                    if attempt &lt; max_retries:
+                        time.sleep(2**attempt)  # exponential backoff
+            raise Exception(&quot;All attempts failed&quot;)
+        return wrapper
+    return decorator
+
+# Example usage:
+
+@fetch_with_retry(&#039;https://api.example.com/data&#039;)
+def fetch_data(url):
+    response = requests.get(url)
+    return response
+
+try:
+    data = fetch_data()
+    print(data)
+except Exception as e:
+    logging.error(e)
+```
+
+This function uses a decorator to wrap the `requests.get()` call, which allows us to log each attempt and implement retry logic. The `fetch_with_retry` function takes an optional `max_retries` parameter, which specifies how many times we should retry before raising an exception.
+
+The decorator uses a loop to make up to `max_retries + 1` attempts at fetching the data. If any of these attempts fail (i.e., raise a `requests.RequestException`), it logs the error and waits for the specified amount of time before making the next attempt. This is done using exponential backoff, where the wait time doubles with each retry.
+
+If all attempts fail, the decorator raises an exception with a message indicating that all attempts failed.</div>
+      <div class="label">⚖️ Judge Reasoning</div>
+      <div class="content">The decorator pattern is wrong (should be a simple function), status code logic is backwards (retries 2xx/3xx success codes, returns on 4xx errors), and the implementation doesn&#039;t match the requested function signature at all.</div>
+      <div class="grid" style="margin-top: 1rem;">
+        <div class="stat"><div class="stat-label">Accuracy</div><div class="stat-value">2/10</div></div>
+        <div class="stat"><div class="stat-label">Completeness</div><div class="stat-value">3/10</div></div>
+        <div class="stat"><div class="stat-label">Conciseness</div><div class="stat-value">4/10</div></div>
+        <div class="stat"><div class="stat-label">Latency</div><div class="stat-value">13222ms</div></div>
+      </div>
+    </div><div class="case">
+      <div class="case-header">
+        <div class="case-id">python-error-handling</div>
+        <div class="score">5.4/10</div>
+      </div>
+      <div class="label">📝 Prompt</div>
+      <div class="content">Refactor this code to have better error handling:
+
+```python
+def process_user(user_id):
+    user = db.get_user(user_id)
+    profile = api.fetch_profile(user.email)
+    result = calculate_score(profile.data)
+    return result
+```
+
+Handle: missing user, API failures, invalid data, calculation errors.
+</div>
+      <div class="label">📋 Criteria</div>
+      <div class="content">MUST HAVE:
+- Check if user exists (if user is None)
+- try/except around API call (requests.RequestException or similar)
+- try/except around calculate_score (ValueError or similar)
+- Specific exception types (not bare except)
+- Return None or raise with clear message on error
+- OR use Optional return type and handle each None
+
+QUALITY:
+- Separate try/except blocks for different operations
+- Log errors appropriately
+- Clear error messages
+- Early returns for error cases
+- Type hints with Optional
+</div>
+      <div class="label">💬 Model Response</div>
+      <div class="content">Certainly! To improve error handling in the `process_user` function, we can add checks and handle potential issues such as a missing user, API failures, invalid data, and calculation errors. Here&#039;s a refactored version of your code:
+
+```python
+def process_user(user_id):
+    try:
+        # Step 1: Fetch the user from the database
+        user = db.get_user(user_id)
+        if not user:
+            raise ValueError(f&quot;No user found with ID {user_id}&quot;)
+        
+        # Step 2: Fetch the profile using the email
+        profile = api.fetch_profile(user.email)
+        if not profile or &#039;data&#039; not in profile:
+            raise ValueError(&quot;Failed to fetch valid profile data&quot;)
+        
+        # Step 3: Calculate the score from the profile data
+        result = calculate_score(profile[&#039;data&#039;])
+        return result
+    
+    except db.DatabaseError as e:
+        print(f&quot;Database error occurred: {e}&quot;)
+    
+    except api.APIError as e:
+        print(f&quot;API error occurred: {e}&quot;)
+    
+    except KeyError as e:
+        print(f&quot;Key error occurred: {e}&quot;)
+    
+    except ValueError as e:
+        print(f&quot;Value error occurred: {e}&quot;)
+    
+    except Exception as e:
+        print(f&quot;An unexpected error occurred: {e}&quot;)
+
+    return None
+```
+
+### Explanation:
+
+1. **Database Error Handling**: 
+   - We catch `db.DatabaseError` to handle any issues that might arise from the database operations.
+
+2. **API Error Handling**:
+   - We catch `api.APIError` to handle any errors returned by the API, such as network issues or invalid responses.
+
+3. **KeyError Handling**:
+   - We catch `KeyError` to handle cases where a required key is missing in the profile data.
+
+4. **ValueError Handling**:
+   - We catch `ValueError` for other value-related errors that might occur during validation steps.
+
+5. **General Exception Handling**:
+   - A general `Exception` block is used to catch any unexpected exceptions and print an error message.
+
+6. **Return None on Failure**:
+   - If any of the checks or operations fail, the function returns `None`.
+
+This approach ensures that your code handles various potential issues gracefully and provides meaningful feedback in case something goes wrong.</div>
+      <div class="label">⚖️ Judge Reasoning</div>
+      <div class="content">Code raises then catches its own exceptions in same block, uses print not logging, lacks type hints and separate try/except blocks, but does check for None and return None.</div>
+      <div class="grid" style="margin-top: 1rem;">
+        <div class="stat"><div class="stat-label">Accuracy</div><div class="stat-value">5/10</div></div>
+        <div class="stat"><div class="stat-label">Completeness</div><div class="stat-value">5/10</div></div>
+        <div class="stat"><div class="stat-label">Conciseness</div><div class="stat-value">7/10</div></div>
+        <div class="stat"><div class="stat-label">Latency</div><div class="stat-value">8644ms</div></div>
+      </div>
+    </div></div><div class="section"><h2>🔄 Reproducibility</h2><p>Run this exact benchmark again:</p><pre><code>verdict run -c verdict.yaml -p Python Quick Test -m llama3.2-3b,qwen2.5-7b,qwen2.5-coder-14b,phi4-14b,deepseek-r1-14b,qwen2.5-coder-32b,qwen3-coder-30b,deepseek-r1-32b,haiku,sonnet</code></pre></div></body></html>
