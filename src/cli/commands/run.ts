@@ -10,6 +10,7 @@ import { loadBaseline, compareWithBaseline } from '../../core/baseline.js'
 import { printSummary, printCaseDetail, printBaselineComparison, printSynthesis } from '../../reporter/terminal.js'
 import { generateMarkdownReport } from '../../reporter/markdown.js'
 import type { SlackCard } from '../../types/index.js'
+import { setLogLevel } from '../../utils/logger.js'
 
 interface RunOptions {
   config: string
@@ -28,6 +29,10 @@ interface RunOptions {
 }
 
 export async function runCommand(opts: RunOptions): Promise<void> {
+  // Set verbosity level before anything else
+  if (opts.debug) setLogLevel('debug')
+  else if (opts.verbose) setLogLevel('verbose')
+
   // When --json is set, suppress all non-JSON stdout output.
   // Informational messages go to stderr; only the final JSON goes to stdout.
   const log = opts.json ? (...args: unknown[]) => { process.stderr.write(args.join(' ') + '\n') } : console.log.bind(console)

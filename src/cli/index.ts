@@ -43,8 +43,8 @@ program
   .option('--category <categories...>', 'Filter cases by category (repeatable)')
   .option('--json', 'Output results as JSON to stdout (for CI/CD pipelines)')
   .option('--fail-if-regression', 'Exit with code 1 if any model regresses vs the default baseline')
-  .option('--verbose', 'Print each case result as it completes')
-  .option('--debug', 'Log raw provider requests and responses to stderr')
+  .option('--verbose', 'Show model call results, scores, and timing as they happen')
+  .option('--debug', 'Show verbose output plus raw API request/response bodies')
   .action(runCommand)
 
 const models = program

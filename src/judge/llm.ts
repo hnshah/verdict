@@ -2,6 +2,7 @@ import OpenAI from 'openai'
 import type { ModelConfig, JudgeConfig, JudgeScore, CotChoice } from '../types/index.js'
 import { callOpenClaw, type OpenClawConfig } from '../providers/openclaw.js'
 import { callSubAgent, type SubAgentConfig } from '../providers/subagent.js'
+import { log as vlog } from '../utils/logger.js'
 
 const judgeClientCache = new Map<string, OpenAI>()
 
@@ -76,9 +77,10 @@ export async function judgeResponse(
   response: string
 ): Promise<JudgeScore> {
   const judgePrompt = buildPrompt(prompt, criteria, response, config.rubric)
-  
+  vlog('debug', `judge ${judgeModel.id}: request`, judgePrompt)
+
   let text: string
-  
+
   // Route to OpenClaw if provider is openclaw
   if (judgeModel.provider === 'openclaw') {
     const result = await callOpenClaw(judgePrompt, judgeModel as OpenClawConfig)
@@ -104,6 +106,7 @@ export async function judgeResponse(
 
     text = result.choices[0]?.message?.content ?? ''
   }
+  vlog('debug', `judge ${judgeModel.id}: response`, text)
   const parsed = parseJudgeJson(text)
   if (!parsed) throw new Error(`Judge returned non-JSON: ${text.slice(0, 200)}`)
 
