@@ -18,7 +18,7 @@ export async function publishCommand(opts: PublishOptions): Promise<void> {
   console.log()
 
   const resultsPrivate = path.resolve('results/private')
-  const resultsPublic = path.resolve('results/public')
+  const resultsPublic = path.resolve('dashboard/published')
 
   // Ensure directories exist
   if (!fs.existsSync(resultsPrivate)) {
@@ -75,7 +75,7 @@ export async function publishCommand(opts: PublishOptions): Promise<void> {
       console.log()
       console.log(chalk.green('  ✓ Next steps:'))
       console.log(`    1. Generate leaderboard: ${chalk.cyan('verdict leaderboard')}`)
-      console.log(`    2. Commit and push: ${chalk.cyan('git add results/public/ && git commit && git push')}`)
+      console.log(`    2. Commit and push: ${chalk.cyan('git add dashboard/published/ && git commit && git push')}`)
       console.log(`    3. View at: ${chalk.cyan('https://hnshah.github.io/verdict')}`)
       console.log()
     } catch (err) {

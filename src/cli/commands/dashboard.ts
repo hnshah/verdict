@@ -106,14 +106,14 @@ export async function dashboardGenerateCommand(opts: GenerateOptions): Promise<v
 
   if (opts.embed) {
     // Embed data into HTML template
-    const templatePath = path.resolve(__dirname, '../../../templates/dashboard/index.html')
+    const templatePath = path.resolve(__dirname, '../../../dashboard/templates/index.html')
     let template: string
     // Try bundled template, fall back to source location
     if (fs.existsSync(templatePath)) {
       template = fs.readFileSync(templatePath, 'utf-8')
     } else {
       // When running from src with tsx, templates are at project root
-      const altPath = path.resolve(__dirname, '../../../../templates/dashboard/index.html')
+      const altPath = path.resolve(__dirname, '../../../../dashboard/templates/index.html')
       if (fs.existsSync(altPath)) {
         template = fs.readFileSync(altPath, 'utf-8')
       } else {
@@ -396,9 +396,9 @@ export function validateDashboardData(data: unknown): string[] {
 
 function findTemplatePath(filename: string): string | null {
   const candidates = [
-    path.resolve(__dirname, '../../../templates/dashboard', filename),
-    path.resolve(__dirname, '../../../../templates/dashboard', filename),
-    path.resolve('templates/dashboard', filename),
+    path.resolve(__dirname, '../../../dashboard/templates', filename),
+    path.resolve(__dirname, '../../../../dashboard/templates', filename),
+    path.resolve('dashboard/templates', filename),
   ]
   for (const p of candidates) {
     if (fs.existsSync(p)) return p
