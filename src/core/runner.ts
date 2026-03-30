@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
 import { execSync } from 'child_process'
-import type { Config, EvalPack, RunResult, ModelSummary, CaseResult, Checkpoint, JudgeScore, Assertion } from '../types/index.js'
+import type { Config, EvalPack, RunResult, ModelSummary, CaseResult, Checkpoint, JudgeScore, Assertion, RunMeta } from '../types/index.js'
 import { callModel, callModelMultiTurn, callModelWithTools } from '../providers/compat.js'
 import { judgeResponse, judgeResponseCot } from '../judge/llm.js'
 import { scoreDeterministic, isDeterministic, scoreToolCall } from '../judge/deterministic.js'
@@ -196,7 +196,8 @@ export async function runEvals(
   onProgress?: (msg: string) => void,
   resume?: boolean,
   categoryFilter?: string[],
-  preload: boolean = true
+  preload: boolean = true,
+  configFile?: string
 ): Promise<RunResult> {
   const configHash = computeConfigHash(config)
   const log = onProgress ?? (() => {})
@@ -376,10 +377,18 @@ export async function runEvals(
 
   // Collect metadata
   const hardware = detectHardware()
+  const hwFormat = toRunResultFormat(hardware)
   const environment = detectEnvironment()
   const evalPackMetadata = extractEvalPackMetadata(packs)
   const packNames = packs.map(p => p.name)
-  
+
+  const runMeta: RunMeta = {
+    run_id: runId,
+    config_file: configFile || 'verdict.yaml',
+    verdict_version: environment.verdict_version,
+    hardware: `${hwFormat.cpu} ${hwFormat.ram_gb}GB`,
+  }
+
   return {
     run_id: runId,
     name: config.name,
@@ -387,8 +396,8 @@ export async function runEvals(
     models: modelIds,
     cases,
     summary,
-    // NEW: Complete metadata
-    hardware: toRunResultFormat(hardware),
+    run_meta: runMeta,
+    hardware: hwFormat,
     environment,
     eval_pack: evalPackMetadata,
     judge: {
@@ -398,7 +407,7 @@ export async function runEvals(
     },
     reproducibility: {
       command: buildReproCommand(config, packNames, modelIds),
-      config_file: 'verdict.yaml',
+      config_file: configFile || 'verdict.yaml',
       model_configs: buildModelConfigs(config)
     }
   }

@@ -168,6 +168,7 @@ export interface JudgeScore {
   conciseness: number
   total: number
   reasoning: string
+  structured_reasoning?: StructuredReasoning
 }
 
 export interface CaseResult {
@@ -236,6 +237,19 @@ export interface ReproducibilityInfo {
   }>
 }
 
+export interface RunMeta {
+  run_id: string
+  config_file: string
+  verdict_version: string
+  hardware: string
+}
+
+export interface StructuredReasoning {
+  strengths: string[]
+  weaknesses: string[]
+  verdict: string
+}
+
 export interface RunResult {
   run_id: string
   name: string
@@ -245,7 +259,9 @@ export interface RunResult {
   summary: Record<string, ModelSummary>
   synthesis?: SynthesisResult
   baselineComparison?: BaselineComparison
-  // NEW: Comprehensive metadata
+  // Run-level metadata for reproducibility
+  run_meta?: RunMeta
+  // Comprehensive metadata
   hardware?: HardwareInfo
   environment?: EnvironmentInfo
   eval_pack?: EvalPackMetadata
