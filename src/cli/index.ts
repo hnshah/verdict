@@ -15,6 +15,7 @@ import { publishCommand } from './commands/publish.js'
 import { leaderboardCommand } from './commands/leaderboard.js'
 import { reportCommand } from './commands/report.js'
 import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } from './commands/eval.js'
+import { dashboardGenerateCommand, dashboardValidateCommand, dashboardPreviewCommand } from './commands/dashboard.js'
 
 const program = new Command()
 
@@ -200,5 +201,30 @@ evalCmd
   .command('init')
   .description('Auto-register built-in eval packs')
   .action(evalInitCommand)
+
+const dashboard = program
+  .command('dashboard')
+  .description('Generate and preview an interactive dashboard from eval results')
+
+dashboard
+  .command('generate')
+  .description('Aggregate results into dashboard JSON (and optionally HTML)')
+  .option('-o, --output <path>', 'Output file path', 'dashboard-data.json')
+  .option('-r, --results <dir>', 'Results directory', './results')
+  .option('--embed', 'Also generate a self-contained HTML dashboard')
+  .action(dashboardGenerateCommand)
+
+dashboard
+  .command('validate')
+  .description('Validate a dashboard-data.json file')
+  .option('-i, --input <path>', 'Input file path', 'dashboard-data.json')
+  .action(dashboardValidateCommand)
+
+dashboard
+  .command('preview')
+  .description('Preview dashboard locally in your browser')
+  .option('-i, --input <path>', 'Input dashboard-data.json file', 'dashboard-data.json')
+  .option('-p, --port <n>', 'Port to listen on', '3000')
+  .action(dashboardPreviewCommand)
 
 program.parse()

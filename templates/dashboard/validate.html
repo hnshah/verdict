@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verdict Dashboard - Data Validation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      color: #1a1a2e;
+      background: #f0f2f5;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+    .drop-zone {
+      border: 2px dashed #dee2e6;
+      border-radius: 12px;
+      padding: 3rem;
+      text-align: center;
+      color: #6c757d;
+      margin-bottom: 2rem;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .drop-zone:hover, .drop-zone.active { border-color: #4a6cf7; color: #4a6cf7; }
+    #results { margin-top: 1rem; }
+    .check { padding: 0.75rem; margin-bottom: 0.5rem; border-radius: 8px; font-size: 0.9rem; }
+    .check.pass { background: #d4edda; color: #155724; }
+    .check.fail { background: #f8d7da; color: #721c24; }
+    .check.warn { background: #fff3cd; color: #856404; }
+  </style>
+</head>
+<body>
+  <h1>Dashboard Data Validator</h1>
+  <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+    Drop dashboard-data.json here or click to select
+    <input type="file" id="fileInput" accept=".json" style="display:none">
+  </div>
+  <div id="results"></div>
+  <script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const results = document.getElementById('results');
+
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('active'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('active'));
+    dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('active'); handleFile(e.dataTransfer.files[0]); });
+    fileInput.addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+
+    function handleFile(file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const data = JSON.parse(e.target.result);
+          validate(data);
+        } catch (err) {
+          results.innerHTML = check('fail', 'Invalid JSON: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function validate(data) {
+      const checks = [];
+
+      // Meta
+      if (data.meta) {
+        checks.push(check('pass', 'meta object present'));
+        if (typeof data.meta.total_runs === 'number') checks.push(check('pass', `total_runs: ${data.meta.total_runs}`));
+        else checks.push(check('fail', 'meta.total_runs missing or not a number'));
+        if (typeof data.meta.total_cases === 'number') checks.push(check('pass', `total_cases: ${data.meta.total_cases}`));
+        else checks.push(check('fail', 'meta.total_cases missing or not a number'));
+        if (data.meta.last_updated) checks.push(check('pass', `last_updated: ${data.meta.last_updated}`));
+        else checks.push(check('warn', 'meta.last_updated missing'));
+      } else {
+        checks.push(check('fail', 'meta object missing'));
+      }
+
+      // Models
+      if (data.models && typeof data.models === 'object') {
+        const modelCount = Object.keys(data.models).length;
+        checks.push(check('pass', `models: ${modelCount} model(s) defined`));
+        for (const [id, m] of Object.entries(data.models)) {
+          if (!m.name) checks.push(check('warn', `models.${id}.name missing`));
+        }
+      } else {
+        checks.push(check('fail', 'models object missing'));
+      }
+
+      // Cases
+      if (Array.isArray(data.cases)) {
+        checks.push(check('pass', `cases: ${data.cases.length} case(s)`));
+        for (let i = 0; i < data.cases.length; i++) {
+          const c = data.cases[i];
+          if (!c.id) checks.push(check('fail', `cases[${i}].id missing`));
+          if (!Array.isArray(c.runs)) checks.push(check('fail', `cases[${i}].runs missing or not an array`));
+          else {
+            for (let j = 0; j < c.runs.length; j++) {
+              const run = c.runs[j];
+              if (!run.run_id) checks.push(check('warn', `cases[${i}].runs[${j}].run_id missing`));
+              if (!run.responses || typeof run.responses !== 'object') checks.push(check('fail', `cases[${i}].runs[${j}].responses missing`));
+              if (!run.scores || typeof run.scores !== 'object') checks.push(check('fail', `cases[${i}].runs[${j}].scores missing`));
+            }
+          }
+        }
+      } else {
+        checks.push(check('fail', 'cases array missing'));
+      }
+
+      const failCount = checks.filter(c => c.includes('class="check fail"')).length;
+      const summary = failCount === 0
+        ? check('pass', `All checks passed! (${checks.length} checks)`)
+        : check('fail', `${failCount} check(s) failed out of ${checks.length}`);
+
+      results.innerHTML = summary + checks.join('');
+    }
+
+    function check(type, msg) {
+      const icon = type === 'pass' ? '&#10003;' : type === 'fail' ? '&#10007;' : '&#9888;';
+      return `<div class="check ${type}">${icon} ${msg}</div>`;
+    }
+  </script>
+</body>
+</html>
