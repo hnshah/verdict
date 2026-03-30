@@ -1,0 +1,105 @@
+# eval-packs/summarization.yaml
+name: Summarization Quality
+version: 1.0.0
+description: 10 cases testing summarization — extractive accuracy, length control, audience adaptation, and avoiding hallucination.
+
+cases:
+  - id: summ-001
+    description: "Basic article summarization — preserves key facts, appropriate length"
+    category: factual
+    prompt: |
+      Summarize this article in 2-3 sentences:
+
+      "OpenAI announced GPT-4 Turbo in November 2023, featuring a 128,000-token context window — roughly 300 pages of text. The model is priced at $0.01 per 1,000 input tokens, a 3x cost reduction from GPT-4. It also includes knowledge of events up to April 2023 and improved instruction following. The announcement was made at OpenAI's first developer conference, DevDay, which attracted over 900 developers."
+    criteria: "Covers: GPT-4 Turbo, 128k context, cost reduction, knowledge cutoff, DevDay announcement. No invented facts. 2-3 sentences. Reads naturally."
+    tags: [summarization, factual, easy]
+
+  - id: summ-002
+    description: "Executive summary — distills a long problem description to key decision points"
+    category: creative
+    prompt: |
+      Write a 1-sentence executive summary of this situation:
+
+      "Our mobile app currently has 45,000 monthly active users. Over the past 3 months, we've seen a 12% month-over-month decline in DAU despite running three paid acquisition campaigns. Churn analysis shows users are dropping off after 7 days, primarily citing 'too complicated' and 'not sure what to do next.' The onboarding flow hasn't been updated in 18 months. Engineering estimates a full onboarding redesign at 6 weeks. A lightweight tooltip/guidance overlay could ship in 1 week. The marketing team wants to pause acquisition until retention improves."
+    criteria: "Captures the core tension: declining retention + onboarding problem. Mentions key metrics or decision. Exactly 1 sentence. Decision-maker could act on it."
+    tags: [summarization, executive, medium]
+
+  - id: summ-003
+    description: "Bullet-point extraction — pulls key facts without hallucination"
+    category: factual
+    prompt: |
+      Extract the 4 most important facts from this paragraph as bullet points:
+
+      "The Mars Perseverance rover, which landed in February 2021, has collected 23 rock and soil samples stored in titanium tubes. NASA plans to retrieve these samples via a joint Mars Sample Return mission with ESA, currently targeting a 2040 launch. The samples could provide evidence of ancient microbial life. The mission's cost has ballooned to an estimated $11 billion, prompting a redesign review. Perseverance also carries the Ingenuity helicopter, which has completed over 70 flights."
+    criteria: "Exactly 4 bullets. All facts present in source text (no hallucination). Covers most important points: sample collection, MSR mission, life detection potential, cost or Ingenuity. No invented numbers or dates."
+    tags: [summarization, extraction, bullets, easy]
+
+  - id: summ-004
+    description: "Length control — summarize to exact word target"
+    category: factual
+    prompt: |
+      Summarize this in exactly 25 words (count carefully):
+
+      "The human brain contains approximately 86 billion neurons, each connected to thousands of others via synapses. These connections form the basis of memory, thought, and emotion. Unlike most cells, neurons rarely regenerate after death, though the brain does exhibit neuroplasticity — its ability to reorganize and form new connections in response to learning and injury."
+    criteria: "Close to 25 words (23-27 acceptable). Accurate to source material. No invented facts. Coherent sentence(s)."
+    tags: [summarization, length-control, medium]
+
+  - id: summ-005
+    description: "Audience adaptation — same content, different reading level"
+    category: creative
+    prompt: |
+      Explain this to a 10-year-old in 2 sentences:
+
+      "Photosynthesis is the biochemical process by which plants, algae, and some bacteria convert light energy (typically from the sun) into chemical energy stored as glucose. This process requires carbon dioxide from the air and water from the soil, releasing oxygen as a byproduct through a light-dependent reaction in the chloroplasts."
+    criteria: "Uses simple vocabulary (no 'biochemical', 'chloroplasts', 'byproduct' without explanation). Accurate core concept (plants use sunlight + water + air to make food). 2 sentences. A child would understand."
+    tags: [summarization, audience-adaptation, easy]
+
+  - id: summ-006
+    description: "Hallucination test — does model add facts not in source?"
+    category: factual
+    prompt: |
+      Summarize ONLY what is stated in this text. Do not add any information not explicitly mentioned:
+
+      "Acme Corp reported Q3 revenue of $2.1M, up 15% year-over-year. The CEO cited international expansion as the primary growth driver. Operating expenses increased 22% due to hiring. The company did not provide Q4 guidance."
+    criteria: "Only includes: $2.1M revenue, 15% YoY growth, international expansion as driver, 22% opex increase from hiring, no Q4 guidance given. No speculation about Q4 or future performance. No invented metrics."
+    tags: [summarization, anti-hallucination, factual, medium]
+
+  - id: summ-007
+    description: "Meeting notes to action items — structured extraction"
+    category: factual
+    prompt: |
+      Extract only the action items from this meeting transcript as a bulleted list:
+
+      "Team discussed the Q2 roadmap. Sarah will send the updated spec by Friday. The API rate limiting issue was reviewed — Marcus will file the bug report today. Everyone agreed the launch date is still May 15th. John asked about the design mockups; Lisa said they'd be ready next week and will share them in Slack. No decision was made on the pricing page redesign."
+    criteria: "Extracts: Sarah sends spec by Friday, Marcus files bug report today, Lisa shares mockups in Slack next week. Does NOT include: launch date (not an action), pricing discussion (no action). Format is clean bullets."
+    tags: [summarization, action-items, extraction, medium]
+
+  - id: summ-008
+    description: "Abstractive vs extractive — model summarizes with own words, not copy-paste"
+    category: creative
+    prompt: |
+      Summarize this in 1 sentence using your own words (do not copy phrases from the source):
+
+      "The company's new remote work policy allows employees to work from any country for up to 90 days per calendar year, requires a minimum of 4 hours overlap with the team's core hours (10am-2pm EST), and mandates that employees notify HR at least 2 weeks in advance of any international remote work period."
+    criteria: "Paraphrases the policy in own words. Captures: international remote work allowed, 90-day limit, core hours requirement, advance notice. Does not copy phrases verbatim from source."
+    tags: [summarization, abstractive, medium]
+
+  - id: summ-009
+    description: "Conflicting information — model identifies contradiction rather than smoothing over it"
+    category: factual
+    prompt: |
+      Summarize this text and flag any contradictions you find:
+
+      "The report states that user retention improved 20% in Q3. Later, it notes that 'churn increased significantly in the July-September period.' The report recommends continuing the current retention strategy."
+    criteria: "Identifies the contradiction between '20% retention improvement' and 'churn increased significantly.' Does not smooth over it. Summary is accurate to source. Flags the inconsistency clearly."
+    tags: [summarization, contradiction-detection, hard]
+
+  - id: summ-010
+    description: "TL;DR for technical documentation — accessible but accurate"
+    category: creative
+    prompt: |
+      Write a TL;DR (1-2 sentences) for a developer audience for this:
+
+      "Rate limiting is implemented using the token bucket algorithm. Each API key is allocated 1000 tokens per minute. Each request consumes tokens proportional to the response size (1 token per 100 output characters). When the bucket is empty, requests return HTTP 429 with a Retry-After header. The bucket refills at a rate of 16.67 tokens per second. Burst capacity allows temporary usage of up to 1500 tokens."
+    criteria: "Mentions: rate limiting, token-based, 1000 tokens/min limit, 429 response, Retry-After, or burst capacity. 1-2 sentences. Developer-appropriate language (OK to keep HTTP 429, token bucket). Accurate."
+    tags: [summarization, technical, tl-dr, medium]
