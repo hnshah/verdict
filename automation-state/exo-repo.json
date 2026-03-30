@@ -1,0 +1,14 @@
+{
+  "repo": "ankitvgupta/mail-app",
+  "tracking": {
+    "allIssues": true,
+    "allPRs": true,
+    "newReleases": true
+  },
+  "lastChecked": "2026-03-30T22:50:00Z",
+  "lastIssueNumber": 10,
+  "lastPRNumber": 0,
+  "status": "monitoring",
+  "reason": "Potential contribution + OpenClaw integration",
+  "createdAt": "2026-03-30T22:48:00Z"
+}
