@@ -1,0 +1,29 @@
+name: OpenClaw Provider Test
+
+models:
+  # Via OpenClaw → Anthropic Haiku (fast/cheap)
+  - id: haiku-openclaw
+    provider: openclaw
+    model: anthropic/claude-haiku-4-5
+    agent_id: ren
+    tags: [openclaw, fast]
+
+judge:
+  model: haiku-openclaw
+  temperature: 0.1
+  rubric:
+    accuracy: 0.4
+    completeness: 0.4
+    conciseness: 0.2
+
+packs:
+  - ./eval-packs/quick-test.yaml
+
+settings:
+  parallel: 2
+  timeout_ms: 60000
+  retry_on_failure: false
+
+output:
+  dir: ./results
+  format: json

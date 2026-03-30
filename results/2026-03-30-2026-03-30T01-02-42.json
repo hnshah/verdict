@@ -1,0 +1,133 @@
+{
+  "run_id": "2026-03-30T01-02-42",
+  "name": "OpenClaw Provider Test",
+  "timestamp": "2026-03-30T01:04:43.109Z",
+  "models": [
+    "haiku-openclaw"
+  ],
+  "cases": [
+    {
+      "case_id": "simple-math",
+      "prompt": "What is 2 + 2?",
+      "criteria": "Answer is 4",
+      "responses": {
+        "haiku-openclaw": {
+          "text": "4",
+          "latency_ms": 54503,
+          "model": "anthropic/claude-haiku-4-5",
+          "metadata": {
+            "provider": "openclaw",
+            "gateway_url": "http://127.0.0.1:18789",
+            "agent_id": "ren",
+            "usage": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "total_tokens": 0
+            },
+            "finish_reason": "stop"
+          }
+        }
+      },
+      "scores": {
+        "haiku-openclaw": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "Correct answer with no extraneous content, perfectly meeting the stated criterion."
+        }
+      },
+      "winner": "haiku-openclaw"
+    },
+    {
+      "case_id": "simple-reasoning",
+      "prompt": "If a train travels 60 miles per hour for 2 hours, how far does it go?",
+      "criteria": "Answer is 120 miles with clear calculation shown",
+      "responses": {
+        "haiku-openclaw": {
+          "text": "The train travels **120 miles**.\n\nDistance = Speed × Time = 60 mph × 2 hours = 120 miles",
+          "latency_ms": 10786,
+          "model": "anthropic/claude-haiku-4-5",
+          "metadata": {
+            "provider": "openclaw",
+            "gateway_url": "http://127.0.0.1:18789",
+            "agent_id": "ren",
+            "usage": {
+              "prompt_tokens": 0,
+              "completion_tokens": 0,
+              "total_tokens": 0
+            },
+            "finish_reason": "stop"
+          }
+        }
+      },
+      "scores": {
+        "haiku-openclaw": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "Correct answer with formula and calculation clearly shown, no unnecessary content."
+        }
+      },
+      "winner": "haiku-openclaw"
+    }
+  ],
+  "summary": {
+    "haiku-openclaw": {
+      "model_id": "haiku-openclaw",
+      "avg_total": 10,
+      "avg_accuracy": 10,
+      "avg_completeness": 10,
+      "avg_conciseness": 10,
+      "avg_latency_ms": 32644.5,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 100,
+      "wins": 2,
+      "cases_run": 2,
+      "avg_solve_rate": 0
+    }
+  },
+  "hardware": {
+    "cpu": "Apple M3 Ultra",
+    "cpu_cores": 32,
+    "cpu_arch": "arm64",
+    "ram_gb": 256,
+    "os": "macOS",
+    "os_version": "25.3.0"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v22.22.1",
+    "provider_versions": {
+      "ollama": "0.18.3"
+    }
+  },
+  "eval_pack": {
+    "file": "eval-packs/quick-dogfooding-test.yaml",
+    "description": "Minimal test to verify Verdict works",
+    "total_cases": 2
+  },
+  "judge": {
+    "model": "haiku-openclaw",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p Quick Dogfooding Test -m haiku-openclaw",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "haiku-openclaw": {
+        "provider": "openclaw",
+        "model": "anthropic/claude-haiku-4-5",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      }
+    }
+  }
+}

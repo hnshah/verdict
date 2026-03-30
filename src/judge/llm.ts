@@ -1,5 +1,6 @@
 import OpenAI from 'openai'
 import type { ModelConfig, JudgeConfig, JudgeScore } from '../types/index.js'
+import { callOpenClaw, type OpenClawConfig } from '../providers/openclaw.js'
 
 const judgeClientCache = new Map<string, OpenAI>()
 
@@ -73,20 +74,31 @@ export async function judgeResponse(
   criteria: string,
   response: string
 ): Promise<JudgeScore> {
-  const baseURL = judgeModel.base_url
-  if (!baseURL) throw new Error(`Judge model '${judgeModel.id}' has no base_url`)
+  const judgePrompt = buildPrompt(prompt, criteria, response, config.rubric)
+  
+  let text: string
+  
+  // Route to OpenClaw if provider is openclaw
+  if (judgeModel.provider === 'openclaw') {
+    const result = await callOpenClaw(judgePrompt, judgeModel as OpenClawConfig)
+    text = result.text
+  } else {
+    // Standard OpenAI-compatible path
+    const baseURL = judgeModel.base_url
+    if (!baseURL) throw new Error(`Judge model '${judgeModel.id}' has no base_url`)
 
-  const apiKey = judgeModel.api_key === 'none' ? 'no-key-required' : (judgeModel.api_key ?? 'ollama')
-  const client = getOrCreateJudgeClient(baseURL, apiKey)
+    const apiKey = judgeModel.api_key === 'none' ? 'no-key-required' : (judgeModel.api_key ?? 'ollama')
+    const client = getOrCreateJudgeClient(baseURL, apiKey)
 
-  const result = await client.chat.completions.create({
-    model: judgeModel.model,
-    messages: [{ role: 'user', content: buildPrompt(prompt, criteria, response, config.rubric) }],
-    max_tokens: 256,
-    temperature: 0.0,
-  })
+    const result = await client.chat.completions.create({
+      model: judgeModel.model,
+      messages: [{ role: 'user', content: judgePrompt }],
+      max_tokens: 256,
+      temperature: 0.0,
+    })
 
-  const text = result.choices[0]?.message?.content ?? ''
+    text = result.choices[0]?.message?.content ?? ''
+  }
   const parsed = parseJudgeJson(text)
   if (!parsed) throw new Error(`Judge returned non-JSON: ${text.slice(0, 200)}`)
 

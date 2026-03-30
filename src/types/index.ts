@@ -5,7 +5,7 @@ import { z } from 'zod'
 export const ModelConfigSchema = z.object({
   id: z.string(),
   // Provider shortcuts with deep integration
-  provider: z.enum(['ollama', 'mlx']).optional(),
+  provider: z.enum(['ollama', 'mlx', 'openclaw']).optional(),
   // Or raw OpenAI-compat endpoint (covers everything else: OpenRouter, Groq, OpenAI, etc.)
   base_url: z.string().optional(),
   api_key: z.string().default('none'),
@@ -14,6 +14,10 @@ export const ModelConfigSchema = z.object({
   host: z.string().optional(),
   // MLX-specific
   port: z.number().default(8080),
+  // OpenClaw-specific
+  gateway_url: z.string().optional(),
+  gateway_token: z.string().optional(),
+  agent_id: z.string().optional(),
   // Metadata
   tags: z.array(z.string()).default([]),
   cost_per_1m_input: z.number().optional(),

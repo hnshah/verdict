@@ -9,6 +9,7 @@
 import OpenAI from 'openai'
 import fs from 'fs'
 import type { ModelConfig, ModelResponse, ToolDef } from '../types/index.js'
+import { callOpenClaw, type OpenClawConfig } from './openclaw.js'
 
 const clientCache = new Map<string, OpenAI>()
 
@@ -71,6 +72,11 @@ export async function callModel(
   imagePath?: string,
   systemPrompt?: string
 ): Promise<ModelResponse> {
+  // Route to OpenClaw provider if specified
+  if (config.provider === 'openclaw') {
+    return callOpenClaw(prompt, config as OpenClawConfig)
+  }
+  
   const baseURL = config.base_url
   if (!baseURL) throw new Error(`Model '${config.id}' has no base_url`)
 
@@ -153,6 +159,13 @@ export async function callModelMultiTurn(
   attempt = 0,
   systemPrompt?: string
 ): Promise<ModelResponse> {
+  // Route to OpenClaw provider if specified
+  if (config.provider === 'openclaw') {
+    // Convert messages to single prompt (OpenClaw doesn't support multi-turn yet)
+    const prompt = messages.map(m => `${m.role}: ${m.content}`).join('\n\n')
+    return callOpenClaw(prompt, config as OpenClawConfig)
+  }
+  
   const baseURL = config.base_url
   if (!baseURL) throw new Error(`Model '${config.id}' has no base_url`)
 
@@ -206,6 +219,12 @@ export async function callModelWithTools(
   attempt = 0,
   systemPrompt?: string
 ): Promise<ModelResponse> {
+  // Route to OpenClaw provider if specified
+  if (config.provider === 'openclaw') {
+    // OpenClaw doesn't support tools in this simple provider yet
+    return callOpenClaw(prompt, config as OpenClawConfig)
+  }
+  
   const baseURL = config.base_url
   if (!baseURL) throw new Error(`Model '${config.id}' has no base_url`)
 
