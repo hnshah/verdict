@@ -82,7 +82,7 @@
       <div class="flex items-center gap-4 mb-4">
         <p class="text-sm font-semibold text-gray-700">Filters:</p>
         <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-          <input type="checkbox" id="hide-test" class="rounded border-gray-300">
+          <input type="checkbox" id="hide-test" class="rounded border-gray-300" checked>
           <span>Hide test runs</span>
         </label>
         <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
@@ -90,6 +90,7 @@
           <span>Hide single-model runs</span>
         </label>
       </div>
+      <p class="text-xs text-gray-500 mt-2">Showing {{ stats.real_runs }} real runs ({{ stats.test_runs }} test runs hidden)</p>
     </section>
 
     <!-- All Runs -->
@@ -188,16 +189,27 @@ const hideSingle = document.getElementById('hide-single');
 const rows = document.querySelectorAll('.run-row');
 
 function updateFilters() {
+  let visibleCount = 0;
   rows.forEach(row => {
     const isTest = row.dataset.test === 'true';
     const isSingle = row.dataset.single === 'true';
     const shouldHide = (hideTest.checked && isTest) || (hideSingle.checked && isSingle);
     row.style.display = shouldHide ? 'none' : '';
+    if (!shouldHide) visibleCount++;
   });
+  
+  // Update runs table header count
+  const runsHeader = document.querySelector('#runs h2');
+  if (runsHeader) {
+    runsHeader.textContent = `All Runs (${visibleCount})`;
+  }
 }
 
 hideTest.addEventListener('change', updateFilters);
 hideSingle.addEventListener('change', updateFilters);
+
+// Run on page load to hide test runs by default
+updateFilters();
 </script>
 
 </body>
