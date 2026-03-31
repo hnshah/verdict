@@ -1,0 +1,1673 @@
+{
+  "run_id": "2026-03-31T14-25-37",
+  "name": "My Evals",
+  "timestamp": "2026-03-31T14:29:10.668Z",
+  "models": [
+    "qwen2.5:7b",
+    "llama3.2:3b",
+    "phi4:14b",
+    "qwen2.5:14b",
+    "gemma2:9b",
+    "mistral:7b",
+    "deepseek-coder:6.7b",
+    "mathstral:7b",
+    "qwen2.5-coder:7b"
+  ],
+  "cases": [
+    {
+      "case_id": "gen-001",
+      "prompt": "What is the capital of France?",
+      "criteria": "Single correct answer: Paris",
+      "responses": {
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1222,
+          "error": "Connection error."
+        },
+        "phi4:14b": {
+          "model_id": "phi4:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1356,
+          "error": "Connection error."
+        },
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1368,
+          "error": "Connection error."
+        },
+        "gemma2:9b": {
+          "model_id": "gemma2:9b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1227,
+          "error": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "model_id": "qwen2.5:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1218,
+          "error": "Connection error."
+        },
+        "mistral:7b": {
+          "model_id": "mistral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1445,
+          "error": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "model_id": "qwen2.5-coder:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1280,
+          "error": "Connection error."
+        },
+        "mathstral:7b": {
+          "model_id": "mathstral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1169,
+          "error": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "model_id": "deepseek-coder:6.7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1435,
+          "error": "Connection error."
+        }
+      },
+      "scores": {
+        "llama3.2:3b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "phi4:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "gemma2:9b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mistral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mathstral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        }
+      }
+    },
+    {
+      "case_id": "gen-002",
+      "prompt": "What does RAM stand for and what does it do?",
+      "criteria": "Random Access Memory, volatile storage that holds running programs and data",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1230,
+          "error": "Connection error."
+        },
+        "phi4:14b": {
+          "model_id": "phi4:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1409,
+          "error": "Connection error."
+        },
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1425,
+          "error": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "model_id": "qwen2.5:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1247,
+          "error": "Connection error."
+        },
+        "mistral:7b": {
+          "model_id": "mistral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1402,
+          "error": "Connection error."
+        },
+        "gemma2:9b": {
+          "model_id": "gemma2:9b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1486,
+          "error": "Connection error."
+        },
+        "mathstral:7b": {
+          "model_id": "mathstral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1219,
+          "error": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "model_id": "deepseek-coder:6.7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1264,
+          "error": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "model_id": "qwen2.5-coder:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1445,
+          "error": "Connection error."
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "phi4:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "llama3.2:3b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mistral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "gemma2:9b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mathstral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        }
+      }
+    },
+    {
+      "case_id": "gen-003",
+      "prompt": "Explain the difference between a process and a thread in one paragraph.",
+      "criteria": "Covers: separate memory space vs shared, overhead difference, use cases for each",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1250,
+          "error": "Connection error."
+        },
+        "phi4:14b": {
+          "model_id": "phi4:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1312,
+          "error": "Connection error."
+        },
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1250,
+          "error": "Connection error."
+        },
+        "gemma2:9b": {
+          "model_id": "gemma2:9b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1246,
+          "error": "Connection error."
+        },
+        "mistral:7b": {
+          "model_id": "mistral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1284,
+          "error": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "model_id": "qwen2.5:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1310,
+          "error": "Connection error."
+        },
+        "mathstral:7b": {
+          "model_id": "mathstral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1241,
+          "error": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "model_id": "deepseek-coder:6.7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1332,
+          "error": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "model_id": "qwen2.5-coder:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1452,
+          "error": "Connection error."
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "phi4:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "llama3.2:3b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "gemma2:9b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mistral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mathstral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        }
+      }
+    },
+    {
+      "case_id": "gen-004",
+      "prompt": "If all mammals are warm-blooded, and dolphins are mammals, what can we conclude about dolphins?",
+      "criteria": "Correct deductive conclusion: dolphins are warm-blooded. Clear reasoning shown.",
+      "responses": {
+        "phi4:14b": {
+          "model_id": "phi4:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1339,
+          "error": "Connection error."
+        },
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1326,
+          "error": "Connection error."
+        },
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1501,
+          "error": "Connection error."
+        },
+        "gemma2:9b": {
+          "model_id": "gemma2:9b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1310,
+          "error": "Connection error."
+        },
+        "mistral:7b": {
+          "model_id": "mistral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1408,
+          "error": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "model_id": "qwen2.5:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1319,
+          "error": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "model_id": "qwen2.5-coder:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1170,
+          "error": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "model_id": "deepseek-coder:6.7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1413,
+          "error": "Connection error."
+        },
+        "mathstral:7b": {
+          "model_id": "mathstral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1371,
+          "error": "Connection error."
+        }
+      },
+      "scores": {
+        "phi4:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "llama3.2:3b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "gemma2:9b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mistral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mathstral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        }
+      }
+    },
+    {
+      "case_id": "gen-005",
+      "prompt": "List exactly 3 benefits of regular exercise. Numbered list. Max 12 words per item.",
+      "criteria": "Exactly 3 items, numbered list format, each under 12 words",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1418,
+          "error": "Connection error."
+        },
+        "phi4:14b": {
+          "model_id": "phi4:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1378,
+          "error": "Connection error."
+        },
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1352,
+          "error": "Connection error."
+        },
+        "gemma2:9b": {
+          "model_id": "gemma2:9b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1394,
+          "error": "Connection error."
+        },
+        "mistral:7b": {
+          "model_id": "mistral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1167,
+          "error": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "model_id": "qwen2.5:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1234,
+          "error": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "model_id": "deepseek-coder:6.7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1194,
+          "error": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "model_id": "qwen2.5-coder:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1400,
+          "error": "Connection error."
+        },
+        "mathstral:7b": {
+          "model_id": "mathstral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1410,
+          "error": "Connection error."
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "phi4:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "llama3.2:3b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "gemma2:9b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mistral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mathstral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        }
+      }
+    },
+    {
+      "case_id": "gen-006",
+      "prompt": "Write a JavaScript function that returns the sum of all even numbers in an array.",
+      "criteria": "Working JS function, handles empty array, filters even numbers with % 2 === 0, returns sum",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1341,
+          "error": "Connection error."
+        },
+        "phi4:14b": {
+          "model_id": "phi4:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1307,
+          "error": "Connection error."
+        },
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1476,
+          "error": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "model_id": "qwen2.5:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1396,
+          "error": "Connection error."
+        },
+        "mistral:7b": {
+          "model_id": "mistral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1219,
+          "error": "Connection error."
+        },
+        "gemma2:9b": {
+          "model_id": "gemma2:9b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1276,
+          "error": "Connection error."
+        },
+        "mathstral:7b": {
+          "model_id": "mathstral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1355,
+          "error": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "model_id": "deepseek-coder:6.7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1381,
+          "error": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "model_id": "qwen2.5-coder:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1426,
+          "error": "Connection error."
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "phi4:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "llama3.2:3b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mistral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "gemma2:9b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mathstral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        }
+      }
+    },
+    {
+      "case_id": "gen-007",
+      "prompt": "What is the time complexity of binary search and why?",
+      "criteria": "O(log n), correct explanation of halving the search space each iteration",
+      "responses": {
+        "phi4:14b": {
+          "model_id": "phi4:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1297,
+          "error": "Connection error."
+        },
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1233,
+          "error": "Connection error."
+        },
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1392,
+          "error": "Connection error."
+        },
+        "gemma2:9b": {
+          "model_id": "gemma2:9b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1218,
+          "error": "Connection error."
+        },
+        "mistral:7b": {
+          "model_id": "mistral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1473,
+          "error": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "model_id": "qwen2.5:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1365,
+          "error": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "model_id": "qwen2.5-coder:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1180,
+          "error": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "model_id": "deepseek-coder:6.7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1299,
+          "error": "Connection error."
+        },
+        "mathstral:7b": {
+          "model_id": "mathstral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1308,
+          "error": "Connection error."
+        }
+      },
+      "scores": {
+        "phi4:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "llama3.2:3b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "gemma2:9b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mistral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mathstral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        }
+      }
+    },
+    {
+      "case_id": "gen-008",
+      "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
+      "criteria": "Covers attention mechanism, parallel processing (vs RNN), why it improved NLP. Appropriate depth.",
+      "responses": {
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1243,
+          "error": "Connection error."
+        },
+        "phi4:14b": {
+          "model_id": "phi4:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1375,
+          "error": "Connection error."
+        },
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1476,
+          "error": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "model_id": "qwen2.5:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1260,
+          "error": "Connection error."
+        },
+        "gemma2:9b": {
+          "model_id": "gemma2:9b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1290,
+          "error": "Connection error."
+        },
+        "mistral:7b": {
+          "model_id": "mistral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1474,
+          "error": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "model_id": "qwen2.5-coder:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1412,
+          "error": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "model_id": "deepseek-coder:6.7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1333,
+          "error": "Connection error."
+        },
+        "mathstral:7b": {
+          "model_id": "mathstral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1327,
+          "error": "Connection error."
+        }
+      },
+      "scores": {
+        "llama3.2:3b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "phi4:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "gemma2:9b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mistral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mathstral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        }
+      }
+    },
+    {
+      "case_id": "gen-009",
+      "prompt": "Write a haiku about debugging code.",
+      "criteria": "5-7-5 syllable structure, references debugging or code, coherent meaning",
+      "responses": {
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1378,
+          "error": "Connection error."
+        },
+        "phi4:14b": {
+          "model_id": "phi4:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1249,
+          "error": "Connection error."
+        },
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1399,
+          "error": "Connection error."
+        },
+        "gemma2:9b": {
+          "model_id": "gemma2:9b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1264,
+          "error": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "model_id": "qwen2.5:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1152,
+          "error": "Connection error."
+        },
+        "mistral:7b": {
+          "model_id": "mistral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1343,
+          "error": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "model_id": "deepseek-coder:6.7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1227,
+          "error": "Connection error."
+        },
+        "mathstral:7b": {
+          "model_id": "mathstral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1243,
+          "error": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "model_id": "qwen2.5-coder:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1386,
+          "error": "Connection error."
+        }
+      },
+      "scores": {
+        "llama3.2:3b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "phi4:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "gemma2:9b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mistral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mathstral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        }
+      }
+    },
+    {
+      "case_id": "gen-010",
+      "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
+      "criteria": "Consistency, Availability, Partition tolerance, can only guarantee 2 of 3, tradeoffs for system design",
+      "responses": {
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1211,
+          "error": "Connection error."
+        },
+        "phi4:14b": {
+          "model_id": "phi4:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1376,
+          "error": "Connection error."
+        },
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1439,
+          "error": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "model_id": "qwen2.5:14b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1409,
+          "error": "Connection error."
+        },
+        "gemma2:9b": {
+          "model_id": "gemma2:9b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1449,
+          "error": "Connection error."
+        },
+        "mistral:7b": {
+          "model_id": "mistral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1362,
+          "error": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "model_id": "qwen2.5-coder:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1193,
+          "error": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "model_id": "deepseek-coder:6.7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1239,
+          "error": "Connection error."
+        },
+        "mathstral:7b": {
+          "model_id": "mathstral:7b",
+          "text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 1335,
+          "error": "Connection error."
+        }
+      },
+      "scores": {
+        "llama3.2:3b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "phi4:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5:14b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "gemma2:9b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mistral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "qwen2.5-coder:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "deepseek-coder:6.7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        },
+        "mathstral:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "Connection error."
+        }
+      }
+    }
+  ],
+  "summary": {
+    "qwen2.5:7b": {
+      "model_id": "qwen2.5:7b",
+      "avg_total": 0,
+      "avg_accuracy": 0,
+      "avg_completeness": 0,
+      "avg_conciseness": 0,
+      "avg_latency_ms": 13480,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 0,
+      "avg_solve_rate": 0
+    },
+    "llama3.2:3b": {
+      "model_id": "llama3.2:3b",
+      "avg_total": 0,
+      "avg_accuracy": 0,
+      "avg_completeness": 0,
+      "avg_conciseness": 0,
+      "avg_latency_ms": 13450,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 0,
+      "avg_solve_rate": 0
+    },
+    "phi4:14b": {
+      "model_id": "phi4:14b",
+      "avg_total": 0,
+      "avg_accuracy": 0,
+      "avg_completeness": 0,
+      "avg_conciseness": 0,
+      "avg_latency_ms": 13398,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 0,
+      "avg_solve_rate": 0
+    },
+    "qwen2.5:14b": {
+      "model_id": "qwen2.5:14b",
+      "avg_total": 0,
+      "avg_accuracy": 0,
+      "avg_completeness": 0,
+      "avg_conciseness": 0,
+      "avg_latency_ms": 12910,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 0,
+      "avg_solve_rate": 0
+    },
+    "gemma2:9b": {
+      "model_id": "gemma2:9b",
+      "avg_total": 0,
+      "avg_accuracy": 0,
+      "avg_completeness": 0,
+      "avg_conciseness": 0,
+      "avg_latency_ms": 13160,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 0,
+      "avg_solve_rate": 0
+    },
+    "mistral:7b": {
+      "model_id": "mistral:7b",
+      "avg_total": 0,
+      "avg_accuracy": 0,
+      "avg_completeness": 0,
+      "avg_conciseness": 0,
+      "avg_latency_ms": 13577,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 0,
+      "avg_solve_rate": 0
+    },
+    "deepseek-coder:6.7b": {
+      "model_id": "deepseek-coder:6.7b",
+      "avg_total": 0,
+      "avg_accuracy": 0,
+      "avg_completeness": 0,
+      "avg_conciseness": 0,
+      "avg_latency_ms": 13117,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 0,
+      "avg_solve_rate": 0
+    },
+    "mathstral:7b": {
+      "model_id": "mathstral:7b",
+      "avg_total": 0,
+      "avg_accuracy": 0,
+      "avg_completeness": 0,
+      "avg_conciseness": 0,
+      "avg_latency_ms": 12978,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 0,
+      "avg_solve_rate": 0
+    },
+    "qwen2.5-coder:7b": {
+      "model_id": "qwen2.5-coder:7b",
+      "avg_total": 0,
+      "avg_accuracy": 0,
+      "avg_completeness": 0,
+      "avg_conciseness": 0,
+      "avg_latency_ms": 13344,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 0,
+      "avg_solve_rate": 0
+    }
+  },
+  "hardware": {
+    "cpu": "Apple M4 Pro",
+    "cpu_cores": 12,
+    "cpu_arch": "arm64",
+    "ram_gb": 24,
+    "os": "macOS",
+    "os_version": "25.3.0"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v22.22.1",
+    "provider_versions": {}
+  },
+  "eval_pack": {
+    "file": "eval-packs/general.yaml",
+    "description": "10 general-purpose cases covering factual recall, reasoning, coding, and instruction following",
+    "total_cases": 10
+  },
+  "judge": {
+    "model": "qwen2.5:7b",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p General -m qwen2.5:7b,llama3.2:3b,phi4:14b,qwen2.5:14b,gemma2:9b,mistral:7b,deepseek-coder:6.7b,mathstral:7b,qwen2.5-coder:7b",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "qwen2.5:7b": {
+        "provider": "ollama",
+        "model": "qwen2.5:7b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "llama3.2:3b": {
+        "provider": "ollama",
+        "model": "llama3.2:3b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "phi4:14b": {
+        "provider": "ollama",
+        "model": "phi4:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "qwen2.5:14b": {
+        "provider": "ollama",
+        "model": "qwen2.5:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "gemma2:9b": {
+        "provider": "ollama",
+        "model": "gemma2:9b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "mistral:7b": {
+        "provider": "ollama",
+        "model": "mistral:7b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "deepseek-coder:6.7b": {
+        "provider": "ollama",
+        "model": "deepseek-coder:6.7b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "mathstral:7b": {
+        "provider": "ollama",
+        "model": "mathstral:7b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "qwen2.5-coder:7b": {
+        "provider": "ollama",
+        "model": "qwen2.5-coder:7b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      }
+    }
+  }
+}

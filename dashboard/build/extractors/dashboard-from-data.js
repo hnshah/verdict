@@ -36,7 +36,9 @@ dashboardData.cases.forEach(caseData => {
         models: new Set(),
         cases: 0,
         totalScore: 0,
-        scoreCount: 0
+        scoreCount: 0,
+        totalLatency: 0,
+        latencyCount: 0
       });
     }
     
@@ -51,6 +53,14 @@ dashboardData.cases.forEach(caseData => {
       if (score.total) {
         runData.totalScore += score.total;
         runData.scoreCount++;
+      }
+    });
+    
+    // Track latencies
+    Object.values(run.responses || {}).forEach(response => {
+      if (response.latency_ms) {
+        runData.totalLatency += response.latency_ms;
+        runData.latencyCount++;
       }
     });
   });
@@ -68,12 +78,51 @@ dashboardData.cases.forEach(caseData => {
   });
 });
 
+// Load timestamps from individual run files
+const runTimestamps = {};
+try {
+  const runFiles = fs.readdirSync(runFilesDir).filter(f => f.endsWith('.json') && f.startsWith('2026'));
+  runFiles.forEach(file => {
+    const data = JSON.parse(fs.readFileSync(`${runFilesDir}/${file}`, 'utf8'));
+    const runId = file.replace(/^2026-03-\d+-/, '').replace('.json', '');
+    runTimestamps[runId] = data.timestamp;
+  });
+} catch (err) {
+  console.error('Warning: Could not load timestamps:', err.message);
+}
+
 // Convert to runs array with MM-DD-YY date format
 const runs = Array.from(runMap.values()).map(run => {
   // Convert YYYY-MM-DD to MM-DD-YY
   const [year, month, day] = run.date.split('-');
   const shortYear = year.slice(-2);
   const usDate = `${month}-${day}-${shortYear}`;
+  
+  // Format start time from timestamp (HH:MM AM/PM)
+  let startTime = '-';
+  if (runTimestamps[run.id]) {
+    const date = new Date(runTimestamps[run.id]);
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    startTime = `${displayHours}:${minutes} ${ampm}`;
+  }
+  
+  // Calculate duration (rough estimate from latencies)
+  let duration = '-';
+  if (run.totalLatency && run.latencyCount) {
+    const avgLatencyMs = run.totalLatency / run.latencyCount;
+    const totalMs = avgLatencyMs * run.models.size; // Rough parallel execution estimate
+    const seconds = Math.round(totalMs / 1000);
+    if (seconds < 60) {
+      duration = `${seconds}s`;
+    } else {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      duration = `${mins}m ${secs}s`;
+    }
+  }
   
   return {
     id: run.id,
@@ -84,6 +133,8 @@ const runs = Array.from(runMap.values()).map(run => {
     avg_score: run.scoreCount > 0 
       ? Math.round((run.totalScore / run.scoreCount) * 10) / 10 
       : 0,
+    start_time: startTime,
+    duration: duration,
     badges: [],
     is_test: false,
     is_single_model: run.models.size === 1

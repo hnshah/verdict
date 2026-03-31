@@ -12,9 +12,9 @@
       "score": 9.6,
       "wins": 3,
       "latency": 6.2,
-      "accuracy": 9.9,
-      "completeness": 9.6,
-      "conciseness": 8.8
+      "accuracy": 0,
+      "completeness": 0,
+      "conciseness": 0
     },
     {
       "id": "2026-03-31T18-25-12",
@@ -23,15 +23,15 @@
       "score": 9.8,
       "wins": 0,
       "latency": 6.9,
-      "accuracy": 10,
-      "completeness": 10,
-      "conciseness": 8.9
+      "accuracy": 0,
+      "completeness": 0,
+      "conciseness": 0
     }
   ],
   "best_cases": [
     {
       "id": "gen-001",
-      "name": "gen 001",
+      "name": "gen-001",
       "prompt": "What is the capital of France?",
       "score": 10,
       "response": "The capital of France is Paris.",
@@ -39,7 +39,7 @@
     },
     {
       "id": "gen-005",
-      "name": "gen 005",
+      "name": "gen-005",
       "prompt": "List exactly 3 benefits of regular exercise. Numbered list. Max 12 words per item.",
       "score": 10,
       "response": "1. Boosts cardiovascular health and reduces heart disease risk.\n\n2. Enhances mental health and reduces anxiety symptoms.\n\n3. Increases energy levels and improves sleep quality.",
@@ -47,7 +47,7 @@
     },
     {
       "id": "gen-009",
-      "name": "gen 009",
+      "name": "gen-009",
       "prompt": "Write a haiku about debugging code.",
       "score": 10,
       "response": "Lines of logic\nTangled thoughts untangle—\nSilence finds its way.",
@@ -57,7 +57,7 @@
   "worst_cases": [
     {
       "id": "gen-010",
-      "name": "gen 010",
+      "name": "gen-010",
       "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
       "score": 9.2,
       "response": "The CAP theorem, also known as Brewer's theorem, states that in any distributed data system, you can only guarantee **two out of three** of the following three properties:\n\n## The Three Properties\n\n1. **Consistency** - All nodes see the same data at the same time\n2. **Availability** - Every request receives a response (success or failure)\n3. **Partition Tolerance** - The system continues to operate despite network failures\n\n## What It Means for Distributed Systems Design\n\n### The Core Trade-off\nSince network partitions are inevitable in distributed systems, you must choose which two properties to prioritize:\n\n## Common Approaches\n\n### CP Systems (Consistency + Partition Tolerance)\n- **Example**: Traditional RDBMS, ZooKeeper\n- **Behavior**: During partition, system sacrifices availability\n- **Use case**: Financial systems, where data consistency is critical\n\n### AP Systems (Availability + Partition Tolerance)\n- **Example**: DNS, web caching, some NoSQL databases\n- **Behavior**: During partition, system maintains availability but may return stale data\n- **Use case**: Web applications, social media\n\n### CA Systems (Consistency + Availability)\n- **Example**: Single-node databases\n- **Reality**: Impossible in true distributed systems\n- **Use case**: Small, non-distributed systems\n\n## Real-World Implications\n\nThe CAP theorem forces architects to make explicit design decisions based on their specific requirements. Most modern distributed systems are designed as **AP systems** because:\n- Network partitions are common\n- Users generally prefer availability over consistency\n- Modern systems often use eventual consistency patterns\n\nUnderstanding CAP helps teams make informed decisions about their system architecture and trade-offs.",
@@ -65,7 +65,7 @@
     },
     {
       "id": "gen-008",
-      "name": "gen 008",
+      "name": "gen-008",
       "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
       "score": 9.2,
       "response": "A transformer model is an attention-based neural network architecture that processes input sequences in parallel rather than sequentially, using self-attention mechanisms to weigh the importance of different tokens in the input when generating each output token. Unlike RNNs or LSTMs, transformers don't have recurrent connections, allowing them to capture long-range dependencies more effectively and scale to much larger datasets and model sizes. The key innovation is the multi-head self-attention mechanism that lets each position attend to all positions in the previous layer, enabling the model to understand context and relationships between distant words in a sentence.",
@@ -73,7 +73,7 @@
     },
     {
       "id": "gen-007",
-      "name": "gen 007",
+      "name": "gen-007",
       "prompt": "What is the time complexity of binary search and why?",
       "score": 9.2,
       "response": "## Time Complexity of Binary Search\n\n**Time Complexity: O(log n)**\n\n## Why O(log n)?\n\nBinary search works by repeatedly dividing the search space in half, which leads to logarithmic time complexity.\n\n### How It Works:\n1. Start with the entire array\n2. Compare target with middle element\n3. If found, return index\n4. If target is smaller, search left half\n5. If target is larger, search right half\n6. Repeat until found or search space is empty\n\n### Mathematical Explanation:\n\nLet's say we have an array of size n. After each comparison:\n- 1st comparison: search space = n\n- 2nd comparison: search space = n/2\n- 3rd comparison: search space = n/4\n- 4th comparison: search space = n/8\n- ...and so on\n\nAfter k comparisons, the search space becomes n/2^k.\n\nThe algorithm stops when the search space is 1 (or 0):\n```\nn/2^k = 1\nn = 2^k\nk = log₂(n)\n```\n\nTherefore, the maximum number of comparisons needed is **log₂(n)**.\n\n## Space Complexity:\n- **Iterative version**: O(1) - only uses a few variables\n- **Recursive version**: O(log n) - due to call stack depth\n\n## Example:\nFor an array of 1024 elements:\n- Maximum comparisons needed = log₂(1024) = 10\n- Even for 1 billion elements: log₂(1,000,000,000) ≈ 30 comparisons\n\nThis logarithmic growth makes binary search extremely efficient for large datasets, especially when the array is already sorted.",

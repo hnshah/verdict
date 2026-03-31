@@ -105,6 +105,8 @@
               <th class="pb-3 pr-4 text-right font-semibold">Cases</th>
               <th class="pb-3 pr-4 text-right font-semibold">Models</th>
               <th class="pb-3 pr-4 text-right font-semibold">Avg Score</th>
+              <th class="pb-3 pr-4 font-semibold">Start Time</th>
+              <th class="pb-3 pr-4 text-right font-semibold">Duration</th>
               <th class="pb-3 text-left font-semibold">Tags</th>
             </tr>
           </thead>
@@ -118,6 +120,8 @@
               <td class="py-3 pr-4 text-right text-gray-700">{{ run.cases }}</td>
               <td class="py-3 pr-4 text-right text-gray-700">{{ run.models }}</td>
               <td class="py-3 pr-4 text-right font-medium text-gray-900">{{ run.avg_score }}/10</td>
+              <td class="py-3 pr-4 mono text-xs text-gray-500">{{ run.start_time }}</td>
+              <td class="py-3 pr-4 text-right mono text-xs text-gray-600">{{ run.duration }}</td>
               <td class="py-3 flex gap-1">
                 {% for badge in run.badges %}
                   {% if badge.type == 'test' %}
