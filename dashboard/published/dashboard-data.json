@@ -1,8 +1,8 @@
 {
   "meta": {
-    "total_runs": 1,
-    "total_cases": 10,
-    "total_models": 5,
+    "total_runs": 6,
+    "total_cases": 35,
+    "total_models": 10,
     "last_updated": "2026-03-31"
   },
   "models": {
@@ -20,6 +20,21 @@
     },
     "deepseek": {
       "name": "deepseek"
+    },
+    "qwen2.5:7b": {
+      "name": "qwen2.5:7b"
+    },
+    "llama3.2:3b": {
+      "name": "llama3.2:3b"
+    },
+    "phi4:14b": {
+      "name": "phi4:14b"
+    },
+    "qwen2.5:14b": {
+      "name": "qwen2.5:14b"
+    },
+    "gemma2:9b": {
+      "name": "gemma2:9b"
     }
   },
   "cases": [
@@ -877,6 +892,1896 @@
                 "accuracy": 0,
                 "completeness": 0,
                 "conciseness": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "speed-001",
+      "name": "speed 001",
+      "suite": "speed test",
+      "prompt": "Capital of France?",
+      "runs": [
+        {
+          "run_id": "2026-03-31T04-18-02",
+          "run_meta": {
+            "run_id": "2026-03-31T04-18-02",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "The capital of France is Paris.",
+              "latency_ms": 2096
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "The response correctly identifies Paris as the capital of France, addresses all criteria, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "speed-002",
+      "name": "speed 002",
+      "suite": "speed test",
+      "prompt": "2+2=",
+      "runs": [
+        {
+          "run_id": "2026-03-31T04-18-02",
+          "run_meta": {
+            "run_id": "2026-03-31T04-18-02",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "2+2 equals 4.",
+              "latency_ms": 284
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "The response correctly answers the question, is concise, and addresses all criteria without unnecessary information.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "speed-003",
+      "name": "speed 003",
+      "suite": "speed test",
+      "prompt": "true AND false =",
+      "runs": [
+        {
+          "run_id": "2026-03-31T04-18-02",
+          "run_meta": {
+            "run_id": "2026-03-31T04-18-02",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "在逻辑运算中，\"AND\" 运算要求所有条件都为真时，结果才为真。因此，\"true AND false\" 的结果是 \"false\"。",
+              "latency_ms": 933
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "回答完全正确且全面地满足了所有评价标准，表述简洁明了。",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "speed-004",
+      "name": "speed 004",
+      "suite": "speed test",
+      "prompt": "Color of sky?",
+      "runs": [
+        {
+          "run_id": "2026-03-31T04-18-02",
+          "run_meta": {
+            "run_id": "2026-03-31T04-18-02",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "The color of the sky can vary depending on the time of day, weather conditions, and other factors. Generally, during clear daytime conditions, the sky appears blue due to a phenomenon called Rayleigh scattering, where shorter (blue) wavelengths of light are scattered more by the Earth's atmosphere. At sunrise and sunset, the sky often takes on a range of colors including pink, orange, and purple due to the light having to pass through more of the Earth's atmosphere. At night, the sky is typically dark, with stars visible if there is no light pollution.",
+              "latency_ms": 2505
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 6.2,
+              "reasoning": "Partially addresses the criteria by mentioning blue, but lacks the specificity required and includes additional information not directly related to the question.",
+              "dimensions": {
+                "accuracy": 7,
+                "completeness": 6,
+                "conciseness": 5
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "speed-005",
+      "name": "speed 005",
+      "suite": "speed test",
+      "prompt": "1, 2, 3, ?",
+      "runs": [
+        {
+          "run_id": "2026-03-31T04-18-02",
+          "run_meta": {
+            "run_id": "2026-03-31T04-18-02",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "The sequence you've provided, 1, 2, 3, ?, could be the beginning of a simple counting sequence in ascending order. Following this pattern, the next number would be 4. However, without additional context, there could be many other possible sequences or patterns that fit these numbers. Could you provide more information or specify the rule governing the sequence?",
+              "latency_ms": 1694
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "The response correctly identifies the next number in the sequence and addresses the criteria without unnecessary information.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "multi-001",
+      "name": "multi 001",
+      "suite": "multilingual",
+      "prompt": "Translate to English and explain: \"El gato está sobre la mesa pero no puede bajar.\"\n",
+      "runs": [
+        {
+          "run_id": "2026-03-31T04-18-28",
+          "run_meta": {
+            "run_id": "2026-03-31T04-18-28",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "The English translation of \"El gato está sobre la mesa pero no puede bajar.\" is:\n\n\"The cat is on the table but cannot get down.\"\n\nExplanation:\n- \"El gato\" means \"The cat.\"\n- \"está sobre\" means \"is on.\"\n- \"la mesa\" means \"the table.\"\n- \"pero\" means \"but.\"\n- \"no puede\" means \"cannot\" or \"is unable to.\"\n- \"bajar\" means \"to get down\" or \"to go down.\"\n\nThis sentence describes a situation where a cat is on a table and is unable to come down from it.",
+              "latency_ms": 2840
+            },
+            "llama3.2:3b": {
+              "text": "The translation of \"El gato está sobre la mesa pero no puede bajar\" is:\n\n\"The cat is on the table but can't get down.\"\n\nExplanation:\n\n* \"El gato\" means \"the cat\".\n* \"Está sobre la mesa\" means \"is on the table\".\n* \"Pero\" is a conjunction that means \"but\" or \"however\".\n* \"No puede bajar\" means \"can't get down\".\n\nThis phrase is likely used to describe a situation where a cat is sitting on a table, but it's unable to jump down or get off the table, perhaps due to its size, weight, or other reasons.",
+              "latency_ms": 14073
+            },
+            "phi4:14b": {
+              "text": "The sentence \"El gato está sobre la mesa pero no puede bajar\" translates to English as \"The cat is on the table but cannot get down.\"\n\nExplanation:\n- \"El gato\" means \"The cat.\"\n- \"está\" is the third person singular form of \"estar,\" meaning \"is.\"\n- \"sobre la mesa\" translates to \"on the table.\"\n- \"pero\" means \"but.\"\n- \"no puede\" is the third person singular form of \"poder,\" meaning \"cannot.\"\n- \"bajar\" means \"to get down\" or \"to go down.\"\n\nThe sentence describes a situation where a cat is currently on a table and is unable to descend from it.",
+              "latency_ms": 16041
+            },
+            "qwen2.5:14b": {
+              "text": "The sentence \"El gato está sobre la mesa pero no puede bajar\" translates to English as \"The cat is on the table but cannot get down.\"\n\nExplanation:\n- \"El gato\" means \"The cat.\"\n- \"está\" is the third-person singular form of the verb \"estar,\" which means \"to be\" in a temporary sense.\n- \"sobre\" means \"on\" or \"above.\"\n- \"la mesa\" means \"the table.\"\n- \"pero\" means \"but.\"\n- \"no puede\" means \"cannot\" or \"is not able to.\"\n- \"bajar\" means \"to go down\" or \"to get down.\"\n\nThe sentence implies that the cat is in a position on the table from which it is unable to descend, perhaps due to being stuck or scared.",
+              "latency_ms": 18415
+            },
+            "gemma2:9b": {
+              "text": "**English Translation:** The cat is on the table but can't get down.\n\n**Explanation:**\n\n* **El gato:** The cat\n* **está sobre la mesa:** is on the table\n* **pero:** but\n* **no puede bajar:** can't get down\n\nThis sentence describes a situation where a cat is perched on a table but is unable to descend. It implies that there might be an obstacle preventing the cat from jumping down, or perhaps the cat is simply too scared or hesitant to do so. \n\n\n",
+              "latency_ms": 18704
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "The translation and explanation are accurate, complete, and concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 10,
+              "reasoning": "The translation and explanation are accurate, complete, and concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "phi4:14b": {
+              "total": 10,
+              "reasoning": "The translation and explanation are accurate, complete, and concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 10,
+              "reasoning": "The translation and explanation are accurate, complete, and concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "The translation and explanation are accurate, complete, and concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "multi-002",
+      "name": "multi 002",
+      "suite": "multilingual",
+      "prompt": "What does this Python code do?\n\n# Trouve le maximum dans une liste\ndef trouver_max(liste):\n    return max(liste)\n",
+      "runs": [
+        {
+          "run_id": "2026-03-31T04-18-28",
+          "run_meta": {
+            "run_id": "2026-03-31T04-18-28",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "This Python code defines a function named `trouver_max` that takes a list as an argument and returns the maximum value found in that list. Here's a breakdown of the code:\n\n```python\n# Trouve le maximum dans une liste\ndef trouver_max(liste):\n    return max(liste)\n```\n\n- `def trouver_max(liste):` defines a function called `trouver_max` that takes a single parameter, `liste`, which is expected to be a list.\n- `return max(liste)` uses Python's built-in `max()` function to find and return the maximum value in the list passed to the function.\n\nHere's an example of how you might use this function:\n\n```python\nmy_list = [3, 5, 1, 2, 4]\nprint(trouver_max(my_list))  # Output will be 5\n```\n\nThis function is simple and leverages Python's built-in capabilities to perform its task efficiently.",
+              "latency_ms": 4399
+            },
+            "llama3.2:3b": {
+              "text": "Ce code définit une fonction appelée `trouver_max` qui prend en entrée une liste de nombres et renvoie le maximum de ces nombres.\n\nVoici une explication détaillée de ce que fait cette fonction :\n\n- La fonction `trouver_max` prend une liste de nombres sous la forme d'une liste en entrée.\n- La fonction utilise la fonction intégrée `max` de Python pour trouver le maximum de la liste.\n- La fonction renvoie le maximum trouvé.\n\nCependant, cette fonction n'est pas très utile car elle ne prend pas en compte le cas où la liste est vide. Si la liste est vide, la fonction `max` renverra une erreur.\n\nPour rendre cette fonction plus utile, il faudrait ajouter une condition pour gérer le cas où la liste est vide. Voici une version améliorée de la fonction :\n\n```python\n# Trouve le maximum dans une liste\ndef trouver_max(liste):\n    if len(liste) == 0:\n        return None  # ou une valeur par défaut, selon les besoins\n    return max(liste)\n```\n\nCette version de la fonction renverra `None` si la liste est vide, mais vous pouvez modifier cela pour renvoyer une valeur par défaut si vous le souhaitez.",
+              "latency_ms": 16621
+            },
+            "phi4:14b": {
+              "text": "This Python code defines a function named `trouver_max` that takes a single argument, `liste`, which is expected to be a list. The function uses Python's built-in `max()` function to find and return the maximum value in the list. Here's a breakdown of the code:\n\n1. **Function Definition**: \n   - `def trouver_max(liste):` defines a function called `trouver_max` that accepts one parameter, `liste`.\n\n2. **Finding the Maximum**:\n   - `return max(liste)` uses the `max()` function to determine the largest element in the list `liste` and returns it.\n\n### Usage\n\n- You can call this function by passing a list of numbers (or other comparable items) to it. For example:\n\n  ```python\n  numbers = [3, 1, 4, 1, 5, 9, 2, 6, 5]\n  maximum_value = trouver_max(numbers)\n  print(maximum_value)  # Output: 9\n  ```\n\n### Considerations\n\n- The function assumes that the list is not empty. If you pass an empty list, it will raise a `ValueError` because `max()` cannot determine a maximum value from an empty sequence.\n- The elements in the list should be comparable to each other. If they are not, a `TypeError` will be raised.\n\nThis function is a simple utility for finding the maximum value in a list, leveraging Python's built-in capabilities.",
+              "latency_ms": 23237
+            },
+            "qwen2.5:14b": {
+              "text": "The Python code you provided defines a function named `trouver_max` which takes a single argument, `liste` (which is a list in English). This function returns the maximum value found in the list using Python's built-in `max()` function.\n\nHere's a breakdown of the code:\n\n```python\n# Find the maximum in a list\ndef trouver_max(liste):\n    return max(liste)\n```\n\n- The comment `# Trouve le maximum dans une liste` translates to \"Find the maximum in a list\" in English.\n- The function `trouver_max` is defined with one parameter `liste`.\n- Inside the function, `max(liste)` is called, which returns the largest item in the list `liste`.\n- The function then returns this maximum value.\n\nTo use this function, you would pass a list of numbers to it, and it would return the maximum number in that list. For example:\n\n```python\nma_liste = [3, 5, 1, 2, 4]\nprint(trouver_max(ma_liste))  # Output will be 5\n```",
+              "latency_ms": 21923
+            },
+            "gemma2:9b": {
+              "text": "This Python code defines a function called `trouver_max` that finds the maximum value in a given list. \n\nHere's a breakdown:\n\n* **`def trouver_max(liste):`**: This line defines the function named `trouver_max`. It takes one argument, `liste`, which is expected to be a list of numbers.\n\n* **`return max(liste)`**: This line is the core of the function. It uses the built-in `max()` function to find the largest value within the input list `liste`. The result of `max(liste)` is then returned by the function.\n\n**In essence, this function provides a simple way to determine the maximum value within a list of numbers.**\n\n**Example Usage:**\n\n```python\nnumbers = [3, 7, 1, 9, 2]\nmaximum = trouver_max(numbers)\nprint(f\"The maximum value in the list is: {maximum}\")  # Output: The maximum value in the list is: 9\n```\n\n\n\nLet me know if you have any other Python code snippets you'd like me to explain!",
+              "latency_ms": 22625
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "The response accurately, completely, and concisely evaluates the Python code as requested.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 8,
+              "reasoning": "The response accurately explains the function, mentions the potential issue with an empty list, and provides a solution, but could be slightly more precise in its accuracy score due to minor language nuances.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 8
+              }
+            },
+            "phi4:14b": {
+              "total": 9.6,
+              "reasoning": "The response accurately explains the function, its usage, and provides a correct evaluation of the code without padding.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 9.6,
+              "reasoning": "The response accurately explains the function, its parameters, and its operation, and meets all criteria without unnecessary details.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "The response accurately, completely, and concisely explains the Python code.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "multi-003",
+      "name": "multi 003",
+      "suite": "multilingual",
+      "prompt": "In English, explain this concept: \"Die Zeitkomplexität ist O(n log n) für Quicksort im Durchschnittsfall.\"\n",
+      "runs": [
+        {
+          "run_id": "2026-03-31T04-18-28",
+          "run_meta": {
+            "run_id": "2026-03-31T04-18-28",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "The concept \"Die Zeitkomplexität ist O(n log n) für Quicksort im Durchschnittsfall\" can be translated and explained in English as follows:\n\n\"The time complexity of Quicksort is O(n log n) on average.\"\n\nTo break this down further:\n\n- **Time Complexity**: This refers to the computational complexity that describes the amount of time an algorithm takes to run as a function of the size of the input data.\n- **O(n log n)**: This is the Big O notation used to describe the upper bound of the time complexity. It means that the time taken by the algorithm increases in proportion to n (the number of elements) multiplied by the logarithm of n.\n- **Quicksort**: This is a popular and efficient sorting algorithm that uses a divide-and-conquer approach to sort elements.\n- **Average Case**: This refers to the performance of the algorithm when the input data is randomly distributed or when considering all possible inputs, excluding the best and worst cases.\n\nIn summary, on average, Quicksort has a time complexity of O(n log n), making it very efficient for sorting large datasets.",
+              "latency_ms": 5128
+            },
+            "llama3.2:3b": {
+              "text": "A nice question about computer science!\n\nThe concept you're referring to is the time complexity of the Quicksort algorithm, which is a popular sorting algorithm used to sort lists of elements.\n\n\"Die Zeitkomplexität ist O(n log n) für Quicksort im Durchschnittsfall\" can be translated to:\n\n\"The time complexity is O(n log n) for Quicksort in the average case.\"\n\nLet's break it down:\n\n* \"Die Zeitkomplexität\" refers to the time complexity, which is a measure of how long an algorithm takes to complete as a function of the size of the input.\n* \"ist\" is the verb \"is\".\n* \"O(n log n)\" is the time complexity notation, which represents the upper bound of the algorithm's running time.\n* \"für\" means \"for\".\n* \"Quicksort\" is the algorithm being discussed.\n* \"im Durchschnittsfall\" means \"in the average case\".\n\nIn essence, this statement means that the average-case time complexity of the Quicksort algorithm is O(n log n), which is a very efficient time complexity for sorting algorithms.\n\nTo understand why, let's quickly review how Quicksort works:\n\n1. Choose a pivot element from the list.\n2. Partition the list into two sublists: elements less than the pivot and elements greater than the pivot.\n3. Recursively apply the same process to the sublists.\n\nThe key insight behind Quicksort's average-case time complexity is that the partitioning step takes O(n) time, and the recursive calls take O(log n) time, since each recursive call reduces the size of the list by half.\n\nBy combining these two factors, we get an overall time complexity of O(n log n), which is why Quicksort is considered one of the most efficient sorting algorithms for large datasets.\n\nOf course, it's worth noting that the worst-case time complexity of Quicksort is O(n^2), which occurs when the pivot is chosen poorly and the list is already sorted in a particular order. However, the average-case time complexity of O(n log n) is much more desirable, making Quicksort a popular choice for many applications.",
+              "latency_ms": 20833
+            },
+            "phi4:14b": {
+              "text": "The statement \"Die Zeitkomplexität ist O(n log n) für Quicksort im Durchschnittsfall\" is in German and translates to \"The time complexity is O(n log n) for Quicksort in the average case\" in English.\n\nTo explain this concept:\n\n1. **Time Complexity**: This refers to the computational complexity that describes the amount of time an algorithm takes to run as a function of the length of the input. It's a way to quantify the efficiency of an algorithm.\n\n2. **Big O Notation (O)**: This is a mathematical notation used to describe the upper bound of an algorithm's running time. It provides an asymptotic analysis, meaning it describes the behavior of the algorithm as the input size grows towards infinity. O(n log n) is a specific notation indicating that the time complexity grows at a rate proportional to n log n, where n is the size of the input.\n\n3. **Quicksort**: This is a popular sorting algorithm that uses a divide-and-conquer approach to sort elements. It works by selecting a 'pivot' element from the array and partitioning the other elements into two sub-arrays, according to whether they are less than or greater than the pivot. The sub-arrays are then sorted recursively.\n\n4. **Average Case**: In algorithm analysis, the average case refers to the expected time complexity when the input is randomly distributed. For Quicksort, the average case assumes that the pivot divides the array into reasonably balanced partitions.\n\n5. **O(n log n) for Quicksort in the Average Case**: In the average case, Quicksort has a time complexity of O(n log n). This means that, on average, the time it takes to sort an array of n elements grows proportionally to n log n. This is considered efficient for sorting algorithms, especially compared to simpler algorithms like bubble sort or insertion sort, which have average and worst-case time complexities of O(n^2).\n\nIn summary, the statement indicates that, on average, Quicksort is an efficient sorting algorithm with a time complexity of O(n log n), making it suitable for large datasets.",
+              "latency_ms": 30060
+            },
+            "qwen2.5:14b": {
+              "text": "The concept described in the German sentence \"Die Zeitkomplexität ist O(n log n) für Quicksort im Durchschnittsfall\" can be translated to English as:\n\n\"The time complexity is O(n log n) for Quicksort on average.\"\n\nThis statement refers to the efficiency of the Quicksort algorithm, a popular and efficient sorting algorithm. The time complexity O(n log n) indicates that, on average, the number of operations (or steps) required to sort a list of n elements using Quicksort grows proportionally to n log n, where n is the number of elements in the list. This is considered very efficient, especially compared to other sorting algorithms that might have a time complexity of O(n^2) in the worst case.\n\nIt's important to note that while Quicksort has an average-case time complexity of O(n log n), its worst-case time complexity is O(n^2). However, the average-case scenario is what is typically discussed when evaluating the performance of Quicksort, as it is highly probable and represents the typical behavior of the algorithm.",
+              "latency_ms": 21448
+            },
+            "gemma2:9b": {
+              "text": "This statement describes the time complexity of the Quicksort algorithm in its average case. \n\nHere's a breakdown:\n\n* **Quicksort:** A popular sorting algorithm that works by recursively partitioning a list around a chosen \"pivot\" element. Elements smaller than the pivot go to the left, and larger elements go to the right. This process is repeated on the sub-lists until the entire list is sorted.\n\n* **Time Complexity:**  A way to measure how the runtime of an algorithm scales with the size of the input. It's often expressed using Big O notation.\n\n* **O(n log n):** This notation means that the time it takes for Quicksort to sort a list of size \"n\" grows proportionally to \"n multiplied by the logarithm of n\".  \n\n* **Average Case:** This refers to the performance of the algorithm when the input data is randomly distributed.\n\n**In simpler terms:**\n\nOn average, Quicksort takes a time that increases roughly as the size of the list is multiplied by the logarithm of its size. This makes it a very efficient sorting algorithm for large datasets.\n\n\nLet me know if you'd like a more detailed explanation of any of these concepts!",
+              "latency_ms": 22757
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "The response accurately, completely, and concisely explains the concept of average-case time complexity for Quicksort.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 9.4,
+              "reasoning": "The response accurately explains the concept, is complete in addressing all criteria, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 10,
+                "conciseness": 9
+              }
+            },
+            "phi4:14b": {
+              "total": 9.4,
+              "reasoning": "The response accurately explains the concept, is complete, and is concise, with minor room for improvement in conciseness by removing redundant phrases.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 10,
+                "conciseness": 9
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 9.6,
+              "reasoning": "The response accurately explains the time complexity of Quicksort, addresses all criteria, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 9,
+              "reasoning": "The response accurately explains the concept, covers all criteria, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "multi-004",
+      "name": "multi 004",
+      "suite": "multilingual",
+      "prompt": "Solve: りんごが5個あります。2個食べました。何個残っていますか？\n",
+      "runs": [
+        {
+          "run_id": "2026-03-31T04-18-28",
+          "run_meta": {
+            "run_id": "2026-03-31T04-18-28",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "りんごが5個あり、2個食べたので、残っているりんごは3個です。数学的に表すと、5 - 2 = 3 となります。",
+              "latency_ms": 1000
+            },
+            "llama3.2:3b": {
+              "text": "りんごが5個あります。2個食べました。\n\n5 - 2 = 3\n\nしたがって、3個のりんごが残っています。",
+              "latency_ms": 11573
+            },
+            "phi4:14b": {
+              "text": "りんごが5個あり、そのうち2個食べたので、残っているりんごの数を計算します。\n\n5個 - 2個 = 3個\n\nしたがって、3個のりんごが残っています。",
+              "latency_ms": 12395
+            },
+            "qwen2.5:14b": {
+              "text": "りんごが5個あり、2個食べたということなので、残っているりんごの数は以下の計算になります：\n\n5 - 2 = 3\n\nしたがって、3個のりんごが残っています。",
+              "latency_ms": 11200
+            },
+            "gemma2:9b": {
+              "text": "りんごが5個あったので、2個食べると、5 - 2 = 3個残ります。\n\n\n**答え：3個** \n",
+              "latency_ms": 15001
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "完全正确地解决了问题，准确无误地回答了剩余苹果的数量，并且数学表达式也正确。",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 10,
+              "reasoning": "完全正确地解决了问题，准确无误地回答了剩余苹果的数量，且格式恰当，简洁明了。",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "phi4:14b": {
+              "total": 10,
+              "reasoning": "解答正確且完全满足所有评价标准，简洁明了。",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 10,
+              "reasoning": "完全正确地解决了问题，准确无误地回答了剩余苹果的数量，且格式简洁，涵盖了所有要求的要素。",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "内容は正確で、全ての評価基準を満たし、簡潔に解答しています。",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "multi-005",
+      "name": "multi 005",
+      "suite": "multilingual",
+      "prompt": "Fix the bug:\n\n// Comprueba si el número es par\nfunction isEven(num) {\n    return num % 2 === 1;  // Bug aquí\n}\n",
+      "runs": [
+        {
+          "run_id": "2026-03-31T04-18-28",
+          "run_meta": {
+            "run_id": "2026-03-31T04-18-28",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "The bug in your code is that the condition `num % 2 === 1` is incorrect for determining if a number is even. For a number to be even, the remainder when divided by 2 should be 0. Here is the corrected code:\n\n```javascript\n// Comprueba si el número es par\nfunction isEven(num) {\n    return num % 2 === 0;  // Corrección aquí\n}\n```\n\nThis function will now correctly return `true` for even numbers and `false` for odd numbers.",
+              "latency_ms": 2600
+            },
+            "llama3.2:3b": {
+              "text": "El bug en el código es que el método `isEven` devuelve `true` cuando el número es impar, en lugar de cuando es par.\n\nAquí está el código corregido:\n\n```javascript\n// Comprueba si el número es par\nfunction isEven(num) {\n    return num % 2 === 0;  // Ahora devuelve true cuando el número es par\n}\n```\n\nEn este código, el método `isEven` devuelve `true` cuando el resto de la división de `num` por 2 es 0, lo que indica que el número es par.",
+              "latency_ms": 13401
+            },
+            "phi4:14b": {
+              "text": "The bug in the function `isEven` is in the return statement. The function is supposed to check if a number is even, but it currently checks if the number is odd. The condition `num % 2 === 1` checks if the remainder when `num` is divided by 2 is 1, which means the number is odd. To fix the bug, you should change the condition to check if the remainder is 0, which indicates that the number is even. Here's the corrected function:\n\n```javascript\n// Comprueba si el número es par\nfunction isEven(num) {\n    return num % 2 === 0;  // Fixed the condition here\n}\n```\n\nNow, the function correctly returns `true` if the number is even and `false` if it is odd.",
+              "latency_ms": 16679
+            },
+            "qwen2.5:14b": {
+              "text": "The function `isEven` is intended to check if a number is even. However, there is a logical error in the condition. The current condition `num % 2 === 1` checks if the number is odd, not even. To fix this, you should change the condition to `num % 2 === 0`, which correctly checks if the number is even.\n\nHere is the corrected function:\n\n```javascript\n// Comprueba si el número es par\nfunction isEven(num) {\n    return num % 2 === 0;  // Corregido aquí\n}\n```\n\nThis function will now correctly return `true` if the number is even and `false` if it is odd.",
+              "latency_ms": 16324
+            },
+            "gemma2:9b": {
+              "text": "```javascript\n// Comprueba si el número es par\nfunction isEven(num) {\n    return num % 2 === 0;  // Corrección: debe ser === 0\n}\n```\n\n**Explanation:**\n\nThe original code had a bug in the return statement: `return num % 2 === 1;`.  \n\n* The modulo operator (`%`) returns the remainder of a division. \n* A number is even if the remainder after dividing by 2 is **0**.\n\nTherefore, the correct condition to check for even numbers is `num % 2 === 0`. \n\n\nLet me know if you have any other code snippets you'd like me to help with!",
+              "latency_ms": 18344
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "The response correctly identifies and fixes the bug, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 10,
+              "reasoning": "The response correctly identifies and fixes the bug, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "phi4:14b": {
+              "total": 9.6,
+              "reasoning": "The response correctly identifies the bug, provides the fix, and addresses all criteria without unnecessary details.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 10,
+              "reasoning": "The response correctly identifies and fixes the bug, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "The response correctly identifies and fixes the bug, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "context-001",
+      "name": "context 001",
+      "suite": "context stress",
+      "prompt": "Read this carefully:\n\nThe project started in 2020. We hired 5 engineers. The budget was $2M.\nBy 2021 we had grown to 15 people. Revenue hit $500K. The CEO was Jane.\nIn 2022 we raised Series A from Acme VC. Amount: $10M. Lead investor: Bob Smith.\n2023 was our breakout year. Revenue: $5M. Team size: 50. New CFO: Alice Wong.\nCurrently we're in 2024. Planning Series B. Target: $30M. Valuation: $200M.\n\nQuestion: Who led the Series A and how much was raised?\n",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-04-23",
+          "run_meta": {
+            "run_id": "2026-03-31T05-04-23",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "phi4:14b": {
+              "text": "The Series A funding round was led by Bob Smith, and the amount raised was $10 million.",
+              "latency_ms": 9093
+            },
+            "qwen2.5:7b": {
+              "text": "According to the information provided, Series A funding was raised in 2022 from Acme VC. The amount raised was $10M, with Bob Smith as the lead investor.",
+              "latency_ms": 10628
+            },
+            "llama3.2:3b": {
+              "text": "According to the text, Bob Smith led the Series A funding round, and the amount raised was $10M.",
+              "latency_ms": 11701
+            },
+            "qwen2.5:14b": {
+              "text": "The Series A was led by Acme VC, and the amount raised was $10M. The lead investor was Bob Smith.",
+              "latency_ms": 11055
+            },
+            "gemma2:9b": {
+              "text": "Bob Smith led the Series A, and $10M was raised. \n",
+              "latency_ms": 14354
+            }
+          },
+          "scores": {
+            "phi4:14b": {
+              "total": 10,
+              "reasoning": "The response accurately answers the question, is complete, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "The response accurately answers the question, is complete, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 10,
+              "reasoning": "The response accurately answers the question, is complete, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 9.2,
+              "reasoning": "Accuracy is 8 because the response states that Acme VC led the Series A, which is incorrect; it should be Bob Smith. Completeness and conciseness are perfect as it addresses all criteria and is concise.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "The response accurately answers the question, is complete, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "context-002",
+      "name": "context 002",
+      "suite": "context stress",
+      "prompt": "Facts:\n- Alice reports to Bob\n- Bob reports to Carol  \n- Carol reports to Dan\n- Dan is the CEO\n- VPs can approve up to $50K\n- Directors can approve up to $10K\n- Carol is a VP\n- Bob is a Director\n\nQuestion: Can Bob approve a $25K expense? Explain the chain of reasoning.\n",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-04-23",
+          "run_meta": {
+            "run_id": "2026-03-31T05-04-23",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "To determine if Bob can approve a $25K expense, let's break down the chain of reasoning based on the given facts:\n\n1. **Identify Bob's role and approval limit:**\n   - Bob is a Director.\n   - Directors can approve up to $10K.\n\n2. **Determine the approval limit for a $25K expense:**\n   - Since a $25K expense exceeds the $10K limit for Directors, Bob cannot approve this expense on his own.\n\n3. **Identify the next level of approval:**\n   - VPs can approve up to $50K.\n   - Carol is a VP and can approve up to $50K.\n\n4. **Determine the chain of command:**\n   - Alice reports to Bob.\n   - Bob reports to Carol.\n   - Carol reports to Dan.\n   - Dan is the CEO.\n\nGiven these facts, Bob cannot approve a $25K expense because his approval limit as a Director is only $10K. However, since Carol, who is a VP and has a higher approval limit, is in the chain of command, she can approve the $25K expense.\n\nTherefore, the answer is that Bob cannot approve a $25K expense on his own, but Carol, as a VP, can approve it.",
+              "latency_ms": 6107
+            },
+            "llama3.2:3b": {
+              "text": "To determine if Bob can approve a $25K expense, we need to follow the chain of reasoning:\n\n1. Bob reports to Carol, who is a VP.\n2. VPs can approve up to $50K.\n3. Since the expense is $25K, which is below the VP approval limit, Bob can approve it.\n\nTherefore, the answer is yes, Bob can approve a $25K expense.",
+              "latency_ms": 11778
+            },
+            "phi4:14b": {
+              "text": "To determine whether Bob can approve a $25K expense, we need to consider his position and the approval limits associated with that position.\n\n1. **Identify Bob's Position**: According to the facts provided, Bob is a Director.\n\n2. **Approval Limits for Directors**: The facts state that Directors can approve up to $10K.\n\n3. **Compare the Expense Amount with Bob's Approval Limit**: The expense in question is $25K. Since Bob, as a Director, can only approve expenses up to $10K, he does not have the authority to approve a $25K expense on his own.\n\n4. **Conclusion**: Bob cannot approve a $25K expense because his approval limit as a Director is $10K, which is less than the $25K required.\n\nTherefore, Bob would need to escalate the approval to someone with higher authority, such as a VP or the CEO, who have higher approval limits. In this case, Carol, who is a VP and can approve up to $50K, would be the appropriate person to approve the $25K expense.",
+              "latency_ms": 18051
+            },
+            "gemma2:9b": {
+              "text": "No, Bob cannot approve a $25K expense. Here's why:\n\n* **Bob's Role:** Bob is a Director.\n* **Director Approval Limit:** Directors can approve expenses up to $10K.\n* **Expense Amount:** The expense in question is $25K, which exceeds Bob's approval limit. \n\n\nTherefore, Bob would need to escalate the request to his manager, Carol, who has the authority as a VP to approve expenses up to $50K. \n",
+              "latency_ms": 17997
+            },
+            "qwen2.5:14b": {
+              "text": "Based on the given facts, Bob cannot approve a $25K expense. Here's the chain of reasoning:\n\n1. **Bob's Approval Limit**: Bob is a Director, and Directors can approve up to $10K.\n2. **Expense Amount**: The expense in question is $25K, which exceeds Bob's approval limit of $10K.\n3. **Approval Hierarchy**: Since the expense amount exceeds Bob's limit, it needs to be approved by someone higher up in the hierarchy.\n4. **Carol's Approval Limit**: Carol is a VP and can approve up to $50K. Since $25K is within Carol's approval limit, Carol would be the appropriate person to approve this expense.\n5. **Conclusion**: Bob cannot approve the $25K expense because it exceeds his approval limit. The approval must go to Carol or higher.\n\nTherefore, Bob cannot approve a $25K expense; it must be approved by Carol or Dan.",
+              "latency_ms": 19353
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 9.2,
+              "reasoning": "The response accurately identifies Bob's approval limit and the need for higher approval limits, but slightly misinterprets the question by stating Bob cannot approve it, when in fact he can pass it to Carol who can approve it.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 3.8,
+              "reasoning": "The response incorrectly states that Bob can approve the expense, when in fact, as a Director, he can only approve up to $10K.",
+              "dimensions": {
+                "accuracy": 3,
+                "completeness": 4,
+                "conciseness": 5
+              }
+            },
+            "phi4:14b": {
+              "total": 9.6,
+              "reasoning": "The response accurately traces Bob's position and approval limit, correctly concludes he cannot approve the expense, and provides a clear rationale.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "clearly explains the reasoning based on Bob's role and approval limits",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 9.6,
+              "reasoning": "The response accurately traces the approval limits and hierarchy, and is concise and complete.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "context-003",
+      "name": "context 003",
+      "suite": "context stress",
+      "prompt": "Given this code:\n\ndef calculate_tax(amount):\n    return amount * 0.08\n    \ndef apply_discount(price, percent):\n    return price * (1 - percent / 100)\n    \ndef final_price(item_price, discount_pct):\n    discounted = apply_discount(item_price, discount_pct)\n    with_tax = discounted + calculate_tax(discounted)\n    return with_tax\n\nIf item_price=$100 and discount_pct=20, what is the final_price? Show work.\n",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-04-23",
+          "run_meta": {
+            "run_id": "2026-03-31T05-04-23",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "Sure, let's break down the calculation step by step using the given functions and the provided values: `item_price = $100` and `discount_pct = 20`.\n\n1. **Apply the discount:**\n\n   The `apply_discount` function is defined as:\n   ```python\n   def apply_discount(price, percent):\n       return price * (1 - percent / 100)\n   ```\n\n   Plugging in the values:\n   ```python\n   discounted = apply_discount(100, 20)\n   ```\n\n   Calculation:\n   ```python\n   discounted = 100 * (1 - 20 / 100)\n   discounted = 100 * (1 - 0.20)\n   discounted = 100 * 0.80\n   discounted = 80\n   ```\n\n   So, the discounted price is $80.\n\n2. **Calculate the tax:**\n\n   The `calculate_tax` function is defined as:\n   ```python\n   def calculate_tax(amount):\n       return amount * 0.08\n   ```\n\n   Plugging in the discounted price:\n   ```python\n   with_tax = calculate_tax(discounted)\n   ```\n\n   Calculation:\n   ```python\n   with_tax = 80 * 0.08\n   with_tax = 6.4\n   ```\n\n   So, the tax amount is $6.40.\n\n3. **Calculate the final price:**\n\n   The `final_price` function combines the discounted price and the tax:\n   ```python\n   def final_price(item_price, discount_pct):\n       discounted = apply_discount(item_price, discount_pct)\n       with_tax = discounted + calculate_tax(discounted)\n       return with_tax\n   ```\n\n   Plugging in the values:\n   ```python\n   final_price = final_price(100, 20)\n   ```\n\n   Calculation:\n   ```python\n   final_price = 80 + 6.4\n   final_price = 86.4\n   ```\n\nTherefore, the final price after applying the 20% discount and adding the 8% tax is $86.40.",
+              "latency_ms": 14437
+            },
+            "llama3.2:3b": {
+              "text": "To find the final price, we need to follow the steps in the given functions.\n\n1. Apply the discount to the item price:\n\n   item_price = $100\n   discount_pct = 20\n\n   discount_amount = item_price * (discount_pct / 100)\n   discounted_price = item_price - discount_amount\n   discounted_price = $100 - ($100 * (20 / 100))\n   discounted_price = $100 - $20\n   discounted_price = $80\n\n2. Calculate the tax on the discounted price:\n\n   discounted_price = $80\n   tax_amount = discounted_price * 0.08\n   tax_amount = $80 * 0.08\n   tax_amount = $6.40\n\n3. Add the tax amount to the discounted price to get the final price:\n\n   discounted_price = $80\n   tax_amount = $6.40\n   final_price = discounted_price + tax_amount\n   final_price = $80 + $6.40\n   final_price = $86.40\n\nTherefore, the final price is $86.40.",
+              "latency_ms": 17849
+            },
+            "phi4:14b": {
+              "text": "To find the final price using the given functions, we need to follow these steps:\n\n1. **Apply the Discount:**\n   - Use the `apply_discount` function to calculate the discounted price.\n   - Formula: \\( \\text{discounted} = \\text{item\\_price} \\times (1 - \\frac{\\text{discount\\_pct}}{100}) \\)\n   - Given: \\( \\text{item\\_price} = 100 \\), \\( \\text{discount\\_pct} = 20 \\)\n   - Calculation: \n     \\[\n     \\text{discounted} = 100 \\times (1 - \\frac{20}{100}) = 100 \\times 0.8 = 80\n     \\]\n\n2. **Calculate Tax on Discounted Price:**\n   - Use the `calculate_tax` function to find the tax on the discounted price.\n   - Formula: \\( \\text{tax} = \\text{discounted} \\times 0.08 \\)\n   - Calculation:\n     \\[\n     \\text{tax} = 80 \\times 0.08 = 6.4\n     \\]\n\n3. **Calculate Final Price:**\n   - Add the tax to the discounted price to get the final price.\n   - Formula: \\( \\text{with\\_tax} = \\text{discounted} + \\text{tax} \\)\n   - Calculation:\n     \\[\n     \\text{with\\_tax} = 80 + 6.4 = 86.4\n     \\]\n\nTherefore, the final price is $86.40.",
+              "latency_ms": 26914
+            },
+            "gemma2:9b": {
+              "text": "Here's how to calculate the final price:\n\n**1. Calculate the discounted price:**\n\n* `discounted = apply_discount(item_price, discount_pct)`\n* `discounted = 100 * (1 - 20 / 100)`\n* `discounted = 100 * (1 - 0.20)`\n* `discounted = 100 * 0.80`\n* `discounted = $80`\n\n**2. Calculate the price with tax:**\n\n* `with_tax = discounted + calculate_tax(discounted)`\n* `with_tax = 80 + 80 * 0.08`\n* `with_tax = 80 + 6.40`\n* `with_tax = $86.40`\n\n\n\n**Therefore, the final price of the item is $86.40.** \n",
+              "latency_ms": 22827
+            },
+            "qwen2.5:14b": {
+              "text": "To find the final price when `item_price` is $100 and `discount_pct` is 20%, we will follow the steps defined in the `final_price` function. Let's break it down:\n\n1. **Apply the discount:**\n\n   The `apply_discount` function calculates the discounted price based on the original price and the discount percentage.\n\n   \\[\n   \\text{discounted} = \\text{apply_discount}(100, 20)\n   \\]\n\n   Substituting the values into the `apply_discount` function:\n\n   \\[\n   \\text{discounted} = 100 \\times (1 - \\frac{20}{100}) = 100 \\times (1 - 0.2) = 100 \\times 0.8 = 80\n   \\]\n\n   So, the discounted price is $80.\n\n2. **Calculate the tax on the discounted price:**\n\n   The `calculate_tax` function calculates the tax on the discounted price.\n\n   \\[\n   \\text{tax} = \\text{calculate_tax}(80)\n   \\]\n\n   Substituting the value into the `calculate_tax` function:\n\n   \\[\n   \\text{tax} = 80 \\times 0.08 = 6.4\n   \\]\n\n   So, the tax on the discounted price is $6.40.\n\n3. **Calculate the final price:**\n\n   The final price is the sum of the discounted price and the tax.\n\n   \\[\n   \\text{with_tax} = \\text{discounted} + \\text{tax} = 80 + 6.4 = 86.4\n   \\]\n\nTherefore, the final price when `item_price` is $100 and `discount_pct` is 20% is **$86.40**.",
+              "latency_ms": 30319
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "The response accurately calculates the final price, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 10,
+              "reasoning": "The response accurately follows the steps, is complete, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "phi4:14b": {
+              "total": 10,
+              "reasoning": "The response accurately calculates the final price, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "The response accurately calculates the final price, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 10,
+              "reasoning": "The response accurately calculates the final price, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "simple-math",
+      "name": "simple math",
+      "suite": "quick dogfooding test",
+      "prompt": "What is 2 + 2?",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-05-58",
+          "run_meta": {
+            "run_id": "2026-03-31T05-05-58",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "2 + 2 equals 4.",
+              "latency_ms": 8193
+            },
+            "llama3.2:3b": {
+              "text": "2 + 2 = 4",
+              "latency_ms": 11195
+            },
+            "phi4:14b": {
+              "text": "2 + 2 equals 4.",
+              "latency_ms": 20567
+            },
+            "gemma2:9b": {
+              "text": "2 + 2 = 4",
+              "latency_ms": 22766
+            },
+            "qwen2.5:14b": {
+              "text": "2 + 2 equals 4.",
+              "latency_ms": 30325
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "The response correctly states that 2 + 2 equals 4, addresses all criteria, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 10,
+              "reasoning": "The response correctly answers the question, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "phi4:14b": {
+              "total": 10,
+              "reasoning": "The response correctly states that 2 + 2 equals 4, addresses all criteria, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "The response correctly answers the question, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 10,
+              "reasoning": "The response correctly states that 2 + 2 equals 4, addresses all criteria, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "simple-reasoning",
+      "name": "simple reasoning",
+      "suite": "quick dogfooding test",
+      "prompt": "If a train travels 60 miles per hour for 2 hours, how far does it go?",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-05-58",
+          "run_meta": {
+            "run_id": "2026-03-31T05-05-58",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "If a train travels at a speed of 60 miles per hour for 2 hours, the distance it covers can be calculated using the formula:\n\n\\[ \\text{Distance} = \\text{Speed} \\times \\text{Time} \\]\n\nPlugging in the values:\n\n\\[ \\text{Distance} = 60 \\, \\text{miles/hour} \\times 2 \\, \\text{hours} = 120 \\, \\text{miles} \\]\n\nSo, the train travels 120 miles.",
+              "latency_ms": 2639
+            },
+            "llama3.2:3b": {
+              "text": "To find the distance traveled, you multiply the speed (60 miles per hour) by the time (2 hours).\n\nDistance = Speed x Time\nDistance = 60 miles/hour x 2 hours\nDistance = 120 miles\n\nSo, the train travels 120 miles in 2 hours.",
+              "latency_ms": 11378
+            },
+            "phi4:14b": {
+              "text": "To find out how far the train travels, you can use the formula for distance, which is:\n\n\\[ \\text{Distance} = \\text{Speed} \\times \\text{Time} \\]\n\nIn this case, the speed of the train is 60 miles per hour, and the time is 2 hours. Plugging these values into the formula gives:\n\n\\[ \\text{Distance} = 60 \\, \\text{miles per hour} \\times 2 \\, \\text{hours} = 120 \\, \\text{miles} \\]\n\nSo, the train travels 120 miles.",
+              "latency_ms": 13830
+            },
+            "qwen2.5:14b": {
+              "text": "If a train travels at a speed of 60 miles per hour for 2 hours, it will cover a distance of \\(60 \\, \\text{miles/hour} \\times 2 \\, \\text{hours} = 120 \\, \\text{miles}\\).",
+              "latency_ms": 10784
+            },
+            "gemma2:9b": {
+              "text": "Here's how to solve this:\n\n* **Distance = Speed x Time**\n\n* **Speed:** 60 miles per hour\n* **Time:** 2 hours\n\n* **Distance:** 60 miles/hour * 2 hours = 120 miles\n\n\nThe train travels **120 miles**. \n",
+              "latency_ms": 14656
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "The response correctly calculates the distance, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 10,
+              "reasoning": "The response correctly calculates the distance, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "phi4:14b": {
+              "total": 10,
+              "reasoning": "The response correctly calculates the distance, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 10,
+              "reasoning": "The response correctly calculates the distance, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "The response correctly calculates the distance, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "gen-001",
+      "name": "gen 001",
+      "suite": "general",
+      "prompt": "What is the capital of France?",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-07-33",
+          "run_meta": {
+            "run_id": "2026-03-31T05-07-33",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "phi4:14b": {
+              "text": "The capital of France is Paris.",
+              "latency_ms": 14578
+            },
+            "qwen2.5:7b": {
+              "text": "The capital of France is Paris.",
+              "latency_ms": 18387
+            },
+            "llama3.2:3b": {
+              "text": "The capital of France is Paris.",
+              "latency_ms": 20899
+            },
+            "qwen2.5:14b": {
+              "text": "The capital of France is Paris.",
+              "latency_ms": 8762
+            },
+            "gemma2:9b": {
+              "text": "The capital of France is **Paris**. 🇫🇷  \n",
+              "latency_ms": 13661
+            }
+          },
+          "scores": {
+            "phi4:14b": {
+              "total": 10,
+              "reasoning": "correct and concise, fully addresses the question",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "correct and concise, fully addresses the question",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 10,
+              "reasoning": "correct and concise, fully addresses the question",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 10,
+              "reasoning": "correct and concise, fully addresses the question",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "The response correctly identifies Paris as the capital of France, addresses the question completely, and is concise without any padding.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "gen-002",
+      "name": "gen 002",
+      "suite": "general",
+      "prompt": "What does RAM stand for and what does it do?",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-07-33",
+          "run_meta": {
+            "run_id": "2026-03-31T05-07-33",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "RAM stands for Random Access Memory. It is a type of volatile memory used by computers and other devices to store data and machine code currently being used. Here are some key points about RAM:\n\n1. **Function**: RAM serves as a temporary storage area for data that the CPU (Central Processing Unit) needs to access quickly. It allows the computer to work with data and programs more efficiently.\n\n2. **Access**: The term \"random access\" means that the CPU can read or write to any part of the memory without having to process the data in a specific sequence. This is in contrast to other types of memory, like magnetic tape, where data must be accessed in a sequential manner.\n\n3. **Volatile Memory**: Unlike non-volatile memory (like hard drives or SSDs), RAM loses its data when the power is turned off. This makes it faster but less suitable for long-term storage.\n\n4. **Types**: There are several types of RAM, including DRAM (Dynamic RAM), SRAM (Static RAM), and newer technologies like DDR (Double Data Rate) RAM and GDDR (Graphics Double Data Rate) RAM.\n\n5. **Performance Impact**: The amount and speed of RAM can significantly affect a computer's performance. More RAM allows the computer to handle more applications and processes simultaneously, while faster RAM can improve the overall speed of data access.\n\nIn summary, RAM is crucial for the efficient operation of a computer, providing fast access to data and instructions that the CPU needs to process.",
+              "latency_ms": 6571
+            },
+            "llama3.2:3b": {
+              "text": "RAM stands for Random Access Memory. It's a type of computer memory that temporarily stores data and applications while the computer is running.\n\nRAM allows the computer to access and process data quickly, making it an essential component of a computer's performance. When you open a program or application, it is loaded into RAM, where it can be accessed and manipulated by the computer's processor.\n\nHere's how RAM works:\n\n1. The computer's processor retrieves data from the hard drive or solid-state drive (SSD) and stores it in RAM.\n2. The processor can access the data in RAM quickly, making it available for processing.\n3. When the processor is done with the data, it is stored back in the hard drive or SSD.\n\nThe amount of RAM in a computer determines how many applications can be run simultaneously without a significant decrease in performance. More RAM means more applications can be run at the same time, making it ideal for tasks like video editing, gaming, and multitasking.\n\nIn summary, RAM is a type of computer memory that temporarily stores data and applications, allowing the computer to access and process it quickly, which is essential for smooth performance.",
+              "latency_ms": 16166
+            },
+            "phi4:14b": {
+              "text": "RAM stands for Random Access Memory. It is a type of computer memory that is used to store data and machine code currently being used. RAM is volatile memory, meaning it loses its contents when the power is turned off. It provides fast read and write access to a storage medium that is much quicker than other types of storage, such as hard drives or solid-state drives.\n\nThe primary function of RAM is to provide space for your computer to read and write data to be accessed by the CPU (Central Processing Unit) quickly. When you run applications or open files, they are loaded from your storage device into RAM so that the CPU can access them more efficiently. The more RAM a computer has, the more data it can process without having to use slower storage options, which can improve the overall speed and performance of the system.\n\nIn summary, RAM is crucial for multitasking and running applications smoothly, as it temporarily holds the data and instructions that the CPU needs to access quickly.",
+              "latency_ms": 18517
+            },
+            "gemma2:9b": {
+              "text": "RAM stands for **Random Access Memory**. \n\nThink of it like your computer's short-term memory. \n\nHere's what it does:\n\n* **Stores data and instructions currently in use:** When you open a program or file, RAM loads it so your CPU can access it quickly.\n* **Allows for fast data access:** RAM is much faster than your hard drive, so your computer can process information much quicker.\n* **Temporary storage:**  When you close a program, the data in RAM is erased. This is why your computer can't remember what you were doing in a program after you close it.\n\n**Analogy:** Imagine your desk as your computer. Your hard drive is like a filing cabinet full of papers (your files). RAM is like the space on your desk where you keep the papers you're currently working on. You can access them quickly and easily, but once you're done, you put them back in the filing cabinet.\n\n\nThe more RAM you have, the more programs and files your computer can keep open and running smoothly at the same time.",
+              "latency_ms": 24304
+            },
+            "qwen2.5:14b": {
+              "text": "RAM stands for Random Access Memory. It is a type of computer memory that stores data and machine code currently being used by the computer's CPU (Central Processing Unit). RAM is volatile, meaning it requires power to maintain the stored information, and it loses its data when the power is turned off.\n\nHere are some key points about RAM:\n\n1. **Function**: RAM allows the computer to quickly access data and instructions in any order, rather than sequentially like in tapes or disks. This makes it possible for the computer to run multiple applications and processes simultaneously.\n\n2. **Types**: There are different types of RAM, such as DRAM (Dynamic RAM) and SRAM (Static RAM), each with its own characteristics and uses.\n\n3. **Capacity and Speed**: The amount of RAM in a computer affects how many applications can run at once and how quickly the computer can switch between them. The speed of RAM also impacts the performance of the computer.\n\n4. **Usage**: When you open an application or file, it is loaded into RAM. The more RAM your computer has, the more applications and files it can keep open at once without slowing down.\n\nIn summary, RAM is crucial for the performance and responsiveness of a computer, enabling it to handle multiple tasks efficiently.",
+              "latency_ms": 24429
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 9,
+              "reasoning": "The response accurately covers the definition, function, and key characteristics of RAM, aligning well with the evaluation criteria.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            },
+            "llama3.2:3b": {
+              "total": 9,
+              "reasoning": "The response is accurate, complete, and concise, with minor room for additional detail.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            },
+            "phi4:14b": {
+              "total": 9,
+              "reasoning": "The response accurately defines RAM, mentions its volatile nature, and correctly describes its function, though it could slightly expand on the distinction between RAM and other types of memory for greater completeness.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            },
+            "gemma2:9b": {
+              "total": 7.2,
+              "reasoning": "The response is mostly accurate but includes an analogy that is not directly related to the technical explanation.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 7,
+                "conciseness": 6
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 9,
+              "reasoning": "The response is accurate, complete, and concise, with only minor improvements suggested.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "gen-003",
+      "name": "gen 003",
+      "suite": "general",
+      "prompt": "Explain the difference between a process and a thread in one paragraph.",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-07-33",
+          "run_meta": {
+            "run_id": "2026-03-31T05-07-33",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "In computing, a process is an instance of a computer program that is being executed. It includes the program code and its current activity. Processes are often used to manage resources and provide a level of isolation between different programs. A thread, on the other hand, is a smaller unit of processing than a process and represents the flow of control within a process. While a process can contain one or more threads, threads within the same process share the process's resources, such as memory and file handles, which allows them to communicate and synchronize more easily than processes can.",
+              "latency_ms": 2550
+            },
+            "llama3.2:3b": {
+              "text": "A process and a thread are two fundamental concepts in computer science that are often confused with each other. A process is an independent unit of execution that runs on a computer's operating system, with its own memory space, resources, and memory allocation. Each process has its own program counter, stack, and memory, allowing multiple processes to run concurrently without sharing resources. On the other hand, a thread is a lightweight process that shares the same memory space as other threads within the same process, allowing for efficient communication and synchronization between threads. Threads are scheduled by the operating system, whereas processes are scheduled independently, making threads a more efficient way to manage concurrent execution within a process.",
+              "latency_ms": 13400
+            },
+            "phi4:14b": {
+              "text": "A process and a thread are both fundamental concepts in computing related to the execution of tasks, but they differ in their scope and resource management. A process is an independent execution unit that contains its own memory space, including code, data, and operating system resources. Each process operates in isolation from others, which provides security and stability, as one process cannot directly interfere with another. Processes are managed by the operating system, which allocates resources and schedules their execution. On the other hand, a thread is a smaller unit of execution within a process. Threads share the same memory space and resources of their parent process, allowing for more efficient communication and data sharing between them. This makes threads lighter and faster to create and manage compared to processes. However, because they share resources, threads require careful synchronization to avoid conflicts and ensure data integrity. In summary, while processes are independent execution units with separate memory spaces, threads are subdivisions of a process that share the same memory space, enabling more efficient task execution within a single process.",
+              "latency_ms": 17844
+            },
+            "qwen2.5:14b": {
+              "text": "A process is an instance of a program that is being executed, complete with its own memory space and resources, whereas a thread is a subpart of a process that can run concurrently with other threads within the same process, sharing the process's memory and resources. This means that while processes are isolated from each other and communicate through inter-process communication mechanisms, threads within the same process can communicate and share data more easily and efficiently.",
+              "latency_ms": 12188
+            },
+            "gemma2:9b": {
+              "text": "A process is an independent program execution environment with its own memory space, resources, and operating system context. It represents a complete, self-contained program. A thread, on the other hand, is a lightweight unit of execution within a process, sharing the same memory space and resources. Multiple threads can exist within a single process, allowing for concurrent execution of different tasks without the overhead of creating separate processes.  Think of a process as a house and threads as the people living in that house; each person (thread) can do their own thing within the shared space (process) without needing their own separate house. \n\n\n",
+              "latency_ms": 16276
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 7.6,
+              "reasoning": "Accuracy is good but could be more precise. Completeness is acceptable but misses mentioning the overhead difference. Conciseness is appropriate.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 7,
+                "conciseness": 8
+              }
+            },
+            "llama3.2:3b": {
+              "total": 9,
+              "reasoning": "The response is accurate, covers all criteria, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            },
+            "phi4:14b": {
+              "total": 9,
+              "reasoning": "The response is accurate, covers all criteria, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 8.4,
+              "reasoning": "The response is accurate and covers the main points, but it could be slightly more precise in explaining the overhead difference and use cases.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 8,
+                "conciseness": 8
+              }
+            },
+            "gemma2:9b": {
+              "total": 0,
+              "reasoning": "judge error: Error: Judge returned non-JSON: {\"accuracy\":9,\"completeness\":8,\"conciseness\":8,\"reasoning\":\"The response is accurate and covers the main points, but \"overhead difference\" is not explicitly mentioned.\"}",
+              "dimensions": {
+                "accuracy": 0,
+                "completeness": 0,
+                "conciseness": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "gen-004",
+      "name": "gen 004",
+      "suite": "general",
+      "prompt": "If all mammals are warm-blooded, and dolphins are mammals, what can we conclude about dolphins?",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-07-33",
+          "run_meta": {
+            "run_id": "2026-03-31T05-07-33",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "Given the statements:\n\n1. All mammals are warm-blooded.\n2. Dolphins are mammals.\n\nWe can logically conclude that:\n\n- Dolphins are warm-blooded.\n\nThis conclusion follows from the logical structure known as a syllogism, where if all members of one group (mammals) have a certain characteristic (warm-blooded), and a specific member of that group (dolphins) is also part of the group (mammals), then that specific member must also have the characteristic.",
+              "latency_ms": 2315
+            },
+            "phi4:14b": {
+              "text": "Given the premises:\n\n1. All mammals are warm-blooded.\n2. Dolphins are mammals.\n\nWe can conclude that dolphins are warm-blooded. This conclusion follows logically from the fact that dolphins, being mammals, share the characteristic of being warm-blooded as stated in the first premise.",
+              "latency_ms": 11797
+            },
+            "llama3.2:3b": {
+              "text": "If all mammals are warm-blooded, and dolphins are mammals, then we can conclude that dolphins are warm-blooded.\n\nThis is an example of a syllogism, a form of logical argument that uses deductive reasoning. The syllogism is as follows:\n\nAll mammals are warm-blooded.\nDolphins are mammals.\n∴ Dolphins are warm-blooded.\n\nIn this case, the first premise is a general statement about all mammals, the second premise is a specific statement about dolphins, and the conclusion is a logical inference based on the premises.",
+              "latency_ms": 12521
+            },
+            "qwen2.5:14b": {
+              "text": "Given the premises that all mammals are warm-blooded and dolphins are mammals, we can conclude that dolphins are warm-blooded. This conclusion follows directly from the logical structure of the statements provided.",
+              "latency_ms": 11287
+            },
+            "gemma2:9b": {
+              "text": "We can conclude that **dolphins are warm-blooded**. \n\nThis is a classic example of deductive reasoning.  \n\n* **Premise 1:** All mammals are warm-blooded.\n* **Premise 2:** Dolphins are mammals.\n* **Conclusion:** Therefore, dolphins are warm-blooded. \n",
+              "latency_ms": 15729
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "clearly meets all evaluation criteria",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "phi4:14b": {
+              "total": 10,
+              "reasoning": "clearly addresses all criteria with accurate, complete, and concise reasoning",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 10,
+              "reasoning": "clearly addresses all criteria with correct and complete reasoning",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 10,
+              "reasoning": "clearly addresses all criteria with correct and complete reasoning",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "clearly meets all criteria with correct and complete information and concise presentation",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "gen-005",
+      "name": "gen 005",
+      "suite": "general",
+      "prompt": "List exactly 3 benefits of regular exercise. Numbered list. Max 12 words per item.",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-07-33",
+          "run_meta": {
+            "run_id": "2026-03-31T05-07-33",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "1. Improves cardiovascular health.\n2. Enhances mental well-being.\n3. Boosts energy levels.",
+              "latency_ms": 649
+            },
+            "phi4:14b": {
+              "text": "1. Improves cardiovascular health, reducing the risk of heart disease and stroke.\n\n2. Enhances mental well-being by reducing stress, anxiety, and depression symptoms.\n\n3. Boosts physical strength, flexibility, and endurance, aiding in weight management.",
+              "latency_ms": 10273
+            },
+            "llama3.2:3b": {
+              "text": "Here are three benefits of regular exercise:\n\n1. Improves cardiovascular health and reduces risk of heart disease.\n2. Boosts mood and reduces symptoms of anxiety and depression.\n3. Increases energy levels and enhances overall physical function.",
+              "latency_ms": 10595
+            },
+            "qwen2.5:14b": {
+              "text": "1. Enhances heart health, reduces disease risk.\n2. Boosts mood, decreases anxiety and depression.\n3. Strengthens muscles, improves overall fitness.",
+              "latency_ms": 9851
+            },
+            "gemma2:9b": {
+              "text": "1. **Improved cardiovascular health and reduced risk of heart disease.**\n2. **Stronger bones and muscles, improving mobility and balance.**\n3. **Reduced risk of chronic diseases like type 2 diabetes and some cancers.** \n\n\n",
+              "latency_ms": 13848
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "meets all criteria perfectly",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "phi4:14b": {
+              "total": 10,
+              "reasoning": "All benefits are accurate, all three criteria are met, and each item is concise within the limit.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 10,
+              "reasoning": "meets all criteria perfectly",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 10,
+              "reasoning": "all criteria met perfectly",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "Meets all criteria with factual and concise information.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "gen-006",
+      "name": "gen 006",
+      "suite": "general",
+      "prompt": "Write a JavaScript function that returns the sum of all even numbers in an array.",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-07-33",
+          "run_meta": {
+            "run_id": "2026-03-31T05-07-33",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "Certainly! Below is a JavaScript function that takes an array of numbers as input and returns the sum of all even numbers in that array:\n\n```javascript\nfunction sumOfEvenNumbers(arr) {\n    // Filter the array to keep only even numbers and then reduce it to sum them up\n    return arr.filter(num => num % 2 === 0).reduce((acc, num) => acc + num, 0);\n}\n\n// Example usage:\nconst numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\nconsole.log(sumOfEvenNumbers(numbers)); // Output: 30\n```\n\n### Explanation:\n1. **`filter(num => num % 2 === 0)`**: This method creates a new array with all elements that pass the test implemented by the provided function. In this case, it filters out only the even numbers.\n2. **`reduce((acc, num) => acc + num, 0)`**: This method reduces the array to a single value by applying a function against an accumulator and each element in the array (from left to right). The initial value of the accumulator is `0`.\n\nThis function will work with any array of numbers and will correctly sum up all the even numbers in it.",
+              "latency_ms": 5862
+            },
+            "llama3.2:3b": {
+              "text": "// Function to calculate the sum of all even numbers in an array\nfunction sumEvenNumbers(array) {\n    // Initialize a variable to store the sum of even numbers\n    let sum = 0;\n    \n    // Iterate over each number in the array\n    for (let i = 0; i < array.length; i++) {\n        // Check if the current number is even\n        if (array[i] % 2 === 0) {\n            // If the number is even, add it to the sum\n            sum += array[i];\n        }\n    }\n    \n    // Return the sum of even numbers\n    return sum;\n}\n\n// Example usage:\nlet numbers = [1, 2, 3, 4, 5, 6];\nconsole.log(sumEvenNumbers(numbers));  // Output: 12",
+              "latency_ms": 13858
+            },
+            "phi4:14b": {
+              "text": "To create a JavaScript function that returns the sum of all even numbers in an array, you can follow these steps:\n\n1. Define a function that takes an array as its parameter.\n2. Initialize a variable to keep track of the sum of even numbers.\n3. Iterate over each element in the array.\n4. Check if the current element is an even number.\n5. If it is even, add it to the sum.\n6. After the loop, return the sum.\n\nHere's how you can implement this:\n\n```javascript\nfunction sumOfEvenNumbers(arr) {\n    // Initialize sum to 0\n    let sum = 0;\n\n    // Iterate over each element in the array\n    for (let i = 0; i < arr.length; i++) {\n        // Check if the current element is an even number\n        if (arr[i] % 2 === 0) {\n            // Add the even number to the sum\n            sum += arr[i];\n        }\n    }\n\n    // Return the sum of even numbers\n    return sum;\n}\n\n// Example usage:\nconst numbers = [1, 2, 3, 4, 5, 6];\nconsole.log(sumOfEvenNumbers(numbers)); // Output: 12\n```\n\n### Explanation:\n\n- **Function Definition**: The function `sumOfEvenNumbers` takes an array `arr` as an argument.\n- **Sum Initialization**: A variable `sum` is initialized to 0 to store the cumulative sum of even numbers.\n- **Loop Through Array**: A `for` loop iterates over each element in the array.\n- **Check for Even Numbers**: The condition `arr[i] % 2 === 0` checks if the current element is even. The modulus operator `%` returns the remainder of the division of `arr[i]` by 2. If the remainder is 0, the number is even.\n- **Add to Sum**: If the number is even, it is added to `sum`.\n- **Return Result**: After the loop completes, the function returns the total sum of even numbers.\n\nThis function efficiently calculates the sum of all even numbers in the given array.",
+              "latency_ms": 27683
+            },
+            "qwen2.5:14b": {
+              "text": "Certainly! Below is a JavaScript function that takes an array of numbers as input and returns the sum of all even numbers in the array.\n\n```javascript\nfunction sumOfEvenNumbers(arr) {\n    // Initialize a variable to hold the sum of even numbers\n    let sum = 0;\n\n    // Iterate through each element in the array\n    for (let i = 0; i < arr.length; i++) {\n        // Check if the current element is an even number\n        if (arr[i] % 2 === 0) {\n            // Add the even number to the sum\n            sum += arr[i];\n        }\n    }\n\n    // Return the final sum of even numbers\n    return sum;\n}\n\n// Example usage:\nconst exampleArray = [1, 2, 3, 4, 5, 6];\nconsole.log(sumOfEvenNumbers(exampleArray)); // Output: 12 (2 + 4 + 6 = 12)\n```\n\n### Explanation:\n- The function `sumOfEvenNumbers` takes an array `arr` as its parameter.\n- It initializes a variable `sum` to 0, which will store the cumulative sum of even numbers.\n- The function then iterates through each element of the array using a `for` loop.\n- Inside the loop, it checks if the current element is even by using the modulus operator (`%`). If the element is even (i.e., `arr[i] % 2 === 0`), it adds the element to `sum`.\n- Finally, the function returns the total sum of all even numbers found in the array.\n\nYou can test this function with different arrays to verify its correctness.",
+              "latency_ms": 31111
+            },
+            "gemma2:9b": {
+              "text": "```javascript\nfunction sumEvenNumbers(arr) {\n  let sum = 0;\n  for (let i = 0; i < arr.length; i++) {\n    if (arr[i] % 2 === 0) {\n      sum += arr[i];\n    }\n  }\n  return sum;\n}\n```\n\n**Explanation:**\n\n1. **Function Definition:**\n   - `function sumEvenNumbers(arr)`: Defines a function named `sumEvenNumbers` that takes an array `arr` as input.\n\n2. **Initialization:**\n   - `let sum = 0;`: Creates a variable `sum` and initializes it to 0. This variable will store the sum of even numbers.\n\n3. **Looping through the Array:**\n   - `for (let i = 0; i < arr.length; i++)`: This loop iterates through each element of the array `arr`.\n     - `let i = 0;`: Initializes a loop counter `i` to 0.\n     - `i < arr.length;`: The loop continues as long as `i` is less than the length of the array.\n     - `i++`: Increments `i` by 1 after each iteration.\n\n4. **Checking for Even Numbers:**\n   - `if (arr[i] % 2 === 0)`: Inside the loop, this condition checks if the current element `arr[i]` is even.\n     - `%`: The modulo operator (%) returns the remainder of a division. If the remainder when dividing by 2 is 0, the number is even.\n\n5. **Adding Even Numbers to the Sum:**\n   - `sum += arr[i];`: If the current element is even, it's added to the `sum` variable.\n\n6. **Returning the Sum:**\n   - `return sum;`: After the loop has finished processing all elements, the function returns the final `sum` of all even numbers in the array.\n\n\n\nLet me know if you'd like to see an example of how to use this function!",
+              "latency_ms": 32694
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "The response meets all the criteria accurately, comprehensively, and concisely.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "llama3.2:3b": {
+              "total": 10,
+              "reasoning": "The function correctly calculates the sum of all even numbers in an array, handles an empty array by default, filters even numbers using the modulus operator, and is appropriately scoped without unnecessary code.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "phi4:14b": {
+              "total": 10,
+              "reasoning": "The response accurately, completely, and concisely provides a correct and functional JavaScript function to solve the given problem.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 10,
+              "reasoning": "The response meets all the criteria accurately, comprehensively, and concisely.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "The response meets all the evaluation criteria accurately and concisely.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "gen-007",
+      "name": "gen 007",
+      "suite": "general",
+      "prompt": "What is the time complexity of binary search and why?",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-07-33",
+          "run_meta": {
+            "run_id": "2026-03-31T05-07-33",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "The time complexity of binary search is O(log n), where n is the number of elements in the sorted array or list being searched.\n\nHere's why:\n\n1. **Initial Setup**: Binary search starts by examining the middle element of the array. This is the first comparison.\n\n2. **Halving the Search Space**: If the middle element is not the target, the search space is effectively halved. For example, if the target is less than the middle element, the search continues in the left half of the array; if the target is greater, it continues in the right half.\n\n3. **Repeating the Process**: This process of halving the search space is repeated. With each comparison, the search space is reduced by half.\n\n4. **Logarithmic Growth**: The number of comparisons needed to reduce the search space to a single element grows logarithmically with the size of the input. This is because each step roughly halves the remaining search space.\n\n5. **Mathematical Explanation**: If you start with n elements, after one comparison, you have n/2 elements left. After two comparisons, you have n/4 elements left, and so on. The number of comparisons needed to reduce the search space to 1 element is the number of times you can divide n by 2 before reaching 1, which is log₂(n).\n\nTherefore, the time complexity of binary search is O(log n), making it very efficient for large datasets.",
+              "latency_ms": 6546
+            },
+            "llama3.2:3b": {
+              "text": "The time complexity of binary search is O(log n), where n is the number of elements in the sorted array.\n\nTo understand why, let's analyze the process of binary search:\n\n1. The algorithm starts by comparing the target element to the middle element of the array.\n2. If the target element is less than the middle element, the algorithm repeats the process with the left half of the array.\n3. If the target element is greater than the middle element, the algorithm repeats the process with the right half of the array.\n4. This process continues until the target element is found or the array is exhausted.\n\nThe key insight behind binary search is that each comparison reduces the search space by half. In other words, if the algorithm compares the target element to the middle element, it effectively divides the array into two halves, each of which contains at most half of the original elements.\n\nThis process can be represented recursively as follows:\n\nT(n) = T(n/2) + 1\n\nwhere T(n) is the time complexity of searching for an element in an array of size n.\n\nUsing the master theorem, we can solve this recurrence relation to get:\n\nT(n) = O(log n)\n\nThis is because the number of comparisons required to search for an element in an array of size n is proportional to the logarithm of the size of the array.\n\nIn more detail, the time complexity of binary search can be broken down as follows:\n\n* The first comparison takes O(1) time.\n* Each subsequent comparison takes O(log n) time, since the search space is reduced by half at each step.\n* The total number of comparisons required is therefore O(log n).\n\nTherefore, the time complexity of binary search is O(log n), making it a very efficient algorithm for searching large datasets.",
+              "latency_ms": 18798
+            },
+            "phi4:14b": {
+              "text": "Binary search is an efficient algorithm for finding an item from a sorted list of items. It works by repeatedly dividing in half the portion of the list that could contain the item, until you've narrowed down the possible locations to just one.\n\nThe time complexity of binary search is \\(O(\\log n)\\), where \\(n\\) is the number of elements in the list. Here's why:\n\n1. **Divide and Conquer**: In each step of the binary search, the algorithm compares the target value to the middle element of the array. If the target value is equal to the middle element, the search is complete. If the target value is less than the middle element, the search continues on the left half of the array. If the target value is greater, the search continues on the right half.\n\n2. **Halving the Search Space**: Each comparison allows the algorithm to eliminate half of the remaining elements from consideration. This means that with each step, the size of the search space is reduced by half.\n\n3. **Logarithmic Reduction**: The process of halving the search space continues until the search space is reduced to one element. The number of times you can halve \\(n\\) elements until you reach one element is \\(\\log_2 n\\). Therefore, the maximum number of comparisons needed is proportional to \\(\\log_2 n\\).\n\n4. **Base of the Logarithm**: The base of the logarithm in the time complexity is typically omitted in Big O notation because logarithms of different bases differ only by a constant factor. Thus, \\(O(\\log_2 n)\\) is equivalent to \\(O(\\log n)\\).\n\nIn summary, the time complexity of binary search is \\(O(\\log n)\\) because it reduces the problem size by half with each step, leading to a logarithmic number of steps relative to the size of the input.",
+              "latency_ms": 27274
+            },
+            "qwen2.5:14b": {
+              "text": "The time complexity of binary search is O(log n), where n is the number of elements in the array or list being searched. Here's why:\n\nBinary search works by repeatedly dividing the search interval in half. It starts with an interval covering the whole array. If the value of the search key is less than the item in the middle of the interval, the search continues in the lower half. Otherwise, it continues in the upper half. This process repeats until the value is found or the interval is empty.\n\nThe reason for the O(log n) complexity is that with each comparison, the search space is halved. This means that if you have n elements, you can find the target in at most log₂(n) steps. For example, if you have 16 elements, you can find the target in at most 4 steps (since 2⁴ = 16). This logarithmic growth is much slower than linear growth, making binary search very efficient for large datasets.\n\nIt's important to note that binary search works only on sorted arrays or lists. If the array is not sorted, you would need to sort it first, which would add additional time complexity to the overall process.",
+              "latency_ms": 22997
+            },
+            "gemma2:9b": {
+              "text": "The time complexity of binary search is **O(log n)**. \n\nHere's why:\n\n* **Divide and Conquer:** Binary search works by repeatedly dividing the search interval in half. \n* **Logarithmic Reduction:**  With each comparison, you eliminate half of the remaining elements. This means the number of elements to consider is halved in each step.\n* **Number of Steps:**  To reduce a list of size 'n' down to a single element, you need to perform a logarithmic number of comparisons.  The number of steps required is approximately log₂(n).\n\n**Example:**\n\nIf you have a list of 16 elements, binary search would take a maximum of 4 steps:\n\n1. Compare the middle element.\n2.  Eliminate half the list (8 elements).\n3. Compare the middle element of the remaining list.\n4. Eliminate half again (4 elements).\n5. Compare the middle element of the remaining list.\n6. Eliminate half again (2 elements).\n7. Compare the middle element of the remaining list.\n8. You've found the element!\n\n**Key Points:**\n\n* **Sorted Data:** Binary search only works on sorted data.\n* **Efficiency:** O(log n) is significantly more efficient than a linear search (O(n)) for large datasets.\n\n\nLet me know if you'd like a more detailed explanation or a code example!",
+              "latency_ms": 24854
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 8.4,
+              "reasoning": "The response is accurate and addresses the criteria well, but could be slightly more precise in the logarithmic base and the explanation of the halving process.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 8,
+                "conciseness": 8
+              }
+            },
+            "llama3.2:3b": {
+              "total": 8.2,
+              "reasoning": "Accuracy is high, completeness covers the main points, but could be more concise and address the halving process more directly.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "phi4:14b": {
+              "total": 10,
+              "reasoning": "The response accurately explains the time complexity of binary search, addresses all criteria, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 8.4,
+              "reasoning": "Accuracy is high, but minor improvements could be made for completeness and conciseness.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 8,
+                "conciseness": 8
+              }
+            },
+            "gemma2:9b": {
+              "total": 10,
+              "reasoning": "The response accurately explains the time complexity of binary search, provides a clear explanation of the halving process, and includes an example and key points.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "gen-008",
+      "name": "gen 008",
+      "suite": "general",
+      "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-07-33",
+          "run_meta": {
+            "run_id": "2026-03-31T05-07-33",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "A transformer model is a type of neural network architecture that excels in sequence-to-sequence tasks, such as machine translation, by using self-attention mechanisms to weigh the importance of different words in a sentence, enabling more efficient and context-aware processing. This architecture has revolutionized natural language processing by significantly improving the speed and quality of translations and text generation.",
+              "latency_ms": 1682
+            },
+            "llama3.2:3b": {
+              "text": "A transformer model is a type of neural network architecture that uses self-attention mechanisms to process sequential data, such as text or time series data. Unlike traditional recurrent neural networks (RNNs), transformer models do not rely on recurrent connections to capture temporal dependencies, instead using a parallelized attention mechanism to weigh the importance of different input elements. This allows transformer models to be more efficient and scalable, making them particularly well-suited for tasks like language translation, text classification, and image captioning.",
+              "latency_ms": 12604
+            },
+            "phi4:14b": {
+              "text": "A transformer model is a type of neural network architecture primarily used for processing sequential data, such as natural language, by leveraging self-attention mechanisms to weigh the importance of different parts of the input data. Unlike traditional recurrent neural networks (RNNs), transformers process input data in parallel, allowing for more efficient training and better handling of long-range dependencies. This architecture has become foundational in modern natural language processing tasks, exemplified by models like BERT and GPT, due to its ability to capture complex patterns and relationships in data.",
+              "latency_ms": 13748
+            },
+            "qwen2.5:14b": {
+              "text": "A transformer model is a deep learning architecture designed for sequence data, primarily known for its self-attention mechanism, which allows the model to weigh the importance of different words in a sentence dynamically. This architecture, introduced in the context of natural language processing, has significantly improved performance in tasks like translation and text summarization by efficiently handling long-range dependencies and parallelization.",
+              "latency_ms": 11641
+            },
+            "gemma2:9b": {
+              "text": "A transformer model is a type of neural network architecture specifically designed for processing sequential data like text.  It utilizes an attention mechanism to weigh the importance of different words in a sequence, allowing it to capture long-range dependencies and understand context effectively. This makes transformers powerful for tasks like machine translation, text summarization, and question answering. \n\n\n",
+              "latency_ms": 14581
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 8.6,
+              "reasoning": "slightly incomplete as it does not explicitly mention parallel processing vs RNN, but still accurate and concise",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 8,
+                "conciseness": 9
+              }
+            },
+            "llama3.2:3b": {
+              "total": 8.6,
+              "reasoning": "The response is accurate and covers the attention mechanism and parallel processing, but could mention the specific improvement in NLP tasks more directly.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 8,
+                "conciseness": 9
+              }
+            },
+            "phi4:14b": {
+              "total": 10,
+              "reasoning": "The response accurately covers the attention mechanism, parallel processing, and the improvement in NLP, and is concise and complete.",
+              "dimensions": {
+                "accuracy": 10,
+                "completeness": 10,
+                "conciseness": 10
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 8.6,
+              "reasoning": "slightly incomplete as it does not explicitly mention RNNs, but otherwise accurate and concise",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 8,
+                "conciseness": 9
+              }
+            },
+            "gemma2:9b": {
+              "total": 8.6,
+              "reasoning": "Close to perfect, but could mention parallel processing as a key feature distinguishing it from RNNs.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 8,
+                "conciseness": 9
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "gen-009",
+      "name": "gen 009",
+      "suite": "general",
+      "prompt": "Write a haiku about debugging code.",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-07-33",
+          "run_meta": {
+            "run_id": "2026-03-31T05-07-33",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "Lines of code appear,\nErrors hide like shadows deep—\nDebugging begins.",
+              "latency_ms": 511
+            },
+            "llama3.2:3b": {
+              "text": "Lines of code entwine\nError messages whisper clues\nLogic's gentle art",
+              "latency_ms": 10723
+            },
+            "phi4:14b": {
+              "text": "In silent night's glow,  \nErrors dance in tangled lines—  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: the quiet focus required, the complexity of the task, and the satisfaction of finding solutions.",
+              "latency_ms": 10965
+            },
+            "qwen2.5:14b": {
+              "text": "Lines of code entwined,\nSilent bugs in bright screens hide,\nLightning strikes, they're found.",
+              "latency_ms": 10436
+            },
+            "gemma2:9b": {
+              "text": "Lines of code blur,\nErrors whisper in the dark,\nFix found, light returns. \n\n\nLet me know if you'd like another haiku!",
+              "latency_ms": 14949
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 9.4,
+              "reasoning": "The haiku accurately captures the essence of debugging code, mentions code and debugging, and follows the 5-7-5 syllable structure. It is concise and coherent.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 10,
+                "conciseness": 9
+              }
+            },
+            "llama3.2:3b": {
+              "total": 8.6,
+              "reasoning": "The haiku accurately captures the essence of debugging code and follows the 5-7-5 syllable structure. It mentions 'code' and 'error messages,' but does not explicitly state 'debugging.' It is concise and coherent.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 8,
+                "conciseness": 9
+              }
+            },
+            "phi4:14b": {
+              "total": 8.6,
+              "reasoning": "The haiku accurately captures the debugging process with a 5-7-5 syllable structure, references the complexity of code, and conveys the resolution. It slightly misses the 'silent night's glow' aspect but is very concise and complete.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 8.6,
+              "reasoning": "The haiku follows the 5-7-5 syllable structure, references code and debugging, and conveys a coherent meaning. However, 'lines of code entwined' could be more specific to coding, and 'lightning strikes' might be a metaphor for a sudden insight, which is a common experience in debugging.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            },
+            "gemma2:9b": {
+              "total": 9.4,
+              "reasoning": "The haiku accurately captures the debugging process with a 5-7-5 syllable structure, references code and debugging, and conveys a coherent meaning.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 10,
+                "conciseness": 9
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "gen-010",
+      "name": "gen 010",
+      "suite": "general",
+      "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
+      "runs": [
+        {
+          "run_id": "2026-03-31T05-07-33",
+          "run_meta": {
+            "run_id": "2026-03-31T05-07-33",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "The CAP theorem, also known as the Brewer's theorem, is a principle in distributed computing that states that a distributed system can at most satisfy two out of the three desirable properties listed below in any given time:\n\n1. **Consistency**: Every read operation must see the most recent write operation. In other words, all nodes see the same data at the same time.\n\n2. **Availability**: Every request receives a response, ensuring that the system remains operational and responsive under any circumstances.\n\n3. **Partition Tolerance**: The system continues to operate despite any arbitrary failure of part of the system, including network partitions (where nodes are unable to communicate with each other).\n\n### Implications for Distributed Systems Design\n\nThe CAP theorem has significant implications for the design of distributed systems, as it forces designers to make trade-offs between these three critical properties. Here’s how it impacts design choices:\n\n1. **Consistency vs. Availability**:\n   - **Consistency First**: In this approach, the system prioritizes consistency over availability. This is common in scenarios where data integrity is paramount, such as financial transactions. Examples include traditional relational databases.\n   - **Availability First**: Here, the system prioritizes availability over consistency. This is useful in scenarios where the system must remain operational even if some data might be temporarily inconsistent. Examples include many web applications and real-time systems.\n\n2. **Partition Tolerance**:\n   - Since partition tolerance is a fundamental requirement for any distributed system, it is always considered. The challenge lies in designing the system to handle partitions gracefully, ensuring that the system remains functional and provides a useful service even when some parts are unavailable.\n\n### Examples of Trade-offs\n\n- **DynamoDB (Amazon)**: Designed for high availability and partition tolerance, it sacrifices strong consistency in favor of eventual consistency. This makes it suitable for applications where occasional data staleness is acceptable.\n- **Cassandra**: Also designed for high availability and partition tolerance, it uses a distributed hash table and a masterless architecture, allowing it to operate even when some nodes are down.\n- **MongoDB**: Offers both sharding and replica sets, allowing for high availability and partition tolerance. It can be configured to provide strong consistency or eventually consistent reads.\n\n### Conclusion\n\nThe CAP theorem is a fundamental concept in distributed systems that guides the design of systems that need to operate in a networked environment. It forces developers and architects to make informed decisions about the trade-offs between consistency, availability, and partition tolerance, ensuring that the system meets the specific requirements of the application.",
+              "latency_ms": 15725
+            },
+            "llama3.2:3b": {
+              "text": "The CAP theorem, also known as the Brewer's CAP theorem, is a fundamental concept in distributed systems design that states that it is impossible for a distributed data store to simultaneously guarantee all three of the following:\n\n1. **Consistency**: Every read operation will see the most recent write or an error.\n2. **Availability**: Every request receives a response, without the guarantee that it contains the most recent write.\n3. **Partition tolerance**: The system continues to operate and make progress even when there are network partitions (i.e., when some nodes in the system cannot communicate with each other).\n\nIn other words, the CAP theorem states that you can't have all three of these properties simultaneously in a distributed system. You have to choose two out of the three, and sacrifice one of them.\n\nHere's a simple example to illustrate this:\n\nImagine a distributed database with two nodes, A and B. Node A is responsible for writing data, while node B is responsible for reading data. If node A is writing data and node B is reading data, the system must choose between consistency and availability.\n\n* If the system prioritizes consistency, node B will see the most recent write, but it may not receive a response if node A is down or experiencing network issues. This means the system is not available.\n* If the system prioritizes availability, node B will receive a response, but it may see stale data if node A is writing data. This means the system is not consistent.\n\nThe CAP theorem has significant implications for distributed systems design. Here are some key takeaways:\n\n1. **Trade-offs**: When designing a distributed system, you must make trade-offs between consistency, availability, and partition tolerance. You can't have it all.\n2. **Consistency vs. availability**: If you prioritize consistency, you may sacrifice availability. If you prioritize availability, you may sacrifice consistency.\n3. **Partition tolerance**: If you prioritize partition tolerance, you may sacrifice both consistency and availability.\n4. **System design**: The CAP theorem implies that system design should focus on the specific use case and requirements. For example, a financial system may prioritize consistency and availability, while a social media platform may prioritize availability and partition tolerance.\n\nThe CAP theorem has been influential in shaping the design of various distributed systems, including:\n\n1. **NoSQL databases**: Many NoSQL databases, such as Cassandra and Riak, prioritize availability and partition tolerance over consistency.\n2. **Cloud storage**: Cloud storage services, such as Amazon S3 and Google Cloud Storage, prioritize availability and partition tolerance over consistency.\n3. **Real-time systems**: Real-time systems, such as financial trading platforms and IoT systems, often prioritize consistency and availability.\n\nIn summary, the CAP theorem is a fundamental concept in distributed systems design that highlights the trade-offs between consistency, availability, and partition tolerance. By understanding the CAP theorem, system designers can make informed decisions about the design of their systems and prioritize the specific requirements of their use case.",
+              "latency_ms": 27504
+            },
+            "phi4:14b": {
+              "text": "The CAP theorem, also known as Brewer's theorem, is a fundamental principle in the field of distributed systems. It was formulated by computer scientist Eric Brewer in 2000 and later proven by Seth Gilbert and Nancy Lynch. The theorem states that in any distributed data store, it is impossible to simultaneously achieve all three of the following guarantees:\n\n1. **Consistency (C):** Every read receives the most recent write or an error. This means that all nodes see the same data at the same time.\n\n2. **Availability (A):** Every request receives a (non-error) response, without the guarantee that it contains the most recent write. This implies that the system is always operational and can handle requests.\n\n3. **Partition Tolerance (P):** The system continues to operate despite an arbitrary number of messages being dropped (or delayed) by the network between nodes. This means the system can handle network partitions.\n\nThe CAP theorem implies that in the presence of a network partition, a distributed system must choose between consistency and availability:\n\n- **CP (Consistency/Partition Tolerance):** The system will remain consistent but may not be available during a partition. This means that some operations might be rejected or delayed until the partition is resolved.\n\n- **AP (Availability/Partition Tolerance):** The system will remain available but may not be consistent during a partition. This means that some operations might return stale data.\n\n- **CA (Consistency/Availability):** This combination is not possible in a partitioned network, as the system cannot guarantee both consistency and availability when partitions occur.\n\n### Implications for Distributed Systems Design\n\n1. **Trade-offs:** System designers must make trade-offs based on the specific requirements of their application. For example, a banking system might prioritize consistency over availability, while a social media platform might prioritize availability over consistency.\n\n2. **Use Cases:** Different applications have different needs. Understanding the CAP theorem helps in choosing the right data store or designing a system that aligns with the application's requirements.\n\n3. **Hybrid Approaches:** Some systems use hybrid approaches to balance these trade-offs. For example, they might use eventual consistency to provide high availability while ensuring that data eventually becomes consistent.\n\n4. **Design Decisions:** The CAP theorem influences architectural decisions, such as choosing between SQL and NoSQL databases, or deciding on the use of consensus algorithms like Paxos or Raft.\n\n5. **Operational Considerations:** Understanding the CAP theorem helps in planning for network partitions and designing systems that can gracefully degrade in performance or functionality during such events.\n\nIn summary, the CAP theorem is a guiding principle for designing distributed systems, helping architects understand the limitations and trade-offs involved in achieving consistency, availability, and partition tolerance.",
+              "latency_ms": 39212
+            },
+            "gemma2:9b": {
+              "text": "## The CAP Theorem: A Balancing Act in Distributed Systems\n\nThe CAP theorem, also known as Brewer's theorem, states that a distributed data store can only simultaneously provide two out of the following three guarantees:\n\n* **Consistency:** Every read request receives the most recent write or an error. All nodes see the same data at the same time.\n* **Availability:** Every request receives a (non-error) response, even if some nodes are down.\n* **Partition tolerance:** The system continues to operate despite network partitions (communication failures between nodes).\n\n**In simpler terms:** You can choose two out of these three:\n\n1. **Consistency and Availability:**  Your system will always be consistent (everyone sees the same data) and available (everyone can access it), but it will break if the network is partitioned.\n2. **Consistency and Partition tolerance:** Your system will always be consistent and able to handle network partitions, but it might become unavailable if there are issues.\n3. **Availability and Partition tolerance:** Your system will always be available and handle network partitions, but consistency might be compromised (different nodes might see different data).\n\n**What does this mean for distributed systems design?**\n\nThe CAP theorem forces developers to make tough choices based on their application's needs.\n\n* **CP systems (Consistency and Partition tolerance):**\n\n    * Suitable for applications where data consistency is paramount, even at the cost of availability.\n    * Examples: Financial transactions, database systems requiring strict ACID properties.\n* **AP systems (Availability and Partition tolerance):**\n\n    * Prioritize availability and handle network partitions gracefully.\n    * Data consistency might be relaxed, using techniques like eventual consistency.\n    * Examples: Social media platforms, content delivery networks.\n* **CA systems (Consistency and Availability):**\n\n    * Theoretically possible only in the absence of network partitions.\n    * Not practical for real-world distributed systems.\n\n**Key takeaways:**\n\n* The CAP theorem is a fundamental concept in distributed systems design.\n* It highlights the trade-offs between consistency, availability, and partition tolerance.\n* Choosing the right CAP combination depends on the specific requirements of your application.\n* Understanding the CAP theorem helps you make informed decisions about your system architecture and design.\n\n\n",
+              "latency_ms": 34149
+            },
+            "qwen2.5:14b": {
+              "text": "The CAP theorem, also known as Brewer's theorem, is a fundamental principle in distributed systems that highlights the trade-offs among three desirable properties: Consistency, Availability, and Partition tolerance. The theorem was first proposed by computer scientist Eric Brewer in 2000 and later formally proven by Nancy Lynch and Seth Gilbert in 2002. According to the CAP theorem, it is impossible for a distributed system to simultaneously provide all three of these properties with a guarantee.\n\nHere's a brief explanation of each property:\n\n1. **Consistency (C)**: In a consistent system, all nodes see the same data at the same time. After a write operation, all subsequent read operations will return the value written, regardless of which node the read operation is performed on.\n\n2. **Availability (A)**: Every request receives a response, without guarantee that the response will contain the most recent version of the requested data. In other words, the system guarantees that every request receives a (non-error) response, but does not guarantee that the response is the most recent version of the data.\n\n3. **Partition tolerance (P)**: The system continues to operate despite an arbitrary number of messages being dropped (or delayed) by the network between nodes. Partition tolerance is a must-have property for any distributed system because network partitions are inevitable in real-world scenarios.\n\nThe CAP theorem states that a distributed system can guarantee at most two of these three properties at any given time. This means that when designing a distributed system, developers must choose which two of these properties to prioritize, depending on the specific requirements and constraints of their application.\n\nFor example:\n- **CP systems** (Consistent and Partition-tolerant) prioritize consistency and partition tolerance, but sacrifice availability. An example of a CP system is a traditional relational database.\n- **AP systems** (Available and Partition-tolerant) prioritize availability and partition tolerance, but sacrifice consistency. An example of an AP system is a NoSQL database like Cassandra or DynamoDB.\n- **CA systems** (Consistent and Available) prioritize consistency and availability but do not tolerate partitions, which is not practical for distributed systems.\n\nUnderstanding the CAP theorem is crucial for designing robust and scalable distributed systems, as it helps developers make informed decisions about the trade-offs between consistency, availability, and partition tolerance.",
+              "latency_ms": 37064
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 9,
+              "reasoning": "The response accurately explains the CAP theorem and its implications, addresses all criteria, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            },
+            "llama3.2:3b": {
+              "total": 9,
+              "reasoning": "The response accurately explains the CAP theorem and its implications, addresses all criteria, and is concise without padding.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            },
+            "phi4:14b": {
+              "total": 9,
+              "reasoning": "The response accurately covers the CAP theorem, its implications, and the trade-offs involved, addressing all criteria succinctly.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            },
+            "gemma2:9b": {
+              "total": 9,
+              "reasoning": "The response accurately explains the CAP theorem, its implications, and provides clear examples, addressing all criteria concisely.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 9,
+                "conciseness": 9
+              }
+            },
+            "qwen2.5:14b": {
+              "total": 9,
+              "reasoning": "The response is accurate, complete, and concise, with only minor room for improvement in precision and detail.",
+              "dimensions": {
+                "accuracy": 9,
+                "completeness": 9,
+                "conciseness": 9
               }
             }
           }
