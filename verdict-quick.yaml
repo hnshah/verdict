@@ -1,0 +1,16 @@
+models:
+  - id: phi4
+    model: phi4:14b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+judge:
+  provider: ollama
+  model: phi4:14b
+  base_url: http://localhost:11434/v1
+  api_key: none
+
+settings:
+  temperature: 0
+  max_tokens: 4096

@@ -1,0 +1,284 @@
+name: Code Review
+description: Tests ability to identify bugs, security vulnerabilities, performance issues, and subtle logic errors in existing code. Evaluates the model as a reviewer, not a generator.
+
+cases:
+  # ── Security vulnerabilities ─────────────────────────────────────────────
+  - id: review-sec-001
+    description: "SQL injection via string concatenation"
+    category: security
+    prompt: |
+      Review this Python code for issues:
+      
+      ```python
+      def get_user(username):
+          query = "SELECT * FROM users WHERE username = '" + username + "'"
+          return db.execute(query)
+      ```
+    criteria: "Must identify SQL injection vulnerability. Should recommend parameterized queries (e.g., `db.execute('SELECT * FROM users WHERE username = ?', (username,))`). May also note lack of input validation."
+    tags: [security, sql-injection, python]
+
+  - id: review-sec-002
+    description: "Hardcoded credentials"
+    category: security
+    prompt: |
+      Review this JavaScript code for issues:
+      
+      ```javascript
+      const config = {
+        database: {
+          host: 'prod-db.company.com',
+          user: 'admin',
+          password: 'Sup3rS3cret!',
+          port: 5432
+        }
+      };
+      
+      module.exports = config;
+      ```
+    criteria: "Must flag hardcoded credentials/password as a critical security issue. Should recommend environment variables or secrets management (e.g., process.env.DB_PASSWORD). Should mention not committing secrets to version control."
+    tags: [security, credentials, javascript]
+
+  - id: review-sec-003
+    description: "Path traversal vulnerability"
+    category: security
+    prompt: |
+      Review this Node.js code for issues:
+      
+      ```javascript
+      app.get('/file', (req, res) => {
+        const filename = req.query.name;
+        const filepath = path.join(__dirname, 'uploads', filename);
+        res.sendFile(filepath);
+      });
+      ```
+    criteria: "Must identify path traversal vulnerability — attacker can use `../../../etc/passwd` to read arbitrary files. Should recommend validating/sanitizing the filename, using path.resolve() to check the file stays within uploads/, or a whitelist approach."
+    tags: [security, path-traversal, nodejs]
+
+  # ── Logic bugs ────────────────────────────────────────────────────────────
+  - id: review-bug-001
+    description: "Off-by-one error in pagination"
+    category: bugs
+    prompt: |
+      Review this Python pagination code for issues:
+      
+      ```python
+      def paginate(items, page, per_page):
+          start = page * per_page
+          end = start + per_page
+          return items[start:end]
+      
+      # Usage: page 1 = first page
+      results = paginate(data, 1, 10)
+      ```
+    criteria: "Must identify that if page 1 is the first page, `start = 1 * 10 = 10` — skipping the first 10 items. Fix: use `(page - 1) * per_page` or document that page is 0-indexed."
+    tags: [bugs, off-by-one, python]
+
+  - id: review-bug-002
+    description: "Mutating a list while iterating over it"
+    category: bugs
+    prompt: |
+      Review this Python code for issues:
+      
+      ```python
+      def remove_negatives(numbers):
+          for n in numbers:
+              if n < 0:
+                  numbers.remove(n)
+          return numbers
+      
+      result = remove_negatives([-1, -2, 3, -4, 5])
+      ```
+    criteria: "Must identify that modifying a list while iterating over it causes items to be skipped (e.g., [-1,-2,3,-4,5] → removes -1, iterator advances, -2 gets skipped). Recommend iterating over a copy: `for n in numbers[:]` or use list comprehension: `return [n for n in numbers if n >= 0]`."
+    tags: [bugs, mutation, python, iteration]
+
+  - id: review-bug-003
+    description: "Race condition in async code"
+    category: bugs
+    prompt: |
+      Review this JavaScript code for issues:
+      
+      ```javascript
+      let count = 0;
+      
+      async function incrementCounter() {
+        const current = count;
+        await someAsyncOperation();
+        count = current + 1;
+      }
+      
+      // Called concurrently 100 times
+      await Promise.all(Array(100).fill(null).map(() => incrementCounter()));
+      console.log(count); // Expected: 100
+      ```
+    criteria: "Must identify the race condition — multiple calls read the same `current` value before any write, so the final count will be far less than 100. Should explain why: all 100 calls read count=0, await, then all write count=1. Should suggest atomic operations, a mutex/lock pattern, or restructuring to avoid shared mutable state."
+    tags: [bugs, race-condition, async, javascript]
+
+  - id: review-bug-004
+    description: "Incorrect error handling swallows exceptions"
+    category: bugs
+    prompt: |
+      Review this Python code for issues:
+      
+      ```python
+      def parse_config(filepath):
+          try:
+              with open(filepath) as f:
+                  return json.loads(f.read())
+          except:
+              return {}
+      ```
+    criteria: "Must flag bare `except:` which silently swallows ALL exceptions including KeyboardInterrupt, SystemExit, and programming errors like NameError. Should recommend: (1) catching specific exceptions (FileNotFoundError, json.JSONDecodeError), (2) at minimum using `except Exception:`, (3) logging the error before returning default."
+    tags: [bugs, error-handling, python]
+
+  # ── Performance issues ─────────────────────────────────────────────────────
+  - id: review-perf-001
+    description: "N+1 query problem"
+    category: performance
+    prompt: |
+      Review this Python ORM code for issues:
+      
+      ```python
+      def get_posts_with_authors(limit=100):
+          posts = Post.objects.all()[:limit]
+          result = []
+          for post in posts:
+              result.append({
+                  'title': post.title,
+                  'author': post.author.name  # Fetches author separately
+              })
+          return result
+      ```
+    criteria: "Must identify the N+1 query problem — 1 query for posts + 1 query per post for author = 101 queries for 100 posts. Should recommend `select_related('author')` (Django) or equivalent eager loading to fetch in 1-2 queries."
+    tags: [performance, n+1, orm, python]
+
+  - id: review-perf-002
+    description: "Quadratic complexity string concatenation"
+    category: performance
+    prompt: |
+      Review this Python code for performance issues:
+      
+      ```python
+      def build_csv(rows):
+          result = ""
+          for row in rows:
+              result += ",".join(str(x) for x in row) + "\n"
+          return result
+      ```
+    criteria: "Must identify that string concatenation in a loop is O(n²) because each `+=` creates a new string object. For large datasets this is very slow. Should recommend: collecting into a list and using `''.join(...)`, using StringIO, or the csv module."
+    tags: [performance, string-concatenation, python, complexity]
+
+  # ── Code quality / subtle issues ──────────────────────────────────────────
+  - id: review-quality-001
+    description: "Mutable default argument"
+    category: quality
+    prompt: |
+      Review this Python code for issues:
+      
+      ```python
+      def append_item(item, lst=[]):
+          lst.append(item)
+          return lst
+      
+      print(append_item(1))  # [1]
+      print(append_item(2))  # Expected: [2], Actual: ???
+      ```
+    criteria: "Must identify that default mutable arguments are evaluated once at function definition, not per call. `lst=[]` creates a single shared list. Second call returns [1, 2], not [2]. Fix: use `lst=None` and set `if lst is None: lst = []` inside the function."
+    tags: [quality, mutable-defaults, python, gotcha]
+
+  - id: review-quality-002
+    description: "Floating point equality comparison"
+    category: quality
+    prompt: |
+      Review this code for issues:
+      
+      ```python
+      def calculate_tax(amount, rate):
+          tax = amount * rate
+          if tax == 0.1:
+              return "Minimum tax applies"
+          return f"Tax: {tax}"
+      
+      print(calculate_tax(1.0, 0.1))
+      ```
+    criteria: "Must identify that floating point arithmetic makes exact equality comparisons unreliable — `1.0 * 0.1` may not equal exactly `0.1` due to IEEE 754 representation. Should recommend using `math.isclose(tax, 0.1)` or comparing with a tolerance (epsilon), or working in integer cents."
+    tags: [quality, floating-point, python]
+
+  - id: review-quality-003
+    description: "Missing null/undefined check"
+    category: quality
+    prompt: |
+      Review this TypeScript code for issues:
+      
+      ```typescript
+      interface User {
+        name: string;
+        address?: {
+          city: string;
+          country: string;
+        };
+      }
+      
+      function formatLocation(user: User): string {
+        return `${user.address.city}, ${user.address.country}`;
+      }
+      ```
+    criteria: "Must identify that `user.address` is optional and accessing `.city` will throw a TypeError if address is undefined. Despite TypeScript types, the runtime will crash. Should recommend optional chaining (`user.address?.city`) or a null check before accessing. Note: TypeScript strict mode should also catch this with `strictNullChecks`."
+    tags: [quality, null-check, typescript]
+
+  - id: review-quality-004
+    description: "Incorrect use of async/await returning nested promise"
+    category: quality
+    prompt: |
+      Review this JavaScript code for issues:
+      
+      ```javascript
+      async function fetchData(url) {
+        return await fetch(url).then(res => res.json());
+      }
+      
+      async function processUsers() {
+        const users = fetchData('/api/users');  // Missing await
+        users.forEach(user => console.log(user.name));
+      }
+      ```
+    criteria: "Must identify that `fetchData('/api/users')` is missing `await` in `processUsers()` — `users` is a Promise, not an array. Calling `.forEach` on a Promise will silently fail (no `.forEach` method, or won't iterate). The error may not be obvious. Fix: `const users = await fetchData('/api/users')`."
+    tags: [quality, async-await, javascript, missing-await]
+
+  - id: review-quality-005
+    description: "Deep copy vs shallow copy bug"
+    category: quality
+    prompt: |
+      Review this JavaScript code for issues:
+      
+      ```javascript
+      function addDefaults(userConfig) {
+        const defaults = {
+          theme: 'light',
+          notifications: { email: true, push: false },
+          maxItems: 100
+        };
+        return Object.assign(defaults, userConfig);
+      }
+      
+      const config1 = addDefaults({ theme: 'dark' });
+      const config2 = addDefaults({ maxItems: 50 });
+      console.log(config1.notifications === config2.notifications); // true — shared reference
+      ```
+    criteria: "Must identify two issues: (1) Object.assign mutates `defaults` — since it's declared inside the function this is acceptable per-call, but (2) nested objects like `notifications` are shallow-copied — both configs share the same `notifications` reference, so mutating one affects the other. Fix: use `structuredClone(defaults)` or spread nested objects manually."
+    tags: [quality, shallow-copy, javascript]
+
+  - id: review-quality-006
+    description: "Resource leak — file handle not closed on exception"
+    category: quality
+    prompt: |
+      Review this Python code for issues:
+      
+      ```python
+      def read_config(path):
+          f = open(path)
+          data = json.load(f)
+          f.close()
+          return data
+      ```
+    criteria: "Must identify that if `json.load(f)` raises an exception, `f.close()` is never called — resource leak. Fix: use `with open(path) as f:` which guarantees the file is closed even on exception. May also note lack of specific exception handling."
+    tags: [quality, resource-leak, python, context-manager]

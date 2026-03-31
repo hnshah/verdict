@@ -34,19 +34,21 @@ jobs:
           chmod +x scripts/backup-dashboard.sh
           TRIGGER="pre-regeneration" ./scripts/backup-dashboard.sh
         
-      - name: Generate dashboard-data.json from all contributed results
+      - name: Regenerate complete dashboard (main + runs + models)
         run: |
           COUNT=$(ls dashboard/published/*.json 2>/dev/null | grep -v dashboard-data | wc -l | tr -d ' ')
-          echo "Regenerating dashboard from $COUNT result files..."
-          node dist/cli/index.js dashboard generate \
-            --results dashboard/published \
-            --output dashboard/published/dashboard-data.json
-          echo "✅ dashboard-data.json updated"
+          echo "Regenerating complete dashboard from $COUNT result files..."
+          chmod +x dashboard/build/generate-all.sh
+          bash dashboard/build/generate-all.sh
+          echo "✅ Complete dashboard regenerated"
+          echo "   - Main dashboard (index.html)"
+          echo "   - $COUNT run detail pages"
+          echo "   - Model detail pages"
 
-      - name: Commit updated dashboard data
+      - name: Commit updated dashboard files
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore(dashboard): regenerate dashboard-data.json [skip ci]"
-          file_pattern: "dashboard/published/dashboard-data.json"
+          commit_message: "chore(dashboard): regenerate complete dashboard from ${{ github.event.head_commit.message }} [skip ci]"
+          file_pattern: "dashboard/published/"
           commit_user_name: "Verdict Dashboard Bot"
           commit_user_email: "bot@verdict.dev"

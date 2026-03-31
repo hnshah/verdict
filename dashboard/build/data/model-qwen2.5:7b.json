@@ -1,0 +1,86 @@
+{
+  "model_name": "qwen2.5:7b",
+  "total_runs": 2,
+  "total_cases": 10,
+  "avg_score": 9.1,
+  "total_wins": 12,
+  "avg_latency": 3.5,
+  "runs": [
+    {
+      "id": "2026-03-31-2026-03-31T07-53-03",
+      "name": "Comprehensive Benchmark (10 models)",
+      "date": "2026-03-31",
+      "score": 9.1,
+      "accuracy": 9.3,
+      "completeness": 9.1,
+      "conciseness": 8.7,
+      "wins": 6,
+      "latency": 3.7
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-48-00",
+      "name": "Comprehensive Benchmark (10 models)",
+      "date": "2026-03-31",
+      "score": 9.1,
+      "accuracy": 9.3,
+      "completeness": 9.1,
+      "conciseness": 8.7,
+      "wins": 6,
+      "latency": 3.2
+    }
+  ],
+  "best_cases": [
+    {
+      "id": "gen-001",
+      "prompt": "What is the capital of France?",
+      "score": 10
+    },
+    {
+      "id": "gen-004",
+      "prompt": "If all mammals are warm-blooded, and dolphins are mammals, what can we conclude about dolphins?",
+      "score": 10
+    },
+    {
+      "id": "gen-005",
+      "prompt": "List exactly 3 benefits of regular exercise. Numbered list. Max 12 words per item.",
+      "score": 10
+    },
+    {
+      "id": "gen-006",
+      "prompt": "Write a JavaScript function that returns the sum of all even numbers in an array.",
+      "score": 10
+    },
+    {
+      "id": "gen-010",
+      "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
+      "score": 9.4
+    }
+  ],
+  "worst_cases": [
+    {
+      "id": "gen-003",
+      "prompt": "Explain the difference between a process and a thread in one paragraph.",
+      "score": 7.2
+    },
+    {
+      "id": "gen-002",
+      "prompt": "What does RAM stand for and what does it do?",
+      "score": 8.2
+    },
+    {
+      "id": "gen-007",
+      "prompt": "What is the time complexity of binary search and why?",
+      "score": 8.2
+    },
+    {
+      "id": "gen-008",
+      "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
+      "score": 8.8
+    },
+    {
+      "id": "gen-009",
+      "prompt": "Write a haiku about debugging code.",
+      "score": 9.2
+    }
+  ]
+}

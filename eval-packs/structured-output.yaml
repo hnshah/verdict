@@ -1,0 +1,324 @@
+name: Structured Output
+description: Tests a model's ability to produce reliably parseable structured output across multiple formats — YAML, CSV, XML, markdown tables, and typed JSON schemas. Critical for pipeline use where output is consumed programmatically.
+
+cases:
+  # ── YAML output ───────────────────────────────────────────────────────────
+  - id: struct-yaml-001
+    description: "Basic YAML object with mixed types"
+    category: yaml
+    prompt: |
+      Output a YAML object for a user profile with these fields:
+      - name: "Alice Chen"
+      - age: 31
+      - roles: ["admin", "editor"]
+      - active: true
+      Output ONLY valid YAML. No explanation, no markdown fences.
+    scorer: javascript
+    scoreJs: |
+      try {
+        const text = response.trim();
+        // Basic structural checks without a YAML parser
+        const hasName = text.includes('name:') && text.includes('Alice Chen');
+        const hasAge = text.includes('age:') && text.includes('31');
+        const hasActive = text.includes('active:') && text.includes('true');
+        const hasRoles = text.includes('roles:') && text.includes('admin') && text.includes('editor');
+        const noFences = !text.includes('```');
+        const score = [hasName, hasAge, hasActive, hasRoles, noFences].filter(Boolean).length * 2;
+        return score;
+      } catch(e) { return 0; }
+    tags: [yaml, structured-output]
+
+  - id: struct-yaml-002
+    description: "Nested YAML with array of objects"
+    category: yaml
+    prompt: |
+      Output a YAML config for a server with:
+      - host: "api.example.com"
+      - port: 8080
+      - endpoints: list of two items, each with path and method fields:
+          1. path: "/health", method: "GET"
+          2. path: "/users", method: "POST"
+      Output ONLY valid YAML. No markdown fences.
+    scorer: javascript
+    scoreJs: |
+      const text = response.trim();
+      const checks = [
+        text.includes('host:') && text.includes('api.example.com'),
+        text.includes('port:') && text.includes('8080'),
+        text.includes('endpoints:'),
+        text.includes('/health') && text.includes('GET'),
+        text.includes('/users') && text.includes('POST'),
+        !text.includes('```')
+      ];
+      return checks.filter(Boolean).length * Math.floor(10 / checks.length);
+    tags: [yaml, structured-output, nested]
+
+  # ── CSV output ────────────────────────────────────────────────────────────
+  - id: struct-csv-001
+    description: "Simple CSV with header row"
+    category: csv
+    prompt: |
+      Output a CSV table with columns: id, name, score
+      Include a header row and exactly 3 data rows:
+      1. id=1, name="Alice", score=95
+      2. id=2, name="Bob", score=87
+      3. id=3, name="Carol", score=92
+      Output ONLY the CSV. No explanation, no markdown fences.
+    scorer: javascript
+    scoreJs: |
+      const lines = response.trim().split('\n').filter(l => l.trim());
+      if (lines.length < 4) return 0;
+      const header = lines[0].toLowerCase();
+      const hasHeader = header.includes('id') && header.includes('name') && header.includes('score');
+      const hasAlice = lines.some(l => l.includes('Alice') && l.includes('95'));
+      const hasBob = lines.some(l => l.includes('Bob') && l.includes('87'));
+      const hasCarol = lines.some(l => l.includes('Carol') && l.includes('92'));
+      const noFences = !response.includes('```');
+      const checks = [hasHeader, hasAlice, hasBob, hasCarol, noFences];
+      return checks.filter(Boolean).length * 2;
+    tags: [csv, structured-output]
+
+  - id: struct-csv-002
+    description: "CSV with values containing commas (should be quoted)"
+    category: csv
+    prompt: |
+      Output a CSV with columns: product, price, description
+      Include these 2 rows:
+      1. product="Widget A", price=9.99, description="Small, red, plastic"
+      2. product="Widget B", price=19.99, description="Large and durable"
+      Output ONLY the CSV. No markdown fences.
+    scorer: javascript
+    scoreJs: |
+      const text = response.trim();
+      const lines = text.split('\n').filter(l => l.trim());
+      const hasWidgetA = text.includes('Widget A');
+      const hasWidgetB = text.includes('Widget B');
+      const hasPrice1 = text.includes('9.99');
+      const hasPrice2 = text.includes('19.99');
+      // The comma-containing description should be quoted
+      const quotedComma = text.includes('"Small, red') || text.includes("'Small, red");
+      const noFences = !text.includes('```');
+      const checks = [hasWidgetA, hasWidgetB, hasPrice1, hasPrice2, quotedComma, noFences];
+      return checks.filter(Boolean).length * Math.floor(10 / checks.length) + (quotedComma ? 0 : -2 < 0 ? 0 : 0);
+    tags: [csv, structured-output, escaping]
+
+  # ── XML output ────────────────────────────────────────────────────────────
+  - id: struct-xml-001
+    description: "Basic XML document structure"
+    category: xml
+    prompt: |
+      Output an XML document for a book:
+      - title: "Clean Code"
+      - author: "Robert Martin"
+      - year: 2008
+      - available: true
+      Use a root element <book>. Output ONLY valid XML. No markdown fences.
+    scorer: javascript
+    scoreJs: |
+      const text = response.trim();
+      const hasBook = text.includes('<book') && text.includes('</book>');
+      const hasTitle = text.includes('Clean Code');
+      const hasAuthor = text.includes('Robert Martin');
+      const hasYear = text.includes('2008');
+      const hasAvailable = text.includes('true');
+      const noFences = !text.includes('```');
+      const wellFormed = text.startsWith('<') || text.startsWith('<?xml');
+      const checks = [hasBook, hasTitle, hasAuthor, hasYear, hasAvailable, noFences, wellFormed];
+      return checks.filter(Boolean).length * Math.floor(10 / checks.length);
+    tags: [xml, structured-output]
+
+  - id: struct-xml-002
+    description: "XML with attributes and child elements"
+    category: xml
+    prompt: |
+      Output XML for a product catalog with:
+      - Root element: <catalog>
+      - Two <product> elements, each with an "id" attribute
+        1. id="p1": <name>Laptop</name>, <price>999.99</price>
+        2. id="p2": <name>Mouse</name>, <price>29.99</price>
+      Output ONLY valid XML. No markdown fences.
+    scorer: javascript
+    scoreJs: |
+      const text = response.trim();
+      const hasCatalog = text.includes('<catalog') && text.includes('</catalog>');
+      const hasP1 = text.includes('id="p1"') || text.includes("id='p1'");
+      const hasP2 = text.includes('id="p2"') || text.includes("id='p2'");
+      const hasLaptop = text.includes('Laptop');
+      const hasMouse = text.includes('Mouse');
+      const hasPrices = text.includes('999.99') && text.includes('29.99');
+      const noFences = !text.includes('```');
+      const checks = [hasCatalog, hasP1, hasP2, hasLaptop, hasMouse, hasPrices, noFences];
+      return checks.filter(Boolean).length * Math.floor(10 / checks.length);
+    tags: [xml, structured-output, attributes]
+
+  # ── Markdown tables ───────────────────────────────────────────────────────
+  - id: struct-md-table-001
+    description: "Basic markdown table"
+    category: markdown
+    prompt: |
+      Output a markdown table comparing three programming languages:
+      Columns: Language, Year Created, Primary Use
+      Rows:
+      1. Python, 1991, Data Science
+      2. JavaScript, 1995, Web
+      3. Rust, 2010, Systems
+      Output ONLY the markdown table. No explanation.
+    scorer: javascript
+    scoreJs: |
+      const text = response.trim();
+      const lines = text.split('\n').filter(l => l.trim());
+      // Check for pipe characters (markdown table structure)
+      const hasPipes = lines.filter(l => l.includes('|')).length >= 3;
+      // Check for separator row (---|---|---)
+      const hasSeparator = lines.some(l => l.includes('---'));
+      const hasPython = text.includes('Python') && text.includes('1991');
+      const hasJS = text.includes('JavaScript') && text.includes('1995');
+      const hasRust = text.includes('Rust') && text.includes('2010');
+      const checks = [hasPipes, hasSeparator, hasPython, hasJS, hasRust];
+      return checks.filter(Boolean).length * 2;
+    tags: [markdown, table, structured-output]
+
+  - id: struct-md-table-002
+    description: "Markdown table with alignment"
+    category: markdown
+    prompt: |
+      Output a markdown table of Q1 sales data:
+      Columns: Month, Revenue, Units (with Revenue right-aligned)
+      Rows:
+      - January | $45,200 | 312
+      - February | $38,750 | 267
+      - March | $52,100 | 389
+      Output ONLY the table.
+    scorer: javascript
+    scoreJs: |
+      const text = response.trim();
+      const lines = text.split('\n').filter(l => l.trim());
+      const hasPipes = lines.filter(l => l.includes('|')).length >= 4;
+      const hasJan = text.includes('January') && text.includes('45');
+      const hasFeb = text.includes('February') && text.includes('38');
+      const hasMar = text.includes('March') && text.includes('52');
+      const hasSeparator = lines.some(l => l.includes('---'));
+      const checks = [hasPipes, hasJan, hasFeb, hasMar, hasSeparator];
+      return checks.filter(Boolean).length * 2;
+    tags: [markdown, table, structured-output]
+
+  # ── JSON schema compliance ────────────────────────────────────────────────
+  - id: struct-json-schema-001
+    description: "Strict JSON with nested types"
+    category: json
+    prompt: |
+      Output a JSON object matching this schema:
+      {
+        "order_id": string (UUID format),
+        "items": array of objects with "sku" (string) and "qty" (integer),
+        "total": number,
+        "shipped": boolean
+      }
+      Use realistic placeholder values. Output ONLY valid JSON.
+    scorer: javascript
+    scoreJs: |
+      try {
+        const text = response.trim().replace(/^```json\s*/,'').replace(/```\s*$/,'');
+        const obj = JSON.parse(text);
+        const hasOrderId = typeof obj.order_id === 'string' && obj.order_id.length > 0;
+        const hasItems = Array.isArray(obj.items) && obj.items.length > 0;
+        const validItems = obj.items && obj.items.every(i => typeof i.sku === 'string' && Number.isInteger(i.qty));
+        const hasTotal = typeof obj.total === 'number';
+        const hasShipped = typeof obj.shipped === 'boolean';
+        const checks = [hasOrderId, hasItems, validItems, hasTotal, hasShipped];
+        return checks.filter(Boolean).length * 2;
+      } catch(e) { return 0; }
+    tags: [json, structured-output, schema]
+
+  - id: struct-json-schema-002
+    description: "JSON array of typed objects — no extra fields"
+    category: json
+    prompt: |
+      Output a JSON array of exactly 3 user objects. Each object must have ONLY these fields:
+      - "id": integer
+      - "username": string (lowercase, no spaces)
+      - "email": string (valid email format)
+      No extra fields. Output ONLY the JSON array.
+    scorer: javascript
+    scoreJs: |
+      try {
+        const text = response.trim().replace(/^```json\s*/,'').replace(/```\s*$/,'');
+        const arr = JSON.parse(text);
+        if (!Array.isArray(arr) || arr.length !== 3) return 2;
+        let score = 4; // base for valid JSON array of 3
+        const validItems = arr.every(u => {
+          const keys = Object.keys(u);
+          const exactKeys = keys.length === 3 && keys.includes('id') && keys.includes('username') && keys.includes('email');
+          const validTypes = Number.isInteger(u.id) && typeof u.username === 'string' && typeof u.email === 'string';
+          const validEmail = u.email && u.email.includes('@');
+          const noSpaces = u.username && !u.username.includes(' ');
+          return exactKeys && validTypes && validEmail && noSpaces;
+        });
+        return validItems ? 10 : score;
+      } catch(e) { return 0; }
+    tags: [json, structured-output, schema, strict]
+
+  # ── Format adherence under pressure ──────────────────────────────────────
+  - id: struct-pressure-001
+    description: "Model should output only CSV even when asked to explain"
+    category: format-adherence
+    prompt: |
+      I need to understand how to write CSV. Can you show me an example CSV of 3 fruits with columns: name, color, calories_per_100g?
+      
+      Use: apple (red, 52), banana (yellow, 89), kiwi (green, 61)
+      
+      Please output ONLY the CSV table itself — no explanation before or after.
+    scorer: javascript
+    scoreJs: |
+      const text = response.trim();
+      const lines = text.split('\n').filter(l => l.trim());
+      const hasApple = text.includes('apple') && text.includes('52');
+      const hasBanana = text.includes('banana') && text.includes('89');
+      const hasKiwi = text.includes('kiwi') && text.includes('61');
+      // Penalize if there's prose around the CSV
+      const hasProse = text.toLowerCase().includes('here is') || 
+                       text.toLowerCase().includes('here\'s') || 
+                       text.toLowerCase().includes('certainly') ||
+                       text.toLowerCase().includes('of course');
+      const score = (hasApple ? 2 : 0) + (hasBanana ? 2 : 0) + (hasKiwi ? 2 : 0) + (hasProse ? 0 : 4);
+      return score;
+    tags: [csv, format-adherence, instruction-following]
+
+  - id: struct-pressure-002
+    description: "Output only JSON even with ambiguous context"
+    category: format-adherence
+    prompt: |
+      For an API response, I need a JSON object representing an error. Fields: code (integer), message (string), details (array of strings). Use code=404, message="Resource not found", details=["Check the ID", "Resource may have been deleted"]. Just the JSON.
+    scorer: javascript
+    scoreJs: |
+      try {
+        const text = response.trim().replace(/^```json\s*/,'').replace(/```\s*$/,'');
+        const obj = JSON.parse(text);
+        const hasCode = obj.code === 404;
+        const hasMessage = typeof obj.message === 'string' && obj.message.toLowerCase().includes('not found');
+        const hasDetails = Array.isArray(obj.details) && obj.details.length === 2;
+        const checks = [hasCode, hasMessage, hasDetails];
+        return checks.filter(Boolean).length * Math.floor(10/3);
+      } catch(e) { return 0; }
+    tags: [json, format-adherence, structured-output]
+
+  # ── Multi-format in one response ──────────────────────────────────────────
+  - id: struct-mixed-001
+    description: "Output both YAML and JSON representations of same data"
+    category: multi-format
+    prompt: |
+      For a config object with: name="myapp", version="2.1.0", debug=false, max_connections=100
+      Output FIRST a YAML block (in a ```yaml fence), THEN a JSON block (in a ```json fence).
+      Nothing else.
+    scorer: javascript
+    scoreJs: |
+      const text = response;
+      const hasYamlFence = text.includes('```yaml');
+      const hasJsonFence = text.includes('```json');
+      const hasName = text.includes('myapp');
+      const hasVersion = text.includes('2.1.0');
+      const hasDebug = text.includes('false') || text.includes('False');
+      const hasMax = text.includes('100');
+      const checks = [hasYamlFence, hasJsonFence, hasName, hasVersion, hasDebug, hasMax];
+      return checks.filter(Boolean).length * Math.floor(10 / checks.length);
+    tags: [yaml, json, multi-format, structured-output]

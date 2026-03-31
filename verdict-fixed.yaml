@@ -1,0 +1,20 @@
+models:
+  - id: phi4
+    provider: ollama
+    model: phi4:14b
+
+  - id: qwen-coder
+    provider: ollama
+    model: qwen2.5-coder:14b
+
+  - id: qwen3-coder
+    provider: ollama
+    model: qwen3-coder:30b
+    
+judge:
+  provider: ollama
+  model: phi4  # KEY FIX: Use model ID, not model name!
+  
+settings:
+  temperature: 0
+  max_tokens: 4096

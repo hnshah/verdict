@@ -1,0 +1,8 @@
+models:
+  - id: phi4
+    provider: ollama
+    model: phi4:14b
+    
+judge:
+  provider: ollama
+  model: phi4

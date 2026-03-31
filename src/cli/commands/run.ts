@@ -11,6 +11,7 @@ import { printSummary, printCaseDetail, printBaselineComparison, printSynthesis 
 import { generateMarkdownReport } from '../../reporter/markdown.js'
 import type { SlackCard } from '../../types/index.js'
 import { setLogLevel } from '../../utils/logger.js'
+import { contributeCommand } from './contribute.js'
 
 interface RunOptions {
   config: string
@@ -269,5 +270,32 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     log(chalk.dim(`  slack:  ${base}.slack-card.json`))
   }
   log(chalk.dim(`  raw:    ${base}.json`))
+
+  // Auto-contribute if enabled and run succeeded
+  if (config.settings?.auto_contribute && result.models.length > 0) {
+    await tryAutoContribute(`${base}.json`, config, log)
+  }
+
   log()
+}
+
+async function tryAutoContribute(
+  resultPath: string,
+  config: { settings?: { contribution_author?: string } },
+  log: (...args: unknown[]) => void
+): Promise<void> {
+  try {
+    const author = config.settings?.contribution_author || 'Verdict Bot'
+    log(chalk.dim('  auto-contributing to dashboard...'))
+    await contributeCommand({
+      result: resultPath,
+      author,
+      // Token comes from env (GITHUB_TOKEN or VERDICT_GITHUB_TOKEN)
+    })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    log(chalk.yellow(`  ⚠ Auto-contribute failed: ${message}`))
+    log(chalk.dim(`  You can contribute manually:`))
+    log(`    ${chalk.cyan(`verdict contribute --result ${resultPath}`)}`)
+  }
 }

@@ -1,0 +1,665 @@
+{
+  "run_id": "2026-03-31T14-02-35",
+  "name": "3 Model Comparison - 10 cases",
+  "timestamp": "2026-03-31T14:04:50.393Z",
+  "models": [
+    "phi4",
+    "qwen-coder",
+    "qwen3-coder"
+  ],
+  "cases": [
+    {
+      "case_id": "gen-001",
+      "prompt": "What is the capital of France?",
+      "criteria": "Single correct answer: Paris",
+      "responses": {
+        "phi4": {
+          "model_id": "phi4",
+          "text": "The capital of France is Paris. It's not only the largest city in the country but also a major cultural and economic center known for its history, art, fashion, and cuisine. Paris is home to iconic landmarks such as the Eiffel Tower, Notre-Dame Cathedral, and the Louvre Museum, which houses famous artworks like the Mona Lisa. The city's influence extends globally across various fields including politics, education, entertainment, and science.",
+          "input_tokens": 17,
+          "output_tokens": 91,
+          "latency_ms": 2505,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "The capital of France is Paris.",
+          "input_tokens": 15,
+          "output_tokens": 8,
+          "latency_ms": 4851,
+          "cost_usd": 0
+        },
+        "qwen-coder": {
+          "model_id": "qwen-coder",
+          "text": "The capital of France is Paris.",
+          "input_tokens": 36,
+          "output_tokens": 8,
+          "latency_ms": 5602,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 8,
+          "conciseness": 6,
+          "total": 8.4,
+          "reasoning": "The response correctly identifies Paris as the capital of France and provides additional relevant information, but it includes more detail than necessary for a simple factual question."
+        },
+        "qwen3-coder": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly identifies Paris as the capital of France, fully addressing the question with no unnecessary information."
+        },
+        "qwen-coder": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly identifies Paris as the capital of France, fully addressing the question with no unnecessary information."
+        }
+      },
+      "winner": "qwen3-coder"
+    },
+    {
+      "case_id": "gen-002",
+      "prompt": "What does RAM stand for and what does it do?",
+      "criteria": "Random Access Memory, volatile storage that holds running programs and data",
+      "responses": {
+        "qwen-coder": {
+          "model_id": "qwen-coder",
+          "text": "RAM stands for Random Access Memory. It is a type of computer memory that allows data to be read from and written to at any time, without the need to access preceding bytes first. This makes RAM much faster than other storage types like hard drives or SSDs. RAM is used by computers to load programs and data into an area of high-speed memory for quick access by the central processing unit (CPU). When the computer is turned off, the data stored in RAM is lost because it requires a constant power supply to maintain its contents.",
+          "input_tokens": 40,
+          "output_tokens": 108,
+          "latency_ms": 4187,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "RAM stands for Random Access Memory. It is a type of computer memory that is used to store data temporarily while a computer is running. Here are some key points about RAM:\n\n1. **Temporary Storage**: Unlike permanent storage devices like hard drives or SSDs, RAM stores information only as long as the device is powered on and loses its contents when the power is turned off.\n\n2. **Speed**: RAM is much faster than other types of storage, which allows for quick access to data by the CPU (Central Processing Unit). This speed is crucial for running applications smoothly and efficiently.\n\n3. **Volatility**: RAM is volatile memory, meaning it requires power to maintain the stored information. Once the device is turned off, all data in RAM is lost.\n\n4. **Functionality**: When you run a program or open a file on your computer, that data is loaded into RAM from permanent storage so that the CPU can access it quickly. The more RAM a system has, the more applications and processes it can handle simultaneously without slowing down.\n\n5. **Capacity**: The amount of RAM in a computer affects its ability to multitask and run complex programs. More RAM allows for better performance when running multiple applications at once or handling large files.\n\nOverall, RAM plays a critical role in determining how well a computer performs tasks by providing fast access to data needed by the CPU during operation.",
+          "input_tokens": 21,
+          "output_tokens": 277,
+          "latency_ms": 6618,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "RAM stands for **Random Access Memory**.\n\nRAM is your computer's short-term memory that temporarily stores data and instructions that the CPU needs while your computer is running. Here's what it does:\n\n## Key Functions:\n- **Temporary storage** of currently running programs and data\n- **Fast access** for the CPU to read and write information\n- **Working memory** for applications to operate smoothly\n- **Cache** for frequently used data and instructions\n\n## How it works:\n- Data can be accessed in any order (hence \"random access\")\n- Much faster than storage devices like hard drives or SSDs\n- Loses all data when the computer is turned off (volatile memory)\n- Acts as a \"workspace\" where your computer can quickly access and manipulate information\n\n## Why it matters:\nThe more RAM you have, the more programs you can run simultaneously without slowdowns. It's like having a larger desk - you can spread out more work at once before having to organize or clear space.\n\nThink of RAM as your computer's \"short-term memory\" - it holds what you're actively working on, while your hard drive serves as long-term storage for files you save.",
+          "input_tokens": 19,
+          "output_tokens": 239,
+          "latency_ms": 7163,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately defines RAM and its function, addressing most criteria but slightly lacking in explicitly mentioning 'volatile storage'."
+        },
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately describes RAM's function, characteristics, and importance while covering most criteria but could be slightly more concise."
+        },
+        "qwen3-coder": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately describes RAM's function and characteristics, covering most key aspects but could be slightly more concise."
+        }
+      },
+      "winner": "qwen-coder"
+    },
+    {
+      "case_id": "gen-003",
+      "prompt": "Explain the difference between a process and a thread in one paragraph.",
+      "criteria": "Covers: separate memory space vs shared, overhead difference, use cases for each",
+      "responses": {
+        "qwen-coder": {
+          "model_id": "qwen-coder",
+          "text": "A process is an instance of a computer program that is being executed by one or more threads. It includes all the resources needed to run the program, such as memory space, file descriptors, and CPU time. On the other hand, a thread is the smallest unit of execution within a process; it is responsible for executing specific tasks and can run concurrently with other threads within the same process. While a process can contain multiple threads that share its resources, each thread operates independently, allowing for parallel execution and potentially improving the performance of applications that require multitasking.",
+          "input_tokens": 43,
+          "output_tokens": 112,
+          "latency_ms": 4143,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "A process is an instance of a program that is being executed, encompassing its own memory space, resources, and system state. It operates independently from other processes, with each having its own set of allocated resources such as CPU time, memory, and I/O devices. Processes are isolated from one another to prevent interference, which enhances stability but can lead to inefficiencies in resource utilization. On the other hand, a thread is a smaller unit of execution within a process that shares the same memory space and resources with other threads belonging to the same process. Threads allow for concurrent execution within a single process, enabling more efficient use of CPU time by performing multiple tasks simultaneously without the overhead associated with creating separate processes. This makes threading particularly useful in applications requiring high responsiveness or parallelism, such as graphical user interfaces or real-time data processing. However, because threads share resources, they require careful synchronization to avoid conflicts and ensure data integrity.",
+          "input_tokens": 24,
+          "output_tokens": 186,
+          "latency_ms": 4835,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "A process is an independent executing instance of a program that has its own memory space, system resources, and execution context, while a thread is a lightweight sub-process that exists within a process and shares the parent process's memory and resources, with each thread having its own stack space and execution state but operating within the same address space. The key differences lie in resource allocation (processes are isolated and resource-intensive, while threads share resources and are more efficient), memory management (processes have separate memory spaces, whereas threads share memory), and fault isolation (a crash in one process doesn't affect others, but a crash in one thread can potentially impact the entire process). Processes provide better security and stability through isolation, while threads offer improved performance and communication efficiency within a single program, making them ideal for concurrent execution within applications.",
+          "input_tokens": 22,
+          "output_tokens": 165,
+          "latency_ms": 5318,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder": {
+          "accuracy": 7,
+          "completeness": 5,
+          "conciseness": 8,
+          "total": 6.4,
+          "reasoning": "The response correctly identifies basic differences but lacks detail on memory space, overhead, and specific use cases."
+        },
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately describes the differences in memory space, overhead, and use cases between processes and threads."
+        },
+        "qwen3-coder": {
+          "accuracy": 9,
+          "completeness": 10,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately describes the differences in memory space, resource sharing, and fault isolation between processes and threads while covering all evaluation criteria."
+        }
+      },
+      "winner": "phi4"
+    },
+    {
+      "case_id": "gen-004",
+      "prompt": "If all mammals are warm-blooded, and dolphins are mammals, what can we conclude about dolphins?",
+      "criteria": "Correct deductive conclusion: dolphins are warm-blooded. Clear reasoning shown.",
+      "responses": {
+        "qwen-coder": {
+          "model_id": "qwen-coder",
+          "text": "We can conclude that dolphins are warm-blooded. This conclusion is based on the given premises: all mammals are warm-blooded, and dolphins are mammals. Since dolphins fall under the category of mammals, they share the characteristic of being warm-blooded with other mammals.",
+          "input_tokens": 49,
+          "output_tokens": 54,
+          "latency_ms": 2180,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "Given the premises:\n\n1. All mammals are warm-blooded.\n2. Dolphins are mammals.\n\nWe can use logical deduction to conclude that dolphins are warm-blooded. This conclusion follows from the fact that if all members of a group (mammals) have a certain property (being warm-blooded), and an individual (dolphins) is part of that group, then the individual must also possess that property. Therefore, dolphins are warm-blooded.",
+          "input_tokens": 30,
+          "output_tokens": 93,
+          "latency_ms": 2426,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "Based on the given premises, we can conclude that **dolphins are warm-blooded**.\n\nThis follows logically from the syllogism:\n1. All mammals are warm-blooded\n2. Dolphins are mammals\n3. Therefore, dolphins are warm-blooded\n\nThis is a classic example of deductive reasoning where the conclusion necessarily follows from the premises. Since dolphins belong to the class of mammals, and all mammals have the characteristic of being warm-blooded, dolphins must possess this characteristic as well.",
+          "input_tokens": 28,
+          "output_tokens": 103,
+          "latency_ms": 3046,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "total": 9.8,
+          "reasoning": "The response correctly applies deductive reasoning to conclude that dolphins are warm-blooded based on the premises provided."
+        },
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "total": 9.8,
+          "reasoning": "The response correctly applies deductive reasoning to conclude that dolphins are warm-blooded based on the given premises."
+        },
+        "qwen3-coder": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "total": 9.8,
+          "reasoning": "The response correctly applies deductive reasoning to conclude that dolphins are warm-blooded based on the premises provided."
+        }
+      },
+      "winner": "qwen-coder"
+    },
+    {
+      "case_id": "gen-005",
+      "prompt": "List exactly 3 benefits of regular exercise. Numbered list. Max 12 words per item.",
+      "criteria": "Exactly 3 items, numbered list format, each under 12 words",
+      "responses": {
+        "qwen-coder": {
+          "model_id": "qwen-coder",
+          "text": "1. Improves cardiovascular health.\n2. Enhances mental well-being.\n3. Boosts physical strength and flexibility.",
+          "input_tokens": 50,
+          "output_tokens": 25,
+          "latency_ms": 1244,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "1. Improves cardiovascular health, reducing the risk of heart disease and stroke.\n\n2. Enhances mental well-being by decreasing stress, anxiety, and depression symptoms.\n\n3. Boosts physical strength, flexibility, and endurance for better overall fitness levels.",
+          "input_tokens": 30,
+          "output_tokens": 51,
+          "latency_ms": 1316,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "1. Boosts cardiovascular health and reduces heart disease risk.\n\n2. Enhances mental health and reduces anxiety symptoms.\n\n3. Increases energy levels and improves sleep quality.",
+          "input_tokens": 29,
+          "output_tokens": 34,
+          "latency_ms": 1534,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response accurately lists three benefits of regular exercise, each under 12 words."
+        },
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response accurately lists three benefits of regular exercise, each under 12 words."
+        },
+        "qwen3-coder": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response accurately lists three benefits of regular exercise, each under 12 words."
+        }
+      },
+      "winner": "qwen-coder"
+    },
+    {
+      "case_id": "gen-006",
+      "prompt": "Write a JavaScript function that returns the sum of all even numbers in an array.",
+      "criteria": "Working JS function, handles empty array, filters even numbers with % 2 === 0, returns sum",
+      "responses": {
+        "qwen-coder": {
+          "model_id": "qwen-coder",
+          "text": "Certainly! Below is a JavaScript function that takes an array as input and returns the sum of all even numbers in that array:\n\n```javascript\nfunction sumOfEvenNumbers(arr) {\n    // Initialize a variable to store the sum of even numbers\n    let sum = 0;\n\n    // Iterate over each element in the array\n    for (let i = 0; i < arr.length; i++) {\n        // Check if the current element is an even number\n        if (arr[i] % 2 === 0) {\n            // Add the even number to the sum\n            sum += arr[i];\n        }\n    }\n\n    // Return the total sum of even numbers\n    return sum;\n}\n\n// Example usage:\nconst numbers = [1, 2, 3, 4, 5, 6];\nconsole.log(sumOfEvenNumbers(numbers)); // Output: 12\n```\n\n### Explanation:\n- The function `sumOfEvenNumbers` takes an array `arr` as its parameter.\n- It initializes a variable `sum` to 0, which will hold the sum of even numbers.\n- It iterates over each element in the array using a `for` loop.\n- Inside the loop, it checks if the current element is even by using the modulus operator (`%`). If `arr[i] % 2 === 0`, the number is even.\n- If the number is even, it adds it to the `sum`.\n- After the loop completes, the function returns the total sum of all even numbers in the array.",
+          "input_tokens": 45,
+          "output_tokens": 320,
+          "latency_ms": 11313,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "To create a JavaScript function that calculates the sum of all even numbers in an array, you can follow these steps:\n\n1. Define a function that takes an array as its parameter.\n2. Initialize a variable to keep track of the sum.\n3. Iterate over each element in the array.\n4. Check if the current element is an even number (i.e., divisible by 2 with no remainder).\n5. If it's even, add it to the sum.\n6. After iterating through all elements, return the sum.\n\nHere's how you can implement this:\n\n```javascript\nfunction sumOfEvenNumbers(arr) {\n    // Initialize a variable to store the sum of even numbers\n    let sum = 0;\n\n    // Iterate over each element in the array\n    for (let i = 0; i < arr.length; i++) {\n        // Check if the current number is even\n        if (arr[i] % 2 === 0) {\n            // Add it to the sum\n            sum += arr[i];\n        }\n    }\n\n    // Return the total sum of even numbers\n    return sum;\n}\n\n// Example usage:\nconst numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\nconsole.log(sumOfEvenNumbers(numbers)); // Output: 30\n```\n\n### Explanation:\n\n- **Function Definition**: The function `sumOfEvenNumbers` takes an array `arr` as its argument.\n- **Sum Initialization**: A variable `sum` is initialized to zero. This will accumulate the sum of even numbers.\n- **Loop Through Array**: A `for` loop iterates over each element in the array using index `i`.\n- **Check for Even Numbers**: The condition `arr[i] % 2 === 0` checks if a number is even. If true, it adds that number to `sum`.\n- **Return Result**: After completing the iteration, the function returns the accumulated sum of all even numbers.\n\nThis approach efficiently calculates the desired result by iterating through the array only once, making it an O(n) solution in terms of time complexity, where n is the number of elements in the array.",
+          "input_tokens": 26,
+          "output_tokens": 455,
+          "latency_ms": 12192,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "Here's a JavaScript function that returns the sum of all even numbers in an array:\n\n```javascript\nfunction sumEvenNumbers(arr) {\n    let sum = 0;\n    for (let i = 0; i < arr.length; i++) {\n        if (arr[i] % 2 === 0) {\n            sum += arr[i];\n        }\n    }\n    return sum;\n}\n\n// Alternative implementations:\n\n// Using forEach method\nfunction sumEvenNumbersForEach(arr) {\n    let sum = 0;\n    arr.forEach(num => {\n        if (num % 2 === 0) {\n            sum += num;\n        }\n    });\n    return sum;\n}\n\n// Using reduce method (most concise)\nfunction sumEvenNumbersReduce(arr) {\n    return arr.reduce((sum, num) => {\n        return num % 2 === 0 ? sum + num : sum;\n    }, 0);\n}\n\n// Using filter and reduce together\nfunction sumEvenNumbersFilterReduce(arr) {\n    return arr\n        .filter(num => num % 2 === 0)\n        .reduce((sum, num) => sum + num, 0);\n}\n\n// Example usage:\nconsole.log(sumEvenNumbers([1, 2, 3, 4, 5, 6])); // Output: 12 (2 + 4 + 6)\nconsole.log(sumEvenNumbers([1, 3, 5, 7])); // Output: 0 (no even numbers)\nconsole.log(sumEvenNumbers([2, 4, 6, 8])); // Output: 20 (2 + 4 + 6 + 8)\nconsole.log(sumEvenNumbers([])); // Output: 0 (empty array)\n```\n\nThe first implementation uses a traditional `for` loop to iterate through the array and check if each number is even using the modulo operator (`% 2 === 0`). The function returns the sum of all even numbers found.\n\nAll four implementations will produce the same result, but you can choose the one that best fits your coding style and requirements:\n- The first one is the most straightforward and readable\n- `forEach` is more functional in style\n- `reduce` is the most concise and functional approach\n- `filter` + `reduce` is very readable and separates the filtering logic from the summation logic",
+          "input_tokens": 24,
+          "output_tokens": 481,
+          "latency_ms": 14022,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The function correctly calculates the sum of even numbers, handles empty arrays by returning 0, and is concise but could be slightly more efficient using array methods."
+        },
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response provides a correct and complete JavaScript function that meets all specified criteria, with clear explanation but slightly more detail than necessary."
+        },
+        "qwen3-coder": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "total": 9.8,
+          "reasoning": "The response provides correct implementations that meet all evaluation criteria, with a slight excess in providing multiple solutions."
+        }
+      },
+      "winner": "qwen3-coder"
+    },
+    {
+      "case_id": "gen-007",
+      "prompt": "What is the time complexity of binary search and why?",
+      "criteria": "O(log n), correct explanation of halving the search space each iteration",
+      "responses": {
+        "qwen-coder": {
+          "model_id": "qwen-coder",
+          "text": "The time complexity of binary search is O(log n), where n is the number of elements in the sorted array on which the search is performed. This is because binary search works by repeatedly dividing the search interval in half. If the value of the search key is less than the item in the middle of the interval, the search continues in the lower half, or if it's greater, it continues in the upper half. This process repeats until the value is found or the interval is empty. Since the array is halved with each step, the number of steps required to find an element grows logarithmically relative to the size of the array.",
+          "input_tokens": 40,
+          "output_tokens": 130,
+          "latency_ms": 4818,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "Binary search has a time complexity of \\(O(\\log n)\\), where \\(n\\) is the number of elements in the sorted array or list being searched. This efficiency arises from the algorithm's divide-and-conquer approach.\n\nHere’s why:\n\n1. **Divide**: In each step, binary search divides the search interval in half. It compares the target value to the middle element of the current interval.\n   \n2. **Conquer**: Depending on whether the target is less than or greater than this middle element, it discards one half of the array and continues the search on the remaining half.\n\n3. **Repeat**: This process repeats, each time reducing the size of the problem by approximately half, until the target value is found or the interval is empty.\n\nThe logarithmic nature comes from the fact that with each comparison, you eliminate about half of the elements from consideration. Mathematically, if you start with \\(n\\) elements and halve the search space in each step, it takes \\(\\log_2 n\\) steps to reduce the problem size to 1 (or zero). Thus, the time complexity is \\(O(\\log n)\\).\n\nThis efficiency assumes that the input data structure allows for constant-time access to any element by index, such as an array or a list. If you were using a linked list, accessing elements in the middle would take linear time, which would affect the overall time complexity.",
+          "input_tokens": 21,
+          "output_tokens": 288,
+          "latency_ms": 7085,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "## Time Complexity of Binary Search\n\n**Time Complexity: O(log n)**\n\n## Why O(log n)?\n\nBinary search works by repeatedly dividing the search space in half, which leads to logarithmic time complexity.\n\n### How It Works:\n1. Start with the entire array\n2. Compare target with middle element\n3. If found, return index\n4. If target is smaller, search left half\n5. If target is larger, search right half\n6. Repeat until found or search space is empty\n\n### Mathematical Explanation:\n\nLet's say we have an array of size n. After each comparison:\n- 1st comparison: search space = n\n- 2nd comparison: search space = n/2\n- 3rd comparison: search space = n/4\n- 4th comparison: search space = n/8\n- ...and so on\n\nAfter k comparisons, the search space becomes n/2^k.\n\nThe algorithm stops when the search space is 1 (or 0):\n```\nn/2^k = 1\nn = 2^k\nk = log₂(n)\n```\n\nTherefore, the maximum number of comparisons needed is **log₂(n)**.\n\n## Space Complexity:\n- **Iterative version**: O(1) - only uses a few variables\n- **Recursive version**: O(log n) - due to call stack depth\n\n## Example:\nFor an array of 1024 elements:\n- Maximum comparisons needed = log₂(1024) = 10\n- Even for 1 billion elements: log₂(1,000,000,000) ≈ 30 comparisons\n\nThis logarithmic growth makes binary search extremely efficient for large datasets, especially when the array is already sorted.",
+          "input_tokens": 19,
+          "output_tokens": 372,
+          "latency_ms": 8933,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "total": 9.8,
+          "reasoning": "The response accurately explains the time complexity of binary search and why it is O(log n) by detailing how the search space is halved each iteration."
+        },
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately explains the time complexity of binary search and its halving mechanism, but could briefly mention that it assumes random access data structures."
+        },
+        "qwen3-coder": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately explains the time complexity of binary search and provides a clear, detailed explanation of why it is O(log n) by describing how the search space is halved each iteration."
+        }
+      },
+      "winner": "qwen-coder"
+    },
+    {
+      "case_id": "gen-008",
+      "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
+      "criteria": "Covers attention mechanism, parallel processing (vs RNN), why it improved NLP. Appropriate depth.",
+      "responses": {
+        "phi4": {
+          "model_id": "phi4",
+          "text": "A transformer model is an architecture designed to handle sequential data, primarily used in natural language processing tasks like translation and text generation. It relies on self-attention mechanisms that allow it to weigh the importance of different words in a sentence relative to each other, enabling parallelization and efficient handling of long-range dependencies without relying on recurrent layers. Transformers consist of encoder-decoder structures where both parts use stacked layers of multi-head attention and feed-forward neural networks, making them highly effective for capturing complex patterns in data.",
+          "input_tokens": 32,
+          "output_tokens": 101,
+          "latency_ms": 2754,
+          "cost_usd": 0
+        },
+        "qwen-coder": {
+          "model_id": "qwen-coder",
+          "text": "A transformer model is an advanced neural network architecture that relies on self-attention mechanisms to weigh the importance of different words in a sentence, enabling it to capture complex relationships and dependencies between elements in sequences more effectively than traditional models like RNNs or LSTMs. This design allows transformers to process input data in parallel, significantly speeding up training times and making them highly efficient for tasks such as natural language processing, machine translation, and text summarization.",
+          "input_tokens": 51,
+          "output_tokens": 91,
+          "latency_ms": 3210,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "A transformer model is an attention-based neural network architecture that processes input sequences in parallel rather than sequentially, using self-attention mechanisms to weigh the importance of different tokens in the input when generating each output token. Unlike RNNs or LSTMs, transformers don't have recurrent connections, allowing them to capture long-range dependencies more effectively and scale to much larger datasets and model sizes. The key innovation is the multi-head self-attention mechanism that lets each position attend to all positions in the previous layer, enabling the model to understand context and relationships between distant words in a sentence.",
+          "input_tokens": 30,
+          "output_tokens": 116,
+          "latency_ms": 3686,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "phi4": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response accurately describes the transformer model's architecture and its reliance on self-attention mechanisms, but it could briefly mention why transformers improved NLP by highlighting their ability to handle long-range dependencies more effectively than RNNs."
+        },
+        "qwen-coder": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 10,
+          "total": 8.8,
+          "reasoning": "The response accurately describes the transformer model's use of self-attention and parallel processing, explaining its advantages over RNNs in NLP tasks."
+        },
+        "qwen3-coder": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately describes the transformer model's architecture, attention mechanism, and advantages over RNNs, but could briefly mention its impact on NLP improvements."
+        }
+      },
+      "winner": "qwen3-coder"
+    },
+    {
+      "case_id": "gen-009",
+      "prompt": "Write a haiku about debugging code.",
+      "criteria": "5-7-5 syllable structure, references debugging or code, coherent meaning",
+      "responses": {
+        "qwen-coder": {
+          "model_id": "qwen-coder",
+          "text": "Syntax error found,\nDebugging lines of code,\nProgram runs smoothly.",
+          "input_tokens": 37,
+          "output_tokens": 15,
+          "latency_ms": 898,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "In silent night's glow,  \nErrors dance in tangled lines—  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: working through complex and often frustrating code to achieve clarity and understanding.",
+          "input_tokens": 18,
+          "output_tokens": 45,
+          "latency_ms": 1079,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "Lines of logic\nTangled thoughts untangle—\nSilence finds its way.",
+          "input_tokens": 16,
+          "output_tokens": 18,
+          "latency_ms": 1160,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The haiku follows the 5-7-5 syllable structure, references debugging and code, and conveys a coherent meaning."
+        },
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "total": 9.8,
+          "reasoning": "The haiku adheres to the 5-7-5 syllable structure, references debugging through 'errors' and 'tangled lines', and conveys a coherent meaning about achieving clarity."
+        },
+        "qwen3-coder": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The haiku follows the 5-7-5 syllable structure, references debugging through 'tangled thoughts untangle,' and conveys a coherent meaning about finding clarity in code."
+        }
+      },
+      "winner": "qwen-coder"
+    },
+    {
+      "case_id": "gen-010",
+      "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
+      "criteria": "Consistency, Availability, Partition tolerance, can only guarantee 2 of 3, tradeoffs for system design",
+      "responses": {
+        "qwen-coder": {
+          "model_id": "qwen-coder",
+          "text": "The CAP theorem, named after its creators Eric Brewer and David Patterson, is a fundamental concept in distributed computing that states that it is impossible for a distributed system to simultaneously provide all three of the following guarantees:\n\n1. **Consistency**: Every read receives the most recent write or an error (all nodes see the same data at the same time).\n2. **Availability**: Every request receives a response, without the guarantee that it contains the most recent write (the system is always up and responsive).\n3. **Partition tolerance**: The system continues to operate despite arbitrary message loss or failure of some subset of its components.\n\nThe theorem implies that in any distributed system design, you can only choose two out of these three guarantees:\n\n- If you choose Consistency and Availability, the system cannot tolerate network partitions (P) without compromising one of them.\n- If you choose Consistency and Partition tolerance, the system will not be available during a partition.\n- If you choose Availability and Partition tolerance, the system may return stale data.\n\nThis theorem is crucial for understanding the trade-offs in designing distributed systems. For example, databases like Cassandra prioritize availability and partition tolerance over consistency, while others like MongoDB aim to provide strong consistency at the cost of reduced availability or partition tolerance.",
+          "input_tokens": 44,
+          "output_tokens": 252,
+          "latency_ms": 9065,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "The CAP theorem, also known as Brewer's theorem, states that in any distributed data system, you can only guarantee **two out of three** of the following three properties:\n\n## The Three Properties\n\n1. **Consistency** - All nodes see the same data at the same time\n2. **Availability** - Every request receives a response (success or failure)\n3. **Partition Tolerance** - The system continues to operate despite network failures\n\n## What It Means for Distributed Systems Design\n\n### The Core Trade-off\nSince network partitions are inevitable in distributed systems, you must choose which two properties to prioritize:\n\n## Common Approaches\n\n### CP Systems (Consistency + Partition Tolerance)\n- **Example**: Traditional RDBMS, ZooKeeper\n- **Behavior**: During partition, system sacrifices availability\n- **Use case**: Financial systems, where data consistency is critical\n\n### AP Systems (Availability + Partition Tolerance)\n- **Example**: DNS, web caching, some NoSQL databases\n- **Behavior**: During partition, system maintains availability but may return stale data\n- **Use case**: Web applications, social media\n\n### CA Systems (Consistency + Availability)\n- **Example**: Single-node databases\n- **Reality**: Impossible in true distributed systems\n- **Use case**: Small, non-distributed systems\n\n## Real-World Implications\n\nThe CAP theorem forces architects to make explicit design decisions based on their specific requirements. Most modern distributed systems are designed as **AP systems** because:\n- Network partitions are common\n- Users generally prefer availability over consistency\n- Modern systems often use eventual consistency patterns\n\nUnderstanding CAP helps teams make informed decisions about their system architecture and trade-offs.",
+          "input_tokens": 23,
+          "output_tokens": 342,
+          "latency_ms": 11953,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "The CAP theorem, also known as Brewer's theorem, is a fundamental principle in the field of distributed computing that outlines the trade-offs between three key properties of distributed data stores: Consistency, Availability, and Partition Tolerance. The theorem states that in any distributed system, it is impossible to simultaneously achieve all three of these guarantees:\n\n1. **Consistency**: Every read operation receives the most recent write or an error. This means that all nodes see the same data at the same time.\n\n2. **Availability**: Every request (read or write) receives a response, without guaranteeing that it contains the most recent write. The system remains operational and responsive even in the face of network failures.\n\n3. **Partition Tolerance**: The system continues to operate despite an arbitrary number of messages being dropped (or delayed) by the network between nodes. This means the system can handle network partitions.\n\nAccording to the CAP theorem, a distributed system can only provide two out of these three guarantees at any given time:\n\n- **CP (Consistency and Partition Tolerance)**: The system ensures that all nodes see the same data at the same time, but it may sacrifice availability. During a partition, some parts of the system might become unavailable to maintain consistency.\n\n- **AP (Availability and Partition Tolerance)**: The system remains available during partitions, but it may serve stale or inconsistent data. This means that not all reads will return the most recent write.\n\n- **CA (Consistency and Availability)**: In a non-partitioned network, the system can be both consistent and available. However, this is only possible if there are no network partitions, which is impractical for real-world distributed systems.\n\n### Implications for Distributed Systems Design\n\nThe CAP theorem has significant implications for designing distributed systems:\n\n1. **Trade-offs**: System architects must decide which two properties (Consistency, Availability, Partition Tolerance) are most critical for their application and design the system accordingly. This decision often depends on the specific requirements and constraints of the application.\n\n2. **Use Cases**:\n   - Systems that require strong consistency might prioritize CP, such as financial systems where accuracy is crucial.\n   - Systems that need to be highly available might choose AP, like social media platforms where eventual consistency is acceptable.\n   - CA systems are typically not feasible in practice due to the inevitability of network partitions.\n\n3. **Hybrid Approaches**: Some modern distributed databases and systems use hybrid approaches or tunable consistency models to provide flexibility. For example, they might offer different levels of consistency (e.g., eventual, strong) based on the operation or user preference.\n\n4. **Eventual Consistency**: Many AP systems aim for eventual consistency, where all nodes will eventually converge to the same state given enough time without new updates.\n\n5. **Consensus Protocols**: Systems that prioritize consistency often rely on consensus protocols like Paxos or Raft to ensure agreement among distributed components.\n\nIn summary, the CAP theorem guides designers in making informed decisions about the trade-offs involved in building distributed systems, helping them align system properties with application requirements and user expectations.",
+          "input_tokens": 25,
+          "output_tokens": 628,
+          "latency_ms": 15035,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately explains the CAP theorem and its implications for distributed systems, covering all key aspects with relevant examples."
+        },
+        "qwen3-coder": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately explains the CAP theorem, covers all necessary aspects including trade-offs and real-world implications, but could be slightly more concise."
+        },
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "total": 9.8,
+          "reasoning": "The response accurately explains the CAP theorem, its implications for distributed systems design, and covers all evaluation criteria effectively with minimal padding."
+        }
+      },
+      "winner": "phi4"
+    }
+  ],
+  "summary": {
+    "phi4": {
+      "model_id": "phi4",
+      "avg_total": 9.28,
+      "avg_accuracy": 9.9,
+      "avg_completeness": 9.2,
+      "avg_conciseness": 8.2,
+      "avg_latency_ms": 5584.5,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 20,
+      "wins": 2,
+      "cases_run": 10,
+      "avg_solve_rate": 0
+    },
+    "qwen-coder": {
+      "model_id": "qwen-coder",
+      "avg_total": 9.24,
+      "avg_accuracy": 9.6,
+      "avg_completeness": 9,
+      "avg_conciseness": 9,
+      "avg_latency_ms": 4666,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 50,
+      "wins": 5,
+      "cases_run": 10,
+      "avg_solve_rate": 0
+    },
+    "qwen3-coder": {
+      "model_id": "qwen3-coder",
+      "avg_total": 9.56,
+      "avg_accuracy": 9.9,
+      "avg_completeness": 9.6,
+      "avg_conciseness": 8.8,
+      "avg_latency_ms": 6166.6,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 30,
+      "wins": 3,
+      "cases_run": 10,
+      "avg_solve_rate": 0
+    }
+  },
+  "run_meta": {
+    "run_id": "2026-03-31T14-02-35",
+    "config_file": "verdict.yaml",
+    "verdict_version": "0.2.0",
+    "hardware": "Apple M3 Ultra 256GB"
+  },
+  "hardware": {
+    "cpu": "Apple M3 Ultra",
+    "cpu_cores": 32,
+    "cpu_arch": "arm64",
+    "ram_gb": 256,
+    "os": "macOS",
+    "os_version": "25.3.0"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v22.22.1",
+    "provider_versions": {
+      "ollama": "0.18.3"
+    }
+  },
+  "eval_pack": {
+    "file": "eval-packs/general.yaml",
+    "description": "10 general-purpose cases covering factual recall, reasoning, coding, and instruction following",
+    "total_cases": 10
+  },
+  "judge": {
+    "model": "phi4",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p General -m phi4,qwen-coder,qwen3-coder",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "phi4": {
+        "provider": "ollama",
+        "model": "phi4:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "qwen-coder": {
+        "provider": "ollama",
+        "model": "qwen2.5-coder:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "qwen3-coder": {
+        "provider": "ollama",
+        "model": "qwen3-coder:30b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      }
+    }
+  }
+}
