@@ -68,20 +68,27 @@ dashboardData.cases.forEach(caseData => {
   });
 });
 
-// Convert to runs array
-const runs = Array.from(runMap.values()).map(run => ({
-  id: run.id,
-  name: run.name,
-  date: run.date,
-  cases: run.caseIds ? run.caseIds.size : run.cases,
-  models: run.models.size,
-  avg_score: run.scoreCount > 0 
-    ? Math.round((run.totalScore / run.scoreCount) * 10) / 10 
-    : 0,
-  badges: [],
-  is_test: false,
-  is_single_model: run.models.size === 1
-}));
+// Convert to runs array with MM-DD-YY date format
+const runs = Array.from(runMap.values()).map(run => {
+  // Convert YYYY-MM-DD to MM-DD-YY
+  const [year, month, day] = run.date.split('-');
+  const shortYear = year.slice(-2);
+  const usDate = `${month}-${day}-${shortYear}`;
+  
+  return {
+    id: run.id,
+    name: run.name,
+    date: usDate,
+    cases: run.caseIds ? run.caseIds.size : run.cases,
+    models: run.models.size,
+    avg_score: run.scoreCount > 0 
+      ? Math.round((run.totalScore / run.scoreCount) * 10) / 10 
+      : 0,
+    badges: [],
+    is_test: false,
+    is_single_model: run.models.size === 1
+  };
+});
 
 // Sort by date desc
 runs.sort((a, b) => b.id.localeCompare(a.id));
@@ -160,7 +167,7 @@ Object.values(modelStats).forEach(stats => {
     : '-';
 });
 
-// Top models (by avg score)
+// All models (sorted by avg score) - no limit, show all
 const topModels = Object.values(modelStats)
   .filter(m => m.total_scores.length > 0)
   .map(m => ({
@@ -168,7 +175,7 @@ const topModels = Object.values(modelStats)
     runs: m.total_runs  // Add 'runs' alias for template compatibility
   }))
   .sort((a, b) => b.avg_score - a.avg_score)
-  .slice(0, 10)
+  // REMOVED: .slice(0, 10) - now showing ALL models
   .map((m, idx) => ({
     ...m,
     rank: idx + 1  // Add rank (1-based)

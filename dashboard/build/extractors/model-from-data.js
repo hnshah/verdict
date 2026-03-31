@@ -49,10 +49,16 @@ data.cases.forEach(caseData => {
     
     // Initialize run stats
     if (!runMap.has(runId)) {
+      // Convert date to MM-DD-YY format
+      const isoDate = runId.split('T')[0];
+      const [year, month, day] = isoDate.split('-');
+      const shortYear = year.slice(-2);
+      const usDate = `${month}-${day}-${shortYear}`;
+      
       runMap.set(runId, {
         id: runId,
         name: runNames[runId] || run.run_meta?.name || 'Unnamed Run',
-        date: runId.split('T')[0],
+        date: usDate,
         scores: [],
         accuracy: [],
         completeness: [],
