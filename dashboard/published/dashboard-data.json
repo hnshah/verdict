@@ -1,9 +1,9 @@
 {
   "meta": {
-    "total_runs": 4,
-    "total_cases": 18,
-    "total_models": 11,
-    "last_updated": "2026-03-30"
+    "total_runs": 5,
+    "total_cases": 28,
+    "total_models": 15,
+    "last_updated": "2026-03-31"
   },
   "models": {
     "qwen7b": {
@@ -38,6 +38,18 @@
     },
     "sonnet": {
       "name": "sonnet"
+    },
+    "qwen-coder": {
+      "name": "qwen-coder"
+    },
+    "codellama": {
+      "name": "codellama"
+    },
+    "qwen": {
+      "name": "qwen"
+    },
+    "deepseek": {
+      "name": "deepseek"
     }
   },
   "cases": [
@@ -1258,6 +1270,866 @@
                 "accuracy": 7,
                 "completeness": 9,
                 "conciseness": 6
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-001",
+      "name": "code 001",
+      "suite": "coding",
+      "prompt": "Write a Python function that finds the two numbers in a list that sum to a target value. Return their indices. Assume exactly one solution exists.",
+      "runs": [
+        {
+          "run_id": "2026-03-30T22-22-13",
+          "run_meta": {
+            "run_id": "2026-03-30T22-22-13",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "codellama": {
+              "text": "[PYTHON]\ndef find_indices(my_list, target):\n    for i in range(len(my_list)):\n        for j in range(i+1, len(my_list)):\n            if my_list[i] + my_list[j] == target:\n                return [i, j]\n    return []\n[/PYTHON]\n[TESTS]\n# Test case 1:\nassert find_indices([1, 2, 3, 4, 5], 7) == [1, 3]\n# Test case 2:\nassert find_indices([1, 2, 3, 4, 5], 6) == [0, 2]\n# Test case 3:\nassert find_indices([1, 2, 3, 4, 5], 8) == [2, 4]\n[/TESTS]\n",
+              "latency_ms": 10937
+            },
+            "qwen-coder": {
+              "text": "```python\ndef two_sum(nums, target):\n    # Create a dictionary to store the numbers and their indices\n    num_dict = {}\n    # Iterate over the list of numbers\n    for i, num in enumerate(nums):\n        # Calculate the complement that would sum to the target\n        complement = target - num\n        # Check if the complement exists in the dictionary\n        if complement in num_dict:\n            # If it exists, return the indices of the complement and the current number\n            return [num_dict[complement], i]\n        # If not, add the current number and its index to the dictionary\n        num_dict[num] = i\n    # If no solution is found, return an empty list (though the problem guarantees one solution)\n    return []\n```\n\nIn this solution, we use a dictionary to store each number and its index as we iterate through the list. For each number, we calculate its complement (the number that, when added to the current number, equals the target). If this complement is already in the dictionary, it means we have found the two numbers that sum to the target, and we return their indices. If not, we add the current number and its index to the dictionary and continue. This approach ensures that we find the solution in a single pass through the list, making it efficient with a time complexity of O(n).",
+              "latency_ms": 14753
+            },
+            "qwen7b": {
+              "text": "Certainly! Below is a Python function that takes a list of integers and a target sum, then returns the indices of the two numbers that add up to the target. The function assumes that there is exactly one solution.\n\n```python\ndef two_sum(nums, target):\n    # Create a dictionary to store the index of each number\n    num_to_index = {}\n    \n    # Iterate through the list of numbers\n    for i, num in enumerate(nums):\n        # Calculate the complement of the current number\n        complement = target - num\n        \n        # Check if the complement exists in the dictionary\n        if complement in num_to_index:\n            # If it exists, return the current index and the index of the complement\n            return [num_to_index[complement], i]\n        \n        # Store the index of the current number\n        num_to_index[num] = i\n    \n    # If no solution is found, raise an error (though the problem statement guarantees a solution)\n    raise ValueError(\"No solution found\")\n\n# Example usage:\nnums = [2, 7, 11, 15]\ntarget = 9\nprint(two_sum(nums, target))  # Output: [0, 1]\n```\n\n### Explanation:\n1. **Dictionary for Lookup**: We use a dictionary `num_to_index` to store each number and its corresponding index as we iterate through the list.\n2. **Complement Calculation**: For each number, we calculate the complement by subtracting the current number from the target.\n3. **Check for Complement**: We check if the complement exists in the dictionary. If it does, we return the indices of the current number and the complement.\n4. **Store Current Number**: If the complement is not found, we store the current number and its index in the dictionary.\n\nThis approach ensures that we find the solution in a single pass through the list, making it efficient with a time complexity of O(n) and a space complexity of O(n).",
+              "latency_ms": 17376
+            },
+            "qwen": {
+              "text": "Certainly! Below is a Python function that takes a list of integers and a target sum, then returns the indices of the two numbers that add up to the target. The function assumes that there is exactly one solution.\n\n```python\ndef two_sum(nums, target):\n    # Create a dictionary to store the index of each number\n    num_to_index = {}\n    \n    # Iterate through the list of numbers\n    for i, num in enumerate(nums):\n        # Calculate the complement of the current number\n        complement = target - num\n        \n        # Check if the complement exists in the dictionary\n        if complement in num_to_index:\n            # If it exists, return the current index and the index of the complement\n            return [num_to_index[complement], i]\n        \n        # Store the index of the current number\n        num_to_index[num] = i\n    \n    # If no solution is found, raise an error (though the problem statement guarantees a solution)\n    raise ValueError(\"No solution found\")\n\n# Example usage:\nnums = [2, 7, 11, 15]\ntarget = 9\nprint(two_sum(nums, target))  # Output: [0, 1]\n```\n\n### Explanation:\n1. **Dictionary for Lookup**: We use a dictionary `num_to_index` to store each number and its corresponding index as we iterate through the list.\n2. **Complement Calculation**: For each number, we calculate the complement by subtracting the current number from the target.\n3. **Check for Complement**: We check if the complement exists in the dictionary. If it does, we return the indices of the current number and the complement.\n4. **Store Current Number**: If the complement is not found, we store the current number and its index in the dictionary.\n\nThis approach ensures that we find the solution in a single pass through the list, making it efficient with a time complexity of O(n) and a space complexity of O(n).",
+              "latency_ms": 12943
+            },
+            "deepseek": {
+              "text": "",
+              "latency_ms": 30112
+            }
+          },
+          "scores": {
+            "codellama": {
+              "total": 2,
+              "reasoning": "The provided solution does not meet the criteria. It uses a nested loop, resulting in an O(n^2) time complexity, which is not efficient for large lists. Additionally, it does not handle the case where the same element can't be used twice, as required.",
+              "dimensions": {
+                "accuracy": 2,
+                "completeness": 2,
+                "conciseness": 2
+              }
+            },
+            "qwen-coder": {
+              "total": 8,
+              "reasoning": "The solution is correct, addresses all criteria, and is concise.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 8
+              }
+            },
+            "qwen7b": {
+              "total": 7.8,
+              "reasoning": "The function is correct, addresses all criteria, and is concise but could be slightly more streamlined.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen": {
+              "total": 7.8,
+              "reasoning": "The function is correct, addresses all criteria, and is concise but could be slightly more streamlined.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "deepseek": {
+              "total": 0,
+              "reasoning": "no response",
+              "dimensions": {
+                "accuracy": 0,
+                "completeness": 0,
+                "conciseness": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-002",
+      "name": "code 002",
+      "suite": "coding",
+      "prompt": "Debug this JavaScript: function flatten(arr) { return arr.reduce((acc, val) => acc.concat(val), []); } — it only flattens one level deep. Fix it to flatten arrays of any depth.",
+      "runs": [
+        {
+          "run_id": "2026-03-30T22-22-13",
+          "run_meta": {
+            "run_id": "2026-03-30T22-22-13",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen-coder": {
+              "text": "To fix the `flatten` function so that it can flatten arrays of any depth, you can use a recursive approach. Here's how you can do it:\n\n```javascript\nfunction flatten(arr) {\n  return arr.reduce((acc, val) => {\n    if (Array.isArray(val)) {\n      return acc.concat(flatten(val));\n    } else {\n      return acc.concat(val);\n    }\n  }, []);\n}\n```\n\n### Explanation:\n- The `reduce` function is used to iterate over each element in the array.\n- For each element, it checks if the element is an array using `Array.isArray(val)`.\n  - If the element is an array, it recursively calls `flatten(val)` to flatten the nested array and then concatenates the result with the accumulator (`acc`).\n  - If the element is not an array, it simply concatenates the element with the accumulator.\n- The initial value of the accumulator is an empty array `[]`.\n\nThis approach ensures that the function can handle arrays of any depth, flattening them completely.",
+              "latency_ms": 7207
+            },
+            "codellama": {
+              "text": "\nThe issue with the current implementation is that it only flattens arrays of one level deep. To fix this, we can use a recursive approach to flatten arrays of any depth. Here's an example of how we can modify the function to achieve this:\n```\nfunction flatten(arr) {\n  return arr.reduce((acc, val) => {\n    if (Array.isArray(val)) {\n      return acc.concat(flatten(val));\n    } else {\n      return acc.concat(val);\n    }\n  }, []);\n}\n```\nIn this implementation, we use the `Array.isArray()` method to check if the current value is an array. If it is, we recursively call the `flatten()` function on that array and concatenate the result with the accumulator. If it's not an array, we simply concatenate the value with the accumulator.\n\nThis approach allows us to flatten arrays of any depth, as the `flatten()` function will recursively call itself on any nested arrays it encounters.\n\nHere's an example usage of the modified `flatten()` function:\n```\nconst arr = [1, [2, [3, 4], 5], 6];\nconst flattened = flatten(arr);\nconsole.log(flattened); // Output: [1, 2, 3, 4, 5, 6]\n```\nIn this example, the `flatten()` function is called on an array with a nested array of depth 2. The function will recursively flatten the nested array and return a flat array with all the elements.",
+              "latency_ms": 14321
+            },
+            "qwen7b": {
+              "text": "To flatten an array of any depth, you need to use a recursive approach. The current implementation only flattens one level deep because it simply concatenates each element with the accumulator array. To handle arrays of any depth, you need to check if an element is an array and then recursively flatten it.\n\nHere's the corrected function:\n\n```javascript\nfunction flatten(arr) {\n    return arr.reduce((acc, val) => {\n        if (Array.isArray(val)) {\n            // Recursively flatten the subarray\n            return acc.concat(flatten(val));\n        } else {\n            // Add non-array elements directly to the accumulator\n            acc.push(val);\n            return acc;\n        }\n    }, []);\n}\n\n// Example usage:\nconst nestedArray = [1, [2, [3, 4], 5], 6, [7, 8]];\nconsole.log(flatten(nestedArray)); // Output: [1, 2, 3, 4, 5, 6, 7, 8]\n```\n\n### Explanation:\n- **`Array.isArray(val)`**: This checks if the current value `val` is an array. If it is, the function calls itself recursively to flatten the subarray.\n- **`acc.concat(flatten(val))`**: This concatenates the flattened subarray to the accumulator array.\n- **`acc.push(val)`**: If `val` is not an array, it is directly pushed to the accumulator array.\n\nThis approach ensures that the function can handle arrays of any depth by recursively flattening nested arrays.",
+              "latency_ms": 17348
+            },
+            "qwen": {
+              "text": "To flatten an array of any depth, you need to use a recursive approach. The current implementation only flattens one level deep because it simply concatenates each element with the accumulator array. To handle arrays of any depth, you need to check if an element is an array and then recursively flatten it.\n\nHere's the corrected function:\n\n```javascript\nfunction flatten(arr) {\n    return arr.reduce((acc, val) => {\n        if (Array.isArray(val)) {\n            // Recursively flatten the subarray\n            return acc.concat(flatten(val));\n        } else {\n            // Add non-array elements directly to the accumulator\n            acc.push(val);\n            return acc;\n        }\n    }, []);\n}\n\n// Example usage:\nconst nestedArray = [1, [2, [3, 4], 5], 6, [7, 8]];\nconsole.log(flatten(nestedArray)); // Output: [1, 2, 3, 4, 5, 6, 7, 8]\n```\n\n### Explanation:\n- **`Array.isArray(val)`**: This checks if the current value `val` is an array. If it is, the function calls itself recursively to flatten the subarray.\n- **`acc.concat(flatten(val))`**: This concatenates the flattened subarray to the accumulator array.\n- **`acc.push(val)`**: If `val` is not an array, it is directly pushed to the accumulator array.\n\nThis approach ensures that the function can handle arrays of any depth by recursively flattening nested arrays.",
+              "latency_ms": 19552
+            },
+            "deepseek": {
+              "text": "",
+              "latency_ms": 31446
+            }
+          },
+          "scores": {
+            "qwen-coder": {
+              "total": 7.8,
+              "reasoning": "The response correctly implements a recursive approach to flatten arrays of any depth, addressing all criteria. The code is clear and concise, but could be slightly more concise by removing the unnecessary `else` block.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "codellama": {
+              "total": 7.8,
+              "reasoning": "The response correctly addresses the criteria and provides a clear, concise solution.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen7b": {
+              "total": 7.8,
+              "reasoning": "The response correctly addresses the criteria and provides a clear, concise solution.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen": {
+              "total": 7.8,
+              "reasoning": "The response correctly addresses the criteria and provides a clear, concise solution.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "deepseek": {
+              "total": 0,
+              "reasoning": "no response",
+              "dimensions": {
+                "accuracy": 0,
+                "completeness": 0,
+                "conciseness": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-003",
+      "name": "code 003",
+      "suite": "coding",
+      "prompt": "Write a SQL query that finds the top 3 customers by total order value from tables: orders(id, customer_id, amount) and customers(id, name). Include customer name and total.",
+      "runs": [
+        {
+          "run_id": "2026-03-30T22-22-13",
+          "run_meta": {
+            "run_id": "2026-03-30T22-22-13",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen-coder": {
+              "text": "To find the top 3 customers by total order value, you can use the following SQL query:\n\n```sql\nSELECT \n    c.id AS customer_id,\n    c.name AS customer_name,\n    SUM(o.amount) AS total_order_value\nFROM \n    orders o\nJOIN \n    customers c ON o.customer_id = c.id\nGROUP BY \n    c.id, c.name\nORDER BY \n    total_order_value DESC\nLIMIT 3;\n```\n\nThis query performs the following steps:\n\n1. **JOIN**: Combines the `orders` and `customers` tables based on the `customer_id` field.\n2. **GROUP BY**: Groups the results by `customer_id` and `customer_name` to aggregate the total order value for each customer.\n3. **SUM**: Calculates the total order value for each customer.\n4. **ORDER BY**: Sorts the results in descending order based on the total order value.\n5. **LIMIT**: Limits the output to the top 3 customers.\n\nThis will give you the names and total order values of the top 3 customers.",
+              "latency_ms": 8583
+            },
+            "codellama": {
+              "text": "\nHere is a SQL query that finds the top 3 customers by total order value from tables orders and customers:\n```\nSELECT c.name, SUM(o.amount) AS total\nFROM orders o\nJOIN customers c ON o.customer_id = c.id\nGROUP BY c.id\nORDER BY total DESC\nLIMIT 3;\n```\nThis query joins the orders and customers tables on the customer_id column, and then groups the results by customer ID. The SUM function is used to calculate the total amount for each customer. The results are then ordered by the total amount in descending order and limited to the top 3 customers.\n\nNote that this query assumes that the orders table has a customer_id column that references the id column in the customers table. If your tables have different column names, you will need to adjust the query accordingly.",
+              "latency_ms": 8961
+            },
+            "qwen7b": {
+              "text": "Certainly! To find the top 3 customers by total order value, you can use a SQL query that joins the `orders` and `customers` tables, groups the results by customer, sums the order amounts, and then orders the results by the total order value in descending order. Here's the SQL query:\n\n```sql\nSELECT \n    c.name,\n    SUM(o.amount) AS total_order_value\nFROM \n    orders o\nJOIN \n    customers c ON o.customer_id = c.id\nGROUP BY \n    c.name\nORDER BY \n    total_order_value DESC\nLIMIT 3;\n```\n\n### Explanation:\n- **`SELECT c.name, SUM(o.amount) AS total_order_value`**: This selects the customer name and the total order value for each customer.\n- **`FROM orders o JOIN customers c ON o.customer_id = c.id`**: This joins the `orders` table with the `customers` table on the `customer_id` field.\n- **`GROUP BY c.name`**: This groups the results by customer name.\n- **`ORDER BY total_order_value DESC`**: This orders the results by the total order value in descending order, so the customers with the highest total order value come first.\n- **`LIMIT 3`**: This limits the results to the top 3 customers by total order value.\n\nThis query will return the names of the top 3 customers along with their total order value.",
+              "latency_ms": 14092
+            },
+            "qwen": {
+              "text": "Certainly! To find the top 3 customers by total order value, you can use a SQL query that joins the `orders` and `customers` tables, groups the results by customer, sums the order amounts, and then orders the results by the total order value in descending order. Here's the SQL query:\n\n```sql\nSELECT \n    c.name,\n    SUM(o.amount) AS total_order_value\nFROM \n    orders o\nJOIN \n    customers c ON o.customer_id = c.id\nGROUP BY \n    c.name\nORDER BY \n    total_order_value DESC\nLIMIT 3;\n```\n\n### Explanation:\n- **`SELECT c.name, SUM(o.amount) AS total_order_value`**: This selects the customer name and the total order value for each customer.\n- **`FROM orders o JOIN customers c ON o.customer_id = c.id`**: This joins the `orders` table with the `customers` table on the `customer_id` field.\n- **`GROUP BY c.name`**: This groups the results by customer name.\n- **`ORDER BY total_order_value DESC`**: This orders the results by the total order value in descending order, so the customers with the highest total order value come first.\n- **`LIMIT 3`**: This limits the results to the top 3 customers by total order value.\n\nThis query will return the names of the top 3 customers along with their total order value.",
+              "latency_ms": 8892
+            },
+            "deepseek": {
+              "text": "To find the top 3 customers by their total order value, we can use a SQL query that joins the orders and customers tables, groups by customer, sums the amounts, and then selects the top 3 based on this total.\n\n**Answer:**\n\n```sql\nSELECT c.name AS customer_name, SUM(o.amount) AS total_amount\nFROM orders o\nJOIN customers c ON o.customer_id = c.id\nGROUP BY c.id\nORDER BY total_amount DESC\nLIMIT 3;\n```\n\n**Explanation:**\n\n1. **JOIN Operation:** We join the `orders` table with the `customers` table using the `customer_id` as the common identifier.\n2. **Grouping and Summing:** We group the joined results by `customer_id` and sum the `amount` values to get each customer's total order value.\n3. **Sorting:** We sort the results in descending order based on the total order value.\n4. **Limiting Results:** We select only the top 3 customers from the sorted list.\n\nThis query efficiently retrieves the desired information by leveraging SQL's grouping, ordering, and limiting capabilities.",
+              "latency_ms": 22727
+            }
+          },
+          "scores": {
+            "qwen-coder": {
+              "total": 3.8,
+              "reasoning": "The query is mostly correct but lacks the necessary column references for the GROUP BY clause and the ORDER BY clause.",
+              "dimensions": {
+                "accuracy": 4,
+                "completeness": 4,
+                "conciseness": 3
+              }
+            },
+            "codellama": {
+              "total": 8,
+              "reasoning": "The query is correct and addresses all criteria. It uses JOIN, GROUP BY, SUM, ORDER BY DESC, and LIMIT 3. The column references are correct. It returns the customer name and total order value.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 8
+              }
+            },
+            "qwen7b": {
+              "total": 7.8,
+              "reasoning": "The query is correct and addresses all criteria, but it could be slightly more concise by removing the unnecessary alias 'o' for the orders table.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen": {
+              "total": 7.8,
+              "reasoning": "The query is correct and addresses all criteria, but it could be slightly more concise by removing the unnecessary alias 'o' for the orders table.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "deepseek": {
+              "total": 7.8,
+              "reasoning": "The query is correct and addresses all criteria, but it could be slightly more concise by removing the unnecessary alias for the sum.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-004",
+      "name": "code 004",
+      "suite": "coding",
+      "prompt": "Implement a basic LRU (Least Recently Used) cache in Python with get(key) and put(key, value) methods. Capacity is set at init. Both operations must be O(1).",
+      "runs": [
+        {
+          "run_id": "2026-03-30T22-22-13",
+          "run_meta": {
+            "run_id": "2026-03-30T22-22-13",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "codellama": {
+              "text": "\nHere is an example of how you could implement a basic LRU cache in Python:\n```\nclass LRUCache:\n    def __init__(self, capacity):\n        self.capacity = capacity\n        self.cache = {}\n        self.order = []\n\n    def get(self, key):\n        if key not in self.cache:\n            return -1\n        else:\n            self.order.remove(key)\n            self.order.append(key)\n            return self.cache[key]\n\n    def put(self, key, value):\n        if key in self.cache:\n            self.order.remove(key)\n            self.order.append(key)\n            self.cache[key] = value\n        else:\n            if len(self.cache) >= self.capacity:\n                self.cache.popitem(last=False)\n            self.cache[key] = value\n            self.order.append(key)\n```\nThe `get` method returns the value associated with the given key, or -1 if the key is not in the cache. The `put` method adds the given key-value pair to the cache, and removes the least recently used item if the cache is full.\n\nThe `order` list is used to keep track of the order in which the items were accessed. When an item is accessed, it is moved to the end of the list. This allows the least recently used item to be easily identified and removed from the cache.\n\nThe `capacity` parameter is set at initialization and is used to determine the maximum number of items that can be stored in the cache.\n\nBoth the `get` and `put` methods have a time complexity of O(1), since they only involve accessing and modifying a single dictionary and a single list.",
+              "latency_ms": 20495
+            },
+            "qwen-coder": {
+              "text": "To implement a basic LRU (Least Recently Used) cache in Python with `get(key)` and `put(key, value)` methods, we can use a combination of a dictionary and an ordered list. The dictionary will provide O(1) access to the values, and the ordered list will help us maintain the order of usage to implement the LRU policy.\n\nHere's a step-by-step implementation:\n\n1. **Dictionary**: This will store the key-value pairs.\n2. **Ordered List**: This will store the keys in the order they were accessed. The most recently used key will be at the end of the list, and the least recently used key will be at the beginning.\n\nWe will use Python's `collections.OrderedDict` to simplify the implementation of the ordered list.\n\nHere's the complete implementation:\n\n```python\nfrom collections import OrderedDict\n\nclass LRUCache:\n    def __init__(self, capacity: int):\n        self.cache = OrderedDict()\n        self.capacity = capacity\n\n    def get(self, key: int) -> int:\n        if key not in self.cache:\n            return -1\n        else:\n            # Move the key to the end to show that it was recently used\n            self.cache.move_to_end(key)\n            return self.cache[key]\n\n    def put(self, key: int, value: int) -> None:\n        if key in self.cache:\n            # Move the key to the end to show that it was recently used\n            self.cache.move_to_end(key)\n        self.cache[key] = value\n        if len(self.cache) > self.capacity:\n            # Remove the first key (least recently used)\n            self.cache.popitem(last=False)\n\n# Example usage:\ncache = LRUCache(2)\ncache.put(1, 1)\ncache.put(2, 2)\nprint(cache.get(1))  # returns 1\ncache.put(3, 3)  # evicts key 2\nprint(cache.get(2))  # returns -1 (not found)\ncache.put(4, 4)  # evicts key 1\nprint(cache.get(1))  # returns -1 (not found)\nprint(cache.get(3))  # returns 3\nprint(cache.get(4))  # returns 4\n```\n\n### Explanation:\n\n1. **Initialization (`__init__` method)**:\n   - `self.cache`: An `OrderedDict` to store the key-value pairs.\n   - `self.capacity`: The maximum number of items the cache can hold.\n\n2. **Get Operation (`get` method)**:\n   - If the key is not in the cache, return `-1`.\n   - If the key is in the cache, move the key to the end of the `OrderedDict` to mark it as recently used and return its value.\n\n3. **Put Operation (`put` method)**:\n   - If the key is already in the cache, move it to the end of the `OrderedDict` to mark it as recently used.\n   - Update the value of the key in the cache.\n   - If the cache exceeds its capacity, remove the first key (the least recently used) from the `OrderedDict`.\n\nThis implementation ensures that both `get` and `put` operations are O(1) due to the properties of the `OrderedDict`.",
+              "latency_ms": 29892
+            },
+            "qwen7b": {
+              "text": "To implement a basic LRU (Least Recently Used) cache in Python with `get(key)` and `put(key, value)` methods, we can use a combination of a dictionary and a doubly linked list. The dictionary will provide O(1) access to the cache items, while the doubly linked list will help us maintain the order of usage and efficiently remove the least recently used items.\n\nHere's a Python implementation:\n\n```python\nclass Node:\n    def __init__(self, key, value):\n        self.key = key\n        self.value = value\n        self.prev = None\n        self.next = None\n\nclass LRUCache:\n    def __init__(self, capacity: int):\n        self.capacity = capacity\n        self.cache = {}  # Dictionary to store key and node\n        self.head = Node(0, 0)  # Dummy head node\n        self.tail = Node(0, 0)  # Dummy tail node\n        self.head.next = self.tail\n        self.tail.prev = self.head\n\n    def get(self, key: int) -> int:\n        if key in self.cache:\n            node = self.cache[key]\n            self._remove(node)\n            self._add(node)\n            return node.value\n        return -1\n\n    def put(self, key: int, value: int) -> None:\n        if key in self.cache:\n            self._remove(self.cache[key])\n        node = Node(key, value)\n        self.cache[key] = node\n        self._add(node)\n        if len(self.cache) > self.capacity:\n            node = self.head.next\n            self._remove(node)\n            del self.cache[node.key]\n\n    def _remove(self, node):\n        prev = node.prev\n        next = node.next\n        prev.next = next\n        next.prev = prev\n\n    def _add(self, node):\n        prev = self.tail.prev\n        prev.next = node\n        node.prev = prev\n        node.next = self.tail\n        self.tail.prev = node\n\n# Example usage:\ncache = LRUCache(2)\ncache.put(1, 1)\ncache.put(2, 2)\nprint(cache.get(1))  # returns 1\ncache.put(3, 3)  # evicts key 2\nprint(cache.get(2))  # returns -1 (not found)\ncache.put(4, 4)  # evicts key 1\nprint(cache.get(1))  # returns -1 (not found)\nprint(cache.get(3))  # returns 3\nprint(cache.get(4))  # returns 4\n```\n\n### Explanation:\n\n1. **Node Class**: Represents a node in the doubly linked list. Each node contains a key, value, and pointers to the previous and next nodes.\n\n2. **LRUCache Class**:\n   - **Initialization**: Sets up the cache with a given capacity, a dictionary to store key-node pairs, and a doubly linked list with dummy head and tail nodes.\n   - **get(key)**: Retrieves the value of the given key. If the key exists, it moves the node to the end of the list (most recently used) and returns the value. If the key does not exist, it returns -1.\n   - **put(key, value)**: Inserts a key-value pair into the cache. If the key already exists, it updates the value and moves the node to the end of the list. If the cache is at capacity, it removes the least recently used item (the head's next node) before adding the new item.\n   - **_remove(node)**: Removes a node from the doubly linked list.\n   - **_add(node)**: Adds a node to the end of the doubly linked list.\n\nThis implementation ensures that both `get` and `put` operations are O(1) by leveraging the dictionary for quick lookups and the doubly linked list for maintaining the order of usage.",
+              "latency_ms": 37041
+            },
+            "qwen": {
+              "text": "To implement a basic LRU (Least Recently Used) cache in Python with `get(key)` and `put(key, value)` methods, we can use a combination of a dictionary and a doubly linked list. The dictionary will provide O(1) access to the cache items, while the doubly linked list will help us maintain the order of usage and efficiently remove the least recently used items.\n\nHere's a Python implementation:\n\n```python\nclass Node:\n    def __init__(self, key, value):\n        self.key = key\n        self.value = value\n        self.prev = None\n        self.next = None\n\nclass LRUCache:\n    def __init__(self, capacity: int):\n        self.capacity = capacity\n        self.cache = {}  # Dictionary to store key and node\n        self.head = Node(0, 0)  # Dummy head node\n        self.tail = Node(0, 0)  # Dummy tail node\n        self.head.next = self.tail\n        self.tail.prev = self.head\n\n    def get(self, key: int) -> int:\n        if key in self.cache:\n            node = self.cache[key]\n            self._remove(node)\n            self._add(node)\n            return node.value\n        return -1\n\n    def put(self, key: int, value: int) -> None:\n        if key in self.cache:\n            self._remove(self.cache[key])\n        node = Node(key, value)\n        self.cache[key] = node\n        self._add(node)\n        if len(self.cache) > self.capacity:\n            node = self.head.next\n            self._remove(node)\n            del self.cache[node.key]\n\n    def _remove(self, node):\n        prev = node.prev\n        next = node.next\n        prev.next = next\n        next.prev = prev\n\n    def _add(self, node):\n        prev = self.tail.prev\n        prev.next = node\n        node.prev = prev\n        node.next = self.tail\n        self.tail.prev = node\n\n# Example usage:\ncache = LRUCache(2)\ncache.put(1, 1)\ncache.put(2, 2)\nprint(cache.get(1))  # returns 1\ncache.put(3, 3)  # evicts key 2\nprint(cache.get(2))  # returns -1 (not found)\ncache.put(4, 4)  # evicts key 1\nprint(cache.get(1))  # returns -1 (not found)\nprint(cache.get(3))  # returns 3\nprint(cache.get(4))  # returns 4\n```\n\n### Explanation:\n\n1. **Node Class**: Represents a node in the doubly linked list. Each node contains a key, value, and pointers to the previous and next nodes.\n\n2. **LRUCache Class**:\n   - **Initialization**: Sets up the cache with a given capacity, a dictionary to store key-node pairs, and a doubly linked list with dummy head and tail nodes.\n   - **get(key)**: Retrieves the value of the given key. If the key exists, it moves the node to the end of the list (most recently used) and returns the value. If the key does not exist, it returns -1.\n   - **put(key, value)**: Inserts a key-value pair into the cache. If the key already exists, it updates the value and moves the node to the end of the list. If the cache is at capacity, it removes the least recently used item (the head's next node) before adding the new item.\n   - **_remove(node)**: Removes a node from the doubly linked list.\n   - **_add(node)**: Adds a node to the end of the doubly linked list.\n\nThis implementation ensures that both `get` and `put` operations are O(1) by leveraging the dictionary for quick lookups and the doubly linked list for maintaining the order of usage.",
+              "latency_ms": 28906
+            },
+            "deepseek": {
+              "text": "",
+              "latency_ms": 36911
+            }
+          },
+          "scores": {
+            "codellama": {
+              "total": 2.2,
+              "reasoning": "The implementation does not meet the O(1) time complexity requirement for both operations. The use of a list to track order is inefficient for removing the least recently used item. Additionally, the put method does not correctly handle the case where the key already exists in the cache.",
+              "dimensions": {
+                "accuracy": 3,
+                "completeness": 2,
+                "conciseness": 1
+              }
+            },
+            "qwen-coder": {
+              "total": 7.8,
+              "reasoning": "The response is clear, relevant, and concise, but could benefit from a more detailed explanation of the `OrderedDict` methods used.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen7b": {
+              "total": 7.8,
+              "reasoning": "The response provides a correct and complete implementation of an LRU cache in Python, using a combination of a dictionary and a doubly linked list. The implementation is concise and follows the requirements.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen": {
+              "total": 7.8,
+              "reasoning": "The response provides a correct and complete implementation of an LRU cache in Python, using a combination of a dictionary and a doubly linked list. The implementation is concise and follows the requirements.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "deepseek": {
+              "total": 0,
+              "reasoning": "no response",
+              "dimensions": {
+                "accuracy": 0,
+                "completeness": 0,
+                "conciseness": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-005",
+      "name": "code 005",
+      "suite": "coding",
+      "prompt": "What's wrong with this Go code? func main() { var wg sync.WaitGroup; for i := 0; i < 5; i++ { wg.Add(1); go func() { defer wg.Done(); fmt.Println(i) }() }; wg.Wait() }",
+      "runs": [
+        {
+          "run_id": "2026-03-30T22-22-13",
+          "run_meta": {
+            "run_id": "2026-03-30T22-22-13",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "codellama": {
+              "text": "\nThe code is not correct because it is using the `i` variable in the closure, which is a copy of the `i` variable in the outer scope. This means that the value of `i` in the closure is always 5, because the loop has already finished and `i` has been set to 5.\n\nTo fix this, you can use the `range` keyword to iterate over the values in the `wg` slice, and use the `i` variable in the closure to print the current value. Here's the corrected code:\n```\nfunc main() {\n    var wg sync.WaitGroup\n    for i := 0; i < 5; i++ {\n        wg.Add(1)\n        go func(i int) {\n            defer wg.Done()\n            fmt.Println(i)\n        }(i)\n    }\n    wg.Wait()\n}\n```\nThis code will print the values 0 through 4, as expected.",
+              "latency_ms": 11761
+            },
+            "qwen-coder": {
+              "text": "The Go code you provided has a common issue related to the use of a closure within a loop. The problem arises because the closure captures the loop variable `i` by reference, not by value. As a result, when the goroutines are executed, they all print the value of `i` at the time the loop completes, which is 5.\n\nHere's a breakdown of the issue:\n\n1. **Loop Variable Capture**: The loop variable `i` is captured by reference in the closure. This means that all goroutines will see the same `i`, which is the final value of the loop variable after the loop completes.\n\n2. **Goroutine Execution**: When the goroutines are executed, they print the value of `i` at the time the loop completes, which is 5.\n\nTo fix this issue, you need to capture the loop variable by value. You can do this by creating a new variable inside the loop and passing it to the goroutine. Here's the corrected code:\n\n```go\npackage main\n\nimport (\n\t\"fmt\"\n\t\"sync\"\n)\n\nfunc main() {\n\tvar wg sync.WaitGroup\n\tfor i := 0; i < 5; i++ {\n\t\twg.Add(1)\n\t\tgo func(i int) { // Capture i by value\n\t\t\tdefer wg.Done()\n\t\t\tfmt.Println(i)\n\t\t}(i) // Pass the current value of i to the closure\n\t}\n\twg.Wait()\n}\n```\n\nIn this corrected version, each goroutine captures its own copy of `i` by value, so they will print the correct values from 0 to 4.",
+              "latency_ms": 13305
+            },
+            "qwen7b": {
+              "text": "The issue with the provided Go code is related to the use of the `i` variable in the `fmt.Println(i)` statement. By the time the goroutines run, the loop has already completed, and `i` has the final value of 5. Therefore, all goroutines will print `5`.\n\nTo fix this, you can use a closure to capture the current value of `i` in each iteration of the loop. Here's the corrected code:\n\n```go\npackage main\n\nimport (\n\t\"fmt\"\n\t\"sync\"\n)\n\nfunc main() {\n\tvar wg sync.WaitGroup\n\tfor i := 0; i < 5; i++ {\n\t\twg.Add(1)\n\t\tgo func(i int) { // Use a closure to capture the current value of i\n\t\t\tdefer wg.Done()\n\t\t\tfmt.Println(i)\n\t\t}(i) // Pass the current value of i to the closure\n\t}\n\twg.Wait()\n}\n```\n\nThis code will correctly print the numbers 0 through 4, as each goroutine will have its own captured value of `i`.",
+              "latency_ms": 15228
+            },
+            "qwen": {
+              "text": "The issue with the provided Go code is related to the use of the `i` variable in the `fmt.Println(i)` statement. By the time the goroutines run, the loop has already completed, and `i` has the final value of 5. Therefore, all goroutines will print `5`.\n\nTo fix this, you can use a closure to capture the current value of `i` in each iteration of the loop. Here's the corrected code:\n\n```go\npackage main\n\nimport (\n\t\"fmt\"\n\t\"sync\"\n)\n\nfunc main() {\n\tvar wg sync.WaitGroup\n\tfor i := 0; i < 5; i++ {\n\t\twg.Add(1)\n\t\tgo func(i int) { // Use a closure to capture the current value of i\n\t\t\tdefer wg.Done()\n\t\t\tfmt.Println(i)\n\t\t}(i) // Pass the current value of i to the closure\n\t}\n\twg.Wait()\n}\n```\n\nThis code will correctly print the numbers 0 through 4, as each goroutine will have its own captured value of `i`.",
+              "latency_ms": 6059
+            },
+            "deepseek": {
+              "text": "The issue in the provided Go code is that the channel is added to the wait group before it is closed. This causes an error when the wait group tries to remove the channel because the channel is still open. The fix is to ensure the channel is closed before it is added to the wait group.\n\n**Step-by-Step Explanation:**\n\n1. **Identify the Problem:**\n   - The code adds a channel to the wait group before closing it.\n   - The `Remove()` method of the wait group requires the channel to be closed before removal.\n   - This results in an error when trying to remove an open channel.\n\n2. **Understand the Solution:**\n   - Move the `defer wg.Done()` call before adding the channel to the wait group.\n   - This ensures the channel is closed before it's added to the wait group, allowing the `Remove()` method to function correctly.\n\n3. **Correct the Code:**\n   - Adjust the order of operations so that `defer wg.Done()` is executed before `wg.Add(c)`.\n\n**Corrected Code:**\n\n```go\nfunc main() {\n    var wg sync.WaitGroup\n    for i := 0; i < 5; i++ {\n        defer wg.Done()                 // Close the channel before adding to wait group\n        wg.Add(c)                      // Now the channel is closed\n        go func() {\n            fmt.Println(i)\n        }()\n    }\n    wg.Wait()\n}\n```\n\nThis corrected code ensures that each channel is properly closed before being added to the wait group, preventing any errors during the removal process.",
+              "latency_ms": 25411
+            }
+          },
+          "scores": {
+            "codellama": {
+              "total": 7.8,
+              "reasoning": "The response correctly identifies the closure variable capture bug and provides a fix. However, it does not fully address the evaluation criteria, which also includes identifying the issue with the `sync.WaitGroup` usage and suggesting a more idiomatic way to use it with goroutines.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen-coder": {
+              "total": 7.8,
+              "reasoning": "The response accurately identifies the issue and provides a correct fix, addressing all criteria. It is concise but could be slightly more succinct.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen7b": {
+              "total": 7.8,
+              "reasoning": "The response correctly identifies the issue and provides a fix, but it could be more concise and could include a brief explanation of why the closure is necessary.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen": {
+              "total": 7.8,
+              "reasoning": "The response correctly identifies the issue and provides a fix, but it could be more concise and could include a brief explanation of why the closure is necessary.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "deepseek": {
+              "total": 1,
+              "reasoning": "The response does not address the actual issue in the Go code, which is the closure variable capture bug. Instead, it discusses a different issue related to channel management in a wait group.",
+              "dimensions": {
+                "accuracy": 1,
+                "completeness": 1,
+                "conciseness": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-006",
+      "name": "code 006",
+      "suite": "coding",
+      "prompt": "Write a TypeScript generic function `groupBy<T>(arr: T[], key: keyof T): Record<string, T[]>` that groups an array of objects by a given key.",
+      "runs": [
+        {
+          "run_id": "2026-03-30T22-22-13",
+          "run_meta": {
+            "run_id": "2026-03-30T22-22-13",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen-coder": {
+              "text": "```typescript\nfunction groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {\n  return arr.reduce((acc, item) => {\n    const groupKey = item[key];\n    if (!acc[groupKey]) {\n      acc[groupKey] = [];\n    }\n    acc[groupKey].push(item);\n    return acc;\n  }, {} as Record<string, T[]>);\n}\n```\n\n**Explanation**:\nThe `groupBy` function takes an array of objects `arr` and a key `key` as arguments. It returns an object where the keys are the unique values of the specified key in the array, and the values are arrays of objects that have that key value.\n\n- The function uses the `reduce` method to iterate over each item in the array.\n- For each item, it extracts the value of the specified key.\n- If the accumulated object (`acc`) does not have a property with the value of the key, it initializes it as an empty array.\n- The item is then pushed into the array corresponding to its key in the accumulated object.\n- Finally, the accumulated object is returned, which now contains the grouped items.\n\nThis function is useful for organizing data into categories based on a common attribute, making it easier to access and manipulate grouped data.",
+              "latency_ms": 9585
+            },
+            "codellama": {
+              "text": "\nHere is an example of how you can implement a generic function `groupBy<T>(arr: T[], key: keyof T): Record<string, T[]>` in TypeScript:\n```\nfunction groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {\n  return arr.reduce((acc, cur) => {\n    const groupKey = cur[key];\n    if (!acc[groupKey]) {\n      acc[groupKey] = [];\n    }\n    acc[groupKey].push(cur);\n    return acc;\n  }, {});\n}\n```\nThis function takes two parameters: `arr` is an array of objects, and `key` is a key of the objects in the array. It returns a record of arrays, where each key in the record is a unique value of the `key` property in the input array, and the corresponding value is an array of objects that have that value for the `key` property.\n\nFor example, if you have an array of objects like this:\n```\nconst arr = [\n  { id: 1, name: 'John', age: 25 },\n  { id: 2, name: 'Alice', age: 30 },\n  { id: 3, name: 'Bob', age: 30 },\n  { id: 4, name: 'Charlie', age: 20 }\n];\n```\nYou can group the objects by the `age` property like this:\n```\nconst grouped = groupBy(arr, 'age');\n```\nThe `grouped` variable will contain a record of arrays, where each key is a unique value of the `age` property in the input array, and the corresponding value is an array of objects that have that value for the `age` property. For example:\n```\n{\n  25: [{ id: 1, name: 'John', age: 25 }],\n  30: [{ id: 2, name: 'Alice', age: 30 }, { id: 3, name: 'Bob', age: 30 }],\n  20: [{ id: 4, name: 'Charlie', age: 20 }]\n}\n```\nYou can then access the arrays of objects for each age group like this:\n```\nconsole.log(grouped[25]); // Output: [{ id: 1, name: 'John', age: 25 }]\nconsole.log(grouped[30]); // Output: [{ id: 2, name: 'Alice', age: 30 }, { id: 3, name: 'Bob', age: 30 }]\nconsole.log(grouped[20]); // Output: [{ id: 4, name: 'Charlie', age: 20 }]\n```\nNote that the `keyof T` type is used to specify that the `key` parameter should be a key of the `T` type. This allows the function to work with any type of object, as long as the `key` parameter is a valid key for that type.",
+              "latency_ms": 25653
+            },
+            "qwen7b": {
+              "text": "Certainly! Below is a TypeScript generic function `groupBy` that groups an array of objects by a given key. The function uses the `keyof` type to ensure that the key provided is valid for the objects in the array.\n\n```typescript\nfunction groupBy<T, K extends keyof T>(arr: T[], key: K): Record<string, T[]> {\n    const grouped: Record<string, T[]> = {};\n\n    arr.forEach(item => {\n        const keyValue = item[key];\n        if (!grouped[keyValue]) {\n            grouped[keyValue] = [];\n        }\n        grouped[keyValue].push(item);\n    });\n\n    return grouped;\n}\n\n// Example usage:\ninterface Person {\n    name: string;\n    age: number;\n}\n\nconst people: Person[] = [\n    { name: \"Alice\", age: 25 },\n    { name: \"Bob\", age: 30 },\n    { name: \"Charlie\", age: 25 },\n    { name: \"David\", age: 30 }\n];\n\nconst groupedPeople = groupBy(people, \"age\");\n\nconsole.log(groupedPeople);\n// Output:\n// {\n//     \"25\": [{ name: \"Alice\", age: 25 }, { name: \"Charlie\", age: 25 }],\n//     \"30\": [{ name: \"Bob\", age: 30 }, { name: \"David\", age: 30 }]\n// }\n```\n\n### Explanation:\n- **Generic Parameters**:\n  - `T`: The type of the objects in the array.\n  - `K extends keyof T`: The key by which the objects are grouped. This ensures that the key is a valid property of the objects in the array.\n\n- **Record<string, T[]>**: The return type is a record where the keys are strings (the values of the key property) and the values are arrays of objects.\n\n- **grouped**: An object that will hold the grouped data. The keys are the values of the specified key, and the values are arrays of objects that share the same key value.\n\n- **forEach**: Iterates over each item in the array, extracts the value of the specified key, and groups the items accordingly.\n\nThis function can be used with any array of objects and any valid key, as long as the key is a property of the objects in the array.",
+              "latency_ms": 26598
+            },
+            "qwen": {
+              "text": "Certainly! Below is a TypeScript generic function `groupBy` that groups an array of objects by a given key. The function uses the `keyof` type to ensure that the key provided is valid for the objects in the array.\n\n```typescript\nfunction groupBy<T, K extends keyof T>(arr: T[], key: K): Record<string, T[]> {\n    const grouped: Record<string, T[]> = {};\n\n    arr.forEach(item => {\n        const keyValue = item[key];\n        if (!grouped[keyValue]) {\n            grouped[keyValue] = [];\n        }\n        grouped[keyValue].push(item);\n    });\n\n    return grouped;\n}\n\n// Example usage:\ninterface Person {\n    name: string;\n    age: number;\n}\n\nconst people: Person[] = [\n    { name: \"Alice\", age: 25 },\n    { name: \"Bob\", age: 30 },\n    { name: \"Charlie\", age: 25 },\n    { name: \"David\", age: 30 }\n];\n\nconst groupedPeople = groupBy(people, \"age\");\n\nconsole.log(groupedPeople);\n// Output:\n// {\n//     \"25\": [{ name: \"Alice\", age: 25 }, { name: \"Charlie\", age: 25 }],\n//     \"30\": [{ name: \"Bob\", age: 30 }, { name: \"David\", age: 30 }]\n// }\n```\n\n### Explanation:\n- **Generic Parameters**:\n  - `T`: The type of the objects in the array.\n  - `K extends keyof T`: The key by which the objects are grouped. This ensures that the key is a valid property of the objects in the array.\n\n- **Record<string, T[]>**: The return type is a record where the keys are strings (the values of the key property) and the values are arrays of objects.\n\n- **grouped**: An object that will hold the grouped data. The keys are the values of the specified key, and the values are arrays of objects that share the same key value.\n\n- **forEach**: Iterates over each item in the array, extracts the value of the specified key, and groups the items accordingly.\n\nThis function can be used with any array of objects and any valid key, as long as the key is a property of the objects in the array.",
+              "latency_ms": 16495
+            },
+            "deepseek": {
+              "text": "To solve this problem, we need to create a TypeScript function that groups an array of objects by a specified key. The function will return a record where each key is a string representing the grouping key, and the value is an array of objects that share that key.\n\n### Approach\n1. **Function Signature**: The function `groupBy` takes two parameters: an array of objects `arr` and a string `key` which specifies the property to group by. The function returns a record of type `Record<string, T[]>`, where `T` is the type of the objects in the input array.\n2. **Initialization**: We start by initializing an empty object `result` of type `Record<string, T[]>` to store the grouped data.\n3. **Iteration**: We loop through each element in the input array `arr`.\n4. **Key Extraction**: For each element, we extract the value of the specified key.\n5. **Grouping**: We check if the extracted key exists in the `result` object. If it does, we add the current element to the corresponding array using the spread operator. If it does not, we create a new array with the current element.\n6. **Return Result**: After processing all elements, we return the `result` object containing the grouped data.\n\n### Solution Code\n\n```typescript\nfunction groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {\n  const result: Record<string, T[]> = {};\n  for (const element of arr) {\n    const keyValue = element[key];\n    result[keyValue] = result[keyValue].spread(element);\n  }\n  return result;\n}\n```\n\n### Explanation\n- **Function Parameters**: The function `groupBy` takes an array of objects `arr` and a key `key` which is a string representing the property to group by.\n- **Result Initialization**: An empty object `result` is initialized to store the grouped data.\n- **Loop Through Array**: Each element in the array is processed in a loop.\n- **Extract Key Value**: For each element, the value of the specified key is extracted.\n- **Update Result**: The extracted key is used to update the `result` object. If the key already exists, the current element is added to the corresponding array using the spread operator, which creates a new array each time.\n- **Return**: The `result` object, which now contains the grouped data, is returned.\n\nThis approach ensures that the function efficiently groups the array elements by the specified key and handles each element in linear time, making it suitable for large datasets.",
+              "latency_ms": 31131
+            }
+          },
+          "scores": {
+            "qwen-coder": {
+              "total": 7.8,
+              "reasoning": "The function correctly implements the groupBy functionality with TypeScript generics and the keyof constraint. It handles missing/undefined keys gracefully by initializing the array if the key is not present. The implementation is concise and well-scoped.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "codellama": {
+              "total": 8,
+              "reasoning": "The response is correct, addresses all criteria, and is appropriately scoped.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 8
+              }
+            },
+            "qwen7b": {
+              "total": 7.8,
+              "reasoning": "The function is correct, addresses all criteria, and is concise but could be slightly more streamlined.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen": {
+              "total": 7.8,
+              "reasoning": "The function is correct, addresses all criteria, and is concise but could be slightly more streamlined.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "deepseek": {
+              "total": 2.2,
+              "reasoning": "The response does not correctly implement the groupBy function. It uses an incorrect method (spread) and does not handle missing/undefined keys gracefully.",
+              "dimensions": {
+                "accuracy": 3,
+                "completeness": 2,
+                "conciseness": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-007",
+      "name": "code 007",
+      "suite": "coding",
+      "prompt": "Given a binary tree, write a function to check if it's a valid BST (Binary Search Tree). Don't just compare each node to its parent — consider the full range constraint.",
+      "runs": [
+        {
+          "run_id": "2026-03-30T22-22-13",
+          "run_meta": {
+            "run_id": "2026-03-30T22-22-13",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen-coder": {
+              "text": "To check if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node, all nodes in its left subtree are less than the node, and all nodes in its right subtree are greater than the node. This constraint must hold for every node in the tree.\n\nHere's a Python function to check if a binary tree is a valid BST:\n\n```python\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef is_valid_bst(root):\n    def validate(node, low=float('-inf'), high=float('inf')):\n        # An empty tree is a valid BST\n        if not node:\n            return True\n        \n        # The current node's value must be between low and high\n        if node.val <= low or node.val >= high:\n            return False\n        \n        # Recursively validate the left and right subtrees\n        return (validate(node.left, low, node.val) and\n                validate(node.right, node.val, high))\n    \n    # Start the validation with the entire range of valid values\n    return validate(root)\n\n# Example usage:\n# Constructing a valid BST:\n#       2\n#      / \\\n#     1   3\nroot = TreeNode(2)\nroot.left = TreeNode(1)\nroot.right = TreeNode(3)\n\n# Check if the tree is a valid BST\nprint(is_valid_bst(root))  # Output: True\n\n# Constructing an invalid BST:\n#       2\n#      / \\\n#     3   1\nroot = TreeNode(2)\nroot.left = TreeNode(3)\nroot.right = TreeNode(1)\n\n# Check if the tree is a valid BST\nprint(is_valid_bst(root))  # Output: False\n```\n\n### Explanation:\n1. **TreeNode Class**: This class defines the structure of a node in the binary tree.\n2. **is_valid_bst Function**: This function checks if the binary tree is a valid BST.\n   - **validate Helper Function**: This is a recursive function that takes a node and a range (`low` and `high`) within which the node's value must lie.\n     - If the node is `None`, it returns `True` because an empty tree is a valid BST.\n     - If the node's value is not within the valid range, it returns `False`.\n     - It recursively checks the left and right subtrees with updated ranges.\n3. **Example Usage**: The example constructs two binary trees, one valid and one invalid, and checks if they are valid BSTs.\n\nThis approach ensures that the BST property is checked for every node in the tree, considering the full range constraint.",
+              "latency_ms": 28350
+            },
+            "codellama": {
+              "text": "\nA valid BST is defined as follows:\n\n* The left subtree of a node contains only nodes with keys less than the node's key.\n* The right subtree of a node contains only nodes with keys greater than the node's key.\n* Both the left and right subtrees must also be binary search trees.\n\nHere's an example of a valid BST:\n```\n      4\n     / \\\n    2   6\n   / \\   \\\n  1   3   7\n```\nAnd here's an example of an invalid BST:\n```\n      4\n     / \\\n    2   8\n   / \\   \\\n  1   3   7\n```\nIn this example, the node with the key 8 is not less than the node with the key 6, which violates the constraint.\n\nTo check if a binary tree is a valid BST, we can use a recursive approach. We can define a function that takes a node and its parent node as arguments, and returns a boolean indicating whether the node is a valid BST.\n\nHere's the pseudocode for the function:\n```\nfunction isValidBST(node, parent):\n  if node is None:\n    return True\n\n  # Check if the node's key is less than the parent's key\n  if node.key < parent.key:\n    return False\n\n  # Check if the left subtree is a valid BST\n  if node.left is not None and node.left.key >= parent.key:\n    return False\n\n  # Check if the right subtree is a valid BST\n  if node.right is not None and node.right.key <= parent.key:\n    return False\n\n  # Recursively check the left and right subtrees\n  return isValidBST(node.left, node) and isValidBST(node.right, node)\n```\nIn this function, we first check if the node is None. If it is, we return True, since there is no need to check the subtrees.\n\nNext, we check if the node's key is less than the parent's key. If it is not, we return False, since the node's key is not less than the parent's key.\n\nWe then check if the left subtree is a valid BST. If it is not, we return False, since the left subtree is not a valid BST.\n\nWe then check if the right subtree is a valid BST. If it is not, we return False, since the right subtree is not a valid BST.\n\nFinally, we recursively check the left and right subtrees. If either of them is not a valid BST, we return False. Otherwise, we return True.\n\nHere's an example of how to use this function:\n```\nroot = Node(4)\nroot.left = Node(2)\nroot.right = Node(6)\nroot.left.left = Node(1)\nroot.left.right = Node(3)\nroot.right.left = Node(7)\n\nprint(isValidBST(root, None))  # Output: True\n```\nIn this example, the root node has a key of 4, and its left subtree has a key of 2, and its right subtree has a key of 6. The left subtree's left subtree has a key of 1, and its right subtree has a key of 3. The right subtree's left subtree has a key of 7.\n\nThe function returns True, since the tree is a valid BST.",
+              "latency_ms": 36023
+            },
+            "qwen7b": {
+              "text": "To check if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node, all nodes in its left subtree are smaller and all nodes in its right subtree are larger. This means that the value of each node must be within a certain range, which is defined by the values of its parent node.\n\nHere's a Python function that checks if a binary tree is a valid BST using a recursive approach. The function will take a node and a tuple representing the range of valid values for that node. If the node is `None`, it is considered valid. Otherwise, the node's value must be within the given range, and the function will recursively check the left and right subtrees with updated ranges.\n\n```python\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef isValidBST(root):\n    def helper(node, lower=float('-inf'), upper=float('inf')):\n        if not node:\n            return True\n        \n        val = node.val\n        if val <= lower or val >= upper:\n            return False\n        \n        if not helper(node.right, val, upper):\n            return False\n        if not helper(node.left, lower, val):\n            return False\n        \n        return True\n    \n    return helper(root)\n\n# Example usage:\n# Constructing a simple BST\n#       2\n#      / \\\n#     1   3\nroot = TreeNode(2)\nroot.left = TreeNode(1)\nroot.right = TreeNode(3)\n\n# Check if the constructed tree is a valid BST\nprint(isValidBST(root))  # Output: True\n\n# Constructing an invalid BST\n#       5\n#      / \\\n#     1   4\n#        / \\\n#       3   6\ninvalid_root = TreeNode(5)\ninvalid_root.left = TreeNode(1)\ninvalid_root.right = TreeNode(4, TreeNode(3), TreeNode(6))\n\n# Check if the constructed tree is a valid BST\nprint(isValidBST(invalid_root))  # Output: False\n```\n\n### Explanation:\n1. **TreeNode Class**: This class defines the structure of a node in the binary tree. Each node has a value (`val`), a left child (`left`), and a right child (`right`).\n\n2. **isValidBST Function**: This function checks if the given binary tree is a valid BST. It uses a helper function to perform the actual validation.\n\n3. **Helper Function**: This is a recursive function that checks if a node is within the valid range. It takes three parameters:\n   - `node`: The current node being checked.\n   - `lower`: The lower bound of the valid range for the current node.\n   - `upper`: The upper bound of the valid range for the current node.\n\n4. **Base Case**: If the node is `None`, it returns `True` because an empty subtree is a valid BST.\n\n5. **Range Check**: The node's value must be greater than the lower bound and less than the upper bound.\n\n6. **Recursive Calls**: The function recursively checks the left and right subtrees with updated ranges:\n   - For the right subtree, the lower bound remains the same, but the upper bound is updated to the current node's value.\n   - For the left subtree, the upper bound remains the same, but the lower bound is updated to the current node's value.\n\n7. **Return Value**: The function returns `True` if all nodes are within their valid ranges, otherwise `False`.\n\nThis approach ensures that the entire tree is checked for the BST property, not just comparing each node to its parent.",
+              "latency_ms": 40383
+            },
+            "qwen": {
+              "text": "To check if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node, all nodes in its left subtree are smaller and all nodes in its right subtree are larger. This means that the value of each node must be within a certain range, which is defined by the values of its parent node.\n\nHere's a Python function that checks if a binary tree is a valid BST using a recursive approach. The function will take a node and a tuple representing the range of valid values for that node. If the node is `None`, it is considered valid. Otherwise, the node's value must be within the given range, and the function will recursively check the left and right subtrees with updated ranges.\n\n```python\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef isValidBST(root):\n    def helper(node, lower=float('-inf'), upper=float('inf')):\n        if not node:\n            return True\n        \n        val = node.val\n        if val <= lower or val >= upper:\n            return False\n        \n        if not helper(node.right, val, upper):\n            return False\n        if not helper(node.left, lower, val):\n            return False\n        \n        return True\n    \n    return helper(root)\n\n# Example usage:\n# Constructing a simple BST\n#       2\n#      / \\\n#     1   3\nroot = TreeNode(2)\nroot.left = TreeNode(1)\nroot.right = TreeNode(3)\n\n# Check if the constructed tree is a valid BST\nprint(isValidBST(root))  # Output: True\n\n# Constructing an invalid BST\n#       5\n#      / \\\n#     1   4\n#        / \\\n#       3   6\ninvalid_root = TreeNode(5)\ninvalid_root.left = TreeNode(1)\ninvalid_root.right = TreeNode(4, TreeNode(3), TreeNode(6))\n\n# Check if the constructed tree is a valid BST\nprint(isValidBST(invalid_root))  # Output: False\n```\n\n### Explanation:\n1. **TreeNode Class**: This class defines the structure of a node in the binary tree. Each node has a value (`val`), a left child (`left`), and a right child (`right`).\n\n2. **isValidBST Function**: This function checks if the given binary tree is a valid BST. It uses a helper function to perform the actual validation.\n\n3. **Helper Function**: This is a recursive function that checks if a node is within the valid range. It takes three parameters:\n   - `node`: The current node being checked.\n   - `lower`: The lower bound of the valid range for the current node.\n   - `upper`: The upper bound of the valid range for the current node.\n\n4. **Base Case**: If the node is `None`, it returns `True` because an empty subtree is a valid BST.\n\n5. **Range Check**: The node's value must be greater than the lower bound and less than the upper bound.\n\n6. **Recursive Calls**: The function recursively checks the left and right subtrees with updated ranges:\n   - For the right subtree, the lower bound remains the same, but the upper bound is updated to the current node's value.\n   - For the left subtree, the upper bound remains the same, but the lower bound is updated to the current node's value.\n\n7. **Return Value**: The function returns `True` if all nodes are within their valid ranges, otherwise `False`.\n\nThis approach ensures that the entire tree is checked for the BST property, not just comparing each node to its parent.",
+              "latency_ms": 26916
+            },
+            "deepseek": {
+              "text": "",
+              "latency_ms": 35963
+            }
+          },
+          "scores": {
+            "qwen-coder": {
+              "total": 7.8,
+              "reasoning": "The response is clear, relevant, and covers all the criteria, but could be more concise.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "codellama": {
+              "total": 2.2,
+              "reasoning": "The response does not accurately describe the problem or provide a correct solution. It also lacks clarity and is not concise.",
+              "dimensions": {
+                "accuracy": 3,
+                "completeness": 2,
+                "conciseness": 1
+              }
+            },
+            "qwen7b": {
+              "total": 7.8,
+              "reasoning": "The response is clear, relevant, and covers all the criteria, but it could be more concise.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen": {
+              "total": 7.8,
+              "reasoning": "The response is clear, relevant, and covers all the criteria, but it could be more concise.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "deepseek": {
+              "total": 0,
+              "reasoning": "no response",
+              "dimensions": {
+                "accuracy": 0,
+                "completeness": 0,
+                "conciseness": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-008",
+      "name": "code 008",
+      "suite": "coding",
+      "prompt": "Refactor this code to remove duplication: if (type === 'admin') { log('admin action'); audit('admin', userId); } if (type === 'user') { log('user action'); audit('user', userId); } if (type === 'guest') { log('guest action'); audit('guest', userId); }",
+      "runs": [
+        {
+          "run_id": "2026-03-30T22-22-13",
+          "run_meta": {
+            "run_id": "2026-03-30T22-22-13",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen-coder": {
+              "text": "You can refactor the code to remove duplication by using a function that handles both the logging and auditing based on the type. Here's an example in JavaScript:\n\n```javascript\nfunction handleAction(type, userId) {\n    const actionType = type === 'admin' ? 'admin' : type === 'user' ? 'user' : 'guest';\n    log(`${actionType} action`);\n    audit(actionType, userId);\n}\n\n// Usage\nif (type === 'admin' || type === 'user' || type === 'guest') {\n    handleAction(type, userId);\n}\n```\n\nThis way, you avoid repeating the same code for each type and make the code more maintainable and scalable.",
+              "latency_ms": 4334
+            },
+            "codellama": {
+              "text": "\nHere's a refactoring of the code to remove duplication:\n```\nconst logAndAudit = (type, userId) => {\n  if (type === 'admin') {\n    log('admin action');\n    audit('admin', userId);\n  } else if (type === 'user') {\n    log('user action');\n    audit('user', userId);\n  } else if (type === 'guest') {\n    log('guest action');\n    audit('guest', userId);\n  }\n};\n```\nIn this refactoring, we've extracted the common logic of logging and auditing into a separate function called `logAndAudit`. This function takes two arguments: `type` and `userId`.\n\nThe `if` statement is then used to determine which action to take based on the value of `type`. If `type` is `'admin'`, we log an admin action and audit an admin action. If `type` is `'user'`, we log a user action and audit a user action. If `type` is `'guest'`, we log a guest action and audit a guest action.\n\nThis refactoring reduces the duplication in the original code by moving the common logic into a separate function. It also makes the code more readable and easier to maintain by avoiding the repetition of the same code for each type of user.",
+              "latency_ms": 11093
+            },
+            "qwen7b": {
+              "text": "Certainly! You can refactor the code to remove duplication by using a single function that handles the common logic. Here's a refactored version:\n\n```javascript\nfunction handleAction(type, userId) {\n    log(`${type} action`);\n    audit(type, userId);\n}\n\nif (type === 'admin') {\n    handleAction('admin', userId);\n} else if (type === 'user') {\n    handleAction('user', userId);\n} else if (type === 'guest') {\n    handleAction('guest', userId);\n}\n```\n\nAlternatively, you can use a switch statement to make the code even more concise:\n\n```javascript\nfunction handleAction(type, userId) {\n    log(`${type} action`);\n    audit(type, userId);\n}\n\nswitch (type) {\n    case 'admin':\n        handleAction('admin', userId);\n        break;\n    case 'user':\n        handleAction('user', userId);\n        break;\n    case 'guest':\n        handleAction('guest', userId);\n        break;\n    default:\n        // Handle unknown type if necessary\n        break;\n}\n```\n\nBoth approaches reduce code duplication and make the code more maintainable.",
+              "latency_ms": 13713
+            },
+            "qwen": {
+              "text": "Certainly! You can refactor the code to remove duplication by using a single function that handles the common logic. Here's a refactored version:\n\n```javascript\nfunction handleAction(type, userId) {\n    log(`${type} action`);\n    audit(type, userId);\n}\n\nif (type === 'admin') {\n    handleAction('admin', userId);\n} else if (type === 'user') {\n    handleAction('user', userId);\n} else if (type === 'guest') {\n    handleAction('guest', userId);\n}\n```\n\nAlternatively, you can use a switch statement to make the code even more concise:\n\n```javascript\nfunction handleAction(type, userId) {\n    log(`${type} action`);\n    audit(type, userId);\n}\n\nswitch (type) {\n    case 'admin':\n        handleAction('admin', userId);\n        break;\n    case 'user':\n        handleAction('user', userId);\n        break;\n    case 'guest':\n        handleAction('guest', userId);\n        break;\n    default:\n        // Handle unknown type if necessary\n        break;\n}\n```\n\nBoth approaches reduce code duplication and make the code more maintainable.",
+              "latency_ms": 6668
+            },
+            "deepseek": {
+              "text": "Here's a refactored version of the code that removes duplication by using a switch statement:\n\n```javascript\nconst type = 'admin'; // or whatever the actual value is\n\nswitch (type) {\n  case 'admin':\n    log('admin action');\n    audit('admin', userId);\n    break;\n  case 'user':\n    log('user action');\n    audit('user', userId);\n    break;\n  case 'guest':\n    log('guest action');\n    audit('guest', userId);\n    break;\n  default:\n    // Handle unknown type if necessary\n    break;\n}\n```\n\nThis version combines the duplicated code into a single switch statement, making it cleaner and easier to maintain. Each case performs both the logging and auditing actions in a single location.",
+              "latency_ms": 16399
+            }
+          },
+          "scores": {
+            "qwen-coder": {
+              "total": 7.8,
+              "reasoning": "The refactored code removes duplication and follows the criteria, but the accuracy and completeness could be higher as it does not handle the case where 'type' is not one of the expected values. The conciseness is good, but could be slightly improved by removing the unnecessary ternary operator.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "codellama": {
+              "total": 2.4,
+              "reasoning": "The refactored code does not eliminate duplication as the if-else structure is still present. It also does not meet the criteria for a single code path for all types. The response is not accurate, complete, or concise.",
+              "dimensions": {
+                "accuracy": 3,
+                "completeness": 2,
+                "conciseness": 2
+              }
+            },
+            "qwen7b": {
+              "total": 7.8,
+              "reasoning": "The refactored code removes duplication and follows the criteria, but the switch statement could be more concise.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen": {
+              "total": 7.8,
+              "reasoning": "The refactored code removes duplication and follows the criteria, but the switch statement could be more concise.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "deepseek": {
+              "total": 3.2,
+              "reasoning": "The refactored code uses a switch statement to handle different types, which eliminates duplication. However, the switch statement does not provide a single code path for all types, as each case still contains separate log and audit calls. The code is not as readable or maintainable as it could be, and it does not work correctly for all three types if the type variable is not properly defined or if the default case is not handled.",
+              "dimensions": {
+                "accuracy": 4,
+                "completeness": 3,
+                "conciseness": 2
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-009",
+      "name": "code 009",
+      "suite": "coding",
+      "prompt": "Write a bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing size and path.",
+      "runs": [
+        {
+          "run_id": "2026-03-30T22-22-13",
+          "run_meta": {
+            "run_id": "2026-03-30T22-22-13",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "qwen-coder": {
+              "text": "You can use the following bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing size and path:\n\n```bash\nfind . -type f -exec ls -lh {} + | sort -rh | head -n 6 | sed '1d'\n```\n\nHere's a breakdown of what each part of the command does:\n\n1. `find . -type f -exec ls -lh {} +`: This part of the command finds all files (`-type f`) in the current directory and its subdirectories (`find .`). The `-exec` option allows you to run a command on each file found. `ls -lh {}` lists the files with human-readable sizes (`-h`).\n\n2. `sort -rh`: This sorts the output of the `ls` command in reverse human-readable order (`-rh`), so the largest files appear first.\n\n3. `head -n 6`: This limits the output to the first 6 lines. The first line is the header, so we use `sed '1d'` to remove it.\n\n4. `sed '1d'`: This removes the first line of the output, which is the header.\n\nSo, the final command will output the 5 largest files in the current directory and its subdirectories, showing size and path.",
+              "latency_ms": 10885
+            },
+            "codellama": {
+              "text": "\nHere is a bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing size and path:\n```\nfind . -type f -exec du -h {} + | sort -n | tail -5\n```\nExplanation:\n\n* `find . -type f`: finds all files (type `f`) in the current directory and its subdirectories.\n* `-exec du -h {} +`: runs the `du` command on each file found, with the `-h` option to display the size in human-readable format (e.g., `100M` for 100 MB). The `{}` is a placeholder for the file name, and the `+` at the end of the command tells `find` to run `du` on multiple files at once.\n* `sort -n`: sorts the output of `du` by size (in bytes) in numerical order.\n* `tail -5`: prints the last 5 lines of the output, which are the 5 largest files.\n\nNote that this command assumes that the current directory is the directory you want to search. If you want to search a different directory, replace `.` with the path to that directory.",
+              "latency_ms": 12526
+            },
+            "qwen7b": {
+              "text": "You can use the following bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing their size and path:\n\n```bash\nfind . -type f -exec du -h {} + | sort -rh | head -n 5\n```\n\nThis command works as follows:\n- `find . -type f`: Finds all files in the current directory and its subdirectories.\n- `-exec du -h {} +`: For each file found, it runs `du -h {}` to get the human-readable file size.\n- `sort -rh`: Sorts the output by size in reverse human-readable order.\n- `head -n 5`: Displays the top 5 largest files.",
+              "latency_ms": 13203
+            },
+            "qwen": {
+              "text": "You can use the following bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing their size and path:\n\n```bash\nfind . -type f -exec du -h {} + | sort -rh | head -n 5\n```\n\nThis command works as follows:\n- `find . -type f`: Finds all files in the current directory and its subdirectories.\n- `-exec du -h {} +`: For each file found, it runs `du -h {}` to get the human-readable file size.\n- `sort -rh`: Sorts the output by size in reverse human-readable order.\n- `head -n 5`: Displays the top 5 largest files.",
+              "latency_ms": 13258
+            },
+            "deepseek": {
+              "text": "To find the 5 largest files in the current directory and its subdirectories, showing their size and path, you can use the following bash one-liner:\n\n```bash\ndu -v --maxdepth=999 | sort -rl | head -n 5\n```\n\n**Explanation:**\n\n- `du -v --maxdepth=999`: This command lists all files in the current directory and subdirectories, including those deep within nested directories. The `--maxdepth=999` ensures that all levels are included.\n  \n- `sort -rl`: This sorts the output in descending order based on file size (the last part of each line).\n\n- `head -n 5`: This limits the output to the top 5 largest files.\n\nThis command efficiently finds and displays the largest files, including their full paths and sizes.",
+              "latency_ms": 27137
+            }
+          },
+          "scores": {
+            "qwen-coder": {
+              "total": 7.8,
+              "reasoning": "The command is mostly correct but could be simplified and improved for better readability and efficiency.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "codellama": {
+              "total": 3.2,
+              "reasoning": "The command does not sort by size numerically and does not show human-readable sizes with file paths.",
+              "dimensions": {
+                "accuracy": 4,
+                "completeness": 3,
+                "conciseness": 2
+              }
+            },
+            "qwen7b": {
+              "total": 3.8,
+              "reasoning": "The command is correct and addresses all criteria, but it could be more concise.",
+              "dimensions": {
+                "accuracy": 4,
+                "completeness": 4,
+                "conciseness": 3
+              }
+            },
+            "qwen": {
+              "total": 3.8,
+              "reasoning": "The command is correct and addresses all criteria, but it could be more concise.",
+              "dimensions": {
+                "accuracy": 4,
+                "completeness": 4,
+                "conciseness": 3
+              }
+            },
+            "deepseek": {
+              "total": 2.4,
+              "reasoning": "The command does not use find or du correctly. It also does not show human-readable sizes. It does not work on macOS and Linux.",
+              "dimensions": {
+                "accuracy": 3,
+                "completeness": 2,
+                "conciseness": 2
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-010",
+      "name": "code 010",
+      "suite": "coding",
+      "prompt": "Design the data model (tables + key fields) for a multi-tenant SaaS app where each tenant has users, projects, and tasks. Tasks belong to projects, projects belong to tenants. Consider indexing strategy.",
+      "runs": [
+        {
+          "run_id": "2026-03-30T22-22-13",
+          "run_meta": {
+            "run_id": "2026-03-30T22-22-13",
+            "config_file": "verdict.yaml",
+            "verdict_version": "0.2.0",
+            "hardware": "Apple M4 Pro 24GB"
+          },
+          "responses": {
+            "codellama": {
+              "text": "\nHere is a possible data model for a multi-tenant SaaS app where each tenant has users, projects, and tasks. Tasks belong to projects, projects belong to tenants.\n\n**Tenants**\n\n* `tenant_id` (primary key): a unique identifier for each tenant\n* `tenant_name`: the name of the tenant\n* `tenant_email`: the email address of the tenant\n* `tenant_status`: the status of the tenant (e.g. \"active\", \"inactive\")\n\n**Users**\n\n* `user_id` (primary key): a unique identifier for each user\n* `user_name`: the name of the user\n* `user_email`: the email address of the user\n* `user_status`: the status of the user (e.g. \"active\", \"inactive\")\n* `tenant_id`: the ID of the tenant that the user belongs to\n\n**Projects**\n\n* `project_id` (primary key): a unique identifier for each project\n* `project_name`: the name of the project\n* `project_description`: a brief description of the project\n* `tenant_id`: the ID of the tenant that the project belongs to\n\n**Tasks**\n\n* `task_id` (primary key): a unique identifier for each task\n* `task_name`: the name of the task\n* `task_description`: a brief description of the task\n* `project_id`: the ID of the project that the task belongs to\n* `user_id`: the ID of the user who created the task\n* `task_status`: the status of the task (e.g. \"active\", \"inactive\")\n\n**Indexing Strategy**\n\n* For the `Tenants` table, create a unique index on the `tenant_id` column to ensure that each tenant has a unique ID.\n* For the `Users` table, create a unique index on the `user_id` column to ensure that each user has a unique ID.\n* For the `Projects` table, create a unique index on the `project_id` column to ensure that each project has a unique ID.\n* For the `Tasks` table, create a unique index on the `task_id` column to ensure that each task has a unique ID.\n* For the `Tasks` table, create an index on the `project_id` column to improve the performance of queries that filter tasks by project.\n* For the `Tasks` table, create an index on the `user_id` column to improve the performance of queries that filter tasks by user.\n\nThis data model provides a basic structure for a multi-tenant SaaS app where each tenant has users, projects, and tasks. The indexing strategy is designed to improve the performance of queries that filter tasks by project or user.",
+              "latency_ms": 33910
+            },
+            "qwen-coder": {
+              "text": "To design a data model for a multi-tenant SaaS app with the specified relationships (tenants, users, projects, and tasks), we need to ensure that each tenant's data is isolated from others. This can be achieved by including a tenant identifier in each table. Below is a suggested data model with key fields and indexing strategies.\n\n### Tables\n\n1. **Tenants**\n   - **TenantID** (Primary Key)\n   - **TenantName**\n   - **TenantEmail**\n   - **TenantPhone**\n   - **TenantAddress**\n   - **TenantCreatedDate**\n   - **TenantUpdatedDate**\n\n2. **Users**\n   - **UserID** (Primary Key)\n   - **TenantID** (Foreign Key referencing Tenants.TenantID)\n   - **Username**\n   - **Email**\n   - **PasswordHash**\n   - **Role** (e.g., Admin, User)\n   - **CreatedDate**\n   - **UpdatedDate**\n\n3. **Projects**\n   - **ProjectID** (Primary Key)\n   - **TenantID** (Foreign Key referencing Tenants.TenantID)\n   - **ProjectName**\n   - **ProjectDescription**\n   - **ProjectStartDate**\n   - **ProjectEndDate**\n   - **CreatedDate**\n   - **UpdatedDate**\n\n4. **Tasks**\n   - **TaskID** (Primary Key)\n   - **ProjectID** (Foreign Key referencing Projects.ProjectID)\n   - **TaskName**\n   - **TaskDescription**\n   - **TaskStartDate**\n   - **TaskEndDate**\n   - **TaskStatus** (e.g., Not Started, In Progress, Completed)\n   - **AssignedUserID** (Foreign Key referencing Users.UserID)\n   - **CreatedDate**\n   - **UpdatedDate**\n\n### Indexing Strategy\n\n1. **Tenants Table**\n   - **TenantID** (Primary Key)\n   - **TenantName** (Unique Index)\n\n2. **Users Table**\n   - **UserID** (Primary Key)\n   - **TenantID** (Foreign Key)\n   - **Username** (Unique Index)\n   - **Email** (Unique Index)\n\n3. **Projects Table**\n   - **ProjectID** (Primary Key)\n   - **TenantID** (Foreign Key)\n   - **ProjectName** (Unique Index within a Tenant)\n\n4. **Tasks Table**\n   - **TaskID** (Primary Key)\n   - **ProjectID** (Foreign Key)\n   - **TaskName** (Unique Index within a Project)\n   - **AssignedUserID** (Foreign Key)\n   - **TaskStatus** (Index for efficient querying by task status)\n\n### Relationships\n\n- **Tenants** can have multiple **Users**.\n- **Users** belong to one **Tenant**.\n- **Tenants** can have multiple **Projects**.\n- **Projects** belong to one **Tenant**.\n- **Projects** can have multiple **Tasks**.\n- **Tasks** belong to one **Project**.\n- **Tasks** can be assigned to one **User**.\n\n### Example SQL for Creating Tables\n\n```sql\nCREATE TABLE Tenants (\n    TenantID INT PRIMARY KEY AUTO_INCREMENT,\n    TenantName VARCHAR(255) NOT NULL UNIQUE,\n    TenantEmail VARCHAR(255) NOT NULL UNIQUE,\n    TenantPhone VARCHAR(20),\n    TenantAddress VARCHAR(255),\n    TenantCreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,\n    TenantUpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP\n);\n\nCREATE TABLE Users (\n    UserID INT PRIMARY KEY AUTO_INCREMENT,\n    TenantID INT,\n    Username VARCHAR(255) NOT NULL UNIQUE,\n    Email VARCHAR(255) NOT NULL UNIQUE,\n    PasswordHash VARCHAR(255) NOT NULL,\n    Role ENUM('Admin', 'User') NOT NULL,\n    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,\n    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n    FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID)\n);\n\nCREATE TABLE Projects (\n    ProjectID INT PRIMARY KEY AUTO_INCREMENT,\n    TenantID INT,\n    ProjectName VARCHAR(255) NOT NULL UNIQUE,\n    ProjectDescription TEXT,\n    ProjectStartDate DATE,\n    ProjectEndDate DATE,\n    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,\n    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n    FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID)\n);\n\nCREATE TABLE Tasks (\n    TaskID INT PRIMARY KEY AUTO_INCREMENT,\n    ProjectID INT,\n    TaskName VARCHAR(255) NOT NULL UNIQUE,\n    TaskDescription TEXT,\n    TaskStartDate DATE,\n    TaskEndDate DATE,\n    TaskStatus ENUM('Not Started', 'In Progress', 'Completed') NOT NULL,\n    AssignedUserID INT,\n    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,\n    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),\n    FOREIGN KEY (AssignedUserID) REFERENCES Users(UserID)\n);\n```\n\n### Indexing\n\n```sql\nCREATE",
+              "latency_ms": 48756
+            },
+            "qwen7b": {
+              "text": "To design a data model for a multi-tenant SaaS application, we need to ensure that the database schema supports the hierarchical nature of the data (tenants, projects, and tasks) while also allowing for efficient querying and indexing. Here's a proposed data model with tables and key fields, along with an indexing strategy.\n\n### Tables and Key Fields\n\n1. **Tenants**\n   - `tenant_id` (Primary Key)\n   - `tenant_name`\n   - `created_at`\n   - `updated_at`\n\n2. **Projects**\n   - `project_id` (Primary Key)\n   - `tenant_id` (Foreign Key)\n   - `project_name`\n   - `created_at`\n   - `updated_at`\n\n3. **Tasks**\n   - `task_id` (Primary Key)\n   - `project_id` (Foreign Key)\n   - `task_name`\n   - `description`\n   - `due_date`\n   - `status`\n   - `created_at`\n   - `updated_at`\n\n### Relationships\n- A `tenant` can have multiple `projects`.\n- A `project` belongs to one `tenant`.\n- A `project` can have multiple `tasks`.\n- A `task` belongs to one `project`.\n\n### Indexing Strategy\n\nTo ensure efficient querying and performance, we need to consider the following indexes:\n\n1. **Tenant Indexes**\n   - `tenant_id` (Primary Key)\n   - `tenant_name` (Index for searching by tenant name)\n\n2. **Project Indexes**\n   - `tenant_id` (Foreign Key) - Index to quickly filter projects by tenant\n   - `project_id` (Primary Key)\n   - `project_name` (Index for searching by project name)\n\n3. **Task Indexes**\n   - `project_id` (Foreign Key) - Index to quickly filter tasks by project\n   - `task_id` (Primary Key)\n   - `task_name` (Index for searching by task name)\n   - `status` (Index for filtering tasks by status)\n\n### Example SQL Schema\n\n```sql\nCREATE TABLE Tenants (\n    tenant_id SERIAL PRIMARY KEY,\n    tenant_name VARCHAR(255) NOT NULL,\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE INDEX idx_tenant_name ON Tenants (tenant_name);\n\nCREATE TABLE Projects (\n    project_id SERIAL PRIMARY KEY,\n    tenant_id INT NOT NULL,\n    project_name VARCHAR(255) NOT NULL,\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (tenant_id) REFERENCES Tenants(tenant_id)\n);\n\nCREATE INDEX idx_project_tenant_id ON Projects (tenant_id);\nCREATE INDEX idx_project_name ON Projects (project_name);\n\nCREATE TABLE Tasks (\n    task_id SERIAL PRIMARY KEY,\n    project_id INT NOT NULL,\n    task_name VARCHAR(255) NOT NULL,\n    description TEXT,\n    due_date TIMESTAMP,\n    status VARCHAR(50),\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (project_id) REFERENCES Projects(project_id)\n);\n\nCREATE INDEX idx_task_project_id ON Tasks (project_id);\nCREATE INDEX idx_task_name ON Tasks (task_name);\nCREATE INDEX idx_task_status ON Tasks (status);\n```\n\n### Explanation\n\n- **Tenants Table**: Stores information about each tenant. The `tenant_id` is the primary key, and `tenant_name` is indexed for quick searches.\n- **Projects Table**: Stores information about projects. The `project_id` is the primary key, and `tenant_id` is a foreign key to link projects to their respective tenants. `project_name` is indexed for searching.\n- **Tasks Table**: Stores information about tasks. The `task_id` is the primary key, and `project_id` is a foreign key to link tasks to their respective projects. `task_name` and `status` are indexed for searching and filtering.\n\n### Additional Considerations\n\n- **Tenant-Specific Queries**: When querying tasks or projects, always include the `tenant_id` in the WHERE clause to ensure that only the relevant data is returned.\n- **Performance Optimization**: Depending on the volume of data, consider partitioning the `Projects` and `Tasks` tables by `tenant_id` to improve query performance.\n- **Audit Logs**: Consider adding audit logs for tracking changes to tenants, projects, and tasks.\n\nThis schema and indexing strategy should provide a robust foundation for a multi-tenant SaaS application.",
+              "latency_ms": 50869
+            },
+            "qwen": {
+              "text": "To design a data model for a multi-tenant SaaS application, we need to ensure that the database schema supports the hierarchical nature of the data (tenants, projects, and tasks) while also allowing for efficient querying and indexing. Here's a proposed data model with tables and key fields, along with an indexing strategy.\n\n### Tables and Key Fields\n\n1. **Tenants**\n   - `tenant_id` (Primary Key)\n   - `tenant_name`\n   - `created_at`\n   - `updated_at`\n\n2. **Projects**\n   - `project_id` (Primary Key)\n   - `tenant_id` (Foreign Key)\n   - `project_name`\n   - `created_at`\n   - `updated_at`\n\n3. **Tasks**\n   - `task_id` (Primary Key)\n   - `project_id` (Foreign Key)\n   - `task_name`\n   - `description`\n   - `due_date`\n   - `status`\n   - `created_at`\n   - `updated_at`\n\n### Relationships\n- A `tenant` can have multiple `projects`.\n- A `project` belongs to one `tenant`.\n- A `project` can have multiple `tasks`.\n- A `task` belongs to one `project`.\n\n### Indexing Strategy\n\nTo ensure efficient querying and performance, we need to consider the following indexes:\n\n1. **Tenant Indexes**\n   - `tenant_id` (Primary Key)\n   - `tenant_name` (Index for searching by tenant name)\n\n2. **Project Indexes**\n   - `tenant_id` (Foreign Key) - Index to quickly filter projects by tenant\n   - `project_id` (Primary Key)\n   - `project_name` (Index for searching by project name)\n\n3. **Task Indexes**\n   - `project_id` (Foreign Key) - Index to quickly filter tasks by project\n   - `task_id` (Primary Key)\n   - `task_name` (Index for searching by task name)\n   - `status` (Index for filtering tasks by status)\n\n### Example SQL Schema\n\n```sql\nCREATE TABLE Tenants (\n    tenant_id SERIAL PRIMARY KEY,\n    tenant_name VARCHAR(255) NOT NULL,\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE INDEX idx_tenant_name ON Tenants (tenant_name);\n\nCREATE TABLE Projects (\n    project_id SERIAL PRIMARY KEY,\n    tenant_id INT NOT NULL,\n    project_name VARCHAR(255) NOT NULL,\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (tenant_id) REFERENCES Tenants(tenant_id)\n);\n\nCREATE INDEX idx_project_tenant_id ON Projects (tenant_id);\nCREATE INDEX idx_project_name ON Projects (project_name);\n\nCREATE TABLE Tasks (\n    task_id SERIAL PRIMARY KEY,\n    project_id INT NOT NULL,\n    task_name VARCHAR(255) NOT NULL,\n    description TEXT,\n    due_date TIMESTAMP,\n    status VARCHAR(50),\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (project_id) REFERENCES Projects(project_id)\n);\n\nCREATE INDEX idx_task_project_id ON Tasks (project_id);\nCREATE INDEX idx_task_name ON Tasks (task_name);\nCREATE INDEX idx_task_status ON Tasks (status);\n```\n\n### Explanation\n\n- **Tenants Table**: Stores information about each tenant. The `tenant_id` is the primary key, and `tenant_name` is indexed for quick searches.\n- **Projects Table**: Stores information about projects. The `project_id` is the primary key, and `tenant_id` is a foreign key to link projects to their respective tenants. `project_name` is indexed for searching.\n- **Tasks Table**: Stores information about tasks. The `task_id` is the primary key, and `project_id` is a foreign key to link tasks to their respective projects. `task_name` and `status` are indexed for searching and filtering.\n\n### Additional Considerations\n\n- **Tenant-Specific Queries**: When querying tasks or projects, always include the `tenant_id` in the WHERE clause to ensure that only the relevant data is returned.\n- **Performance Optimization**: Depending on the volume of data, consider partitioning the `Projects` and `Tasks` tables by `tenant_id` to improve query performance.\n- **Audit Logs**: Consider adding audit logs for tracking changes to tenants, projects, and tasks.\n\nThis schema and indexing strategy should provide a robust foundation for a multi-tenant SaaS application.",
+              "latency_ms": 33647
+            },
+            "deepseek": {
+              "text": "",
+              "latency_ms": 39244
+            }
+          },
+          "scores": {
+            "codellama": {
+              "total": 8,
+              "reasoning": "The response accurately describes the data model and indexing strategy for a multi-tenant SaaS app, addressing all criteria and providing a clear and concise explanation.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 8
+              }
+            },
+            "qwen-coder": {
+              "total": 7.8,
+              "reasoning": "The response provides a clear and accurate data model for a multi-tenant SaaS app, including all required tables, key fields, and indexing strategies. It addresses all criteria and is concise but could benefit from slightly more detail in the indexing strategy.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen7b": {
+              "total": 7.8,
+              "reasoning": "The response accurately describes the data model and indexing strategy for a multi-tenant SaaS app, addressing all criteria. It is concise but could be slightly more streamlined.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "qwen": {
+              "total": 7.8,
+              "reasoning": "The response accurately describes the data model and indexing strategy for a multi-tenant SaaS app, addressing all criteria. It is concise but could be slightly more streamlined.",
+              "dimensions": {
+                "accuracy": 8,
+                "completeness": 8,
+                "conciseness": 7
+              }
+            },
+            "deepseek": {
+              "total": 0,
+              "reasoning": "no response",
+              "dimensions": {
+                "accuracy": 0,
+                "completeness": 0,
+                "conciseness": 0
               }
             }
           }
