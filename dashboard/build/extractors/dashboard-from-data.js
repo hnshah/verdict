@@ -94,6 +94,7 @@ Object.keys(dashboardData.models).forEach(modelId => {
     total_runs: 0,
     total_wins: 0,
     total_scores: [],
+    latencies: [],
     avg_score: 0
   };
 });
@@ -101,19 +102,35 @@ Object.keys(dashboardData.models).forEach(modelId => {
 // Count wins and scores per model
 dashboardData.cases.forEach(caseData => {
   caseData.runs.forEach(run => {
-    // Find winner for this run+case
+    // Find winner for this run+case (calculate from scores if not set)
+    let winner = run.winner;
     let maxScore = -1;
-    let winner = null;
+    
+    // Calculate winner from scores if not already set
+    if (!winner) {
+      Object.entries(run.scores || {}).forEach(([model, score]) => {
+        const totalScore = typeof score === 'number' ? score : (score.total || 0);
+        if (totalScore > maxScore) {
+          maxScore = totalScore;
+          winner = model;
+        }
+      });
+    }
+    
+    // Track scores and latencies
     Object.entries(run.scores || {}).forEach(([model, score]) => {
-      if (score.total > maxScore) {
-        maxScore = score.total;
-        winner = model;
-      }
+      const totalScore = typeof score === 'number' ? score : (score.total || 0);
       if (modelStats[model]) {
-        modelStats[model].total_scores.push(score.total);
+        modelStats[model].total_scores.push(totalScore);
+        
+        // Track latency
+        if (run.responses?.[model]?.latency_ms) {
+          modelStats[model].latencies.push(run.responses[model].latency_ms);
+        }
       }
     });
     
+    // Track wins
     if (winner && modelStats[winner]) {
       modelStats[winner].total_wins++;
     }
@@ -138,7 +155,9 @@ Object.values(modelStats).forEach(stats => {
   stats.win_rate = stats.total_scores.length > 0
     ? Math.round((stats.total_wins / stats.total_scores.length) * 100)
     : 0;
-  stats.avg_latency = 's'; // Placeholder - latency not in dashboard-data.json format
+  stats.avg_latency = stats.latencies.length > 0
+    ? Math.round((stats.latencies.reduce((a, b) => a + b, 0) / stats.latencies.length) / 100) / 10
+    : '-';
 });
 
 // Top models (by avg score)

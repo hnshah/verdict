@@ -69,8 +69,20 @@ data.cases.forEach(caseData => {
       scoreCount++;
     }
     
-    // Track wins
-    if (run.winner === modelName) {
+    // Track wins (calculate from scores if winner not set)
+    let winner = run.winner;
+    if (!winner && run.scores) {
+      let maxScore = -1;
+      Object.entries(run.scores).forEach(([model, score]) => {
+        const totalScore = typeof score === 'number' ? score : (score.total || 0);
+        if (totalScore > maxScore) {
+          maxScore = totalScore;
+          winner = model;
+        }
+      });
+    }
+    
+    if (winner === modelName) {
       runData.wins++;
       totalWins++;
     }

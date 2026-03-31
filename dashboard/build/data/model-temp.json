@@ -1,7 +1,7 @@
 {
   "model_name": "qwen3-coder",
   "avg_score": 9.7,
-  "total_wins": 0,
+  "total_wins": 5,
   "total_runs": 3,
   "avg_latency": "6.4",
   "runs": [
@@ -10,7 +10,7 @@
       "name": "3 Model Comparison - 10 cases",
       "date": "2026-03-31",
       "score": 9.6,
-      "wins": 0,
+      "wins": 3,
       "latency": 6.2,
       "accuracy": 0,
       "completeness": 0,
@@ -21,7 +21,7 @@
       "name": "3 Model Comparison - 10 cases",
       "date": "2026-03-31",
       "score": 9.6,
-      "wins": 0,
+      "wins": 2,
       "latency": 6.2,
       "accuracy": 0,
       "completeness": 0,
