@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>code-004 — Verdict</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --accent: #3B82F6;
+  --accent-hover: #2563EB;
+  --bg-page: #F9FAFB;
+  --bg-card: #FFFFFF;
+  --text-primary: #111827;
+  --text-body: #374151;
+  --text-muted: #6B7280;
+  --text-label: #9CA3AF;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: #111827;
+    --bg-card: #1F2937;
+    --text-primary: #F9FAFB;
+    --text-body: #E5E7EB;
+    --text-muted: #9CA3AF;
+    --text-label: #6B7280;
+    --border: #374151;
+    --border-light: #1F2937;
+  }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-body);
+}
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.card {
+  background: var(--bg-card);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  padding: 2rem;
+  margin-top: 2rem;
+}
+.card:first-child { margin-top: 0; }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.badge-green { background: #ECFDF5; color: #065F46; }
+.badge-yellow { background: #FFFBEB; color: #92400E; }
+.badge-red { background: #FEF2F2; color: #991B1B; }
+
+@media (prefers-color-scheme: dark) {
+  .badge-green { background: #064E3B; color: #A7F3D0; }
+  .badge-yellow { background: #78350F; color: #FDE68A; }
+  .badge-red { background: #7F1D1D; color: #FCA5A5; }
+}
+
+tbody tr {
+  transition: background 0.1s;
+}
+tbody tr:hover {
+  background: var(--border-light);
+}
+
+.response-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .desktop-only { display: none; }
+  .card { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="bg-white dark:bg-gray-800 border-b sticky top-0 z-50" style="border-color: var(--border)">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="/" class="text-sm no-underline" style="color: var(--text-muted)">← Dashboard</a>
+      <span style="color: var(--border)">·</span>
+      <span class="font-semibold mono" style="color: var(--text-primary)">code-004</span>
+    </div>
+    <span class="text-xs" style="color: var(--text-label)">39 runs</span>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+  <!-- Case overview -->
+  <section class="card">
+    <div class="flex items-start justify-between mb-6 flex-wrap gap-3">
+      <div class="flex-1">
+        <h1 class="text-2xl font-bold mb-2 mono" style="color: var(--text-primary)">code-004</h1>
+        <p class="text-sm mb-4" style="color: var(--text-muted)">Tested in 39 runs across 5 models</p>
+        
+        <div class="rounded p-4" style="background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <p class="text-sm" style="color: var(--text-body)">Implement a basic LRU (Least Recently Used) cache in Python with get(key) and put(key, value) methods. Capacity is set at init. Both operations must be O(1).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mt-6">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Avg Score</p>
+        <p class="text-2xl font-bold" style="color: var(--text-primary)">5.4<span class="text-base" style="color: var(--text-muted)">/10</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Pass Rate</p>
+        <p class="text-2xl font-bold" style="color: var(--text-primary)">0<span class="text-base" style="color: var(--text-muted)">%</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Best Score</p>
+        <p class="text-2xl font-bold" style="color: var(--text-primary)">7.8<span class="text-base" style="color: var(--text-muted)">/10</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Worst Score</p>
+        <p class="text-2xl font-bold" style="color: var(--text-primary)">0<span class="text-base" style="color: var(--text-muted)">/10</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Model performance -->
+  <section class="card">
+    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Model Performance</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs border-b" style="color: var(--text-label); border-color: var(--border-light)">
+            <th class="pb-3 pr-4 font-semibold">Rank</th>
+            <th class="pb-3 pr-4 font-semibold">Model</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Avg Score</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Times Tested</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Best</th>
+            <th class="pb-3 text-right font-semibold desktop-only">Worst</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y" style="border-color: var(--border-light)">
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">1</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen-coder</span>
+                <span class="text-xs">🥇</span>
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.8/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">2</td>
+            <td class="py-3 pr-4 text-right desktop-only">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">7.8</span>
+            </td>
+            <td class="py-3 text-right desktop-only">
+              <span class="badge-yellow px-2 py-0.5 rounded text-xs font-medium">7.8</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">2</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen7b</span>
+                
+                <span class="text-xs">🥈</span>
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.8/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right desktop-only">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">7.8</span>
+            </td>
+            <td class="py-3 text-right desktop-only">
+              <span class="badge-yellow px-2 py-0.5 rounded text-xs font-medium">7.8</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">3</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen</span>
+                
+                
+                <span class="text-xs">🥉</span>
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.8/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">2</td>
+            <td class="py-3 pr-4 text-right desktop-only">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">7.8</span>
+            </td>
+            <td class="py-3 text-right desktop-only">
+              <span class="badge-yellow px-2 py-0.5 rounded text-xs font-medium">7.8</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">4</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">codellama</span>
+                
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">2.2/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">2</td>
+            <td class="py-3 pr-4 text-right desktop-only">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">2.2</span>
+            </td>
+            <td class="py-3 text-right desktop-only">
+              <span class="badge-yellow px-2 py-0.5 rounded text-xs font-medium">2.2</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">5</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">deepseek</span>
+                
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">0/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right desktop-only">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">0</span>
+            </td>
+            <td class="py-3 text-right desktop-only">
+              <span class="badge-yellow px-2 py-0.5 rounded text-xs font-medium">0</span>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Response examples -->
+  <section class="card">
+    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Response Examples</h2>
+    <div class="space-y-4">
+      
+      <div class="response-card">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <span class="font-medium" style="color: var(--text-primary)">qwen-coder</span>
+            <span class="text-xs ml-2" style="color: var(--text-muted)">Gap Fill - Comprehensive Coding</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="mono text-xs" style="color: var(--text-label)">29.9s</span>
+            
+            <span class="badge-yellow px-2 py-0.5 rounded text-xs font-medium">7.8/10</span>
+            
+          </div>
+        </div>
+        <div class="rounded p-3 mono text-xs leading-relaxed" style="background: var(--border-light); color: var(--text-muted); max-height: 300px; overflow-y: auto">
+          To implement a basic LRU (Least Recently Used) cache in Python with `get(key)` and `put(key, value)` methods, we can use a combination of a dictionary and an ordered list. The dictionary will provide O(1) access to the values, and the ordered list will help us maintain the order of usage to implement the LRU policy.
+
+Here's a step-by-step implementation:
+
+1. **Dictionary**: This will store the key-value pairs.
+2. **Ordered List**: This will store the keys in the order they were accessed. The most recently used key will be at the end of the list, and the least recently used key will be at the beginning.
+
+We will use Python's `collections.OrderedDict` to simplify the implementation of the ordered list.
+
+Here's the complete implementation:
+
+```python
+from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cache = OrderedDict()
+        self.capacity = capacity
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        else:
+            # Move the key to the end to show that it was recently used
+            self.cache.move_to_end(key)
+            return self.cache[key]
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            # Move the key to the end to show that it was recently used
+            self.cache.move_to_end(key)
+        self.cache[key] = value
+        if len(self.cache) > self.capacity:
+            # Remove the first key (least recently used)
+            self.cache.popitem(last=False)
+
+# Example usage:
+cache = LRUCache(2)
+cache.put(1, 1)
+cache.put(2, 2)
+print(cache.get(1))  # returns 1
+cache.put(3, 3)  # evicts key 2
+print(cache.get(2))  # returns -1 (not found)
+cache.put(4, 4)  # evicts key 1
+print(cache.get(1))  # returns -1 (not found)
+print(cache.get(3))  # returns 3
+print(cache.get(4))  # returns 4
+```
+
+### Explanation:
+
+1. **Initialization (`__init__` method)**:
+   - `self.cache`: An `OrderedDict` to store the key-value pairs.
+   - `self.capacity`: The maximum number of items the cache can hold.
+
+2. **Get Operation (`get` method)**:
+   - If the key is not in the cache, return `-1`.
+   - If the key is in the cache, move the key to the end of the `OrderedDict` to mark it as recently used and return its value.
+
+3. **Put Operation (`put` method)**:
+   - If the key is already in the cache, move it to the end of the `OrderedDict` to mark it as recently used.
+   - Update the value of the key in the cache.
+   - If the cache exceeds its capacity, remove the first key (the least recently used) from the `OrderedDict`.
+
+This implementation ensures that both `get` and `put` operations are O(1) due to the properties of the `OrderedDict`.
+        </div>
+      </div>
+      
+      <div class="response-card">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <span class="font-medium" style="color: var(--text-primary)">qwen</span>
+            <span class="text-xs ml-2" style="color: var(--text-muted)">Comprehensive Categorized Benchmark</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="mono text-xs" style="color: var(--text-label)">37.7s</span>
+            
+            <span class="badge-yellow px-2 py-0.5 rounded text-xs font-medium">7.8/10</span>
+            
+          </div>
+        </div>
+        <div class="rounded p-3 mono text-xs leading-relaxed" style="background: var(--border-light); color: var(--text-muted); max-height: 300px; overflow-y: auto">
+          To implement a basic LRU (Least Recently Used) cache in Python with `get(key)` and `put(key, value)` methods, we can use a combination of a dictionary and a doubly linked list. The dictionary will provide O(1) access to the cache items, while the doubly linked list will help us maintain the order of usage and efficiently remove the least recently used items.
+
+Here's a Python implementation:
+
+```python
+class Node:
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+        self.prev = None
+        self.next = None
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.cache = {}  # Dictionary to store key and node
+        self.head = Node(0, 0)  # Dummy head node
+        self.tail = Node(0, 0)  # Dummy tail node
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            node = self.cache[key]
+            self._remove(node)
+            self._add(node)
+            return node.value
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self._remove(self.cache[key])
+        node = Node(key, value)
+        self.cache[key] = node
+        self._add(node)
+        if len(self.cache) > self.capacity:
+            node = self.head.next
+            self._remove(node)
+            del self.cache[node.key]
+
+    def _remove(self, node):
+        prev = node.prev
+        next = node.next
+        prev.next = next
+        next.prev = prev
+
+    def _add(self, node):
+        prev = self.tail.prev
+        prev.next = node
+        node.prev = prev
+        node.next = self.tail
+        self.tail.prev = node
+
+# Example usage:
+cache = LRUCache(2)
+cache.put(1, 1)
+cache.put(2, 2)
+print(cache.get(1))  # returns 1
+cache.put(3, 3)  # evicts key 2
+print(cache.get(2))  # returns -1 (not found)
+cache.put(4, 4)  # evicts key 1
+print(cache.get(1))  # returns -1 (not found)
+print(cache.get(3))  # returns 3
+print(cache.get(4))  # returns 4
+```
+
+### Explanation:
+
+1. **Node Class**: Represents a node in the doubly linked list. Each node contains a key, value, and pointers to the previous and next nodes.
+
+2. **LRUCache Class**:
+   - **Initialization**: Sets up the cache with a given capacity, a dictionary to store key-node pairs, and a doubly linked list with dummy head and tail nodes.
+   - **get(key)**: Retrieves the value of the given key. If the key exists, it moves the node to the end of the list (most recently used) and returns the value. If the key does not exist, it returns -1.
+   - **put(key, value)**: Inserts a key-value pair into the cache. If the key already exists, it updates the value and moves the node to the end of the list. If the cache is at capacity, it removes the least recently used item (the head's next node) before adding the new item.
+   - **_remove(node)**: Removes a node from the doubly linked list.
+   - **_add(node)**: Adds a node to the end of the doubly linked list.
+
+This implementation ensures that both `get` and `put` operations are O(1) by leveraging the dictionary for quick lookups and the doubly linked list for maintaining the order of usage.
+        </div>
+      </div>
+      
+      <div class="response-card">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <span class="font-medium" style="color: var(--text-primary)">deepseek</span>
+            <span class="text-xs ml-2" style="color: var(--text-muted)">Gap Fill - Comprehensive Coding</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="mono text-xs" style="color: var(--text-label)">36.9s</span>
+            
+            <span class="badge-red px-2 py-0.5 rounded text-xs font-medium">0/10</span>
+            
+          </div>
+        </div>
+        <div class="rounded p-3 mono text-xs leading-relaxed" style="background: var(--border-light); color: var(--text-muted); max-height: 300px; overflow-y: auto">
+          
+        </div>
+      </div>
+      
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
