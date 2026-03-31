@@ -1,0 +1,212 @@
+name: 'Verdict — LLM Quality Gate'
+description: 'Run LLM evals against your models and optionally fail on quality regressions. Works with Ollama, OpenAI, OpenRouter, and any OpenAI-compatible endpoint.'
+author: 'Hiten Shah'
+
+branding:
+  icon: 'bar-chart-2'
+  color: 'purple'
+
+inputs:
+  config:
+    description: 'Path to verdict config file (verdict.yaml)'
+    required: false
+    default: 'verdict.yaml'
+
+  pack:
+    description: 'Comma-separated eval pack files or registry names (e.g. "general,coding" or "eval-packs/custom.yaml")'
+    required: false
+    default: ''
+
+  models:
+    description: 'Comma-separated model IDs to benchmark (must match IDs in your config). Defaults to all models in config.'
+    required: false
+    default: ''
+
+  fail-threshold:
+    description: 'Fail the action if any model scores below this value (0-10 scale). Set to 0 to disable threshold check.'
+    required: false
+    default: '0'
+
+  fail-if-regression:
+    description: 'Fail if scores regress from the stored baseline. Requires a prior baseline to have been saved.'
+    required: false
+    default: 'false'
+
+  output-file:
+    description: 'Path to write JSON results. Defaults to verdict-results.json'
+    required: false
+    default: 'verdict-results.json'
+
+  upload-artifact:
+    description: 'Upload results JSON as a workflow artifact'
+    required: false
+    default: 'true'
+
+  artifact-name:
+    description: 'Name for the uploaded artifact'
+    required: false
+    default: 'verdict-results'
+
+  node-version:
+    description: 'Node.js version to use'
+    required: false
+    default: '20'
+
+  verdict-version:
+    description: 'Verdict npm package version to install (e.g. "0.3.0" or "latest")'
+    required: false
+    default: 'latest'
+
+  working-directory:
+    description: 'Working directory for running verdict commands'
+    required: false
+    default: '.'
+
+outputs:
+  results-file:
+    description: 'Path to the JSON results file'
+    value: ${{ steps.run-verdict.outputs.results-file }}
+
+  top-model:
+    description: 'Model ID that scored highest'
+    value: ${{ steps.parse-results.outputs.top-model }}
+
+  top-score:
+    description: 'Highest score achieved (0-10)'
+    value: ${{ steps.parse-results.outputs.top-score }}
+
+  passed:
+    description: '"true" if all checks passed, "false" otherwise'
+    value: ${{ steps.check-threshold.outputs.passed }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install Verdict
+      shell: bash
+      run: npm install -g verdict@${{ inputs.verdict-version }}
+
+    - name: Run Verdict Evals
+      id: run-verdict
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        VERDICT_OUTPUT: ${{ inputs.output-file }}
+      run: |
+        ARGS="--config ${{ inputs.config }} --json"
+
+        if [ -n "${{ inputs.pack }}" ]; then
+          # Check if it looks like a file path or a registry name
+          if [[ "${{ inputs.pack }}" == *.yaml ]] || [[ "${{ inputs.pack }}" == *.yml ]]; then
+            ARGS="$ARGS --pack ${{ inputs.pack }}"
+          else
+            ARGS="$ARGS --eval ${{ inputs.pack }}"
+          fi
+        fi
+
+        if [ -n "${{ inputs.models }}" ]; then
+          ARGS="$ARGS --models ${{ inputs.models }}"
+        fi
+
+        if [ "${{ inputs.fail-if-regression }}" = "true" ]; then
+          ARGS="$ARGS --fail-if-regression"
+        fi
+
+        echo "Running: verdict run $ARGS"
+        verdict run $ARGS > "${{ inputs.output-file }}"
+
+        echo "results-file=${{ inputs.output-file }}" >> "$GITHUB_OUTPUT"
+
+    - name: Parse Results
+      id: parse-results
+      shell: bash
+      run: |
+        RESULTS_FILE="${{ inputs.working-directory }}/${{ inputs.output-file }}"
+
+        if [ ! -f "$RESULTS_FILE" ]; then
+          echo "⚠️ Results file not found at $RESULTS_FILE"
+          echo "top-model=unknown" >> "$GITHUB_OUTPUT"
+          echo "top-score=0" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        # Extract top model and score using jq (available in GitHub Actions runners)
+        TOP_MODEL=$(cat "$RESULTS_FILE" | jq -r '
+          if .summary then
+            (.summary | to_entries | max_by(.value.avg_total) | .key)
+          else "unknown" end
+        ' 2>/dev/null || echo "unknown")
+
+        TOP_SCORE=$(cat "$RESULTS_FILE" | jq -r '
+          if .summary then
+            (.summary | to_entries | max_by(.value.avg_total) | .value.avg_total)
+          else "0" end
+        ' 2>/dev/null || echo "0")
+
+        echo "top-model=$TOP_MODEL" >> "$GITHUB_OUTPUT"
+        echo "top-score=$TOP_SCORE" >> "$GITHUB_OUTPUT"
+
+        # Print a human-readable summary to logs
+        echo ""
+        echo "📊 Verdict Results Summary"
+        echo "=========================="
+        cat "$RESULTS_FILE" | jq -r '
+          if .summary then
+            "Models tested: \(.summary | keys | length)",
+            (.summary | to_entries | sort_by(-.value.avg_total) | .[] |
+              "  \(.key): \(.value.avg_total)/10 (\(.value.cases_run) cases)")
+          else "No summary available" end
+        ' 2>/dev/null || echo "Results written to $RESULTS_FILE"
+        echo ""
+
+    - name: Check Score Threshold
+      id: check-threshold
+      shell: bash
+      run: |
+        THRESHOLD="${{ inputs.fail-threshold }}"
+        RESULTS_FILE="${{ inputs.working-directory }}/${{ inputs.output-file }}"
+
+        if [ "$THRESHOLD" = "0" ] || [ -z "$THRESHOLD" ]; then
+          echo "passed=true" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        if [ ! -f "$RESULTS_FILE" ]; then
+          echo "passed=false" >> "$GITHUB_OUTPUT"
+          echo "❌ Results file not found — cannot check threshold"
+          exit 1
+        fi
+
+        # Check if any model is below threshold
+        FAILING=$(cat "$RESULTS_FILE" | jq -r --arg threshold "$THRESHOLD" '
+          if .summary then
+            (.summary | to_entries | .[] |
+              select(.value.avg_total < ($threshold | tonumber)) |
+              "\(.key): \(.value.avg_total)/10 (threshold: \($threshold)/10)")
+          else empty end
+        ' 2>/dev/null)
+
+        if [ -n "$FAILING" ]; then
+          echo "passed=false" >> "$GITHUB_OUTPUT"
+          echo ""
+          echo "❌ Quality threshold not met:"
+          echo "$FAILING"
+          echo ""
+          exit 1
+        else
+          echo "passed=true" >> "$GITHUB_OUTPUT"
+          echo "✅ All models meet quality threshold of $THRESHOLD/10"
+        fi
+
+    - name: Upload Results Artifact
+      if: inputs.upload-artifact == 'true' && always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.working-directory }}/${{ inputs.output-file }}
+        if-no-files-found: warn
