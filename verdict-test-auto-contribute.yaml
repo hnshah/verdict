@@ -1,0 +1,11 @@
+models:
+  - id: test-phi4
+    provider: ollama
+    model: phi4:14b
+
+judge:
+  model: test-phi4
+
+settings:
+  auto_contribute: true
+  contribution_author: "Ren Test"

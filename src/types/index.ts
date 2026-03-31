@@ -59,6 +59,10 @@ export const ConfigSchema = z.object({
     formats: z.array(z.enum(['json', 'markdown', 'slack'])).default(['json', 'markdown']),
     delta: z.boolean().default(true),
   }).default({}),
+  settings: z.object({
+    auto_contribute: z.boolean().default(false),
+    contribution_author: z.string().optional(),
+  }).optional(),
 })
 export type Config = z.infer<typeof ConfigSchema>
 
