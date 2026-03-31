@@ -147,7 +147,8 @@
       "avg_score": 9.7,
       "win_rate": 13,
       "avg_latency": "s",
-      "runs": 40
+      "runs": 40,
+      "rank": 1
     },
     {
       "name": "qwen-32b",
@@ -208,7 +209,8 @@
       "avg_score": 9.5,
       "win_rate": 4,
       "avg_latency": "s",
-      "runs": 50
+      "runs": 50,
+      "rank": 2
     },
     {
       "name": "phi4",
@@ -269,7 +271,8 @@
       "avg_score": 9.5,
       "win_rate": 32,
       "avg_latency": "s",
-      "runs": 50
+      "runs": 50,
+      "rank": 3
     },
     {
       "name": "qwen-7b",
@@ -330,7 +333,8 @@
       "avg_score": 9.4,
       "win_rate": 94,
       "avg_latency": "s",
-      "runs": 50
+      "runs": 50,
+      "rank": 4
     },
     {
       "name": "qwen2.5-7b",
@@ -361,7 +365,8 @@
       "avg_score": 9.4,
       "win_rate": 25,
       "avg_latency": "s",
-      "runs": 20
+      "runs": 20,
+      "rank": 5
     },
     {
       "name": "test-phi4",
@@ -382,7 +387,8 @@
       "avg_score": 9.3,
       "win_rate": 100,
       "avg_latency": "s",
-      "runs": 10
+      "runs": 10,
+      "rank": 6
     },
     {
       "name": "cogito",
@@ -443,7 +449,8 @@
       "avg_score": 9.1,
       "win_rate": 0,
       "avg_latency": "s",
-      "runs": 50
+      "runs": 50,
+      "rank": 7
     },
     {
       "name": "qwen2.5:7b",
@@ -474,7 +481,8 @@
       "avg_score": 9.1,
       "win_rate": 60,
       "avg_latency": "s",
-      "runs": 20
+      "runs": 20,
+      "rank": 8
     },
     {
       "name": "llama3.2:3b",
@@ -505,7 +513,8 @@
       "avg_score": 9.1,
       "win_rate": 30,
       "avg_latency": "s",
-      "runs": 20
+      "runs": 20,
+      "rank": 9
     },
     {
       "name": "llama3.3:70b",
@@ -536,7 +545,8 @@
       "avg_score": 9.1,
       "win_rate": 10,
       "avg_latency": "s",
-      "runs": 20
+      "runs": 20,
+      "rank": 10
     }
   ],
   "all_models": [

@@ -149,7 +149,11 @@ const topModels = Object.values(modelStats)
     runs: m.total_runs  // Add 'runs' alias for template compatibility
   }))
   .sort((a, b) => b.avg_score - a.avg_score)
-  .slice(0, 10);
+  .slice(0, 10)
+  .map((m, idx) => ({
+    ...m,
+    rank: idx + 1  // Add rank (1-based)
+  }));
 
 // Overall stats
 const allScores = [];
