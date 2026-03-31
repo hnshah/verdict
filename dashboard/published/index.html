@@ -59,8 +59,8 @@
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
         <div>
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Total Runs</p>
-          <p class="text-2xl font-bold text-gray-900">5</p>
-          <p class="text-xs text-gray-500 mt-1">0 test · 5 real</p>
+          <p class="text-2xl font-bold text-gray-900">7</p>
+          <p class="text-xs text-gray-500 mt-1">0 test · 7 real</p>
         </div>
         <div>
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Test Cases</p>
@@ -72,7 +72,7 @@
         </div>
         <div>
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Score</p>
-          <p class="text-2xl font-bold text-gray-900">6.6<span class="text-base text-gray-500">/10</span></p>
+          <p class="text-2xl font-bold text-gray-900">6.9<span class="text-base text-gray-500">/10</span></p>
         </div>
       </div>
     </section>
@@ -90,12 +90,12 @@
           <span>Hide single-model runs</span>
         </label>
       </div>
-      <p class="text-xs text-gray-500 mt-2">Showing 5 real runs (0 test runs hidden)</p>
+      <p class="text-xs text-gray-500 mt-2">Showing 7 real runs (0 test runs hidden)</p>
     </section>
 
     <!-- All Runs -->
     <section id="runs" class="card">
-      <h2 class="text-xl font-bold text-gray-900 mb-6">All Runs (5)</h2>
+      <h2 class="text-xl font-bold text-gray-900 mb-6">All Runs (7)</h2>
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
@@ -187,6 +187,36 @@
               </td>
             </tr>
             
+            <tr data-test="false" data-single="false" class="run-row">
+              <td class="py-3 pr-4 mono text-xs text-gray-500">03-31-26</td>
+              <td class="py-3 pr-4">
+                <a href="runs/2026-03-31T07-36-33/" class="text-gray-900 hover:text-blue-600">My Evals</a>
+              </td>
+              <td class="py-3 pr-4 text-right text-gray-700">10</td>
+              <td class="py-3 pr-4 text-right text-gray-700">4</td>
+              <td class="py-3 pr-4 text-right font-medium text-gray-900">8.6/10</td>
+              <td class="py-3 pr-4 mono text-xs text-gray-500">12:43 AM</td>
+              <td class="py-3 pr-4 text-right mono text-xs text-gray-600">48s</td>
+              <td class="py-3 flex gap-1">
+                
+              </td>
+            </tr>
+            
+            <tr data-test="false" data-single="false" class="run-row">
+              <td class="py-3 pr-4 mono text-xs text-gray-500">03-31-26</td>
+              <td class="py-3 pr-4">
+                <a href="runs/2026-03-31T07-19-11/" class="text-gray-900 hover:text-blue-600">My Evals</a>
+              </td>
+              <td class="py-3 pr-4 text-right text-gray-700">10</td>
+              <td class="py-3 pr-4 text-right text-gray-700">2</td>
+              <td class="py-3 pr-4 text-right font-medium text-gray-900">9.2/10</td>
+              <td class="py-3 pr-4 mono text-xs text-gray-500">12:20 AM</td>
+              <td class="py-3 pr-4 text-right mono text-xs text-gray-600">9s</td>
+              <td class="py-3 flex gap-1">
+                
+              </td>
+            </tr>
+            
           </tbody>
         </table>
       </div>
@@ -270,16 +300,50 @@
                 </div>
               </td>
               <td class="py-3 pr-4 text-right font-bold text-gray-900">9.3/10</td>
-              <td class="py-3 pr-4 text-right text-gray-700">80</td>
-              <td class="py-3 pr-4 text-right text-gray-700">58</td>
+              <td class="py-3 pr-4 text-right text-gray-700">100</td>
+              <td class="py-3 pr-4 text-right text-gray-700">68</td>
               <td class="py-3 pr-4 text-right">
-                <span class="badge-b">73%</span>
+                <span class="badge-b">68%</span>
               </td>
-              <td class="py-3 text-right mono text-xs text-gray-500">8.8s</td>
+              <td class="py-3 text-right mono text-xs text-gray-500">8.5s</td>
             </tr>
             
             <tr>
               <td class="py-3 pr-4 font-bold text-gray-900">5</td>
+              <td class="py-3 pr-4">
+                <div class="flex items-center gap-2">
+                  <a href="models/qwen2-5-coder-7b/" class="text-gray-900 hover:text-blue-600">qwen2.5-coder:7b</a>
+                  
+                </div>
+              </td>
+              <td class="py-3 pr-4 text-right font-bold text-gray-900">9.3/10</td>
+              <td class="py-3 pr-4 text-right text-gray-700">10</td>
+              <td class="py-3 pr-4 text-right text-gray-700">0</td>
+              <td class="py-3 pr-4 text-right">
+                <span class="badge-b">0%</span>
+              </td>
+              <td class="py-3 text-right mono text-xs text-gray-500">7.5s</td>
+            </tr>
+            
+            <tr>
+              <td class="py-3 pr-4 font-bold text-gray-900">6</td>
+              <td class="py-3 pr-4">
+                <div class="flex items-center gap-2">
+                  <a href="models/phi4-14b/" class="text-gray-900 hover:text-blue-600">phi4:14b</a>
+                  
+                </div>
+              </td>
+              <td class="py-3 pr-4 text-right font-bold text-gray-900">9.2/10</td>
+              <td class="py-3 pr-4 text-right text-gray-700">20</td>
+              <td class="py-3 pr-4 text-right text-gray-700">4</td>
+              <td class="py-3 pr-4 text-right">
+                <span class="badge-b">20%</span>
+              </td>
+              <td class="py-3 text-right mono text-xs text-gray-500">12s</td>
+            </tr>
+            
+            <tr>
+              <td class="py-3 pr-4 font-bold text-gray-900">7</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <a href="models/llama3-3-70b/" class="text-gray-900 hover:text-blue-600">llama3.3:70b</a>
@@ -296,7 +360,7 @@
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">6</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">8</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <a href="models/qwen-coder/" class="text-gray-900 hover:text-blue-600">qwen-coder</a>
@@ -313,24 +377,7 @@
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">7</td>
-              <td class="py-3 pr-4">
-                <div class="flex items-center gap-2">
-                  <a href="models/phi4-14b/" class="text-gray-900 hover:text-blue-600">phi4:14b</a>
-                  
-                </div>
-              </td>
-              <td class="py-3 pr-4 text-right font-bold text-gray-900">8.9/10</td>
-              <td class="py-3 pr-4 text-right text-gray-700">10</td>
-              <td class="py-3 pr-4 text-right text-gray-700">0</td>
-              <td class="py-3 pr-4 text-right">
-                <span class="badge-b">0%</span>
-              </td>
-              <td class="py-3 text-right mono text-xs text-gray-500">5.9s</td>
-            </tr>
-            
-            <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">8</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">9</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <a href="models/qwen2-5-14b/" class="text-gray-900 hover:text-blue-600">qwen2.5:14b</a>
@@ -347,24 +394,41 @@
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">9</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">10</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <a href="models/llama3-2-3b/" class="text-gray-900 hover:text-blue-600">llama3.2:3b</a>
                   
                 </div>
               </td>
-              <td class="py-3 pr-4 text-right font-bold text-gray-900">8.5/10</td>
-              <td class="py-3 pr-4 text-right text-gray-700">30</td>
-              <td class="py-3 pr-4 text-right text-gray-700">16</td>
+              <td class="py-3 pr-4 text-right font-bold text-gray-900">8.7/10</td>
+              <td class="py-3 pr-4 text-right text-gray-700">40</td>
+              <td class="py-3 pr-4 text-right text-gray-700">22</td>
               <td class="py-3 pr-4 text-right">
-                <span class="badge-b">53%</span>
+                <span class="badge-b">55%</span>
               </td>
-              <td class="py-3 text-right mono text-xs text-gray-500">2.8s</td>
+              <td class="py-3 text-right mono text-xs text-gray-500">3.1s</td>
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">10</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">11</td>
+              <td class="py-3 pr-4">
+                <div class="flex items-center gap-2">
+                  <a href="models/deepseek-coder-6-7b/" class="text-gray-900 hover:text-blue-600">deepseek-coder:6.7b</a>
+                  
+                </div>
+              </td>
+              <td class="py-3 pr-4 text-right font-bold text-gray-900">3.2/10</td>
+              <td class="py-3 pr-4 text-right text-gray-700">20</td>
+              <td class="py-3 pr-4 text-right text-gray-700">0</td>
+              <td class="py-3 pr-4 text-right">
+                <span class="badge-b">0%</span>
+              </td>
+              <td class="py-3 text-right mono text-xs text-gray-500">6.8s</td>
+            </tr>
+            
+            <tr>
+              <td class="py-3 pr-4 font-bold text-gray-900">12</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <a href="models/qwen3-4b/" class="text-gray-900 hover:text-blue-600">qwen3-4b</a>
@@ -381,7 +445,7 @@
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">11</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">13</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <a href="models/deepseek-coder/" class="text-gray-900 hover:text-blue-600">deepseek-coder</a>
@@ -398,24 +462,7 @@
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">12</td>
-              <td class="py-3 pr-4">
-                <div class="flex items-center gap-2">
-                  <a href="models/deepseek-coder-6-7b/" class="text-gray-900 hover:text-blue-600">deepseek-coder:6.7b</a>
-                  
-                </div>
-              </td>
-              <td class="py-3 pr-4 text-right font-bold text-gray-900">0/10</td>
-              <td class="py-3 pr-4 text-right text-gray-700">10</td>
-              <td class="py-3 pr-4 text-right text-gray-700">0</td>
-              <td class="py-3 pr-4 text-right">
-                <span class="badge-b">0%</span>
-              </td>
-              <td class="py-3 text-right mono text-xs text-gray-500">0s</td>
-            </tr>
-            
-            <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">13</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">14</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <a href="models/gemma2-9b/" class="text-gray-900 hover:text-blue-600">gemma2:9b</a>
@@ -432,7 +479,7 @@
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">14</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">15</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <a href="models/mathstral-7b/" class="text-gray-900 hover:text-blue-600">mathstral:7b</a>
@@ -449,7 +496,7 @@
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">15</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">16</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <a href="models/mistral-7b/" class="text-gray-900 hover:text-blue-600">mistral:7b</a>
