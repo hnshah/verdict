@@ -1,14 +1,30 @@
 {
-  "generated_at": "2026-03-31T07:08:46.942Z",
+  "generated_at": "2026-03-31T07:23:41.230Z",
   "stats": {
-    "total_runs": 10,
-    "total_cases": 100,
+    "total_runs": 11,
+    "total_cases": 110,
     "total_models": 6,
-    "avg_score": 7.9,
-    "test_runs": 0,
+    "avg_score": 8,
+    "test_runs": 1,
     "real_runs": 10
   },
   "runs": [
+    {
+      "id": "2026-03-31-2026-03-31T07-19-11",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 2,
+      "avg_score": 9.2,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
     {
       "id": "2026-03-30-2026-03-30T22-22-13",
       "name": "Gap Fill - Comprehensive Coding",
