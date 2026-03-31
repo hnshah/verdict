@@ -158,7 +158,7 @@
               <td class="py-3 pr-4 font-bold text-gray-900">{{ model.rank }}</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
-                  <span class="text-gray-900">{{ model.name }}</span>
+                  <a href="models/{{ model.name | replace: ':', '-' | replace: '.', '-' }}/" class="text-gray-900 hover:text-blue-600">{{ model.name }}</a>
                   {% if model.medal %}
                     <span>{{ model.medal }}</span>
                   {% endif %}

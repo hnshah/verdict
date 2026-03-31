@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>qwen-coder — Verdict</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  body { font-family: 'Inter', sans-serif; }
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+  
+  .badge-a { background: #EFF6FF; color: #1D4ED8; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-b { background: #ECFDF5; color: #065F46; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-c { background: #FFFBEB; color: #92400E; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  
+  .card { background: white; border-radius: 0.75rem; border: 1px solid #E5E7EB; padding: 2rem; margin-top: 2rem; }
+  tr:hover { background: #F9FAFB; }
+  
+  @media print { .no-print { display: none; } }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 no-print">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="../../" class="text-sm text-gray-500 hover:text-gray-900">← Dashboard</a>
+      <span class="text-gray-300">·</span>
+      <span class="font-semibold text-gray-900 mono">qwen-coder</span>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-6 py-8">
+
+  <section class="card" style="margin-top:0">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6 mono">qwen-coder</h1>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Score</p>
+        <p class="text-2xl font-bold text-gray-900">8.3<span class="text-base text-gray-500">/10</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Total Wins</p>
+        <p class="text-2xl font-bold text-gray-900">56</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Runs</p>
+        <p class="text-2xl font-bold text-gray-900">9</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Latency</p>
+        <p class="text-2xl font-bold text-gray-900">6.5<span class="text-base text-gray-500">s</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="text-xl font-bold text-gray-900 mb-6">Performance Across Runs</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs text-gray-400 border-b border-gray-100">
+            <th class="pb-3 pr-4 font-semibold">Date</th>
+            <th class="pb-3 pr-4 font-semibold">Run</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Score</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Accuracy</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Complete</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Concise</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Wins</th>
+            <th class="pb-3 text-right font-semibold">Latency</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          
+          <tr>
+            <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="../../runs/2026-03-30-2026-03-30T22-22-13/" class="text-gray-900 hover:text-blue-600">Gap Fill - Comprehensive Coding</a>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">7.4/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">6.7</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">6</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">17.6s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="../../runs/2026-03-30-2026-03-30T19-23-38/" class="text-gray-900 hover:text-blue-600">Gap Fill - Speed Coverage</a>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">9.6/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.4</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">1</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">2.1s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="../../runs/2026-03-30-2026-03-30T17-34-39/" class="text-gray-900 hover:text-blue-600">Gap Fill - Multilingual Coverage</a>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">7.6/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.4</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">2</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">3.6s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="../../runs/2026-03-30-2026-03-30T17-23-38/" class="text-gray-900 hover:text-blue-600">Comprehensive Categorized Benchmark</a>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">8/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.1</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">12</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">13.3s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="../../runs/2026-03-30-2026-03-30T17-08-33/" class="text-gray-900 hover:text-blue-600">Coding Specialist Comparison</a>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">8.5/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">7</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">6.1s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="../../runs/2026-03-30-2026-03-30T16-01-05/" class="text-gray-900 hover:text-blue-600">Quick Diverse Benchmark</a>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">8.5/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">6</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">4.4s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="../../runs/2026-03-30-2026-03-30T07-20-32/" class="text-gray-900 hover:text-blue-600">Elite Production-Grade Tests (Matching Ren's Quality)</a>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">8.5/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">6</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">4.1s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="../../runs/2026-03-30-2026-03-30T07-15-19/" class="text-gray-900 hover:text-blue-600">Fast 7B Model Comparison</a>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">8.5/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">8</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">3.4s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="../../runs/2026-03-30-2026-03-30T07-12-16/" class="text-gray-900 hover:text-blue-600">Quick Coding Test</a>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">8.5/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">8</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">4s</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="grid sm:grid-cols-2 gap-6">
+    <section class="card" style="margin-top:0">
+      <h2 class="text-xl font-bold text-gray-900 mb-6">Best Cases</h2>
+      <div class="space-y-3">
+        
+        <div class="flex items-center justify-between p-3 rounded bg-gray-50">
+          <div class="flex-1">
+            <p class="mono text-sm font-medium text-gray-900">speed-001</p>
+            <p class="text-xs text-gray-500">Capital of France?</p>
+          </div>
+          <span class="badge-b ml-3">10/10</span>
+        </div>
+        
+        <div class="flex items-center justify-between p-3 rounded bg-gray-50">
+          <div class="flex-1">
+            <p class="mono text-sm font-medium text-gray-900">speed-002</p>
+            <p class="text-xs text-gray-500">2+2=</p>
+          </div>
+          <span class="badge-b ml-3">10/10</span>
+        </div>
+        
+        <div class="flex items-center justify-between p-3 rounded bg-gray-50">
+          <div class="flex-1">
+            <p class="mono text-sm font-medium text-gray-900">speed-003</p>
+            <p class="text-xs text-gray-500">true AND false =</p>
+          </div>
+          <span class="badge-b ml-3">10/10</span>
+        </div>
+        
+        <div class="flex items-center justify-between p-3 rounded bg-gray-50">
+          <div class="flex-1">
+            <p class="mono text-sm font-medium text-gray-900">speed-005</p>
+            <p class="text-xs text-gray-500">1, 2, 3, ?</p>
+          </div>
+          <span class="badge-b ml-3">10/10</span>
+        </div>
+        
+        <div class="flex items-center justify-between p-3 rounded bg-gray-50">
+          <div class="flex-1">
+            <p class="mono text-sm font-medium text-gray-900">multi-004</p>
+            <p class="text-xs text-gray-500">Solve: りんごが5個あります。2個食べました。何個残っていますか？
+</p>
+          </div>
+          <span class="badge-b ml-3">10/10</span>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:0">
+      <h2 class="text-xl font-bold text-gray-900 mb-6">Needs Improvement</h2>
+      <div class="space-y-3">
+        
+        <div class="flex items-center justify-between p-3 rounded bg-gray-50">
+          <div class="flex-1">
+            <p class="mono text-sm font-medium text-gray-900">code-003</p>
+            <p class="text-xs text-gray-500">Write a SQL query that finds the top 3 customers by total...</p>
+          </div>
+          <span class="badge-c ml-3">3.8/10</span>
+        </div>
+        
+        <div class="flex items-center justify-between p-3 rounded bg-gray-50">
+          <div class="flex-1">
+            <p class="mono text-sm font-medium text-gray-900">multi-001</p>
+            <p class="text-xs text-gray-500">Translate to English and explain: "El gato está sobre la ...</p>
+          </div>
+          <span class="badge-c ml-3">3.8/10</span>
+        </div>
+        
+        <div class="flex items-center justify-between p-3 rounded bg-gray-50">
+          <div class="flex-1">
+            <p class="mono text-sm font-medium text-gray-900">gen-008</p>
+            <p class="text-xs text-gray-500">Explain what a transformer model is in 2-3 sentences for ...</p>
+          </div>
+          <span class="badge-c ml-3">7.6/10</span>
+        </div>
+        
+        <div class="flex items-center justify-between p-3 rounded bg-gray-50">
+          <div class="flex-1">
+            <p class="mono text-sm font-medium text-gray-900">gen-009</p>
+            <p class="text-xs text-gray-500">Write a haiku about debugging code.</p>
+          </div>
+          <span class="badge-c ml-3">7.6/10</span>
+        </div>
+        
+        <div class="flex items-center justify-between p-3 rounded bg-gray-50">
+          <div class="flex-1">
+            <p class="mono text-sm font-medium text-gray-900">code-002</p>
+            <p class="text-xs text-gray-500">Debug this JavaScript: function flatten(arr) { return arr...</p>
+          </div>
+          <span class="badge-c ml-3">7.8/10</span>
+        </div>
+        
+      </div>
+    </section>
+  </div>
+
+</div>
+
+</body>
+</html>
