@@ -1,0 +1,125 @@
+{
+  "repos": [
+    {
+      "owner": "PyCQA",
+      "repo": "isort",
+      "reason": "Active contribution - Issue #1518",
+      "priority": "critical",
+      "track": {
+        "specificIssues": [1518],
+        "ourPRs": true,
+        "maintainerComments": true
+      },
+      "addedAt": "2026-03-30T22:17:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
+    },
+    {
+      "owner": "ankitvgupta",
+      "repo": "mail-app",
+      "reason": "OpenClaw integration opportunity",
+      "priority": "high",
+      "track": {
+        "allIssues": true,
+        "allPRs": true,
+        "newReleases": true
+      },
+      "addedAt": "2026-03-30T22:48:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
+    },
+    {
+      "owner": "huggingface",
+      "repo": "transformers",
+      "reason": "AI/ML - High value, popular",
+      "priority": "medium",
+      "track": {
+        "goodFirstIssue": true,
+        "helpWanted": true
+      },
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
+    },
+    {
+      "owner": "langchain-ai",
+      "repo": "langchain",
+      "reason": "Agent framework - Relevant",
+      "priority": "medium",
+      "track": {
+        "goodFirstIssue": true,
+        "helpWanted": true
+      },
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
+    },
+    {
+      "owner": "streamlit",
+      "repo": "streamlit",
+      "reason": "From 25-OSS list - Data apps",
+      "priority": "medium",
+      "track": {
+        "goodFirstIssue": true,
+        "helpWanted": true
+      },
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
+    },
+    {
+      "owner": "mlflow",
+      "repo": "mlflow",
+      "reason": "From 25-OSS list - ML platform",
+      "priority": "medium",
+      "track": {
+        "goodFirstIssue": true,
+        "helpWanted": true
+      },
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
+    },
+    {
+      "owner": "fastapi",
+      "repo": "fastapi",
+      "reason": "From 25-OSS list - Popular framework",
+      "priority": "medium",
+      "track": {
+        "goodFirstIssue": true,
+        "helpWanted": true
+      },
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
+    },
+    {
+      "owner": "encode",
+      "repo": "httpx",
+      "reason": "From 25-OSS list - HTTP client",
+      "priority": "low",
+      "track": {
+        "goodFirstIssue": true
+      },
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
+    },
+    {
+      "owner": "astral-sh",
+      "repo": "ruff",
+      "reason": "From 25-OSS list - Python linter",
+      "priority": "low",
+      "track": {
+        "goodFirstIssue": true
+      },
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
+    },
+    {
+      "owner": "pytest-dev",
+      "repo": "pytest",
+      "reason": "From 25-OSS list - Testing framework",
+      "priority": "low",
+      "track": {
+        "goodFirstIssue": true
+      },
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
+    }
+  ],
+  "lastUpdated": "2026-03-31T04:50:36Z",
+  "totalRepos": 10
+}
