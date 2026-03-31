@@ -61,21 +61,15 @@ verdict/
 └── regenerate-dashboard-data.sh # Regenerate from individual files
 ```
 
-### Two Dashboard Systems
+### Dashboard System
 
-**🔴 IMPORTANT:** There are **TWO** dashboard systems:
+**Dashboard Build System** - Node.js
+- Location: `dashboard/build/`
+- Purpose: Multi-page static site generator
+- Output: Full site with model/run detail pages
+- Deployment: GitHub Pages (https://hnshah.github.io/verdict/)
 
-1. **Verdict CLI (`verdict dashboard`)** - TypeScript
-   - Location: `src/cli/commands/dashboard.ts`
-   - Purpose: Official Verdict dashboard generator
-   - Output: Single-file embedded HTML
-   - Status: **NOT USED** in current setup
-
-2. **Custom Build System** - Node.js (Current)
-   - Location: `dashboard/build/`
-   - Purpose: Multi-page static site
-   - Output: Full site with model/run pages
-   - Status: **ACTIVE** and deployed to GitHub Pages
+**Note:** The built-in `verdict dashboard` CLI command has been **removed** to avoid confusion. The custom build system in `dashboard/build/` is the only dashboard system.
 
 ---
 

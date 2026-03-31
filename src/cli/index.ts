@@ -16,7 +16,8 @@ import { leaderboardCommand } from './commands/leaderboard.js'
 import { reportCommand } from './commands/report.js'
 import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } from './commands/eval.js'
 import { contributeCommand } from './commands/contribute.js'
-import { dashboardGenerateCommand, dashboardValidateCommand, dashboardPreviewCommand, dashboardServeCommand, dashboardDeployCommand } from './commands/dashboard.js'
+// Dashboard CLI removed - use custom build system in dashboard/build/ instead
+// See WORKFLOW.md for complete dashboard workflow
 
 const program = new Command()
 
@@ -203,45 +204,16 @@ evalCmd
   .description('Auto-register built-in eval packs')
   .action(evalInitCommand)
 
-const dashboard = program
-  .command('dashboard')
-  .description('Generate and preview an interactive dashboard from eval results')
-
-dashboard
-  .command('generate')
-  .description('Aggregate results into dashboard JSON (and optionally HTML)')
-  .option('-o, --output <path>', 'Output file path', 'dashboard-data.json')
-  .option('-r, --results <dir>', 'Results directory', './results')
-  .option('--embed', 'Also generate a self-contained HTML dashboard')
-  .action(dashboardGenerateCommand)
-
-dashboard
-  .command('validate')
-  .description('Validate a dashboard-data.json file')
-  .option('-i, --input <path>', 'Input file path', 'dashboard-data.json')
-  .action(dashboardValidateCommand)
-
-dashboard
-  .command('preview')
-  .description('Preview dashboard locally in your browser')
-  .option('-i, --input <path>', 'Input dashboard-data.json file', 'dashboard-data.json')
-  .option('-p, --port <n>', 'Port to listen on', '3000')
-  .action(dashboardPreviewCommand)
-
-dashboard
-  .command('serve')
-  .description('Serve dashboard locally from results directory (auto-refreshes)')
-  .option('-r, --results <dir>', 'Results directory', './results')
-  .option('-p, --port <n>', 'Port to listen on', '8080')
-  .action(dashboardServeCommand)
-
-dashboard
-  .command('deploy')
-  .description('Generate dashboard for deployment')
-  .option('--to <target>', 'Deployment target (github-pages, cloudflare-pages)', 'github-pages')
-  .option('-r, --results <dir>', 'Results directory', './results')
-  .option('-o, --output <dir>', 'Output directory for deploy artifacts', './dashboard/published')
-  .action(dashboardDeployCommand)
+// Dashboard CLI removed - use custom build system instead
+// 
+// The built-in `verdict dashboard` command has been removed in favor of the
+// custom multi-page dashboard system in dashboard/build/
+//
+// To update the dashboard:
+//   1. Run evals: npx verdict run --eval-pack eval-packs/my-test.yaml
+//   2. Add to dashboard: ./quick-add-run.sh results/LATEST.json
+//
+// See WORKFLOW.md for complete documentation
 
 program
   .command('contribute')
