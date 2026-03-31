@@ -1,0 +1,189 @@
+name: Information Extraction
+description: Tests extraction of entities, facts, relationships, and data points from unstructured text. Distinct from json-extraction (format compliance) — this tests whether models correctly identify the right information. Critical for RAG pipelines, document parsing, and data enrichment tasks.
+
+cases:
+  # ── Named entity extraction ───────────────────────────────────────────────
+  - id: ie-001
+    description: "Extract key entities from a press release"
+    category: named-entity
+    prompt: |
+      Extract the following from this text as JSON: company, amount, date, acquirer.
+      
+      "Veritas Analytics announced today that it has been acquired by Paladin Capital Group for $340 million. The deal is expected to close by March 15, 2025, pending regulatory approval."
+    scorer: json
+    expected:
+      company: "Veritas Analytics"
+      acquirer: "Paladin Capital Group"
+    criteria: "Correctly extracts company=Veritas Analytics, acquirer=Paladin Capital Group, amount=$340 million, date=March 15, 2025."
+    tags: [extraction, named-entity, json]
+
+  - id: ie-002
+    description: "Extract contact info from unstructured bio text"
+    category: named-entity
+    prompt: |
+      Extract name, email, and phone from this text as JSON:
+      
+      "Hi, I'm Dr. Patricia Owens-Hall. You can reach me at p.owenshall@northwestern.edu or call my office at (312) 555-0182 on weekdays."
+    scorer: json
+    expected:
+      name: "Dr. Patricia Owens-Hall"
+      email: "p.owenshall@northwestern.edu"
+    criteria: "Extracts name (Dr. Patricia Owens-Hall), email (p.owenshall@northwestern.edu), phone (312-555-0182 or equivalent format)."
+    tags: [extraction, contact, json]
+
+  - id: ie-003
+    description: "Extract multiple dates and durations from contract text"
+    category: named-entity
+    prompt: |
+      List all dates and durations mentioned in this contract clause as a JSON array of objects with keys: type, value.
+      
+      "The License Agreement commences on January 1, 2025 and continues for a period of three (3) years, unless terminated earlier. Either party may terminate with 90 days written notice after the initial twelve-month period."
+    scorer: json
+    criteria: "Identifies: start date (January 1, 2025), total duration (3 years), early termination notice (90 days), initial lock-in period (12 months). JSON array with type+value fields."
+    tags: [extraction, dates, json]
+
+  # ── Fact extraction ───────────────────────────────────────────────────────
+  - id: ie-004
+    description: "Extract product specs from marketing text"
+    category: fact-extraction
+    prompt: |
+      Extract these product specs from the description as JSON: battery_life_hours, weight_grams, display_inches, storage_gb.
+      
+      "The Meridian X7 features a stunning 6.2-inch OLED display and comes in 128GB and 256GB configurations. At just 187 grams, it's one of the lightest phones in its class. With our new PowerCore technology, expect up to 28 hours of mixed usage on a single charge."
+    scorer: json
+    expected:
+      battery_life_hours: 28
+      weight_grams: 187
+      display_inches: 6.2
+    criteria: "Correctly extracts battery_life=28, weight=187g, display=6.2in. For storage_gb, should note multiple options (128 and 256) or return an array — not just one value."
+    tags: [extraction, specs, json]
+
+  - id: ie-005
+    description: "Extract financial data from earnings report snippet"
+    category: fact-extraction
+    prompt: |
+      Extract revenue, net_income, and yoy_growth_percent as JSON from this earnings snippet:
+      
+      "Q3 2024 Results: Revenue came in at $2.47 billion, up 18% year-over-year. Net income was $312 million, compared to $198 million in Q3 2023."
+    scorer: json
+    criteria: "revenue=2.47B (or 2470000000), net_income=312M (or 312000000), yoy_growth_percent=18. Consistent numeric representation."
+    tags: [extraction, financial, json]
+
+  - id: ie-006
+    description: "Extract causal relationships from a news article"
+    category: fact-extraction
+    prompt: |
+      From this passage, list what caused what — output as a JSON array of {cause, effect} objects:
+      
+      "Heavy rainfall flooded the downtown subway tunnels, forcing the transit authority to suspend service on lines 2 and 5. With trains out of service, commuters flooded the bus network, causing severe overcrowding and delays of up to 90 minutes."
+    scorer: json
+    criteria: "Identifies at least 2 causal chains: (1) heavy rainfall → subway flooding, (2) subway suspension → commuters switching to buses, (3) overcrowding → 90-minute delays."
+    tags: [extraction, causal, json]
+
+  # ── Selective extraction ──────────────────────────────────────────────────
+  - id: ie-007
+    description: "Extract only action items from meeting notes"
+    category: selective
+    prompt: |
+      Extract only the action items from these meeting notes. Return as a JSON array of {owner, task, due_date} objects. Ignore discussion points.
+      
+      "We discussed Q2 performance (revenue up 12%). Sarah will update the pricing deck by Friday. Team agreed to delay the mobile launch. James needs to send the vendor contract to legal by EOD Wednesday. Long discussion about hiring — no decision yet. Marketing to share the new brand guidelines with all teams by next Monday."
+    scorer: json
+    criteria: "Returns exactly 3 action items: Sarah/pricing deck/Friday, James/vendor contract/Wednesday EOD, Marketing/brand guidelines/next Monday. Should NOT include discussion items (Q2 performance, mobile launch delay, hiring)."
+    tags: [extraction, selective, meetings]
+
+  - id: ie-008
+    description: "Extract only negative sentiment sentences from a review"
+    category: selective
+    prompt: |
+      From this product review, extract only the sentences expressing complaints or negative feedback. Return as a JSON array of strings.
+      
+      "The build quality is excellent and the screen is gorgeous. However, the battery dies after just 4 hours of use. Customer support took 3 weeks to respond to my ticket. Setup was straightforward. The charging brick gets extremely hot. Loving the camera though."
+    scorer: json
+    criteria: "Returns exactly 3 negative sentences: battery (4 hours), support (3 weeks), charging brick (hot). Should NOT include positive sentences (build quality, screen, setup, camera)."
+    tags: [extraction, selective, sentiment]
+
+  - id: ie-009
+    description: "Extract only numeric measurements from a recipe"
+    category: selective
+    prompt: |
+      Extract all measurements from this recipe as a JSON array of {ingredient, amount, unit} objects. Only include items with explicit numeric quantities.
+      
+      "Combine 2 cups of flour with a pinch of salt. Add 3 tablespoons of olive oil and 1/2 teaspoon of dried oregano. Mix in some garlic (to taste). Pour in 175ml of warm water. Optional: sprinkle a handful of sesame seeds on top."
+    scorer: json
+    criteria: "Returns 4 measured items: flour (2 cups), olive oil (3 tablespoons), oregano (0.5 teaspoon), water (175 ml). Should NOT include 'garlic to taste' or 'handful of sesame seeds' — no explicit numeric quantity."
+    tags: [extraction, selective, recipe]
+
+  # ── Negative / absent entity ──────────────────────────────────────────────
+  - id: ie-010
+    description: "Correctly returns null when entity is not present"
+    category: negative
+    prompt: |
+      Extract the following from this text as JSON: company_name, founding_year, ceo_name, headquarters.
+      
+      "Streamline offers cloud-based project management software used by over 50,000 teams worldwide. The platform integrates with Slack, GitHub, and Jira."
+    scorer: json
+    criteria: "company_name=Streamline. founding_year, ceo_name, headquarters should be null or absent — must NOT be fabricated. Should not invent facts not in the text."
+    tags: [extraction, negative, hallucination-resistance]
+
+  - id: ie-011
+    description: "Handles partial data without inventing missing fields"
+    category: negative
+    prompt: |
+      Extract sender, recipient, subject, and date from this email header as JSON:
+      
+      "From: noreply@alerts.bankofamerica.com
+      Subject: Your account statement is ready
+      Date: Thu, 27 Mar 2025 08:14:22 +0000"
+    scorer: json
+    expected:
+      sender: "noreply@alerts.bankofamerica.com"
+      subject: "Your account statement is ready"
+    criteria: "sender and subject extracted correctly. date=Thu, 27 Mar 2025 (or ISO equivalent). recipient should be null/missing — it's not in the header. Must NOT invent a recipient."
+    tags: [extraction, negative, email]
+
+  # ── Relationship extraction ───────────────────────────────────────────────
+  - id: ie-012
+    description: "Extract org chart relationships from paragraph"
+    category: relationships
+    prompt: |
+      Extract reporting relationships as a JSON array of {person, reports_to} objects:
+      
+      "The company is led by CEO Marcus Webb. CFO Diana Torres and CTO Raj Patel both report directly to Webb. The engineering team is managed by VP James Liu, who reports to Raj Patel. Diana Torres oversees Controller Mei Chen."
+    scorer: json
+    criteria: "4 relationships: Torres→Webb, Patel→Webb, Liu→Patel, Chen→Torres. Each relationship should have person and reports_to fields."
+    tags: [extraction, relationships, org-chart]
+
+  - id: ie-013
+    description: "Extract locations and their associated events from travel blog"
+    category: relationships
+    prompt: |
+      Extract each location and what happened there as a JSON array of {location, event} objects:
+      
+      "We started our trip in Lisbon, where we visited the Alfama district and tried pastel de nata at a local bakery. After two days, we took the train to Porto, where the Dom Luís bridge was stunning and we joined a port wine tasting. Our final stop was the Algarve coast, where we hiked to Ponta da Piedade."
+    scorer: json
+    criteria: "3 location objects: Lisbon (Alfama, pastel de nata), Porto (Dom Luís bridge, port wine tasting), Algarve (Ponta da Piedade hike). Each with location and meaningful event description."
+    tags: [extraction, relationships, travel]
+
+  # ── Complex / multi-step extraction ──────────────────────────────────────
+  - id: ie-014
+    description: "Extract and normalize inconsistently formatted data"
+    category: complex
+    prompt: |
+      Extract all prices from this text and normalize them to USD cents as integers in a JSON array:
+      
+      "The basic plan is $9.99/month. Enterprise costs $1,200 per year. Our add-on pack is 4.50 USD. Legacy customers still pay the old rate of $7 per month."
+    scorer: json
+    criteria: "Returns 4 prices as integers in cents: 999, 120000, 450, 700. Correct conversion from dollars to cents. No floating point — integer cents."
+    tags: [extraction, normalization, pricing]
+
+  - id: ie-015
+    description: "Extract structured timeline from narrative text"
+    category: complex
+    prompt: |
+      Convert this narrative into a JSON array of timeline events sorted chronologically, each with keys: year, event.
+      
+      "The company was founded in 2018 by two ex-Google engineers. Three years later, they raised a $40M Series B. Their first product launched in 2019. In 2023 they crossed $10M ARR, and by early 2024 had been acquired by Adobe."
+    scorer: json
+    criteria: "5 events in chronological order: 2018 (founded), 2019 (first product), 2021 (Series B — '3 years later' = 2021), 2023 ($10M ARR), 2024 (acquired by Adobe). Must calculate 2021 from 'three years later' relative to founding."
+    tags: [extraction, timeline, inference]
