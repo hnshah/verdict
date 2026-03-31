@@ -1,0 +1,114 @@
+name: Translation & Multilingual
+description: Tests translation accuracy, language detection, cross-lingual consistency, and multilingual instruction following. Critical for benchmarking local models claimed to support multiple languages.
+
+cases:
+  # ── Translation accuracy ──────────────────────────────────────────────────
+  - id: trans-001
+    description: "English to Spanish — technical vocabulary"
+    category: translation
+    prompt: "Translate to Spanish: 'The pull request was merged after code review. Please update your local branch.'"
+    criteria: "Accurate Spanish translation preserving technical terms appropriately. 'pull request' can stay as-is or become 'solicitud de extracción'. 'merged' → 'fusionado/a' or 'incorporado/a'. 'branch' → 'rama' or stay as 'branch'. Must be grammatically correct Spanish."
+    tags: [translation, spanish, technical]
+
+  - id: trans-002
+    description: "French to English — formal register preservation"
+    category: translation
+    prompt: "Translate to English: 'Veuillez trouver ci-joint notre proposition commerciale. Nous restons à votre disposition pour tout renseignement complémentaire.'"
+    criteria: "Formal English translation preserving the professional register. Something like: 'Please find attached our commercial proposal. We remain at your disposal for any additional information.' Must maintain formal/business tone."
+    tags: [translation, french, register]
+
+  - id: trans-003
+    description: "German to English — compound word handling"
+    category: translation
+    prompt: "Translate to English: 'Die Benutzeroberfläche der Anwendungssoftware wurde grundlegend überarbeitet.'"
+    criteria: "Accurate translation: 'The user interface of the application software has been fundamentally revised.' Key compounds: Benutzeroberfläche=user interface, Anwendungssoftware=application software, grundlegend=fundamentally/radically."
+    tags: [translation, german, compounds]
+
+  - id: trans-004
+    description: "Japanese to English — context-dependent pronouns"
+    category: translation
+    prompt: "Translate to English: '明日の会議に参加できますか？資料を事前に送ってください。'"
+    criteria: "Accurate translation. Something like: 'Can you attend tomorrow's meeting? Please send the materials in advance.' Note: Japanese drops subjects — 'you' is implied. 'Resources/materials' = 資料. Tense and politeness level appropriate."
+    tags: [translation, japanese, pronouns]
+
+  - id: trans-005
+    description: "English to Portuguese (Brazilian) — idiom handling"
+    category: translation
+    prompt: "Translate to Brazilian Portuguese: 'We need to think outside the box to solve this problem.'"
+    criteria: "Fluent Brazilian Portuguese. 'Think outside the box' can be translated literally or adapted: 'pensar fora da caixa' (accepted Brazilianism) or reworded as 'pensar de forma criativa/inovadora'. Must sound natural, not word-for-word robotic."
+    tags: [translation, portuguese, idioms]
+
+  # ── Language detection ────────────────────────────────────────────────────
+  - id: trans-006
+    description: "Identify language of short text"
+    category: language-detection
+    prompt: "What language is this text written in? 'Buongiorno, come stai oggi?'"
+    scorer: contains
+    expected: "Italian"
+    criteria: "Must identify as Italian."
+    tags: [language-detection, italian]
+
+  - id: trans-007
+    description: "Distinguish similar languages"
+    category: language-detection
+    prompt: "What language is each of these texts written in? (1) 'Bom dia, tudo bem?' (2) 'Buenos días, ¿cómo estás?'"
+    criteria: "Must correctly identify: (1) = Portuguese, (2) = Spanish. Should NOT confuse them despite similarity."
+    tags: [language-detection, portuguese, spanish]
+
+  - id: trans-008
+    description: "Detect mixed-language code-switching"
+    category: language-detection
+    prompt: "What languages are used in this sentence, and which parts? 'I was like totalement d'accord with her, you know?'"
+    criteria: "Should identify English (main) and French ('totalement d'accord' = completely in agreement). Code-switching sentence where French phrase is embedded in English."
+    tags: [language-detection, code-switching]
+
+  # ── Cross-lingual consistency ─────────────────────────────────────────────
+  - id: trans-009
+    description: "Same question in two languages should get consistent facts"
+    category: consistency
+    prompt: "Answer both questions with the same factual information:\n1. (English) What is the capital of Australia?\n2. (Spanish) ¿Cuál es la capital de Australia?"
+    criteria: "Both answers should say Canberra (not Sydney, which is a common mistake). The factual answer must be identical in both languages."
+    tags: [consistency, factual, spanish]
+
+  - id: trans-010
+    description: "Multilingual instruction following"
+    category: instruction-following
+    prompt: "Respond to the following question in the SAME language it's asked in:\nPregunta: ¿Cuántos días tiene una semana?"
+    criteria: "Must respond in Spanish. Answer: 'Una semana tiene siete días' or equivalent Spanish response. Should NOT respond in English."
+    tags: [instruction-following, spanish, multilingual]
+
+  - id: trans-011
+    description: "Translate while preserving code/technical syntax"
+    category: translation
+    prompt: "Translate the comments in this code to English, but leave the code itself unchanged:\n```python\n# Este bucle itera sobre la lista de usuarios\nfor usuario in usuarios:\n    # Verificar si el usuario está activo\n    if usuario.activo:\n        enviar_correo(usuario)  # Enviar notificación\n```"
+    criteria: "Comments translated to English: '# This loop iterates over the list of users', '# Check if the user is active', '# Send notification'. Code itself (variables, function names: usuario, usuarios, activo, enviar_correo) must remain unchanged."
+    tags: [translation, code, comments]
+
+  # ── Translation quality judgment ──────────────────────────────────────────
+  - id: trans-012
+    description: "Identify translation errors in a provided translation"
+    category: quality-review
+    prompt: "Find any errors in this English-to-French translation:\nOriginal: 'The meeting was postponed until next Friday.'\nTranslation: 'La réunion a été reportée jusqu'à vendredi dernier.'"
+    criteria: "Should identify the error: 'vendredi dernier' = 'last Friday' but original says 'next Friday' = 'vendredi prochain'. A significant meaning error — the time direction is reversed."
+    tags: [quality-review, french, error-detection]
+
+  - id: trans-013
+    description: "Choose better of two translations"
+    category: quality-review
+    prompt: "Which of these Italian-to-English translations is better, and why?\nOriginal: 'Mi manca la mia famiglia.'\nA: 'I miss my family to me.'\nB: 'I miss my family.'"
+    criteria: "B is better. A is a literal word-for-word render of 'mi' (to me/reflexive clitic) which produces unnatural English. 'Mi manca' is an idiomatic construction meaning 'I miss' — the dative clitic 'mi' doesn't translate as 'to me' in natural English."
+    tags: [quality-review, italian, idioms]
+
+  - id: trans-014
+    description: "Translate preserving tone — sarcastic text"
+    category: translation
+    prompt: "Translate to French, preserving the sarcastic tone: 'Oh great, another Monday. Just what I needed.'"
+    criteria: "Should produce a sarcastic French equivalent. Something like: 'Super, encore un lundi. C'est exactement ce dont j'avais besoin.' Sarcastic markers preserved. Should NOT flatten into neutral text."
+    tags: [translation, french, tone]
+
+  - id: trans-015
+    description: "Multilingual summarization"
+    category: multilingual
+    prompt: "Summarize this text in English, then also provide the summary in German:\n'Le changement climatique représente l'un des défis les plus urgents de notre époque. Les scientifiques s'accordent à dire que les émissions de gaz à effet de serre doivent être réduites de manière significative d'ici 2030 pour limiter le réchauffement mondial à 1,5 degré Celsius.'"
+    criteria: "English summary: Climate change is urgent; scientists agree GHG emissions must be cut significantly by 2030 to limit warming to 1.5°C. German summary: equivalent content in correct German. Both should be accurate to the French source."
+    tags: [multilingual, summarization, french, german]
