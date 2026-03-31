@@ -1,0 +1,516 @@
+name: HellaSwag (Commonsense Reasoning)
+version: 1.0.0
+description: HellaSwag benchmark - 20 commonsense natural language inference tasks.
+cases:
+- id: hellaswag-00001
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'A man is sitting on a roof. he
+
+
+    Choose the most likely continuation:
+
+
+    A) is using wrap to wrap a pair of skis.
+
+
+    B) is ripping level tiles off.
+
+
+    C) is holding a rubik''s cube.
+
+
+    D) starts pulling up roofing on a roof.'
+  criteria: 'Correct answer: D'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00002
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'A lady walks to a barbell. She bends down and grabs the pole. the lady
+
+
+    Choose the most likely continuation:
+
+
+    A) swings and lands in her arms.
+
+
+    B) pulls the barbell forward.
+
+
+    C) pulls a rope attached to the barbell.
+
+
+    D) stands and lifts the weight over her head.'
+  criteria: 'Correct answer: D'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00003
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'Two women in a child are shown in a canoe while a man pulls the canoe while
+    standing in the water, with other individuals visible in the background. the child
+    and a different man
+
+
+    Choose the most likely continuation:
+
+
+    A) are then shown paddling down a river in a boat while a woman talks.
+
+
+    B) are driving the canoe, they go down the river flowing side to side.
+
+
+    C) sit in a canoe while the man paddles.
+
+
+    D) walking go down the rapids, while the man in his helicopter almost falls and
+    goes out of canoehood.'
+  criteria: 'Correct answer: C'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00004
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'A boy is running down a track. the boy
+
+
+    Choose the most likely continuation:
+
+
+    A) runs into a car.
+
+
+    B) gets in a mat.
+
+
+    C) lifts his body above the height of a pole.
+
+
+    D) stands on his hands and springs.'
+  criteria: 'Correct answer: C'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00005
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'The boy lifts his body above the height of a pole. The boy lands on his
+    back on to a red mat. the boy
+
+
+    Choose the most likely continuation:
+
+
+    A) turns his body around on the mat.
+
+
+    B) gets up from the mat.
+
+
+    C) continues to lift his body over the pole.
+
+
+    D) wiggles out of the mat.'
+  criteria: 'Correct answer: B'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00006
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'The boy lands on his back on to a red mat. The boy gets up from the mat.
+    the boy
+
+
+    Choose the most likely continuation:
+
+
+    A) starts doing spins.
+
+
+    B) celebrates by clapping and flexing both arms.
+
+
+    C) is dancing on the mat.
+
+
+    D) does jump jacks on his stick.'
+  criteria: 'Correct answer: B'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00007
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'A man is standing in front of a camera. He starts playing a harmonica for
+    the camera. he
+
+
+    Choose the most likely continuation:
+
+
+    A) begins to play the harmonica with his body while looking at the camera.
+
+
+    B) seems to be singing while playing the harmonica.
+
+
+    C) rocks back and forth to the music as he goes.
+
+
+    D) painted a fence in front of the camera.'
+  criteria: 'Correct answer: C'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00008
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'A cartoon animation video is shown with people wandering around and rockets
+    being shot. two men
+
+
+    Choose the most likely continuation:
+
+
+    A) fight robots of evil and ends with a to be continued.
+
+
+    B) are then shown in closeups shooting a shot put.
+
+
+    C) push a child in a speedboat in the water.
+
+
+    D) look in the cameraman''s eye and smile.'
+  criteria: 'Correct answer: A'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00009
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'A man is holding a pocket knife while sitting on some rocks in the wilderness.
+    then he
+
+
+    Choose the most likely continuation:
+
+
+    A) opens a can of oil put oil on the knife, and puts oil on a knife and press
+    it through a can filled with oil then cuts several pieces from the sandwiches.
+
+
+    B) takes a small stone from the flowing river and smashes it on another stone.
+
+
+    C) uses the knife to shave his leg.
+
+
+    D) sand the rocks and tops them by using strong pressure.'
+  criteria: 'Correct answer: B'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00010
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'Then he takes a small stone from the flowing river and smashes it on another
+    stone. He starts to crush the small stone to smaller pieces. he
+
+
+    Choose the most likely continuation:
+
+
+    A) cuts the center stone in half and blow it on to make it bigger.
+
+
+    B) grind it hard to make the pieces smaller.
+
+
+    C) eventually brings it back into view and adds it to the smaller ones to make
+    a small triangular shaped piece.
+
+
+    D) starts to party with them and throw the pieces by hand while they celebrate.'
+  criteria: 'Correct answer: B'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00011
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'Then he takes a piece of bark and rubs the powered stone pieces onto it.
+    The stone particles stick to the wet piece of wood. he
+
+
+    Choose the most likely continuation:
+
+
+    A) uses a small brush to polish one of the stone pieces.
+
+
+    B) then uses a strip of sealing tape to seal the board and then smooths the bottom
+    of the board.
+
+
+    C) walks towards the camera.
+
+
+    D) then takes the knife and sharpens it against the wood piece.'
+  criteria: 'Correct answer: D'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00012
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'The stone particles stick to the wet piece of wood. He then takes the knife
+    and sharpens it against the wood piece. he
+
+
+    Choose the most likely continuation:
+
+
+    A) then cuts off the excess hair of the wood.
+
+
+    B) scrapes the wood with a broom in the cutting tool used in sharpening the instrument.
+
+
+    C) writes on the board again.
+
+
+    D) then notices a little black and green poisonous frog sitting next to him.'
+  criteria: 'Correct answer: D'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00013
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'He then takes the knife and sharpens it against the wood piece. He then
+    notices a little black and green poisonous frog sitting next to him. the frog
+
+
+    Choose the most likely continuation:
+
+
+    A) eventually gets to get up and marches out of the room waving its body about.
+
+
+    B) then starts to get up from the chair and begins walking towards the camera.
+
+
+    C) then escapes and jumps away.
+
+
+    D) is acting crazy and attacking him while he is cooking.'
+  criteria: 'Correct answer: C'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00014
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'He then notices a little black and green poisonous frog sitting next to
+    him. The frog then escapes and jumps away. he
+
+
+    Choose the most likely continuation:
+
+
+    A) sits and hugs another man and also adjusts his camera.
+
+
+    B) then sits there staring at his text machine as if he has actually been given
+    a gift from god.
+
+
+    C) explains how the frog secretes a poisonous fluid that can be extremely harmful.
+
+
+    D) takes the frog on his hand and tickles the back of it.'
+  criteria: 'Correct answer: C'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00015
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'A person is playing bagpipes out in a park. A man and two boys watching
+    from a far. the camera
+
+
+    Choose the most likely continuation:
+
+
+    A) shoots areas all around the park while the bagpipes play.
+
+
+    B) is covered to the boy that is playing there.
+
+
+    C) then goes black and we see a black opening scene.
+
+
+    D) watching the boy and boy as they play a game of drums.'
+  criteria: 'Correct answer: A'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00016
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'Two people are seen passing a ball back and fourth in a pool and leads
+    into one speaking to the camera. the man
+
+
+    Choose the most likely continuation:
+
+
+    A) dips the ball and walks back with the boy and pours detergent into a cup again.
+
+
+    B) then throws the ball into the pool and begins running around with a sail in
+    his hand while a group of men watch.
+
+
+    C) then takes a drink having a conversation with another man and another man leads
+    into him throwing balls in the water and laughing to the camera.
+
+
+    D) demonstrates how to properly throw the ball with his hands while still speaking
+    to the camera.'
+  criteria: 'Correct answer: D'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00017
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'A woman is sitting at a table in a fast food restaurant while eating. She
+    continually speaks to nobody as she eats. she
+
+
+    Choose the most likely continuation:
+
+
+    A) is then seen sitting alone as she eats a cold brown ice cream.
+
+
+    B) pauses in the process of eating to enjoy her food.
+
+
+    C) stands up and grabs her purse, continuing to talk and laugh as she leaves.
+
+
+    D) picks up another chocolate bar and chews it as she talks.'
+  criteria: 'Correct answer: C'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00018
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'A group of cheerleaders run onto a stage before a cheering audience. they
+
+
+    Choose the most likely continuation:
+
+
+    A) get into formation, then begin dancing and flipping as male cheerleaders join
+    them.
+
+
+    B) perform a cheer routine before the girls, along with makeup artists, spread
+    out and pose.
+
+
+    C) take turns jumping on each other like they are performing karate.
+
+
+    D) are then shown performing the type of cheerleading dance, using batons and
+    pole vaults.'
+  criteria: 'Correct answer: A'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00019
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'A group of cheerleaders run onto a stage before a cheering audience. They
+    get into formation, then begin dancing and flipping as male cheerleaders join
+    them. they all
+
+
+    Choose the most likely continuation:
+
+
+    A) dance and flip on stage while hanging their hats on the sides.
+
+
+    B) continue dancing and flipping, doing hand springs.
+
+
+    C) dance together with flip up their sleeves.
+
+
+    D) perform their routines as the studio rashes to a halt with cheerleaders in
+    the audience.'
+  criteria: 'Correct answer: B'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning
+- id: hellaswag-00020
+  description: Commonsense reasoning - sentence completion
+  category: commonsense
+  prompt: 'They get into formation, then begin dancing and flipping as male cheerleaders
+    join them. They all continue dancing and flipping, doing hand springs. when they
+
+
+    Choose the most likely continuation:
+
+
+    A) are done, they shake hands and walk away, but cheers are heard all around as
+    they''re finished.
+
+
+    B) are finished, they jump up and down happily and walk off the stage, exhausted.
+
+
+    C) are done, a male cheerleader is crowned and an instant replay is shown.
+
+
+    D) come down from their workout, they all stop to bow and applaud, then they continue
+    dancing.'
+  criteria: 'Correct answer: B'
+  tags:
+  - hellaswag
+  - commonsense
+  - reasoning

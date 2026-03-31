@@ -144,13 +144,13 @@ def convert_truthfulqa(dataset, sample_size=None):
         'cases': cases
     }
 
-# Dataset converters mapping
+# Dataset converters mapping (dataset_name, config, split, converter_func)
 CONVERTERS = {
-    'mmlu': ('cais/mmlu', 'test', convert_mmlu),
-    'gsm8k': ('openai/gsm8k', 'test', convert_gsm8k),
-    'hellaswag': ('Rowan/hellaswag', 'validation', convert_hellaswag),
-    'arc': ('allenai/ai2_arc', 'ARC-Challenge', convert_arc),
-    'truthfulqa': ('truthful_qa', 'validation', convert_truthfulqa),
+    'mmlu': ('cais/mmlu', 'all', 'test', convert_mmlu),
+    'gsm8k': ('openai/gsm8k', 'main', 'test', convert_gsm8k),
+    'hellaswag': ('Rowan/hellaswag', None, 'validation', convert_hellaswag),
+    'arc': ('allenai/ai2_arc', 'ARC-Challenge', 'test', convert_arc),
+    'truthfulqa': ('truthful_qa', 'generation', 'validation', convert_truthfulqa),
 }
 
 def main():
@@ -162,14 +162,21 @@ def main():
     args = parser.parse_args()
     
     # Get converter
-    hf_name, split, converter = CONVERTERS[args.dataset]
+    hf_name, config, split, converter = CONVERTERS[args.dataset]
     
-    print(f"📦 Loading {hf_name} ({split} split)...")
+    print(f"📦 Loading {hf_name} (config={config}, split={split})...")
     try:
-        dataset = load_dataset(hf_name, split=split, trust_remote_code=True)
-    except:
-        print(f"   Trying without split specification...")
-        dataset = load_dataset(hf_name, trust_remote_code=True)
+        if config:
+            dataset = load_dataset(hf_name, config, split=split)
+        else:
+            dataset = load_dataset(hf_name, split=split)
+    except Exception as e:
+        print(f"   Error: {e}")
+        print(f"   Trying without split...")
+        if config:
+            dataset = load_dataset(hf_name, config)
+        else:
+            dataset = load_dataset(hf_name)
         if isinstance(dataset, dict):
             dataset = dataset.get(split, list(dataset.values())[0])
     
