@@ -1,0 +1,34 @@
+# Run 4: HumanEval × Code Specialists
+# 4 models × 164 cases = 656 evaluations
+
+models:
+  - id: deepseek-6.7b
+    name: DeepSeek Coder 6.7B
+    provider: ollama
+    model: deepseek-coder:6.7b
+  
+  - id: deepseek-14b
+    name: DeepSeek Coder 14B
+    provider: ollama
+    model: deepseek-coder:14b
+  
+  - id: qwen-coder
+    name: Qwen 2.5 Coder 7B
+    provider: ollama
+    model: qwen2.5-coder:7b
+  
+  - id: codestral
+    name: Codestral 22B
+    provider: ollama
+    model: codestral:22b
+
+judge:
+  model: deepseek-14b
+
+packs:
+  - ../eval-packs/humaneval.yaml
+
+metadata:
+  hardware: "Apple M2 Max 64GB"
+  author: "Rak"
+  purpose: "HumanEval code specialist comparison"

@@ -1,0 +1,29 @@
+# Run 5: HumanEval × General Models
+# 3 models × 164 cases = 492 evaluations
+
+models:
+  - id: qwen-7b
+    name: Qwen 2.5 7B
+    provider: ollama
+    model: qwen2.5:7b
+  
+  - id: qwen-32b
+    name: Qwen 2.5 32B
+    provider: ollama
+    model: qwen2.5:32b
+  
+  - id: gemma3
+    name: Gemma 3 12B
+    provider: ollama
+    model: gemma3:12b
+
+judge:
+  model: qwen-32b
+
+packs:
+  - ../eval-packs/humaneval.yaml
+
+metadata:
+  hardware: "Apple M2 Max 64GB"
+  author: "Rak"
+  purpose: "HumanEval general model baseline"

@@ -1,0 +1,72 @@
+# Run 65: general-workflow.yaml × ALL AVAILABLE MODELS
+# Ultimate universal baseline
+
+models:
+  # General Purpose
+  - id: qwen-7b
+    name: Qwen 2.5 7B
+    provider: ollama
+    model: qwen2.5:7b
+  
+  - id: qwen-32b
+    name: Qwen 2.5 32B
+    provider: ollama
+    model: qwen2.5:32b
+  
+  - id: qwen3-4b
+    name: Qwen 3.5 4B
+    provider: ollama
+    model: qwen3.5:4b
+  
+  - id: gemma3
+    name: Gemma 3 12B
+    provider: ollama
+    model: gemma3:12b
+  
+  # Code Specialists
+  - id: deepseek-6.7b
+    name: DeepSeek Coder 6.7B
+    provider: ollama
+    model: deepseek-coder:6.7b
+  
+  - id: deepseek-14b
+    name: DeepSeek Coder 14B
+    provider: ollama
+    model: deepseek-coder:14b
+  
+  - id: qwen-coder
+    name: Qwen 2.5 Coder 7B
+    provider: ollama
+    model: qwen2.5-coder:7b
+  
+  - id: codestral
+    name: Codestral 22B
+    provider: ollama
+    model: codestral:22b
+  
+  # Reasoning
+  - id: cogito
+    name: Cogito 8B
+    provider: ollama
+    model: cogito:8b
+  
+  - id: qwq
+    name: QwQ 32B
+    provider: ollama
+    model: qwq:32b
+  
+  - id: deepthink
+    name: DeepThink 1B
+    provider: ollama
+    model: deepthink:1b
+
+judge:
+  model: qwen-32b
+
+packs:
+  - ../eval-packs/general-workflow.yaml
+
+metadata:
+  hardware: "Apple M2 Max 64GB"
+  author: "Rak"
+  purpose: "Ultimate universal baseline - ALL models"

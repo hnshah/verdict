@@ -1,0 +1,41 @@
+# Run 1: GSM8K Math Benchmark
+# 5 models × 50 cases = 250 evaluations
+# Estimated: 60-90 minutes
+
+models:
+  - id: qwen-7b
+    name: Qwen 2.5 7B
+    provider: ollama
+    model: qwen2.5:7b
+  
+  - id: qwen-32b
+    name: Qwen 2.5 32B
+    provider: ollama
+    model: qwen2.5:32b
+  
+  - id: qwen3-4b
+    name: Qwen 3.5 4B
+    provider: ollama
+    model: qwen3.5:4b
+  
+  - id: deepseek-coder
+    name: DeepSeek Coder 6.7B
+    provider: ollama
+    model: deepseek-coder:6.7b
+  
+  - id: cogito
+    name: Cogito 8B
+    provider: ollama
+    model: cogito:8b
+
+judge:
+  model: qwen-32b
+
+packs:
+  - ../eval-packs/gsm8k.yaml
+
+# Metadata for dashboard
+metadata:
+  hardware: "Apple M2 Max 64GB"
+  author: "Rak"
+  purpose: "Validate GSM8K pack + math capabilities"

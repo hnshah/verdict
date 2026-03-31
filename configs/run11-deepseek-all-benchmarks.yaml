@@ -1,0 +1,21 @@
+# Run 11: DeepSeek Coder × All HF Benchmarks
+# 1 model × (50+164+100) = 314 evaluations
+
+models:
+  - id: deepseek-6.7b
+    name: DeepSeek Coder 6.7B
+    provider: ollama
+    model: deepseek-coder:6.7b
+
+judge:
+  model: deepseek-6.7b
+
+packs:
+  - ../eval-packs/gsm8k.yaml
+  - ../eval-packs/humaneval.yaml
+  - ../eval-packs/mbpp.yaml
+
+metadata:
+  hardware: "Apple M2 Max 64GB"
+  author: "Rak"
+  purpose: "DeepSeek code specialist comprehensive profile"

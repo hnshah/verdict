@@ -1,0 +1,29 @@
+# Run 2: GSM8K × Reasoning Specialists
+# 3 models × 50 cases = 150 evaluations
+
+models:
+  - id: cogito
+    name: Cogito 8B
+    provider: ollama
+    model: cogito:8b
+  
+  - id: qwq
+    name: QwQ 32B
+    provider: ollama
+    model: qwq:32b
+  
+  - id: deepthink
+    name: DeepThink 1B
+    provider: ollama
+    model: deepthink:1b
+
+judge:
+  model: qwq
+
+packs:
+  - ../eval-packs/gsm8k.yaml
+
+metadata:
+  hardware: "Apple M2 Max 64GB"
+  author: "Rak"
+  purpose: "GSM8K with reasoning specialists"

@@ -1,0 +1,39 @@
+# Run 25: reasoning.yaml × Reasoning Models
+# 5 models × ~20 cases
+
+models:
+  - id: cogito
+    name: Cogito 8B
+    provider: ollama
+    model: cogito:8b
+  
+  - id: qwq
+    name: QwQ 32B
+    provider: ollama
+    model: qwq:32b
+  
+  - id: qwen-32b
+    name: Qwen 2.5 32B
+    provider: ollama
+    model: qwen2.5:32b
+  
+  - id: gemma3
+    name: Gemma 3 12B
+    provider: ollama
+    model: gemma3:12b
+  
+  - id: deepthink
+    name: DeepThink 1B
+    provider: ollama
+    model: deepthink:1b
+
+judge:
+  model: qwq
+
+packs:
+  - ../eval-packs/reasoning.yaml
+
+metadata:
+  hardware: "Apple M2 Max 64GB"
+  author: "Rak"
+  purpose: "Reasoning pack - specialist comparison"

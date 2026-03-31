@@ -1,0 +1,21 @@
+# Run 10: Qwen 7B × All HF Benchmarks
+# 1 model × (50+164+100) = 314 evaluations
+
+models:
+  - id: qwen-7b
+    name: Qwen 2.5 7B
+    provider: ollama
+    model: qwen2.5:7b
+
+judge:
+  model: qwen-7b
+
+packs:
+  - ../eval-packs/gsm8k.yaml
+  - ../eval-packs/humaneval.yaml
+  - ../eval-packs/mbpp.yaml
+
+metadata:
+  hardware: "Apple M2 Max 64GB"
+  author: "Rak"
+  purpose: "Qwen 7B comprehensive HF benchmark profile"
