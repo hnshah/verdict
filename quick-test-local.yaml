@@ -1,0 +1,14 @@
+models:
+  - provider: ollama
+    model: llama3.1:latest
+    alias: llama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+cases:
+  - id: hello
+    input: "Say hello in exactly 3 words"
+    ideal: "Hello there friend"
+
+scorers:
+  - fuzzy_match

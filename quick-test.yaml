@@ -1,0 +1,16 @@
+models:
+  - provider: anthropic
+    model: claude-haiku-4-5
+    alias: haiku
+
+cases:
+  - id: hello
+    input: "Say hello in exactly 3 words"
+    ideal: "Hello there friend"
+    
+  - id: count
+    input: "Count from 1 to 5, comma-separated"
+    ideal: "1, 2, 3, 4, 5"
+
+scorers:
+  - fuzzy_match
