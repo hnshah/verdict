@@ -8,7 +8,7 @@
   "runs": [
     {
       "id": "2026-03-31-2026-03-31T15-12-50",
-      "name": "My Evals",
+      "name": "test-phi4 - 10 cases",
       "date": "2026-03-31",
       "score": 9.3,
       "accuracy": 9.9,

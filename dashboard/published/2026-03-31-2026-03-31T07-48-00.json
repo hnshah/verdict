@@ -1,6 +1,6 @@
 {
   "run_id": "2026-03-31T07-48-00",
-  "name": "My Evals",
+  "name": "Comprehensive Benchmark (10 models)",
   "timestamp": "2026-03-31T07:55:00.886Z",
   "models": [
     "qwen2.5:7b",

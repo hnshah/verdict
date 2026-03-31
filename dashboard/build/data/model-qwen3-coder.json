@@ -8,7 +8,7 @@
   "runs": [
     {
       "id": "2026-03-31-2026-03-31T14-13-39",
-      "name": "My Evals",
+      "name": "3 Model Comparison - 10 cases",
       "date": "2026-03-31",
       "score": 9.6,
       "accuracy": 9.9,
@@ -19,7 +19,7 @@
     },
     {
       "id": "2026-03-31-2026-03-31T14-02-35",
-      "name": "My Evals",
+      "name": "3 Model Comparison - 10 cases",
       "date": "2026-03-31",
       "score": 9.6,
       "accuracy": 9.9,

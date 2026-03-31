@@ -1,6 +1,6 @@
 {
   "run_id": "2026-03-31T07-44-02",
-  "name": "My Evals",
+  "name": "5 Models - 50 Cases",
   "timestamp": "2026-03-31T08:45:03.533Z",
   "models": [
     "qwen-7b",
