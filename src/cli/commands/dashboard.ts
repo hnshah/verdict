@@ -2,7 +2,11 @@ import path from 'path'
 import fs from 'fs'
 import chalk from 'chalk'
 import ora from 'ora'
+import { fileURLToPath } from 'url'
 import type { RunResult } from '../../types/index.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // ─── Dashboard data types ────────────────────────────────────────────────────
 
