@@ -1,0 +1,51 @@
+version: "1.0"
+name: "Verdict Auto-Dashboard"
+
+# Auto-contribute results to dashboard
+settings:
+  auto_contribute: true
+  contribution_author: "Verdict Bot"
+
+# Top local models to test
+models:
+  # Fast 7B models
+  - id: qwen2.5-7b
+    provider: ollama
+    model: qwen2.5:7b
+  
+  - id: llama3.2-3b
+    provider: ollama
+    model: llama3.2:3b
+  
+  # Quality 14B models
+  - id: phi4
+    provider: ollama
+    model: phi4:14b
+  
+  - id: qwen-coder
+    provider: ollama
+    model: qwen2.5-coder:14b
+  
+  # High-end models
+  - id: qwen3-coder
+    provider: ollama
+    model: qwen3-coder:30b
+
+# Judge configuration
+judge:
+  model: phi4
+  dimensions:
+    accuracy: 0.3
+    completeness: 0.4
+    conciseness: 0.3
+
+# Run configuration
+run:
+  concurrency: 2
+  retries: 1
+  cache: true
+
+# Output
+output:
+  dir: ./results
+  formats: ["json", "markdown"]
