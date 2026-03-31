@@ -1,6 +1,6 @@
 {
   "author": "hnshah",
-  "lastChecked": "2026-03-30T23:59:59Z",
+  "lastChecked": "2026-03-31T04:12:00Z",
   "trackedPRs": [
     {
       "number": 54990,
@@ -35,9 +35,9 @@
       "title": "fix: remove macOS Gatekeeper quarantine xattr from copied files",
       "url": "https://github.com/pnpm/pnpm/pull/11095",
       "updatedAt": "2026-03-27T22:35:43Z",
-      "status": "ACTIVE_MAINTAINER_DISCUSSION",
+      "status": "APPROVED_BY_MAINTAINER",
       "commentsCount": 8,
-      "notes": "zkochan engaged, PR updated to native binaries only, dasa suggested batching approach"
+      "notes": "✅ zkochan (MAINTAINER): 'It isn't the right balance. It is the right solution. It doesn't make sense to run xattr on files that don't even need it.' - STRONG APPROVAL after refactoring to native binaries only. 💬 dasa suggested batching (check first, then remove). READY FOR MERGE - maintainer fully on board."
     },
     {
       "number": 86,
@@ -47,7 +47,7 @@
       "updatedAt": "2026-03-28T15:45:51Z",
       "status": "DEFERRED_V3",
       "commentsCount": 2,
-      "notes": "mvanhorn: Can't commit until v3.0 lands, will consider and ping for rebase"
+      "notes": "mvanhorn: 'Can't commit to merging right now, but will consider once 3.0 lands and ping for rebase'. DanRWilloughby +1'd the feature."
     },
     {
       "number": 85,
@@ -122,7 +122,7 @@
       "updatedAt": "2026-03-27T02:24:26Z",
       "status": "AWAITING_STREAMING_EXAMPLE",
       "commentsCount": 2,
-      "notes": "therealron reviewing, waiting for new streaming example to be shipped"
+      "notes": "therealron: 'we just shipped an example for streaming so that should change things so let me include this example w streaming as well' - waiting for maintainer to add streaming content before merge"
     },
     {
       "number": 53451,
@@ -150,7 +150,7 @@
       "updatedAt": "2026-03-26T17:38:37Z",
       "status": "AWAITING_MAINTAINER_REVIEW",
       "commentsCount": 2,
-      "notes": "monorkin gave feedback, refactored to SQL-based sorting per feedback"
+      "notes": "monorkin (contributor) gave feedback on 2026-03-26, refactored to SQL-based sorting per feedback. Needs maintainer approval."
     },
     {
       "number": 33,
@@ -203,9 +203,9 @@
       "title": "fix: vendor Anthropic OAuth plugin and fix PKCE state security issue (fixes #18652)",
       "url": "https://github.com/anomalyco/opencode/pull/18674",
       "updatedAt": "2026-03-29T18:02:34Z",
-      "status": "ALL_CHECKS_PASSED_NEEDS_MERGE",
+      "status": "ALL_CHECKS_PASSED_READY_TO_MERGE",
       "commentsCount": 0,
-      "notes": "14 bot reviews (all approved/commented), all CI checks passed (8/8 green), no maintainer review yet"
+      "notes": "🎉 ALL 8 CI CHECKS PASSED! 14 bot reviews (all approved/commented favorably). CRITICAL SECURITY FIX ready for maintainer merge. Last updated 2 days ago (2026-03-29). Still open, awaiting maintainer action."
     },
     {
       "number": 98,

@@ -1,0 +1,37 @@
+{
+  "lastChecked": "2026-03-31T00:50:00Z",
+  "repos": {
+    "PyCQA/isort": {
+      "lastChecked": "2026-03-31T00:50:00Z",
+      "lastIssueId": 2503
+    },
+    "ankitvgupta/mail-app": {
+      "lastChecked": "2026-03-31T00:50:00Z",
+      "lastIssueId": 14
+    },
+    "huggingface/transformers": {
+      "lastChecked": "2026-03-31T00:50:00Z"
+    },
+    "langchain-ai/langchain": {
+      "lastChecked": "2026-03-31T00:50:00Z"
+    },
+    "streamlit/streamlit": {
+      "lastChecked": "2026-03-31T00:50:00Z"
+    },
+    "mlflow/mlflow": {
+      "lastChecked": "2026-03-31T00:50:00Z"
+    },
+    "fastapi/fastapi": {
+      "lastChecked": "2026-03-31T00:50:00Z"
+    },
+    "encode/httpx": {
+      "lastChecked": "2026-03-31T00:50:00Z"
+    },
+    "astral-sh/ruff": {
+      "lastChecked": "2026-03-31T00:50:00Z"
+    },
+    "pytest-dev/pytest": {
+      "lastChecked": "2026-03-31T00:50:00Z"
+    }
+  }
+}

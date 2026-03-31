@@ -10,7 +10,8 @@
         "ourPRs": true,
         "maintainerComments": true
       },
-      "addedAt": "2026-03-30T22:17:00Z"
+      "addedAt": "2026-03-30T22:17:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
     },
     {
       "owner": "ankitvgupta",
@@ -22,7 +23,8 @@
         "allPRs": true,
         "newReleases": true
       },
-      "addedAt": "2026-03-30T22:48:00Z"
+      "addedAt": "2026-03-30T22:48:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
     },
     {
       "owner": "huggingface",
@@ -33,7 +35,8 @@
         "goodFirstIssue": true,
         "helpWanted": true
       },
-      "addedAt": "2026-03-30T22:55:00Z"
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
     },
     {
       "owner": "langchain-ai",
@@ -44,7 +47,8 @@
         "goodFirstIssue": true,
         "helpWanted": true
       },
-      "addedAt": "2026-03-30T22:55:00Z"
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
     },
     {
       "owner": "streamlit",
@@ -55,7 +59,8 @@
         "goodFirstIssue": true,
         "helpWanted": true
       },
-      "addedAt": "2026-03-30T22:55:00Z"
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
     },
     {
       "owner": "mlflow",
@@ -66,7 +71,8 @@
         "goodFirstIssue": true,
         "helpWanted": true
       },
-      "addedAt": "2026-03-30T22:55:00Z"
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
     },
     {
       "owner": "fastapi",
@@ -77,7 +83,8 @@
         "goodFirstIssue": true,
         "helpWanted": true
       },
-      "addedAt": "2026-03-30T22:55:00Z"
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
     },
     {
       "owner": "encode",
@@ -87,7 +94,8 @@
       "track": {
         "goodFirstIssue": true
       },
-      "addedAt": "2026-03-30T22:55:00Z"
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
     },
     {
       "owner": "astral-sh",
@@ -97,7 +105,8 @@
       "track": {
         "goodFirstIssue": true
       },
-      "addedAt": "2026-03-30T22:55:00Z"
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
     },
     {
       "owner": "pytest-dev",
@@ -107,9 +116,10 @@
       "track": {
         "goodFirstIssue": true
       },
-      "addedAt": "2026-03-30T22:55:00Z"
+      "addedAt": "2026-03-30T22:55:00Z",
+      "lastChecked": "2026-03-31T04:50:36Z"
     }
   ],
-  "lastUpdated": "2026-03-30T22:55:00Z",
+  "lastUpdated": "2026-03-31T04:50:36Z",
   "totalRepos": 10
 }
