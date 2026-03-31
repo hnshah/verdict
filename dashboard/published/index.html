@@ -60,7 +60,7 @@
         <div>
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Total Runs</p>
           <p class="text-2xl font-bold text-gray-900">11</p>
-          <p class="text-xs text-gray-500 mt-1">1 test · 10 real</p>
+          <p class="text-xs text-gray-500 mt-1">0 test · 11 real</p>
         </div>
         <div>
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Test Cases</p>
@@ -68,7 +68,7 @@
         </div>
         <div>
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Models</p>
-          <p class="text-2xl font-bold text-gray-900">6</p>
+          <p class="text-2xl font-bold text-gray-900">8</p>
         </div>
         <div>
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Score</p>
@@ -90,7 +90,7 @@
           <span>Hide single-model runs</span>
         </label>
       </div>
-      <p class="text-xs text-gray-500 mt-2">Showing 10 real runs (1 test runs hidden)</p>
+      <p class="text-xs text-gray-500 mt-2">Showing 11 real runs (0 test runs hidden)</p>
     </section>
 
     <!-- All Runs -->
@@ -110,7 +110,7 @@
           </thead>
           <tbody class="divide-y divide-gray-100">
             
-            <tr data-test="true" data-single="false" class="run-row">
+            <tr data-test="false" data-single="false" class="run-row">
               <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-31</td>
               <td class="py-3 pr-4">
                 <a href="runs/2026-03-31-2026-03-31T07-19-11/" class="text-gray-900 hover:text-blue-600">My Evals</a>
@@ -119,10 +119,6 @@
               <td class="py-3 pr-4 text-right text-gray-700">2</td>
               <td class="py-3 pr-4 text-right font-medium text-gray-900">9.2/10</td>
               <td class="py-3 flex gap-1">
-                
-                  
-                    <span class="badge-c">Test Run</span>
-                  
                 
               </td>
             </tr>
@@ -284,9 +280,47 @@
               <td class="py-3 pr-4 font-bold text-gray-900">1</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
-                  <span class="text-gray-900">qwen-coder</span>
+                  <span class="text-gray-900">qwen2.5:7b</span>
                   
                     <span>🥇</span>
+                  
+                </div>
+              </td>
+              <td class="py-3 pr-4 text-right font-bold text-gray-900">9.2/10</td>
+              <td class="py-3 pr-4 text-right text-gray-700">1</td>
+              <td class="py-3 pr-4 text-right text-gray-700">4</td>
+              <td class="py-3 pr-4 text-right">
+                <span class="badge-b">400%</span>
+              </td>
+              <td class="py-3 text-right mono text-xs text-gray-500">5.3s</td>
+            </tr>
+            
+            <tr>
+              <td class="py-3 pr-4 font-bold text-gray-900">2</td>
+              <td class="py-3 pr-4">
+                <div class="flex items-center gap-2">
+                  <span class="text-gray-900">llama3.2:3b</span>
+                  
+                    <span>🥈</span>
+                  
+                </div>
+              </td>
+              <td class="py-3 pr-4 text-right font-bold text-gray-900">9.2/10</td>
+              <td class="py-3 pr-4 text-right text-gray-700">1</td>
+              <td class="py-3 pr-4 text-right text-gray-700">6</td>
+              <td class="py-3 pr-4 text-right">
+                <span class="badge-b">600%</span>
+              </td>
+              <td class="py-3 text-right mono text-xs text-gray-500">4.1s</td>
+            </tr>
+            
+            <tr>
+              <td class="py-3 pr-4 font-bold text-gray-900">3</td>
+              <td class="py-3 pr-4">
+                <div class="flex items-center gap-2">
+                  <span class="text-gray-900">qwen-coder</span>
+                  
+                    <span>🥉</span>
                   
                 </div>
               </td>
@@ -300,12 +334,12 @@
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">2</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">4</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <span class="text-gray-900">qwen</span>
                   
-                    <span>🥈</span>
+                    <span></span>
                   
                 </div>
               </td>
@@ -319,12 +353,12 @@
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">3</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">5</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <span class="text-gray-900">codellama</span>
                   
-                    <span>🥉</span>
+                    <span></span>
                   
                 </div>
               </td>
@@ -338,7 +372,7 @@
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">4</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">6</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <span class="text-gray-900">qwen7b</span>
@@ -357,7 +391,7 @@
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">5</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">7</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <span class="text-gray-900">deepseek</span>
@@ -376,7 +410,7 @@
             </tr>
             
             <tr>
-              <td class="py-3 pr-4 font-bold text-gray-900">6</td>
+              <td class="py-3 pr-4 font-bold text-gray-900">8</td>
               <td class="py-3 pr-4">
                 <div class="flex items-center gap-2">
                   <span class="text-gray-900">tiny</span>

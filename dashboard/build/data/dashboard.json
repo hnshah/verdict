@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-03-31T07:23:41.230Z",
+  "generated_at": "2026-03-31T07:26:26.167Z",
   "stats": {
     "total_runs": 11,
     "total_cases": 110,
-    "total_models": 6,
+    "total_models": 8,
     "avg_score": 8,
-    "test_runs": 1,
-    "real_runs": 10
+    "test_runs": 0,
+    "real_runs": 11
   },
   "runs": [
     {
@@ -16,13 +16,8 @@
       "cases": 10,
       "models": 2,
       "avg_score": 9.2,
-      "badges": [
-        {
-          "type": "test",
-          "label": "Test Run"
-        }
-      ],
-      "is_test": true,
+      "badges": [],
+      "is_test": false,
       "is_single_model": false
     },
     {
@@ -138,14 +133,34 @@
   ],
   "top_models": [
     {
+      "name": "qwen2.5:7b",
+      "avg_score": 9.2,
+      "runs": 1,
+      "total_wins": 4,
+      "win_rate": 400,
+      "avg_latency": 5.3,
+      "rank": 1,
+      "medal": "🥇"
+    },
+    {
+      "name": "llama3.2:3b",
+      "avg_score": 9.2,
+      "runs": 1,
+      "total_wins": 6,
+      "win_rate": 600,
+      "avg_latency": 4.1,
+      "rank": 2,
+      "medal": "🥈"
+    },
+    {
       "name": "qwen-coder",
       "avg_score": 8.3,
       "runs": 9,
       "total_wins": 56,
       "win_rate": 622,
       "avg_latency": 6.5,
-      "rank": 1,
-      "medal": "🥇"
+      "rank": 3,
+      "medal": "🥉"
     },
     {
       "name": "qwen",
@@ -154,8 +169,8 @@
       "total_wins": 12,
       "win_rate": 200,
       "avg_latency": 10.8,
-      "rank": 2,
-      "medal": "🥈"
+      "rank": 4,
+      "medal": ""
     },
     {
       "name": "codellama",
@@ -164,8 +179,8 @@
       "total_wins": 30,
       "win_rate": 375,
       "avg_latency": 6.9,
-      "rank": 3,
-      "medal": "🥉"
+      "rank": 5,
+      "medal": ""
     },
     {
       "name": "qwen7b",
@@ -174,7 +189,7 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 11,
-      "rank": 4,
+      "rank": 6,
       "medal": ""
     },
     {
@@ -184,7 +199,7 @@
       "total_wins": 2,
       "win_rate": 50,
       "avg_latency": 28.8,
-      "rank": 5,
+      "rank": 7,
       "medal": ""
     },
     {
@@ -194,7 +209,7 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 1.6,
-      "rank": 6,
+      "rank": 8,
       "medal": ""
     }
   ]

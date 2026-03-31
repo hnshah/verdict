@@ -29,7 +29,7 @@ files.forEach(filePath => {
   const badges = [];
   if (caseCount < 5) badges.push({ type: 'test', label: 'Test Run' });
   if (modelCount === 1) badges.push({ type: 'single', label: 'Single Model' });
-  if (data.name.includes('My Evals')) badges.push({ type: 'test', label: 'Test Run' });
+  // Don't filter "My Evals" - it's the default name, not necessarily a test
   
   const hasAllScores = data.cases?.every(c => c.scores && Object.keys(c.scores).length > 0);
   if (!hasAllScores && caseCount > 0) {
