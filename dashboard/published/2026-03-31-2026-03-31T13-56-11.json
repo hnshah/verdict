@@ -1,0 +1,323 @@
+{
+  "run_id": "2026-03-31T13-56-11",
+  "name": "My Evals",
+  "timestamp": "2026-03-31T13:57:13.213Z",
+  "models": [
+    "phi4"
+  ],
+  "cases": [
+    {
+      "case_id": "gen-001",
+      "prompt": "What is the capital of France?",
+      "criteria": "Single correct answer: Paris",
+      "responses": {
+        "phi4": {
+          "model_id": "phi4",
+          "text": "The capital of France is Paris. It's not only the largest city in the country but also a major cultural and economic center known for its history, art, fashion, and cuisine. Paris is home to iconic landmarks such as the Eiffel Tower, Notre-Dame Cathedral, and the Louvre Museum, which houses famous artworks like the Mona Lisa. The city's influence extends globally across various fields including politics, education, entertainment, and science.",
+          "input_tokens": 17,
+          "output_tokens": 91,
+          "latency_ms": 2496,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 8,
+          "conciseness": 6,
+          "total": 8.4,
+          "reasoning": "The response correctly identifies Paris as the capital of France and provides additional relevant information, but it includes more detail than necessary for a simple factual question."
+        }
+      },
+      "winner": "phi4"
+    },
+    {
+      "case_id": "gen-002",
+      "prompt": "What does RAM stand for and what does it do?",
+      "criteria": "Random Access Memory, volatile storage that holds running programs and data",
+      "responses": {
+        "phi4": {
+          "model_id": "phi4",
+          "text": "RAM stands for Random Access Memory. It is a type of computer memory that is used to store data temporarily while a computer is running. Here are some key points about RAM:\n\n1. **Temporary Storage**: Unlike permanent storage devices like hard drives or SSDs, RAM stores information only as long as the device is powered on and loses its contents when the power is turned off.\n\n2. **Speed**: RAM is much faster than other types of storage, which allows for quick access to data by the CPU (Central Processing Unit). This speed is crucial for running applications smoothly and efficiently.\n\n3. **Volatility**: RAM is volatile memory, meaning it requires power to maintain the stored information. Once the device is turned off, all data in RAM is lost.\n\n4. **Functionality**: When you run a program or open a file on your computer, that data is loaded into RAM from permanent storage so that the CPU can access it quickly. The more RAM a system has, the more applications and processes it can handle simultaneously without slowing down.\n\n5. **Capacity**: The amount of RAM in a computer affects its ability to multitask and run complex programs. More RAM allows for better performance when running multiple applications at once or handling large files.\n\nOverall, RAM plays a critical role in determining how well a computer performs tasks by providing fast access to data needed by the CPU during operation.",
+          "input_tokens": 21,
+          "output_tokens": 277,
+          "latency_ms": 4725,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately describes RAM's function, characteristics, and importance while covering most criteria but could be slightly more concise."
+        }
+      },
+      "winner": "phi4"
+    },
+    {
+      "case_id": "gen-003",
+      "prompt": "Explain the difference between a process and a thread in one paragraph.",
+      "criteria": "Covers: separate memory space vs shared, overhead difference, use cases for each",
+      "responses": {
+        "phi4": {
+          "model_id": "phi4",
+          "text": "A process is an instance of a program that is being executed, encompassing its own memory space, resources, and system state. It operates independently from other processes, with each having its own set of allocated resources such as CPU time, memory, and I/O devices. Processes are isolated from one another to prevent interference, which enhances stability but can lead to inefficiencies in resource utilization. On the other hand, a thread is a smaller unit of execution within a process that shares the same memory space and resources with other threads belonging to the same process. Threads allow for concurrent execution within a single process, enabling more efficient use of CPU time by performing multiple tasks simultaneously without the overhead associated with creating separate processes. This makes threading particularly useful in applications requiring high responsiveness or parallelism, such as graphical user interfaces or real-time data processing. However, because threads share resources, they require careful synchronization to avoid conflicts and ensure data integrity.",
+          "input_tokens": 24,
+          "output_tokens": 186,
+          "latency_ms": 3199,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately describes the differences in memory space, overhead, and use cases between processes and threads."
+        }
+      },
+      "winner": "phi4"
+    },
+    {
+      "case_id": "gen-004",
+      "prompt": "If all mammals are warm-blooded, and dolphins are mammals, what can we conclude about dolphins?",
+      "criteria": "Correct deductive conclusion: dolphins are warm-blooded. Clear reasoning shown.",
+      "responses": {
+        "phi4": {
+          "model_id": "phi4",
+          "text": "Given the premises:\n\n1. All mammals are warm-blooded.\n2. Dolphins are mammals.\n\nWe can use logical deduction to conclude that dolphins are warm-blooded. This conclusion follows from the fact that if all members of a group (mammals) have a certain property (being warm-blooded), and an individual (dolphins) is part of that group, then the individual must also possess that property. Therefore, dolphins are warm-blooded.",
+          "input_tokens": 30,
+          "output_tokens": 93,
+          "latency_ms": 1649,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "total": 9.8,
+          "reasoning": "The response correctly applies deductive reasoning to conclude that dolphins are warm-blooded based on the given premises."
+        }
+      },
+      "winner": "phi4"
+    },
+    {
+      "case_id": "gen-005",
+      "prompt": "List exactly 3 benefits of regular exercise. Numbered list. Max 12 words per item.",
+      "criteria": "Exactly 3 items, numbered list format, each under 12 words",
+      "responses": {
+        "phi4": {
+          "model_id": "phi4",
+          "text": "1. Improves cardiovascular health, reducing the risk of heart disease and stroke.\n\n2. Enhances mental well-being by decreasing stress, anxiety, and depression symptoms.\n\n3. Boosts physical strength, flexibility, and endurance for better overall fitness levels.",
+          "input_tokens": 30,
+          "output_tokens": 51,
+          "latency_ms": 951,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response accurately lists three benefits of regular exercise, each under 12 words."
+        }
+      },
+      "winner": "phi4"
+    },
+    {
+      "case_id": "gen-006",
+      "prompt": "Write a JavaScript function that returns the sum of all even numbers in an array.",
+      "criteria": "Working JS function, handles empty array, filters even numbers with % 2 === 0, returns sum",
+      "responses": {
+        "phi4": {
+          "model_id": "phi4",
+          "text": "To create a JavaScript function that calculates the sum of all even numbers in an array, you can follow these steps:\n\n1. Define a function that takes an array as its parameter.\n2. Initialize a variable to keep track of the sum.\n3. Iterate over each element in the array.\n4. Check if the current element is an even number (i.e., divisible by 2 with no remainder).\n5. If it's even, add it to the sum.\n6. After iterating through all elements, return the sum.\n\nHere's how you can implement this:\n\n```javascript\nfunction sumOfEvenNumbers(arr) {\n    // Initialize a variable to store the sum of even numbers\n    let sum = 0;\n\n    // Iterate over each element in the array\n    for (let i = 0; i < arr.length; i++) {\n        // Check if the current number is even\n        if (arr[i] % 2 === 0) {\n            // Add it to the sum\n            sum += arr[i];\n        }\n    }\n\n    // Return the total sum of even numbers\n    return sum;\n}\n\n// Example usage:\nconst numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\nconsole.log(sumOfEvenNumbers(numbers)); // Output: 30\n```\n\n### Explanation:\n\n- **Function Definition**: The function `sumOfEvenNumbers` takes an array `arr` as its argument.\n- **Sum Initialization**: A variable `sum` is initialized to zero. This will accumulate the sum of even numbers.\n- **Loop Through Array**: A `for` loop iterates over each element in the array using index `i`.\n- **Check for Even Numbers**: The condition `arr[i] % 2 === 0` checks if a number is even. If true, it adds that number to `sum`.\n- **Return Result**: After completing the iteration, the function returns the accumulated sum of all even numbers.\n\nThis approach efficiently calculates the desired result by iterating through the array only once, making it an O(n) solution in terms of time complexity, where n is the number of elements in the array.",
+          "input_tokens": 26,
+          "output_tokens": 455,
+          "latency_ms": 7677,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response provides a correct and complete JavaScript function that meets all specified criteria, with clear explanation but slightly more detail than necessary."
+        }
+      },
+      "winner": "phi4"
+    },
+    {
+      "case_id": "gen-007",
+      "prompt": "What is the time complexity of binary search and why?",
+      "criteria": "O(log n), correct explanation of halving the search space each iteration",
+      "responses": {
+        "phi4": {
+          "model_id": "phi4",
+          "text": "Binary search has a time complexity of \\(O(\\log n)\\), where \\(n\\) is the number of elements in the sorted array or list being searched. This efficiency arises from the algorithm's divide-and-conquer approach.\n\nHere’s why:\n\n1. **Divide**: In each step, binary search divides the search interval in half. It compares the target value to the middle element of the current interval.\n   \n2. **Conquer**: Depending on whether the target is less than or greater than this middle element, it discards one half of the array and continues the search on the remaining half.\n\n3. **Repeat**: This process repeats, each time reducing the size of the problem by approximately half, until the target value is found or the interval is empty.\n\nThe logarithmic nature comes from the fact that with each comparison, you eliminate about half of the elements from consideration. Mathematically, if you start with \\(n\\) elements and halve the search space in each step, it takes \\(\\log_2 n\\) steps to reduce the problem size to 1 (or zero). Thus, the time complexity is \\(O(\\log n)\\).\n\nThis efficiency assumes that the input data structure allows for constant-time access to any element by index, such as an array or a list. If you were using a linked list, accessing elements in the middle would take linear time, which would affect the overall time complexity.",
+          "input_tokens": 21,
+          "output_tokens": 288,
+          "latency_ms": 4907,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.2,
+          "reasoning": "The response accurately explains the time complexity of binary search and its halving mechanism, but could briefly mention that it assumes random access data structures."
+        }
+      },
+      "winner": "phi4"
+    },
+    {
+      "case_id": "gen-008",
+      "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
+      "criteria": "Covers attention mechanism, parallel processing (vs RNN), why it improved NLP. Appropriate depth.",
+      "responses": {
+        "phi4": {
+          "model_id": "phi4",
+          "text": "A transformer model is an architecture designed to handle sequential data, primarily used in natural language processing tasks like translation and text generation. It relies on self-attention mechanisms that allow it to weigh the importance of different words in a sentence relative to each other, enabling parallelization and efficient handling of long-range dependencies without relying on recurrent layers. Transformers consist of encoder-decoder structures where both parts use stacked layers of multi-head attention and feed-forward neural networks, making them highly effective for capturing complex patterns in data.",
+          "input_tokens": 32,
+          "output_tokens": 101,
+          "latency_ms": 1781,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "phi4": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response accurately describes the transformer model's architecture and its reliance on self-attention mechanisms, but it could briefly mention why transformers improved NLP by highlighting their ability to handle long-range dependencies more effectively than RNNs."
+        }
+      },
+      "winner": "phi4"
+    },
+    {
+      "case_id": "gen-009",
+      "prompt": "Write a haiku about debugging code.",
+      "criteria": "5-7-5 syllable structure, references debugging or code, coherent meaning",
+      "responses": {
+        "phi4": {
+          "model_id": "phi4",
+          "text": "In silent night's glow,  \nErrors dance in tangled lines—  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: working through complex and often frustrating code to achieve clarity and understanding.",
+          "input_tokens": 18,
+          "output_tokens": 45,
+          "latency_ms": 850,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "total": 9.8,
+          "reasoning": "The haiku adheres to the 5-7-5 syllable structure, references debugging through 'errors' and 'tangled lines', and conveys a coherent meaning about achieving clarity."
+        }
+      },
+      "winner": "phi4"
+    },
+    {
+      "case_id": "gen-010",
+      "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
+      "criteria": "Consistency, Availability, Partition tolerance, can only guarantee 2 of 3, tradeoffs for system design",
+      "responses": {
+        "phi4": {
+          "model_id": "phi4",
+          "text": "The CAP theorem, also known as Brewer's theorem, is a fundamental principle in the field of distributed computing that outlines the trade-offs between three key properties of distributed data stores: Consistency, Availability, and Partition Tolerance. The theorem states that in any distributed system, it is impossible to simultaneously achieve all three of these guarantees:\n\n1. **Consistency**: Every read operation receives the most recent write or an error. This means that all nodes see the same data at the same time.\n\n2. **Availability**: Every request (read or write) receives a response, without guaranteeing that it contains the most recent write. The system remains operational and responsive even in the face of network failures.\n\n3. **Partition Tolerance**: The system continues to operate despite an arbitrary number of messages being dropped (or delayed) by the network between nodes. This means the system can handle network partitions.\n\nAccording to the CAP theorem, a distributed system can only provide two out of these three guarantees at any given time:\n\n- **CP (Consistency and Partition Tolerance)**: The system ensures that all nodes see the same data at the same time, but it may sacrifice availability. During a partition, some parts of the system might become unavailable to maintain consistency.\n\n- **AP (Availability and Partition Tolerance)**: The system remains available during partitions, but it may serve stale or inconsistent data. This means that not all reads will return the most recent write.\n\n- **CA (Consistency and Availability)**: In a non-partitioned network, the system can be both consistent and available. However, this is only possible if there are no network partitions, which is impractical for real-world distributed systems.\n\n### Implications for Distributed Systems Design\n\nThe CAP theorem has significant implications for designing distributed systems:\n\n1. **Trade-offs**: System architects must decide which two properties (Consistency, Availability, Partition Tolerance) are most critical for their application and design the system accordingly. This decision often depends on the specific requirements and constraints of the application.\n\n2. **Use Cases**:\n   - Systems that require strong consistency might prioritize CP, such as financial systems where accuracy is crucial.\n   - Systems that need to be highly available might choose AP, like social media platforms where eventual consistency is acceptable.\n   - CA systems are typically not feasible in practice due to the inevitability of network partitions.\n\n3. **Hybrid Approaches**: Some modern distributed databases and systems use hybrid approaches or tunable consistency models to provide flexibility. For example, they might offer different levels of consistency (e.g., eventual, strong) based on the operation or user preference.\n\n4. **Eventual Consistency**: Many AP systems aim for eventual consistency, where all nodes will eventually converge to the same state given enough time without new updates.\n\n5. **Consensus Protocols**: Systems that prioritize consistency often rely on consensus protocols like Paxos or Raft to ensure agreement among distributed components.\n\nIn summary, the CAP theorem guides designers in making informed decisions about the trade-offs involved in building distributed systems, helping them align system properties with application requirements and user expectations.",
+          "input_tokens": 25,
+          "output_tokens": 628,
+          "latency_ms": 10594,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "total": 9.8,
+          "reasoning": "The response accurately explains the CAP theorem, its implications for distributed systems design, and covers all evaluation criteria effectively with minimal padding."
+        }
+      },
+      "winner": "phi4"
+    }
+  ],
+  "summary": {
+    "phi4": {
+      "model_id": "phi4",
+      "avg_total": 9.28,
+      "avg_accuracy": 9.9,
+      "avg_completeness": 9.2,
+      "avg_conciseness": 8.2,
+      "avg_latency_ms": 3882.9,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 100,
+      "wins": 10,
+      "cases_run": 10,
+      "avg_solve_rate": 0
+    }
+  },
+  "run_meta": {
+    "run_id": "2026-03-31T13-56-11",
+    "config_file": "verdict.yaml",
+    "verdict_version": "0.2.0",
+    "hardware": "Apple M3 Ultra 256GB"
+  },
+  "hardware": {
+    "cpu": "Apple M3 Ultra",
+    "cpu_cores": 32,
+    "cpu_arch": "arm64",
+    "ram_gb": 256,
+    "os": "macOS",
+    "os_version": "25.3.0"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v22.22.1",
+    "provider_versions": {
+      "ollama": "0.18.3"
+    }
+  },
+  "eval_pack": {
+    "file": "eval-packs/general.yaml",
+    "description": "10 general-purpose cases covering factual recall, reasoning, coding, and instruction following",
+    "total_cases": 10
+  },
+  "judge": {
+    "model": "phi4",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p General -m phi4",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "phi4": {
+        "provider": "ollama",
+        "model": "phi4:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      }
+    }
+  }
+}
