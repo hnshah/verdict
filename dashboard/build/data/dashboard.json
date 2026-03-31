@@ -49,7 +49,7 @@
     },
     {
       "id": "2026-03-31T07-53-37",
-      "name": "My Evals",
+      "name": "Qwen Family + Phi4 + Gemma2",
       "date": "03-31-26",
       "cases": 10,
       "models": 4,
@@ -62,7 +62,7 @@
     },
     {
       "id": "2026-03-31T07-51-23",
-      "name": "My Evals",
+      "name": "7B Models Re-test",
       "date": "03-31-26",
       "cases": 10,
       "models": 3,
@@ -101,7 +101,7 @@
     },
     {
       "id": "2026-03-31T07-40-52",
-      "name": "My Evals",
+      "name": "Popular 7B Models Comparison",
       "date": "03-31-26",
       "cases": 10,
       "models": 3,
@@ -114,7 +114,7 @@
     },
     {
       "id": "2026-03-31T07-36-33",
-      "name": "My Evals",
+      "name": "Code Models Benchmark (4 models)",
       "date": "03-31-26",
       "cases": 10,
       "models": 4,
@@ -127,7 +127,7 @@
     },
     {
       "id": "2026-03-31T07-19-11",
-      "name": "My Evals",
+      "name": "Qwen vs Llama Comparison",
       "date": "03-31-26",
       "cases": 10,
       "models": 2,

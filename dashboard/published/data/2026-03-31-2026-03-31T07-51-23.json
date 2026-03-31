@@ -1,6 +1,6 @@
 {
   "run_id": "2026-03-31T07-51-23",
-  "name": "My Evals",
+  "name": "7B Models Re-test",
   "timestamp": "2026-03-31T07:53:31.111Z",
   "models": [
     "qwen2.5:7b",

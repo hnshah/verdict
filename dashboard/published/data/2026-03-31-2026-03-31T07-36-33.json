@@ -1,6 +1,6 @@
 {
   "run_id": "2026-03-31T07-36-33",
-  "name": "My Evals",
+  "name": "Code Models Benchmark (4 models)",
   "timestamp": "2026-03-31T07:43:16.490Z",
   "models": [
     "qwen2.5:7b",
