@@ -1,0 +1,3199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gap Fill - Comprehensive Coding — Verdict</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  body { font-family: 'Inter', sans-serif; }
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+  
+  .badge-a { background: #EFF6FF; color: #1D4ED8; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-b { background: #ECFDF5; color: #065F46; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-c { background: #FFFBEB; color: #92400E; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  
+  .card { background: white; border-radius: 0.75rem; border: 1px solid #E5E7EB; padding: 2rem; margin-top: 2rem; }
+  
+  details summary { cursor: pointer; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details[open] summary .chevron { transform: rotate(180deg); }
+  .chevron { transition: transform 0.2s; display: inline-block; }
+  
+  tr:hover { background: #F9FAFB; }
+  
+  @media print { .no-print { display: none; } }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 no-print">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="../../" class="text-sm text-gray-500 hover:text-gray-900">← Dashboard</a>
+      <span class="text-gray-300">·</span>
+      <span class="font-semibold text-gray-900">Gap Fill - Comprehensive Coding</span>
+    </div>
+    <span class="text-xs text-gray-400">2026-03-30</span>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-6 py-8">
+
+  <!-- Run Stats -->
+  <section class="card" style="margin-top:0">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Gap Fill - Comprehensive Coding</h1>
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-6">
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Cases</p>
+        <p class="text-2xl font-bold text-gray-900">10</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Models</p>
+        <p class="text-2xl font-bold text-gray-900">5</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Score</p>
+        <p class="text-2xl font-bold text-gray-900">6.1<span class="text-base text-gray-500">/10</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Pass Rate</p>
+        <p class="text-2xl font-bold text-gray-900">0<span class="text-base text-gray-500">%</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Latency</p>
+        <p class="text-2xl font-bold text-gray-900">27.5<span class="text-base text-gray-500">s</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Model Leaderboard -->
+  <section class="card">
+    <h2 class="text-xl font-bold text-gray-900 mb-6">Model Performance</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs text-gray-400 border-b border-gray-100">
+            <th class="pb-3 pr-4 font-semibold">Rank</th>
+            <th class="pb-3 pr-4 font-semibold">Model</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Score</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Accuracy</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Complete</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Concise</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Wins</th>
+            <th class="pb-3 text-right font-semibold">Latency</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold text-gray-900">1</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">qwen-coder</span>
+              <span>🥇</span>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">7.4/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">6.7</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">6</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">17.6s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold text-gray-900">2</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">qwen7b</span>
+              <span>🥈</span>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">7.4/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">6.6</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">0</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">24.6s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold text-gray-900">3</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">qwen</span>
+              <span>🥉</span>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">7.4/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">6.6</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">0</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">17.3s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold text-gray-900">4</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">codellama</span>
+              <span></span>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">5.2/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">5.5</td>
+            <td class="py-3 pr-4 text-right text-gray-700">5.1</td>
+            <td class="py-3 pr-4 text-right text-gray-700">4.6</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">4</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">18.6s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold text-gray-900">5</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">deepseek</span>
+              <span></span>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">3.3/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">3.8</td>
+            <td class="py-3 pr-4 text-right text-gray-700">3.2</td>
+            <td class="py-3 pr-4 text-right text-gray-700">2.6</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">0</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">59.3s</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Test Cases -->
+  <section class="card">
+    <h2 class="text-xl font-bold text-gray-900 mb-6">Test Cases (10)</h2>
+    <div class="space-y-4">
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">code-001</span>
+            <span class="badge-a">
+              5.1/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Write a Python function that finds the two numbers in a list that sum to a target value. Return their indices. Assume exactly one solution exists.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">10.9s</span>
+                  <span class="badge-a">
+                    2/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                [PYTHON]
+def find_indices(my_list, target):
+    for i in range(len(my_list)):
+        for j in range(i+1, len(my_list)):
+            if my_list[i] + my_list[j] == target:
+                return [i, j]
+    return []
+[/PYTHON]
+[TESTS]
+# Test case 1:
+assert find_indices([1, 2, 3, 4, 5], 7) == [1, 3]
+# Test case 2:
+assert find_indices([1, 2, 3, 4, 5], 6) == [0, 2]
+# Test case 3:
+assert find_indices([1, 2, 3, 4, 5], 8) == [2, 4]
+[/TESTS]
+
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The provided solution does not meet the criteria. It uses a nested loop, resulting in an O(n^2) time complexity, which is not efficient for large lists. Additionally, it does not handle the case where the same element can't be used twice, as required.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">14.8s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                ```python
+def two_sum(nums, target):
+    # Create a dictionary to store the numbers and their indices
+    num_dict = {}
+    # Iterate over the list of numbers
+    for i, num in enumerate(nums):
+        # Calculate the complement that would sum to the target
+        complement = target - num
+        # Check if the complement exists in the dictionary
+        if complement in num_dict:
+            # If it exists, return the indices of the complement and the current number
+            return [num_dict[complement], i]
+        # If not, add the current number and its index to the dictionary
+        num_dict[num] = i
+    # If no solution is found, return an empty list (though the problem guarantees one solution)
+    return []
+```
+
+In this solution, we use a dictionary to store each number and its index as we iterate through the list. For each number, we calculate its complement (the number that, when added to the current number, equals the target). If this complement is already in the dictionary, it means we have found the two numbers that sum to the target, and we return their indices. If not, we add the current number and its index to the dictionary and continue. This approach ensures that we find the solution in a single pass through the list, making it efficient with a time complexity of O(n).
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The solution is correct, addresses all criteria, and is concise.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">17.4s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! Below is a Python function that takes a list of integers and a target sum, then returns the indices of the two numbers that add up to the target. The function assumes that there is exactly one solution.
+
+```python
+def two_sum(nums, target):
+    # Create a dictionary to store the index of each number
+    num_to_index = {}
+    
+    # Iterate through the list of numbers
+    for i, num in enumerate(nums):
+        # Calculate the complement of the current number
+        complement = target - num
+        
+        # Check if the complement exists in the dictionary
+        if complement in num_to_index:
+            # If it exists, return the current index and the index of the complement
+            return [num_to_index[complement], i]
+        
+        # Store the index of the current number
+        num_to_index[num] = i
+    
+    # If no solution is found, raise an error (though the problem statement guarantees a solution)
+    raise ValueError("No solution found")
+
+# Example usage:
+nums = [2, 7, 11, 15]
+target = 9
+print(two_sum(nums, target))  # Output: [0, 1]
+```
+
+### Explanation:
+1. **Dictionary for Lookup**: We use a dictionary `num_to_index` to store each number and its corresponding index as we iterate through the list.
+2. **Complement Calculation**: For each number, we calculate the complement by subtracting the current number from the target.
+3. **Check for Complement**: We check if the complement exists in the dictionary. If it does, we return the indices of the current number and the complement.
+4. **Store Current Number**: If the complement is not found, we store the current number and its index in the dictionary.
+
+This approach ensures that we find the solution in a single pass through the list, making it efficient with a time complexity of O(n) and a space complexity of O(n).
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The function is correct, addresses all criteria, and is concise but could be slightly more streamlined.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">12.9s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! Below is a Python function that takes a list of integers and a target sum, then returns the indices of the two numbers that add up to the target. The function assumes that there is exactly one solution.
+
+```python
+def two_sum(nums, target):
+    # Create a dictionary to store the index of each number
+    num_to_index = {}
+    
+    # Iterate through the list of numbers
+    for i, num in enumerate(nums):
+        # Calculate the complement of the current number
+        complement = target - num
+        
+        # Check if the complement exists in the dictionary
+        if complement in num_to_index:
+            # If it exists, return the current index and the index of the complement
+            return [num_to_index[complement], i]
+        
+        # Store the index of the current number
+        num_to_index[num] = i
+    
+    # If no solution is found, raise an error (though the problem statement guarantees a solution)
+    raise ValueError("No solution found")
+
+# Example usage:
+nums = [2, 7, 11, 15]
+target = 9
+print(two_sum(nums, target))  # Output: [0, 1]
+```
+
+### Explanation:
+1. **Dictionary for Lookup**: We use a dictionary `num_to_index` to store each number and its corresponding index as we iterate through the list.
+2. **Complement Calculation**: For each number, we calculate the complement by subtracting the current number from the target.
+3. **Check for Complement**: We check if the complement exists in the dictionary. If it does, we return the indices of the current number and the complement.
+4. **Store Current Number**: If the complement is not found, we store the current number and its index in the dictionary.
+
+This approach ensures that we find the solution in a single pass through the list, making it efficient with a time complexity of O(n) and a space complexity of O(n).
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The function is correct, addresses all criteria, and is concise but could be slightly more streamlined.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">deepseek</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">30.1s</span>
+                  <span class="badge-a">
+                    0/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">no response</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">code-002</span>
+            <span class="badge-c">
+              6.2/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Debug this JavaScript: function flatten(arr) { return arr.reduce((acc, val) => acc.concat(val), []); } — it only flattens one level deep. Fix it to flatten arrays of any depth.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">7.2s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To fix the `flatten` function so that it can flatten arrays of any depth, you can use a recursive approach. Here's how you can do it:
+
+```javascript
+function flatten(arr) {
+  return arr.reduce((acc, val) => {
+    if (Array.isArray(val)) {
+      return acc.concat(flatten(val));
+    } else {
+      return acc.concat(val);
+    }
+  }, []);
+}
+```
+
+### Explanation:
+- The `reduce` function is used to iterate over each element in the array.
+- For each element, it checks if the element is an array using `Array.isArray(val)`.
+  - If the element is an array, it recursively calls `flatten(val)` to flatten the nested array and then concatenates the result with the accumulator (`acc`).
+  - If the element is not an array, it simply concatenates the element with the accumulator.
+- The initial value of the accumulator is an empty array `[]`.
+
+This approach ensures that the function can handle arrays of any depth, flattening them completely.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response correctly implements a recursive approach to flatten arrays of any depth, addressing all criteria. The code is clear and concise, but could be slightly more concise by removing the unnecessary `else` block.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">14.3s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+The issue with the current implementation is that it only flattens arrays of one level deep. To fix this, we can use a recursive approach to flatten arrays of any depth. Here's an example of how we can modify the function to achieve this:
+```
+function flatten(arr) {
+  return arr.reduce((acc, val) => {
+    if (Array.isArray(val)) {
+      return acc.concat(flatten(val));
+    } else {
+      return acc.concat(val);
+    }
+  }, []);
+}
+```
+In this implementation, we use the `Array.isArray()` method to check if the current value is an array. If it is, we recursively call the `flatten()` function on that array and concatenate the result with the accumulator. If it's not an array, we simply concatenate the value with the accumulator.
+
+This approach allows us to flatten arrays of any depth, as the `flatten()` function will recursively call itself on any nested arrays it encounters.
+
+Here's an example usage of the modified `flatten()` function:
+```
+const arr = [1, [2, [3, 4], 5], 6];
+const flattened = flatten(arr);
+console.log(flattened); // Output: [1, 2, 3, 4, 5, 6]
+```
+In this example, the `flatten()` function is called on an array with a nested array of depth 2. The function will recursively flatten the nested array and return a flat array with all the elements.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response correctly addresses the criteria and provides a clear, concise solution.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">17.3s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To flatten an array of any depth, you need to use a recursive approach. The current implementation only flattens one level deep because it simply concatenates each element with the accumulator array. To handle arrays of any depth, you need to check if an element is an array and then recursively flatten it.
+
+Here's the corrected function:
+
+```javascript
+function flatten(arr) {
+    return arr.reduce((acc, val) => {
+        if (Array.isArray(val)) {
+            // Recursively flatten the subarray
+            return acc.concat(flatten(val));
+        } else {
+            // Add non-array elements directly to the accumulator
+            acc.push(val);
+            return acc;
+        }
+    }, []);
+}
+
+// Example usage:
+const nestedArray = [1, [2, [3, 4], 5], 6, [7, 8]];
+console.log(flatten(nestedArray)); // Output: [1, 2, 3, 4, 5, 6, 7, 8]
+```
+
+### Explanation:
+- **`Array.isArray(val)`**: This checks if the current value `val` is an array. If it is, the function calls itself recursively to flatten the subarray.
+- **`acc.concat(flatten(val))`**: This concatenates the flattened subarray to the accumulator array.
+- **`acc.push(val)`**: If `val` is not an array, it is directly pushed to the accumulator array.
+
+This approach ensures that the function can handle arrays of any depth by recursively flattening nested arrays.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response correctly addresses the criteria and provides a clear, concise solution.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">19.6s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To flatten an array of any depth, you need to use a recursive approach. The current implementation only flattens one level deep because it simply concatenates each element with the accumulator array. To handle arrays of any depth, you need to check if an element is an array and then recursively flatten it.
+
+Here's the corrected function:
+
+```javascript
+function flatten(arr) {
+    return arr.reduce((acc, val) => {
+        if (Array.isArray(val)) {
+            // Recursively flatten the subarray
+            return acc.concat(flatten(val));
+        } else {
+            // Add non-array elements directly to the accumulator
+            acc.push(val);
+            return acc;
+        }
+    }, []);
+}
+
+// Example usage:
+const nestedArray = [1, [2, [3, 4], 5], 6, [7, 8]];
+console.log(flatten(nestedArray)); // Output: [1, 2, 3, 4, 5, 6, 7, 8]
+```
+
+### Explanation:
+- **`Array.isArray(val)`**: This checks if the current value `val` is an array. If it is, the function calls itself recursively to flatten the subarray.
+- **`acc.concat(flatten(val))`**: This concatenates the flattened subarray to the accumulator array.
+- **`acc.push(val)`**: If `val` is not an array, it is directly pushed to the accumulator array.
+
+This approach ensures that the function can handle arrays of any depth by recursively flattening nested arrays.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response correctly addresses the criteria and provides a clear, concise solution.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">deepseek</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">31.4s</span>
+                  <span class="badge-a">
+                    0/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">no response</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">code-003</span>
+            <span class="badge-c">
+              7/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Write a SQL query that finds the top 3 customers by total order value from tables: orders(id, customer_id, amount) and customers(id, name). Include customer name and total.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">8.6s</span>
+                  <span class="badge-a">
+                    3.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To find the top 3 customers by total order value, you can use the following SQL query:
+
+```sql
+SELECT 
+    c.id AS customer_id,
+    c.name AS customer_name,
+    SUM(o.amount) AS total_order_value
+FROM 
+    orders o
+JOIN 
+    customers c ON o.customer_id = c.id
+GROUP BY 
+    c.id, c.name
+ORDER BY 
+    total_order_value DESC
+LIMIT 3;
+```
+
+This query performs the following steps:
+
+1. **JOIN**: Combines the `orders` and `customers` tables based on the `customer_id` field.
+2. **GROUP BY**: Groups the results by `customer_id` and `customer_name` to aggregate the total order value for each customer.
+3. **SUM**: Calculates the total order value for each customer.
+4. **ORDER BY**: Sorts the results in descending order based on the total order value.
+5. **LIMIT**: Limits the output to the top 3 customers.
+
+This will give you the names and total order values of the top 3 customers.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The query is mostly correct but lacks the necessary column references for the GROUP BY clause and the ORDER BY clause.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">9s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+Here is a SQL query that finds the top 3 customers by total order value from tables orders and customers:
+```
+SELECT c.name, SUM(o.amount) AS total
+FROM orders o
+JOIN customers c ON o.customer_id = c.id
+GROUP BY c.id
+ORDER BY total DESC
+LIMIT 3;
+```
+This query joins the orders and customers tables on the customer_id column, and then groups the results by customer ID. The SUM function is used to calculate the total amount for each customer. The results are then ordered by the total amount in descending order and limited to the top 3 customers.
+
+Note that this query assumes that the orders table has a customer_id column that references the id column in the customers table. If your tables have different column names, you will need to adjust the query accordingly.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The query is correct and addresses all criteria. It uses JOIN, GROUP BY, SUM, ORDER BY DESC, and LIMIT 3. The column references are correct. It returns the customer name and total order value.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">14.1s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! To find the top 3 customers by total order value, you can use a SQL query that joins the `orders` and `customers` tables, groups the results by customer, sums the order amounts, and then orders the results by the total order value in descending order. Here's the SQL query:
+
+```sql
+SELECT 
+    c.name,
+    SUM(o.amount) AS total_order_value
+FROM 
+    orders o
+JOIN 
+    customers c ON o.customer_id = c.id
+GROUP BY 
+    c.name
+ORDER BY 
+    total_order_value DESC
+LIMIT 3;
+```
+
+### Explanation:
+- **`SELECT c.name, SUM(o.amount) AS total_order_value`**: This selects the customer name and the total order value for each customer.
+- **`FROM orders o JOIN customers c ON o.customer_id = c.id`**: This joins the `orders` table with the `customers` table on the `customer_id` field.
+- **`GROUP BY c.name`**: This groups the results by customer name.
+- **`ORDER BY total_order_value DESC`**: This orders the results by the total order value in descending order, so the customers with the highest total order value come first.
+- **`LIMIT 3`**: This limits the results to the top 3 customers by total order value.
+
+This query will return the names of the top 3 customers along with their total order value.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The query is correct and addresses all criteria, but it could be slightly more concise by removing the unnecessary alias 'o' for the orders table.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">8.9s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! To find the top 3 customers by total order value, you can use a SQL query that joins the `orders` and `customers` tables, groups the results by customer, sums the order amounts, and then orders the results by the total order value in descending order. Here's the SQL query:
+
+```sql
+SELECT 
+    c.name,
+    SUM(o.amount) AS total_order_value
+FROM 
+    orders o
+JOIN 
+    customers c ON o.customer_id = c.id
+GROUP BY 
+    c.name
+ORDER BY 
+    total_order_value DESC
+LIMIT 3;
+```
+
+### Explanation:
+- **`SELECT c.name, SUM(o.amount) AS total_order_value`**: This selects the customer name and the total order value for each customer.
+- **`FROM orders o JOIN customers c ON o.customer_id = c.id`**: This joins the `orders` table with the `customers` table on the `customer_id` field.
+- **`GROUP BY c.name`**: This groups the results by customer name.
+- **`ORDER BY total_order_value DESC`**: This orders the results by the total order value in descending order, so the customers with the highest total order value come first.
+- **`LIMIT 3`**: This limits the results to the top 3 customers by total order value.
+
+This query will return the names of the top 3 customers along with their total order value.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The query is correct and addresses all criteria, but it could be slightly more concise by removing the unnecessary alias 'o' for the orders table.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">deepseek</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">22.7s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To find the top 3 customers by their total order value, we can use a SQL query that joins the orders and customers tables, groups by customer, sums the amounts, and then selects the top 3 based on this total.
+
+**Answer:**
+
+```sql
+SELECT c.name AS customer_name, SUM(o.amount) AS total_amount
+FROM orders o
+JOIN customers c ON o.customer_id = c.id
+GROUP BY c.id
+ORDER BY total_amount DESC
+LIMIT 3;
+```
+
+**Explanation:**
+
+1. **JOIN Operation:** We join the `orders` table with the `customers` table using the `customer_id` as the common identifier.
+2. **Grouping and Summing:** We group the joined results by `customer_id` and sum the `amount` values to get each customer's total order value.
+3. **Sorting:** We sort the results in descending order based on the total order value.
+4. **Limiting Results:** We select only the top 3 customers from the sorted list.
+
+This query efficiently retrieves the desired information by leveraging SQL's grouping, ordering, and limiting capabilities.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The query is correct and addresses all criteria, but it could be slightly more concise by removing the unnecessary alias for the sum.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">code-004</span>
+            <span class="badge-a">
+              5.1/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Implement a basic LRU (Least Recently Used) cache in Python with get(key) and put(key, value) methods. Capacity is set at init. Both operations must be O(1).</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">20.5s</span>
+                  <span class="badge-a">
+                    2.2/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+Here is an example of how you could implement a basic LRU cache in Python:
+```
+class LRUCache:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.cache = {}
+        self.order = []
+
+    def get(self, key):
+        if key not in self.cache:
+            return -1
+        else:
+            self.order.remove(key)
+            self.order.append(key)
+            return self.cache[key]
+
+    def put(self, key, value):
+        if key in self.cache:
+            self.order.remove(key)
+            self.order.append(key)
+            self.cache[key] = value
+        else:
+            if len(self.cache) >= self.capacity:
+                self.cache.popitem(last=False)
+            self.cache[key] = value
+            self.order.append(key)
+```
+The `get` method returns the value associated with the given key, or -1 if the key is not in the cache. The `put` method adds the given key-value pair to the cache, and removes the least recently used item if the cache is full.
+
+The `order` list is used to keep track of the order in which the items were accessed. When an item is accessed, it is moved to the end of the list. This allows the least recently used item to be easily identified and removed from the cache.
+
+The `capacity` parameter is set at initialization and is used to determine the maximum number of items that can be stored in the cache.
+
+Both the `get` and `put` methods have a time complexity of O(1), since they only involve accessing and modifying a single dictionary and a single list.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The implementation does not meet the O(1) time complexity requirement for both operations. The use of a list to track order is inefficient for removing the least recently used item. Additionally, the put method does not correctly handle the case where the key already exists in the cache.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">29.9s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To implement a basic LRU (Least Recently Used) cache in Python with `get(key)` and `put(key, value)` methods, we can use a combination of a dictionary and an ordered list. The dictionary will provide O(1) access to the values, and the ordered list will help us maintain the order of usage to implement the LRU policy.
+
+Here's a step-by-step implementation:
+
+1. **Dictionary**: This will store the key-value pairs.
+2. **Ordered List**: This will store the keys in the order they were accessed. The most recently used key will be at the end of the list, and the least recently used key will be at the beginning.
+
+We will use Python's `collections.OrderedDict` to simplify the implementation of the ordered list.
+
+Here's the complete implementation:
+
+```python
+from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cache = OrderedDict()
+        self.capacity = capacity
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        else:
+            # Move the key to the end to show that it was recently used
+            self.cache.move_to_end(key)
+            return self.cache[key]
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            # Move the key to the end to show that it was recently used
+            self.cache.move_to_end(key)
+        self.cache[key] = value
+        if len(self.cache) > self.capacity:
+            # Remove the first key (least recently used)
+            self.cache.popitem(last=False)
+
+# Example usage:
+cache = LRUCache(2)
+cache.put(1, 1)
+cache.put(2, 2)
+print(cache.get(1))  # returns 1
+cache.put(3, 3)  # evicts key 2
+print(cache.get(2))  # returns -1 (not found)
+cache.put(4, 4)  # evicts key 1
+print(cache.get(1))  # returns -1 (not found)
+print(cache.get(3))  # returns 3
+print(cache.get(4))  # returns 4
+```
+
+### Explanation:
+
+1. **Initialization (`__init__` method)**:
+   - `self.cache`: An `OrderedDict` to store the key-value pairs.
+   - `self.capacity`: The maximum number of items the cache can hold.
+
+2. **Get Operation (`get` method)**:
+   - If the key is not in the cache, return `-1`.
+   - If the key is in the cache, move the key to the end of the `OrderedDict` to mark it as recently used and return its value.
+
+3. **Put Operation (`put` method)**:
+   - If the key is already in the cache, move it to the end of the `OrderedDict` to mark it as recently used.
+   - Update the value of the key in the cache.
+   - If the cache exceeds its capacity, remove the first key (the least recently used) from the `OrderedDict`.
+
+This implementation ensures that both `get` and `put` operations are O(1) due to the properties of the `OrderedDict`.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response is clear, relevant, and concise, but could benefit from a more detailed explanation of the `OrderedDict` methods used.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">37s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To implement a basic LRU (Least Recently Used) cache in Python with `get(key)` and `put(key, value)` methods, we can use a combination of a dictionary and a doubly linked list. The dictionary will provide O(1) access to the cache items, while the doubly linked list will help us maintain the order of usage and efficiently remove the least recently used items.
+
+Here's a Python implementation:
+
+```python
+class Node:
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+        self.prev = None
+        self.next = None
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.cache = {}  # Dictionary to store key and node
+        self.head = Node(0, 0)  # Dummy head node
+        self.tail = Node(0, 0)  # Dummy tail node
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            node = self.cache[key]
+            self._remove(node)
+            self._add(node)
+            return node.value
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self._remove(self.cache[key])
+        node = Node(key, value)
+        self.cache[key] = node
+        self._add(node)
+        if len(self.cache) > self.capacity:
+            node = self.head.next
+            self._remove(node)
+            del self.cache[node.key]
+
+    def _remove(self, node):
+        prev = node.prev
+        next = node.next
+        prev.next = next
+        next.prev = prev
+
+    def _add(self, node):
+        prev = self.tail.prev
+        prev.next = node
+        node.prev = prev
+        node.next = self.tail
+        self.tail.prev = node
+
+# Example usage:
+cache = LRUCache(2)
+cache.put(1, 1)
+cache.put(2, 2)
+print(cache.get(1))  # returns 1
+cache.put(3, 3)  # evicts key 2
+print(cache.get(2))  # returns -1 (not found)
+cache.put(4, 4)  # evicts key 1
+print(cache.get(1))  # returns -1 (not found)
+print(cache.get(3))  # returns 3
+print(cache.get(4))  # returns 4
+```
+
+### Explanation:
+
+1. **Node Class**: Represents a node in the doubly linked list. Each node contains a key, value, and pointers to the previous and next nodes.
+
+2. **LRUCache Class**:
+   - **Initialization**: Sets up the cache with a given capacity, a dictionary to store key-node pairs, and a doubly linked list with dummy head and tail nodes.
+   - **get(key)**: Retrieves the value of the given key. If the key exists, it moves the node to the end of the list (most recently used) and returns the value. If the key does not exist, it returns -1.
+   - **put(key, value)**: Inserts a key-value pair into the cache. If the key already exists, it updates the value and moves the node to the end of the list. If the cache is at capacity, it removes the least recently used item (the head's next node) before adding the new item.
+   - **_remove(node)**: Removes a node from the doubly linked list.
+   - **_add(node)**: Adds a node to the end of the doubly linked list.
+
+This implementation ensures that both `get` and `put` operations are O(1) by leveraging the dictionary for quick lookups and the doubly linked list for maintaining the order of usage.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response provides a correct and complete implementation of an LRU cache in Python, using a combination of a dictionary and a doubly linked list. The implementation is concise and follows the requirements.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">28.9s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To implement a basic LRU (Least Recently Used) cache in Python with `get(key)` and `put(key, value)` methods, we can use a combination of a dictionary and a doubly linked list. The dictionary will provide O(1) access to the cache items, while the doubly linked list will help us maintain the order of usage and efficiently remove the least recently used items.
+
+Here's a Python implementation:
+
+```python
+class Node:
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+        self.prev = None
+        self.next = None
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.cache = {}  # Dictionary to store key and node
+        self.head = Node(0, 0)  # Dummy head node
+        self.tail = Node(0, 0)  # Dummy tail node
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            node = self.cache[key]
+            self._remove(node)
+            self._add(node)
+            return node.value
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self._remove(self.cache[key])
+        node = Node(key, value)
+        self.cache[key] = node
+        self._add(node)
+        if len(self.cache) > self.capacity:
+            node = self.head.next
+            self._remove(node)
+            del self.cache[node.key]
+
+    def _remove(self, node):
+        prev = node.prev
+        next = node.next
+        prev.next = next
+        next.prev = prev
+
+    def _add(self, node):
+        prev = self.tail.prev
+        prev.next = node
+        node.prev = prev
+        node.next = self.tail
+        self.tail.prev = node
+
+# Example usage:
+cache = LRUCache(2)
+cache.put(1, 1)
+cache.put(2, 2)
+print(cache.get(1))  # returns 1
+cache.put(3, 3)  # evicts key 2
+print(cache.get(2))  # returns -1 (not found)
+cache.put(4, 4)  # evicts key 1
+print(cache.get(1))  # returns -1 (not found)
+print(cache.get(3))  # returns 3
+print(cache.get(4))  # returns 4
+```
+
+### Explanation:
+
+1. **Node Class**: Represents a node in the doubly linked list. Each node contains a key, value, and pointers to the previous and next nodes.
+
+2. **LRUCache Class**:
+   - **Initialization**: Sets up the cache with a given capacity, a dictionary to store key-node pairs, and a doubly linked list with dummy head and tail nodes.
+   - **get(key)**: Retrieves the value of the given key. If the key exists, it moves the node to the end of the list (most recently used) and returns the value. If the key does not exist, it returns -1.
+   - **put(key, value)**: Inserts a key-value pair into the cache. If the key already exists, it updates the value and moves the node to the end of the list. If the cache is at capacity, it removes the least recently used item (the head's next node) before adding the new item.
+   - **_remove(node)**: Removes a node from the doubly linked list.
+   - **_add(node)**: Adds a node to the end of the doubly linked list.
+
+This implementation ensures that both `get` and `put` operations are O(1) by leveraging the dictionary for quick lookups and the doubly linked list for maintaining the order of usage.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response provides a correct and complete implementation of an LRU cache in Python, using a combination of a dictionary and a doubly linked list. The implementation is concise and follows the requirements.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">deepseek</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">36.9s</span>
+                  <span class="badge-a">
+                    0/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">no response</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">code-005</span>
+            <span class="badge-c">
+              6.4/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">What's wrong with this Go code? func main() { var wg sync.WaitGroup; for i := 0; i < 5; i++ { wg.Add(1); go func() { defer wg.Done(); fmt.Println(i) }() }; wg.Wait() }</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">11.8s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+The code is not correct because it is using the `i` variable in the closure, which is a copy of the `i` variable in the outer scope. This means that the value of `i` in the closure is always 5, because the loop has already finished and `i` has been set to 5.
+
+To fix this, you can use the `range` keyword to iterate over the values in the `wg` slice, and use the `i` variable in the closure to print the current value. Here's the corrected code:
+```
+func main() {
+    var wg sync.WaitGroup
+    for i := 0; i < 5; i++ {
+        wg.Add(1)
+        go func(i int) {
+            defer wg.Done()
+            fmt.Println(i)
+        }(i)
+    }
+    wg.Wait()
+}
+```
+This code will print the values 0 through 4, as expected.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response correctly identifies the closure variable capture bug and provides a fix. However, it does not fully address the evaluation criteria, which also includes identifying the issue with the `sync.WaitGroup` usage and suggesting a more idiomatic way to use it with goroutines.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">13.3s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The Go code you provided has a common issue related to the use of a closure within a loop. The problem arises because the closure captures the loop variable `i` by reference, not by value. As a result, when the goroutines are executed, they all print the value of `i` at the time the loop completes, which is 5.
+
+Here's a breakdown of the issue:
+
+1. **Loop Variable Capture**: The loop variable `i` is captured by reference in the closure. This means that all goroutines will see the same `i`, which is the final value of the loop variable after the loop completes.
+
+2. **Goroutine Execution**: When the goroutines are executed, they print the value of `i` at the time the loop completes, which is 5.
+
+To fix this issue, you need to capture the loop variable by value. You can do this by creating a new variable inside the loop and passing it to the goroutine. Here's the corrected code:
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func main() {
+	var wg sync.WaitGroup
+	for i := 0; i < 5; i++ {
+		wg.Add(1)
+		go func(i int) { // Capture i by value
+			defer wg.Done()
+			fmt.Println(i)
+		}(i) // Pass the current value of i to the closure
+	}
+	wg.Wait()
+}
+```
+
+In this corrected version, each goroutine captures its own copy of `i` by value, so they will print the correct values from 0 to 4.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately identifies the issue and provides a correct fix, addressing all criteria. It is concise but could be slightly more succinct.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">15.2s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The issue with the provided Go code is related to the use of the `i` variable in the `fmt.Println(i)` statement. By the time the goroutines run, the loop has already completed, and `i` has the final value of 5. Therefore, all goroutines will print `5`.
+
+To fix this, you can use a closure to capture the current value of `i` in each iteration of the loop. Here's the corrected code:
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func main() {
+	var wg sync.WaitGroup
+	for i := 0; i < 5; i++ {
+		wg.Add(1)
+		go func(i int) { // Use a closure to capture the current value of i
+			defer wg.Done()
+			fmt.Println(i)
+		}(i) // Pass the current value of i to the closure
+	}
+	wg.Wait()
+}
+```
+
+This code will correctly print the numbers 0 through 4, as each goroutine will have its own captured value of `i`.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response correctly identifies the issue and provides a fix, but it could be more concise and could include a brief explanation of why the closure is necessary.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">6.1s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The issue with the provided Go code is related to the use of the `i` variable in the `fmt.Println(i)` statement. By the time the goroutines run, the loop has already completed, and `i` has the final value of 5. Therefore, all goroutines will print `5`.
+
+To fix this, you can use a closure to capture the current value of `i` in each iteration of the loop. Here's the corrected code:
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func main() {
+	var wg sync.WaitGroup
+	for i := 0; i < 5; i++ {
+		wg.Add(1)
+		go func(i int) { // Use a closure to capture the current value of i
+			defer wg.Done()
+			fmt.Println(i)
+		}(i) // Pass the current value of i to the closure
+	}
+	wg.Wait()
+}
+```
+
+This code will correctly print the numbers 0 through 4, as each goroutine will have its own captured value of `i`.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response correctly identifies the issue and provides a fix, but it could be more concise and could include a brief explanation of why the closure is necessary.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">deepseek</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">25.4s</span>
+                  <span class="badge-a">
+                    1/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The issue in the provided Go code is that the channel is added to the wait group before it is closed. This causes an error when the wait group tries to remove the channel because the channel is still open. The fix is to ensure the channel is closed before it is added to the wait group.
+
+**Step-by-Step Explanation:**
+
+1. **Identify the Problem:**
+   - The code adds a channel to the wait group before closing it.
+   - The `Remove()` method of the wait group requires the channel to be closed before removal.
+   - This results in an error when trying to remove an open channel.
+
+2. **Understand the Solution:**
+   - Move the `defer wg.Done()` call before adding the channel to the wait group.
+   - This ensures the channel is closed before it's added to the wait group, allowing the `Remove()` method to function correctly.
+
+3. **Correct the Code:**
+   - Adjust the order of operations so that `defer wg.Done()` is executed before `wg.Add(c)`.
+
+**Corrected Code:**
+
+```go
+func main() {
+    var wg sync.WaitGroup
+    for i := 0; i < 5; i++ {
+        defer wg.Done()                 // Close the channel before adding to wait group
+        wg.Add(c)                      // Now the channel is closed
+        go func() {
+            fmt.Println(i)
+        }()
+    }
+    wg.Wait()
+}
+```
+
+This corrected code ensures that each channel is properly closed before being added to the wait group, preventing any errors during the removal process.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response does not address the actual issue in the Go code, which is the closure variable capture bug. Instead, it discusses a different issue related to channel management in a wait group.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">code-006</span>
+            <span class="badge-c">
+              6.7/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Write a TypeScript generic function `groupBy<T>(arr: T[], key: keyof T): Record<string, T[]>` that groups an array of objects by a given key.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">9.6s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                ```typescript
+function groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {
+  return arr.reduce((acc, item) => {
+    const groupKey = item[key];
+    if (!acc[groupKey]) {
+      acc[groupKey] = [];
+    }
+    acc[groupKey].push(item);
+    return acc;
+  }, {} as Record<string, T[]>);
+}
+```
+
+**Explanation**:
+The `groupBy` function takes an array of objects `arr` and a key `key` as arguments. It returns an object where the keys are the unique values of the specified key in the array, and the values are arrays of objects that have that key value.
+
+- The function uses the `reduce` method to iterate over each item in the array.
+- For each item, it extracts the value of the specified key.
+- If the accumulated object (`acc`) does not have a property with the value of the key, it initializes it as an empty array.
+- The item is then pushed into the array corresponding to its key in the accumulated object.
+- Finally, the accumulated object is returned, which now contains the grouped items.
+
+This function is useful for organizing data into categories based on a common attribute, making it easier to access and manipulate grouped data.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The function correctly implements the groupBy functionality with TypeScript generics and the keyof constraint. It handles missing/undefined keys gracefully by initializing the array if the key is not present. The implementation is concise and well-scoped.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">25.7s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+Here is an example of how you can implement a generic function `groupBy<T>(arr: T[], key: keyof T): Record<string, T[]>` in TypeScript:
+```
+function groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {
+  return arr.reduce((acc, cur) => {
+    const groupKey = cur[key];
+    if (!acc[groupKey]) {
+      acc[groupKey] = [];
+    }
+    acc[groupKey].push(cur);
+    return acc;
+  }, {});
+}
+```
+This function takes two parameters: `arr` is an array of objects, and `key` is a key of the objects in the array. It returns a record of arrays, where each key in the record is a unique value of the `key` property in the input array, and the corresponding value is an array of objects that have that value for the `key` property.
+
+For example, if you have an array of objects like this:
+```
+const arr = [
+  { id: 1, name: 'John', age: 25 },
+  { id: 2, name: 'Alice', age: 30 },
+  { id: 3, name: 'Bob', age: 30 },
+  { id: 4, name: 'Charlie', age: 20 }
+];
+```
+You can group the objects by the `age` property like this:
+```
+const grouped = groupBy(arr, 'age');
+```
+The `grouped` variable will contain a record of arrays, where each key is a unique value of the `age` property in the input array, and the corresponding value is an array of objects that have that value for the `age` property. For example:
+```
+{
+  25: [{ id: 1, name: 'John', age: 25 }],
+  30: [{ id: 2, name: 'Alice', age: 30 }, { id: 3, name: 'Bob', age: 30 }],
+  20: [{ id: 4, name: 'Charlie', age: 20 }]
+}
+```
+You can then access the arrays of objects for each age group like this:
+```
+console.log(grouped[25]); // Output: [{ id: 1, name: 'John', age: 25 }]
+console.log(grouped[30]); // Output: [{ id: 2, name: 'Alice', age: 30 }, { id: 3, name: 'Bob', age: 30 }]
+console.log(grouped[20]); // Output: [{ id: 4, name: 'Charlie', age: 20 }]
+```
+Note that the `keyof T` type is used to specify that the `key` parameter should be a key of the `T` type. This allows the function to work with any type of object, as long as the `key` parameter is a valid key for that type.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response is correct, addresses all criteria, and is appropriately scoped.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">26.6s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! Below is a TypeScript generic function `groupBy` that groups an array of objects by a given key. The function uses the `keyof` type to ensure that the key provided is valid for the objects in the array.
+
+```typescript
+function groupBy<T, K extends keyof T>(arr: T[], key: K): Record<string, T[]> {
+    const grouped: Record<string, T[]> = {};
+
+    arr.forEach(item => {
+        const keyValue = item[key];
+        if (!grouped[keyValue]) {
+            grouped[keyValue] = [];
+        }
+        grouped[keyValue].push(item);
+    });
+
+    return grouped;
+}
+
+// Example usage:
+interface Person {
+    name: string;
+    age: number;
+}
+
+const people: Person[] = [
+    { name: "Alice", age: 25 },
+    { name: "Bob", age: 30 },
+    { name: "Charlie", age: 25 },
+    { name: "David", age: 30 }
+];
+
+const groupedPeople = groupBy(people, "age");
+
+console.log(groupedPeople);
+// Output:
+// {
+//     "25": [{ name: "Alice", age: 25 }, { name: "Charlie", age: 25 }],
+//     "30": [{ name: "Bob", age: 30 }, { name: "David", age: 30 }]
+// }
+```
+
+### Explanation:
+- **Generic Parameters**:
+  - `T`: The type of the objects in the array.
+  - `K extends keyof T`: The key by which the objects are grouped. This ensures that the key is a valid property of the objects in the array.
+
+- **Record<string, T[]>**: The return type is a record where the keys are strings (the values of the key property) and the values are arrays of objects.
+
+- **grouped**: An object that will hold the grouped data. The keys are the values of the specified key, and the values are arrays of objects that share the same key value.
+
+- **forEach**: Iterates over each item in the array, extracts the value of the specified key, and groups the items accordingly.
+
+This function can be used with any array of objects and any valid key, as long as the key is a property of the objects in the array.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The function is correct, addresses all criteria, and is concise but could be slightly more streamlined.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">16.5s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! Below is a TypeScript generic function `groupBy` that groups an array of objects by a given key. The function uses the `keyof` type to ensure that the key provided is valid for the objects in the array.
+
+```typescript
+function groupBy<T, K extends keyof T>(arr: T[], key: K): Record<string, T[]> {
+    const grouped: Record<string, T[]> = {};
+
+    arr.forEach(item => {
+        const keyValue = item[key];
+        if (!grouped[keyValue]) {
+            grouped[keyValue] = [];
+        }
+        grouped[keyValue].push(item);
+    });
+
+    return grouped;
+}
+
+// Example usage:
+interface Person {
+    name: string;
+    age: number;
+}
+
+const people: Person[] = [
+    { name: "Alice", age: 25 },
+    { name: "Bob", age: 30 },
+    { name: "Charlie", age: 25 },
+    { name: "David", age: 30 }
+];
+
+const groupedPeople = groupBy(people, "age");
+
+console.log(groupedPeople);
+// Output:
+// {
+//     "25": [{ name: "Alice", age: 25 }, { name: "Charlie", age: 25 }],
+//     "30": [{ name: "Bob", age: 30 }, { name: "David", age: 30 }]
+// }
+```
+
+### Explanation:
+- **Generic Parameters**:
+  - `T`: The type of the objects in the array.
+  - `K extends keyof T`: The key by which the objects are grouped. This ensures that the key is a valid property of the objects in the array.
+
+- **Record<string, T[]>**: The return type is a record where the keys are strings (the values of the key property) and the values are arrays of objects.
+
+- **grouped**: An object that will hold the grouped data. The keys are the values of the specified key, and the values are arrays of objects that share the same key value.
+
+- **forEach**: Iterates over each item in the array, extracts the value of the specified key, and groups the items accordingly.
+
+This function can be used with any array of objects and any valid key, as long as the key is a property of the objects in the array.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The function is correct, addresses all criteria, and is concise but could be slightly more streamlined.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">deepseek</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">31.1s</span>
+                  <span class="badge-a">
+                    2.2/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To solve this problem, we need to create a TypeScript function that groups an array of objects by a specified key. The function will return a record where each key is a string representing the grouping key, and the value is an array of objects that share that key.
+
+### Approach
+1. **Function Signature**: The function `groupBy` takes two parameters: an array of objects `arr` and a string `key` which specifies the property to group by. The function returns a record of type `Record<string, T[]>`, where `T` is the type of the objects in the input array.
+2. **Initialization**: We start by initializing an empty object `result` of type `Record<string, T[]>` to store the grouped data.
+3. **Iteration**: We loop through each element in the input array `arr`.
+4. **Key Extraction**: For each element, we extract the value of the specified key.
+5. **Grouping**: We check if the extracted key exists in the `result` object. If it does, we add the current element to the corresponding array using the spread operator. If it does not, we create a new array with the current element.
+6. **Return Result**: After processing all elements, we return the `result` object containing the grouped data.
+
+### Solution Code
+
+```typescript
+function groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {
+  const result: Record<string, T[]> = {};
+  for (const element of arr) {
+    const keyValue = element[key];
+    result[keyValue] = result[keyValue].spread(element);
+  }
+  return result;
+}
+```
+
+### Explanation
+- **Function Parameters**: The function `groupBy` takes an array of objects `arr` and a key `key` which is a string representing the property to group by.
+- **Result Initialization**: An empty object `result` is initialized to store the grouped data.
+- **Loop Through Array**: Each element in the array is processed in a loop.
+- **Extract Key Value**: For each element, the value of the specified key is extracted.
+- **Update Result**: The extracted key is used to update the `result` object. If the key already exists, the current element is added to the corresponding array using the spread operator, which creates a new array each time.
+- **Return**: The `result` object, which now contains the grouped data, is returned.
+
+This approach ensures that the function efficiently groups the array elements by the specified key and handles each element in linear time, making it suitable for large datasets.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response does not correctly implement the groupBy function. It uses an incorrect method (spread) and does not handle missing/undefined keys gracefully.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">code-007</span>
+            <span class="badge-a">
+              5.1/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Given a binary tree, write a function to check if it's a valid BST (Binary Search Tree). Don't just compare each node to its parent — consider the full range constraint.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">28.4s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To check if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node, all nodes in its left subtree are less than the node, and all nodes in its right subtree are greater than the node. This constraint must hold for every node in the tree.
+
+Here's a Python function to check if a binary tree is a valid BST:
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def is_valid_bst(root):
+    def validate(node, low=float('-inf'), high=float('inf')):
+        # An empty tree is a valid BST
+        if not node:
+            return True
+        
+        # The current node's value must be between low and high
+        if node.val <= low or node.val >= high:
+            return False
+        
+        # Recursively validate the left and right subtrees
+        return (validate(node.left, low, node.val) and
+                validate(node.right, node.val, high))
+    
+    # Start the validation with the entire range of valid values
+    return validate(root)
+
+# Example usage:
+# Constructing a valid BST:
+#       2
+#      / \
+#     1   3
+root = TreeNode(2)
+root.left = TreeNode(1)
+root.right = TreeNode(3)
+
+# Check if the tree is a valid BST
+print(is_valid_bst(root))  # Output: True
+
+# Constructing an invalid BST:
+#       2
+#      / \
+#     3   1
+root = TreeNode(2)
+root.left = TreeNode(3)
+root.right = TreeNode(1)
+
+# Check if the tree is a valid BST
+print(is_valid_bst(root))  # Output: False
+```
+
+### Explanation:
+1. **TreeNode Class**: This class defines the structure of a node in the binary tree.
+2. **is_valid_bst Function**: This function checks if the binary tree is a valid BST.
+   - **validate Helper Function**: This is a recursive function that takes a node and a range (`low` and `high`) within which the node's value must lie.
+     - If the node is `None`, it returns `True` because an empty tree is a valid BST.
+     - If the node's value is not within the valid range, it returns `False`.
+     - It recursively checks the left and right subtrees with updated ranges.
+3. **Example Usage**: The example constructs two binary trees, one valid and one invalid, and checks if they are valid BSTs.
+
+This approach ensures that the BST property is checked for every node in the tree, considering the full range constraint.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response is clear, relevant, and covers all the criteria, but could be more concise.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">36s</span>
+                  <span class="badge-a">
+                    2.2/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+A valid BST is defined as follows:
+
+* The left subtree of a node contains only nodes with keys less than the node's key.
+* The right subtree of a node contains only nodes with keys greater than the node's key.
+* Both the left and right subtrees must also be binary search trees.
+
+Here's an example of a valid BST:
+```
+      4
+     / \
+    2   6
+   / \   \
+  1   3   7
+```
+And here's an example of an invalid BST:
+```
+      4
+     / \
+    2   8
+   / \   \
+  1   3   7
+```
+In this example, the node with the key 8 is not less than the node with the key 6, which violates the constraint.
+
+To check if a binary tree is a valid BST, we can use a recursive approach. We can define a function that takes a node and its parent node as arguments, and returns a boolean indicating whether the node is a valid BST.
+
+Here's the pseudocode for the function:
+```
+function isValidBST(node, parent):
+  if node is None:
+    return True
+
+  # Check if the node's key is less than the parent's key
+  if node.key < parent.key:
+    return False
+
+  # Check if the left subtree is a valid BST
+  if node.left is not None and node.left.key >= parent.key:
+    return False
+
+  # Check if the right subtree is a valid BST
+  if node.right is not None and node.right.key <= parent.key:
+    return False
+
+  # Recursively check the left and right subtrees
+  return isValidBST(node.left, node) and isValidBST(node.right, node)
+```
+In this function, we first check if the node is None. If it is, we return True, since there is no need to check the subtrees.
+
+Next, we check if the node's key is less than the parent's key. If it is not, we return False, since the node's key is not less than the parent's key.
+
+We then check if the left subtree is a valid BST. If it is not, we return False, since the left subtree is not a valid BST.
+
+We then check if the right subtree is a valid BST. If it is not, we return False, since the right subtree is not a valid BST.
+
+Finally, we recursively check the left and right subtrees. If either of them is not a valid BST, we return False. Otherwise, we return True.
+
+Here's an example of how to use this function:
+```
+root = Node(4)
+root.left = Node(2)
+root.right = Node(6)
+root.left.left = Node(1)
+root.left.right = Node(3)
+root.right.left = Node(7)
+
+print(isValidBST(root, None))  # Output: True
+```
+In this example, the root node has a key of 4, and its left subtree has a key of 2, and its right subtree has a key of 6. The left subtree's left subtree has a key of 1, and its right subtree has a key of 3. The right subtree's left subtree has a key of 7.
+
+The function returns True, since the tree is a valid BST.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response does not accurately describe the problem or provide a correct solution. It also lacks clarity and is not concise.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">40.4s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To check if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node, all nodes in its left subtree are smaller and all nodes in its right subtree are larger. This means that the value of each node must be within a certain range, which is defined by the values of its parent node.
+
+Here's a Python function that checks if a binary tree is a valid BST using a recursive approach. The function will take a node and a tuple representing the range of valid values for that node. If the node is `None`, it is considered valid. Otherwise, the node's value must be within the given range, and the function will recursively check the left and right subtrees with updated ranges.
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def isValidBST(root):
+    def helper(node, lower=float('-inf'), upper=float('inf')):
+        if not node:
+            return True
+        
+        val = node.val
+        if val <= lower or val >= upper:
+            return False
+        
+        if not helper(node.right, val, upper):
+            return False
+        if not helper(node.left, lower, val):
+            return False
+        
+        return True
+    
+    return helper(root)
+
+# Example usage:
+# Constructing a simple BST
+#       2
+#      / \
+#     1   3
+root = TreeNode(2)
+root.left = TreeNode(1)
+root.right = TreeNode(3)
+
+# Check if the constructed tree is a valid BST
+print(isValidBST(root))  # Output: True
+
+# Constructing an invalid BST
+#       5
+#      / \
+#     1   4
+#        / \
+#       3   6
+invalid_root = TreeNode(5)
+invalid_root.left = TreeNode(1)
+invalid_root.right = TreeNode(4, TreeNode(3), TreeNode(6))
+
+# Check if the constructed tree is a valid BST
+print(isValidBST(invalid_root))  # Output: False
+```
+
+### Explanation:
+1. **TreeNode Class**: This class defines the structure of a node in the binary tree. Each node has a value (`val`), a left child (`left`), and a right child (`right`).
+
+2. **isValidBST Function**: This function checks if the given binary tree is a valid BST. It uses a helper function to perform the actual validation.
+
+3. **Helper Function**: This is a recursive function that checks if a node is within the valid range. It takes three parameters:
+   - `node`: The current node being checked.
+   - `lower`: The lower bound of the valid range for the current node.
+   - `upper`: The upper bound of the valid range for the current node.
+
+4. **Base Case**: If the node is `None`, it returns `True` because an empty subtree is a valid BST.
+
+5. **Range Check**: The node's value must be greater than the lower bound and less than the upper bound.
+
+6. **Recursive Calls**: The function recursively checks the left and right subtrees with updated ranges:
+   - For the right subtree, the lower bound remains the same, but the upper bound is updated to the current node's value.
+   - For the left subtree, the upper bound remains the same, but the lower bound is updated to the current node's value.
+
+7. **Return Value**: The function returns `True` if all nodes are within their valid ranges, otherwise `False`.
+
+This approach ensures that the entire tree is checked for the BST property, not just comparing each node to its parent.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response is clear, relevant, and covers all the criteria, but it could be more concise.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">26.9s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To check if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node, all nodes in its left subtree are smaller and all nodes in its right subtree are larger. This means that the value of each node must be within a certain range, which is defined by the values of its parent node.
+
+Here's a Python function that checks if a binary tree is a valid BST using a recursive approach. The function will take a node and a tuple representing the range of valid values for that node. If the node is `None`, it is considered valid. Otherwise, the node's value must be within the given range, and the function will recursively check the left and right subtrees with updated ranges.
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def isValidBST(root):
+    def helper(node, lower=float('-inf'), upper=float('inf')):
+        if not node:
+            return True
+        
+        val = node.val
+        if val <= lower or val >= upper:
+            return False
+        
+        if not helper(node.right, val, upper):
+            return False
+        if not helper(node.left, lower, val):
+            return False
+        
+        return True
+    
+    return helper(root)
+
+# Example usage:
+# Constructing a simple BST
+#       2
+#      / \
+#     1   3
+root = TreeNode(2)
+root.left = TreeNode(1)
+root.right = TreeNode(3)
+
+# Check if the constructed tree is a valid BST
+print(isValidBST(root))  # Output: True
+
+# Constructing an invalid BST
+#       5
+#      / \
+#     1   4
+#        / \
+#       3   6
+invalid_root = TreeNode(5)
+invalid_root.left = TreeNode(1)
+invalid_root.right = TreeNode(4, TreeNode(3), TreeNode(6))
+
+# Check if the constructed tree is a valid BST
+print(isValidBST(invalid_root))  # Output: False
+```
+
+### Explanation:
+1. **TreeNode Class**: This class defines the structure of a node in the binary tree. Each node has a value (`val`), a left child (`left`), and a right child (`right`).
+
+2. **isValidBST Function**: This function checks if the given binary tree is a valid BST. It uses a helper function to perform the actual validation.
+
+3. **Helper Function**: This is a recursive function that checks if a node is within the valid range. It takes three parameters:
+   - `node`: The current node being checked.
+   - `lower`: The lower bound of the valid range for the current node.
+   - `upper`: The upper bound of the valid range for the current node.
+
+4. **Base Case**: If the node is `None`, it returns `True` because an empty subtree is a valid BST.
+
+5. **Range Check**: The node's value must be greater than the lower bound and less than the upper bound.
+
+6. **Recursive Calls**: The function recursively checks the left and right subtrees with updated ranges:
+   - For the right subtree, the lower bound remains the same, but the upper bound is updated to the current node's value.
+   - For the left subtree, the upper bound remains the same, but the lower bound is updated to the current node's value.
+
+7. **Return Value**: The function returns `True` if all nodes are within their valid ranges, otherwise `False`.
+
+This approach ensures that the entire tree is checked for the BST property, not just comparing each node to its parent.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response is clear, relevant, and covers all the criteria, but it could be more concise.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">deepseek</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">36s</span>
+                  <span class="badge-a">
+                    0/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">no response</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">code-008</span>
+            <span class="badge-a">
+              5.8/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Refactor this code to remove duplication: if (type === 'admin') { log('admin action'); audit('admin', userId); } if (type === 'user') { log('user action'); audit('user', userId); } if (type === 'guest') { log('guest action'); audit('guest', userId); }</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">4.3s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                You can refactor the code to remove duplication by using a function that handles both the logging and auditing based on the type. Here's an example in JavaScript:
+
+```javascript
+function handleAction(type, userId) {
+    const actionType = type === 'admin' ? 'admin' : type === 'user' ? 'user' : 'guest';
+    log(`${actionType} action`);
+    audit(actionType, userId);
+}
+
+// Usage
+if (type === 'admin' || type === 'user' || type === 'guest') {
+    handleAction(type, userId);
+}
+```
+
+This way, you avoid repeating the same code for each type and make the code more maintainable and scalable.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The refactored code removes duplication and follows the criteria, but the accuracy and completeness could be higher as it does not handle the case where 'type' is not one of the expected values. The conciseness is good, but could be slightly improved by removing the unnecessary ternary operator.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">11.1s</span>
+                  <span class="badge-a">
+                    2.4/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+Here's a refactoring of the code to remove duplication:
+```
+const logAndAudit = (type, userId) => {
+  if (type === 'admin') {
+    log('admin action');
+    audit('admin', userId);
+  } else if (type === 'user') {
+    log('user action');
+    audit('user', userId);
+  } else if (type === 'guest') {
+    log('guest action');
+    audit('guest', userId);
+  }
+};
+```
+In this refactoring, we've extracted the common logic of logging and auditing into a separate function called `logAndAudit`. This function takes two arguments: `type` and `userId`.
+
+The `if` statement is then used to determine which action to take based on the value of `type`. If `type` is `'admin'`, we log an admin action and audit an admin action. If `type` is `'user'`, we log a user action and audit a user action. If `type` is `'guest'`, we log a guest action and audit a guest action.
+
+This refactoring reduces the duplication in the original code by moving the common logic into a separate function. It also makes the code more readable and easier to maintain by avoiding the repetition of the same code for each type of user.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The refactored code does not eliminate duplication as the if-else structure is still present. It also does not meet the criteria for a single code path for all types. The response is not accurate, complete, or concise.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">13.7s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! You can refactor the code to remove duplication by using a single function that handles the common logic. Here's a refactored version:
+
+```javascript
+function handleAction(type, userId) {
+    log(`${type} action`);
+    audit(type, userId);
+}
+
+if (type === 'admin') {
+    handleAction('admin', userId);
+} else if (type === 'user') {
+    handleAction('user', userId);
+} else if (type === 'guest') {
+    handleAction('guest', userId);
+}
+```
+
+Alternatively, you can use a switch statement to make the code even more concise:
+
+```javascript
+function handleAction(type, userId) {
+    log(`${type} action`);
+    audit(type, userId);
+}
+
+switch (type) {
+    case 'admin':
+        handleAction('admin', userId);
+        break;
+    case 'user':
+        handleAction('user', userId);
+        break;
+    case 'guest':
+        handleAction('guest', userId);
+        break;
+    default:
+        // Handle unknown type if necessary
+        break;
+}
+```
+
+Both approaches reduce code duplication and make the code more maintainable.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The refactored code removes duplication and follows the criteria, but the switch statement could be more concise.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">6.7s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! You can refactor the code to remove duplication by using a single function that handles the common logic. Here's a refactored version:
+
+```javascript
+function handleAction(type, userId) {
+    log(`${type} action`);
+    audit(type, userId);
+}
+
+if (type === 'admin') {
+    handleAction('admin', userId);
+} else if (type === 'user') {
+    handleAction('user', userId);
+} else if (type === 'guest') {
+    handleAction('guest', userId);
+}
+```
+
+Alternatively, you can use a switch statement to make the code even more concise:
+
+```javascript
+function handleAction(type, userId) {
+    log(`${type} action`);
+    audit(type, userId);
+}
+
+switch (type) {
+    case 'admin':
+        handleAction('admin', userId);
+        break;
+    case 'user':
+        handleAction('user', userId);
+        break;
+    case 'guest':
+        handleAction('guest', userId);
+        break;
+    default:
+        // Handle unknown type if necessary
+        break;
+}
+```
+
+Both approaches reduce code duplication and make the code more maintainable.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The refactored code removes duplication and follows the criteria, but the switch statement could be more concise.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">deepseek</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">16.4s</span>
+                  <span class="badge-a">
+                    3.2/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Here's a refactored version of the code that removes duplication by using a switch statement:
+
+```javascript
+const type = 'admin'; // or whatever the actual value is
+
+switch (type) {
+  case 'admin':
+    log('admin action');
+    audit('admin', userId);
+    break;
+  case 'user':
+    log('user action');
+    audit('user', userId);
+    break;
+  case 'guest':
+    log('guest action');
+    audit('guest', userId);
+    break;
+  default:
+    // Handle unknown type if necessary
+    break;
+}
+```
+
+This version combines the duplicated code into a single switch statement, making it cleaner and easier to maintain. Each case performs both the logging and auditing actions in a single location.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The refactored code uses a switch statement to handle different types, which eliminates duplication. However, the switch statement does not provide a single code path for all types, as each case still contains separate log and audit calls. The code is not as readable or maintainable as it could be, and it does not work correctly for all three types if the type variable is not properly defined or if the default case is not handled.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">code-009</span>
+            <span class="badge-a">
+              4.2/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Write a bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing size and path.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">10.9s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                You can use the following bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing size and path:
+
+```bash
+find . -type f -exec ls -lh {} + | sort -rh | head -n 6 | sed '1d'
+```
+
+Here's a breakdown of what each part of the command does:
+
+1. `find . -type f -exec ls -lh {} +`: This part of the command finds all files (`-type f`) in the current directory and its subdirectories (`find .`). The `-exec` option allows you to run a command on each file found. `ls -lh {}` lists the files with human-readable sizes (`-h`).
+
+2. `sort -rh`: This sorts the output of the `ls` command in reverse human-readable order (`-rh`), so the largest files appear first.
+
+3. `head -n 6`: This limits the output to the first 6 lines. The first line is the header, so we use `sed '1d'` to remove it.
+
+4. `sed '1d'`: This removes the first line of the output, which is the header.
+
+So, the final command will output the 5 largest files in the current directory and its subdirectories, showing size and path.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The command is mostly correct but could be simplified and improved for better readability and efficiency.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">12.5s</span>
+                  <span class="badge-a">
+                    3.2/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+Here is a bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing size and path:
+```
+find . -type f -exec du -h {} + | sort -n | tail -5
+```
+Explanation:
+
+* `find . -type f`: finds all files (type `f`) in the current directory and its subdirectories.
+* `-exec du -h {} +`: runs the `du` command on each file found, with the `-h` option to display the size in human-readable format (e.g., `100M` for 100 MB). The `{}` is a placeholder for the file name, and the `+` at the end of the command tells `find` to run `du` on multiple files at once.
+* `sort -n`: sorts the output of `du` by size (in bytes) in numerical order.
+* `tail -5`: prints the last 5 lines of the output, which are the 5 largest files.
+
+Note that this command assumes that the current directory is the directory you want to search. If you want to search a different directory, replace `.` with the path to that directory.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The command does not sort by size numerically and does not show human-readable sizes with file paths.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">13.2s</span>
+                  <span class="badge-a">
+                    3.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                You can use the following bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing their size and path:
+
+```bash
+find . -type f -exec du -h {} + | sort -rh | head -n 5
+```
+
+This command works as follows:
+- `find . -type f`: Finds all files in the current directory and its subdirectories.
+- `-exec du -h {} +`: For each file found, it runs `du -h {}` to get the human-readable file size.
+- `sort -rh`: Sorts the output by size in reverse human-readable order.
+- `head -n 5`: Displays the top 5 largest files.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The command is correct and addresses all criteria, but it could be more concise.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">13.3s</span>
+                  <span class="badge-a">
+                    3.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                You can use the following bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing their size and path:
+
+```bash
+find . -type f -exec du -h {} + | sort -rh | head -n 5
+```
+
+This command works as follows:
+- `find . -type f`: Finds all files in the current directory and its subdirectories.
+- `-exec du -h {} +`: For each file found, it runs `du -h {}` to get the human-readable file size.
+- `sort -rh`: Sorts the output by size in reverse human-readable order.
+- `head -n 5`: Displays the top 5 largest files.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The command is correct and addresses all criteria, but it could be more concise.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">deepseek</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">27.1s</span>
+                  <span class="badge-a">
+                    2.4/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To find the 5 largest files in the current directory and its subdirectories, showing their size and path, you can use the following bash one-liner:
+
+```bash
+du -v --maxdepth=999 | sort -rl | head -n 5
+```
+
+**Explanation:**
+
+- `du -v --maxdepth=999`: This command lists all files in the current directory and subdirectories, including those deep within nested directories. The `--maxdepth=999` ensures that all levels are included.
+  
+- `sort -rl`: This sorts the output in descending order based on file size (the last part of each line).
+
+- `head -n 5`: This limits the output to the top 5 largest files.
+
+This command efficiently finds and displays the largest files, including their full paths and sizes.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The command does not use find or du correctly. It also does not show human-readable sizes. It does not work on macOS and Linux.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">code-010</span>
+            <span class="badge-c">
+              6.3/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Design the data model (tables + key fields) for a multi-tenant SaaS app where each tenant has users, projects, and tasks. Tasks belong to projects, projects belong to tenants. Consider indexing strategy.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">33.9s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+Here is a possible data model for a multi-tenant SaaS app where each tenant has users, projects, and tasks. Tasks belong to projects, projects belong to tenants.
+
+**Tenants**
+
+* `tenant_id` (primary key): a unique identifier for each tenant
+* `tenant_name`: the name of the tenant
+* `tenant_email`: the email address of the tenant
+* `tenant_status`: the status of the tenant (e.g. "active", "inactive")
+
+**Users**
+
+* `user_id` (primary key): a unique identifier for each user
+* `user_name`: the name of the user
+* `user_email`: the email address of the user
+* `user_status`: the status of the user (e.g. "active", "inactive")
+* `tenant_id`: the ID of the tenant that the user belongs to
+
+**Projects**
+
+* `project_id` (primary key): a unique identifier for each project
+* `project_name`: the name of the project
+* `project_description`: a brief description of the project
+* `tenant_id`: the ID of the tenant that the project belongs to
+
+**Tasks**
+
+* `task_id` (primary key): a unique identifier for each task
+* `task_name`: the name of the task
+* `task_description`: a brief description of the task
+* `project_id`: the ID of the project that the task belongs to
+* `user_id`: the ID of the user who created the task
+* `task_status`: the status of the task (e.g. "active", "inactive")
+
+**Indexing Strategy**
+
+* For the `Tenants` table, create a unique index on the `tenant_id` column to ensure that each tenant has a unique ID.
+* For the `Users` table, create a unique index on the `user_id` column to ensure that each user has a unique ID.
+* For the `Projects` table, create a unique index on the `project_id` column to ensure that each project has a unique ID.
+* For the `Tasks` table, create a unique index on the `task_id` column to ensure that each task has a unique ID.
+* For the `Tasks` table, create an index on the `project_id` column to improve the performance of queries that filter tasks by project.
+* For the `Tasks` table, create an index on the `user_id` column to improve the performance of queries that filter tasks by user.
+
+This data model provides a basic structure for a multi-tenant SaaS app where each tenant has users, projects, and tasks. The indexing strategy is designed to improve the performance of queries that filter tasks by project or user.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately describes the data model and indexing strategy for a multi-tenant SaaS app, addressing all criteria and providing a clear and concise explanation.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">48.8s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To design a data model for a multi-tenant SaaS app with the specified relationships (tenants, users, projects, and tasks), we need to ensure that each tenant's data is isolated from others. This can be achieved by including a tenant identifier in each table. Below is a suggested data model with key fields and indexing strategies.
+
+### Tables
+
+1. **Tenants**
+   - **TenantID** (Primary Key)
+   - **TenantName**
+   - **TenantEmail**
+   - **TenantPhone**
+   - **TenantAddress**
+   - **TenantCreatedDate**
+   - **TenantUpdatedDate**
+
+2. **Users**
+   - **UserID** (Primary Key)
+   - **TenantID** (Foreign Key referencing Tenants.TenantID)
+   - **Username**
+   - **Email**
+   - **PasswordHash**
+   - **Role** (e.g., Admin, User)
+   - **CreatedDate**
+   - **UpdatedDate**
+
+3. **Projects**
+   - **ProjectID** (Primary Key)
+   - **TenantID** (Foreign Key referencing Tenants.TenantID)
+   - **ProjectName**
+   - **ProjectDescription**
+   - **ProjectStartDate**
+   - **ProjectEndDate**
+   - **CreatedDate**
+   - **UpdatedDate**
+
+4. **Tasks**
+   - **TaskID** (Primary Key)
+   - **ProjectID** (Foreign Key referencing Projects.ProjectID)
+   - **TaskName**
+   - **TaskDescription**
+   - **TaskStartDate**
+   - **TaskEndDate**
+   - **TaskStatus** (e.g., Not Started, In Progress, Completed)
+   - **AssignedUserID** (Foreign Key referencing Users.UserID)
+   - **CreatedDate**
+   - **UpdatedDate**
+
+### Indexing Strategy
+
+1. **Tenants Table**
+   - **TenantID** (Primary Key)
+   - **TenantName** (Unique Index)
+
+2. **Users Table**
+   - **UserID** (Primary Key)
+   - **TenantID** (Foreign Key)
+   - **Username** (Unique Index)
+   - **Email** (Unique Index)
+
+3. **Projects Table**
+   - **ProjectID** (Primary Key)
+   - **TenantID** (Foreign Key)
+   - **ProjectName** (Unique Index within a Tenant)
+
+4. **Tasks Table**
+   - **TaskID** (Primary Key)
+   - **ProjectID** (Foreign Key)
+   - **TaskName** (Unique Index within a Project)
+   - **AssignedUserID** (Foreign Key)
+   - **TaskStatus** (Index for efficient querying by task status)
+
+### Relationships
+
+- **Tenants** can have multiple **Users**.
+- **Users** belong to one **Tenant**.
+- **Tenants** can have multiple **Projects**.
+- **Projects** belong to one **Tenant**.
+- **Projects** can have multiple **Tasks**.
+- **Tasks** belong to one **Project**.
+- **Tasks** can be assigned to one **User**.
+
+### Example SQL for Creating Tables
+
+```sql
+CREATE TABLE Tenants (
+    TenantID INT PRIMARY KEY AUTO_INCREMENT,
+    TenantName VARCHAR(255) NOT NULL UNIQUE,
+    TenantEmail VARCHAR(255) NOT NULL UNIQUE,
+    TenantPhone VARCHAR(20),
+    TenantAddress VARCHAR(255),
+    TenantCreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    TenantUpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY AUTO_INCREMENT,
+    TenantID INT,
+    Username VARCHAR(255) NOT NULL UNIQUE,
+    Email VARCHAR(255) NOT NULL UNIQUE,
+    PasswordHash VARCHAR(255) NOT NULL,
+    Role ENUM('Admin', 'User') NOT NULL,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID)
+);
+
+CREATE TABLE Projects (
+    ProjectID INT PRIMARY KEY AUTO_INCREMENT,
+    TenantID INT,
+    ProjectName VARCHAR(255) NOT NULL UNIQUE,
+    ProjectDescription TEXT,
+    ProjectStartDate DATE,
+    ProjectEndDate DATE,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID)
+);
+
+CREATE TABLE Tasks (
+    TaskID INT PRIMARY KEY AUTO_INCREMENT,
+    ProjectID INT,
+    TaskName VARCHAR(255) NOT NULL UNIQUE,
+    TaskDescription TEXT,
+    TaskStartDate DATE,
+    TaskEndDate DATE,
+    TaskStatus ENUM('Not Started', 'In Progress', 'Completed') NOT NULL,
+    AssignedUserID INT,
+    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),
+    FOREIGN KEY (AssignedUserID) REFERENCES Users(UserID)
+);
+```
+
+### Indexing
+
+```sql
+CREATE
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response provides a clear and accurate data model for a multi-tenant SaaS app, including all required tables, key fields, and indexing strategies. It addresses all criteria and is concise but could benefit from slightly more detail in the indexing strategy.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">50.9s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To design a data model for a multi-tenant SaaS application, we need to ensure that the database schema supports the hierarchical nature of the data (tenants, projects, and tasks) while also allowing for efficient querying and indexing. Here's a proposed data model with tables and key fields, along with an indexing strategy.
+
+### Tables and Key Fields
+
+1. **Tenants**
+   - `tenant_id` (Primary Key)
+   - `tenant_name`
+   - `created_at`
+   - `updated_at`
+
+2. **Projects**
+   - `project_id` (Primary Key)
+   - `tenant_id` (Foreign Key)
+   - `project_name`
+   - `created_at`
+   - `updated_at`
+
+3. **Tasks**
+   - `task_id` (Primary Key)
+   - `project_id` (Foreign Key)
+   - `task_name`
+   - `description`
+   - `due_date`
+   - `status`
+   - `created_at`
+   - `updated_at`
+
+### Relationships
+- A `tenant` can have multiple `projects`.
+- A `project` belongs to one `tenant`.
+- A `project` can have multiple `tasks`.
+- A `task` belongs to one `project`.
+
+### Indexing Strategy
+
+To ensure efficient querying and performance, we need to consider the following indexes:
+
+1. **Tenant Indexes**
+   - `tenant_id` (Primary Key)
+   - `tenant_name` (Index for searching by tenant name)
+
+2. **Project Indexes**
+   - `tenant_id` (Foreign Key) - Index to quickly filter projects by tenant
+   - `project_id` (Primary Key)
+   - `project_name` (Index for searching by project name)
+
+3. **Task Indexes**
+   - `project_id` (Foreign Key) - Index to quickly filter tasks by project
+   - `task_id` (Primary Key)
+   - `task_name` (Index for searching by task name)
+   - `status` (Index for filtering tasks by status)
+
+### Example SQL Schema
+
+```sql
+CREATE TABLE Tenants (
+    tenant_id SERIAL PRIMARY KEY,
+    tenant_name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_tenant_name ON Tenants (tenant_name);
+
+CREATE TABLE Projects (
+    project_id SERIAL PRIMARY KEY,
+    tenant_id INT NOT NULL,
+    project_name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES Tenants(tenant_id)
+);
+
+CREATE INDEX idx_project_tenant_id ON Projects (tenant_id);
+CREATE INDEX idx_project_name ON Projects (project_name);
+
+CREATE TABLE Tasks (
+    task_id SERIAL PRIMARY KEY,
+    project_id INT NOT NULL,
+    task_name VARCHAR(255) NOT NULL,
+    description TEXT,
+    due_date TIMESTAMP,
+    status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES Projects(project_id)
+);
+
+CREATE INDEX idx_task_project_id ON Tasks (project_id);
+CREATE INDEX idx_task_name ON Tasks (task_name);
+CREATE INDEX idx_task_status ON Tasks (status);
+```
+
+### Explanation
+
+- **Tenants Table**: Stores information about each tenant. The `tenant_id` is the primary key, and `tenant_name` is indexed for quick searches.
+- **Projects Table**: Stores information about projects. The `project_id` is the primary key, and `tenant_id` is a foreign key to link projects to their respective tenants. `project_name` is indexed for searching.
+- **Tasks Table**: Stores information about tasks. The `task_id` is the primary key, and `project_id` is a foreign key to link tasks to their respective projects. `task_name` and `status` are indexed for searching and filtering.
+
+### Additional Considerations
+
+- **Tenant-Specific Queries**: When querying tasks or projects, always include the `tenant_id` in the WHERE clause to ensure that only the relevant data is returned.
+- **Performance Optimization**: Depending on the volume of data, consider partitioning the `Projects` and `Tasks` tables by `tenant_id` to improve query performance.
+- **Audit Logs**: Consider adding audit logs for tracking changes to tenants, projects, and tasks.
+
+This schema and indexing strategy should provide a robust foundation for a multi-tenant SaaS application.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately describes the data model and indexing strategy for a multi-tenant SaaS app, addressing all criteria. It is concise but could be slightly more streamlined.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">33.6s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To design a data model for a multi-tenant SaaS application, we need to ensure that the database schema supports the hierarchical nature of the data (tenants, projects, and tasks) while also allowing for efficient querying and indexing. Here's a proposed data model with tables and key fields, along with an indexing strategy.
+
+### Tables and Key Fields
+
+1. **Tenants**
+   - `tenant_id` (Primary Key)
+   - `tenant_name`
+   - `created_at`
+   - `updated_at`
+
+2. **Projects**
+   - `project_id` (Primary Key)
+   - `tenant_id` (Foreign Key)
+   - `project_name`
+   - `created_at`
+   - `updated_at`
+
+3. **Tasks**
+   - `task_id` (Primary Key)
+   - `project_id` (Foreign Key)
+   - `task_name`
+   - `description`
+   - `due_date`
+   - `status`
+   - `created_at`
+   - `updated_at`
+
+### Relationships
+- A `tenant` can have multiple `projects`.
+- A `project` belongs to one `tenant`.
+- A `project` can have multiple `tasks`.
+- A `task` belongs to one `project`.
+
+### Indexing Strategy
+
+To ensure efficient querying and performance, we need to consider the following indexes:
+
+1. **Tenant Indexes**
+   - `tenant_id` (Primary Key)
+   - `tenant_name` (Index for searching by tenant name)
+
+2. **Project Indexes**
+   - `tenant_id` (Foreign Key) - Index to quickly filter projects by tenant
+   - `project_id` (Primary Key)
+   - `project_name` (Index for searching by project name)
+
+3. **Task Indexes**
+   - `project_id` (Foreign Key) - Index to quickly filter tasks by project
+   - `task_id` (Primary Key)
+   - `task_name` (Index for searching by task name)
+   - `status` (Index for filtering tasks by status)
+
+### Example SQL Schema
+
+```sql
+CREATE TABLE Tenants (
+    tenant_id SERIAL PRIMARY KEY,
+    tenant_name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_tenant_name ON Tenants (tenant_name);
+
+CREATE TABLE Projects (
+    project_id SERIAL PRIMARY KEY,
+    tenant_id INT NOT NULL,
+    project_name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES Tenants(tenant_id)
+);
+
+CREATE INDEX idx_project_tenant_id ON Projects (tenant_id);
+CREATE INDEX idx_project_name ON Projects (project_name);
+
+CREATE TABLE Tasks (
+    task_id SERIAL PRIMARY KEY,
+    project_id INT NOT NULL,
+    task_name VARCHAR(255) NOT NULL,
+    description TEXT,
+    due_date TIMESTAMP,
+    status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES Projects(project_id)
+);
+
+CREATE INDEX idx_task_project_id ON Tasks (project_id);
+CREATE INDEX idx_task_name ON Tasks (task_name);
+CREATE INDEX idx_task_status ON Tasks (status);
+```
+
+### Explanation
+
+- **Tenants Table**: Stores information about each tenant. The `tenant_id` is the primary key, and `tenant_name` is indexed for quick searches.
+- **Projects Table**: Stores information about projects. The `project_id` is the primary key, and `tenant_id` is a foreign key to link projects to their respective tenants. `project_name` is indexed for searching.
+- **Tasks Table**: Stores information about tasks. The `task_id` is the primary key, and `project_id` is a foreign key to link tasks to their respective projects. `task_name` and `status` are indexed for searching and filtering.
+
+### Additional Considerations
+
+- **Tenant-Specific Queries**: When querying tasks or projects, always include the `tenant_id` in the WHERE clause to ensure that only the relevant data is returned.
+- **Performance Optimization**: Depending on the volume of data, consider partitioning the `Projects` and `Tasks` tables by `tenant_id` to improve query performance.
+- **Audit Logs**: Consider adding audit logs for tracking changes to tenants, projects, and tasks.
+
+This schema and indexing strategy should provide a robust foundation for a multi-tenant SaaS application.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately describes the data model and indexing strategy for a multi-tenant SaaS app, addressing all criteria. It is concise but could be slightly more streamlined.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">deepseek</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">39.2s</span>
+                  <span class="badge-a">
+                    0/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">no response</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
