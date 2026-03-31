@@ -1,14 +1,190 @@
 {
-  "generated_at": "2026-03-31T07:26:26.167Z",
+  "generated_at": "2026-03-31T18:35:48.050Z",
   "stats": {
-    "total_runs": 11,
-    "total_cases": 110,
-    "total_models": 8,
-    "avg_score": 8,
+    "total_runs": 27,
+    "total_cases": 270,
+    "total_models": 15,
+    "avg_score": 8.3,
     "test_runs": 0,
-    "real_runs": 11
+    "real_runs": 27
   },
   "runs": [
+    {
+      "id": "2026-03-31-2026-03-31T14-25-37",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 9,
+      "avg_score": 0,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-23-13",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 4,
+      "avg_score": 0,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-21-58",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 3,
+      "avg_score": 0,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-19-35",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 4,
+      "avg_score": 0,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-18-20",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 3,
+      "avg_score": 0,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-15-55",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 6,
+      "avg_score": 0,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-13-29",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 4,
+      "avg_score": 0,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-11-05",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 5,
+      "avg_score": 0,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-08-40",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 4,
+      "avg_score": 0,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-06-15",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 5,
+      "avg_score": 0,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-05-00",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 3,
+      "avg_score": 0,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-03-45",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 3,
+      "avg_score": 0,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-53-37",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 4,
+      "avg_score": 9.3,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-51-23",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 3,
+      "avg_score": 9.2,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-40-52",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 3,
+      "avg_score": 9.2,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-36-33",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 4,
+      "avg_score": 8.6,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
     {
       "id": "2026-03-31-2026-03-31T07-19-11",
       "name": "My Evals",
@@ -133,34 +309,14 @@
   ],
   "top_models": [
     {
-      "name": "qwen2.5:7b",
-      "avg_score": 9.2,
-      "runs": 1,
-      "total_wins": 4,
-      "win_rate": 400,
-      "avg_latency": 5.3,
-      "rank": 1,
-      "medal": "🥇"
-    },
-    {
-      "name": "llama3.2:3b",
-      "avg_score": 9.2,
-      "runs": 1,
-      "total_wins": 6,
-      "win_rate": 600,
-      "avg_latency": 4.1,
-      "rank": 2,
-      "medal": "🥈"
-    },
-    {
       "name": "qwen-coder",
       "avg_score": 8.3,
       "runs": 9,
       "total_wins": 56,
       "win_rate": 622,
       "avg_latency": 6.5,
-      "rank": 3,
-      "medal": "🥉"
+      "rank": 1,
+      "medal": "🥇"
     },
     {
       "name": "qwen",
@@ -169,8 +325,8 @@
       "total_wins": 12,
       "win_rate": 200,
       "avg_latency": 10.8,
-      "rank": 4,
-      "medal": ""
+      "rank": 2,
+      "medal": "🥈"
     },
     {
       "name": "codellama",
@@ -179,8 +335,8 @@
       "total_wins": 30,
       "win_rate": 375,
       "avg_latency": 6.9,
-      "rank": 5,
-      "medal": ""
+      "rank": 3,
+      "medal": "🥉"
     },
     {
       "name": "qwen7b",
@@ -189,7 +345,7 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 11,
-      "rank": 6,
+      "rank": 4,
       "medal": ""
     },
     {
@@ -199,7 +355,7 @@
       "total_wins": 2,
       "win_rate": 50,
       "avg_latency": 28.8,
-      "rank": 7,
+      "rank": 5,
       "medal": ""
     },
     {
@@ -209,7 +365,47 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 1.6,
+      "rank": 6,
+      "medal": ""
+    },
+    {
+      "name": "deepseek-coder:6.7b",
+      "avg_score": 3.2,
+      "runs": 2,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 13.4,
+      "rank": 7,
+      "medal": ""
+    },
+    {
+      "name": "mistral:7b",
+      "avg_score": 3.1,
+      "runs": 6,
+      "total_wins": 7,
+      "win_rate": 117,
+      "avg_latency": 11,
       "rank": 8,
+      "medal": ""
+    },
+    {
+      "name": "qwen2.5-coder:7b",
+      "avg_score": 3.1,
+      "runs": 3,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 11.3,
+      "rank": 9,
+      "medal": ""
+    },
+    {
+      "name": "qwen2.5:7b",
+      "avg_score": 2.7,
+      "runs": 17,
+      "total_wins": 21,
+      "win_rate": 124,
+      "avg_latency": 11.7,
+      "rank": 10,
       "medal": ""
     }
   ]
