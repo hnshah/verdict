@@ -1,0 +1,112 @@
+name: Math & Numerical Reasoning
+description: Tests arithmetic accuracy, algebraic reasoning, and numerical problem-solving. Excellent signal for quantization quality — degraded models lose precision on multi-step calculations first.
+
+cases:
+  # ── Basic arithmetic ──────────────────────────────────────────────────────
+  - id: math-001
+    description: "Multi-step integer arithmetic"
+    category: arithmetic
+    prompt: "Calculate: (847 × 23) - (156 × 41) + 99. Show your work step by step."
+    criteria: "Correct answer: 847×23=19481, 156×41=6396, 19481-6396+99=13184. Must show intermediate steps and arrive at 13184."
+    tags: [arithmetic, multi-step]
+
+  - id: math-002
+    description: "Decimal arithmetic with rounding"
+    category: arithmetic
+    prompt: "A product costs $47.83. You buy 6 of them and use a 15% discount coupon. What's the total? Round to 2 decimal places."
+    criteria: "6 × $47.83 = $286.98. 15% off = $286.98 × 0.85 = $243.933 → $243.93. Must show both steps and round correctly."
+    tags: [arithmetic, decimals, real-world]
+
+  - id: math-003
+    description: "Large number multiplication"
+    category: arithmetic
+    prompt: "What is 9,876 × 543? Show the calculation."
+    criteria: "9876 × 543 = 5,362,668. Must arrive at exactly this answer."
+    tags: [arithmetic, large-numbers]
+
+  - id: math-004
+    description: "Fraction arithmetic"
+    category: arithmetic
+    prompt: "Calculate: 3/4 + 5/6 - 1/3. Express as a simplified fraction and as a decimal."
+    criteria: "Common denominator 12: 9/12 + 10/12 - 4/12 = 15/12 = 5/4. As decimal: 1.25. Both forms required."
+    tags: [arithmetic, fractions]
+
+  - id: math-005
+    description: "Percentage change calculation"
+    category: arithmetic
+    prompt: "A stock was at $234.50. It dropped to $198.75, then recovered to $221.40. What was the percentage drop, and what percentage recovery from the low was needed to reach $221.40?"
+    criteria: "Drop: (234.50-198.75)/234.50 = 35.75/234.50 ≈ 15.24%. Recovery from low: (221.40-198.75)/198.75 = 22.65/198.75 ≈ 11.4%. Both figures needed with correct calculation shown."
+    tags: [arithmetic, percentages, finance]
+
+  # ── Algebra ───────────────────────────────────────────────────────────────
+  - id: math-006
+    description: "Linear equation solving"
+    category: algebra
+    prompt: "Solve for x: 3(2x - 5) + 4 = 7x - 11"
+    criteria: "Expand: 6x - 15 + 4 = 7x - 11 → 6x - 11 = 7x - 11 → -x = 0 → x = 0. Must show algebraic steps."
+    tags: [algebra, equations]
+
+  - id: math-007
+    description: "Quadratic equation"
+    category: algebra
+    prompt: "Solve: x² - 7x + 12 = 0. Show all solutions."
+    criteria: "Factor: (x-3)(x-4) = 0. Solutions: x = 3 and x = 4. Acceptable: quadratic formula showing same result. Must find both roots."
+    tags: [algebra, quadratic]
+
+  - id: math-008
+    description: "System of two equations"
+    category: algebra
+    prompt: "Solve the system: 2x + 3y = 12 and 4x - y = 5"
+    criteria: "From eq2: y = 4x - 5. Substitute: 2x + 3(4x-5) = 12 → 14x = 27 → x = 27/14. Wait — let me verify: 2x+3y=12, 4x-y=5. Multiply eq2 by 3: 12x-3y=15. Add to eq1: 14x=27 → x=27/14. y = 4(27/14)-5 = 108/14-70/14 = 38/14 = 19/7. Must solve correctly with x=27/14 (≈1.929) and y=19/7 (≈2.714)."
+    tags: [algebra, systems]
+
+  # ── Word problems ─────────────────────────────────────────────────────────
+  - id: math-009
+    description: "Rate/time/distance"
+    category: word-problem
+    prompt: "Train A leaves City X heading toward City Y (300 miles apart) at 60 mph. Train B leaves City Y heading toward City X at 40 mph. Both leave at the same time. When do they meet, and how far from City X?"
+    criteria: "Combined speed: 100 mph. Time to meet: 300/100 = 3 hours. Distance from City X: 60 × 3 = 180 miles. Both answers required."
+    tags: [word-problem, rates, distance]
+
+  - id: math-010
+    description: "Work rate problem"
+    category: word-problem
+    prompt: "Alice can complete a project in 8 days. Bob can complete it in 12 days. How long will it take them working together?"
+    criteria: "Alice rate: 1/8 per day. Bob rate: 1/12 per day. Combined: 1/8 + 1/12 = 3/24 + 2/24 = 5/24 per day. Time: 24/5 = 4.8 days. Must show rate calculation and give 4.8 days (or 4 days 19.2 hours)."
+    tags: [word-problem, rates, work]
+
+  - id: math-011
+    description: "Compound interest"
+    category: word-problem
+    prompt: "You invest $5,000 at 6% annual interest compounded monthly. How much will you have after 3 years? Round to the nearest cent."
+    criteria: "Formula: A = P(1 + r/n)^(nt). A = 5000(1 + 0.06/12)^(12×3) = 5000(1.005)^36. (1.005)^36 ≈ 1.19668. A ≈ $5,983.40. Answer should be between $5,983 and $5,984."
+    tags: [word-problem, finance, compound-interest]
+
+  - id: math-012
+    description: "Mixture problem"
+    category: word-problem
+    prompt: "You need 500ml of a 30% salt solution. You have a 20% solution and a 50% solution. How many ml of each should you mix?"
+    criteria: "Let x = ml of 20% solution. 500-x = ml of 50% solution. 0.20x + 0.50(500-x) = 0.30×500. 0.20x + 250 - 0.50x = 150. -0.30x = -100. x = 333.33ml of 20% solution, 166.67ml of 50% solution. Must solve correctly."
+    tags: [word-problem, mixture, algebra]
+
+  # ── Number theory & combinatorics ─────────────────────────────────────────
+  - id: math-013
+    description: "Prime factorization"
+    category: number-theory
+    prompt: "Find the prime factorization of 2,310 and use it to find all divisors."
+    criteria: "2310 = 2 × 3 × 5 × 7 × 11. Number of divisors: 2^5 = 32. Must correctly factor as the product of first 5 primes. Bonus for listing divisor count."
+    tags: [number-theory, primes]
+
+  - id: math-014
+    description: "Combinatorics — permutations"
+    category: combinatorics
+    prompt: "In how many ways can 4 people be seated in a row of 7 chairs? (Not all chairs need to be filled.)"
+    criteria: "P(7,4) = 7!/(7-4)! = 7×6×5×4 = 840. Must use permutation logic and get 840."
+    tags: [combinatorics, permutations]
+
+  - id: math-015
+    description: "Basic probability"
+    category: probability
+    prompt: "A bag has 5 red, 3 blue, and 2 green marbles. You draw 2 marbles without replacement. What's the probability both are red?"
+    criteria: "P(1st red) = 5/10 = 1/2. P(2nd red | 1st red) = 4/9. P(both red) = 1/2 × 4/9 = 4/18 = 2/9 ≈ 0.222. Must use conditional probability and get 2/9."
+    tags: [probability, combinatorics]
