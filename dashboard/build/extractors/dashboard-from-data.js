@@ -9,6 +9,20 @@ const fs = require('fs');
 const dashboardDataPath = process.argv[2] || '../../dashboard-data.json';
 const dashboardData = JSON.parse(fs.readFileSync(dashboardDataPath, 'utf8'));
 
+// Load run names from individual run files
+const runNames = {};
+const runFilesDir = '../../dashboard/published/data';
+try {
+  const runFiles = fs.readdirSync(runFilesDir).filter(f => f.endsWith('.json') && f.startsWith('2026'));
+  runFiles.forEach(file => {
+    const data = JSON.parse(fs.readFileSync(`${runFilesDir}/${file}`, 'utf8'));
+    const runId = file.replace(/^2026-03-\d+-/, '').replace('.json', '');
+    runNames[runId] = data.name || 'Unnamed Run';
+  });
+} catch (err) {
+  console.error('Warning: Could not load run names:', err.message);
+}
+
 // Extract unique runs from cases
 const runMap = new Map();
 dashboardData.cases.forEach(caseData => {
@@ -17,7 +31,7 @@ dashboardData.cases.forEach(caseData => {
     if (!runMap.has(runId)) {
       runMap.set(runId, {
         id: runId,
-        name: run.run_meta?.name || 'Unnamed Run',
+        name: runNames[runId] || run.run_meta?.name || 'Unnamed Run',
         date: runId.split('T')[0],
         models: new Set(),
         cases: 0,
@@ -42,12 +56,24 @@ dashboardData.cases.forEach(caseData => {
   });
 });
 
+// Calculate unique cases per run (count distinct case IDs)
+dashboardData.cases.forEach(caseData => {
+  caseData.runs.forEach(run => {
+    const runId = run.run_id;
+    if (runMap.has(runId)) {
+      const runData = runMap.get(runId);
+      if (!runData.caseIds) runData.caseIds = new Set();
+      runData.caseIds.add(caseData.id);
+    }
+  });
+});
+
 // Convert to runs array
 const runs = Array.from(runMap.values()).map(run => ({
   id: run.id,
   name: run.name,
   date: run.date,
-  cases: Math.floor(run.cases / run.models.size), // Divide by models to get unique cases
+  cases: run.caseIds ? run.caseIds.size : run.cases,
   models: run.models.size,
   avg_score: run.scoreCount > 0 
     ? Math.round((run.totalScore / run.scoreCount) * 10) / 10 
@@ -101,20 +127,27 @@ dashboardData.cases.forEach(caseData => {
   });
 });
 
-// Calculate averages
+// Calculate averages and win rate
 Object.values(modelStats).forEach(stats => {
   if (stats.total_scores.length > 0) {
     stats.avg_score = Math.round(
       (stats.total_scores.reduce((a, b) => a + b, 0) / stats.total_scores.length) * 10
     ) / 10;
   }
-  // Don't track total_runs in new format since models participate in different cases
   stats.total_runs = stats.total_scores.length;
+  stats.win_rate = stats.total_scores.length > 0
+    ? Math.round((stats.total_wins / stats.total_scores.length) * 100)
+    : 0;
+  stats.avg_latency = 's'; // Placeholder - latency not in dashboard-data.json format
 });
 
 // Top models (by avg score)
 const topModels = Object.values(modelStats)
   .filter(m => m.total_scores.length > 0)
+  .map(m => ({
+    ...m,
+    runs: m.total_runs  // Add 'runs' alias for template compatibility
+  }))
   .sort((a, b) => b.avg_score - a.avg_score)
   .slice(0, 10);
 

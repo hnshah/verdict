@@ -10,9 +10,9 @@
   "runs": [
     {
       "id": "2026-03-31T18-25-12",
-      "name": "Unnamed Run",
+      "name": "Verdict Auto-Dashboard",
       "date": "2026-03-31",
-      "cases": 4,
+      "cases": 20,
       "models": 5,
       "avg_score": 9.2,
       "badges": [],
@@ -21,7 +21,7 @@
     },
     {
       "id": "2026-03-31T15-12-50",
-      "name": "Unnamed Run",
+      "name": "test-phi4 - 10 cases",
       "date": "2026-03-31",
       "cases": 10,
       "models": 1,
@@ -32,9 +32,9 @@
     },
     {
       "id": "2026-03-31T14-13-39",
-      "name": "Unnamed Run",
+      "name": "3 Model Comparison - 10 cases",
       "date": "2026-03-31",
-      "cases": 3,
+      "cases": 10,
       "models": 3,
       "avg_score": 9.4,
       "badges": [],
@@ -43,9 +43,9 @@
     },
     {
       "id": "2026-03-31T14-02-35",
-      "name": "Unnamed Run",
+      "name": "3 Model Comparison - 10 cases",
       "date": "2026-03-31",
-      "cases": 3,
+      "cases": 10,
       "models": 3,
       "avg_score": 9.4,
       "badges": [],
@@ -54,7 +54,7 @@
     },
     {
       "id": "2026-03-31T13-56-11",
-      "name": "Unnamed Run",
+      "name": "phi4 - 10 cases",
       "date": "2026-03-31",
       "cases": 10,
       "models": 1,
@@ -65,9 +65,9 @@
     },
     {
       "id": "2026-03-31T07-53-03",
-      "name": "Unnamed Run",
+      "name": "Comprehensive Benchmark (10 models)",
       "date": "2026-03-31",
-      "cases": 1,
+      "cases": 10,
       "models": 10,
       "avg_score": 9,
       "badges": [],
@@ -76,9 +76,9 @@
     },
     {
       "id": "2026-03-31T07-48-00",
-      "name": "Unnamed Run",
+      "name": "Comprehensive Benchmark (10 models)",
       "date": "2026-03-31",
-      "cases": 1,
+      "cases": 10,
       "models": 10,
       "avg_score": 9,
       "badges": [],
@@ -87,9 +87,9 @@
     },
     {
       "id": "2026-03-31T07-44-02",
-      "name": "Unnamed Run",
+      "name": "5 Models - 50 Cases",
       "date": "2026-03-31",
-      "cases": 10,
+      "cases": 50,
       "models": 5,
       "avg_score": 9.3,
       "badges": [],
@@ -144,7 +144,10 @@
         9.8,
         9.8
       ],
-      "avg_score": 9.7
+      "avg_score": 9.7,
+      "win_rate": 13,
+      "avg_latency": "s",
+      "runs": 40
     },
     {
       "name": "qwen-32b",
@@ -202,7 +205,10 @@
         9.6,
         9.6
       ],
-      "avg_score": 9.5
+      "avg_score": 9.5,
+      "win_rate": 4,
+      "avg_latency": "s",
+      "runs": 50
     },
     {
       "name": "phi4",
@@ -260,7 +266,10 @@
         9.8,
         9.8
       ],
-      "avg_score": 9.5
+      "avg_score": 9.5,
+      "win_rate": 32,
+      "avg_latency": "s",
+      "runs": 50
     },
     {
       "name": "qwen-7b",
@@ -318,7 +327,10 @@
         9.6,
         9.6
       ],
-      "avg_score": 9.4
+      "avg_score": 9.4,
+      "win_rate": 94,
+      "avg_latency": "s",
+      "runs": 50
     },
     {
       "name": "qwen2.5-7b",
@@ -346,7 +358,10 @@
         9.8,
         9.8
       ],
-      "avg_score": 9.4
+      "avg_score": 9.4,
+      "win_rate": 25,
+      "avg_latency": "s",
+      "runs": 20
     },
     {
       "name": "test-phi4",
@@ -364,7 +379,10 @@
         9.8,
         9.8
       ],
-      "avg_score": 9.3
+      "avg_score": 9.3,
+      "win_rate": 100,
+      "avg_latency": "s",
+      "runs": 10
     },
     {
       "name": "cogito",
@@ -422,7 +440,10 @@
         9.6,
         9.6
       ],
-      "avg_score": 9.1
+      "avg_score": 9.1,
+      "win_rate": 0,
+      "avg_latency": "s",
+      "runs": 50
     },
     {
       "name": "qwen2.5:7b",
@@ -450,7 +471,10 @@
         9.4,
         9.4
       ],
-      "avg_score": 9.1
+      "avg_score": 9.1,
+      "win_rate": 60,
+      "avg_latency": "s",
+      "runs": 20
     },
     {
       "name": "llama3.2:3b",
@@ -478,7 +502,10 @@
         8.2,
         8.2
       ],
-      "avg_score": 9.1
+      "avg_score": 9.1,
+      "win_rate": 30,
+      "avg_latency": "s",
+      "runs": 20
     },
     {
       "name": "llama3.3:70b",
@@ -506,7 +533,10 @@
         8.2,
         8.2
       ],
-      "avg_score": 9.1
+      "avg_score": 9.1,
+      "win_rate": 10,
+      "avg_latency": "s",
+      "runs": 20
     }
   ],
   "all_models": [
@@ -556,7 +586,9 @@
         9.8,
         9.8
       ],
-      "avg_score": 9.7
+      "avg_score": 9.7,
+      "win_rate": 13,
+      "avg_latency": "s"
     },
     {
       "name": "phi4",
@@ -614,7 +646,9 @@
         9.8,
         9.8
       ],
-      "avg_score": 9.5
+      "avg_score": 9.5,
+      "win_rate": 32,
+      "avg_latency": "s"
     },
     {
       "name": "qwen-32b",
@@ -672,7 +706,9 @@
         9.6,
         9.6
       ],
-      "avg_score": 9.5
+      "avg_score": 9.5,
+      "win_rate": 4,
+      "avg_latency": "s"
     },
     {
       "name": "qwen-7b",
@@ -730,7 +766,9 @@
         9.6,
         9.6
       ],
-      "avg_score": 9.4
+      "avg_score": 9.4,
+      "win_rate": 94,
+      "avg_latency": "s"
     },
     {
       "name": "qwen2.5-7b",
@@ -758,7 +796,9 @@
         9.8,
         9.8
       ],
-      "avg_score": 9.4
+      "avg_score": 9.4,
+      "win_rate": 25,
+      "avg_latency": "s"
     },
     {
       "name": "test-phi4",
@@ -776,7 +816,9 @@
         9.8,
         9.8
       ],
-      "avg_score": 9.3
+      "avg_score": 9.3,
+      "win_rate": 100,
+      "avg_latency": "s"
     },
     {
       "name": "cogito",
@@ -834,7 +876,9 @@
         9.6,
         9.6
       ],
-      "avg_score": 9.1
+      "avg_score": 9.1,
+      "win_rate": 0,
+      "avg_latency": "s"
     },
     {
       "name": "llama3.2:3b",
@@ -862,7 +906,9 @@
         8.2,
         8.2
       ],
-      "avg_score": 9.1
+      "avg_score": 9.1,
+      "win_rate": 30,
+      "avg_latency": "s"
     },
     {
       "name": "llama3.3:70b",
@@ -890,7 +936,9 @@
         8.2,
         8.2
       ],
-      "avg_score": 9.1
+      "avg_score": 9.1,
+      "win_rate": 10,
+      "avg_latency": "s"
     },
     {
       "name": "qwen-coder",
@@ -938,7 +986,9 @@
         9.8,
         9.8
       ],
-      "avg_score": 9.1
+      "avg_score": 9.1,
+      "win_rate": 28,
+      "avg_latency": "s"
     },
     {
       "name": "qwen2.5:7b",
@@ -966,7 +1016,9 @@
         9.4,
         9.4
       ],
-      "avg_score": 9.1
+      "avg_score": 9.1,
+      "win_rate": 60,
+      "avg_latency": "s"
     },
     {
       "name": "qwen2.5:32b",
@@ -994,7 +1046,9 @@
         9,
         9
       ],
-      "avg_score": 9
+      "avg_score": 9,
+      "win_rate": 0,
+      "avg_latency": "s"
     },
     {
       "name": "phi4:14b",
@@ -1022,7 +1076,9 @@
         8.2,
         8.2
       ],
-      "avg_score": 8.9
+      "avg_score": 8.9,
+      "win_rate": 0,
+      "avg_latency": "s"
     },
     {
       "name": "qwen2.5:14b",
@@ -1050,7 +1106,9 @@
         8.2,
         8.2
       ],
-      "avg_score": 8.9
+      "avg_score": 8.9,
+      "win_rate": 0,
+      "avg_latency": "s"
     },
     {
       "name": "llama3.2-3b",
@@ -1078,7 +1136,9 @@
         4.8,
         7.4
       ],
-      "avg_score": 8.3
+      "avg_score": 8.3,
+      "win_rate": 65,
+      "avg_latency": "s"
     },
     {
       "name": "qwen3-4b",
@@ -1136,7 +1196,9 @@
         9.6,
         0
       ],
-      "avg_score": 2.7
+      "avg_score": 2.7,
+      "win_rate": 2,
+      "avg_latency": "s"
     },
     {
       "name": "deepseek-coder",
@@ -1194,7 +1256,9 @@
         0,
         0
       ],
-      "avg_score": 0
+      "avg_score": 0,
+      "win_rate": 0,
+      "avg_latency": "s"
     },
     {
       "name": "deepseek-coder:6.7b",
@@ -1222,7 +1286,9 @@
         0,
         0
       ],
-      "avg_score": 0
+      "avg_score": 0,
+      "win_rate": 0,
+      "avg_latency": "s"
     },
     {
       "name": "gemma2:9b",
@@ -1250,7 +1316,9 @@
         0,
         0
       ],
-      "avg_score": 0
+      "avg_score": 0,
+      "win_rate": 0,
+      "avg_latency": "s"
     },
     {
       "name": "mathstral:7b",
@@ -1278,7 +1346,9 @@
         0,
         0
       ],
-      "avg_score": 0
+      "avg_score": 0,
+      "win_rate": 0,
+      "avg_latency": "s"
     },
     {
       "name": "mistral:7b",
@@ -1306,7 +1376,9 @@
         0,
         0
       ],
-      "avg_score": 0
+      "avg_score": 0,
+      "win_rate": 0,
+      "avg_latency": "s"
     }
   ]
 }
