@@ -12,9 +12,9 @@
       "score": 9.6,
       "wins": 3,
       "latency": 6.2,
-      "accuracy": 0,
-      "completeness": 0,
-      "conciseness": 0
+      "accuracy": 9.9,
+      "completeness": 9.6,
+      "conciseness": 8.8
     },
     {
       "id": "2026-03-31T14-13-39",
@@ -23,9 +23,9 @@
       "score": 9.6,
       "wins": 2,
       "latency": 6.2,
-      "accuracy": 0,
-      "completeness": 0,
-      "conciseness": 0
+      "accuracy": 9.9,
+      "completeness": 9.6,
+      "conciseness": 8.8
     },
     {
       "id": "2026-03-31T18-25-12",
@@ -34,9 +34,9 @@
       "score": 9.8,
       "wins": 0,
       "latency": 6.9,
-      "accuracy": 0,
-      "completeness": 0,
-      "conciseness": 0
+      "accuracy": 10,
+      "completeness": 10,
+      "conciseness": 8.9
     }
   ],
   "best_cases": [

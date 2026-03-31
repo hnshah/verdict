@@ -54,6 +54,9 @@ data.cases.forEach(caseData => {
         name: runNames[runId] || run.run_meta?.name || 'Unnamed Run',
         date: runId.split('T')[0],
         scores: [],
+        accuracy: [],
+        completeness: [],
+        conciseness: [],
         wins: 0,
         latencies: []
       });
@@ -61,12 +64,19 @@ data.cases.forEach(caseData => {
     
     const runData = runMap.get(runId);
     
-    // Track scores
+    // Track scores and dimensions
     if (run.scores?.[modelName]?.total) {
       const score = run.scores[modelName].total;
+      const dims = run.scores[modelName].dimensions || {};
+      
       runData.scores.push(score);
       totalScore += score;
       scoreCount++;
+      
+      // Track dimensions
+      if (dims.accuracy !== undefined) runData.accuracy.push(dims.accuracy);
+      if (dims.completeness !== undefined) runData.completeness.push(dims.completeness);
+      if (dims.conciseness !== undefined) runData.conciseness.push(dims.conciseness);
     }
     
     // Track wins (calculate from scores if winner not set)
@@ -119,10 +129,16 @@ const runs = Array.from(runMap.values()).map(run => ({
   latency: run.latencies.length > 0
     ? Math.round((run.latencies.reduce((a,b) => a+b, 0) / run.latencies.length) / 100) / 10
     : 0,
-  // Stub out other stats (not in new format)
-  accuracy: 0,
-  completeness: 0,
-  conciseness: 0
+  // Calculate dimension averages
+  accuracy: run.accuracy.length > 0
+    ? Math.round((run.accuracy.reduce((a,b) => a+b, 0) / run.accuracy.length) * 10) / 10
+    : 0,
+  completeness: run.completeness.length > 0
+    ? Math.round((run.completeness.reduce((a,b) => a+b, 0) / run.completeness.length) * 10) / 10
+    : 0,
+  conciseness: run.conciseness.length > 0
+    ? Math.round((run.conciseness.reduce((a,b) => a+b, 0) / run.conciseness.length) * 10) / 10
+    : 0
 })).sort((a, b) => b.date.localeCompare(a.date));
 
 // Best and worst cases
