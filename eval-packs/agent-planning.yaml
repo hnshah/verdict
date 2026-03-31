@@ -1,0 +1,216 @@
+name: Agent Planning & Task Decomposition
+description: Tests multi-step task planning, tool use sequencing, subtask decomposition, and self-correction under ambiguity. Critical for evaluating models intended for agentic workflows, coding assistants, and autonomous task runners.
+
+cases:
+  # ── Task decomposition ────────────────────────────────────────────────────
+  - id: agent-plan-001
+    description: "Tests ability to decompose a vague goal into concrete executable steps"
+    category: task-decomposition
+    prompt: |
+      I need to migrate a PostgreSQL database from my old server to a new one with zero downtime.
+      Break this down into a step-by-step plan, including what could go wrong at each step.
+    criteria: |
+      Should produce: (1) pre-migration steps (backup, schema audit, dependency check), (2) replication/sync setup, (3) cutover sequence with rollback point, (4) post-migration validation.
+      Must identify failure modes at key steps (replication lag, connection string updates, ORM cache).
+      Bonus: mentions logical ordering constraints (can't cutover before sync is stable).
+    tags: [planning, decomposition, databases]
+
+  - id: agent-plan-002
+    description: "Tests ability to identify missing information before starting a task"
+    category: ambiguity
+    prompt: |
+      Write a script to automatically archive old files.
+    criteria: |
+      Should ask clarifying questions OR state explicit assumptions before writing code.
+      Must address: what counts as "old" (age threshold), which directory, archive format (zip/tar/move), what to do with archived files, whether to recurse subdirectories.
+      Must NOT just pick arbitrary values silently and write a script without acknowledging the ambiguity.
+    tags: [planning, ambiguity, clarification]
+
+  - id: agent-plan-003
+    description: "Tests sequential dependency reasoning — ordering tasks with constraints"
+    category: task-decomposition
+    prompt: |
+      I need to: (A) deploy the new API, (B) run database migrations, (C) update the frontend to use the new API, (D) write automated tests for the new endpoints, (E) merge the feature branch.
+      What order should I do these in? What are the dependencies?
+    criteria: |
+      Correct dependency order: E → B → A → D → C (or similar valid topological sort).
+      Key constraints: must merge (E) before deploying (A), migrations (B) before API goes live (A), tests (D) should validate A before C relies on it.
+      Must explain WHY the ordering matters, not just list steps.
+    tags: [planning, dependencies, deployment]
+
+  # ── Tool use reasoning ────────────────────────────────────────────────────
+  - id: agent-plan-004
+    description: "Tests tool selection reasoning — picking the right tool for the job"
+    category: tool-use
+    prompt: |
+      I have these tools available: web_search, read_file, write_file, run_code, send_email.
+      Task: Check if the stock price of AAPL is above $200 and if so, send me an email notification.
+      Walk through exactly which tools you'd call and in what order.
+    criteria: |
+      Correct sequence: web_search (get current AAPL price) → conditional check → send_email (only if price > $200).
+      Should NOT call write_file or run_code unless justified.
+      Must explain the conditional nature — don't send email unless condition is met.
+      Bonus: notes that stock data may be delayed and recommends a financial data API if available.
+    tags: [tool-use, sequencing, conditional]
+
+  - id: agent-plan-005
+    description: "Tests reasoning about tool failure and fallback strategies"
+    category: tool-use
+    prompt: |
+      You're an agent with access to a web search tool. You search for "current CEO of Acme Corp" and get no results.
+      What do you do next? List your fallback strategies in order of preference.
+    criteria: |
+      Should propose multiple fallback paths: (1) rephrase query, (2) search for company website directly, (3) check LinkedIn/Crunchbase, (4) search news archives, (5) acknowledge cannot confirm and report uncertainty.
+      Must NOT just declare failure after one search attempt.
+      Should prioritize authoritative sources over less reliable ones.
+    tags: [tool-use, fallback, robustness]
+
+  - id: agent-plan-006
+    description: "Tests recognizing when NOT to use a tool"
+    category: tool-use
+    prompt: |
+      I need to know what 2 + 2 equals. You have access to a run_code tool that can execute Python.
+      Should you use it? Why or why not?
+    criteria: |
+      Should answer directly (4) without calling run_code for trivial arithmetic.
+      Must explain: using a tool has overhead and adds failure surface — use it only when the task exceeds direct reasoning capability.
+      A good response mentions the tool is appropriate for complex calculations, not basic ones.
+    tags: [tool-use, over-engineering, judgment]
+
+  # ── Self-correction ────────────────────────────────────────────────────────
+  - id: agent-plan-007
+    description: "Tests ability to catch and correct a flawed plan mid-stream"
+    category: self-correction
+    prompt: |
+      My plan to delete duplicate database records is:
+      1. SELECT all records
+      2. In Python, find duplicates  
+      3. DELETE all records
+      4. Re-insert the deduplicated ones
+      
+      Is this a good plan? What would you change?
+    criteria: |
+      Must identify the critical flaw: step 3 deletes ALL records including non-duplicates before the re-insert (data loss risk if step 4 fails).
+      Better approach: DELETE only the duplicate row IDs found in step 2, not all records.
+      Should also flag: no transaction wrapping, no backup, no count verification before/after.
+      Must NOT just say "looks good" or make minor wording tweaks without catching the logic error.
+    tags: [self-correction, databases, safety]
+
+  - id: agent-plan-008
+    description: "Tests detecting circular logic in a proposed approach"
+    category: self-correction
+    prompt: |
+      To verify my backup is working, I'll restore it to the same server and check the files are there.
+      Any issues with this approach?
+    criteria: |
+      Should identify: restoring to the same server risks overwriting live data. A proper restore test uses a separate test environment.
+      Also valid: mentions that a successful restore doesn't verify the backup was created correctly — only that the most recent restore worked.
+      Must NOT just validate the approach as fine.
+    tags: [self-correction, backup, logic]
+
+  # ── Multi-step reasoning with state ──────────────────────────────────────
+  - id: agent-plan-009
+    description: "Tests tracking state across a multi-step task"
+    category: state-tracking
+    prompt: |
+      I have 3 servers: Alpha (web), Beta (API), Gamma (database).
+      Step 1: Gamma goes down. What happens to Beta and Alpha?
+      Step 2: Gamma comes back up but Beta is still failing. What's the likely issue?
+      Step 3: Beta recovers. But users are still seeing stale data. Why?
+    criteria: |
+      Step 1: Alpha can't serve dynamic content (API calls fail), but static assets might still work. Beta can't reach DB so requests fail or return errors.
+      Step 2: Beta is likely stuck in a bad state (connection pool exhausted, failed health checks, bad config reload). Not a DB issue since Gamma is up.
+      Step 3: Caching — either CDN, in-memory cache (Redis), or browser cache hasn't been invalidated. Data was cached before the outage and not refreshed.
+      Must track state correctly across steps — each answer should be informed by prior context.
+    tags: [state-tracking, multi-step, infrastructure]
+
+  - id: agent-plan-010
+    description: "Tests handling contradictory instructions mid-task"
+    category: ambiguity
+    prompt: |
+      Task: Send the weekly report to all team members.
+      Context: 
+      - The report is ready
+      - It's currently 11 PM on a Friday
+      - Company policy: no non-urgent emails after 6 PM on Fridays
+      - Your manager just told you "send it now, it's urgent"
+      
+      What do you do?
+    criteria: |
+      Should identify the conflict: company policy says hold, manager says send.
+      Good responses: (1) follow manager's explicit urgent override since they outrank the policy, (2) confirm urgency with manager before sending, (3) schedule for Monday but inform manager.
+      Must NOT ignore the policy conflict entirely, and must NOT refuse to act at all.
+      Key: acknowledges the tension and makes a reasoned decision rather than picking arbitrarily.
+    tags: [ambiguity, conflict-resolution, judgment]
+
+  # ── Planning under constraints ─────────────────────────────────────────────
+  - id: agent-plan-011
+    description: "Tests resource-constrained planning"
+    category: constraints
+    prompt: |
+      I need to process 1 million records through an LLM API that costs $0.01 per 1000 tokens.
+      Average record is 500 tokens. My budget is $50.
+      Design a processing strategy that stays within budget.
+    criteria: |
+      Math: 1M records × 500 tokens = 500M tokens = 500K units at $0.01 = $5000 total cost. Way over $50 budget.
+      Correct response must identify this is over budget by ~100x, NOT pretend the math works.
+      Valid strategies: (1) process a sample (10K records = $50), (2) use a cheaper model, (3) batch/classify records first and only LLM the edge cases.
+      Must do the math correctly and surface the constraint violation.
+    tags: [constraints, math, cost-estimation]
+
+  - id: agent-plan-012
+    description: "Tests time-constrained prioritization"
+    category: constraints
+    prompt: |
+      You have 2 hours before a product demo. These tasks are all needed:
+      A) Fix a critical login bug (est: 3 hours)
+      B) Polish the UI animations (est: 30 min)
+      C) Write the demo script (est: 45 min)
+      D) Set up a stable demo environment (est: 1 hour)
+      E) Prepare fallback screenshots in case the demo fails (est: 20 min)
+      
+      What's your strategy? You can't do everything.
+    criteria: |
+      Total = 5h35m, have 2h. Must prioritize ruthlessly.
+      Optimal: D (demo environment — critical, everything else fails without it) + C (demo script) + E (fallback safety net) = 2h5m. Approximately doable.
+      A is too long and maybe workaroundable (mock the login for the demo).
+      B is lowest priority.
+      Must recognize A's estimate makes it impossible to complete and propose workaround.
+    tags: [constraints, prioritization, trade-offs]
+
+  # ── Instruction following precision ───────────────────────────────────────
+  - id: agent-plan-013
+    description: "Tests precise instruction following with multiple conditions"
+    category: instruction-following
+    prompt: |
+      Review this list of numbers and return ONLY the ones that are: (1) even, (2) greater than 10, AND (3) not divisible by 4.
+      List: 4, 6, 12, 14, 18, 20, 22, 24, 30
+    criteria: |
+      Correct answer: 14, 18, 22, 30.
+      Eliminated: 4 (≤10), 6 (≤10), 12 (divisible by 4), 20 (divisible by 4), 24 (divisible by 4).
+      Must apply ALL three conditions correctly. Common errors: forgetting the "not divisible by 4" condition, or including 12/20/24.
+    tags: [instruction-following, filtering, precision]
+
+  - id: agent-plan-014
+    description: "Tests negative instruction handling — what NOT to do"
+    category: instruction-following
+    prompt: |
+      Rewrite this paragraph without using any form of the word "very", any adverbs ending in "-ly", or any exclamation marks:
+      
+      "This is a very exciting product! It works extremely quickly and is incredibly easy to use!"
+    criteria: |
+      Must eliminate: "very", "extremely", "quickly", "incredibly", "easily" (any -ly adverbs), and "!" marks.
+      Should preserve the meaning using stronger verbs/adjectives instead: "thrilling" instead of "very exciting", "fast" instead of "quickly", etc.
+      Must NOT include any -ly adverbs or "very" in the rewrite.
+    tags: [instruction-following, constraints, writing]
+
+  - id: agent-plan-015
+    description: "Tests handling of underspecified success criteria"
+    category: ambiguity
+    prompt: |
+      Build me a "good" recommendation system.
+    criteria: |
+      Should ask what "good" means before building — or explicitly enumerate the assumptions.
+      Key dimensions to address: (1) what is being recommended (products, content, people?), (2) what data is available (user history, ratings, clicks?), (3) what metric defines success (CTR, revenue, satisfaction?), (4) what constraints (latency, scale, explainability?).
+      Must NOT just immediately produce a generic collaborative filtering design without acknowledging the ambiguity.
+    tags: [ambiguity, requirements, clarification]
