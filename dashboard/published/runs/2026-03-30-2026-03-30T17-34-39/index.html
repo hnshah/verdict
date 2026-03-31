@@ -6,266 +6,127 @@
 <title>Gap Fill - Multilingual Coverage — Verdict</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-
-:root {
-  --accent: #3B82F6;
-  --accent-hover: #2563EB;
-  --bg-page: #F9FAFB;
-  --bg-card: #FFFFFF;
-  --text-primary: #111827;
-  --text-body: #374151;
-  --text-muted: #6B7280;
-  --text-label: #9CA3AF;
-  --border: #E5E7EB;
-  --border-light: #F3F4F6;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-page: #111827;
-    --bg-card: #1F2937;
-    --text-primary: #F9FAFB;
-    --text-body: #E5E7EB;
-    --text-muted: #9CA3AF;
-    --text-label: #6B7280;
-    --border: #374151;
-    --border-light: #1F2937;
-  }
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg-page);
-  color: var(--text-body);
-}
-
-.mono { font-family: 'JetBrains Mono', monospace; }
-
-/* Cards - using Tailwind sizing for consistency */
-.card {
-  background: var(--bg-card);
-  border-radius: 0.75rem;
-  border: 1px solid var(--border);
-  padding: 2rem;
-  margin-top: 2rem;
-}
-.card:first-child { margin-top: 0; }
-
-/* Links - styled with accent color */
-a {
-  color: var(--accent);
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  transition: all 0.15s;
-}
-a:hover {
-  color: var(--accent-hover);
-  text-decoration-color: currentColor;
-}
-
-/* Badges */
-.badge-green { background: #ECFDF5; color: #065F46; }
-.badge-yellow { background: #FFFBEB; color: #92400E; }
-.badge-red { background: #FEF2F2; color: #991B1B; }
-.badge-gray { background: var(--border-light); color: var(--text-body); }
-
-@media (prefers-color-scheme: dark) {
-  .badge-green { background: #064E3B; color: #A7F3D0; }
-  .badge-yellow { background: #78350F; color: #FDE68A; }
-  .badge-red { background: #7F1D1D; color: #FCA5A5; }
-}
-
-/* Tabs */
-.tab {
-  padding: 0.75rem 1.5rem;
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  transition: all 0.15s;
-  color: var(--text-muted);
-}
-.tab:hover {
-  background: var(--border-light);
-}
-.tab.active {
-  border-bottom-color: var(--accent);
-  color: var(--accent);
-  font-weight: 600;
-}
-
-/* Accordion */
-details summary {
-  cursor: pointer;
-  list-style: none;
-}
-details summary::-webkit-details-marker { display: none; }
-details[open] summary .chevron { transform: rotate(180deg); }
-.chevron {
-  transition: transform 0.2s;
-  display: inline-block;
-}
-
-/* Table hover */
-tbody tr {
-  transition: background 0.1s;
-}
-tbody tr:hover {
-  background: var(--border-light);
-}
-
-/* Focus visible */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-/* Mobile responsive */
-@media (max-width: 768px) {
-  .desktop-only { display: none; }
-  .card { padding: 1rem; }
-  .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media print { .no-print { display: none; } }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  body { font-family: 'Inter', sans-serif; }
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+  
+  .badge-a { background: #EFF6FF; color: #1D4ED8; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-b { background: #ECFDF5; color: #065F46; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-c { background: #FFFBEB; color: #92400E; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  
+  .card { background: white; border-radius: 0.75rem; border: 1px solid #E5E7EB; padding: 2rem; margin-top: 2rem; }
+  
+  details summary { cursor: pointer; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details[open] summary .chevron { transform: rotate(180deg); }
+  .chevron { transition: transform 0.2s; display: inline-block; }
+  
+  tr:hover { background: #F9FAFB; }
+  
+  @media print { .no-print { display: none; } }
 </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800">
 
-<header class="bg-white dark:bg-gray-800 border-b sticky top-0 z-50" style="border-color: var(--border)">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 no-print">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
     <div class="flex items-center gap-3">
-      <a href="/" class="font-semibold no-underline" style="color: var(--text-primary)">Verdict</a>
-      <span style="color: var(--border)">·</span>
-      <span class="text-sm" style="color: var(--text-muted)">Gap Fill - Multilingual Coverage</span>
+      <a href="../../" class="text-sm text-gray-500 hover:text-gray-900">← Dashboard</a>
+      <span class="text-gray-300">·</span>
+      <span class="font-semibold text-gray-900">Gap Fill - Multilingual Coverage</span>
     </div>
-    <span class="text-xs" style="color: var(--text-label)">2026-03-30</span>
+    <span class="text-xs text-gray-400">2026-03-30</span>
   </div>
 </header>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+<div class="max-w-7xl mx-auto px-6 py-8">
 
-  <!-- Run header card -->
-  <section class="card">
-    <div class="flex items-start justify-between mb-4 flex-wrap gap-3">
+  <!-- Run Stats -->
+  <section class="card" style="margin-top:0">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Gap Fill - Multilingual Coverage</h1>
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-6">
       <div>
-        <h1 class="text-2xl font-bold mb-1" style="color: var(--text-primary)">Gap Fill - Multilingual Coverage</h1>
-        <p class="text-sm" style="color: var(--text-muted)">5 test cases · 3 models · 2026-03-30</p>
-      </div>
-      <span class="badge-green px-3 py-1 rounded-full text-xs font-semibold">Complete</span>
-    </div>
-
-    <!-- Stats grid - responsive -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mt-6">
-      <div>
-        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Avg Score</p>
-        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">7.4<span class="text-base" style="color: var(--text-muted)">/10</span></p>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Cases</p>
+        <p class="text-2xl font-bold text-gray-900">5</p>
       </div>
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Pass Rate</p>
-        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">40<span class="text-base" style="color: var(--text-muted)">%</span></p>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Models</p>
+        <p class="text-2xl font-bold text-gray-900">3</p>
       </div>
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Avg Latency</p>
-        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">4.2<span class="text-base" style="color: var(--text-muted)">s</span></p>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Score</p>
+        <p class="text-2xl font-bold text-gray-900">7.4<span class="text-base text-gray-500">/10</span></p>
       </div>
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Total Cost</p>
-        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">$0</p>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Pass Rate</p>
+        <p class="text-2xl font-bold text-gray-900">40<span class="text-base text-gray-500">%</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Latency</p>
+        <p class="text-2xl font-bold text-gray-900">4.2<span class="text-base text-gray-500">s</span></p>
       </div>
     </div>
   </section>
 
-  <!-- Category tabs -->
-  <div class="flex gap-2 mt-8 overflow-x-auto border-b rounded-t-xl px-4 bg-white dark:bg-gray-800" style="border-color: var(--border)">
-    
-    <div class="tab active" data-tab="all">
-      All <span style="color: var(--text-label)">(5)</span>
-    </div>
-    
-    <div class="tab " data-tab="multi">
-      multi <span style="color: var(--text-label)">(5)</span>
-    </div>
-    
-  </div>
-
-  <!-- Leaderboard -->
+  <!-- Model Leaderboard -->
   <section class="card">
-    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Model Leaderboard</h2>
+    <h2 class="text-xl font-bold text-gray-900 mb-6">Model Performance</h2>
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
         <thead>
-          <tr class="text-left text-xs border-b" style="color: var(--text-label); border-color: var(--border-light)">
+          <tr class="text-left text-xs text-gray-400 border-b border-gray-100">
             <th class="pb-3 pr-4 font-semibold">Rank</th>
             <th class="pb-3 pr-4 font-semibold">Model</th>
-            <th class="pb-3 pr-4 text-right font-semibold">Overall</th>
-            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Accuracy</th>
-            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Complete</th>
-            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Concise</th>
-            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Latency</th>
-            <th class="pb-3 text-right font-semibold">Wins</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Score</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Accuracy</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Complete</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Concise</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Wins</th>
+            <th class="pb-3 text-right font-semibold">Latency</th>
           </tr>
         </thead>
-        <tbody class="divide-y" style="border-color: var(--border-light)">
+        <tbody class="divide-y divide-gray-100">
           
           <tr>
-            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">1</td>
-            <td class="py-3 pr-4">
-              <div class="flex items-center gap-2">
-                <span class="font-medium" style="color: var(--text-primary)">codellama</span>
-                <span class="text-xs">🥇</span>
-                
-                
-              </div>
+            <td class="py-3 pr-4 font-bold text-gray-900">1</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">codellama</span>
+              <span>🥇</span>
             </td>
-            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">8.4/10</td>
-            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">8.4</td>
-            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">8.4</td>
-            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">8.4</td>
-            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">3.5s</td>
-            <td class="py-3 text-right">
-              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">3</span>
-            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">8.4/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">3</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">3.5s</td>
           </tr>
           
           <tr>
-            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">2</td>
-            <td class="py-3 pr-4">
-              <div class="flex items-center gap-2">
-                <span class="font-medium" style="color: var(--text-primary)">qwen-coder</span>
-                
-                <span class="text-xs">🥈</span>
-                
-              </div>
+            <td class="py-3 pr-4 font-bold text-gray-900">2</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">qwen-coder</span>
+              <span>🥈</span>
             </td>
-            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.6/10</td>
-            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">7.6</td>
-            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">7.6</td>
-            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">7.4</td>
-            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">3.6s</td>
-            <td class="py-3 text-right">
-              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">2</span>
-            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">7.6/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.6</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.4</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">2</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">3.6s</td>
           </tr>
           
           <tr>
-            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">3</td>
-            <td class="py-3 pr-4">
-              <div class="flex items-center gap-2">
-                <span class="font-medium" style="color: var(--text-primary)">qwen7b</span>
-                
-                
-                <span class="text-xs">🥉</span>
-              </div>
+            <td class="py-3 pr-4 font-bold text-gray-900">3</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">qwen7b</span>
+              <span>🥉</span>
             </td>
-            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">6.3/10</td>
-            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">6.4</td>
-            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">6.4</td>
-            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">5.8</td>
-            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">5.5s</td>
-            <td class="py-3 text-right">
-              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">0</span>
-            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">6.3/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">6.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">6.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">5.8</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">0</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">5.5s</td>
           </tr>
           
         </tbody>
@@ -273,81 +134,88 @@ tbody tr:hover {
     </div>
   </section>
 
-  <!-- Test cases -->
+  <!-- Test Cases -->
   <section class="card">
-    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Test Cases</h2>
-    <div class="space-y-3">
+    <h2 class="text-xl font-bold text-gray-900 mb-6">Test Cases (5)</h2>
+    <div class="space-y-4">
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="multi">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">multi-001</span>
-            <span class="text-sm" style="color: var(--text-muted)">Translate to English and explain: "El gato está sobre la mes</span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">multi-001</span>
+            <span class="badge-a">
+              5.2/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">5.2/10</span>
-            
-            <span class="text-red-600">✗</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Translate to English and explain: "El gato está sobre la mesa pero no puede bajar."
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Translate to English and explain: "El gato está sobre la mesa pero no puede bajar."
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">4.4s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">3.8/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">4.4s</span>
+                  <span class="badge-a">
+                    3.8/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              Translation: "The cat is on the table but cannot get down."
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Translation: "The cat is on the table but cannot get down."
 
 Explanation: This sentence describes a situation where a cat is positioned on top of a table, but it is unable to move or descend from its current location. The cat is in a fixed position, likely due to some obstacle or because it is too high up to easily reach the ground.
-            </div>
-          </div>
-          
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">4.8s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
               
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The translation is accurate and addresses all criteria, but the explanation is too long and not necessary.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">4.8s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
 The cat is on the table but cannot get down.
 
 This sentence is a play on words, as "bajar" (to get down) and "baja" (to get down) sound similar in Spanish. The sentence is saying that the cat is on top of the table, but it cannot get down from there. It is a humorous way of describing the situation, as cats are known for their agility and ability to climb.
-            </div>
-          </div>
-          
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">5.8s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">3.8/10</span>
               </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The translation is accurate and the explanation is clear and relevant to the context.</p>
+              </details>
+              
             </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              The English translation of "El gato está sobre la mesa pero no puede bajar." is:
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">5.8s</span>
+                  <span class="badge-a">
+                    3.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The English translation of "El gato está sobre la mesa pero no puede bajar." is:
 
 "The cat is on the table but cannot get down."
 
@@ -360,85 +228,99 @@ Explanation:
 - "bajar" means "to get down" or "to go down."
 
 This sentence describes a situation where a cat is on a table and is unable to come down from it.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The translation is correct, but the explanation is too long and not necessary for a simple translation task.</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="multi">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">multi-002</span>
-            <span class="text-sm" style="color: var(--text-muted)">What does this Python code do</span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">multi-002</span>
+            <span class="badge-c">
+              6.6/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">6.6/10</span>
-            
-            <span class="text-yellow-600">⚠</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">What does this Python code do?
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">What does this Python code do?
 
 # Trouve le maximum dans une liste
 def trouver_max(liste):
     return max(liste)
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">5.2s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">5.2s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              This Python code defines a function named `trouver_max` that takes a list as an argument and returns the maximum value found in that list. The `max()` function is a built-in Python function that returns the largest item in an iterable or the largest of two or more arguments. In this case, it's used to find the maximum value in the list passed to the `trouver_max` function.
-            </div>
-          </div>
-          
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">6.1s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                This Python code defines a function named `trouver_max` that takes a list as an argument and returns the maximum value found in that list. The `max()` function is a built-in Python function that returns the largest item in an iterable or the largest of two or more arguments. In this case, it's used to find the maximum value in the list passed to the `trouver_max` function.
               </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately describes the function, its purpose, and how it uses the built-in `max()` function. It also correctly translates the French comment into English.</p>
+              </details>
+              
             </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-               This Python code defines a function called `trouver_max` that takes a list as an argument and returns the maximum value in the list.
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">6.1s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 This Python code defines a function called `trouver_max` that takes a list as an argument and returns the maximum value in the list.
 
 The function uses the built-in `max()` function to find the maximum value in the list. The `max()` function takes an iterable (such as a list) as an argument and returns the largest value in the iterable.
 
 For example, if we call the function with the list `[1, 2, 3, 4, 5]`, it will return the value `5`, which is the largest value in the list.
-            </div>
-          </div>
-          
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">8.1s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">3.8/10</span>
               </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately describes the function, its purpose, and how it works, addressing all criteria concisely.</p>
+              </details>
+              
             </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              This Python code defines a function named `trouver_max` that takes a list as an argument and returns the maximum value found in that list. Here's a breakdown of the code:
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">8.1s</span>
+                  <span class="badge-a">
+                    3.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                This Python code defines a function named `trouver_max` that takes a list as an argument and returns the maximum value found in that list. Here's a breakdown of the code:
 
 ```python
 # Trouve le maximum dans une liste
@@ -447,224 +329,267 @@ def trouver_max(liste):
 ```
 
 - `def trouver_max(liste):` defines a function called `trouver_max` that takes a single parameter, `liste`, which is expected to be a list.
-- `return max(liste)` uses Python's built-in `max()` function to find and return the maxi...
+- `return max(liste)` uses Python's built-in `max()` function to find and return the maximum value in the list passed to the function.
+
+Here's an example of how you might use this function:
+
+```python
+my_list = [3, 5, 1, 2, 4]
+print(trouver_max(my_list))  # Output will be 5
+```
+
+This function is simple and leverages Python's built-in capabilities to perform its task efficiently.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately describes the function's purpose and implementation, but it could be more concise and direct.</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="multi">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">multi-003</span>
-            <span class="text-sm" style="color: var(--text-muted)">In English, explain this concept: "Die Zeitkomplexität ist O</span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">multi-003</span>
+            <span class="badge-c">
+              7.9/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">7.9/10</span>
-            
-            <span class="text-yellow-600">⚠</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">In English, explain this concept: "Die Zeitkomplexität ist O(n log n) für Quicksort im Durchschnittsfall."
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">In English, explain this concept: "Die Zeitkomplexität ist O(n log n) für Quicksort im Durchschnittsfall."
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">1.4s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.4s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              The time complexity of Quicksort is O(n log n) on average.
-            </div>
-          </div>
-          
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">1.4s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The time complexity of Quicksort is O(n log n) on average.
               </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately states the average case time complexity of Quicksort, addressing all criteria concisely.</p>
+              </details>
+              
             </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-                The time complexity of Quicksort is O(n log n) in the average case.
-            </div>
-          </div>
-          
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">6s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.4s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
               </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                  The time complexity of Quicksort is O(n log n) in the average case.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately states the average case time complexity of Quicksort as O(n log n), which meets all criteria and is concise.</p>
+              </details>
+              
             </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              The concept "Die Zeitkomplexität ist O(n log n) für Quicksort im Durchschnittsfall" can be translated and explained in English as follows:
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">6s</span>
+                  <span class="badge-c">
+                    7.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The concept "Die Zeitkomplexität ist O(n log n) für Quicksort im Durchschnittsfall" can be translated and explained in English as follows:
 
 "The time complexity of Quicksort is O(n log n) on average."
 
 To break this down further:
 
 - **Time Complexity**: This refers to the computational complexity that describes the amount of time an algorithm takes to run as a function of the size of the input data.
-- **O(n log n)**: This is the Big O notation used to describe the upper bound of the time comp...
+- **O(n log n)**: This is the Big O notation used to describe the upper bound of the time complexity. It means that the time taken by the algorithm increases in proportion to n (the number of elements) multiplied by the logarithm of n.
+- **Quicksort**: This is a popular and efficient sorting algorithm that uses a divide-and-conquer approach to sort elements.
+- **Average Case**: This refers to the performance of the algorithm when the input data is randomly distributed or when considering all possible inputs, excluding the best and worst cases.
+
+In summary, on average, Quicksort has a time complexity of O(n log n), making it very efficient for sorting large datasets.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately explains the average case time complexity of Quicksort in English, addressing all criteria and being concise.</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="multi">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">multi-004</span>
-            <span class="text-sm" style="color: var(--text-muted)">Solve: りんごが5個あります。2個食べました。何個残っていますか？
-</span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">multi-004</span>
+            <span class="badge-b">
+              9.3/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">9.3/10</span>
-            
-            <span class="text-green-600">✓</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Solve: りんごが5個あります。2個食べました。何個残っていますか？
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Solve: りんごが5個あります。2個食べました。何個残っていますか？
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">0.8s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">0.8s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-                There are 3 apples left.
-            </div>
-          </div>
-          
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">1.2s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                  There are 3 apples left.
               </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">one sentence</p>
+              </details>
+              
             </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              りんごが5個あります。2個食べました。3個残っています。
-            </div>
-          </div>
-          
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">1.6s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.2s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
               </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                りんごが5個あります。2個食べました。3個残っています。
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">one sentence</p>
+              </details>
+              
             </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              りんごが5個あり、2個食べたので、残っているりんごは3個です。数学的に表すと、5 - 2 = 3 となります。
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.6s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                りんごが5個あり、2個食べたので、残っているりんごは3個です。数学的に表すと、5 - 2 = 3 となります。
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">one sentence</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="multi">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">multi-005</span>
-            <span class="text-sm" style="color: var(--text-muted)">Fix the bug:
-
-// Comprueba si el número es par
-function isEv</span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">multi-005</span>
+            <span class="badge-b">
+              8/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">8/10</span>
-            
-            <span class="text-green-600">✓</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Fix the bug:
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Fix the bug:
 
 // Comprueba si el número es par
 function isEven(num) {
     return num % 2 === 1;  // Bug aquí
 }
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">4.5s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">codellama</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">4.5s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                
 The bug is in the line `return num % 2 === 1;`. This line is checking if the number is odd, but it should be checking if the number is even. To fix the bug, you can change the line to `return num % 2 === 0;`. This will return `true` if the number is even and `false` if it is odd.
-            </div>
-          </div>
-          
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">5.9s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
               </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">Correctly identifies the bug and provides a clear, concise fix.</p>
+              </details>
+              
             </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              The bug in the code is that it checks if the number is odd instead of even. To fix it, you should check if the number is divisible by 2 without a remainder. Here's the corrected code:
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen-coder</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">5.9s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The bug in the code is that it checks if the number is odd instead of even. To fix it, you should check if the number is divisible by 2 without a remainder. Here's the corrected code:
 
 ```javascript
 // Comprueba si el número es par
@@ -674,19 +599,27 @@ function isEven(num) {
 ```
 
 This function will now correctly return `true` if the number is even and `false` if it is odd.
-            </div>
-          </div>
-          
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">6s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
               </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response correctly identifies the bug and provides the correct fix, addressing all criteria concisely.</p>
+              </details>
+              
             </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              The bug in your code is that the condition `num % 2 === 1` is incorrect for determining if a number is even. For a number to be even, the remainder when divided by 2 should be 0. Here is the corrected code:
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">6s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The bug in your code is that the condition `num % 2 === 1` is incorrect for determining if a number is even. For a number to be even, the remainder when divided by 2 should be 0. Here is the corrected code:
 
 ```javascript
 // Comprueba si el número es par
@@ -696,9 +629,16 @@ function isEven(num) {
 ```
 
 This function will now correctly return `true` for even numbers and `false` for odd numbers.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">Correctly identifies the bug and provides a clear, concise fix.</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
@@ -706,30 +646,6 @@ This function will now correctly return `true` for even numbers and `false` for 
   </section>
 
 </div>
-
-<script>
-// Tab switching with category filtering
-const tabs = document.querySelectorAll('.tab');
-const cases = document.querySelectorAll('details[data-category]');
-
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    // Update active tab
-    tabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    
-    // Filter cases
-    const category = tab.dataset.tab;
-    cases.forEach(c => {
-      if (category === 'all' || c.dataset.category === category) {
-        c.style.display = 'block';
-      } else {
-        c.style.display = 'none';
-      }
-    });
-  });
-});
-</script>
 
 </body>
 </html>

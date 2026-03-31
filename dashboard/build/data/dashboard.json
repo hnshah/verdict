@@ -1,0 +1,729 @@
+{
+  "generated_at": "2026-03-31T06:35:00.988Z",
+  "stats": {
+    "total_runs": 39,
+    "total_cases": 256,
+    "total_models": 6,
+    "avg_score": 8.1,
+    "test_runs": 26,
+    "real_runs": 13
+  },
+  "runs": [
+    {
+      "id": "screenmuse-direct-20260330-145117",
+      "name": "ScreenMuse Direct Test Run",
+      "date": "2026-03-30",
+      "cases": 0,
+      "models": 0,
+      "avg_score": 0,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T05-07-33",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 5,
+      "avg_score": 9.3,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T05-05-58",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 2,
+      "models": 5,
+      "avg_score": 10,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T05-04-23",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 3,
+      "models": 5,
+      "avg_score": 9.4,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T04-18-28",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 5,
+      "models": 5,
+      "avg_score": 9.8,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T04-18-02",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 5,
+      "models": 1,
+      "avg_score": 9.2,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-30-2026-03-30T22-22-13",
+      "name": "Gap Fill - Comprehensive Coding",
+      "date": "2026-03-30",
+      "cases": 10,
+      "models": 5,
+      "avg_score": 6.1,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T22-21-04",
+      "name": "Gap Fill - Context Coverage",
+      "date": "2026-03-30",
+      "cases": 3,
+      "models": 3,
+      "avg_score": 4.3,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T21-43-50",
+      "name": "ScreenMuse Elite Evaluation",
+      "date": "2026-03-30",
+      "cases": 20,
+      "models": 1,
+      "avg_score": 5.3,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        }
+      ],
+      "is_test": false,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-30-2026-03-30T19-23-38",
+      "name": "Gap Fill - Speed Coverage",
+      "date": "2026-03-30",
+      "cases": 5,
+      "models": 3,
+      "avg_score": 9.2,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T17-34-39",
+      "name": "Gap Fill - Multilingual Coverage",
+      "date": "2026-03-30",
+      "cases": 5,
+      "models": 3,
+      "avg_score": 7.4,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T17-23-38",
+      "name": "Comprehensive Categorized Benchmark",
+      "date": "2026-03-30",
+      "cases": 20,
+      "models": 3,
+      "avg_score": 7.4,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T17-08-35",
+      "name": "Reasoning Specialist Comparison",
+      "date": "2026-03-30",
+      "cases": 10,
+      "models": 2,
+      "avg_score": 9.1,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T17-08-33",
+      "name": "Coding Specialist Comparison",
+      "date": "2026-03-30",
+      "cases": 10,
+      "models": 2,
+      "avg_score": 8.1,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T16-01-05",
+      "name": "Quick Diverse Benchmark",
+      "date": "2026-03-30",
+      "cases": 10,
+      "models": 4,
+      "avg_score": 8,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T07-20-32",
+      "name": "Elite Production-Grade Tests (Matching Ren's Quality)",
+      "date": "2026-03-30",
+      "cases": 10,
+      "models": 2,
+      "avg_score": 8.1,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T07-15-19",
+      "name": "Fast 7B Model Comparison",
+      "date": "2026-03-30",
+      "cases": 10,
+      "models": 5,
+      "avg_score": 7.5,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T07-12-49",
+      "name": "My Evals",
+      "date": "2026-03-30",
+      "cases": 0,
+      "models": 1,
+      "avg_score": 0,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        },
+        {
+          "type": "single",
+          "label": "Single Model"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-30-2026-03-30T07-12-16",
+      "name": "Quick Coding Test",
+      "date": "2026-03-30",
+      "cases": 10,
+      "models": 2,
+      "avg_score": 8.3,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T06-26-23",
+      "name": "My Evals",
+      "date": "2026-03-30",
+      "cases": 3,
+      "models": 3,
+      "avg_score": 0,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T06-25-45",
+      "name": "My Evals",
+      "date": "2026-03-30",
+      "cases": 5,
+      "models": 3,
+      "avg_score": 0,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T06-25-07",
+      "name": "My Evals",
+      "date": "2026-03-30",
+      "cases": 5,
+      "models": 3,
+      "avg_score": 0,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T00-17-32",
+      "name": "My Evals",
+      "date": "2026-03-30",
+      "cases": 3,
+      "models": 3,
+      "avg_score": 7.2,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T00-17-30",
+      "name": "My Evals",
+      "date": "2026-03-30",
+      "cases": 5,
+      "models": 3,
+      "avg_score": 8.1,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-30-2026-03-30T00-17-28",
+      "name": "My Evals",
+      "date": "2026-03-30",
+      "cases": 5,
+      "models": 3,
+      "avg_score": 7.9,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-29-2026-03-29T23-26-37",
+      "name": "My Evals",
+      "date": "2026-03-29",
+      "cases": 3,
+      "models": 1,
+      "avg_score": 0,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        },
+        {
+          "type": "single",
+          "label": "Single Model"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-29-2026-03-29T23-26-10",
+      "name": "My Evals",
+      "date": "2026-03-29",
+      "cases": 3,
+      "models": 1,
+      "avg_score": 9.7,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        },
+        {
+          "type": "single",
+          "label": "Single Model"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-29-2026-03-29T23-25-24",
+      "name": "My Evals",
+      "date": "2026-03-29",
+      "cases": 10,
+      "models": 1,
+      "avg_score": 8,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-29-2026-03-29T23-22-10",
+      "name": "My Evals",
+      "date": "2026-03-29",
+      "cases": 10,
+      "models": 1,
+      "avg_score": 0,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-29-2026-03-29T23-20-49",
+      "name": "My Evals",
+      "date": "2026-03-29",
+      "cases": 10,
+      "models": 1,
+      "avg_score": 8.2,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-29-2026-03-29T23-20-36",
+      "name": "My Evals",
+      "date": "2026-03-29",
+      "cases": 5,
+      "models": 1,
+      "avg_score": 1,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-29-2026-03-29T23-19-24",
+      "name": "My Evals",
+      "date": "2026-03-29",
+      "cases": 5,
+      "models": 1,
+      "avg_score": 9.6,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-29-2026-03-29T23-18-57",
+      "name": "My Evals",
+      "date": "2026-03-29",
+      "cases": 5,
+      "models": 1,
+      "avg_score": 10,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-29-2026-03-29T23-17-53",
+      "name": "My Evals",
+      "date": "2026-03-29",
+      "cases": 5,
+      "models": 1,
+      "avg_score": 9.2,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-29-2026-03-29T23-15-18",
+      "name": "My Evals",
+      "date": "2026-03-29",
+      "cases": 5,
+      "models": 3,
+      "avg_score": 8.1,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-29-2026-03-29T22-30-51",
+      "name": "My Evals",
+      "date": "2026-03-29",
+      "cases": 3,
+      "models": 3,
+      "avg_score": 7.1,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        },
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-29-2026-03-29T21-13-59",
+      "name": "Comprehensive Stress Test - ALL PACKS",
+      "date": "2026-03-29",
+      "cases": 8,
+      "models": 1,
+      "avg_score": 9.4,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        }
+      ],
+      "is_test": false,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-29-2026-03-29T21-13-18",
+      "name": "Comprehensive Stress Test - ALL PACKS",
+      "date": "2026-03-29",
+      "cases": 8,
+      "models": 1,
+      "avg_score": 9.4,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        }
+      ],
+      "is_test": false,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-29-2026-03-29T20-38-27",
+      "name": "Comprehensive Stress Test - ALL PACKS",
+      "date": "2026-03-29",
+      "cases": 2,
+      "models": 1,
+      "avg_score": 10,
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        },
+        {
+          "type": "single",
+          "label": "Single Model"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": true
+    }
+  ],
+  "top_models": [
+    {
+      "name": "qwen7b",
+      "avg_score": 8.2,
+      "runs": 5,
+      "total_wins": 16,
+      "win_rate": 320,
+      "avg_latency": 8.3,
+      "rank": 1,
+      "medal": "🥇"
+    },
+    {
+      "name": "qwen",
+      "avg_score": 8.1,
+      "runs": 6,
+      "total_wins": 12,
+      "win_rate": 200,
+      "avg_latency": 10.8,
+      "rank": 2,
+      "medal": "🥈"
+    },
+    {
+      "name": "qwen-coder",
+      "avg_score": 8,
+      "runs": 10,
+      "total_wins": 76,
+      "win_rate": 760,
+      "avg_latency": 6.6,
+      "rank": 3,
+      "medal": "🥉"
+    },
+    {
+      "name": "codellama",
+      "avg_score": 7.6,
+      "runs": 8,
+      "total_wins": 30,
+      "win_rate": 375,
+      "avg_latency": 6.9,
+      "rank": 4,
+      "medal": ""
+    },
+    {
+      "name": "deepseek",
+      "avg_score": 6.9,
+      "runs": 4,
+      "total_wins": 2,
+      "win_rate": 50,
+      "avg_latency": 28.8,
+      "rank": 5,
+      "medal": ""
+    },
+    {
+      "name": "tiny",
+      "avg_score": 5.7,
+      "runs": 1,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 1.6,
+      "rank": 6,
+      "medal": ""
+    }
+  ]
+}

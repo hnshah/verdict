@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Comprehensive Stress Test - ALL PACKS — Verdict</title>
+<title>{{ name }} — Verdict</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -33,9 +33,9 @@
     <div class="flex items-center gap-3">
       <a href="../../" class="text-sm text-gray-500 hover:text-gray-900">← Dashboard</a>
       <span class="text-gray-300">·</span>
-      <span class="font-semibold text-gray-900">Comprehensive Stress Test - ALL PACKS</span>
+      <span class="font-semibold text-gray-900">{{ name }}</span>
     </div>
-    <span class="text-xs text-gray-400">2026-03-29</span>
+    <span class="text-xs text-gray-400">{{ date }}</span>
   </div>
 </header>
 
@@ -43,27 +43,27 @@
 
   <!-- Run Stats -->
   <section class="card" style="margin-top:0">
-    <h1 class="text-2xl font-bold text-gray-900 mb-6">Comprehensive Stress Test - ALL PACKS</h1>
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">{{ name }}</h1>
     <div class="grid grid-cols-2 sm:grid-cols-5 gap-6">
       <div>
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Cases</p>
-        <p class="text-2xl font-bold text-gray-900">2</p>
+        <p class="text-2xl font-bold text-gray-900">{{ stats.cases }}</p>
       </div>
       <div>
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Models</p>
-        <p class="text-2xl font-bold text-gray-900">1</p>
+        <p class="text-2xl font-bold text-gray-900">{{ stats.models }}</p>
       </div>
       <div>
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Score</p>
-        <p class="text-2xl font-bold text-gray-900">10<span class="text-base text-gray-500">/10</span></p>
+        <p class="text-2xl font-bold text-gray-900">{{ stats.avg_score }}<span class="text-base text-gray-500">/10</span></p>
       </div>
       <div>
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Pass Rate</p>
-        <p class="text-2xl font-bold text-gray-900">100<span class="text-base text-gray-500">%</span></p>
+        <p class="text-2xl font-bold text-gray-900">{{ stats.pass_rate }}<span class="text-base text-gray-500">%</span></p>
       </div>
       <div>
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Latency</p>
-        <p class="text-2xl font-bold text-gray-900">1.8<span class="text-base text-gray-500">s</span></p>
+        <p class="text-2xl font-bold text-gray-900">{{ stats.avg_latency }}<span class="text-base text-gray-500">s</span></p>
       </div>
     </div>
   </section>
@@ -86,21 +86,21 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
-          
+          {% for model in model_leaderboard %}
           <tr>
-            <td class="py-3 pr-4 font-bold text-gray-900">1</td>
+            <td class="py-3 pr-4 font-bold text-gray-900">{{ model.rank }}</td>
             <td class="py-3 pr-4 flex items-center gap-2">
-              <span class="text-gray-900">qwen7b</span>
-              <span>🥇</span>
+              <span class="text-gray-900">{{ model.name }}</span>
+              {% if model.medal %}<span>{{ model.medal }}</span>{% endif %}
             </td>
-            <td class="py-3 pr-4 text-right font-bold text-gray-900">10/10</td>
-            <td class="py-3 pr-4 text-right text-gray-700">10</td>
-            <td class="py-3 pr-4 text-right text-gray-700">10</td>
-            <td class="py-3 pr-4 text-right text-gray-700">10</td>
-            <td class="py-3 pr-4 text-right"><span class="badge-b">2</span></td>
-            <td class="py-3 text-right mono text-xs text-gray-500">1.8s</td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">{{ model.avg_score }}/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">{{ model.accuracy }}</td>
+            <td class="py-3 pr-4 text-right text-gray-700">{{ model.completeness }}</td>
+            <td class="py-3 pr-4 text-right text-gray-700">{{ model.conciseness }}</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">{{ model.wins }}</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">{{ model.latency }}s</td>
           </tr>
-          
+          {% endfor %}
         </tbody>
       </table>
     </div>
@@ -108,101 +108,51 @@
 
   <!-- Test Cases -->
   <section class="card">
-    <h2 class="text-xl font-bold text-gray-900 mb-6">Test Cases (2)</h2>
+    <h2 class="text-xl font-bold text-gray-900 mb-6">Test Cases ({{ stats.cases }})</h2>
     <div class="space-y-4">
-      
+      {% for case in cases %}
       <details class="border border-gray-200 rounded-lg">
         <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <span class="mono text-sm font-medium text-gray-900">simple-math</span>
-            <span class="badge-b">
-              10/10
+            <span class="mono text-sm font-medium text-gray-900">{{ case.case_id }}</span>
+            <span class="badge-{% if case.avg_score >= 8 %}b{% elsif case.avg_score >= 6 %}c{% else %}a{% endif %}">
+              {{ case.avg_score }}/10
             </span>
           </div>
           <span class="chevron text-gray-400">▼</span>
         </summary>
         <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
-          <p class="text-sm text-gray-700 mb-4">What is 2 + 2?</p>
+          <p class="text-sm text-gray-700 mb-4">{{ case.prompt }}</p>
           
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
           <div class="space-y-3">
-            
+            {% for resp in case.responses %}
             <div class="bg-white border border-gray-200 rounded p-3">
               <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <span class="text-sm font-medium text-gray-900">{{ resp.model }}</span>
                 <div class="flex items-center gap-2">
-                  <span class="mono text-xs text-gray-500">2.4s</span>
-                  <span class="badge-b">
-                    10/10
+                  <span class="mono text-xs text-gray-500">{{ resp.latency }}s</span>
+                  <span class="badge-{% if resp.score >= 8 %}b{% elsif resp.score >= 6 %}c{% else %}a{% endif %}">
+                    {{ resp.score }}/10
                   </span>
                 </div>
               </div>
               <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
-                2 + 2 equals 4.
+                {{ resp.text }}
               </div>
-              
+              {% if resp.reasoning %}
               <details class="mt-2">
                 <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
-                <p class="text-xs text-gray-600 mt-1">The response correctly states that 2 + 2 equals 4, addresses all criteria without additional information, and is concise.</p>
+                <p class="text-xs text-gray-600 mt-1">{{ resp.reasoning }}</p>
               </details>
-              
+              {% endif %}
             </div>
-            
+            {% endfor %}
           </div>
         </div>
       </details>
-      
-      <details class="border border-gray-200 rounded-lg">
-        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <span class="mono text-sm font-medium text-gray-900">simple-reasoning</span>
-            <span class="badge-b">
-              10/10
-            </span>
-          </div>
-          <span class="chevron text-gray-400">▼</span>
-        </summary>
-        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
-          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
-          <p class="text-sm text-gray-700 mb-4">If a train travels 60 miles per hour for 2 hours, how far does it go?</p>
-          
-          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
-          <div class="space-y-3">
-            
-            <div class="bg-white border border-gray-200 rounded p-3">
-              <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-medium text-gray-900">qwen7b</span>
-                <div class="flex items-center gap-2">
-                  <span class="mono text-xs text-gray-500">1.2s</span>
-                  <span class="badge-b">
-                    10/10
-                  </span>
-                </div>
-              </div>
-              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
-                To find out how far the train goes, you can use the formula:
-
-\[ \text{Distance} = \text{Speed} \times \text{Time} \]
-
-Given that the speed is 60 miles per hour and the time is 2 hours, you would calculate it as follows:
-
-\[ \text{Distance} = 60 \, \text{miles/hour} \times 2 \, \text{hours} = 120 \, \text{miles} \]
-
-So, the train travels 120 miles.
-              </div>
-              
-              <details class="mt-2">
-                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
-                <p class="text-xs text-gray-600 mt-1">The response correctly calculates the distance and addresses all criteria succinctly.</p>
-              </details>
-              
-            </div>
-            
-          </div>
-        </div>
-      </details>
-      
+      {% endfor %}
     </div>
   </section>
 

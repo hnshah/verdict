@@ -1,0 +1,12 @@
+{
+  "name": "brief-design-system",
+  "version": "1.0.0",
+  "description": "Document design system with LiquidJS templating",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "liquidjs": "^10.0.0"
+  }
+}

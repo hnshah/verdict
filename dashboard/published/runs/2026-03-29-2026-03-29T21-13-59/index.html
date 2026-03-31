@@ -6,254 +6,99 @@
 <title>Comprehensive Stress Test - ALL PACKS — Verdict</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-
-:root {
-  --accent: #3B82F6;
-  --accent-hover: #2563EB;
-  --bg-page: #F9FAFB;
-  --bg-card: #FFFFFF;
-  --text-primary: #111827;
-  --text-body: #374151;
-  --text-muted: #6B7280;
-  --text-label: #9CA3AF;
-  --border: #E5E7EB;
-  --border-light: #F3F4F6;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-page: #111827;
-    --bg-card: #1F2937;
-    --text-primary: #F9FAFB;
-    --text-body: #E5E7EB;
-    --text-muted: #9CA3AF;
-    --text-label: #6B7280;
-    --border: #374151;
-    --border-light: #1F2937;
-  }
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg-page);
-  color: var(--text-body);
-}
-
-.mono { font-family: 'JetBrains Mono', monospace; }
-
-/* Cards - using Tailwind sizing for consistency */
-.card {
-  background: var(--bg-card);
-  border-radius: 0.75rem;
-  border: 1px solid var(--border);
-  padding: 2rem;
-  margin-top: 2rem;
-}
-.card:first-child { margin-top: 0; }
-
-/* Links - styled with accent color */
-a {
-  color: var(--accent);
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  transition: all 0.15s;
-}
-a:hover {
-  color: var(--accent-hover);
-  text-decoration-color: currentColor;
-}
-
-/* Badges */
-.badge-green { background: #ECFDF5; color: #065F46; }
-.badge-yellow { background: #FFFBEB; color: #92400E; }
-.badge-red { background: #FEF2F2; color: #991B1B; }
-.badge-gray { background: var(--border-light); color: var(--text-body); }
-
-@media (prefers-color-scheme: dark) {
-  .badge-green { background: #064E3B; color: #A7F3D0; }
-  .badge-yellow { background: #78350F; color: #FDE68A; }
-  .badge-red { background: #7F1D1D; color: #FCA5A5; }
-}
-
-/* Tabs */
-.tab {
-  padding: 0.75rem 1.5rem;
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  transition: all 0.15s;
-  color: var(--text-muted);
-}
-.tab:hover {
-  background: var(--border-light);
-}
-.tab.active {
-  border-bottom-color: var(--accent);
-  color: var(--accent);
-  font-weight: 600;
-}
-
-/* Accordion */
-details summary {
-  cursor: pointer;
-  list-style: none;
-}
-details summary::-webkit-details-marker { display: none; }
-details[open] summary .chevron { transform: rotate(180deg); }
-.chevron {
-  transition: transform 0.2s;
-  display: inline-block;
-}
-
-/* Table hover */
-tbody tr {
-  transition: background 0.1s;
-}
-tbody tr:hover {
-  background: var(--border-light);
-}
-
-/* Focus visible */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-/* Mobile responsive */
-@media (max-width: 768px) {
-  .desktop-only { display: none; }
-  .card { padding: 1rem; }
-  .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media print { .no-print { display: none; } }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  body { font-family: 'Inter', sans-serif; }
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+  
+  .badge-a { background: #EFF6FF; color: #1D4ED8; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-b { background: #ECFDF5; color: #065F46; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-c { background: #FFFBEB; color: #92400E; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  
+  .card { background: white; border-radius: 0.75rem; border: 1px solid #E5E7EB; padding: 2rem; margin-top: 2rem; }
+  
+  details summary { cursor: pointer; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details[open] summary .chevron { transform: rotate(180deg); }
+  .chevron { transition: transform 0.2s; display: inline-block; }
+  
+  tr:hover { background: #F9FAFB; }
+  
+  @media print { .no-print { display: none; } }
 </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800">
 
-<header class="bg-white dark:bg-gray-800 border-b sticky top-0 z-50" style="border-color: var(--border)">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 no-print">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
     <div class="flex items-center gap-3">
-      <a href="/" class="font-semibold no-underline" style="color: var(--text-primary)">Verdict</a>
-      <span style="color: var(--border)">·</span>
-      <span class="text-sm" style="color: var(--text-muted)">Comprehensive Stress Test - ALL PACKS</span>
+      <a href="../../" class="text-sm text-gray-500 hover:text-gray-900">← Dashboard</a>
+      <span class="text-gray-300">·</span>
+      <span class="font-semibold text-gray-900">Comprehensive Stress Test - ALL PACKS</span>
     </div>
-    <span class="text-xs" style="color: var(--text-label)">2026-03-29</span>
+    <span class="text-xs text-gray-400">2026-03-29</span>
   </div>
 </header>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+<div class="max-w-7xl mx-auto px-6 py-8">
 
-  <!-- Run header card -->
-  <section class="card">
-    <div class="flex items-start justify-between mb-4 flex-wrap gap-3">
+  <!-- Run Stats -->
+  <section class="card" style="margin-top:0">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Comprehensive Stress Test - ALL PACKS</h1>
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-6">
       <div>
-        <h1 class="text-2xl font-bold mb-1" style="color: var(--text-primary)">Comprehensive Stress Test - ALL PACKS</h1>
-        <p class="text-sm" style="color: var(--text-muted)">8 test cases · 1 models · 2026-03-29</p>
-      </div>
-      <span class="badge-green px-3 py-1 rounded-full text-xs font-semibold">Complete</span>
-    </div>
-
-    <!-- Stats grid - responsive -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mt-6">
-      <div>
-        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Avg Score</p>
-        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">9.4<span class="text-base" style="color: var(--text-muted)">/10</span></p>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Cases</p>
+        <p class="text-2xl font-bold text-gray-900">8</p>
       </div>
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Pass Rate</p>
-        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">100<span class="text-base" style="color: var(--text-muted)">%</span></p>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Models</p>
+        <p class="text-2xl font-bold text-gray-900">1</p>
       </div>
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Avg Latency</p>
-        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">4.2<span class="text-base" style="color: var(--text-muted)">s</span></p>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Score</p>
+        <p class="text-2xl font-bold text-gray-900">9.4<span class="text-base text-gray-500">/10</span></p>
       </div>
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Total Cost</p>
-        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">$0</p>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Pass Rate</p>
+        <p class="text-2xl font-bold text-gray-900">100<span class="text-base text-gray-500">%</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Latency</p>
+        <p class="text-2xl font-bold text-gray-900">4.2<span class="text-base text-gray-500">s</span></p>
       </div>
     </div>
   </section>
 
-  <!-- Category tabs -->
-  <div class="flex gap-2 mt-8 overflow-x-auto border-b rounded-t-xl px-4 bg-white dark:bg-gray-800" style="border-color: var(--border)">
-    
-    <div class="tab active" data-tab="all">
-      All <span style="color: var(--text-label)">(8)</span>
-    </div>
-    
-    <div class="tab " data-tab="ts">
-      ts <span style="color: var(--text-label)">(1)</span>
-    </div>
-    
-    <div class="tab " data-tab="bugfix">
-      bugfix <span style="color: var(--text-label)">(1)</span>
-    </div>
-    
-    <div class="tab " data-tab="python">
-      python <span style="color: var(--text-label)">(1)</span>
-    </div>
-    
-    <div class="tab " data-tab="error">
-      error <span style="color: var(--text-label)">(1)</span>
-    </div>
-    
-    <div class="tab " data-tab="test">
-      test <span style="color: var(--text-label)">(1)</span>
-    </div>
-    
-    <div class="tab " data-tab="refactor">
-      refactor <span style="color: var(--text-label)">(1)</span>
-    </div>
-    
-    <div class="tab " data-tab="api">
-      api <span style="color: var(--text-label)">(1)</span>
-    </div>
-    
-    <div class="tab " data-tab="documentation">
-      documentation <span style="color: var(--text-label)">(1)</span>
-    </div>
-    
-  </div>
-
-  <!-- Leaderboard -->
+  <!-- Model Leaderboard -->
   <section class="card">
-    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Model Leaderboard</h2>
+    <h2 class="text-xl font-bold text-gray-900 mb-6">Model Performance</h2>
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
         <thead>
-          <tr class="text-left text-xs border-b" style="color: var(--text-label); border-color: var(--border-light)">
+          <tr class="text-left text-xs text-gray-400 border-b border-gray-100">
             <th class="pb-3 pr-4 font-semibold">Rank</th>
             <th class="pb-3 pr-4 font-semibold">Model</th>
-            <th class="pb-3 pr-4 text-right font-semibold">Overall</th>
-            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Accuracy</th>
-            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Complete</th>
-            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Concise</th>
-            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Latency</th>
-            <th class="pb-3 text-right font-semibold">Wins</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Score</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Accuracy</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Complete</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Concise</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Wins</th>
+            <th class="pb-3 text-right font-semibold">Latency</th>
           </tr>
         </thead>
-        <tbody class="divide-y" style="border-color: var(--border-light)">
+        <tbody class="divide-y divide-gray-100">
           
           <tr>
-            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">1</td>
-            <td class="py-3 pr-4">
-              <div class="flex items-center gap-2">
-                <span class="font-medium" style="color: var(--text-primary)">qwen7b</span>
-                <span class="text-xs">🥇</span>
-                
-                
-              </div>
+            <td class="py-3 pr-4 font-bold text-gray-900">1</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">qwen7b</span>
+              <span>🥇</span>
             </td>
-            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.4/10</td>
-            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">9.1</td>
-            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">9.8</td>
-            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">9.1</td>
-            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">4.2s</td>
-            <td class="py-3 text-right">
-              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">8</span>
-            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">9.4/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.1</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.8</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.1</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">8</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">4.2s</td>
           </tr>
           
         </tbody>
@@ -261,55 +106,45 @@ tbody tr:hover {
     </div>
   </section>
 
-  <!-- Test cases -->
+  <!-- Test Cases -->
   <section class="card">
-    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Test Cases</h2>
-    <div class="space-y-3">
+    <h2 class="text-xl font-bold text-gray-900 mb-6">Test Cases (8)</h2>
+    <div class="space-y-4">
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="ts">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">ts-interface-1</span>
-            <span class="text-sm" style="color: var(--text-muted)">Create a TypeScript interface for a User with:
-- name (strin</span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">ts-interface-1</span>
+            <span class="badge-b">
+              10/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">10/10</span>
-            
-            <span class="text-green-600">✓</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Create a TypeScript interface for a User with:
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Create a TypeScript interface for a User with:
 - name (string, required)
 - email (string, required)
 - age (number, optional)
 - roles (array of strings, optional)
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">2.6s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">2.6s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              Certainly! Below is a TypeScript interface that defines the structure you've described:
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! Below is a TypeScript interface that defines the structure you've described:
 
 ```typescript
 interface User {
@@ -326,41 +161,50 @@ interface User {
 - `age`: An optional number (denoted by the `?`).
 - `roles`: An optional array of strings (also denoted by the `?`).
 
-You can use this interface to define and validate u...
+You can use this interface to define and validate user objects in your TypeScript code. Here's an example of how you might create a user object using this interface:
+
+```typescript
+const user: User = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    age: 30,
+    roles: ["admin", "user"]
+};
+
+// Or with optional properties:
+const user2: User = {
+    name: "Jane Smith",
+    email: "jane.smith@example.com"
+};
+```
+
+This setup ensures that any object conforming to the `User` interface will have a `name` and `email`, but may optionally include an `age` and/or `roles`.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately defines the TypeScript interface with all required and optional fields correctly specified.</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="bugfix">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">bugfix-1</span>
-            <span class="text-sm" style="color: var(--text-muted)">Fix this bug:
-
-```typescript
-function extractJson(text: stri</span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">bugfix-1</span>
+            <span class="badge-b">
+              8.4/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">8.4/10</span>
-            
-            <span class="text-green-600">✓</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Fix this bug:
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Fix this bug:
 
 ```typescript
 function extractJson(text: string): string {
@@ -369,72 +213,111 @@ function extractJson(text: string): string {
 ```
 
 Problem: Fails when text has content before the fence like "Here's an example:\n```json\n{...}\n```"
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">3.9s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">8.4/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">3.9s</span>
+                  <span class="badge-b">
+                    8.4/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              The issue with your current implementation is that it removes everything up to and including the first occurrence of `^```json\s*` and everything after the last occurrence of `\s*```$`. This can cause problems if there are other lines before or after the JSON code block.
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The issue with your current implementation is that it removes everything up to and including the first occurrence of `^```json\s*` and everything after the last occurrence of `\s*```$`. This can cause problems if there are other lines before or after the JSON code block.
 
-To handle this correctly, you should look for a specific marker (like "JSON:" or any unique identifier) within the text to ensure that only the intended JSON content is extracted. Here's an improved version of your function:...
+To handle this correctly, you should look for a specific marker (like "JSON:" or any unique identifier) within the text to ensure that only the intended JSON content is extracted. Here's an improved version of your function:
+
+```typescript
+function extractJson(text: string): string {
+  // Look for a line containing "JSON:" and capture everything after it until the next fence.
+  const match = text.match(/(?<=\n)(.*?)(?=^```)/s);
+  
+  if (match) {
+    return match[0].trim();
+  } else {
+    return '';
+  }
+}
+```
+
+### Explanation:
+- `/(?<=\n)(.*?)(?=^` - This regular expression uses a positive lookbehind `(?<=\n)` to ensure that the match starts after a newline character, and a positive lookahead `(?=^```)` to ensure it ends before the next fence.
+  - `.*?` is a non-greedy match for any characters (except newline) between the markers.
+- `.trim()` removes leading and trailing whitespace from the extracted content.
+
+### Example Usage:
+```typescript
+const text = `
+Here's an example:
+JSON:
+{
+  "name": "John",
+  "age": 30,
+  "city": "New York"
+}
+`;
+
+console.log(extractJson(text)); // Output: {
+//   "name": "John",
+//   "age": 30,
+//   "city": "New York"
+// }
+```
+
+This approach ensures that only the content between the markers is extracted, even if there are other lines before or after the JSON block.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response provides a correct and functional solution that addresses the criteria, but it could be more concise by removing unnecessary explanations.</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="python">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">python-processing-1</span>
-            <span class="text-sm" style="color: var(--text-muted)">Write Python code to:
-1</span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">python-processing-1</span>
+            <span class="badge-b">
+              10/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">10/10</span>
-            
-            <span class="text-green-600">✓</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Write Python code to:
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Write Python code to:
 1. Read a JSON file
 2. Filter items where status == "active"
 3. Sort by created_at descending
 4. Return top 10
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">6.7s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">6.7s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              Certainly! Below is a Python script that reads a JSON file, filters the items where `status` is `"active"`, sorts them by `created_at` in descending order, and returns the top 10 results.
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! Below is a Python script that reads a JSON file, filters the items where `status` is `"active"`, sorts them by `created_at` in descending order, and returns the top 10 results.
 
 ```python
 import json
@@ -447,60 +330,98 @@ def read_and_process_json(file_path):
     # Step 2: Filter items where status == "active"
     active_items = [item for item in data if item.get('status') == 'active']
     
-    #...
+    # Step 3: Sort by created_at descending
+    sorted_active_items = sorted(active_items, key=lambda x: x['created_at'], reverse=True)
+    
+    # Step 4: Return top 10
+    top_10_items = sorted_active_items[:10]
+    
+    return top_10_items
+
+# Example usage:
+file_path = 'path/to/your/json/file.json'
+top_10_results = read_and_process_json(file_path)
+print(top_10_results)
+```
+
+### Explanation:
+
+- **Step 1:** The script opens and reads the JSON file using `json.load()`.
+- **Step 2:** A list comprehension is used to filter out items where the `status` key equals `"active"`.
+- **Step 3:** The filtered items are sorted by the `created_at` field in descending order.
+- **Step 4:** The top 10 items from the sorted list are returned.
+
+### Example JSON File (`file.json`):
+
+```json
+[
+    {"id": 1, "status": "active", "created_at": "2023-09-01T15:00:00Z"},
+    {"id": 2, "status": "inactive", "created_at": "2023-08-30T14:00:00Z"},
+    {"id": 3, "status": "active", "created_at": "2023-09-05T16:00:00Z"},
+    {"id": 4, "status": "active", "created_at": "2023-08-25T17:00:00Z"},
+    {"id": 5, "status": "inactive", "created_at": "2023-09-02T18:00:00Z"}
+]
+```
+
+### Output:
+
+```python
+[
+    {'id': 3, 'status': 'active', 'created_at': '2023-09-05T16:00:00Z'},
+    {'id': 1, 'status': 'active', 'created_at': '2023-09-01T15:00:00Z'},
+    {'id': 4, 'status': 'active', 'created_at': '2023-08-25T17:00:00Z'}
+]
+```
+
+This output shows the top 3 active items sorted by `created_at` in descending order. Adjust the file path and JSON structure as needed for your specific use case.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately addresses all specified criteria and is concise without padding.</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="error">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">error-handling-1</span>
-            <span class="text-sm" style="color: var(--text-muted)">Add error handling to:
-
-```typescript
-const data = JSON</span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">error-handling-1</span>
+            <span class="badge-b">
+              8.4/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">8.4/10</span>
-            
-            <span class="text-green-600">✓</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Add error handling to:
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Add error handling to:
 
 ```typescript
 const data = JSON.parse(response);
 return data.results.map(r => r.id);
 ```
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">2.6s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">8.4/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">2.6s</span>
+                  <span class="badge-b">
+                    8.4/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              Certainly! Adding error handling is crucial to ensure that your code can gracefully handle unexpected situations, such as invalid JSON or missing `results` in the response. Here's how you can add error handling to your TypeScript code:
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! Adding error handling is crucial to ensure that your code can gracefully handle unexpected situations, such as invalid JSON or missing `results` in the response. Here's how you can add error handling to your TypeScript code:
 
 ```typescript
 try {
@@ -511,41 +432,44 @@ try {
         throw new Error("Response does not contain an array under 'results'");
     }
 } catch (error) {
-  ...
+    console.error("Error parsing response:", error);
+    // You can handle the error appropriately, e.g., by returning an empty array or throwing a custom error
+    return [];
+}
+```
+
+### Explanation:
+1. **Try-Catch Block**: The `try` block attempts to parse the JSON and process it.
+2. **Array Check**: After parsing, we check if `data.results` is an array using `Array.isArray()`. If not, we throw an error.
+3. **Error Handling**: In the `catch` block, any errors that occur during parsing are caught, logged, and handled appropriately (in this case, by returning an empty array).
+
+This approach ensures that your code can handle both JSON parsing errors and unexpected data structures in a robust manner.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately addresses the criteria by handling JSON parse errors and missing results field, but it does not explicitly handle null/undefined values or return a safe default. It also could be more concise by combining some checks.</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="test">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">test-case-1</span>
-            <span class="text-sm" style="color: var(--text-muted)">Write a test for this function:
-
-```typescript
-function scor</span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">test-case-1</span>
+            <span class="badge-b">
+              10/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">10/10</span>
-            
-            <span class="text-green-600">✓</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Write a test for this function:
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Write a test for this function:
 
 ```typescript
 function scoreToolCall(
@@ -558,20 +482,23 @@ function scoreToolCall(
   return toolCalls.some(t => t.name === expectedTool) ? 10 : 0;
 }
 ```
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">5s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">5s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              To write a test for the `scoreToolCall` function, we can use a testing framework like Jest. Below is an example of how you might set up and run tests using Jest.
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To write a test for the `scoreToolCall` function, we can use a testing framework like Jest. Below is an example of how you might set up and run tests using Jest.
 
 First, ensure that you have Jest installed in your project:
 
@@ -585,41 +512,85 @@ Next, create or update your test file (e.g., `scoreToolCall.test.ts`):
 import { scoreToolCall } from './path-to-your-file';
 
 describe('scoreToolCall', () => {
-  test('returns 10 when expected tool is empty and no tool...
+  test('returns 10 when expected tool is empty and no tool calls are provided', () => {
+    const result = scoreToolCall([], '');
+    expect(result).toBe(10);
+  });
+
+  test('returns 10 when the expected tool name matches one of the tool calls', () => {
+    const toolCalls = [
+      { name: 'toolA' },
+      { name: 'toolB' },
+      { name: 'expectedTool' }
+    ];
+    const result = scoreToolCall(toolCalls, 'expectedTool');
+    expect(result).toBe(10);
+  });
+
+  test('returns 0 when the expected tool name does not match any of the tool calls', () => {
+    const toolCalls = [
+      { name: 'toolA' },
+      { name: 'toolB' }
+    ];
+    const result = scoreToolCall(toolCalls, 'expectedTool');
+    expect(result).toBe(0);
+  });
+
+  test('returns 10 when expected tool is empty and there are tool calls', () => {
+    const toolCalls = [
+      { name: 'toolA' },
+      { name: 'toolB' }
+    ];
+    const result = scoreToolCall(toolCalls, '');
+    expect(result).toBe(10);
+  });
+
+  test('returns 0 when expected tool is not empty and no matching tool call exists', () => {
+    const toolCalls = [
+      { name: 'toolA' },
+      { name: 'toolB' }
+    ];
+    const result = scoreToolCall(toolCalls, 'expectedTool');
+    expect(result).toBe(0);
+  });
+});
+```
+
+Make sure to replace `./path-to-your-file` with the actual path to your file containing the `scoreToolCall` function.
+
+To run the tests, you can use the following command:
+
+```bash
+npx jest
+```
+
+This will execute all the test cases and provide feedback on whether they pass or fail.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The evaluation meets all specified criteria accurately and concisely addresses the requirements.</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="refactor">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">refactor-1</span>
-            <span class="text-sm" style="color: var(--text-muted)">Refactor this to be more maintainable:
-
-```typescript
-const </span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">refactor-1</span>
+            <span class="badge-b">
+              10/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">10/10</span>
-            
-            <span class="text-green-600">✓</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Refactor this to be more maintainable:
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Refactor this to be more maintainable:
 
 ```typescript
 const stripped = text
@@ -634,20 +605,23 @@ if (stripped.startsWith('{') || stripped.startsWith('[')) {
 }
 return null;
 ```
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">3.8s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">3.8s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              Certainly! To make the code more maintainable, we can break it down into smaller functions and add comments for clarity. Here's a refactored version:
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! To make the code more maintainable, we can break it down into smaller functions and add comments for clarity. Here's a refactored version:
 
 ```typescript
 function stripCodeBlocks(text: string): string {
@@ -659,54 +633,81 @@ function stripCodeBlocks(text: string): string {
 }
 
 function parseJsonIfPossible(strippedText: string): any | null {
-    // Check if the stripped text start...
+    // Check if the stripped text starts with a JSON object or array.
+    if (strippedText.startsWith('{') || strippedText.startsWith('[')) {
+        try {
+            return JSON.parse(strippedText);
+        } catch {
+            // If parsing fails, return null.
+            return null;
+        }
+    }
+    // Return null if the text does not start with a JSON object or array.
+    return null;
+}
+
+function processText(text: string): any | null {
+    const stripped = stripCodeBlocks(text);
+    return parseJsonIfPossible(stripped);
+}
+
+// Example usage:
+const inputText = "```json\n{\n  \"key\": \"value\"\n}\n```";
+const result = processText(inputText);
+console.log(result); // Output: { key: 'value' }
+```
+
+### Explanation:
+
+1. **`stripCodeBlocks` Function**: This function handles the removal of code block delimiters and any leading or trailing whitespace.
+2. **`parseJsonIfPossible` Function**: This function checks if the stripped text starts with a JSON object or array and attempts to parse it. If parsing fails, it returns `null`.
+3. **`processText` Function**: This is the main function that combines the above two functions to process the input text.
+
+This refactoring makes each part of the logic more modular and easier to understand and maintain.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The refactored code meets all the specified criteria and is accurate, complete, and concise.</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="api">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">api-design-1</span>
-            <span class="text-sm" style="color: var(--text-muted)">Design a function signature for:
-"Score a model's response a</span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">api-design-1</span>
+            <span class="badge-b">
+              9/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">9/10</span>
-            
-            <span class="text-green-600">✓</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Design a function signature for:
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Design a function signature for:
 "Score a model's response against expected output using different scoring methods (exact, contains, LLM judge)"
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">6.2s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">9/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">6.2s</span>
+                  <span class="badge-b">
+                    9/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              Certainly! Below is a proposed function signature for scoring a model's response against an expected output using various scoring methods:
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! Below is a proposed function signature for scoring a model's response against an expected output using various scoring methods:
 
 ```python
 def score_response(model_output: str, expected_output: str, scoring_method: str) -> float:
@@ -715,41 +716,72 @@ def score_response(model_output: str, expected_output: str, scoring_method: str)
 
     :param model_output: The output generated by the language model.
     :param expected_output: The expected or correct output to compare against.
-...
+    :param scoring_method: The method used for scoring, which can be 'exact', 'contains', or 'llm_judge'.
+    :return: A score indicating how well the model's response matches the expected output. 
+             - For 'exact': 1.0 if exact match, 0.0 otherwise.
+             - For 'contains': 1.0 if expected_output is a substring of model_output, 0.0 otherwise.
+             - For 'llm_judge': A score between 0.0 and 1.0 based on the LLM's judgment (hypothetical implementation).
+    """
+    pass
+```
+
+### Explanation:
+- **model_output**: The string output generated by the language model that needs to be scored.
+- **expected_output**: The reference or expected string against which the `model_output` is compared.
+- **scoring_method**: A string indicating the scoring method to use. It can take one of three values: `'exact'`, `'contains'`, or `'llm_judge'`.
+
+### Scoring Methods:
+1. **Exact Match (`'exact'`)**: 
+   - Returns `1.0` if `model_output` is exactly equal to `expected_output`.
+   - Returns `0.0` otherwise.
+
+2. **Contains (`'contains'`)**:
+   - Returns `1.0` if `expected_output` is a substring of `model_output`.
+   - Returns `0.0` otherwise.
+
+3. **LLM Judge (`'llm_judge'`)**:
+   - This method would involve some form of judgment or evaluation by the LLM itself, possibly using natural language understanding techniques to determine how well the response matches the expected output.
+   - The return value is a float between `0.0` and `1.0`, where `1.0` indicates a perfect match.
+
+### Example Usage:
+```python
+score = score_response("The quick brown fox", "quick brown", 'contains')
+print(score)  # Output: 1.0
+
+score = score_response("The quick brown fox jumps over the lazy dog", "lazy dog", 'exact')
+print(score)  # Output: 0.0
+
+score = score_response("The quick brown fox", "A quick brown fox", 'llm_judge')
+print(score)  # Output: 0.8 (hypothetical value)
+```
+
+This function signature and scoring methods provide a flexible way to evaluate model responses based on different criteria, which can be useful in various applications such as natural language processing, chatbot evaluations, or general text generation tasks.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">Accurate content and criteria addressed. Minor room for improvement in conciseness by removing unnecessary words.</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
-      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="documentation">
-        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
-          <div class="flex items-center gap-3 flex-1 flex-wrap">
-            <span class="mono text-sm font-medium" style="color: var(--text-body)">documentation-1</span>
-            <span class="text-sm" style="color: var(--text-muted)">Write JSDoc for:
-
-```typescript
-function extractJson(text: s</span>
-            <div class="flex gap-1 ml-auto">
-              
-              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
-              
-            </div>
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">documentation-1</span>
+            <span class="badge-b">
+              9.2/10
+            </span>
           </div>
-          <div class="flex items-center gap-3 ml-4">
-            <span class="text-sm font-medium" style="color: var(--text-primary)">9.2/10</span>
-            
-            <span class="text-green-600">✓</span>
-            
-            <!-- SVG chevron instead of Unicode -->
-            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
-              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <span class="chevron text-gray-400">▼</span>
         </summary>
-        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
-          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
-          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Write JSDoc for:
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Write JSDoc for:
 
 ```typescript
 function extractJson(text: string): string | null {
@@ -757,20 +789,23 @@ function extractJson(text: string): string | null {
   return match ? match[1].trim() : null;
 }
 ```
-</div>
-
-          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+</p>
           
-          <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
-              <div class="flex items-center gap-2">
-                <span class="text-xs mono" style="color: var(--text-label)">2.5s</span>
-                <span class="text-xs font-bold" style="color: var(--text-primary)">9.2/10</span>
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">2.5s</span>
+                  <span class="badge-b">
+                    9.2/10
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
-              Certainly! Below is the JSDoc comment for the provided TypeScript function:
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! Below is the JSDoc comment for the provided TypeScript function:
 
 ```typescript
 /**
@@ -781,10 +816,25 @@ function extractJson(text: string): string | null {
  */
 function extractJson(text: string): string | null {
   const match = text.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
-  return match ? ma...
+  return match ? match[1].trim() : null;
+}
+```
+
+### Explanation of the JSDoc:
+- **`@param text - The input string containing the JSON content.`**: Describes the parameter `text`, which is expected to be a string that may contain JSON content enclosed in triple backticks.
+- **`@returns The extracted JSON content as a string, or null if no match is found.`**: Describes what the function returns. It will return the trimmed JSON content as a string if a match is found; otherwise, it returns `null`.
+
+This JSDoc comment provides clear documentation for the function's purpose and expected behavior.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The JSDoc is accurate and complete, but it could be slightly more concise by removing unnecessary spaces.</p>
+              </details>
+              
             </div>
+            
           </div>
-          
         </div>
       </details>
       
@@ -792,30 +842,6 @@ function extractJson(text: string): string | null {
   </section>
 
 </div>
-
-<script>
-// Tab switching with category filtering
-const tabs = document.querySelectorAll('.tab');
-const cases = document.querySelectorAll('details[data-category]');
-
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    // Update active tab
-    tabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    
-    // Filter cases
-    const category = tab.dataset.tab;
-    cases.forEach(c => {
-      if (category === 'all' || c.dataset.category === category) {
-        c.style.display = 'block';
-      } else {
-        c.style.display = 'none';
-      }
-    });
-  });
-});
-</script>
 
 </body>
 </html>
