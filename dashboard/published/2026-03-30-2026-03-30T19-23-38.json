@@ -2,7 +2,7 @@
   "run_id": "2026-03-30-2026-03-30T19-23-38",
   "name": "Gap Fill - Speed Coverage",
   "timestamp": "2026-03-30",
-  "models": 3,
+  "models": [],
   "cases": 5,
   "environment": {
     "verdict_version": "0.1.0",

@@ -2,7 +2,7 @@
   "run_id": "2026-03-30-2026-03-30T16-01-05",
   "name": "Quick Diverse Benchmark",
   "timestamp": "2026-03-30",
-  "models": 4,
+  "models": [],
   "cases": 10,
   "environment": {
     "verdict_version": "0.1.0",
