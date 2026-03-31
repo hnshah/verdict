@@ -1,67 +1,194 @@
-# Dashboard
+# Verdict Dashboard
 
-Verdict's visual dashboard for exploring and sharing eval results.
+Visual dashboard for exploring and sharing evaluation results.
 
-## Directory Structure
+## Structure
 
 ```
 dashboard/
-├── templates/          # HTML templates used by `verdict dashboard generate`
-│   ├── index.html      # Main dashboard template
-│   └── validate.html   # Data validator template
-└── published/          # Committed dashboard snapshots (published via GitHub Pages)
-    ├── index.html      # Generated leaderboard
-    ├── runs/           # Per-run HTML reports
-    ├── models/         # Per-model HTML scorecards
-    └── *.json          # Published result data
+├── templates/          # HTML templates
+│   ├── index.html      # Main dashboard (Brief Design System)
+│   └── validate.html   # Data validator
+├── published/          # Published dashboard (served via GitHub Pages)
+│   ├── index.html      # Generated dashboard with embedded data
+│   ├── dashboard-data.json  # Dashboard data (for external loading)
+│   ├── runs/           # (legacy per-run pages - not currently used)
+│   └── models/         # (legacy per-model pages - not currently used)
+└── archive/            # Old build systems (archived for reference)
 ```
 
 ## Usage
 
+### Generate Dashboard
+
+From eval results:
+
 ```bash
-# Generate dashboard from your local results
-verdict dashboard generate
+# Run evals first
+verdict run eval-packs/coding.yaml --models qwen2.5:7b,phi4:14b
 
-# Preview locally
-verdict dashboard preview
+# Generate dashboard
+verdict dashboard generate --results ./results --output ./dashboard-data.json
 
-# Publish a run snapshot
-verdict publish --run latest
+# Deploy to published/
+verdict dashboard deploy --output ./dashboard/published
+
+# Commit and push
+git add dashboard/published/ dashboard-data.json
+git commit -m "feat: Add new evaluation run"
+git push origin main
 ```
 
-## Deploying
+### From Existing dashboard-data.json
 
-`dashboard/published/` is designed to be served via GitHub Pages or Cloudflare Pages.
+If you already have `dashboard-data.json` at repo root:
 
-The `verdict publish` command copies results into this directory and provides git instructions.
-To serve on GitHub Pages, push this directory and set Pages source to `/dashboard/published`.
-
-## Template Development
-
-Edit `dashboard/templates/index.html` to modify the dashboard UI.
-The template uses vanilla JS + Tailwind CDN — no build step required.
-## How Data Gets Into the Dashboard
-
-The dashboard supports two data loading modes:
-
-### Mode 1: Baked-in data (default)
-`verdict dashboard generate` injects data directly into the HTML at build time.
-The resulting HTML is fully self-contained — no server needed, works offline.
 ```bash
-verdict dashboard generate --output my-results.html
+# Inject data into template manually
+python3 << 'EOF'
+import json
+
+with open('dashboard-data.json') as f:
+    data = json.load(f)
+
+with open('dashboard/templates/index.html') as f:
+    template = f.read()
+
+html = template.replace('/*__DASHBOARD_DATA__*/null', json.dumps(data))
+
+with open('dashboard/published/index.html', 'w') as f:
+    f.write(html)
+
+print(f"✅ Dashboard generated with {data['meta']['total_runs']} runs")
+EOF
+
+# Then commit and push
+git add dashboard/published/index.html
+git commit -m "chore: Update dashboard"
+git push origin main
 ```
 
-### Mode 2: Dynamic load (for static deployments like Cloudflare Pages)
-Deploy the template HTML + a `dashboard-data.json` file in the same directory.
-The dashboard will fetch the JSON automatically on load.
-```bash
-# Generate the data file
-verdict dashboard generate  # outputs dashboard-data.json
+## Design System
 
-# Then deploy both files:
-# dashboard/templates/index.html → your hosting root
-# dashboard-data.json → same directory as index.html
+The dashboard uses **Brief Design System**:
+- **Font**: Inter (UI), JetBrains Mono (code)
+- **Framework**: Tailwind CSS
+- **Style**: Clean, minimal, focused on data clarity
+- **Colors**: Semantic badges (blue=general, green=pass, amber=warn)
+
+## Deployment
+
+The `dashboard/published/` directory is served via **GitHub Pages**.
+
+To set up:
+1. Go to repo **Settings → Pages**
+2. Set source to **Deploy from a branch**
+3. Branch: **main**, Folder: **/dashboard/published**
+4. Save
+
+Dashboard will be live at: `https://<username>.github.io/<repo>/`
+
+## Data Format
+
+`dashboard-data.json` structure:
+
+```json
+{
+  "meta": {
+    "total_runs": 5,
+    "total_cases": 10,
+    "total_models": 13,
+    "last_updated": "2026-03-31"
+  },
+  "models": {
+    "qwen2.5:7b": { "name": "qwen2.5:7b" },
+    ...
+  },
+  "cases": [
+    {
+      "id": "gen-001",
+      "name": "General Question 1",
+      "suite": "general",
+      "prompt": "What is the capital of France?",
+      "runs": [
+        {
+          "run_id": "2026-03-31T07-48-00",
+          "run_meta": {
+            "name": "Comprehensive Benchmark",
+            "config_file": "verdict.yaml"
+          },
+          "responses": {
+            "qwen2.5:7b": {
+              "text": "The capital of France is Paris.",
+              "latency_ms": 1198
+            }
+          },
+          "scores": {
+            "qwen2.5:7b": {
+              "total": 10,
+              "reasoning": "Perfect accuracy"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
 ```
 
-This is the right approach for Vera-style Cloudflare Pages deployments where
-you want to update data without redeploying the HTML template.
+## Adding Runs
+
+**Option 1: Use verdict CLI (recommended)**
+
+```bash
+# Run new eval
+verdict run eval-packs/reasoning.yaml --models qwen2.5:7b,phi4:14b
+
+# Regenerate dashboard
+verdict dashboard generate --results ./results --output ./dashboard-data.json
+verdict dashboard deploy --output ./dashboard/published
+
+# Deploy
+git add dashboard/ dashboard-data.json
+git commit -m "feat: Add reasoning benchmark"
+git push origin main
+```
+
+**Option 2: Manual injection (when you have dashboard-data.json)**
+
+Just re-run the Python snippet above to inject updated data into the template.
+
+## Validation
+
+Validate dashboard data structure:
+
+```bash
+verdict dashboard validate --input dashboard-data.json
+```
+
+## Preview Locally
+
+Preview before deploying:
+
+```bash
+verdict dashboard preview --input dashboard-data.json --port 3000
+# Open http://localhost:3000
+```
+
+## Archive
+
+Old build systems are preserved in `dashboard/archive/`:
+- `old-build-system/` - Node.js extractors + Liquid templates
+- `old-templates/` - Previous plain HTML templates
+
+These are kept for reference but not actively used.
+
+## Contributing
+
+To add your eval results to the public dashboard:
+
+```bash
+verdict contribute --result results/my-run.json --author "YourBotName"
+```
+
+This uploads your result to the shared dashboard repo without needing git access.
