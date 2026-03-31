@@ -1,0 +1,293 @@
+name: Code Debugging
+description: Tests ability to identify bugs, explain root causes, and suggest fixes. Covers Python, JS/TS, and common bug patterns — logic errors, off-by-one, async issues, type coercions, null/undefined, race conditions, and subtle semantic bugs.
+
+cases:
+  # ── Python ────────────────────────────────────────────────────────────────
+  - id: debug-py-001
+    description: "Off-by-one in range causing last element to be skipped"
+    category: python
+    prompt: |
+      This function should return the sum of all elements in a list. What's wrong?
+
+      ```python
+      def sum_list(items):
+          total = 0
+          for i in range(len(items) - 1):
+              total += items[i]
+          return total
+      ```
+    criteria: "Identifies the bug: range(len(items) - 1) skips the last element. Fix: use range(len(items)) or just 'for item in items'. May also suggest sum(items) as the idiomatic Python solution."
+    tags: [python, off-by-one, loops]
+
+  - id: debug-py-002
+    description: "Mutable default argument — classic Python footgun"
+    category: python
+    prompt: |
+      This function has a subtle bug that causes unexpected behavior on repeated calls. Find it.
+
+      ```python
+      def append_to(element, target=[]):
+          target.append(element)
+          return target
+
+      print(append_to(1))  # [1]
+      print(append_to(2))  # Expected [2], got [1, 2]
+      ```
+    criteria: "Identifies: mutable default argument is created once and reused across calls. Fix: use target=None as default and set target = [] inside the function if target is None."
+    tags: [python, mutable-default, footgun]
+
+  - id: debug-py-003
+    description: "Late binding closure bug in Python"
+    category: python
+    prompt: |
+      Why do all functions in this list print 4?
+
+      ```python
+      funcs = []
+      for i in range(5):
+          funcs.append(lambda: i)
+
+      for f in funcs:
+          print(f())  # prints 4 five times, not 0, 1, 2, 3, 4
+      ```
+    criteria: "Identifies: late binding — lambdas capture variable i by reference, not by value. When called, i is already 4 (final loop value). Fix: lambda i=i: i (default argument captures value at definition time)."
+    tags: [python, closures, late-binding]
+
+  - id: debug-py-004
+    description: "Incorrect exception handling swallowing the real error"
+    category: python
+    prompt: |
+      This code silently fails and always returns None. What's wrong?
+
+      ```python
+      def parse_config(path):
+          try:
+              with open(path) as f:
+                  return json.loads(f.read())
+          except:
+              return None
+      ```
+    criteria: "Identifies: bare except catches ALL exceptions including KeyboardInterrupt, SystemExit. Also masks bugs like NameError (json not imported). Fix: except (json.JSONDecodeError, FileNotFoundError) as e — or at minimum except Exception. Should also mention logging the error rather than silently returning None."
+    tags: [python, exception-handling, bare-except]
+
+  - id: debug-py-005
+    description: "Integer division vs float division"
+    category: python
+    prompt: |
+      This function always returns 0 for inputs less than 1. Why?
+
+      ```python
+      def scale(value, factor):
+          return value * (1 / factor)  # Wait, this actually works in Python 3
+          # But what if someone writes this instead:
+      
+      def scale_v2(value, factor):
+          return value * 1 // factor
+      ```
+    criteria: "Identifies: operator precedence issue in scale_v2 — `*` and `//` have equal precedence, evaluated left-to-right: (value * 1) // factor = value // factor (integer division). For value < factor, result is always 0. Fix: value * (1 // factor) is not the intent — should be value // factor or value / factor."
+    tags: [python, operator-precedence, integer-division]
+
+  # ── JavaScript / TypeScript ───────────────────────────────────────────────
+  - id: debug-js-001
+    description: "Async/await not properly awaited leading to unresolved promises"
+    category: javascript
+    prompt: |
+      This code logs 'undefined' instead of the user data. Find the bug.
+
+      ```javascript
+      async function getUser(id) {
+          const response = await fetch(`/api/users/${id}`);
+          return response.json();  // Missing await
+      }
+
+      const user = getUser(1);
+      console.log(user.name);  // undefined
+      ```
+    criteria: "Two bugs: (1) Missing await before response.json() — returns a Promise, not the data. (2) getUser is async but called without await — user is a Promise, not the resolved value. Fix: await response.json() inside the function AND const user = await getUser(1) at the call site (or .then())."
+    tags: [javascript, async, promises]
+
+  - id: debug-js-002
+    description: "== vs === coercion causing logic error"
+    category: javascript
+    prompt: |
+      This validation always passes for empty strings. Why?
+
+      ```javascript
+      function isValid(input) {
+          return input != false;
+      }
+
+      console.log(isValid(''));   // true? false?
+      console.log(isValid(0));    // true? false?
+      console.log(isValid(null)); // true? false?
+      ```
+    criteria: "Identifies: != uses type coercion. '' == false is true in JS (empty string is falsy), so '' != false is false — isValid('') returns false, not true. Similarly 0, null, undefined all == false. Fix: use !== and be explicit: input !== null && input !== undefined && input !== ''. Or check what 'valid' actually means."
+    tags: [javascript, type-coercion, equality]
+
+  - id: debug-js-003
+    description: "Race condition in parallel async operations"
+    category: javascript
+    prompt: |
+      This sometimes saves stale data. Explain the race condition.
+
+      ```javascript
+      let currentUser = null;
+
+      async function loadUser(id) {
+          const user = await fetchUser(id);
+          currentUser = user;
+          renderUser(currentUser);
+      }
+
+      // User clicks profile A, then quickly clicks profile B
+      loadUser('alice');
+      loadUser('bob');
+      ```
+    criteria: "Identifies: if fetchUser('bob') resolves before fetchUser('alice') (e.g., alice is slower), currentUser gets set to bob, then overwritten by alice. Render shows alice but currentUser is alice — or vice versa. Fix patterns: cancellation token, abort controller, sequence number guard (if (requestId === currentRequestId)), or ensuring only latest request wins."
+    tags: [javascript, race-condition, async]
+
+  - id: debug-js-004
+    description: "Object mutation instead of immutable update"
+    category: javascript
+    prompt: |
+      Why does previousState get modified even though we only meant to update newState?
+
+      ```javascript
+      const previousState = { user: { name: 'Alice', score: 10 } };
+      const newState = { ...previousState };
+      newState.user.score = 99;
+
+      console.log(previousState.user.score); // 99, not 10!
+      ```
+    criteria: "Identifies: spread operator creates a SHALLOW copy. newState.user still references the same object as previousState.user. Mutating newState.user.score mutates the shared object. Fix: deep copy with structuredClone(), or { ...previousState, user: { ...previousState.user, score: 99 } }."
+    tags: [javascript, shallow-copy, mutation]
+
+  - id: debug-js-005
+    description: "Event listener accumulation memory leak"
+    category: javascript
+    prompt: |
+      This component causes increasing memory usage and duplicate event firing. Find the bug.
+
+      ```javascript
+      function setupButton(buttonId, handler) {
+          const btn = document.getElementById(buttonId);
+          btn.addEventListener('click', handler);
+      }
+
+      // Called every time user navigates to this view
+      function onViewMount() {
+          setupButton('submit-btn', () => submitForm());
+      }
+      ```
+    criteria: "Identifies: addEventListener is called every time onViewMount runs, adding duplicate listeners. Each navigation adds another handler. Fix: removeEventListener before adding, use { once: true } option if single-fire, or track whether listener was already attached. Also: arrow function creates new reference each call so removeEventListener won't work without storing the reference."
+    tags: [javascript, memory-leak, event-listeners]
+
+  # ── TypeScript-specific ───────────────────────────────────────────────────
+  - id: debug-ts-001
+    description: "Type narrowing bypassed with 'as' cast"
+    category: typescript
+    prompt: |
+      This crashes at runtime despite TypeScript showing no errors. Why?
+
+      ```typescript
+      interface User { name: string; email: string; }
+
+      async function getUser(id: string): Promise<User> {
+          const data = await fetch(`/api/users/${id}`).then(r => r.json());
+          return data as User;  // TypeScript is happy, runtime might not be
+      }
+
+      const user = await getUser('123');
+      console.log(user.email.toLowerCase()); // TypeError: Cannot read properties of undefined
+      ```
+    criteria: "Identifies: 'as User' is a type assertion, NOT a runtime validation. If the API returns unexpected data (missing fields, null, error response), TypeScript won't catch it. Fix: use a type guard/validator (zod.parse, io-ts, manual check) before the cast. 'as' tells TypeScript to trust you — at runtime you're on your own."
+    tags: [typescript, type-assertion, runtime-safety]
+
+  # ── General logic bugs ────────────────────────────────────────────────────
+  - id: debug-logic-001
+    description: "Incorrect base case in recursion"
+    category: logic
+    prompt: |
+      This recursive function throws 'Maximum call stack exceeded'. Find the bug.
+
+      ```python
+      def factorial(n):
+          if n == 0:
+              return 0  # Bug here
+          return n * factorial(n - 1)
+      ```
+    criteria: "Identifies: base case returns 0 instead of 1. factorial(1) = 1 * factorial(0) = 1 * 0 = 0. factorial(n) = 0 for all n. Also: negative inputs will recurse infinitely. Fix: return 1 when n == 0 (and ideally handle n < 0 with a ValueError)."
+    tags: [python, recursion, base-case]
+
+  - id: debug-logic-002
+    description: "String comparison instead of numeric comparison for sorting"
+    category: logic
+    prompt: |
+      Why does this sort produce wrong results?
+
+      ```javascript
+      const versions = ['10', '9', '2', '1', '11'];
+      versions.sort();
+      console.log(versions); // ['1', '10', '11', '2', '9'] — lexicographic!
+      ```
+    criteria: "Identifies: Array.sort() without a comparator uses lexicographic (string) ordering. '10' < '2' because '1' < '2'. Fix: versions.sort((a, b) => Number(a) - Number(b)) for numeric sort. If actual semantic version strings (1.2.3): use semver library or split+compare components."
+    tags: [javascript, sorting, string-comparison]
+
+  - id: debug-logic-003
+    description: "Timezone-naive datetime comparison"
+    category: logic
+    prompt: |
+      This appointment booking system double-books across timezones. Find the architectural bug.
+
+      ```python
+      from datetime import datetime
+
+      def is_slot_available(slot_start, slot_end, existing_bookings):
+          for booking in existing_bookings:
+              if not (slot_end <= booking['start'] or slot_start >= booking['end']):
+                  return False
+          return True
+
+      # Booking from NY user: 3pm EST = 20:00 UTC
+      # Booking from LA user: 3pm PST = 23:00 UTC
+      # Both stored as: datetime(2024, 1, 15, 15, 0)  ← naive!
+      ```
+    criteria: "Identifies: storing naive datetimes (no timezone info) means '3pm EST' and '3pm PST' are stored identically as 15:00. The overlap check can't distinguish them. Fix: always store UTC datetimes (use datetime.utcnow() or datetime.now(timezone.utc)), convert user input to UTC at the boundary, display in user's local timezone."
+    tags: [python, datetime, timezone, logic]
+
+  - id: debug-logic-004
+    description: "Incorrect use of 'or' for default values with falsy valid inputs"
+    category: logic
+    prompt: |
+      This config loader ignores valid zero and empty string values. Why?
+
+      ```python
+      def get_config(user_config, defaults):
+          return {
+              'timeout': user_config.get('timeout') or defaults['timeout'],
+              'prefix': user_config.get('prefix') or defaults['prefix'],
+              'retries': user_config.get('retries') or defaults['retries'],
+          }
+
+      # get_config({'timeout': 0, 'prefix': '', 'retries': 0}, {'timeout': 30, 'prefix': 'api_', 'retries': 3})
+      # Returns: timeout=30, prefix='api_', retries=3 — wrong! User set 0 and ''
+      ```
+    criteria: "Identifies: 'x or default' returns default when x is any falsy value: 0, '', [], False, None. User's explicit 0 timeout and empty prefix are overridden. Fix: use explicit None check: user_config.get('timeout') if user_config.get('timeout') is not None else defaults['timeout']. Or: {**defaults, **{k: v for k, v in user_config.items() if v is not None}}."
+    tags: [python, falsy-values, default-values, logic]
+
+  - id: debug-logic-005
+    description: "N+1 query problem in a loop"
+    category: logic
+    prompt: |
+      This loads a page with 100 posts in ~2 seconds instead of ~50ms. Find the performance bug.
+
+      ```python
+      def get_posts_with_authors(post_ids):
+          posts = db.query("SELECT * FROM posts WHERE id IN (?)", post_ids)
+          for post in posts:
+              # This runs a query PER POST
+              post['author'] = db.query_one("SELECT * FROM users WHERE id = ?", post['author_id'])
+          return posts
+      ```
+    criteria: "Identifies: N+1 query — 1 query to fetch N posts, then N queries to fetch each author. For 100 posts = 101 queries. Fix: collect all author_ids first, fetch in one query SELECT * FROM users WHERE id IN (?), build a lookup dict, then assign without additional queries. Or use a JOIN: SELECT posts.*, users.* FROM posts JOIN users ON posts.author_id = users.id WHERE posts.id IN (?)."
+    tags: [python, sql, n-plus-one, performance]
