@@ -1,0 +1,156 @@
+name: SQL Generation
+description: Tests ability to write correct SQL queries — from simple SELECTs to JOINs, aggregations, window functions, CTEs, and edge cases. Useful for benchmarking models used in data pipelines or natural-language-to-SQL tasks.
+
+cases:
+  # ── Basic SELECT ──────────────────────────────────────────────────────────
+  - id: sql-001
+    description: "Simple SELECT with WHERE filter"
+    category: basic
+    prompt: |
+      Table: employees(id, name, department, salary, hire_date)
+      Write SQL to find all employees in the 'Engineering' department earning more than 90000.
+    criteria: "Valid SQL SELECT with WHERE clause filtering department = 'Engineering' AND salary > 90000. Column names match schema. No syntax errors."
+    tags: [sql, basic, where]
+
+  - id: sql-002
+    description: "ORDER BY with LIMIT"
+    category: basic
+    prompt: |
+      Table: products(id, name, category, price, stock)
+      Write SQL to get the 5 most expensive products, showing only name and price.
+    criteria: "SELECT name, price FROM products ORDER BY price DESC LIMIT 5. Correct DESC ordering. Correct column selection."
+    tags: [sql, basic, order-by]
+
+  - id: sql-003
+    description: "COUNT with GROUP BY"
+    category: aggregation
+    prompt: |
+      Table: orders(id, customer_id, status, amount, created_at)
+      Write SQL to count the number of orders per status.
+    criteria: "SELECT status, COUNT(*) ... FROM orders GROUP BY status. Uses COUNT aggregate. Groups by status."
+    tags: [sql, aggregation, group-by]
+
+  # ── JOINs ─────────────────────────────────────────────────────────────────
+  - id: sql-004
+    description: "INNER JOIN across two tables"
+    category: joins
+    prompt: |
+      Tables:
+        users(id, email, name, created_at)
+        orders(id, user_id, amount, status, created_at)
+      Write SQL to get each user's email and their total order amount. Only include users who have at least one order.
+    criteria: "JOIN (INNER or equivalent) between users and orders on user_id = users.id. SUM(amount) aggregation. GROUP BY user id or email. Correct semantics — excludes users with no orders."
+    tags: [sql, joins, aggregation]
+
+  - id: sql-005
+    description: "LEFT JOIN to include non-matching rows"
+    category: joins
+    prompt: |
+      Tables:
+        customers(id, name, email)
+        orders(id, customer_id, amount, created_at)
+      Write SQL to list all customers and their order count, including customers who have never ordered (show 0 for those).
+    criteria: "LEFT JOIN from customers to orders. COUNT with COALESCE or COUNT(*) on orders side — must return 0 for customers with no orders. GROUP BY customer. Not INNER JOIN (would exclude zero-order customers)."
+    tags: [sql, joins, left-join]
+
+  - id: sql-006
+    description: "Multi-table JOIN"
+    category: joins
+    prompt: |
+      Tables:
+        orders(id, customer_id, product_id, quantity, order_date)
+        customers(id, name, country)
+        products(id, name, price)
+      Write SQL to show order_date, customer name, product name, quantity, and total price (quantity × price) for all orders from the USA.
+    criteria: "Three-way JOIN across orders, customers, products. Computed column quantity * price (or products.price * orders.quantity). Filter WHERE country = 'USA'. All five requested columns present."
+    tags: [sql, joins, computed-columns]
+
+  # ── Aggregation & HAVING ──────────────────────────────────────────────────
+  - id: sql-007
+    description: "HAVING clause to filter groups"
+    category: aggregation
+    prompt: |
+      Table: sales(id, rep_id, region, amount, sale_date)
+      Write SQL to find regions where the total sales amount exceeds 500000.
+    criteria: "GROUP BY region with SUM(amount). HAVING SUM(amount) > 500000 (not WHERE — must filter after aggregation). Returns region and total amount."
+    tags: [sql, aggregation, having]
+
+  - id: sql-008
+    description: "Multiple aggregates in one query"
+    category: aggregation
+    prompt: |
+      Table: transactions(id, account_id, type, amount, transaction_date)
+      Write SQL to show per account_id: total transaction count, sum of amounts, average amount, min amount, and max amount.
+    criteria: "SELECT account_id, COUNT(*), SUM(amount), AVG(amount), MIN(amount), MAX(amount) FROM transactions GROUP BY account_id. All five aggregates present."
+    tags: [sql, aggregation, multi-aggregate]
+
+  # ── Subqueries ────────────────────────────────────────────────────────────
+  - id: sql-009
+    description: "Correlated subquery or IN subquery"
+    category: subquery
+    prompt: |
+      Table: employees(id, name, department, salary)
+      Write SQL to find employees who earn more than the average salary of their own department.
+    criteria: "Correctly compares each employee's salary to the average salary of their specific department (not the overall average). Valid approach: correlated subquery, CTE with per-dept avg, or window function. Key: per-department average, not global."
+    tags: [sql, subquery, correlated]
+
+  - id: sql-010
+    description: "NOT IN / NOT EXISTS pattern"
+    category: subquery
+    prompt: |
+      Tables:
+        products(id, name, category)
+        order_items(id, order_id, product_id, quantity)
+      Write SQL to find products that have never been ordered.
+    criteria: "Returns products with no matching rows in order_items. Correct approach: NOT IN (SELECT product_id FROM order_items), NOT EXISTS, or LEFT JOIN with IS NULL check. Must NOT return ordered products."
+    tags: [sql, subquery, not-exists]
+
+  # ── Window Functions ──────────────────────────────────────────────────────
+  - id: sql-011
+    description: "ROW_NUMBER or RANK window function"
+    category: window
+    prompt: |
+      Table: employees(id, name, department, salary)
+      Write SQL to rank employees by salary within each department (highest salary = rank 1). Show name, department, salary, and rank.
+    criteria: "Uses RANK() or DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC). Shows all four columns. Correctly partitions by department so ranks reset per department."
+    tags: [sql, window, rank]
+
+  - id: sql-012
+    description: "Running total with window function"
+    category: window
+    prompt: |
+      Table: daily_revenue(date, amount)
+      Write SQL to show each date, its daily amount, and the running total of revenue up to and including that date.
+    criteria: "SUM(amount) OVER (ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) or equivalent. Shows date, amount, and cumulative sum. Correct window frame ordering."
+    tags: [sql, window, running-total]
+
+  # ── CTEs ──────────────────────────────────────────────────────────────────
+  - id: sql-013
+    description: "CTE for readability"
+    category: cte
+    prompt: |
+      Tables:
+        orders(id, customer_id, amount, created_at)
+        customers(id, name, tier)
+      Write SQL using a CTE to first calculate each customer's total spend, then return only customers in the 'premium' tier who spent more than 10000.
+    criteria: "Uses WITH clause (CTE). CTE calculates per-customer total spend. Outer query filters tier = 'premium' AND total > 10000. Logically correct two-step approach."
+    tags: [sql, cte, readability]
+
+  # ── Edge cases & traps ────────────────────────────────────────────────────
+  - id: sql-014
+    description: "NULL handling"
+    category: edge-cases
+    prompt: |
+      Table: employees(id, name, manager_id, salary)
+      manager_id is NULL for top-level employees. Write SQL to find all employees who do NOT have a manager.
+    criteria: "WHERE manager_id IS NULL (not = NULL or != NULL). Correctly handles NULL comparison semantics. Must use IS NULL not = NULL."
+    tags: [sql, edge-cases, null]
+
+  - id: sql-015
+    description: "Date range filtering"
+    category: edge-cases
+    prompt: |
+      Table: events(id, name, event_date, attendees)
+      Write SQL to find events that occurred in Q1 2025 (January 1 through March 31, 2025) with more than 100 attendees.
+    criteria: "Date range: event_date >= '2025-01-01' AND event_date < '2025-04-01' (or equivalent). Attendees > 100. Correct inclusive/exclusive boundary handling. ISO date format."
+    tags: [sql, edge-cases, date-filtering]
