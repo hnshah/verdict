@@ -1,0 +1,202 @@
+{
+  "generated_at": "2026-03-31T16:32:06.724Z",
+  "stats": {
+    "total_runs": 7,
+    "total_cases": 110,
+    "total_models": 19,
+    "avg_score": 7.9,
+    "test_runs": 0,
+    "real_runs": 7
+  },
+  "runs": [
+    {
+      "id": "2026-03-31-2026-03-31T15-12-50",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 1,
+      "avg_score": 9.3,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        }
+      ],
+      "is_test": false,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-13-39",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 3,
+      "avg_score": 9.4,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-02-35",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 3,
+      "avg_score": 9.4,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T13-56-11",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 1,
+      "avg_score": 9.3,
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        }
+      ],
+      "is_test": false,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-53-03",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 10,
+      "avg_score": 5.4,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-48-00",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 10,
+      "avg_score": 5.4,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-44-02",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "cases": 50,
+      "models": 5,
+      "avg_score": 7.4,
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    }
+  ],
+  "top_models": [
+    {
+      "name": "qwen3-coder",
+      "avg_score": 9.6,
+      "runs": 2,
+      "total_wins": 5,
+      "win_rate": 250,
+      "avg_latency": 6.2,
+      "rank": 1,
+      "medal": "🥇"
+    },
+    {
+      "name": "qwen-32b",
+      "avg_score": 9.5,
+      "runs": 1,
+      "total_wins": 2,
+      "win_rate": 200,
+      "avg_latency": 24.4,
+      "rank": 2,
+      "medal": "🥈"
+    },
+    {
+      "name": "qwen-7b",
+      "avg_score": 9.4,
+      "runs": 1,
+      "total_wins": 47,
+      "win_rate": 4700,
+      "avg_latency": 11.6,
+      "rank": 3,
+      "medal": "🥉"
+    },
+    {
+      "name": "test-phi4",
+      "avg_score": 9.3,
+      "runs": 1,
+      "total_wins": 10,
+      "win_rate": 1000,
+      "avg_latency": 3.9,
+      "rank": 4,
+      "medal": ""
+    },
+    {
+      "name": "phi4",
+      "avg_score": 9.3,
+      "runs": 3,
+      "total_wins": 14,
+      "win_rate": 467,
+      "avg_latency": 5,
+      "rank": 5,
+      "medal": ""
+    },
+    {
+      "name": "qwen-coder",
+      "avg_score": 9.2,
+      "runs": 2,
+      "total_wins": 11,
+      "win_rate": 550,
+      "avg_latency": 4.4,
+      "rank": 6,
+      "medal": ""
+    },
+    {
+      "name": "qwen2.5:7b",
+      "avg_score": 9.1,
+      "runs": 2,
+      "total_wins": 12,
+      "win_rate": 600,
+      "avg_latency": 3.5,
+      "rank": 7,
+      "medal": ""
+    },
+    {
+      "name": "llama3.2:3b",
+      "avg_score": 9.1,
+      "runs": 2,
+      "total_wins": 6,
+      "win_rate": 300,
+      "avg_latency": 4.4,
+      "rank": 8,
+      "medal": ""
+    },
+    {
+      "name": "llama3.3:70b",
+      "avg_score": 9.1,
+      "runs": 2,
+      "total_wins": 2,
+      "win_rate": 100,
+      "avg_latency": 19.9,
+      "rank": 9,
+      "medal": ""
+    },
+    {
+      "name": "cogito",
+      "avg_score": 9.1,
+      "runs": 1,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 6.8,
+      "rank": 10,
+      "medal": ""
+    }
+  ]
+}
