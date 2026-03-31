@@ -319,7 +319,7 @@
       // Try fetching dashboard-data.json from same directory (for static deployments)
       try {
         const url = new URL('dashboard-data.json', window.location.href);
-        const resp = await fetch(url.toString());
+        const resp = await fetch(url.toString() + '?v=' + Date.now());
         if (resp.ok) {
           return await resp.json();
         }
