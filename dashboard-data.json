@@ -59,7 +59,8 @@
             "run_id": "2026-03-31T07-48-00",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
@@ -202,7 +203,8 @@
             "run_id": "2026-03-31T07-53-03",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark v2 (10 models)"
           },
           "responses": {
             "phi4:14b": {
@@ -345,7 +347,8 @@
             "run_id": "2026-03-31T13-56-11",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "phi4:14b Solo Evaluation"
           },
           "responses": {
             "phi4": {
@@ -371,7 +374,8 @@
             "run_id": "2026-03-31T14-02-35",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison"
           },
           "responses": {
             "phi4": {
@@ -423,7 +427,8 @@
             "run_id": "2026-03-31T14-13-39",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison v2"
           },
           "responses": {
             "qwen-coder": {
@@ -483,7 +488,8 @@
             "run_id": "2026-03-31T07-48-00",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark (10 models)"
           },
           "responses": {
             "llama3.2:3b": {
@@ -491,7 +497,7 @@
               "latency_ms": 5576
             },
             "qwen2.5:7b": {
-              "text": "RAM stands for Random Access Memory. It is a type of volatile memory used by computers to store data that the processor needs quick access to during operation.\n\nHere’s how it works:\n\n1. **Function**: RAM acts as a temporary storage area where the computer stores data and information that the CPU (Central Processing Unit) needs to process at any given moment. This allows for faster processing speeds because accessing data from RAM is much quicker than reading from slower storage devices like hard drives or solid-state drives.\n\n2. **Accessing Data**: The term \"Random Access\" means that the computer can access any piece of data stored in RAM directly, without having to go through other pieces first. This direct access capability makes it highly efficient for processing tasks.\n\n3. **Volatile Memory**: Unlike non-volatile storage like hard drives or SSDs, which retain data even when power is removed, RAM loses its contents when the computer is turned off. Therefore, any information stored in RAM must be saved to a permanent storage device before the system is shut down.\n\n4. **Types of RAM**: There are several types of RAM used in modern computers, including DDR (Double Data Rate) SDRAM, LPDDR (Low-Power Double Data Rate), and GDDR (Graphics Double Data Rate). Each type has its own specifications and uses depending on the application.\n\nIn summary, RAM is crucial for a computer's performance as it provides fast access to data that the CPU needs during operation.",
+              "text": "RAM stands for Random Access Memory. It is a type of volatile memory used by computers to store data that the processor needs quick access to during operation.\n\nHere\u2019s how it works:\n\n1. **Function**: RAM acts as a temporary storage area where the computer stores data and information that the CPU (Central Processing Unit) needs to process at any given moment. This allows for faster processing speeds because accessing data from RAM is much quicker than reading from slower storage devices like hard drives or solid-state drives.\n\n2. **Accessing Data**: The term \"Random Access\" means that the computer can access any piece of data stored in RAM directly, without having to go through other pieces first. This direct access capability makes it highly efficient for processing tasks.\n\n3. **Volatile Memory**: Unlike non-volatile storage like hard drives or SSDs, which retain data even when power is removed, RAM loses its contents when the computer is turned off. Therefore, any information stored in RAM must be saved to a permanent storage device before the system is shut down.\n\n4. **Types of RAM**: There are several types of RAM used in modern computers, including DDR (Double Data Rate) SDRAM, LPDDR (Low-Power Double Data Rate), and GDDR (Graphics Double Data Rate). Each type has its own specifications and uses depending on the application.\n\nIn summary, RAM is crucial for a computer's performance as it provides fast access to data that the CPU needs during operation.",
               "latency_ms": 5853
             },
             "phi4:14b": {
@@ -626,7 +632,8 @@
             "run_id": "2026-03-31T07-53-03",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark v2 (10 models)"
           },
           "responses": {
             "llama3.2:3b": {
@@ -634,7 +641,7 @@
               "latency_ms": 4182
             },
             "qwen2.5:7b": {
-              "text": "RAM stands for Random Access Memory. It is a type of volatile memory used by computers to store data that the processor needs quick access to during operation.\n\nHere’s how it works:\n\n1. **Function**: RAM acts as a temporary storage area where the computer stores data and information that the CPU (Central Processing Unit) needs to process at any given moment. This allows for faster processing speeds because accessing data from RAM is much quicker than reading from slower storage devices like hard drives or solid-state drives.\n\n2. **Accessing Data**: The term \"Random Access\" means that the computer can access any piece of data stored in RAM directly, without having to go through other pieces first. This direct access capability makes it highly efficient for processing tasks.\n\n3. **Volatile Memory**: Unlike non-volatile storage like hard drives or SSDs, which retain data even when power is removed, RAM loses its contents when the computer is turned off. Therefore, any information stored in RAM must be saved to a permanent storage device before the system is shut down.\n\n4. **Types of RAM**: There are several types of RAM used in modern computers, including DDR (Double Data Rate) SDRAM, LPDDR (Low-Power Double Data Rate), and GDDR (Graphics Double Data Rate). Each type has its own specifications and uses depending on the application.\n\nIn summary, RAM is crucial for a computer's performance as it provides fast access to data that the CPU needs during operation.",
+              "text": "RAM stands for Random Access Memory. It is a type of volatile memory used by computers to store data that the processor needs quick access to during operation.\n\nHere\u2019s how it works:\n\n1. **Function**: RAM acts as a temporary storage area where the computer stores data and information that the CPU (Central Processing Unit) needs to process at any given moment. This allows for faster processing speeds because accessing data from RAM is much quicker than reading from slower storage devices like hard drives or solid-state drives.\n\n2. **Accessing Data**: The term \"Random Access\" means that the computer can access any piece of data stored in RAM directly, without having to go through other pieces first. This direct access capability makes it highly efficient for processing tasks.\n\n3. **Volatile Memory**: Unlike non-volatile storage like hard drives or SSDs, which retain data even when power is removed, RAM loses its contents when the computer is turned off. Therefore, any information stored in RAM must be saved to a permanent storage device before the system is shut down.\n\n4. **Types of RAM**: There are several types of RAM used in modern computers, including DDR (Double Data Rate) SDRAM, LPDDR (Low-Power Double Data Rate), and GDDR (Graphics Double Data Rate). Each type has its own specifications and uses depending on the application.\n\nIn summary, RAM is crucial for a computer's performance as it provides fast access to data that the CPU needs during operation.",
               "latency_ms": 6024
             },
             "phi4:14b": {
@@ -769,7 +776,8 @@
             "run_id": "2026-03-31T13-56-11",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "phi4:14b Solo Evaluation"
           },
           "responses": {
             "phi4": {
@@ -795,7 +803,8 @@
             "run_id": "2026-03-31T14-02-35",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison"
           },
           "responses": {
             "qwen-coder": {
@@ -847,7 +856,8 @@
             "run_id": "2026-03-31T14-13-39",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison v2"
           },
           "responses": {
             "qwen-coder": {
@@ -907,7 +917,8 @@
             "run_id": "2026-03-31T07-48-00",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
@@ -1050,7 +1061,8 @@
             "run_id": "2026-03-31T07-53-03",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark v2 (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
@@ -1193,7 +1205,8 @@
             "run_id": "2026-03-31T13-56-11",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "phi4:14b Solo Evaluation"
           },
           "responses": {
             "phi4": {
@@ -1219,7 +1232,8 @@
             "run_id": "2026-03-31T14-02-35",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison"
           },
           "responses": {
             "qwen-coder": {
@@ -1271,7 +1285,8 @@
             "run_id": "2026-03-31T14-13-39",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison v2"
           },
           "responses": {
             "qwen-coder": {
@@ -1331,7 +1346,8 @@
             "run_id": "2026-03-31T07-48-00",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
@@ -1355,7 +1371,7 @@
               "latency_ms": 3
             },
             "llama3.3:70b": {
-              "text": "A classic example of a syllogism!\n\nUsing logical reasoning, we can conclude that:\n\nAll mammals are warm-blooded.\nDolphins are mammals.\n∴ Dolphins are warm-blooded.\n\nIn other words, since dolphins belong to the category of mammals, and all mammals are warm-blooded, it follows that dolphins must also be warm-blooded.",
+              "text": "A classic example of a syllogism!\n\nUsing logical reasoning, we can conclude that:\n\nAll mammals are warm-blooded.\nDolphins are mammals.\n\u2234 Dolphins are warm-blooded.\n\nIn other words, since dolphins belong to the category of mammals, and all mammals are warm-blooded, it follows that dolphins must also be warm-blooded.",
               "latency_ms": 10819
             },
             "deepseek-coder:6.7b": {
@@ -1474,7 +1490,8 @@
             "run_id": "2026-03-31T07-53-03",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark v2 (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
@@ -1498,7 +1515,7 @@
               "latency_ms": 2
             },
             "llama3.3:70b": {
-              "text": "A classic example of a syllogism!\n\nUsing logical reasoning, we can conclude that:\n\nAll mammals are warm-blooded.\nDolphins are mammals.\n∴ Dolphins are warm-blooded.\n\nIn other words, since dolphins belong to the category of mammals, and all mammals are warm-blooded, it follows that dolphins must also be warm-blooded.",
+              "text": "A classic example of a syllogism!\n\nUsing logical reasoning, we can conclude that:\n\nAll mammals are warm-blooded.\nDolphins are mammals.\n\u2234 Dolphins are warm-blooded.\n\nIn other words, since dolphins belong to the category of mammals, and all mammals are warm-blooded, it follows that dolphins must also be warm-blooded.",
               "latency_ms": 10977
             },
             "deepseek-coder:6.7b": {
@@ -1617,7 +1634,8 @@
             "run_id": "2026-03-31T13-56-11",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "phi4:14b Solo Evaluation"
           },
           "responses": {
             "phi4": {
@@ -1643,7 +1661,8 @@
             "run_id": "2026-03-31T14-02-35",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison"
           },
           "responses": {
             "qwen-coder": {
@@ -1695,7 +1714,8 @@
             "run_id": "2026-03-31T14-13-39",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison v2"
           },
           "responses": {
             "qwen-coder": {
@@ -1755,7 +1775,8 @@
             "run_id": "2026-03-31T07-48-00",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
@@ -1898,7 +1919,8 @@
             "run_id": "2026-03-31T07-53-03",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark v2 (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
@@ -2041,7 +2063,8 @@
             "run_id": "2026-03-31T13-56-11",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "phi4:14b Solo Evaluation"
           },
           "responses": {
             "phi4": {
@@ -2067,7 +2090,8 @@
             "run_id": "2026-03-31T14-02-35",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison"
           },
           "responses": {
             "qwen-coder": {
@@ -2119,7 +2143,8 @@
             "run_id": "2026-03-31T14-13-39",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison v2"
           },
           "responses": {
             "qwen-coder": {
@@ -2179,7 +2204,8 @@
             "run_id": "2026-03-31T07-48-00",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark (10 models)"
           },
           "responses": {
             "llama3.2:3b": {
@@ -2322,7 +2348,8 @@
             "run_id": "2026-03-31T07-53-03",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark v2 (10 models)"
           },
           "responses": {
             "llama3.2:3b": {
@@ -2465,7 +2492,8 @@
             "run_id": "2026-03-31T13-56-11",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "phi4:14b Solo Evaluation"
           },
           "responses": {
             "phi4": {
@@ -2491,7 +2519,8 @@
             "run_id": "2026-03-31T14-02-35",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison"
           },
           "responses": {
             "qwen-coder": {
@@ -2543,7 +2572,8 @@
             "run_id": "2026-03-31T14-13-39",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison v2"
           },
           "responses": {
             "qwen-coder": {
@@ -2603,7 +2633,8 @@
             "run_id": "2026-03-31T07-48-00",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
@@ -2615,7 +2646,7 @@
               "latency_ms": 9506
             },
             "phi4:14b": {
-              "text": "Binary search has a time complexity of \\(O(\\log n)\\), where \\(n\\) is the number of elements in the sorted array or list being searched. This efficiency arises from the algorithm's divide-and-conquer approach.\n\nHere’s why:\n\n1. **Divide**: In each step, binary search divides the search interval in half. It compares the target value to the middle element of the array.\n   \n2. **Conquer**: Depending on whether the target is less than or greater than this middle element, it discards one half of the array and continues the search on the remaining half.\n\n3. **Repeat**: This process repeats, each time reducing the size of the problem by approximately half, until the target value is found or the interval is empty.\n\nThe logarithmic nature comes from the fact that with each comparison, you eliminate about half of the elements from consideration. Mathematically, if you start with \\(n\\) elements and halve the search space in each step, it takes \\(\\log_2 n\\) steps to reduce the problem size to 1 (or zero). Thus, the time complexity is \\(O(\\log n)\\).\n\nThis efficiency makes binary search much faster than linear search (\\(O(n)\\)) for large datasets, but it requires that the data be sorted beforehand.",
+              "text": "Binary search has a time complexity of \\(O(\\log n)\\), where \\(n\\) is the number of elements in the sorted array or list being searched. This efficiency arises from the algorithm's divide-and-conquer approach.\n\nHere\u2019s why:\n\n1. **Divide**: In each step, binary search divides the search interval in half. It compares the target value to the middle element of the array.\n   \n2. **Conquer**: Depending on whether the target is less than or greater than this middle element, it discards one half of the array and continues the search on the remaining half.\n\n3. **Repeat**: This process repeats, each time reducing the size of the problem by approximately half, until the target value is found or the interval is empty.\n\nThe logarithmic nature comes from the fact that with each comparison, you eliminate about half of the elements from consideration. Mathematically, if you start with \\(n\\) elements and halve the search space in each step, it takes \\(\\log_2 n\\) steps to reduce the problem size to 1 (or zero). Thus, the time complexity is \\(O(\\log n)\\).\n\nThis efficiency makes binary search much faster than linear search (\\(O(n)\\)) for large datasets, but it requires that the data be sorted beforehand.",
               "latency_ms": 10212
             },
             "gemma2:9b": {
@@ -2623,7 +2654,7 @@
               "latency_ms": 3
             },
             "qwen2.5:14b": {
-              "text": "The time complexity of binary search is O(log n), where n is the number of elements in the array or list being searched.\n\nHere's why:\n\nBinary search works on sorted arrays (or lists) by repeatedly dividing the search interval in half. Here’s a step-by-step explanation of how it achieves logarithmic time complexity:\n\n1. **Initial Setup**: You start with an entire range of indices to consider, from 0 to n-1 for an array of size n.\n\n2. **Middle Element Comparison**: At each step, you compare the target value with the middle element of the current search interval.\n   - If the target is equal to the middle element, the search ends successfully.\n   - If the target is less than the middle element, you repeat the process on the left half of the array.\n   - If the target is greater than the middle element, you repeat the process on the right half of the array.\n\n3. **Halving the Search Space**: With each comparison, the search space (the range of indices to consider) is halved. This means that after one iteration, you have reduced the problem size from n to approximately n/2; after two iterations, it's further reduced to about n/4, and so on.\n\nThe number of times you can divide n by 2 before reaching a value less than or equal to 1 is given by the logarithm base 2 of n (log₂n). This is why binary search has a time complexity of O(log n).\n\nIn summary, because each step reduces the problem size significantly (by half), the number of steps required grows logarithmically with the input size.",
+              "text": "The time complexity of binary search is O(log n), where n is the number of elements in the array or list being searched.\n\nHere's why:\n\nBinary search works on sorted arrays (or lists) by repeatedly dividing the search interval in half. Here\u2019s a step-by-step explanation of how it achieves logarithmic time complexity:\n\n1. **Initial Setup**: You start with an entire range of indices to consider, from 0 to n-1 for an array of size n.\n\n2. **Middle Element Comparison**: At each step, you compare the target value with the middle element of the current search interval.\n   - If the target is equal to the middle element, the search ends successfully.\n   - If the target is less than the middle element, you repeat the process on the left half of the array.\n   - If the target is greater than the middle element, you repeat the process on the right half of the array.\n\n3. **Halving the Search Space**: With each comparison, the search space (the range of indices to consider) is halved. This means that after one iteration, you have reduced the problem size from n to approximately n/2; after two iterations, it's further reduced to about n/4, and so on.\n\nThe number of times you can divide n by 2 before reaching a value less than or equal to 1 is given by the logarithm base 2 of n (log\u2082n). This is why binary search has a time complexity of O(log n).\n\nIn summary, because each step reduces the problem size significantly (by half), the number of steps required grows logarithmically with the input size.",
               "latency_ms": 9624
             },
             "llama3.3:70b": {
@@ -2746,7 +2777,8 @@
             "run_id": "2026-03-31T07-53-03",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark v2 (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
@@ -2758,7 +2790,7 @@
               "latency_ms": 6820
             },
             "phi4:14b": {
-              "text": "Binary search has a time complexity of \\(O(\\log n)\\), where \\(n\\) is the number of elements in the sorted array or list being searched. This efficiency arises from the algorithm's divide-and-conquer approach.\n\nHere’s why:\n\n1. **Divide**: In each step, binary search divides the search interval in half. It compares the target value to the middle element of the array.\n   \n2. **Conquer**: Depending on whether the target is less than or greater than this middle element, it discards one half of the array and continues the search on the remaining half.\n\n3. **Repeat**: This process repeats, each time reducing the size of the problem by approximately half, until the target value is found or the interval is empty.\n\nThe logarithmic nature comes from the fact that with each comparison, you eliminate about half of the elements from consideration. Mathematically, if you start with \\(n\\) elements and halve the search space in each step, it takes \\(\\log_2 n\\) steps to reduce the problem size to 1 (or zero). Thus, the time complexity is \\(O(\\log n)\\).\n\nThis efficiency makes binary search much faster than linear search (\\(O(n)\\)) for large datasets, but it requires that the data be sorted beforehand.",
+              "text": "Binary search has a time complexity of \\(O(\\log n)\\), where \\(n\\) is the number of elements in the sorted array or list being searched. This efficiency arises from the algorithm's divide-and-conquer approach.\n\nHere\u2019s why:\n\n1. **Divide**: In each step, binary search divides the search interval in half. It compares the target value to the middle element of the array.\n   \n2. **Conquer**: Depending on whether the target is less than or greater than this middle element, it discards one half of the array and continues the search on the remaining half.\n\n3. **Repeat**: This process repeats, each time reducing the size of the problem by approximately half, until the target value is found or the interval is empty.\n\nThe logarithmic nature comes from the fact that with each comparison, you eliminate about half of the elements from consideration. Mathematically, if you start with \\(n\\) elements and halve the search space in each step, it takes \\(\\log_2 n\\) steps to reduce the problem size to 1 (or zero). Thus, the time complexity is \\(O(\\log n)\\).\n\nThis efficiency makes binary search much faster than linear search (\\(O(n)\\)) for large datasets, but it requires that the data be sorted beforehand.",
               "latency_ms": 7131
             },
             "gemma2:9b": {
@@ -2766,7 +2798,7 @@
               "latency_ms": 3
             },
             "qwen2.5:14b": {
-              "text": "The time complexity of binary search is O(log n), where n is the number of elements in the array or list being searched.\n\nHere's why:\n\nBinary search works on sorted arrays (or lists) by repeatedly dividing the search interval in half. Here’s a step-by-step explanation of how it achieves logarithmic time complexity:\n\n1. **Initial Setup**: You start with an entire range of indices to consider, from 0 to n-1 for an array of size n.\n\n2. **Middle Element Comparison**: At each step, you compare the target value with the middle element of the current search interval.\n   - If the target is equal to the middle element, the search ends successfully.\n   - If the target is less than the middle element, you repeat the process on the left half of the array.\n   - If the target is greater than the middle element, you repeat the process on the right half of the array.\n\n3. **Halving the Search Space**: With each comparison, the search space (the range of indices to consider) is halved. This means that after one iteration, you have reduced the problem size from n to approximately n/2; after two iterations, it's further reduced to about n/4, and so on.\n\nThe number of times you can divide n by 2 before reaching a value less than or equal to 1 is given by the logarithm base 2 of n (log₂n). This is why binary search has a time complexity of O(log n).\n\nIn summary, because each step reduces the problem size significantly (by half), the number of steps required grows logarithmically with the input size.",
+              "text": "The time complexity of binary search is O(log n), where n is the number of elements in the array or list being searched.\n\nHere's why:\n\nBinary search works on sorted arrays (or lists) by repeatedly dividing the search interval in half. Here\u2019s a step-by-step explanation of how it achieves logarithmic time complexity:\n\n1. **Initial Setup**: You start with an entire range of indices to consider, from 0 to n-1 for an array of size n.\n\n2. **Middle Element Comparison**: At each step, you compare the target value with the middle element of the current search interval.\n   - If the target is equal to the middle element, the search ends successfully.\n   - If the target is less than the middle element, you repeat the process on the left half of the array.\n   - If the target is greater than the middle element, you repeat the process on the right half of the array.\n\n3. **Halving the Search Space**: With each comparison, the search space (the range of indices to consider) is halved. This means that after one iteration, you have reduced the problem size from n to approximately n/2; after two iterations, it's further reduced to about n/4, and so on.\n\nThe number of times you can divide n by 2 before reaching a value less than or equal to 1 is given by the logarithm base 2 of n (log\u2082n). This is why binary search has a time complexity of O(log n).\n\nIn summary, because each step reduces the problem size significantly (by half), the number of steps required grows logarithmically with the input size.",
               "latency_ms": 8725
             },
             "llama3.3:70b": {
@@ -2889,11 +2921,12 @@
             "run_id": "2026-03-31T13-56-11",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "phi4:14b Solo Evaluation"
           },
           "responses": {
             "phi4": {
-              "text": "Binary search has a time complexity of \\(O(\\log n)\\), where \\(n\\) is the number of elements in the sorted array or list being searched. This efficiency arises from the algorithm's divide-and-conquer approach.\n\nHere’s why:\n\n1. **Divide**: In each step, binary search divides the search interval in half. It compares the target value to the middle element of the current interval.\n   \n2. **Conquer**: Depending on whether the target is less than or greater than this middle element, it discards one half of the array and continues the search on the remaining half.\n\n3. **Repeat**: This process repeats, each time reducing the size of the problem by approximately half, until the target value is found or the interval is empty.\n\nThe logarithmic nature comes from the fact that with each comparison, you eliminate about half of the elements from consideration. Mathematically, if you start with \\(n\\) elements and halve the search space in each step, it takes \\(\\log_2 n\\) steps to reduce the problem size to 1 (or zero). Thus, the time complexity is \\(O(\\log n)\\).\n\nThis efficiency assumes that the input data structure allows for constant-time access to any element by index, such as an array or a list. If you were using a linked list, accessing elements in the middle would take linear time, which would affect the overall time complexity.",
+              "text": "Binary search has a time complexity of \\(O(\\log n)\\), where \\(n\\) is the number of elements in the sorted array or list being searched. This efficiency arises from the algorithm's divide-and-conquer approach.\n\nHere\u2019s why:\n\n1. **Divide**: In each step, binary search divides the search interval in half. It compares the target value to the middle element of the current interval.\n   \n2. **Conquer**: Depending on whether the target is less than or greater than this middle element, it discards one half of the array and continues the search on the remaining half.\n\n3. **Repeat**: This process repeats, each time reducing the size of the problem by approximately half, until the target value is found or the interval is empty.\n\nThe logarithmic nature comes from the fact that with each comparison, you eliminate about half of the elements from consideration. Mathematically, if you start with \\(n\\) elements and halve the search space in each step, it takes \\(\\log_2 n\\) steps to reduce the problem size to 1 (or zero). Thus, the time complexity is \\(O(\\log n)\\).\n\nThis efficiency assumes that the input data structure allows for constant-time access to any element by index, such as an array or a list. If you were using a linked list, accessing elements in the middle would take linear time, which would affect the overall time complexity.",
               "latency_ms": 4907
             }
           },
@@ -2915,7 +2948,8 @@
             "run_id": "2026-03-31T14-02-35",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison"
           },
           "responses": {
             "qwen-coder": {
@@ -2923,11 +2957,11 @@
               "latency_ms": 4818
             },
             "phi4": {
-              "text": "Binary search has a time complexity of \\(O(\\log n)\\), where \\(n\\) is the number of elements in the sorted array or list being searched. This efficiency arises from the algorithm's divide-and-conquer approach.\n\nHere’s why:\n\n1. **Divide**: In each step, binary search divides the search interval in half. It compares the target value to the middle element of the current interval.\n   \n2. **Conquer**: Depending on whether the target is less than or greater than this middle element, it discards one half of the array and continues the search on the remaining half.\n\n3. **Repeat**: This process repeats, each time reducing the size of the problem by approximately half, until the target value is found or the interval is empty.\n\nThe logarithmic nature comes from the fact that with each comparison, you eliminate about half of the elements from consideration. Mathematically, if you start with \\(n\\) elements and halve the search space in each step, it takes \\(\\log_2 n\\) steps to reduce the problem size to 1 (or zero). Thus, the time complexity is \\(O(\\log n)\\).\n\nThis efficiency assumes that the input data structure allows for constant-time access to any element by index, such as an array or a list. If you were using a linked list, accessing elements in the middle would take linear time, which would affect the overall time complexity.",
+              "text": "Binary search has a time complexity of \\(O(\\log n)\\), where \\(n\\) is the number of elements in the sorted array or list being searched. This efficiency arises from the algorithm's divide-and-conquer approach.\n\nHere\u2019s why:\n\n1. **Divide**: In each step, binary search divides the search interval in half. It compares the target value to the middle element of the current interval.\n   \n2. **Conquer**: Depending on whether the target is less than or greater than this middle element, it discards one half of the array and continues the search on the remaining half.\n\n3. **Repeat**: This process repeats, each time reducing the size of the problem by approximately half, until the target value is found or the interval is empty.\n\nThe logarithmic nature comes from the fact that with each comparison, you eliminate about half of the elements from consideration. Mathematically, if you start with \\(n\\) elements and halve the search space in each step, it takes \\(\\log_2 n\\) steps to reduce the problem size to 1 (or zero). Thus, the time complexity is \\(O(\\log n)\\).\n\nThis efficiency assumes that the input data structure allows for constant-time access to any element by index, such as an array or a list. If you were using a linked list, accessing elements in the middle would take linear time, which would affect the overall time complexity.",
               "latency_ms": 7085
             },
             "qwen3-coder": {
-              "text": "## Time Complexity of Binary Search\n\n**Time Complexity: O(log n)**\n\n## Why O(log n)?\n\nBinary search works by repeatedly dividing the search space in half, which leads to logarithmic time complexity.\n\n### How It Works:\n1. Start with the entire array\n2. Compare target with middle element\n3. If found, return index\n4. If target is smaller, search left half\n5. If target is larger, search right half\n6. Repeat until found or search space is empty\n\n### Mathematical Explanation:\n\nLet's say we have an array of size n. After each comparison:\n- 1st comparison: search space = n\n- 2nd comparison: search space = n/2\n- 3rd comparison: search space = n/4\n- 4th comparison: search space = n/8\n- ...and so on\n\nAfter k comparisons, the search space becomes n/2^k.\n\nThe algorithm stops when the search space is 1 (or 0):\n```\nn/2^k = 1\nn = 2^k\nk = log₂(n)\n```\n\nTherefore, the maximum number of comparisons needed is **log₂(n)**.\n\n## Space Complexity:\n- **Iterative version**: O(1) - only uses a few variables\n- **Recursive version**: O(log n) - due to call stack depth\n\n## Example:\nFor an array of 1024 elements:\n- Maximum comparisons needed = log₂(1024) = 10\n- Even for 1 billion elements: log₂(1,000,000,000) ≈ 30 comparisons\n\nThis logarithmic growth makes binary search extremely efficient for large datasets, especially when the array is already sorted.",
+              "text": "## Time Complexity of Binary Search\n\n**Time Complexity: O(log n)**\n\n## Why O(log n)?\n\nBinary search works by repeatedly dividing the search space in half, which leads to logarithmic time complexity.\n\n### How It Works:\n1. Start with the entire array\n2. Compare target with middle element\n3. If found, return index\n4. If target is smaller, search left half\n5. If target is larger, search right half\n6. Repeat until found or search space is empty\n\n### Mathematical Explanation:\n\nLet's say we have an array of size n. After each comparison:\n- 1st comparison: search space = n\n- 2nd comparison: search space = n/2\n- 3rd comparison: search space = n/4\n- 4th comparison: search space = n/8\n- ...and so on\n\nAfter k comparisons, the search space becomes n/2^k.\n\nThe algorithm stops when the search space is 1 (or 0):\n```\nn/2^k = 1\nn = 2^k\nk = log\u2082(n)\n```\n\nTherefore, the maximum number of comparisons needed is **log\u2082(n)**.\n\n## Space Complexity:\n- **Iterative version**: O(1) - only uses a few variables\n- **Recursive version**: O(log n) - due to call stack depth\n\n## Example:\nFor an array of 1024 elements:\n- Maximum comparisons needed = log\u2082(1024) = 10\n- Even for 1 billion elements: log\u2082(1,000,000,000) \u2248 30 comparisons\n\nThis logarithmic growth makes binary search extremely efficient for large datasets, especially when the array is already sorted.",
               "latency_ms": 8933
             }
           },
@@ -2967,7 +3001,8 @@
             "run_id": "2026-03-31T14-13-39",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison v2"
           },
           "responses": {
             "qwen-coder": {
@@ -2975,11 +3010,11 @@
               "latency_ms": 4851
             },
             "phi4": {
-              "text": "Binary search has a time complexity of \\(O(\\log n)\\), where \\(n\\) is the number of elements in the sorted array or list being searched. This efficiency arises from the algorithm's divide-and-conquer approach.\n\nHere’s why:\n\n1. **Divide**: In each step, binary search divides the search interval in half. It compares the target value to the middle element of the current interval.\n   \n2. **Conquer**: Depending on whether the target is less than or greater than this middle element, it discards one half of the array and continues the search on the remaining half.\n\n3. **Repeat**: This process repeats, each time reducing the size of the problem by approximately half, until the target value is found or the interval is empty.\n\nThe logarithmic nature comes from the fact that with each comparison, you eliminate about half of the elements from consideration. Mathematically, if you start with \\(n\\) elements and halve the search space in each step, it takes \\(\\log_2 n\\) steps to reduce the problem size to 1 (or zero). Thus, the time complexity is \\(O(\\log n)\\).\n\nThis efficiency assumes that the input data structure allows for constant-time access to any element by index, such as an array or a list. If you were using a linked list, accessing elements in the middle would take linear time, which would affect the overall time complexity.",
+              "text": "Binary search has a time complexity of \\(O(\\log n)\\), where \\(n\\) is the number of elements in the sorted array or list being searched. This efficiency arises from the algorithm's divide-and-conquer approach.\n\nHere\u2019s why:\n\n1. **Divide**: In each step, binary search divides the search interval in half. It compares the target value to the middle element of the current interval.\n   \n2. **Conquer**: Depending on whether the target is less than or greater than this middle element, it discards one half of the array and continues the search on the remaining half.\n\n3. **Repeat**: This process repeats, each time reducing the size of the problem by approximately half, until the target value is found or the interval is empty.\n\nThe logarithmic nature comes from the fact that with each comparison, you eliminate about half of the elements from consideration. Mathematically, if you start with \\(n\\) elements and halve the search space in each step, it takes \\(\\log_2 n\\) steps to reduce the problem size to 1 (or zero). Thus, the time complexity is \\(O(\\log n)\\).\n\nThis efficiency assumes that the input data structure allows for constant-time access to any element by index, such as an array or a list. If you were using a linked list, accessing elements in the middle would take linear time, which would affect the overall time complexity.",
               "latency_ms": 7084
             },
             "qwen3-coder": {
-              "text": "## Time Complexity of Binary Search\n\n**Time Complexity: O(log n)**\n\n## Why O(log n)?\n\nBinary search works by repeatedly dividing the search space in half, which leads to logarithmic time complexity.\n\n### How It Works:\n1. Start with the entire array\n2. Compare target with middle element\n3. If found, return index\n4. If target is smaller, search left half\n5. If target is larger, search right half\n6. Repeat until found or search space is empty\n\n### Mathematical Explanation:\n\nLet's say we have an array of size n. After each comparison:\n- 1st comparison: search space = n\n- 2nd comparison: search space = n/2\n- 3rd comparison: search space = n/4\n- 4th comparison: search space = n/8\n- ...and so on\n\nAfter k comparisons, the search space becomes n/2^k.\n\nThe algorithm stops when the search space is 1 (or 0):\n```\nn/2^k = 1\nn = 2^k\nk = log₂(n)\n```\n\nTherefore, the maximum number of comparisons needed is **log₂(n)**.\n\n## Space Complexity:\n- **Iterative version**: O(1) - only uses a few variables\n- **Recursive version**: O(log n) - due to call stack depth\n\n## Example:\nFor an array of 1024 elements:\n- Maximum comparisons needed = log₂(1024) = 10\n- Even for 1 billion elements: log₂(1,000,000,000) ≈ 30 comparisons\n\nThis logarithmic growth makes binary search extremely efficient for large datasets, especially when the array is already sorted.",
+              "text": "## Time Complexity of Binary Search\n\n**Time Complexity: O(log n)**\n\n## Why O(log n)?\n\nBinary search works by repeatedly dividing the search space in half, which leads to logarithmic time complexity.\n\n### How It Works:\n1. Start with the entire array\n2. Compare target with middle element\n3. If found, return index\n4. If target is smaller, search left half\n5. If target is larger, search right half\n6. Repeat until found or search space is empty\n\n### Mathematical Explanation:\n\nLet's say we have an array of size n. After each comparison:\n- 1st comparison: search space = n\n- 2nd comparison: search space = n/2\n- 3rd comparison: search space = n/4\n- 4th comparison: search space = n/8\n- ...and so on\n\nAfter k comparisons, the search space becomes n/2^k.\n\nThe algorithm stops when the search space is 1 (or 0):\n```\nn/2^k = 1\nn = 2^k\nk = log\u2082(n)\n```\n\nTherefore, the maximum number of comparisons needed is **log\u2082(n)**.\n\n## Space Complexity:\n- **Iterative version**: O(1) - only uses a few variables\n- **Recursive version**: O(log n) - due to call stack depth\n\n## Example:\nFor an array of 1024 elements:\n- Maximum comparisons needed = log\u2082(1024) = 10\n- Even for 1 billion elements: log\u2082(1,000,000,000) \u2248 30 comparisons\n\nThis logarithmic growth makes binary search extremely efficient for large datasets, especially when the array is already sorted.",
               "latency_ms": 8967
             }
           },
@@ -3027,7 +3062,8 @@
             "run_id": "2026-03-31T07-48-00",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
@@ -3170,7 +3206,8 @@
             "run_id": "2026-03-31T07-53-03",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark v2 (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
@@ -3313,7 +3350,8 @@
             "run_id": "2026-03-31T13-56-11",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "phi4:14b Solo Evaluation"
           },
           "responses": {
             "phi4": {
@@ -3339,7 +3377,8 @@
             "run_id": "2026-03-31T14-02-35",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison"
           },
           "responses": {
             "phi4": {
@@ -3391,7 +3430,8 @@
             "run_id": "2026-03-31T14-13-39",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison v2"
           },
           "responses": {
             "phi4": {
@@ -3451,15 +3491,16 @@
             "run_id": "2026-03-31T07-48-00",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
-              "text": "Lines of code appear,\nErrors hide like shadows deep—\nDebugging begins.",
+              "text": "Lines of code appear,\nErrors hide like shadows deep\u2014\nDebugging begins.",
               "latency_ms": 318
             },
             "phi4:14b": {
-              "text": "In silent night's glow,  \nErrors dance in tangled lines—  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: working through complex and often frustrating code to achieve clarity and understanding.",
+              "text": "In silent night's glow,  \nErrors dance in tangled lines\u2014  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: working through complex and often frustrating code to achieve clarity and understanding.",
               "latency_ms": 996
             },
             "llama3.2:3b": {
@@ -3479,7 +3520,7 @@
               "latency_ms": 7299
             },
             "qwen2.5:32b": {
-              "text": "Lines of code entwined,\nErrors hide like silent ghosts—\nLight of truth dispels.",
+              "text": "Lines of code entwined,\nErrors hide like silent ghosts\u2014\nLight of truth dispels.",
               "latency_ms": 2983
             },
             "deepseek-coder:6.7b": {
@@ -3594,15 +3635,16 @@
             "run_id": "2026-03-31T07-53-03",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark v2 (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
-              "text": "Lines of code appear,\nErrors hide like shadows deep—\nDebugging begins.",
+              "text": "Lines of code appear,\nErrors hide like shadows deep\u2014\nDebugging begins.",
               "latency_ms": 323
             },
             "phi4:14b": {
-              "text": "In silent night's glow,  \nErrors dance in tangled lines—  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: working through complex and often frustrating code to achieve clarity and understanding.",
+              "text": "In silent night's glow,  \nErrors dance in tangled lines\u2014  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: working through complex and often frustrating code to achieve clarity and understanding.",
               "latency_ms": 996
             },
             "llama3.2:3b": {
@@ -3630,7 +3672,7 @@
               "latency_ms": 2
             },
             "qwen2.5:32b": {
-              "text": "Lines of code entwined,\nErrors hide like silent ghosts—\nLight of truth dispels.",
+              "text": "Lines of code entwined,\nErrors hide like silent ghosts\u2014\nLight of truth dispels.",
               "latency_ms": 3116
             },
             "mathstral:7b": {
@@ -3737,11 +3779,12 @@
             "run_id": "2026-03-31T13-56-11",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "phi4:14b Solo Evaluation"
           },
           "responses": {
             "phi4": {
-              "text": "In silent night's glow,  \nErrors dance in tangled lines—  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: working through complex and often frustrating code to achieve clarity and understanding.",
+              "text": "In silent night's glow,  \nErrors dance in tangled lines\u2014  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: working through complex and often frustrating code to achieve clarity and understanding.",
               "latency_ms": 850
             }
           },
@@ -3763,7 +3806,8 @@
             "run_id": "2026-03-31T14-02-35",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison"
           },
           "responses": {
             "qwen-coder": {
@@ -3771,11 +3815,11 @@
               "latency_ms": 898
             },
             "phi4": {
-              "text": "In silent night's glow,  \nErrors dance in tangled lines—  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: working through complex and often frustrating code to achieve clarity and understanding.",
+              "text": "In silent night's glow,  \nErrors dance in tangled lines\u2014  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: working through complex and often frustrating code to achieve clarity and understanding.",
               "latency_ms": 1079
             },
             "qwen3-coder": {
-              "text": "Lines of logic\nTangled thoughts untangle—\nSilence finds its way.",
+              "text": "Lines of logic\nTangled thoughts untangle\u2014\nSilence finds its way.",
               "latency_ms": 1160
             }
           },
@@ -3815,7 +3859,8 @@
             "run_id": "2026-03-31T14-13-39",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison v2"
           },
           "responses": {
             "qwen-coder": {
@@ -3823,11 +3868,11 @@
               "latency_ms": 903
             },
             "phi4": {
-              "text": "In silent night's glow,  \nErrors dance in tangled lines—  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: working through complex and often frustrating code to achieve clarity and understanding.",
+              "text": "In silent night's glow,  \nErrors dance in tangled lines\u2014  \nClarity awakes.  \n\n--- \n\nThis haiku captures the essence of debugging: working through complex and often frustrating code to achieve clarity and understanding.",
               "latency_ms": 1083
             },
             "qwen3-coder": {
-              "text": "Lines of logic\nTangled thoughts untangle—\nSilence finds its way.",
+              "text": "Lines of logic\nTangled thoughts untangle\u2014\nSilence finds its way.",
               "latency_ms": 1167
             }
           },
@@ -3875,7 +3920,8 @@
             "run_id": "2026-03-31T07-48-00",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark (10 models)"
           },
           "responses": {
             "qwen2.5:7b": {
@@ -4018,7 +4064,8 @@
             "run_id": "2026-03-31T07-53-03",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "Comprehensive Benchmark v2 (10 models)"
           },
           "responses": {
             "llama3.2:3b": {
@@ -4161,7 +4208,8 @@
             "run_id": "2026-03-31T13-56-11",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "phi4:14b Solo Evaluation"
           },
           "responses": {
             "phi4": {
@@ -4187,7 +4235,8 @@
             "run_id": "2026-03-31T14-02-35",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison"
           },
           "responses": {
             "qwen-coder": {
@@ -4239,7 +4288,8 @@
             "run_id": "2026-03-31T14-13-39",
             "config_file": "verdict.yaml",
             "verdict_version": "0.2.0",
-            "hardware": "Apple M3 Ultra 256GB"
+            "hardware": "Apple M3 Ultra 256GB",
+            "name": "3-Way Model Comparison v2"
           },
           "responses": {
             "qwen-coder": {
