@@ -1,0 +1,199 @@
+name: Text Classification
+description: Tests model accuracy on practical text classification tasks — sentiment, intent, topic, toxicity, and urgency detection. Uses deterministic scorers where possible for cost-free evaluation.
+
+cases:
+  # ── Sentiment analysis ────────────────────────────────────────────────────
+  - id: class-sent-001
+    description: "Unambiguous positive sentiment"
+    category: sentiment
+    prompt: |
+      Classify the sentiment of this text as POSITIVE, NEGATIVE, or NEUTRAL.
+      Reply with only the single word classification.
+
+      Text: "This product completely exceeded my expectations. Best purchase I've made all year."
+    criteria: "POSITIVE"
+    scorer: exact
+    tags: [sentiment, easy]
+
+  - id: class-sent-002
+    description: "Unambiguous negative sentiment"
+    category: sentiment
+    prompt: |
+      Classify the sentiment of this text as POSITIVE, NEGATIVE, or NEUTRAL.
+      Reply with only the single word classification.
+
+      Text: "Terrible experience. Waited 45 minutes, food arrived cold, and the waiter was rude."
+    criteria: "NEGATIVE"
+    scorer: exact
+    tags: [sentiment, easy]
+
+  - id: class-sent-003
+    description: "Neutral/factual statement"
+    category: sentiment
+    prompt: |
+      Classify the sentiment of this text as POSITIVE, NEGATIVE, or NEUTRAL.
+      Reply with only the single word classification.
+
+      Text: "The meeting is scheduled for Tuesday at 2pm in conference room B."
+    criteria: "NEUTRAL"
+    scorer: exact
+    tags: [sentiment, easy]
+
+  - id: class-sent-004
+    description: "Mixed sentiment — sarcasm trap"
+    category: sentiment
+    prompt: |
+      Classify the overall sentiment of this customer review as POSITIVE, NEGATIVE, or NEUTRAL.
+      Reply with only the single word classification.
+
+      Text: "Oh great, another software update that breaks everything that was working fine before. Love how they keep 'improving' things."
+    criteria: "The text is sarcastic — overall sentiment is NEGATIVE. Must not be fooled by surface-level positive words."
+    tags: [sentiment, sarcasm, hard]
+
+  # ── Intent classification ─────────────────────────────────────────────────
+  - id: class-intent-001
+    description: "Purchase intent"
+    category: intent
+    prompt: |
+      Classify the user intent as one of: PURCHASE, SUPPORT, COMPLAINT, INFO_REQUEST, CANCEL.
+      Reply with only the single word classification.
+
+      User message: "How much does the pro plan cost and can I pay monthly?"
+    criteria: "PURCHASE"
+    scorer: exact
+    tags: [intent, customer-service]
+
+  - id: class-intent-002
+    description: "Support/help intent"
+    category: intent
+    prompt: |
+      Classify the user intent as one of: PURCHASE, SUPPORT, COMPLAINT, INFO_REQUEST, CANCEL.
+      Reply with only the single word classification.
+
+      User message: "I can't log into my account. I've tried resetting my password twice but I'm still getting an error."
+    criteria: "SUPPORT"
+    scorer: exact
+    tags: [intent, customer-service]
+
+  - id: class-intent-003
+    description: "Cancellation intent"
+    category: intent
+    prompt: |
+      Classify the user intent as one of: PURCHASE, SUPPORT, COMPLAINT, INFO_REQUEST, CANCEL.
+      Reply with only the single word classification.
+
+      User message: "I'd like to end my subscription. Please close my account."
+    criteria: "CANCEL"
+    scorer: exact
+    tags: [intent, customer-service]
+
+  # ── Topic classification ──────────────────────────────────────────────────
+  - id: class-topic-001
+    description: "Technology topic"
+    category: topic
+    prompt: |
+      Classify the topic of this article excerpt as one of: TECHNOLOGY, SPORTS, POLITICS, HEALTH, FINANCE, ENTERTAINMENT.
+      Reply with only the single word classification.
+
+      Text: "Apple unveiled its latest chip architecture today, claiming a 40% performance improvement over the previous generation while maintaining the same thermal envelope."
+    criteria: "TECHNOLOGY"
+    scorer: exact
+    tags: [topic, news]
+
+  - id: class-topic-002
+    description: "Finance topic"
+    category: topic
+    prompt: |
+      Classify the topic of this article excerpt as one of: TECHNOLOGY, SPORTS, POLITICS, HEALTH, FINANCE, ENTERTAINMENT.
+      Reply with only the single word classification.
+
+      Text: "The Federal Reserve held interest rates steady at its September meeting, citing persistent inflation concerns despite three consecutive months of cooling price data."
+    criteria: "FINANCE"
+    scorer: exact
+    tags: [topic, news]
+
+  - id: class-topic-003
+    description: "Health topic"
+    category: topic
+    prompt: |
+      Classify the topic of this article excerpt as one of: TECHNOLOGY, SPORTS, POLITICS, HEALTH, FINANCE, ENTERTAINMENT.
+      Reply with only the single word classification.
+
+      Text: "Researchers found that participants who slept fewer than 6 hours per night showed a 27% higher incidence of metabolic syndrome compared to those sleeping 7-9 hours."
+    criteria: "HEALTH"
+    scorer: exact
+    tags: [topic, news]
+
+  # ── Urgency / priority classification ────────────────────────────────────
+  - id: class-urgency-001
+    description: "High urgency detection"
+    category: urgency
+    prompt: |
+      Rate the urgency of this support ticket as HIGH, MEDIUM, or LOW.
+      Reply with only the single word classification.
+
+      Ticket: "Our entire production database is down. All customers are affected. We're losing $10k/minute. Need immediate help."
+    criteria: "HIGH"
+    scorer: exact
+    tags: [urgency, triage]
+
+  - id: class-urgency-002
+    description: "Low urgency detection"
+    category: urgency
+    prompt: |
+      Rate the urgency of this support ticket as HIGH, MEDIUM, or LOW.
+      Reply with only the single word classification.
+
+      Ticket: "Could you update our company logo in the dashboard when you get a chance? No rush, just a cosmetic thing."
+    criteria: "LOW"
+    scorer: exact
+    tags: [urgency, triage]
+
+  - id: class-urgency-003
+    description: "Medium urgency — nuanced"
+    category: urgency
+    prompt: |
+      Rate the urgency of this support ticket as HIGH, MEDIUM, or LOW.
+      Reply with only the single word classification.
+
+      Ticket: "Our weekly report isn't generating correctly. It's been broken since Monday's update. We need it by end of week for the board meeting."
+    criteria: "MEDIUM"
+    scorer: exact
+    tags: [urgency, triage]
+
+  # ── Multi-label / nuanced ─────────────────────────────────────────────────
+  - id: class-nuanced-001
+    description: "Spam vs ham classification"
+    category: spam
+    prompt: |
+      Classify this email as SPAM or HAM (legitimate).
+      Reply with only the single word classification.
+
+      Subject: "You've been selected! Claim your $1,000 Amazon gift card NOW — limited time offer!!!"
+      Body: "Click here to claim your prize. Offer expires in 24 hours. No purchase necessary. You were randomly selected from millions of subscribers."
+    criteria: "SPAM"
+    scorer: exact
+    tags: [spam, email]
+
+  - id: class-nuanced-002
+    description: "Toxicity detection"
+    category: toxicity
+    prompt: |
+      Does this text contain toxic content (harassment, hate speech, or explicit threats)?
+      Reply with YES or NO only.
+
+      Text: "I completely disagree with your analysis. The data clearly shows the opposite trend, and I think you've misinterpreted the methodology."
+    criteria: "NO"
+    scorer: exact
+    tags: [toxicity, moderation]
+
+  - id: class-nuanced-003
+    description: "Language detection"
+    category: language
+    prompt: |
+      Identify the language of this text. Reply with the language name only (e.g., English, Spanish, French, German, Japanese).
+
+      Text: "Le gouvernement a annoncé de nouvelles mesures pour lutter contre l'inflation."
+    criteria: "French"
+    scorer: exact
+    tags: [language-detection, multilingual]
