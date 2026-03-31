@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verdict Dashboard - Design Check</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #000;
+      color: #0f0;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    h1 { color: #0ff; margin-bottom: 1rem; }
+    h2 { color: #ff0; margin: 2rem 0 1rem; }
+    .pass { color: #0f0; }
+    .fail { color: #f00; }
+    .info { color: #aaa; }
+    pre { 
+      background: #111; 
+      padding: 1rem; 
+      border: 1px solid #333; 
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+    ul { margin-left: 2rem; }
+    li { margin: 0.5rem 0; }
+    a { color: #0ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .box {
+      border: 2px solid #0f0;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      background: #001100;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 Verdict Dashboard - Design Verification</h1>
+  
+  <div class="box">
+    <h2>Current Status:</h2>
+    <p id="status" class="info">Checking...</p>
+    <p><strong>Your Browser:</strong> <span id="browser" class="info"></span></p>
+    <p><strong>Timestamp:</strong> <span id="timestamp" class="info"></span></p>
+  </div>
+
+  <h2>✅ Expected (Brief Design System):</h2>
+  <ul>
+    <li class="pass">✓ Inter font for UI</li>
+    <li class="pass">✓ JetBrains Mono for code</li>
+    <li class="pass">✓ 8 evaluation runs</li>
+    <li class="pass">✓ 80 test cases</li>
+    <li class="pass">✓ 21 unique models</li>
+    <li class="pass">✓ Clean card layout with badges</li>
+  </ul>
+
+  <h2>📊 Dashboard Data:</h2>
+  <pre id="data">Loading...</pre>
+
+  <h2>🎨 Design Elements Detected:</h2>
+  <pre id="design">Checking...</pre>
+
+  <h2>🔧 If You See the Wrong Dashboard:</h2>
+  <div class="box">
+    <p><strong>1. Hard Refresh:</strong></p>
+    <ul>
+      <li>Windows/Linux: <code>Ctrl + Shift + R</code> or <code>Ctrl + F5</code></li>
+      <li>Mac: <code>Cmd + Shift + R</code></li>
+    </ul>
+    
+    <p style="margin-top: 1rem;"><strong>2. Clear Site Data (Chrome/Edge):</strong></p>
+    <ul>
+      <li>Press F12 to open DevTools</li>
+      <li>Right-click the Reload button</li>
+      <li>Select "Empty Cache and Hard Reload"</li>
+    </ul>
+    
+    <p style="margin-top: 1rem;"><strong>3. Clear All Browser Cache:</strong></p>
+    <ul>
+      <li>Chrome/Edge: <code>Ctrl/Cmd + Shift + Delete</code></li>
+      <li>Check "Cached images and files"</li>
+      <li>Click "Clear data"</li>
+    </ul>
+    
+    <p style="margin-top: 1rem;"><strong>4. Try Incognito/Private Window:</strong></p>
+    <ul>
+      <li>Chrome/Edge: <code>Ctrl/Cmd + Shift + N</code></li>
+      <li>Firefox: <code>Ctrl/Cmd + Shift + P</code></li>
+      <li>Safari: <code>Cmd + Shift + N</code></li>
+    </ul>
+  </div>
+
+  <p style="margin-top: 2rem;">
+    <a href="index.html">← Back to Dashboard</a>
+  </p>
+
+  <script>
+    const timestamp = new Date().toISOString();
+    document.getElementById('timestamp').textContent = timestamp;
+    document.getElementById('browser').textContent = navigator.userAgent;
+
+    // Fetch dashboard HTML with cache-busting
+    fetch('index.html?bust=' + Date.now())
+      .then(r => r.text())
+      .then(html => {
+        // Check design elements
+        const hasInter = html.includes('Inter');
+        const hasJetBrains = html.includes('JetBrains');
+        const hasBriefDesign = hasInter && hasJetBrains;
+        
+        let designInfo = '';
+        designInfo += hasInter ? '✅ Inter font detected\n' : '❌ Inter font NOT found\n';
+        designInfo += hasJetBrains ? '✅ JetBrains Mono detected\n' : '❌ JetBrains Mono NOT found\n';
+        designInfo += '\nHTML length: ' + html.length + ' bytes\n';
+        
+        if (html.includes('Comprehensive Benchmark')) {
+          designInfo += '✅ Run data present\n';
+        } else {
+          designInfo += '⚠️ Run data not found (may be loaded dynamically)\n';
+        }
+        
+        document.getElementById('design').textContent = designInfo;
+        
+        // Try to extract embedded data
+        const dataMatch = html.match(/const DASHBOARD_DATA = ({.*?});/s);
+        if (dataMatch) {
+          try {
+            const data = JSON.parse(dataMatch[1]);
+            document.getElementById('data').textContent = JSON.stringify({
+              total_runs: data.meta?.total_runs || 0,
+              total_cases: data.meta?.total_cases || 0,
+              total_models: data.meta?.total_models || 0
+            }, null, 2);
+          } catch (e) {
+            document.getElementById('data').textContent = 'Error parsing data: ' + e.message;
+          }
+        } else {
+          // Try loading external data
+          fetch('data/dashboard-data.json?bust=' + Date.now())
+            .then(r => r.json())
+            .then(data => {
+              document.getElementById('data').textContent = JSON.stringify({
+                total_runs: data.meta?.total_runs || 0,
+                total_cases: data.meta?.total_cases || 0,
+                total_models: data.meta?.total_models || 0
+              }, null, 2);
+            })
+            .catch(e => {
+              document.getElementById('data').textContent = 'No data found: ' + e.message;
+            });
+        }
+        
+        // Status
+        if (hasBriefDesign) {
+          document.getElementById('status').innerHTML = 
+            '<span class="pass">✅ CORRECT - Brief Design System detected!</span>';
+        } else {
+          document.getElementById('status').innerHTML = 
+            '<span class="fail">❌ WRONG - Old design detected. Clear your cache!</span>';
+        }
+      })
+      .catch(err => {
+        document.getElementById('status').textContent = 'Error loading dashboard: ' + err;
+        document.getElementById('design').textContent = 'Error: ' + err;
+      });
+  </script>
+</body>
+</html>
