@@ -1,6 +1,6 @@
 {
   "author": "hnshah",
-  "lastChecked": "2026-03-30T23:39:00Z",
+  "lastChecked": "2026-03-30T23:59:59Z",
   "trackedPRs": [
     {
       "number": 54990,
@@ -35,8 +35,9 @@
       "title": "fix: remove macOS Gatekeeper quarantine xattr from copied files",
       "url": "https://github.com/pnpm/pnpm/pull/11095",
       "updatedAt": "2026-03-27T22:35:43Z",
-      "status": "MAINTAINER_FEEDBACK",
-      "commentsCount": 8
+      "status": "ACTIVE_MAINTAINER_DISCUSSION",
+      "commentsCount": 8,
+      "notes": "zkochan engaged, PR updated to native binaries only, dasa suggested batching approach"
     },
     {
       "number": 86,
@@ -45,7 +46,8 @@
       "url": "https://github.com/mvanhorn/last30days-skill/pull/86",
       "updatedAt": "2026-03-28T15:45:51Z",
       "status": "DEFERRED_V3",
-      "commentsCount": 2
+      "commentsCount": 2,
+      "notes": "mvanhorn: Can't commit until v3.0 lands, will consider and ping for rebase"
     },
     {
       "number": 85,
@@ -54,7 +56,8 @@
       "url": "https://github.com/mvanhorn/last30days-skill/pull/85",
       "updatedAt": "2026-03-28T15:45:51Z",
       "status": "DEFERRED_V3",
-      "commentsCount": 2
+      "commentsCount": 2,
+      "notes": "mvanhorn: Same as #86 - deferred until v3.0"
     },
     {
       "number": 15052,
@@ -72,7 +75,8 @@
       "url": "https://github.com/mvanhorn/last30days-skill/pull/84",
       "updatedAt": "2026-03-25T19:56:23Z",
       "status": "DEFERRED_V3",
-      "commentsCount": 2
+      "commentsCount": 2,
+      "notes": "mvanhorn: Same as #86, #85 - deferred until v3.0"
     },
     {
       "number": 18939,
@@ -116,8 +120,9 @@
       "title": "docs: Add model performance comparison and selection guide",
       "url": "https://github.com/KittenML/KittenTTS/pull/121",
       "updatedAt": "2026-03-27T02:24:26Z",
-      "status": "PENDING_REVIEW",
-      "commentsCount": 2
+      "status": "AWAITING_STREAMING_EXAMPLE",
+      "commentsCount": 2,
+      "notes": "therealron reviewing, waiting for new streaming example to be shipped"
     },
     {
       "number": 53451,
@@ -143,8 +148,9 @@
       "title": "Sort selected users first in filter dropdowns",
       "url": "https://github.com/basecamp/fizzy/pull/2747",
       "updatedAt": "2026-03-26T17:38:37Z",
-      "status": "PENDING_REVIEW",
-      "commentsCount": 2
+      "status": "AWAITING_MAINTAINER_REVIEW",
+      "commentsCount": 2,
+      "notes": "monorkin gave feedback, refactored to SQL-based sorting per feedback"
     },
     {
       "number": 33,
@@ -179,6 +185,61 @@
       "title": "docs: Add subprocess integration guide with permission workarounds",
       "url": "https://github.com/steipete/Peekaboo/pull/97",
       "updatedAt": "2026-03-23T02:06:37Z",
+      "status": "PENDING_REVIEW",
+      "commentsCount": 0
+    },
+    {
+      "number": 514,
+      "repo": "can1357/oh-my-pi",
+      "title": "fix: enable plugin skills discovery (fixes #511)",
+      "url": "https://github.com/can1357/oh-my-pi/pull/514",
+      "updatedAt": "2026-03-23T00:35:47Z",
+      "status": "PENDING_REVIEW",
+      "commentsCount": 2
+    },
+    {
+      "number": 18674,
+      "repo": "anomalyco/opencode",
+      "title": "fix: vendor Anthropic OAuth plugin and fix PKCE state security issue (fixes #18652)",
+      "url": "https://github.com/anomalyco/opencode/pull/18674",
+      "updatedAt": "2026-03-29T18:02:34Z",
+      "status": "ALL_CHECKS_PASSED_NEEDS_MERGE",
+      "commentsCount": 0,
+      "notes": "14 bot reviews (all approved/commented), all CI checks passed (8/8 green), no maintainer review yet"
+    },
+    {
+      "number": 98,
+      "repo": "huggingface/skills",
+      "title": "feat: add OpenCode skills configuration and generation pipeline (fixes #74)",
+      "url": "https://github.com/huggingface/skills/pull/98",
+      "updatedAt": "2026-03-23T12:59:37Z",
+      "status": "PENDING_REVIEW",
+      "commentsCount": 0
+    },
+    {
+      "number": 52469,
+      "repo": "openclaw/openclaw",
+      "title": "fix(compaction): add token-based override for safeguard (fixes #49272)",
+      "url": "https://github.com/openclaw/openclaw/pull/52469",
+      "updatedAt": "2026-03-24T20:15:35Z",
+      "status": "PENDING_REVIEW",
+      "commentsCount": 3
+    },
+    {
+      "number": 332,
+      "repo": "garrytan/gstack",
+      "title": "fix(preamble): make .pending-* glob pattern zsh-compatible (fixes #313)",
+      "url": "https://github.com/garrytan/gstack/pull/332",
+      "updatedAt": "2026-03-23T03:28:06Z",
+      "status": "PENDING_REVIEW",
+      "commentsCount": 0
+    },
+    {
+      "number": 4,
+      "repo": "ComposioHQ/secure-openclaw",
+      "title": "fix: add QR endpoint authentication and secure DM allowlist defaults (fixes #3)",
+      "url": "https://github.com/ComposioHQ/secure-openclaw/pull/4",
+      "updatedAt": "2026-03-22T18:44:33Z",
       "status": "PENDING_REVIEW",
       "commentsCount": 0
     }
