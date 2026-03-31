@@ -1,0 +1,21 @@
+{
+  "name": "test-phi4",
+  "stats": {
+    "total_runs": 1,
+    "avg_score": 9.3,
+    "total_wins": 10,
+    "total_cases": 10,
+    "avg_latency": 3.9
+  },
+  "runs": [
+    {
+      "id": "2026-03-31-2026-03-31T15-12-50",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "score": 9.3,
+      "wins": 10,
+      "cases": 10,
+      "latency": 3875.5
+    }
+  ]
+}

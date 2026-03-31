@@ -1,0 +1,30 @@
+{
+  "name": "phi4:14b",
+  "stats": {
+    "total_runs": 2,
+    "avg_score": 8.9,
+    "total_wins": 0,
+    "total_cases": 20,
+    "avg_latency": 5.9
+  },
+  "runs": [
+    {
+      "id": "2026-03-31-2026-03-31T07-48-00",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "score": 8.9,
+      "wins": 0,
+      "cases": 10,
+      "latency": 5885.3
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-53-03",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "score": 8.9,
+      "wins": 0,
+      "cases": 10,
+      "latency": 5819.7
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "qwen2.5:32b",
+  "stats": {
+    "total_runs": 2,
+    "avg_score": 9,
+    "total_wins": 0,
+    "total_cases": 20,
+    "avg_latency": 7.9
+  },
+  "runs": [
+    {
+      "id": "2026-03-31-2026-03-31T07-48-00",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "score": 9,
+      "wins": 0,
+      "cases": 10,
+      "latency": 8388.7
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-53-03",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "score": 9,
+      "wins": 0,
+      "cases": 10,
+      "latency": 7395.3
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "llama3.2:3b",
+  "stats": {
+    "total_runs": 2,
+    "avg_score": 9.1,
+    "total_wins": 6,
+    "total_cases": 20,
+    "avg_latency": 4.4
+  },
+  "runs": [
+    {
+      "id": "2026-03-31-2026-03-31T07-48-00",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "score": 9.1,
+      "wins": 3,
+      "cases": 10,
+      "latency": 4579.4
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-53-03",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "score": 9.1,
+      "wins": 3,
+      "cases": 10,
+      "latency": 4174.9
+    }
+  ]
+}

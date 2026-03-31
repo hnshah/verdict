@@ -1,0 +1,30 @@
+{
+  "name": "qwen3-coder",
+  "stats": {
+    "total_runs": 2,
+    "avg_score": 9.6,
+    "total_wins": 5,
+    "total_cases": 20,
+    "avg_latency": 6.2
+  },
+  "runs": [
+    {
+      "id": "2026-03-31-2026-03-31T14-02-35",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "score": 9.6,
+      "wins": 3,
+      "cases": 10,
+      "latency": 6166.6
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-13-39",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "score": 9.6,
+      "wins": 2,
+      "cases": 10,
+      "latency": 6178.5
+    }
+  ]
+}

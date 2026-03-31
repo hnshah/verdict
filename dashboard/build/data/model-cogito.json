@@ -1,0 +1,21 @@
+{
+  "name": "cogito",
+  "stats": {
+    "total_runs": 1,
+    "avg_score": 9.1,
+    "total_wins": 0,
+    "total_cases": 50,
+    "avg_latency": 6.8
+  },
+  "runs": [
+    {
+      "id": "2026-03-31-2026-03-31T07-44-02",
+      "name": "My Evals",
+      "date": "2026-03-31",
+      "score": 9.1,
+      "wins": 0,
+      "cases": 50,
+      "latency": 6830.94
+    }
+  ]
+}
