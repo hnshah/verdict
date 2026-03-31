@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verdict Dashboard - Verification</title>
+  <style>
+    body { font-family: monospace; padding: 2rem; background: #1a1a1a; color: #0f0; }
+    .pass { color: #0f0; }
+    .fail { color: #f00; }
+    pre { background: #000; padding: 1rem; border: 1px solid #0f0; }
+  </style>
+</head>
+<body>
+  <h1>✅ Verdict Dashboard Verification</h1>
+  <p><strong>Timestamp:</strong> <span id="timestamp"></span></p>
+  <p><strong>Browser:</strong> <span id="browser"></span></p>
+  
+  <h2>Dashboard Data Check:</h2>
+  <pre id="check"></pre>
+  
+  <h2>Expected:</h2>
+  <ul>
+    <li class="pass">✓ 8 evaluation runs</li>
+    <li class="pass">✓ 80 test cases</li>
+    <li class="pass">✓ 21 unique models</li>
+    <li class="pass">✓ Brief Design System (Inter font)</li>
+  </ul>
+  
+  <p><strong>If you see different numbers, clear your browser cache:</strong></p>
+  <ul>
+    <li>Chrome/Edge: Ctrl+Shift+Delete (Cmd+Shift+Delete on Mac)</li>
+    <li>Firefox: Ctrl+Shift+Delete</li>
+    <li>Safari: Cmd+Option+E</li>
+  </ul>
+  
+  <p><a href="index.html" style="color: #0ff;">← Back to Dashboard</a></p>
+  
+  <script>
+    document.getElementById('timestamp').textContent = new Date().toISOString();
+    document.getElementById('browser').textContent = navigator.userAgent;
+    
+    // Load dashboard data
+    fetch('index.html?bust=' + Date.now())
+      .then(r => r.text())
+      .then(html => {
+        const match = html.match(/const DASHBOARD_DATA = ({.*?});/s);
+        if (match) {
+          const data = JSON.parse(match[1]);
+          document.getElementById('check').textContent = JSON.stringify({
+            total_runs: data.meta.total_runs,
+            total_cases: data.meta.total_cases,
+            total_models: data.meta.total_models,
+            last_updated: data.meta.last_updated,
+            status: data.meta.total_runs === 8 ? '✅ CORRECT' : '❌ WRONG (cache issue)'
+          }, null, 2);
+        } else {
+          document.getElementById('check').textContent = '❌ Could not parse dashboard data';
+        }
+      })
+      .catch(err => {
+        document.getElementById('check').textContent = '❌ Error: ' + err;
+      });
+  </script>
+</body>
+</html>
