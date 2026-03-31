@@ -1,0 +1,22 @@
+{
+  "run_id": "2026-03-30-2026-03-30T16-01-05",
+  "name": "Quick Diverse Benchmark",
+  "timestamp": "2026-03-30",
+  "models": 4,
+  "cases": 10,
+  "environment": {
+    "verdict_version": "0.1.0",
+    "node_version": "v22.22.1"
+  },
+  "judge": {
+    "model": "phi4"
+  },
+  "eval_pack": {
+    "name": "Quick Diverse Benchmark",
+    "file": "unknown"
+  },
+  "reproducibility": {
+    "config_file": "unknown"
+  },
+  "summary": []
+}
