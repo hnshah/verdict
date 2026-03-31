@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coding Specialist Comparison — Verdict</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --accent: #3B82F6;
+  --accent-hover: #2563EB;
+  --bg-page: #F9FAFB;
+  --bg-card: #FFFFFF;
+  --text-primary: #111827;
+  --text-body: #374151;
+  --text-muted: #6B7280;
+  --text-label: #9CA3AF;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: #111827;
+    --bg-card: #1F2937;
+    --text-primary: #F9FAFB;
+    --text-body: #E5E7EB;
+    --text-muted: #9CA3AF;
+    --text-label: #6B7280;
+    --border: #374151;
+    --border-light: #1F2937;
+  }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-body);
+}
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Cards - using Tailwind sizing for consistency */
+.card {
+  background: var(--bg-card);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  padding: 2rem;
+  margin-top: 2rem;
+}
+.card:first-child { margin-top: 0; }
+
+/* Links - styled with accent color */
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: all 0.15s;
+}
+a:hover {
+  color: var(--accent-hover);
+  text-decoration-color: currentColor;
+}
+
+/* Badges */
+.badge-green { background: #ECFDF5; color: #065F46; }
+.badge-yellow { background: #FFFBEB; color: #92400E; }
+.badge-red { background: #FEF2F2; color: #991B1B; }
+.badge-gray { background: var(--border-light); color: var(--text-body); }
+
+@media (prefers-color-scheme: dark) {
+  .badge-green { background: #064E3B; color: #A7F3D0; }
+  .badge-yellow { background: #78350F; color: #FDE68A; }
+  .badge-red { background: #7F1D1D; color: #FCA5A5; }
+}
+
+/* Tabs */
+.tab {
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.15s;
+  color: var(--text-muted);
+}
+.tab:hover {
+  background: var(--border-light);
+}
+.tab.active {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Accordion */
+details summary {
+  cursor: pointer;
+  list-style: none;
+}
+details summary::-webkit-details-marker { display: none; }
+details[open] summary .chevron { transform: rotate(180deg); }
+.chevron {
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+/* Table hover */
+tbody tr {
+  transition: background 0.1s;
+}
+tbody tr:hover {
+  background: var(--border-light);
+}
+
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .desktop-only { display: none; }
+  .card { padding: 1rem; }
+  .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media print { .no-print { display: none; } }
+</style>
+</head>
+<body>
+
+<header class="bg-white dark:bg-gray-800 border-b sticky top-0 z-50" style="border-color: var(--border)">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="/" class="font-semibold no-underline" style="color: var(--text-primary)">Verdict</a>
+      <span style="color: var(--border)">·</span>
+      <span class="text-sm" style="color: var(--text-muted)">Coding Specialist Comparison</span>
+    </div>
+    <span class="text-xs" style="color: var(--text-label)">2026-03-30</span>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+  <!-- Run header card -->
+  <section class="card">
+    <div class="flex items-start justify-between mb-4 flex-wrap gap-3">
+      <div>
+        <h1 class="text-2xl font-bold mb-1" style="color: var(--text-primary)">Coding Specialist Comparison</h1>
+        <p class="text-sm" style="color: var(--text-muted)">10 test cases · 2 models · 2026-03-30</p>
+      </div>
+      <span class="badge-green px-3 py-1 rounded-full text-xs font-semibold">Complete</span>
+    </div>
+
+    <!-- Stats grid - responsive -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mt-6">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Avg Score</p>
+        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">8.2<span class="text-base" style="color: var(--text-muted)">/10</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Pass Rate</p>
+        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">40<span class="text-base" style="color: var(--text-muted)">%</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Avg Latency</p>
+        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">6.1<span class="text-base" style="color: var(--text-muted)">s</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Total Cost</p>
+        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">$0</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category tabs -->
+  <div class="flex gap-2 mt-8 overflow-x-auto border-b rounded-t-xl px-4 bg-white dark:bg-gray-800" style="border-color: var(--border)">
+    
+    <div class="tab active" data-tab="all">
+      All <span style="color: var(--text-label)">(10)</span>
+    </div>
+    
+    <div class="tab " data-tab="gen">
+      gen <span style="color: var(--text-label)">(10)</span>
+    </div>
+    
+  </div>
+
+  <!-- Leaderboard -->
+  <section class="card">
+    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Model Leaderboard</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs border-b" style="color: var(--text-label); border-color: var(--border-light)">
+            <th class="pb-3 pr-4 font-semibold">Rank</th>
+            <th class="pb-3 pr-4 font-semibold">Model</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Overall</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Accuracy</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Complete</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Concise</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Latency</th>
+            <th class="pb-3 text-right font-semibold">Wins</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y" style="border-color: var(--border-light)">
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">1</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen-coder</span>
+                <span class="text-xs">🥇</span>
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">8.5/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">8.6</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">8.4</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">8.4</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">6.1s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">7</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">2</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">codellama</span>
+                
+                <span class="text-xs">🥈</span>
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.8/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">8</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">7.8</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">7.4</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">6.1s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">3</span>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Test cases -->
+  <section class="card">
+    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Test Cases</h2>
+    <div class="space-y-3">
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="gen">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">gen-001</span>
+            <span class="text-sm" style="color: var(--text-muted)">What is the capital of France</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">10/10</span>
+            
+            <span class="text-green-600">✓</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">What is the capital of France?</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">0.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+                The capital of France is Paris.
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">2.7s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              The capital of France is Paris.
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="gen">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">gen-002</span>
+            <span class="text-sm" style="color: var(--text-muted)">What does RAM stand for and what does it do</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">7.9/10</span>
+            
+            <span class="text-yellow-600">⚠</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">What does RAM stand for and what does it do?</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">3.4s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              RAM stands for Random Access Memory. It is a type of computer memory that allows data to be accessed in any order, rather than just sequentially. RAM is used to store data and instructions that the CPU needs to access quickly. It is a crucial component of a computer as it determines how many programs can be run simultaneously and how fast they can run.
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">5.8s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+RAM stands for Random Access Memory. It is a type of computer memory that is used to store data and applications that are currently being used by the computer. RAM is used to store data that is being actively used by the computer, such as programs, files, and other data.
+
+RAM is different from other types of computer memory, such as ROM (Read-Only Memory) and flash memory, in that it can be read and written to at any time. This allows the computer to access and modify the data stored in RAM ...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="gen">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">gen-003</span>
+            <span class="text-sm" style="color: var(--text-muted)">Explain the difference between a process and a thread in one</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">7.8/10</span>
+            
+            <span class="text-yellow-600">⚠</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Explain the difference between a process and a thread in one paragraph.</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">9.5s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              A process and a thread are both units of execution in a computer system, but they serve different purposes and have distinct characteristics. A process is a self-contained execution environment that includes its own memory space, resources, and program counter. Each process runs independently and has its own set of instructions and data. This isolation ensures that one process cannot directly access or modify the memory of another process, enhancing security and stability. On the other hand, ...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">9.6s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+A process is an instance of a program that is executing in memory, while a thread is a separate flow of execution within a process. Each thread has its own set of registers and stack, and can execute independently of other threads in the same process. Threads share the same memory space as the process, while processes have their own private memory space. Threads can communicate with each other using synchronization primitives such as mutexes and semaphores, while processes can communicate wi...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="gen">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">gen-004</span>
+            <span class="text-sm" style="color: var(--text-muted)">If all mammals are warm-blooded, and dolphins are mammals, w</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">10/10</span>
+            
+            <span class="text-green-600">✓</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">If all mammals are warm-blooded, and dolphins are mammals, what can we conclude about dolphins?</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">1.6s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              If all mammals are warm-blooded, and dolphins are mammals, we can conclude that dolphins are warm-blooded.
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">1.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+If all mammals are warm-blooded, and dolphins are mammals, then we can conclude that dolphins are warm-blooded.
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="gen">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">gen-005</span>
+            <span class="text-sm" style="color: var(--text-muted)">List exactly 3 benefits of regular exercise</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">10/10</span>
+            
+            <span class="text-green-600">✓</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">List exactly 3 benefits of regular exercise. Numbered list. Max 12 words per item.</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">1.2s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              1. Boosts cardiovascular health
+2. Enhances muscle strength and endurance
+3. Improves mental health and mood
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">1.3s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+1. Improves cardiovascular health.
+2. Increases muscle strength and endurance.
+3. Enhances mental clarity and focus.
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="gen">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">gen-006</span>
+            <span class="text-sm" style="color: var(--text-muted)">Write a JavaScript function that returns the sum of all even</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">5/10</span>
+            
+            <span class="text-red-600">✗</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Write a JavaScript function that returns the sum of all even numbers in an array.</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">7.4s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">2/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              [PYTHON]
+function getEvenSum(numbers) {
+    return numbers.filter(num => num % 2 === 0).reduce((sum, num) => sum + num, 0);
+}
+[/PYTHON]
+[TESTS]
+# Test case 1:
+assert getEvenSum([]) === 0;
+# Test case 2:
+assert getEvenSum([1, 3, 5, 7]) === 0;
+# Test case 3:
+assert getEvenSum([2, 4, 6, 8]) === 30;
+[/TESTS]
+
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">8s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Here is a simple JavaScript function that sums up all the even numbers in an array:
+
+```javascript
+function sumEvenNumbers(arr) {
+    let sum = 0;
+    for(let i = 0; i < arr.length; i++) {
+        if(arr[i] % 2 === 0) {
+            sum += arr[i];
+        }
+    }
+    return sum;
+}
+```
+
+This function takes an array as an argument, loops through each element in the array, checks if the element is even (i.e., if the remainder when divided by 2 is 0), and if it is, adds it to the sum. Finally, it ...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="gen">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">gen-007</span>
+            <span class="text-sm" style="color: var(--text-muted)">What is the time complexity of binary search and why</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">8/10</span>
+            
+            <span class="text-green-600">✓</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">What is the time complexity of binary search and why?</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">5.2s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+The time complexity of binary search is O(log n), where n is the number of elements in the sorted array. This is because the algorithm repeatedly divides the search interval in half until it finds the target element or determines that it is not present. Each division of the search interval reduces the number of elements to be searched by half, so the algorithm makes log2(n) divisions on average. Since each division takes constant time, the overall time complexity is O(log n).
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">6.5s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              The time complexity of binary search is O(log n), where n is the number of elements in the sorted array on which the search is performed. This is because binary search works by repeatedly dividing the search interval in half. If the value of the search key is less than the item in the middle of the interval, the search continues in the lower half. Otherwise, it continues in the upper half. This process repeats until the value is found or the interval is empty. Each division of the interval re...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="gen">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">gen-008</span>
+            <span class="text-sm" style="color: var(--text-muted)">Explain what a transformer model is in 2-3 sentences for a s</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">7.6/10</span>
+            
+            <span class="text-yellow-600">⚠</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">3.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.6/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              A transformer model is a type of neural network architecture designed to process and generate sequences of data, such as text, by using self-attention mechanisms. This allows the model to weigh the importance of different parts of the input sequence when making predictions, enabling it to capture complex relationships and dependencies between elements in the sequence.
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">4.3s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.6/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+A transformer model is a type of neural network architecture that is commonly used for natural language processing tasks such as language translation, language modeling, and text classification. It is called a transformer because it uses self-attention mechanisms to "transform" input sequences of tokens into output sequences of tokens. This allows the model to effectively capture long-range dependencies in the input sequence and generate more accurate output sequences.
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="gen">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">gen-009</span>
+            <span class="text-sm" style="color: var(--text-muted)">Write a haiku about debugging code</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">7.3/10</span>
+            
+            <span class="text-yellow-600">⚠</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Write a haiku about debugging code.</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">0.6s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.6/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Code weaves through the night,
+Syntax whispers, "Where am I?"
+Debugging finds the light.
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">3.6s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+Debugging code,
+Lines of code, a maze,
+Errors, a plague.
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="gen">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">gen-010</span>
+            <span class="text-sm" style="color: var(--text-muted)">What is the CAP theorem and what does it mean for distribute</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">7.8/10</span>
+            
+            <span class="text-yellow-600">⚠</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">What is the CAP theorem and what does it mean for distributed systems design?</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">20.7s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+The CAP theorem is a principle for distributed systems design that states that it is impossible for a distributed system to simultaneously provide all three of the following guarantees:
+
+1. Availability (A): The system is always available and can be reached.
+2. Consistency (C): The system always returns the same response for a given request.
+3. Partition tolerance (P): The system can continue to function even when there is a network partition or other failure.
+
+In other words, the CAP theore...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">23.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              The CAP theorem, also known as the Brewer's theorem, is a fundamental concept in distributed computing that addresses the trade-offs between consistency, availability, and partition tolerance in a distributed system. The theorem states that a distributed system cannot simultaneously provide all three of the following guarantees:
+
+1. **Consistency**: Every read from the system returns the most recent write or an error. This means that all nodes see the same data at the same time.
+
+2. **Availab...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+    </div>
+  </section>
+
+</div>
+
+<script>
+// Tab switching with category filtering
+const tabs = document.querySelectorAll('.tab');
+const cases = document.querySelectorAll('details[data-category]');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    // Update active tab
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    
+    // Filter cases
+    const category = tab.dataset.tab;
+    cases.forEach(c => {
+      if (category === 'all' || c.dataset.category === category) {
+        c.style.display = 'block';
+      } else {
+        c.style.display = 'none';
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>

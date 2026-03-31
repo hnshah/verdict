@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comprehensive Stress Test - ALL PACKS — Verdict</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --accent: #3B82F6;
+  --accent-hover: #2563EB;
+  --bg-page: #F9FAFB;
+  --bg-card: #FFFFFF;
+  --text-primary: #111827;
+  --text-body: #374151;
+  --text-muted: #6B7280;
+  --text-label: #9CA3AF;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: #111827;
+    --bg-card: #1F2937;
+    --text-primary: #F9FAFB;
+    --text-body: #E5E7EB;
+    --text-muted: #9CA3AF;
+    --text-label: #6B7280;
+    --border: #374151;
+    --border-light: #1F2937;
+  }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-body);
+}
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Cards - using Tailwind sizing for consistency */
+.card {
+  background: var(--bg-card);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  padding: 2rem;
+  margin-top: 2rem;
+}
+.card:first-child { margin-top: 0; }
+
+/* Links - styled with accent color */
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: all 0.15s;
+}
+a:hover {
+  color: var(--accent-hover);
+  text-decoration-color: currentColor;
+}
+
+/* Badges */
+.badge-green { background: #ECFDF5; color: #065F46; }
+.badge-yellow { background: #FFFBEB; color: #92400E; }
+.badge-red { background: #FEF2F2; color: #991B1B; }
+.badge-gray { background: var(--border-light); color: var(--text-body); }
+
+@media (prefers-color-scheme: dark) {
+  .badge-green { background: #064E3B; color: #A7F3D0; }
+  .badge-yellow { background: #78350F; color: #FDE68A; }
+  .badge-red { background: #7F1D1D; color: #FCA5A5; }
+}
+
+/* Tabs */
+.tab {
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.15s;
+  color: var(--text-muted);
+}
+.tab:hover {
+  background: var(--border-light);
+}
+.tab.active {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Accordion */
+details summary {
+  cursor: pointer;
+  list-style: none;
+}
+details summary::-webkit-details-marker { display: none; }
+details[open] summary .chevron { transform: rotate(180deg); }
+.chevron {
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+/* Table hover */
+tbody tr {
+  transition: background 0.1s;
+}
+tbody tr:hover {
+  background: var(--border-light);
+}
+
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .desktop-only { display: none; }
+  .card { padding: 1rem; }
+  .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media print { .no-print { display: none; } }
+</style>
+</head>
+<body>
+
+<header class="bg-white dark:bg-gray-800 border-b sticky top-0 z-50" style="border-color: var(--border)">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="/" class="font-semibold no-underline" style="color: var(--text-primary)">Verdict</a>
+      <span style="color: var(--border)">·</span>
+      <span class="text-sm" style="color: var(--text-muted)">Comprehensive Stress Test - ALL PACKS</span>
+    </div>
+    <span class="text-xs" style="color: var(--text-label)">2026-03-29</span>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+  <!-- Run header card -->
+  <section class="card">
+    <div class="flex items-start justify-between mb-4 flex-wrap gap-3">
+      <div>
+        <h1 class="text-2xl font-bold mb-1" style="color: var(--text-primary)">Comprehensive Stress Test - ALL PACKS</h1>
+        <p class="text-sm" style="color: var(--text-muted)">8 test cases · 1 models · 2026-03-29</p>
+      </div>
+      <span class="badge-green px-3 py-1 rounded-full text-xs font-semibold">Complete</span>
+    </div>
+
+    <!-- Stats grid - responsive -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mt-6">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Avg Score</p>
+        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">9.4<span class="text-base" style="color: var(--text-muted)">/10</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Pass Rate</p>
+        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">100<span class="text-base" style="color: var(--text-muted)">%</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Avg Latency</p>
+        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">4.2<span class="text-base" style="color: var(--text-muted)">s</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Total Cost</p>
+        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">$0</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category tabs -->
+  <div class="flex gap-2 mt-8 overflow-x-auto border-b rounded-t-xl px-4 bg-white dark:bg-gray-800" style="border-color: var(--border)">
+    
+    <div class="tab active" data-tab="all">
+      All <span style="color: var(--text-label)">(8)</span>
+    </div>
+    
+    <div class="tab " data-tab="ts">
+      ts <span style="color: var(--text-label)">(1)</span>
+    </div>
+    
+    <div class="tab " data-tab="bugfix">
+      bugfix <span style="color: var(--text-label)">(1)</span>
+    </div>
+    
+    <div class="tab " data-tab="python">
+      python <span style="color: var(--text-label)">(1)</span>
+    </div>
+    
+    <div class="tab " data-tab="error">
+      error <span style="color: var(--text-label)">(1)</span>
+    </div>
+    
+    <div class="tab " data-tab="test">
+      test <span style="color: var(--text-label)">(1)</span>
+    </div>
+    
+    <div class="tab " data-tab="refactor">
+      refactor <span style="color: var(--text-label)">(1)</span>
+    </div>
+    
+    <div class="tab " data-tab="api">
+      api <span style="color: var(--text-label)">(1)</span>
+    </div>
+    
+    <div class="tab " data-tab="documentation">
+      documentation <span style="color: var(--text-label)">(1)</span>
+    </div>
+    
+  </div>
+
+  <!-- Leaderboard -->
+  <section class="card">
+    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Model Leaderboard</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs border-b" style="color: var(--text-label); border-color: var(--border-light)">
+            <th class="pb-3 pr-4 font-semibold">Rank</th>
+            <th class="pb-3 pr-4 font-semibold">Model</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Overall</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Accuracy</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Complete</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Concise</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Latency</th>
+            <th class="pb-3 text-right font-semibold">Wins</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y" style="border-color: var(--border-light)">
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">1</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen7b</span>
+                <span class="text-xs">🥇</span>
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.4/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">9.1</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">9.8</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">9.1</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">4.2s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">8</span>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Test cases -->
+  <section class="card">
+    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Test Cases</h2>
+    <div class="space-y-3">
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="ts">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">ts-interface-1</span>
+            <span class="text-sm" style="color: var(--text-muted)">Create a TypeScript interface for a User with:
+- name (strin</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">10/10</span>
+            
+            <span class="text-green-600">✓</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Create a TypeScript interface for a User with:
+- name (string, required)
+- email (string, required)
+- age (number, optional)
+- roles (array of strings, optional)
+</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">2.6s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! Below is a TypeScript interface that defines the structure you've described:
+
+```typescript
+interface User {
+    name: string;
+    email: string;
+    age?: number; // Optional property
+    roles?: string[]; // Optional array property
+}
+```
+
+### Explanation:
+- `name`: A required string.
+- `email`: A required string.
+- `age`: An optional number (denoted by the `?`).
+- `roles`: An optional array of strings (also denoted by the `?`).
+
+You can use this interface to define and validate u...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="bugfix">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">bugfix-1</span>
+            <span class="text-sm" style="color: var(--text-muted)">Fix this bug:
+
+```typescript
+function extractJson(text: stri</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">8.4/10</span>
+            
+            <span class="text-green-600">✓</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Fix this bug:
+
+```typescript
+function extractJson(text: string): string {
+  return text.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+}
+```
+
+Problem: Fails when text has content before the fence like "Here's an example:\n```json\n{...}\n```"
+</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">3.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">8.4/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              The issue with your current implementation is that it removes everything up to and including the first occurrence of `^```json\s*` and everything after the last occurrence of `\s*```$`. This can cause problems if there are other lines before or after the JSON code block.
+
+To handle this correctly, you should look for a specific marker (like "JSON:" or any unique identifier) within the text to ensure that only the intended JSON content is extracted. Here's an improved version of your function:...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="python">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">python-processing-1</span>
+            <span class="text-sm" style="color: var(--text-muted)">Write Python code to:
+1</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">10/10</span>
+            
+            <span class="text-green-600">✓</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Write Python code to:
+1. Read a JSON file
+2. Filter items where status == "active"
+3. Sort by created_at descending
+4. Return top 10
+</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">6.7s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! Below is a Python script that reads a JSON file, filters the items where `status` is `"active"`, sorts them by `created_at` in descending order, and returns the top 10 results.
+
+```python
+import json
+
+def read_and_process_json(file_path):
+    # Step 1: Read the JSON file
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+    
+    # Step 2: Filter items where status == "active"
+    active_items = [item for item in data if item.get('status') == 'active']
+    
+    #...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="error">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">error-handling-1</span>
+            <span class="text-sm" style="color: var(--text-muted)">Add error handling to:
+
+```typescript
+const data = JSON</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">8.4/10</span>
+            
+            <span class="text-green-600">✓</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Add error handling to:
+
+```typescript
+const data = JSON.parse(response);
+return data.results.map(r => r.id);
+```
+</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">2.6s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">8.4/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! Adding error handling is crucial to ensure that your code can gracefully handle unexpected situations, such as invalid JSON or missing `results` in the response. Here's how you can add error handling to your TypeScript code:
+
+```typescript
+try {
+    const data = JSON.parse(response);
+    if (Array.isArray(data.results)) {
+        return data.results.map(r => r.id);
+    } else {
+        throw new Error("Response does not contain an array under 'results'");
+    }
+} catch (error) {
+  ...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="test">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">test-case-1</span>
+            <span class="text-sm" style="color: var(--text-muted)">Write a test for this function:
+
+```typescript
+function scor</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">10/10</span>
+            
+            <span class="text-green-600">✓</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Write a test for this function:
+
+```typescript
+function scoreToolCall(
+  toolCalls: ToolCall[] | undefined,
+  expectedTool: string
+): number {
+  if (!toolCalls?.length) {
+    return expectedTool === '' ? 10 : 0;
+  }
+  return toolCalls.some(t => t.name === expectedTool) ? 10 : 0;
+}
+```
+</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">5s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To write a test for the `scoreToolCall` function, we can use a testing framework like Jest. Below is an example of how you might set up and run tests using Jest.
+
+First, ensure that you have Jest installed in your project:
+
+```bash
+npm install --save-dev jest
+```
+
+Next, create or update your test file (e.g., `scoreToolCall.test.ts`):
+
+```typescript
+import { scoreToolCall } from './path-to-your-file';
+
+describe('scoreToolCall', () => {
+  test('returns 10 when expected tool is empty and no tool...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="refactor">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">refactor-1</span>
+            <span class="text-sm" style="color: var(--text-muted)">Refactor this to be more maintainable:
+
+```typescript
+const </span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">10/10</span>
+            
+            <span class="text-green-600">✓</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Refactor this to be more maintainable:
+
+```typescript
+const stripped = text
+  .replace(/^```(?:json)?\s*/i, '')
+  .replace(/\s*```$/, '')
+  .trim();
+
+if (stripped.startsWith('{') || stripped.startsWith('[')) {
+  try {
+    return JSON.parse(stripped);
+  } catch { return null; }
+}
+return null;
+```
+</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">3.8s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">10/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! To make the code more maintainable, we can break it down into smaller functions and add comments for clarity. Here's a refactored version:
+
+```typescript
+function stripCodeBlocks(text: string): string {
+    // Remove leading and trailing code block delimiters if present.
+    return text
+        .replace(/^```(?:json)?\s*/i, '')
+        .replace(/\s*```$/, '')
+        .trim();
+}
+
+function parseJsonIfPossible(strippedText: string): any | null {
+    // Check if the stripped text start...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="api">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">api-design-1</span>
+            <span class="text-sm" style="color: var(--text-muted)">Design a function signature for:
+"Score a model's response a</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">9/10</span>
+            
+            <span class="text-green-600">✓</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Design a function signature for:
+"Score a model's response against expected output using different scoring methods (exact, contains, LLM judge)"
+</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">6.2s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">9/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! Below is a proposed function signature for scoring a model's response against an expected output using various scoring methods:
+
+```python
+def score_response(model_output: str, expected_output: str, scoring_method: str) -> float:
+    """
+    Scores the model's response against the expected output based on the specified scoring method.
+
+    :param model_output: The output generated by the language model.
+    :param expected_output: The expected or correct output to compare against.
+...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="documentation">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">documentation-1</span>
+            <span class="text-sm" style="color: var(--text-muted)">Write JSDoc for:
+
+```typescript
+function extractJson(text: s</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">9.2/10</span>
+            
+            <span class="text-green-600">✓</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Write JSDoc for:
+
+```typescript
+function extractJson(text: string): string | null {
+  const match = text.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
+  return match ? match[1].trim() : null;
+}
+```
+</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">2.5s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">9.2/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! Below is the JSDoc comment for the provided TypeScript function:
+
+```typescript
+/**
+ * Extracts JSON content enclosed in triple backticks (```) with an optional "json" keyword from a given string.
+ *
+ * @param text - The input string containing the JSON content.
+ * @returns The extracted JSON content as a string, or null if no match is found.
+ */
+function extractJson(text: string): string | null {
+  const match = text.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
+  return match ? ma...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+    </div>
+  </section>
+
+</div>
+
+<script>
+// Tab switching with category filtering
+const tabs = document.querySelectorAll('.tab');
+const cases = document.querySelectorAll('details[data-category]');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    // Update active tab
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    
+    // Filter cases
+    const category = tab.dataset.tab;
+    cases.forEach(c => {
+      if (category === 'all' || c.dataset.category === category) {
+        c.style.display = 'block';
+      } else {
+        c.style.display = 'none';
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>

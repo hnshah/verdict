@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verdict Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --accent: #3B82F6;
+  --accent-hover: #2563EB;
+  --bg-page: #F9FAFB;
+  --bg-card: #FFFFFF;
+  --text-primary: #111827;
+  --text-body: #374151;
+  --text-muted: #6B7280;
+  --text-label: #9CA3AF;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: #111827;
+    --bg-card: #1F2937;
+    --text-primary: #F9FAFB;
+    --text-body: #E5E7EB;
+    --text-muted: #9CA3AF;
+    --text-label: #6B7280;
+    --border: #374151;
+    --border-light: #1F2937;
+  }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-body);
+}
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.card {
+  background: var(--bg-card);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  padding: 2rem;
+  margin-top: 2rem;
+}
+.card:first-child { margin-top: 0; }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.badge-green { background: #ECFDF5; color: #065F46; }
+.badge-blue { background: #EFF6FF; color: #1D4ED8; }
+.badge-gray { background: var(--border-light); color: var(--text-body); }
+
+@media (prefers-color-scheme: dark) {
+  .badge-green { background: #064E3B; color: #A7F3D0; }
+  .badge-blue { background: #1E3A8A; color: #93C5FD; }
+}
+
+tbody tr {
+  transition: background 0.1s;
+  cursor: pointer;
+}
+tbody tr:hover {
+  background: var(--border-light);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .desktop-only { display: none; }
+  .card { padding: 1rem; }
+}
+
+@media print { .no-print { display: none; } }
+</style>
+</head>
+<body>
+
+<header class="bg-white dark:bg-gray-800 border-b sticky top-0 z-50" style="border-color: var(--border)">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <h1 class="font-semibold" style="color: var(--text-primary)">Verdict Dashboard</h1>
+    </div>
+    <span class="text-xs" style="color: var(--text-label)">Last updated: 2026-03-31</span>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+  <!-- Overview stats -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+    <div class="stat-card">
+      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color: var(--text-label)">Total Runs</p>
+      <p class="text-2xl font-bold" style="color: var(--text-primary)">39</p>
+    </div>
+    <div class="stat-card">
+      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color: var(--text-label)">Test Cases</p>
+      <p class="text-2xl font-bold" style="color: var(--text-primary)">256</p>
+    </div>
+    <div class="stat-card">
+      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color: var(--text-label)">Models Tested</p>
+      <p class="text-2xl font-bold" style="color: var(--text-primary)">11</p>
+    </div>
+    <div class="stat-card">
+      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color: var(--text-label)">Avg Score</p>
+      <p class="text-2xl font-bold" style="color: var(--text-primary)">6.7<span class="text-base" style="color: var(--text-muted)">/10</span></p>
+    </div>
+  </div>
+
+  <!-- Runs table -->
+  <section class="card">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-xl font-bold" style="color: var(--text-primary)">All Runs</h2>
+      <span class="text-sm" style="color: var(--text-muted)">39 runs</span>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs border-b" style="color: var(--text-label); border-color: var(--border-light)">
+            <th class="pb-3 pr-4 font-semibold">Date</th>
+            <th class="pb-3 pr-4 font-semibold">Run Name</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Cases</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Models</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Avg Score</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Pass Rate</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Latency</th>
+            <th class="pb-3 text-right font-semibold">Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y" style="border-color: var(--border-light)">
+          
+          <tr onclick="window.location.href='/runs/screenmuse-direct-20260330-145117'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/screenmuse-direct-20260330-145117" class="font-medium" style="color: var(--text-primary)">ScreenMuse Direct Test Run</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">0</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">0/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">0s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-31-2026-03-31T05-07-33'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-31</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-31-2026-03-31T05-07-33" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">5</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.3/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">90%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">16.3s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-31-2026-03-31T05-05-58'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-31</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-31-2026-03-31T05-05-58" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">2</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">5</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">10/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">100%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">14.6s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-31-2026-03-31T05-04-23'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-31</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-31-2026-03-31T05-04-23" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">3</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">5</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.4/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">100%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">16.2s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-31-2026-03-31T04-18-28'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-31</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-31-2026-03-31T04-18-28" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">5</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.8/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">100%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">15.1s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-31-2026-03-31T04-18-02'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-31</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-31-2026-03-31T04-18-02" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.2/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">80%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">1.5s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T22-22-13'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T22-22-13" class="font-medium" style="color: var(--text-primary)">Gap Fill - Comprehensive Coding</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">5</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">6.1/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">27.5s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T22-21-04'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T22-21-04" class="font-medium" style="color: var(--text-primary)">Gap Fill - Context Coverage</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">3</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">4.3/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">9s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T21-43-50'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T21-43-50" class="font-medium" style="color: var(--text-primary)">ScreenMuse Elite Evaluation</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">20</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">5.3/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">10%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">7s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T19-23-38'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T19-23-38" class="font-medium" style="color: var(--text-primary)">Gap Fill - Speed Coverage</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.2/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">60%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">2s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T17-34-39'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T17-34-39" class="font-medium" style="color: var(--text-primary)">Gap Fill - Multilingual Coverage</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.4/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">40%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">4.2s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T17-23-38'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T17-23-38" class="font-medium" style="color: var(--text-primary)">Comprehensive Categorized Benchmark</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">20</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.4/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">15%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">13.7s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T17-08-35'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T17-08-35" class="font-medium" style="color: var(--text-primary)">Reasoning Specialist Comparison</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">2</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.1/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">90%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">15.2s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T17-08-33'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T17-08-33" class="font-medium" style="color: var(--text-primary)">Coding Specialist Comparison</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">2</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">8.1/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">40%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">6.1s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T16-01-05'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T16-01-05" class="font-medium" style="color: var(--text-primary)">Quick Diverse Benchmark</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">4</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">8/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">30%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">8.6s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T07-20-32'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T07-20-32" class="font-medium" style="color: var(--text-primary)">Elite Production-Grade Tests (Matching Ren's Quality)</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">2</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">8.1/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">40%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">4.2s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T07-15-19'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T07-15-19" class="font-medium" style="color: var(--text-primary)">Fast 7B Model Comparison</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">5</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.5/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">30%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">7.2s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T07-12-49'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T07-12-49" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">0</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">0/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">0s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T07-12-16'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T07-12-16" class="font-medium" style="color: var(--text-primary)">Quick Coding Test</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">2</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">8.3/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">30%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">5.1s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T06-26-23'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T06-26-23" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">3</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">0/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">4.1s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T06-25-45'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T06-25-45" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">0/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">6.6s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T06-25-07'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T06-25-07" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">0/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">6.8s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T00-17-32'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T00-17-32" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">3</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.2/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">21s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T00-17-30'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T00-17-30" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">8.1/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">60%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">13.1s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-30-2026-03-30T00-17-28'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-30</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-30-2026-03-30T00-17-28" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.9/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">40%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">12.8s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T23-26-37'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T23-26-37" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">3</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">0/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">37s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T23-26-10'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T23-26-10" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">3</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.7/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">100%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">6.1s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T23-25-24'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T23-25-24" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">8/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">80%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">2.5s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T23-22-10'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T23-22-10" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">0/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">133.6s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T23-20-49'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T23-20-49" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">8.2/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">80%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">5.8s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T23-20-36'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T23-20-36" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">1/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">7.1s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T23-19-24'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T23-19-24" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.6/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">40%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">20.5s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T23-18-57'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T23-18-57" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">10/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">100%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">3.3s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T23-17-53'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T23-17-53" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.2/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">80%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">1.2s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T23-15-18'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T23-15-18" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">8.1/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">60%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">3.4s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T22-30-51'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T22-30-51" class="font-medium" style="color: var(--text-primary)">My Evals</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">3</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.1/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">116.4s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T21-13-59'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T21-13-59" class="font-medium" style="color: var(--text-primary)">Comprehensive Stress Test - ALL PACKS</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">8</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.4/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">100%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">4.2s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T21-13-18'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T21-13-18" class="font-medium" style="color: var(--text-primary)">Comprehensive Stress Test - ALL PACKS</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">8</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.4/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">100%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">4.3s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+          <tr onclick="window.location.href='/runs/2026-03-29-2026-03-29T20-38-27'">
+            <td class="py-3 pr-4 mono text-xs" style="color: var(--text-muted)">2026-03-29</td>
+            <td class="py-3 pr-4">
+              <a href="/runs/2026-03-29-2026-03-29T20-38-27" class="font-medium" style="color: var(--text-primary)">Comprehensive Stress Test - ALL PACKS</a>
+              
+              <div class="flex gap-1 mt-1">
+                
+              </div>
+              
+            </td>
+            <td class="py-3 pr-4 text-right font-medium" style="color: var(--text-body)">2</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">10/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">100%</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">1.8s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">Complete</span>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Top Models -->
+  <section class="card">
+    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Top Models (All Runs)</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs border-b" style="color: var(--text-label); border-color: var(--border-light)">
+            <th class="pb-3 pr-4 font-semibold">Rank</th>
+            <th class="pb-3 pr-4 font-semibold">Model</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Avg Score</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Runs</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Total Wins</th>
+            <th class="pb-3 text-right font-semibold">Win Rate</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y" style="border-color: var(--border-light)">
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">1</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">phi4:14b</span>
+                <span class="text-xs">🥇</span>
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.8/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">4</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">4</td>
+            <td class="py-3 text-right">
+              <span class="badge-blue px-2 py-0.5 rounded text-xs font-medium">400%</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">2</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">gemma2:9b</span>
+                
+                <span class="text-xs">🥈</span>
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.8/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">4</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 text-right">
+              <span class="badge-blue px-2 py-0.5 rounded text-xs font-medium">100%</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">3</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen2.5:14b</span>
+                
+                
+                <span class="text-xs">🥉</span>
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.7/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">4</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">0</td>
+            <td class="py-3 text-right">
+              <span class="badge-blue px-2 py-0.5 rounded text-xs font-medium">0%</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">4</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen2.5:7b</span>
+                
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.6/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">19</td>
+            <td class="py-3 text-right">
+              <span class="badge-blue px-2 py-0.5 rounded text-xs font-medium">1900%</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">5</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">llama3.2:3b</span>
+                
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">9.2/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">4</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">1</td>
+            <td class="py-3 text-right">
+              <span class="badge-blue px-2 py-0.5 rounded text-xs font-medium">100%</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">6</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen7b</span>
+                
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">8/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">7</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">18</td>
+            <td class="py-3 text-right">
+              <span class="badge-blue px-2 py-0.5 rounded text-xs font-medium">1800%</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">7</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen-coder</span>
+                
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.8/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">11</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">78</td>
+            <td class="py-3 text-right">
+              <span class="badge-blue px-2 py-0.5 rounded text-xs font-medium">7800%</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">8</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">codellama</span>
+                
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.1/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">41</td>
+            <td class="py-3 text-right">
+              <span class="badge-blue px-2 py-0.5 rounded text-xs font-medium">4100%</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">9</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen</span>
+                
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">19</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">48</td>
+            <td class="py-3 text-right">
+              <span class="badge-blue px-2 py-0.5 rounded text-xs font-medium">4800%</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">10</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">deepseek</span>
+                
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">5.4/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">15</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">6</td>
+            <td class="py-3 text-right">
+              <span class="badge-blue px-2 py-0.5 rounded text-xs font-medium">600%</span>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

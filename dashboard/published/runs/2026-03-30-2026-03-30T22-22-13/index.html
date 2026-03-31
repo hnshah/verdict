@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gap Fill - Comprehensive Coding — Verdict</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --accent: #3B82F6;
+  --accent-hover: #2563EB;
+  --bg-page: #F9FAFB;
+  --bg-card: #FFFFFF;
+  --text-primary: #111827;
+  --text-body: #374151;
+  --text-muted: #6B7280;
+  --text-label: #9CA3AF;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: #111827;
+    --bg-card: #1F2937;
+    --text-primary: #F9FAFB;
+    --text-body: #E5E7EB;
+    --text-muted: #9CA3AF;
+    --text-label: #6B7280;
+    --border: #374151;
+    --border-light: #1F2937;
+  }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-body);
+}
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Cards - using Tailwind sizing for consistency */
+.card {
+  background: var(--bg-card);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  padding: 2rem;
+  margin-top: 2rem;
+}
+.card:first-child { margin-top: 0; }
+
+/* Links - styled with accent color */
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: all 0.15s;
+}
+a:hover {
+  color: var(--accent-hover);
+  text-decoration-color: currentColor;
+}
+
+/* Badges */
+.badge-green { background: #ECFDF5; color: #065F46; }
+.badge-yellow { background: #FFFBEB; color: #92400E; }
+.badge-red { background: #FEF2F2; color: #991B1B; }
+.badge-gray { background: var(--border-light); color: var(--text-body); }
+
+@media (prefers-color-scheme: dark) {
+  .badge-green { background: #064E3B; color: #A7F3D0; }
+  .badge-yellow { background: #78350F; color: #FDE68A; }
+  .badge-red { background: #7F1D1D; color: #FCA5A5; }
+}
+
+/* Tabs */
+.tab {
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.15s;
+  color: var(--text-muted);
+}
+.tab:hover {
+  background: var(--border-light);
+}
+.tab.active {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Accordion */
+details summary {
+  cursor: pointer;
+  list-style: none;
+}
+details summary::-webkit-details-marker { display: none; }
+details[open] summary .chevron { transform: rotate(180deg); }
+.chevron {
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+/* Table hover */
+tbody tr {
+  transition: background 0.1s;
+}
+tbody tr:hover {
+  background: var(--border-light);
+}
+
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .desktop-only { display: none; }
+  .card { padding: 1rem; }
+  .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media print { .no-print { display: none; } }
+</style>
+</head>
+<body>
+
+<header class="bg-white dark:bg-gray-800 border-b sticky top-0 z-50" style="border-color: var(--border)">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="/" class="font-semibold no-underline" style="color: var(--text-primary)">Verdict</a>
+      <span style="color: var(--border)">·</span>
+      <span class="text-sm" style="color: var(--text-muted)">Gap Fill - Comprehensive Coding</span>
+    </div>
+    <span class="text-xs" style="color: var(--text-label)">2026-03-30</span>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+  <!-- Run header card -->
+  <section class="card">
+    <div class="flex items-start justify-between mb-4 flex-wrap gap-3">
+      <div>
+        <h1 class="text-2xl font-bold mb-1" style="color: var(--text-primary)">Gap Fill - Comprehensive Coding</h1>
+        <p class="text-sm" style="color: var(--text-muted)">10 test cases · 5 models · 2026-03-30</p>
+      </div>
+      <span class="badge-green px-3 py-1 rounded-full text-xs font-semibold">Complete</span>
+    </div>
+
+    <!-- Stats grid - responsive -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mt-6">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Avg Score</p>
+        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">6.1<span class="text-base" style="color: var(--text-muted)">/10</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Pass Rate</p>
+        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">0<span class="text-base" style="color: var(--text-muted)">%</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Avg Latency</p>
+        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">27.5<span class="text-base" style="color: var(--text-muted)">s</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Total Cost</p>
+        <p class="text-xl sm:text-2xl font-bold" style="color: var(--text-primary)">$0</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category tabs -->
+  <div class="flex gap-2 mt-8 overflow-x-auto border-b rounded-t-xl px-4 bg-white dark:bg-gray-800" style="border-color: var(--border)">
+    
+    <div class="tab active" data-tab="all">
+      All <span style="color: var(--text-label)">(10)</span>
+    </div>
+    
+    <div class="tab " data-tab="code">
+      code <span style="color: var(--text-label)">(10)</span>
+    </div>
+    
+  </div>
+
+  <!-- Leaderboard -->
+  <section class="card">
+    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Model Leaderboard</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs border-b" style="color: var(--text-label); border-color: var(--border-light)">
+            <th class="pb-3 pr-4 font-semibold">Rank</th>
+            <th class="pb-3 pr-4 font-semibold">Model</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Overall</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Accuracy</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Complete</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Concise</th>
+            <th class="pb-3 pr-4 text-right font-semibold desktop-only">Latency</th>
+            <th class="pb-3 text-right font-semibold">Wins</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y" style="border-color: var(--border-light)">
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">1</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen-coder</span>
+                <span class="text-xs">🥇</span>
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.4/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">7.6</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">7.6</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">6.7</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">17.6s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">6</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">2</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen7b</span>
+                
+                <span class="text-xs">🥈</span>
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.4/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">7.6</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">7.6</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">6.6</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">24.6s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">0</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">3</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">qwen</span>
+                
+                
+                <span class="text-xs">🥉</span>
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">7.4/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">7.6</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">7.6</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">6.6</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">17.3s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">0</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">4</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">codellama</span>
+                
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">5.2/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">5.5</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">5.1</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">4.6</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">18.6s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">4</span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold" style="color: var(--text-primary)">5</td>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="font-medium" style="color: var(--text-primary)">deepseek</span>
+                
+                
+                
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold" style="color: var(--text-primary)">3.3/10</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3.8</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">3.2</td>
+            <td class="py-3 pr-4 text-right desktop-only" style="color: var(--text-muted)">2.6</td>
+            <td class="py-3 pr-4 text-right mono text-xs desktop-only" style="color: var(--text-label)">59.3s</td>
+            <td class="py-3 text-right">
+              <span class="badge-green px-2 py-0.5 rounded text-xs font-medium">0</span>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Test cases -->
+  <section class="card">
+    <h2 class="text-xl font-bold mb-6" style="color: var(--text-primary)">Test Cases</h2>
+    <div class="space-y-3">
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="code">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">code-001</span>
+            <span class="text-sm" style="color: var(--text-muted)">Write a Python function that finds the two numbers in a list</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">5.1/10</span>
+            
+            <span class="text-red-600">✗</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Write a Python function that finds the two numbers in a list that sum to a target value. Return their indices. Assume exactly one solution exists.</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">10.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">2/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              [PYTHON]
+def find_indices(my_list, target):
+    for i in range(len(my_list)):
+        for j in range(i+1, len(my_list)):
+            if my_list[i] + my_list[j] == target:
+                return [i, j]
+    return []
+[/PYTHON]
+[TESTS]
+# Test case 1:
+assert find_indices([1, 2, 3, 4, 5], 7) == [1, 3]
+# Test case 2:
+assert find_indices([1, 2, 3, 4, 5], 6) == [0, 2]
+# Test case 3:
+assert find_indices([1, 2, 3, 4, 5], 8) == [2, 4]
+[/TESTS]
+
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">14.8s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              ```python
+def two_sum(nums, target):
+    # Create a dictionary to store the numbers and their indices
+    num_dict = {}
+    # Iterate over the list of numbers
+    for i, num in enumerate(nums):
+        # Calculate the complement that would sum to the target
+        complement = target - num
+        # Check if the complement exists in the dictionary
+        if complement in num_dict:
+            # If it exists, return the indices of the complement and the current number
+            return [num...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">17.4s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! Below is a Python function that takes a list of integers and a target sum, then returns the indices of the two numbers that add up to the target. The function assumes that there is exactly one solution.
+
+```python
+def two_sum(nums, target):
+    # Create a dictionary to store the index of each number
+    num_to_index = {}
+    
+    # Iterate through the list of numbers
+    for i, num in enumerate(nums):
+        # Calculate the complement of the current number
+        complement = tar...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">12.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! Below is a Python function that takes a list of integers and a target sum, then returns the indices of the two numbers that add up to the target. The function assumes that there is exactly one solution.
+
+```python
+def two_sum(nums, target):
+    # Create a dictionary to store the index of each number
+    num_to_index = {}
+    
+    # Iterate through the list of numbers
+    for i, num in enumerate(nums):
+        # Calculate the complement of the current number
+        complement = tar...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">deepseek</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">30.1s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">0/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="code">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">code-002</span>
+            <span class="text-sm" style="color: var(--text-muted)">Debug this JavaScript: function flatten(arr) { return arr</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">6.2/10</span>
+            
+            <span class="text-yellow-600">⚠</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Debug this JavaScript: function flatten(arr) { return arr.reduce((acc, val) => acc.concat(val), []); } — it only flattens one level deep. Fix it to flatten arrays of any depth.</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">7.2s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To fix the `flatten` function so that it can flatten arrays of any depth, you can use a recursive approach. Here's how you can do it:
+
+```javascript
+function flatten(arr) {
+  return arr.reduce((acc, val) => {
+    if (Array.isArray(val)) {
+      return acc.concat(flatten(val));
+    } else {
+      return acc.concat(val);
+    }
+  }, []);
+}
+```
+
+### Explanation:
+- The `reduce` function is used to iterate over each element in the array.
+- For each element, it checks if the element is an array usin...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">14.3s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+The issue with the current implementation is that it only flattens arrays of one level deep. To fix this, we can use a recursive approach to flatten arrays of any depth. Here's an example of how we can modify the function to achieve this:
+```
+function flatten(arr) {
+  return arr.reduce((acc, val) => {
+    if (Array.isArray(val)) {
+      return acc.concat(flatten(val));
+    } else {
+      return acc.concat(val);
+    }
+  }, []);
+}
+```
+In this implementation, we use the `Array.isArray()` method...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">17.3s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To flatten an array of any depth, you need to use a recursive approach. The current implementation only flattens one level deep because it simply concatenates each element with the accumulator array. To handle arrays of any depth, you need to check if an element is an array and then recursively flatten it.
+
+Here's the corrected function:
+
+```javascript
+function flatten(arr) {
+    return arr.reduce((acc, val) => {
+        if (Array.isArray(val)) {
+            // Recursively flatten the subarra...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">19.6s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To flatten an array of any depth, you need to use a recursive approach. The current implementation only flattens one level deep because it simply concatenates each element with the accumulator array. To handle arrays of any depth, you need to check if an element is an array and then recursively flatten it.
+
+Here's the corrected function:
+
+```javascript
+function flatten(arr) {
+    return arr.reduce((acc, val) => {
+        if (Array.isArray(val)) {
+            // Recursively flatten the subarra...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">deepseek</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">31.4s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">0/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="code">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">code-003</span>
+            <span class="text-sm" style="color: var(--text-muted)">Write a SQL query that finds the top 3 customers by total or</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">7/10</span>
+            
+            <span class="text-yellow-600">⚠</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Write a SQL query that finds the top 3 customers by total order value from tables: orders(id, customer_id, amount) and customers(id, name). Include customer name and total.</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">8.6s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">3.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To find the top 3 customers by total order value, you can use the following SQL query:
+
+```sql
+SELECT 
+    c.id AS customer_id,
+    c.name AS customer_name,
+    SUM(o.amount) AS total_order_value
+FROM 
+    orders o
+JOIN 
+    customers c ON o.customer_id = c.id
+GROUP BY 
+    c.id, c.name
+ORDER BY 
+    total_order_value DESC
+LIMIT 3;
+```
+
+This query performs the following steps:
+
+1. **JOIN**: Combines the `orders` and `customers` tables based on the `customer_id` field.
+2. **GROUP BY**: Groups ...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+Here is a SQL query that finds the top 3 customers by total order value from tables orders and customers:
+```
+SELECT c.name, SUM(o.amount) AS total
+FROM orders o
+JOIN customers c ON o.customer_id = c.id
+GROUP BY c.id
+ORDER BY total DESC
+LIMIT 3;
+```
+This query joins the orders and customers tables on the customer_id column, and then groups the results by customer ID. The SUM function is used to calculate the total amount for each customer. The results are then ordered by the total amount in ...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">14.1s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! To find the top 3 customers by total order value, you can use a SQL query that joins the `orders` and `customers` tables, groups the results by customer, sums the order amounts, and then orders the results by the total order value in descending order. Here's the SQL query:
+
+```sql
+SELECT 
+    c.name,
+    SUM(o.amount) AS total_order_value
+FROM 
+    orders o
+JOIN 
+    customers c ON o.customer_id = c.id
+GROUP BY 
+    c.name
+ORDER BY 
+    total_order_value DESC
+LIMIT 3;
+```
+
+### Expl...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">8.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! To find the top 3 customers by total order value, you can use a SQL query that joins the `orders` and `customers` tables, groups the results by customer, sums the order amounts, and then orders the results by the total order value in descending order. Here's the SQL query:
+
+```sql
+SELECT 
+    c.name,
+    SUM(o.amount) AS total_order_value
+FROM 
+    orders o
+JOIN 
+    customers c ON o.customer_id = c.id
+GROUP BY 
+    c.name
+ORDER BY 
+    total_order_value DESC
+LIMIT 3;
+```
+
+### Expl...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">deepseek</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">22.7s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To find the top 3 customers by their total order value, we can use a SQL query that joins the orders and customers tables, groups by customer, sums the amounts, and then selects the top 3 based on this total.
+
+**Answer:**
+
+```sql
+SELECT c.name AS customer_name, SUM(o.amount) AS total_amount
+FROM orders o
+JOIN customers c ON o.customer_id = c.id
+GROUP BY c.id
+ORDER BY total_amount DESC
+LIMIT 3;
+```
+
+**Explanation:**
+
+1. **JOIN Operation:** We join the `orders` table with the `customers` table ...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="code">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">code-004</span>
+            <span class="text-sm" style="color: var(--text-muted)">Implement a basic LRU (Least Recently Used) cache in Python </span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">5.1/10</span>
+            
+            <span class="text-red-600">✗</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Implement a basic LRU (Least Recently Used) cache in Python with get(key) and put(key, value) methods. Capacity is set at init. Both operations must be O(1).</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">20.5s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">2.2/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+Here is an example of how you could implement a basic LRU cache in Python:
+```
+class LRUCache:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.cache = {}
+        self.order = []
+
+    def get(self, key):
+        if key not in self.cache:
+            return -1
+        else:
+            self.order.remove(key)
+            self.order.append(key)
+            return self.cache[key]
+
+    def put(self, key, value):
+        if key in self.cache:
+            self.order.r...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">29.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To implement a basic LRU (Least Recently Used) cache in Python with `get(key)` and `put(key, value)` methods, we can use a combination of a dictionary and an ordered list. The dictionary will provide O(1) access to the values, and the ordered list will help us maintain the order of usage to implement the LRU policy.
+
+Here's a step-by-step implementation:
+
+1. **Dictionary**: This will store the key-value pairs.
+2. **Ordered List**: This will store the keys in the order they were accessed. The ...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">37s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To implement a basic LRU (Least Recently Used) cache in Python with `get(key)` and `put(key, value)` methods, we can use a combination of a dictionary and a doubly linked list. The dictionary will provide O(1) access to the cache items, while the doubly linked list will help us maintain the order of usage and efficiently remove the least recently used items.
+
+Here's a Python implementation:
+
+```python
+class Node:
+    def __init__(self, key, value):
+        self.key = key
+        self.value = ...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">28.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To implement a basic LRU (Least Recently Used) cache in Python with `get(key)` and `put(key, value)` methods, we can use a combination of a dictionary and a doubly linked list. The dictionary will provide O(1) access to the cache items, while the doubly linked list will help us maintain the order of usage and efficiently remove the least recently used items.
+
+Here's a Python implementation:
+
+```python
+class Node:
+    def __init__(self, key, value):
+        self.key = key
+        self.value = ...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">deepseek</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">36.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">0/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="code">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">code-005</span>
+            <span class="text-sm" style="color: var(--text-muted)">What's wrong with this Go code</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">6.4/10</span>
+            
+            <span class="text-yellow-600">⚠</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">What's wrong with this Go code? func main() { var wg sync.WaitGroup; for i := 0; i < 5; i++ { wg.Add(1); go func() { defer wg.Done(); fmt.Println(i) }() }; wg.Wait() }</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">11.8s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+The code is not correct because it is using the `i` variable in the closure, which is a copy of the `i` variable in the outer scope. This means that the value of `i` in the closure is always 5, because the loop has already finished and `i` has been set to 5.
+
+To fix this, you can use the `range` keyword to iterate over the values in the `wg` slice, and use the `i` variable in the closure to print the current value. Here's the corrected code:
+```
+func main() {
+    var wg sync.WaitGroup
+    fo...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">13.3s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              The Go code you provided has a common issue related to the use of a closure within a loop. The problem arises because the closure captures the loop variable `i` by reference, not by value. As a result, when the goroutines are executed, they all print the value of `i` at the time the loop completes, which is 5.
+
+Here's a breakdown of the issue:
+
+1. **Loop Variable Capture**: The loop variable `i` is captured by reference in the closure. This means that all goroutines will see the same `i`, whi...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">15.2s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              The issue with the provided Go code is related to the use of the `i` variable in the `fmt.Println(i)` statement. By the time the goroutines run, the loop has already completed, and `i` has the final value of 5. Therefore, all goroutines will print `5`.
+
+To fix this, you can use a closure to capture the current value of `i` in each iteration of the loop. Here's the corrected code:
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func main() {
+	var wg sync.WaitGroup
+	for i := 0; i < 5; i++ {
+		w...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">6.1s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              The issue with the provided Go code is related to the use of the `i` variable in the `fmt.Println(i)` statement. By the time the goroutines run, the loop has already completed, and `i` has the final value of 5. Therefore, all goroutines will print `5`.
+
+To fix this, you can use a closure to capture the current value of `i` in each iteration of the loop. Here's the corrected code:
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func main() {
+	var wg sync.WaitGroup
+	for i := 0; i < 5; i++ {
+		w...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">deepseek</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">25.4s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">1/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              The issue in the provided Go code is that the channel is added to the wait group before it is closed. This causes an error when the wait group tries to remove the channel because the channel is still open. The fix is to ensure the channel is closed before it is added to the wait group.
+
+**Step-by-Step Explanation:**
+
+1. **Identify the Problem:**
+   - The code adds a channel to the wait group before closing it.
+   - The `Remove()` method of the wait group requires the channel to be closed befo...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="code">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">code-006</span>
+            <span class="text-sm" style="color: var(--text-muted)">Write a TypeScript generic function `groupBy<T>(arr: T[], ke</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">6.7/10</span>
+            
+            <span class="text-yellow-600">⚠</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Write a TypeScript generic function `groupBy<T>(arr: T[], key: keyof T): Record<string, T[]>` that groups an array of objects by a given key.</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">9.6s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              ```typescript
+function groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {
+  return arr.reduce((acc, item) => {
+    const groupKey = item[key];
+    if (!acc[groupKey]) {
+      acc[groupKey] = [];
+    }
+    acc[groupKey].push(item);
+    return acc;
+  }, {} as Record<string, T[]>);
+}
+```
+
+**Explanation**:
+The `groupBy` function takes an array of objects `arr` and a key `key` as arguments. It returns an object where the keys are the unique values of the specified key in the array, and the ...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">25.7s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+Here is an example of how you can implement a generic function `groupBy<T>(arr: T[], key: keyof T): Record<string, T[]>` in TypeScript:
+```
+function groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {
+  return arr.reduce((acc, cur) => {
+    const groupKey = cur[key];
+    if (!acc[groupKey]) {
+      acc[groupKey] = [];
+    }
+    acc[groupKey].push(cur);
+    return acc;
+  }, {});
+}
+```
+This function takes two parameters: `arr` is an array of objects, and `key` is a key of the objects in ...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">26.6s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! Below is a TypeScript generic function `groupBy` that groups an array of objects by a given key. The function uses the `keyof` type to ensure that the key provided is valid for the objects in the array.
+
+```typescript
+function groupBy<T, K extends keyof T>(arr: T[], key: K): Record<string, T[]> {
+    const grouped: Record<string, T[]> = {};
+
+    arr.forEach(item => {
+        const keyValue = item[key];
+        if (!grouped[keyValue]) {
+            grouped[keyValue] = [];
+        }
+...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">16.5s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! Below is a TypeScript generic function `groupBy` that groups an array of objects by a given key. The function uses the `keyof` type to ensure that the key provided is valid for the objects in the array.
+
+```typescript
+function groupBy<T, K extends keyof T>(arr: T[], key: K): Record<string, T[]> {
+    const grouped: Record<string, T[]> = {};
+
+    arr.forEach(item => {
+        const keyValue = item[key];
+        if (!grouped[keyValue]) {
+            grouped[keyValue] = [];
+        }
+...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">deepseek</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">31.1s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">2.2/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To solve this problem, we need to create a TypeScript function that groups an array of objects by a specified key. The function will return a record where each key is a string representing the grouping key, and the value is an array of objects that share that key.
+
+### Approach
+1. **Function Signature**: The function `groupBy` takes two parameters: an array of objects `arr` and a string `key` which specifies the property to group by. The function returns a record of type `Record<string, T[]>`...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="code">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">code-007</span>
+            <span class="text-sm" style="color: var(--text-muted)">Given a binary tree, write a function to check if it's a val</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">5.1/10</span>
+            
+            <span class="text-red-600">✗</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Given a binary tree, write a function to check if it's a valid BST (Binary Search Tree). Don't just compare each node to its parent — consider the full range constraint.</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">28.4s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To check if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node, all nodes in its left subtree are less than the node, and all nodes in its right subtree are greater than the node. This constraint must hold for every node in the tree.
+
+Here's a Python function to check if a binary tree is a valid BST:
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">36s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">2.2/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+A valid BST is defined as follows:
+
+* The left subtree of a node contains only nodes with keys less than the node's key.
+* The right subtree of a node contains only nodes with keys greater than the node's key.
+* Both the left and right subtrees must also be binary search trees.
+
+Here's an example of a valid BST:
+```
+      4
+     / \
+    2   6
+   / \   \
+  1   3   7
+```
+And here's an example of an invalid BST:
+```
+      4
+     / \
+    2   8
+   / \   \
+  1   3   7
+```
+In this example, the node...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">40.4s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To check if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node, all nodes in its left subtree are smaller and all nodes in its right subtree are larger. This means that the value of each node must be within a certain range, which is defined by the values of its parent node.
+
+Here's a Python function that checks if a binary tree is a valid BST using a recursive approach. The function will take a node and a tuple representing the range of valid values for t...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">26.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To check if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node, all nodes in its left subtree are smaller and all nodes in its right subtree are larger. This means that the value of each node must be within a certain range, which is defined by the values of its parent node.
+
+Here's a Python function that checks if a binary tree is a valid BST using a recursive approach. The function will take a node and a tuple representing the range of valid values for t...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">deepseek</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">36s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">0/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="code">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">code-008</span>
+            <span class="text-sm" style="color: var(--text-muted)">Refactor this code to remove duplication: if (type === 'admi</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">5.8/10</span>
+            
+            <span class="text-red-600">✗</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Refactor this code to remove duplication: if (type === 'admin') { log('admin action'); audit('admin', userId); } if (type === 'user') { log('user action'); audit('user', userId); } if (type === 'guest') { log('guest action'); audit('guest', userId); }</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">4.3s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              You can refactor the code to remove duplication by using a function that handles both the logging and auditing based on the type. Here's an example in JavaScript:
+
+```javascript
+function handleAction(type, userId) {
+    const actionType = type === 'admin' ? 'admin' : type === 'user' ? 'user' : 'guest';
+    log(`${actionType} action`);
+    audit(actionType, userId);
+}
+
+// Usage
+if (type === 'admin' || type === 'user' || type === 'guest') {
+    handleAction(type, userId);
+}
+```
+
+This way, you a...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">11.1s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">2.4/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+Here's a refactoring of the code to remove duplication:
+```
+const logAndAudit = (type, userId) => {
+  if (type === 'admin') {
+    log('admin action');
+    audit('admin', userId);
+  } else if (type === 'user') {
+    log('user action');
+    audit('user', userId);
+  } else if (type === 'guest') {
+    log('guest action');
+    audit('guest', userId);
+  }
+};
+```
+In this refactoring, we've extracted the common logic of logging and auditing into a separate function called `logAndAudit`. This functio...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">13.7s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! You can refactor the code to remove duplication by using a single function that handles the common logic. Here's a refactored version:
+
+```javascript
+function handleAction(type, userId) {
+    log(`${type} action`);
+    audit(type, userId);
+}
+
+if (type === 'admin') {
+    handleAction('admin', userId);
+} else if (type === 'user') {
+    handleAction('user', userId);
+} else if (type === 'guest') {
+    handleAction('guest', userId);
+}
+```
+
+Alternatively, you can use a switch statement t...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">6.7s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Certainly! You can refactor the code to remove duplication by using a single function that handles the common logic. Here's a refactored version:
+
+```javascript
+function handleAction(type, userId) {
+    log(`${type} action`);
+    audit(type, userId);
+}
+
+if (type === 'admin') {
+    handleAction('admin', userId);
+} else if (type === 'user') {
+    handleAction('user', userId);
+} else if (type === 'guest') {
+    handleAction('guest', userId);
+}
+```
+
+Alternatively, you can use a switch statement t...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">deepseek</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">16.4s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">3.2/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              Here's a refactored version of the code that removes duplication by using a switch statement:
+
+```javascript
+const type = 'admin'; // or whatever the actual value is
+
+switch (type) {
+  case 'admin':
+    log('admin action');
+    audit('admin', userId);
+    break;
+  case 'user':
+    log('user action');
+    audit('user', userId);
+    break;
+  case 'guest':
+    log('guest action');
+    audit('guest', userId);
+    break;
+  default:
+    // Handle unknown type if necessary
+    break;
+}
+```
+
+This ver...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="code">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">code-009</span>
+            <span class="text-sm" style="color: var(--text-muted)">Write a bash one-liner to find the 5 largest files in the cu</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">4.2/10</span>
+            
+            <span class="text-red-600">✗</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Write a bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing size and path.</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">10.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              You can use the following bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing size and path:
+
+```bash
+find . -type f -exec ls -lh {} + | sort -rh | head -n 6 | sed '1d'
+```
+
+Here's a breakdown of what each part of the command does:
+
+1. `find . -type f -exec ls -lh {} +`: This part of the command finds all files (`-type f`) in the current directory and its subdirectories (`find .`). The `-exec` option allows you to run a command on each file foun...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">12.5s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">3.2/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+Here is a bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing size and path:
+```
+find . -type f -exec du -h {} + | sort -n | tail -5
+```
+Explanation:
+
+* `find . -type f`: finds all files (type `f`) in the current directory and its subdirectories.
+* `-exec du -h {} +`: runs the `du` command on each file found, with the `-h` option to display the size in human-readable format (e.g., `100M` for 100 MB). The `{}` is a placeholder for the file name,...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">13.2s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">3.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              You can use the following bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing their size and path:
+
+```bash
+find . -type f -exec du -h {} + | sort -rh | head -n 5
+```
+
+This command works as follows:
+- `find . -type f`: Finds all files in the current directory and its subdirectories.
+- `-exec du -h {} +`: For each file found, it runs `du -h {}` to get the human-readable file size.
+- `sort -rh`: Sorts the output by size in reverse human-readable o...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">13.3s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">3.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              You can use the following bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing their size and path:
+
+```bash
+find . -type f -exec du -h {} + | sort -rh | head -n 5
+```
+
+This command works as follows:
+- `find . -type f`: Finds all files in the current directory and its subdirectories.
+- `-exec du -h {} +`: For each file found, it runs `du -h {}` to get the human-readable file size.
+- `sort -rh`: Sorts the output by size in reverse human-readable o...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">deepseek</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">27.1s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">2.4/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To find the 5 largest files in the current directory and its subdirectories, showing their size and path, you can use the following bash one-liner:
+
+```bash
+du -v --maxdepth=999 | sort -rl | head -n 5
+```
+
+**Explanation:**
+
+- `du -v --maxdepth=999`: This command lists all files in the current directory and subdirectories, including those deep within nested directories. The `--maxdepth=999` ensures that all levels are included.
+  
+- `sort -rl`: This sorts the output in descending order based o...
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+      <details class="border rounded-lg overflow-hidden" style="border-color: var(--border)" data-category="code">
+        <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <div class="flex items-center gap-3 flex-1 flex-wrap">
+            <span class="mono text-sm font-medium" style="color: var(--text-body)">code-010</span>
+            <span class="text-sm" style="color: var(--text-muted)">Design the data model (tables + key fields) for a multi-tena</span>
+            <div class="flex gap-1 ml-auto">
+              
+              <span class="badge-gray px-2 py-0.5 rounded text-xs">coding</span>
+              
+            </div>
+          </div>
+          <div class="flex items-center gap-3 ml-4">
+            <span class="text-sm font-medium" style="color: var(--text-primary)">6.3/10</span>
+            
+            <span class="text-yellow-600">⚠</span>
+            
+            <!-- SVG chevron instead of Unicode -->
+            <svg class="chevron w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="color: var(--text-muted)">
+              <path d="M4 6l4 4 4-4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </summary>
+        <div class="p-4 border-t" style="border-color: var(--border-light); background: var(--border-light)">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-label)">Prompt</p>
+          <div class="rounded p-3 text-sm mb-4" style="background: var(--bg-card); color: var(--text-body)">Design the data model (tables + key fields) for a multi-tenant SaaS app where each tenant has users, projects, and tasks. Tasks belong to projects, projects belong to tenants. Consider indexing strategy.</div>
+
+          <p class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--text-label)">Model Responses</p>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">codellama</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">33.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+Here is a possible data model for a multi-tenant SaaS app where each tenant has users, projects, and tasks. Tasks belong to projects, projects belong to tenants.
+
+**Tenants**
+
+* `tenant_id` (primary key): a unique identifier for each tenant
+* `tenant_name`: the name of the tenant
+* `tenant_email`: the email address of the tenant
+* `tenant_status`: the status of the tenant (e.g. "active", "inactive")
+
+**Users**
+
+* `user_id` (primary key): a unique identifier for each user
+* `user_name`: the n...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen-coder</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">48.8s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To design a data model for a multi-tenant SaaS app with the specified relationships (tenants, users, projects, and tasks), we need to ensure that each tenant's data is isolated from others. This can be achieved by including a tenant identifier in each table. Below is a suggested data model with key fields and indexing strategies.
+
+### Tables
+
+1. **Tenants**
+   - **TenantID** (Primary Key)
+   - **TenantName**
+   - **TenantEmail**
+   - **TenantPhone**
+   - **TenantAddress**
+   - **TenantCreated...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen7b</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">50.9s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To design a data model for a multi-tenant SaaS application, we need to ensure that the database schema supports the hierarchical nature of the data (tenants, projects, and tasks) while also allowing for efficient querying and indexing. Here's a proposed data model with tables and key fields, along with an indexing strategy.
+
+### Tables and Key Fields
+
+1. **Tenants**
+   - `tenant_id` (Primary Key)
+   - `tenant_name`
+   - `created_at`
+   - `updated_at`
+
+2. **Projects**
+   - `project_id` (Primar...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">qwen</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">33.6s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">7.8/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              To design a data model for a multi-tenant SaaS application, we need to ensure that the database schema supports the hierarchical nature of the data (tenants, projects, and tasks) while also allowing for efficient querying and indexing. Here's a proposed data model with tables and key fields, along with an indexing strategy.
+
+### Tables and Key Fields
+
+1. **Tenants**
+   - `tenant_id` (Primary Key)
+   - `tenant_name`
+   - `created_at`
+   - `updated_at`
+
+2. **Projects**
+   - `project_id` (Primar...
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium" style="color: var(--text-body)">deepseek</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs mono" style="color: var(--text-label)">39.2s</span>
+                <span class="text-xs font-bold" style="color: var(--text-primary)">0/10</span>
+              </div>
+            </div>
+            <div class="rounded p-3 text-xs mono leading-relaxed" style="background: var(--bg-card); color: var(--text-muted); max-height: 200px; overflow-y: auto">
+              
+            </div>
+          </div>
+          
+        </div>
+      </details>
+      
+    </div>
+  </section>
+
+</div>
+
+<script>
+// Tab switching with category filtering
+const tabs = document.querySelectorAll('.tab');
+const cases = document.querySelectorAll('details[data-category]');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    // Update active tab
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    
+    // Filter cases
+    const category = tab.dataset.tab;
+    cases.forEach(c => {
+      if (category === 'all' || c.dataset.category === category) {
+        c.style.display = 'block';
+      } else {
+        c.style.display = 'none';
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>
