@@ -1,130 +1,94 @@
 {
-  "model_name": "mistral:7b",
-  "total_runs": 6,
-  "total_cases": 10,
-  "avg_score": 3.1,
-  "total_wins": 7,
-  "avg_latency": 11,
+  "model_name": "qwen3-coder",
+  "avg_score": 9.7,
+  "total_wins": 0,
+  "total_runs": 3,
+  "avg_latency": "6.4",
   "runs": [
     {
-      "id": "2026-03-31-2026-03-31T14-25-37",
-      "name": "My Evals",
+      "id": "2026-03-31T14-02-35",
+      "name": "Unnamed Run",
       "date": "2026-03-31",
-      "score": 0,
+      "score": 9.6,
+      "wins": 0,
+      "latency": 6.2,
       "accuracy": 0,
       "completeness": 0,
-      "conciseness": 0,
-      "wins": 0,
-      "latency": 13.6
+      "conciseness": 0
     },
     {
-      "id": "2026-03-31-2026-03-31T14-19-35",
-      "name": "My Evals",
+      "id": "2026-03-31T14-13-39",
+      "name": "Unnamed Run",
       "date": "2026-03-31",
-      "score": 0,
+      "score": 9.6,
+      "wins": 0,
+      "latency": 6.2,
       "accuracy": 0,
       "completeness": 0,
-      "conciseness": 0,
-      "wins": 0,
-      "latency": 12.6
+      "conciseness": 0
     },
     {
-      "id": "2026-03-31-2026-03-31T14-15-55",
-      "name": "My Evals",
+      "id": "2026-03-31T18-25-12",
+      "name": "Unnamed Run",
       "date": "2026-03-31",
-      "score": 0,
+      "score": 9.8,
+      "wins": 0,
+      "latency": 6.9,
       "accuracy": 0,
       "completeness": 0,
-      "conciseness": 0,
-      "wins": 0,
-      "latency": 12.8
-    },
-    {
-      "id": "2026-03-31-2026-03-31T14-08-40",
-      "name": "My Evals",
-      "date": "2026-03-31",
-      "score": 0,
-      "accuracy": 0,
-      "completeness": 0,
-      "conciseness": 0,
-      "wins": 0,
-      "latency": 13
-    },
-    {
-      "id": "2026-03-31-2026-03-31T07-51-23",
-      "name": "My Evals",
-      "date": "2026-03-31",
-      "score": 9.3,
-      "accuracy": 9.4,
-      "completeness": 9.2,
-      "conciseness": 9.2,
-      "wins": 4,
-      "latency": 6.1
-    },
-    {
-      "id": "2026-03-31-2026-03-31T07-40-52",
-      "name": "My Evals",
-      "date": "2026-03-31",
-      "score": 9.3,
-      "accuracy": 9.4,
-      "completeness": 9.2,
-      "conciseness": 9.2,
-      "wins": 3,
-      "latency": 7.7
+      "conciseness": 0
     }
   ],
   "best_cases": [
     {
       "id": "gen-001",
+      "name": "gen 001",
       "prompt": "What is the capital of France?",
-      "score": 3.3
-    },
-    {
-      "id": "gen-004",
-      "prompt": "If all mammals are warm-blooded, and dolphins are mammals, what can we conclude about dolphins?",
-      "score": 3.3
+      "score": 10,
+      "response": "The capital of France is Paris.",
+      "reasoning": "The response correctly identifies Paris as the capital of France, fully addressing the question with no unnecessary information."
     },
     {
       "id": "gen-005",
+      "name": "gen 005",
       "prompt": "List exactly 3 benefits of regular exercise. Numbered list. Max 12 words per item.",
-      "score": 3.3
-    },
-    {
-      "id": "gen-006",
-      "prompt": "Write a JavaScript function that returns the sum of all even numbers in an array.",
-      "score": 3.3
+      "score": 10,
+      "response": "1. Boosts cardiovascular health and reduces heart disease risk.\n\n2. Enhances mental health and reduces anxiety symptoms.\n\n3. Increases energy levels and improves sleep quality.",
+      "reasoning": "The response accurately lists three benefits of regular exercise, each under 12 words."
     },
     {
       "id": "gen-009",
+      "name": "gen 009",
       "prompt": "Write a haiku about debugging code.",
-      "score": 3.1
+      "score": 10,
+      "response": "Lines of logic\nTangled thoughts untangle—\nSilence finds its way.",
+      "reasoning": "The haiku follows the 5-7-5 syllable structure, references debugging through 'tangled thoughts untangle,' and conveys a coherent meaning about finding clarity in code."
     }
   ],
   "worst_cases": [
     {
-      "id": "gen-003",
-      "prompt": "Explain the difference between a process and a thread in one paragraph.",
-      "score": 2.8
-    },
-    {
-      "id": "gen-007",
-      "prompt": "What is the time complexity of binary search and why?",
-      "score": 2.8
+      "id": "gen-010",
+      "name": "gen 010",
+      "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
+      "score": 9.2,
+      "response": "The CAP theorem, also known as Brewer's theorem, states that in any distributed data system, you can only guarantee **two out of three** of the following three properties:\n\n## The Three Properties\n\n1. **Consistency** - All nodes see the same data at the same time\n2. **Availability** - Every request receives a response (success or failure)\n3. **Partition Tolerance** - The system continues to operate despite network failures\n\n## What It Means for Distributed Systems Design\n\n### The Core Trade-off\nSince network partitions are inevitable in distributed systems, you must choose which two properties to prioritize:\n\n## Common Approaches\n\n### CP Systems (Consistency + Partition Tolerance)\n- **Example**: Traditional RDBMS, ZooKeeper\n- **Behavior**: During partition, system sacrifices availability\n- **Use case**: Financial systems, where data consistency is critical\n\n### AP Systems (Availability + Partition Tolerance)\n- **Example**: DNS, web caching, some NoSQL databases\n- **Behavior**: During partition, system maintains availability but may return stale data\n- **Use case**: Web applications, social media\n\n### CA Systems (Consistency + Availability)\n- **Example**: Single-node databases\n- **Reality**: Impossible in true distributed systems\n- **Use case**: Small, non-distributed systems\n\n## Real-World Implications\n\nThe CAP theorem forces architects to make explicit design decisions based on their specific requirements. Most modern distributed systems are designed as **AP systems** because:\n- Network partitions are common\n- Users generally prefer availability over consistency\n- Modern systems often use eventual consistency patterns\n\nUnderstanding CAP helps teams make informed decisions about their system architecture and trade-offs.",
+      "reasoning": "The response accurately explains the CAP theorem, covers all necessary aspects including trade-offs and real-world implications, but could be slightly more concise."
     },
     {
       "id": "gen-008",
+      "name": "gen 008",
       "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
-      "score": 2.9
+      "score": 9.2,
+      "response": "A transformer model is an attention-based neural network architecture that processes input sequences in parallel rather than sequentially, using self-attention mechanisms to weigh the importance of different tokens in the input when generating each output token. Unlike RNNs or LSTMs, transformers don't have recurrent connections, allowing them to capture long-range dependencies more effectively and scale to much larger datasets and model sizes. The key innovation is the multi-head self-attention mechanism that lets each position attend to all positions in the previous layer, enabling the model to understand context and relationships between distant words in a sentence.",
+      "reasoning": "The response accurately describes the transformer model's architecture, attention mechanism, and advantages over RNNs, but could briefly mention its impact on NLP improvements."
     },
     {
-      "id": "gen-002",
-      "prompt": "What does RAM stand for and what does it do?",
-      "score": 3
-    },
-    {
-      "id": "gen-010",
-      "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
-      "score": 3
+      "id": "gen-007",
+      "name": "gen 007",
+      "prompt": "What is the time complexity of binary search and why?",
+      "score": 9.2,
+      "response": "## Time Complexity of Binary Search\n\n**Time Complexity: O(log n)**\n\n## Why O(log n)?\n\nBinary search works by repeatedly dividing the search space in half, which leads to logarithmic time complexity.\n\n### How It Works:\n1. Start with the entire array\n2. Compare target with middle element\n3. If found, return index\n4. If target is smaller, search left half\n5. If target is larger, search right half\n6. Repeat until found or search space is empty\n\n### Mathematical Explanation:\n\nLet's say we have an array of size n. After each comparison:\n- 1st comparison: search space = n\n- 2nd comparison: search space = n/2\n- 3rd comparison: search space = n/4\n- 4th comparison: search space = n/8\n- ...and so on\n\nAfter k comparisons, the search space becomes n/2^k.\n\nThe algorithm stops when the search space is 1 (or 0):\n```\nn/2^k = 1\nn = 2^k\nk = log₂(n)\n```\n\nTherefore, the maximum number of comparisons needed is **log₂(n)**.\n\n## Space Complexity:\n- **Iterative version**: O(1) - only uses a few variables\n- **Recursive version**: O(log n) - due to call stack depth\n\n## Example:\nFor an array of 1024 elements:\n- Maximum comparisons needed = log₂(1024) = 10\n- Even for 1 billion elements: log₂(1,000,000,000) ≈ 30 comparisons\n\nThis logarithmic growth makes binary search extremely efficient for large datasets, especially when the array is already sorted.",
+      "reasoning": "The response accurately explains the time complexity of binary search and provides a clear, detailed explanation of why it is O(log n) by describing how the search space is halved each iteration."
     }
   ]
 }
