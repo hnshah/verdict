@@ -29,6 +29,11 @@ jobs:
       - name: Build verdict
         run: npm run build
 
+      - name: Backup dashboard before regeneration
+        run: |
+          chmod +x scripts/backup-dashboard.sh
+          TRIGGER="pre-regeneration" ./scripts/backup-dashboard.sh
+        
       - name: Generate dashboard-data.json from all contributed results
         run: |
           COUNT=$(ls dashboard/published/*.json 2>/dev/null | grep -v dashboard-data | wc -l | tr -d ' ')
