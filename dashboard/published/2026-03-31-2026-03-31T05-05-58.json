@@ -1,0 +1,321 @@
+{
+  "run_id": "2026-03-31T05-05-58",
+  "name": "My Evals",
+  "timestamp": "2026-03-31T05:08:00.551Z",
+  "models": [
+    "qwen2.5:7b",
+    "llama3.2:3b",
+    "phi4:14b",
+    "qwen2.5:14b",
+    "gemma2:9b"
+  ],
+  "cases": [
+    {
+      "case_id": "simple-math",
+      "prompt": "What is 2 + 2?",
+      "criteria": "Answer is 4",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "2 + 2 equals 4.",
+          "input_tokens": 37,
+          "output_tokens": 9,
+          "latency_ms": 8193,
+          "cost_usd": 0
+        },
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "2 + 2 = 4",
+          "input_tokens": 33,
+          "output_tokens": 8,
+          "latency_ms": 11195,
+          "cost_usd": 0
+        },
+        "phi4:14b": {
+          "model_id": "phi4:14b",
+          "text": "2 + 2 equals 4.",
+          "input_tokens": 18,
+          "output_tokens": 9,
+          "latency_ms": 20567,
+          "cost_usd": 0
+        },
+        "gemma2:9b": {
+          "model_id": "gemma2:9b",
+          "text": "2 + 2 = 4",
+          "input_tokens": 17,
+          "output_tokens": 8,
+          "latency_ms": 22766,
+          "cost_usd": 0
+        },
+        "qwen2.5:14b": {
+          "model_id": "qwen2.5:14b",
+          "text": "2 + 2 equals 4.",
+          "input_tokens": 37,
+          "output_tokens": 9,
+          "latency_ms": 30325,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly states that 2 + 2 equals 4, addresses all criteria, and is concise without padding."
+        },
+        "llama3.2:3b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly answers the question, addresses all criteria, and is concise."
+        },
+        "phi4:14b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly states that 2 + 2 equals 4, addresses all criteria, and is concise without padding."
+        },
+        "gemma2:9b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly answers the question, addresses all criteria, and is concise."
+        },
+        "qwen2.5:14b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly states that 2 + 2 equals 4, addresses all criteria, and is concise without padding."
+        }
+      },
+      "winner": "qwen2.5:7b"
+    },
+    {
+      "case_id": "simple-reasoning",
+      "prompt": "If a train travels 60 miles per hour for 2 hours, how far does it go?",
+      "criteria": "Answer is 120 miles with clear calculation shown",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "If a train travels at a speed of 60 miles per hour for 2 hours, the distance it covers can be calculated using the formula:\n\n\\[ \\text{Distance} = \\text{Speed} \\times \\text{Time} \\]\n\nPlugging in the values:\n\n\\[ \\text{Distance} = 60 \\, \\text{miles/hour} \\times 2 \\, \\text{hours} = 120 \\, \\text{miles} \\]\n\nSo, the train travels 120 miles.",
+          "input_tokens": 50,
+          "output_tokens": 115,
+          "latency_ms": 2639,
+          "cost_usd": 0
+        },
+        "llama3.2:3b": {
+          "model_id": "llama3.2:3b",
+          "text": "To find the distance traveled, you multiply the speed (60 miles per hour) by the time (2 hours).\n\nDistance = Speed x Time\nDistance = 60 miles/hour x 2 hours\nDistance = 120 miles\n\nSo, the train travels 120 miles in 2 hours.",
+          "input_tokens": 45,
+          "output_tokens": 61,
+          "latency_ms": 11378,
+          "cost_usd": 0
+        },
+        "phi4:14b": {
+          "model_id": "phi4:14b",
+          "text": "To find out how far the train travels, you can use the formula for distance, which is:\n\n\\[ \\text{Distance} = \\text{Speed} \\times \\text{Time} \\]\n\nIn this case, the speed of the train is 60 miles per hour, and the time is 2 hours. Plugging these values into the formula gives:\n\n\\[ \\text{Distance} = 60 \\, \\text{miles per hour} \\times 2 \\, \\text{hours} = 120 \\, \\text{miles} \\]\n\nSo, the train travels 120 miles.",
+          "input_tokens": 30,
+          "output_tokens": 127,
+          "latency_ms": 13830,
+          "cost_usd": 0
+        },
+        "qwen2.5:14b": {
+          "model_id": "qwen2.5:14b",
+          "text": "If a train travels at a speed of 60 miles per hour for 2 hours, it will cover a distance of \\(60 \\, \\text{miles/hour} \\times 2 \\, \\text{hours} = 120 \\, \\text{miles}\\).",
+          "input_tokens": 50,
+          "output_tokens": 64,
+          "latency_ms": 10784,
+          "cost_usd": 0
+        },
+        "gemma2:9b": {
+          "model_id": "gemma2:9b",
+          "text": "Here's how to solve this:\n\n* **Distance = Speed x Time**\n\n* **Speed:** 60 miles per hour\n* **Time:** 2 hours\n\n* **Distance:** 60 miles/hour * 2 hours = 120 miles\n\n\nThe train travels **120 miles**. \n",
+          "input_tokens": 30,
+          "output_tokens": 70,
+          "latency_ms": 14656,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly calculates the distance, addresses all criteria, and is concise."
+        },
+        "llama3.2:3b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly calculates the distance, addresses all criteria, and is concise."
+        },
+        "phi4:14b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly calculates the distance, addresses all criteria, and is concise."
+        },
+        "qwen2.5:14b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly calculates the distance, addresses all criteria, and is concise."
+        },
+        "gemma2:9b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly calculates the distance, addresses all criteria, and is concise."
+        }
+      },
+      "winner": "qwen2.5:7b"
+    }
+  ],
+  "summary": {
+    "qwen2.5:7b": {
+      "model_id": "qwen2.5:7b",
+      "avg_total": 10,
+      "avg_accuracy": 10,
+      "avg_completeness": 10,
+      "avg_conciseness": 10,
+      "avg_latency_ms": 5416,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 100,
+      "wins": 2,
+      "cases_run": 2,
+      "avg_solve_rate": 0
+    },
+    "llama3.2:3b": {
+      "model_id": "llama3.2:3b",
+      "avg_total": 10,
+      "avg_accuracy": 10,
+      "avg_completeness": 10,
+      "avg_conciseness": 10,
+      "avg_latency_ms": 11286.5,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 2,
+      "avg_solve_rate": 0
+    },
+    "phi4:14b": {
+      "model_id": "phi4:14b",
+      "avg_total": 10,
+      "avg_accuracy": 10,
+      "avg_completeness": 10,
+      "avg_conciseness": 10,
+      "avg_latency_ms": 17198.5,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 2,
+      "avg_solve_rate": 0
+    },
+    "qwen2.5:14b": {
+      "model_id": "qwen2.5:14b",
+      "avg_total": 10,
+      "avg_accuracy": 10,
+      "avg_completeness": 10,
+      "avg_conciseness": 10,
+      "avg_latency_ms": 20554.5,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 2,
+      "avg_solve_rate": 0
+    },
+    "gemma2:9b": {
+      "model_id": "gemma2:9b",
+      "avg_total": 10,
+      "avg_accuracy": 10,
+      "avg_completeness": 10,
+      "avg_conciseness": 10,
+      "avg_latency_ms": 18711,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 2,
+      "avg_solve_rate": 0
+    }
+  },
+  "hardware": {
+    "cpu": "Apple M4 Pro",
+    "cpu_cores": 12,
+    "cpu_arch": "arm64",
+    "ram_gb": 24,
+    "os": "macOS",
+    "os_version": "25.3.0"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v22.22.1",
+    "provider_versions": {
+      "ollama": "0.17.5"
+    }
+  },
+  "eval_pack": {
+    "file": "eval-packs/quick-dogfooding-test.yaml",
+    "description": "Minimal test to verify Verdict works",
+    "total_cases": 2
+  },
+  "judge": {
+    "model": "qwen2.5:7b",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p Quick Dogfooding Test -m qwen2.5:7b,llama3.2:3b,phi4:14b,qwen2.5:14b,gemma2:9b",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "qwen2.5:7b": {
+        "provider": "ollama",
+        "model": "qwen2.5:7b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "llama3.2:3b": {
+        "provider": "ollama",
+        "model": "llama3.2:3b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "phi4:14b": {
+        "provider": "ollama",
+        "model": "phi4:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "qwen2.5:14b": {
+        "provider": "ollama",
+        "model": "qwen2.5:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "gemma2:9b": {
+        "provider": "ollama",
+        "model": "gemma2:9b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      }
+    }
+  }
+}

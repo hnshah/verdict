@@ -1,0 +1,192 @@
+{
+  "run_id": "2026-03-31T04-18-02",
+  "name": "My Evals",
+  "timestamp": "2026-03-31T04:18:17.366Z",
+  "models": [
+    "qwen2.5:7b"
+  ],
+  "cases": [
+    {
+      "case_id": "speed-001",
+      "prompt": "Capital of France?",
+      "criteria": "Must answer: Paris",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "The capital of France is Paris.",
+          "input_tokens": 33,
+          "output_tokens": 8,
+          "latency_ms": 2096,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly identifies Paris as the capital of France, addresses all criteria, and is concise without padding."
+        }
+      },
+      "winner": "qwen2.5:7b"
+    },
+    {
+      "case_id": "speed-002",
+      "prompt": "2+2=",
+      "criteria": "Must answer: 4",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "2+2 equals 4.",
+          "input_tokens": 33,
+          "output_tokens": 8,
+          "latency_ms": 284,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly answers the question, is concise, and addresses all criteria without unnecessary information."
+        }
+      },
+      "winner": "qwen2.5:7b"
+    },
+    {
+      "case_id": "speed-003",
+      "prompt": "true AND false =",
+      "criteria": "Must answer: false",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "在逻辑运算中，\"AND\" 运算要求所有条件都为真时，结果才为真。因此，\"true AND false\" 的结果是 \"false\"。",
+          "input_tokens": 33,
+          "output_tokens": 39,
+          "latency_ms": 933,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "回答完全正确且全面地满足了所有评价标准，表述简洁明了。"
+        }
+      },
+      "winner": "qwen2.5:7b"
+    },
+    {
+      "case_id": "speed-004",
+      "prompt": "Color of sky?",
+      "criteria": "Must answer: blue (or similar)",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "The color of the sky can vary depending on the time of day, weather conditions, and other factors. Generally, during clear daytime conditions, the sky appears blue due to a phenomenon called Rayleigh scattering, where shorter (blue) wavelengths of light are scattered more by the Earth's atmosphere. At sunrise and sunset, the sky often takes on a range of colors including pink, orange, and purple due to the light having to pass through more of the Earth's atmosphere. At night, the sky is typically dark, with stars visible if there is no light pollution.",
+          "input_tokens": 33,
+          "output_tokens": 114,
+          "latency_ms": 2505,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 7,
+          "completeness": 6,
+          "conciseness": 5,
+          "total": 6.2,
+          "reasoning": "Partially addresses the criteria by mentioning blue, but lacks the specificity required and includes additional information not directly related to the question."
+        }
+      },
+      "winner": "qwen2.5:7b"
+    },
+    {
+      "case_id": "speed-005",
+      "prompt": "1, 2, 3, ?",
+      "criteria": "Must answer: 4",
+      "responses": {
+        "qwen2.5:7b": {
+          "model_id": "qwen2.5:7b",
+          "text": "The sequence you've provided, 1, 2, 3, ?, could be the beginning of a simple counting sequence in ascending order. Following this pattern, the next number would be 4. However, without additional context, there could be many other possible sequences or patterns that fit these numbers. Could you provide more information or specify the rule governing the sequence?",
+          "input_tokens": 38,
+          "output_tokens": 75,
+          "latency_ms": 1694,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response correctly identifies the next number in the sequence and addresses the criteria without unnecessary information."
+        }
+      },
+      "winner": "qwen2.5:7b"
+    }
+  ],
+  "summary": {
+    "qwen2.5:7b": {
+      "model_id": "qwen2.5:7b",
+      "avg_total": 9.24,
+      "avg_accuracy": 9.4,
+      "avg_completeness": 9.2,
+      "avg_conciseness": 9,
+      "avg_latency_ms": 1502.4,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 100,
+      "wins": 5,
+      "cases_run": 5,
+      "avg_solve_rate": 0
+    }
+  },
+  "hardware": {
+    "cpu": "Apple M4 Pro",
+    "cpu_cores": 12,
+    "cpu_arch": "arm64",
+    "ram_gb": 24,
+    "os": "macOS",
+    "os_version": "25.3.0"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v22.22.1",
+    "provider_versions": {
+      "ollama": "0.17.5"
+    }
+  },
+  "eval_pack": {
+    "file": "eval-packs/speed-test.yaml",
+    "description": "Single-word answers to measure raw inference speed",
+    "total_cases": 5
+  },
+  "judge": {
+    "model": "qwen2.5:7b",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p Speed Test -m qwen2.5:7b",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "qwen2.5:7b": {
+        "provider": "ollama",
+        "model": "qwen2.5:7b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      }
+    }
+  }
+}
