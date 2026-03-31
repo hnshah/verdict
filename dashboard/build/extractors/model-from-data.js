@@ -16,6 +16,20 @@ if (!modelName) {
 // Load dashboard data
 const data = JSON.parse(fs.readFileSync(dashboardDataPath, 'utf8'));
 
+// Load run names from individual run files
+const runNames = {};
+const runFilesDir = '../../dashboard/published/data';
+try {
+  const runFiles = fs.readdirSync(runFilesDir).filter(f => f.endsWith('.json') && f.startsWith('2026'));
+  runFiles.forEach(file => {
+    const runData = JSON.parse(fs.readFileSync(`${runFilesDir}/${file}`, 'utf8'));
+    const runId = file.replace(/^2026-03-\d+-/, '').replace('.json', '');
+    runNames[runId] = runData.name || 'Unnamed Run';
+  });
+} catch (err) {
+  console.error('Warning: Could not load run names:', err.message);
+}
+
 // Track model stats across all runs
 const runStats = [];
 const allCases = new Map();
@@ -37,7 +51,7 @@ data.cases.forEach(caseData => {
     if (!runMap.has(runId)) {
       runMap.set(runId, {
         id: runId,
-        name: run.run_meta?.name || 'Unnamed Run',
+        name: runNames[runId] || run.run_meta?.name || 'Unnamed Run',
         date: runId.split('T')[0],
         scores: [],
         wins: 0,

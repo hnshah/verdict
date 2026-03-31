@@ -7,7 +7,7 @@
   "runs": [
     {
       "id": "2026-03-31T14-02-35",
-      "name": "Unnamed Run",
+      "name": "3 Model Comparison - 10 cases",
       "date": "2026-03-31",
       "score": 9.6,
       "wins": 0,
@@ -18,7 +18,7 @@
     },
     {
       "id": "2026-03-31T14-13-39",
-      "name": "Unnamed Run",
+      "name": "3 Model Comparison - 10 cases",
       "date": "2026-03-31",
       "score": 9.6,
       "wins": 0,
@@ -29,7 +29,7 @@
     },
     {
       "id": "2026-03-31T18-25-12",
-      "name": "Unnamed Run",
+      "name": "Verdict Auto-Dashboard",
       "date": "2026-03-31",
       "score": 9.8,
       "wins": 0,
