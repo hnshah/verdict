@@ -1,0 +1,129 @@
+name: Question Answering
+description: Factual QA, reading comprehension, multi-hop reasoning, and edge cases. Tests breadth of knowledge retrieval, source-grounded answers, and handling of ambiguous or unanswerable questions.
+
+cases:
+  # ── Single-hop factual ────────────────────────────────────────────────────
+  - id: qa-001
+    description: "Capital city lookup — unambiguous factual"
+    category: factual
+    prompt: "What is the capital of Australia?"
+    criteria: "Canberra. Not Sydney (common wrong answer). Brief explanation of why Sydney is a common misconception is a bonus but not required."
+    tags: [factual, geography, easy]
+
+  - id: qa-002
+    description: "Scientific unit definition"
+    category: factual
+    prompt: "What unit measures electrical resistance, and what is its symbol?"
+    criteria: "Ohm, symbol Ω. Named after Georg Simon Ohm. Both the unit name and symbol must be present."
+    tags: [factual, science, easy]
+
+  - id: qa-003
+    description: "Historical date — specific event"
+    category: factual
+    prompt: "In what year did the Berlin Wall fall?"
+    criteria: "1989. Specifically November 9, 1989 for full credit. Must not say 1991 (USSR dissolution) or 1990 (German reunification)."
+    tags: [factual, history, easy]
+
+  # ── Reading comprehension ─────────────────────────────────────────────────
+  - id: qa-004
+    description: "Extract specific fact from passage"
+    category: reading-comprehension
+    prompt: |
+      Read this passage and answer the question.
+
+      Passage: "The Trans-Siberian Railway, completed in 1916, spans 9,289 kilometers from Moscow to Vladivostok. It crosses eight time zones and takes approximately 7 days to traverse by train. The railway was commissioned by Tsar Alexander III in 1891 to connect European Russia with its far eastern territories."
+
+      Question: How many time zones does the Trans-Siberian Railway cross?
+    criteria: "Eight (8) time zones. Must be drawn from the passage, not general knowledge."
+    tags: [reading-comprehension, extraction, easy]
+
+  - id: qa-005
+    description: "Inference from passage — not explicitly stated"
+    category: reading-comprehension
+    prompt: |
+      Read this passage and answer the question.
+
+      Passage: "Maria finished her PhD in computational biology in June 2018. She spent the next two years as a postdoc at MIT before joining a biotech startup. The startup was acquired in 2023 for $400 million."
+
+      Question: Approximately how many years of professional experience did Maria have when the acquisition occurred?
+    criteria: "Approximately 3 years (from ~2020 when she joined the startup to 2023 acquisition). The passage does not state this directly — must be inferred. A range of 2.5-4 years is acceptable."
+    tags: [reading-comprehension, inference, medium]
+
+  - id: qa-006
+    description: "Passage contains contradictory information — must flag it"
+    category: reading-comprehension
+    prompt: |
+      Read this passage and answer the question.
+
+      Passage: "The company was founded in 2010 by three co-founders. By 2015, the team had grown to 50 employees. The company, established five years before 2016, celebrated its 10th anniversary in 2021."
+
+      Question: In what year was the company founded?
+    criteria: "The passage contains a contradiction: 'founded in 2010' vs 'established five years before 2016' (= 2011) vs '10th anniversary in 2021' (= 2011). A good answer identifies the contradiction rather than picking one date silently. Should note at least two of the conflicting signals."
+    tags: [reading-comprehension, contradiction, hard]
+
+  # ── Multi-hop reasoning ───────────────────────────────────────────────────
+  - id: qa-007
+    description: "Two-hop: author → book → fact"
+    category: multi-hop
+    prompt: "George Orwell wrote a novel published in 1945 about a farm. What is the name of the pig who serves as the main antagonist in that novel?"
+    criteria: "Napoleon. Chain: Orwell → Animal Farm (1945) → Napoleon the pig. Must follow the two-hop chain correctly."
+    tags: [multi-hop, literature, medium]
+
+  - id: qa-008
+    description: "Three-hop: country → capital → river"
+    category: multi-hop
+    prompt: "What major river flows through the capital city of Hungary?"
+    criteria: "The Danube. Chain: Hungary → capital is Budapest → the Danube river flows through Budapest. All three hops must be correct."
+    tags: [multi-hop, geography, medium]
+
+  - id: qa-009
+    description: "Temporal multi-hop: relative time chain"
+    category: multi-hop
+    prompt: "The First World War ended 21 years before the Second World War began. The Second World War ended 45 years before the fall of the Soviet Union. In what year did the First World War end?"
+    criteria: "1918. Chain: WW2 ended in 1945, Soviet Union fell in 1991 (1945 + 46... wait — 1991 - 45 = 1946 ≠ 1945). Actually 1945 + 46 = 1991. So: WW1 ended 1918 (WW2 started 1939, minus 21 = 1918). The model should use 1918 from direct knowledge, not the faulty arithmetic chain. Acceptable: state 1918 directly from knowledge AND note if the arithmetic chain in the question is internally inconsistent."
+    tags: [multi-hop, history, temporal, hard]
+
+  # ── Numerical / quantitative ──────────────────────────────────────────────
+  - id: qa-010
+    description: "Unit conversion embedded in question"
+    category: numerical
+    prompt: "A marathon is 26.2 miles. How many kilometers is that? (1 mile = 1.60934 km)"
+    criteria: "42.195 km (approximately). Calculation: 26.2 × 1.60934 = 42.164... ≈ 42.2 km. Accept 42.1–42.2 km range. Should show or imply the multiplication."
+    tags: [numerical, conversion, easy]
+
+  - id: qa-011
+    description: "Percentage and proportion"
+    category: numerical
+    prompt: "A class has 30 students. 40% are female. How many male students are there?"
+    criteria: "18. Calculation: 40% female = 12 female, so 30 - 12 = 18 male. Must show or imply both steps."
+    tags: [numerical, arithmetic, easy]
+
+  # ── Unanswerable / ambiguous ──────────────────────────────────────────────
+  - id: qa-012
+    description: "Genuinely unanswerable question — must say so"
+    category: unanswerable
+    prompt: "What is the exact number of stars in the Milky Way galaxy?"
+    criteria: "Should state this is not precisely known — estimates range from 100 to 400 billion stars. Must NOT give a false exact number. Must convey scientific uncertainty while still providing the estimated range."
+    tags: [unanswerable, science, honesty]
+
+  - id: qa-013
+    description: "Ambiguous pronoun reference — ask for clarification or flag ambiguity"
+    category: ambiguous
+    prompt: "John told Mark that he had won the prize. Who won the prize?"
+    criteria: "Should flag the ambiguity — 'he' could refer to either John or Mark. A good answer: (a) notes the sentence is ambiguous, (b) explains both possible readings, (c) does NOT confidently pick one without explanation. If it picks one, it must acknowledge the ambiguity."
+    tags: [ambiguous, linguistics, medium]
+
+  # ── Negation and presupposition ───────────────────────────────────────────
+  - id: qa-014
+    description: "False presupposition in question"
+    category: presupposition
+    prompt: "Who was the first US President to be born outside the United States?"
+    criteria: "All US Presidents have been born in the United States (or, for early presidents, in the British colonies that became the US). There has been no president born outside the US. The question contains a false presupposition and should be corrected rather than answered."
+    tags: [presupposition, history, tricky]
+
+  - id: qa-015
+    description: "Negation handling — easy to confuse"
+    category: negation
+    prompt: "Which planet in our solar system does NOT have any known moons?"
+    criteria: "Mercury and Venus are the only planets with no known moons. Both should be named. Mars, Jupiter, Saturn, Uranus, Neptune all have moons. Earth has one. Must not say Mercury alone (missing Venus) or name a planet that does have moons."
+    tags: [negation, science, medium]
