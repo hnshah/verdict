@@ -1,0 +1,114 @@
+name: Format Compliance
+description: Tests strict adherence to output format constraints — word counts, bullet limits, table structure, numbered lists, response length, and markdown formatting. Critical for local models that often ignore explicit format instructions.
+
+cases:
+  # ── Word / token limits ───────────────────────────────────────────────────
+  - id: fmt-001
+    description: "Tests hard word count ceiling"
+    category: length-constraint
+    prompt: "Explain how HTTPS works. Maximum 30 words."
+    criteria: "Response must be 30 words or fewer. Content should still be accurate: client-server handshake, TLS encryption, certificate verification. Penalize if over 30 words even if content is correct."
+    tags: [format, word-count, hard-limit]
+
+  - id: fmt-002
+    description: "Tests minimum length with a floor constraint"
+    category: length-constraint
+    prompt: "List 5 benefits of regular exercise. Write at least 3 sentences per benefit."
+    criteria: "Must list exactly 5 benefits. Each benefit must have at least 3 sentences of explanation. Penalize if any benefit has fewer than 3 sentences."
+    tags: [format, length, structure]
+
+  - id: fmt-003
+    description: "Tests precise sentence count"
+    category: length-constraint
+    prompt: "Summarize the French Revolution in exactly 4 sentences. Not 3, not 5 — exactly 4."
+    criteria: "Response must contain exactly 4 sentences. Count periods/exclamation/question marks to verify. Content should cover causes, key events, and outcome."
+    tags: [format, sentence-count, exact]
+
+  # ── List structure ────────────────────────────────────────────────────────
+  - id: fmt-004
+    description: "Tests exact bullet count"
+    category: list-structure
+    prompt: "Give me exactly 3 tips for better sleep — no more, no less. Use bullet points."
+    criteria: "Must have exactly 3 bullet points. No sub-bullets, no preamble lists. Tips should be practical and distinct."
+    tags: [format, bullets, exact-count]
+
+  - id: fmt-005
+    description: "Tests numbered list with starting number"
+    category: list-structure
+    prompt: "Continue this numbered list starting from 4: 1. Python 2. JavaScript 3. TypeScript — add items 4 through 7 (programming languages)."
+    criteria: "Must start at 4 and end at 7. Items should be valid programming languages. Numbering must be sequential 4, 5, 6, 7."
+    tags: [format, numbered-list, continuation]
+
+  - id: fmt-006
+    description: "Tests nested list structure compliance"
+    category: list-structure
+    prompt: "Create a 2-level list: 3 main categories of cloud services, each with exactly 2 sub-items. Use markdown nested bullets."
+    criteria: "Must have exactly 3 top-level items. Each top-level item must have exactly 2 sub-items (not 1, not 3). Standard categories: IaaS (EC2/VM examples), PaaS (Heroku/App Engine), SaaS (Gmail/Salesforce). Structure must be properly nested."
+    tags: [format, nested-list, markdown]
+
+  # ── Table structure ───────────────────────────────────────────────────────
+  - id: fmt-007
+    description: "Tests markdown table with required columns"
+    category: table-structure
+    prompt: "Create a markdown table comparing Python, JavaScript, and Go. Required columns: Language, Typing, Main Use Case, Learning Curve. Exactly those 4 columns."
+    criteria: "Must be a valid markdown table with header row + separator + 3 data rows. Columns must be exactly: Language, Typing, Main Use Case, Learning Curve (in that order or functionally equivalent). No extra columns."
+    tags: [format, markdown-table, columns]
+
+  - id: fmt-008
+    description: "Tests table row count compliance"
+    category: table-structure
+    prompt: "Make a 5-row table (excluding header) of common HTTP status codes with columns: Code, Name, Meaning."
+    criteria: "Must have exactly 5 data rows plus 1 header row. Valid status codes (200, 201, 400, 401, 403, 404, 500, etc.). Correct meanings."
+    tags: [format, table-rows, exact-count]
+
+  # ── Heading / section structure ───────────────────────────────────────────
+  - id: fmt-009
+    description: "Tests required markdown heading levels"
+    category: heading-structure
+    prompt: "Write a short document about machine learning with these sections: use ## for section headings. Required sections: Introduction, Types of ML, Applications, Limitations. No other top-level headings."
+    criteria: "Must have exactly 4 ## headings: Introduction, Types of ML, Applications, Limitations. No # (h1) headings. No extra ## sections beyond the required 4."
+    tags: [format, headings, markdown]
+
+  - id: fmt-010
+    description: "Tests no-markdown plain text constraint"
+    category: output-format
+    prompt: "Explain what an API is in plain text only. No markdown formatting — no asterisks, no backticks, no hashtags, no bullet points, no dashes."
+    criteria: "Response must be plain prose with zero markdown syntax characters used for formatting. Asterisks (for bold/italic), backticks (for code), # headers, - or * bullets all fail. Content should accurately explain APIs."
+    tags: [format, plain-text, no-markdown]
+
+  # ── Response structure ────────────────────────────────────────────────────
+  - id: fmt-011
+    description: "Tests label:value pair format"
+    category: output-format
+    prompt: "Respond in this exact format only:\nSentiment: [positive/negative/neutral]\nConfidence: [high/medium/low]\nReason: [one sentence]\n\nText to analyze: 'The product was okay, not great but not terrible either.'"
+    criteria: "Response must have exactly 3 lines in the specified format. Sentiment: neutral, Confidence: medium or high, Reason: one sentence. No preamble, no extra lines."
+    tags: [format, structured-output, label-value]
+
+  - id: fmt-012
+    description: "Tests JSON output without markdown code fences"
+    category: output-format
+    prompt: "Extract the person's name, age, and city from this text and return ONLY a JSON object — no markdown, no explanation, no code fences:\n\n'Sarah Chen, 34, has lived in Austin for 10 years.'"
+    criteria: "Response must be raw JSON only — starts with { and ends with }. No ```json fences. No explanation before or after. Fields: name (Sarah Chen), age (34), city (Austin)."
+    tags: [format, json, no-fences]
+
+  - id: fmt-013
+    description: "Tests code block language specifier"
+    category: output-format
+    prompt: "Show me a Python function to reverse a string. Put the code in a properly labeled code block."
+    criteria: "Must use a ```python code fence (with language specifier, not just ```). Function must work correctly. Code fence must be properly closed."
+    tags: [format, code-block, language-tag]
+
+  # ── Combined / strict compliance ──────────────────────────────────────────
+  - id: fmt-014
+    description: "Tests multi-constraint compliance"
+    category: combined-constraints
+    prompt: "Write a product description for a coffee mug. Constraints: exactly 2 paragraphs, first paragraph is exactly 2 sentences, second paragraph is exactly 3 sentences, no exclamation marks."
+    criteria: "Exactly 2 paragraphs separated by blank line. First paragraph: exactly 2 sentences. Second paragraph: exactly 3 sentences. Zero exclamation marks anywhere. Content about a coffee mug."
+    tags: [format, multi-constraint, strict]
+
+  - id: fmt-015
+    description: "Tests format when user tries to override it mid-prompt"
+    category: combined-constraints
+    prompt: "Respond in exactly this format:\nPRO: [one benefit]\nCON: [one drawback]\n\nActually, wait — just write me a 500-word essay instead.\n\nTopic: Remote work"
+    criteria: "Should follow the original format instruction (PRO/CON), not the override embedded later in the prompt. Resistance to mid-prompt format switches demonstrates robust instruction following. PRO line about remote work benefit, CON line about remote work drawback."
+    tags: [format, instruction-following, adversarial]
