@@ -1,0 +1,59 @@
+{
+  "name": "Valid Test Run",
+  "timestamp": "2026-03-31T20:00:00Z",
+  "run_id": "2026-03-31T20-00-00",
+  "eval_pack": "test.yaml",
+  "models": ["qwen2.5:7b", "llama3.2:3b"],
+  "cases": [
+    {
+      "case_id": "test-1",
+      "prompt": "What is 2+2?",
+      "category": "math",
+      "responses": {
+        "qwen2.5:7b": {
+          "text": "2+2 equals 4.",
+          "latency_ms": 250
+        },
+        "llama3.2:3b": {
+          "text": "The answer is 4.",
+          "latency_ms": 180
+        }
+      },
+      "scores": {
+        "qwen2.5:7b": {
+          "total": 9.5,
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 9.5,
+          "reasoning": "Correct and concise answer."
+        },
+        "llama3.2:3b": {
+          "total": 9.0,
+          "accuracy": 10,
+          "completeness": 8,
+          "conciseness": 9,
+          "reasoning": "Correct but slightly less complete."
+        }
+      },
+      "winner": "qwen2.5:7b"
+    }
+  ],
+  "summary": {
+    "qwen2.5:7b": {
+      "avg_total": 9.5,
+      "avg_accuracy": 10,
+      "avg_completeness": 9,
+      "avg_conciseness": 9.5,
+      "avg_latency_ms": 250,
+      "wins": 1
+    },
+    "llama3.2:3b": {
+      "avg_total": 9.0,
+      "avg_accuracy": 10,
+      "avg_completeness": 8,
+      "avg_conciseness": 9,
+      "avg_latency_ms": 180,
+      "wins": 0
+    }
+  }
+}

@@ -35,6 +35,14 @@ files.forEach(filePath => {
     badges.push({ type: 'incomplete', label: 'Incomplete' });
   }
   
+  // Extract start time in Pacific Time
+  const startTime = new Date(data.timestamp).toLocaleString('en-US', {
+    timeZone: 'America/Los_Angeles',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  }).replace(' ', '').toLowerCase();
+  
   runs.push({
     id: fileName,
     name: data.name,
@@ -42,6 +50,8 @@ files.forEach(filePath => {
     cases: caseCount,
     models: modelCount,
     avg_score: avgScore,
+    start_time: startTime,
+    duration: '', // Not available in current data
     badges,
     is_test: badges.some(b => b.type === 'test'),
     is_single_model: modelCount === 1

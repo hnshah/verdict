@@ -1,7 +1,7 @@
 {
   "id": "2026-03-31-2026-03-31T13-56-11",
   "name": "phi4 - 10 cases",
-  "date": "2026-03-31",
+  "date": "Mar 31, 2026, 6:57 AM PT",
   "run_id": "2026-03-31T13-56-11",
   "eval_pack": {
     "file": "eval-packs/general.yaml",
@@ -209,5 +209,6 @@
       ],
       "avg_score": 9.8
     }
-  ]
+  ],
+  "last_updated": "Mar 31, 2026, 9:53 PM PT"
 }

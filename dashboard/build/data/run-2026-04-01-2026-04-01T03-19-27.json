@@ -1,7 +1,7 @@
 {
   "id": "2026-04-01-2026-04-01T03-19-27",
   "name": "Vision Comprehensive Benchmark",
-  "date": "2026-04-01",
+  "date": "Mar 31, 2026, 8:21 PM PT",
   "run_id": "2026-04-01T03-19-27",
   "eval_pack": {
     "file": "eval-packs/vision-comprehensive-benchmark.yaml",
@@ -320,5 +320,6 @@
       ],
       "avg_score": 9.1
     }
-  ]
+  ],
+  "last_updated": "Mar 31, 2026, 9:53 PM PT"
 }

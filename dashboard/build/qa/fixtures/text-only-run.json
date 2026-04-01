@@ -1,0 +1,59 @@
+{
+  "name": "Text-Only Benchmark",
+  "timestamp": "2026-03-31T22:00:00Z",
+  "run_id": "2026-03-31T22-00-00",
+  "eval_pack": "coding.yaml",
+  "models": ["qwen-coder", "phi4"],
+  "cases": [
+    {
+      "case_id": "code-1",
+      "prompt": "Write a Python function to reverse a string.",
+      "category": "coding",
+      "responses": {
+        "qwen-coder": {
+          "text": "def reverse_string(s):\n    return s[::-1]",
+          "latency_ms": 200
+        },
+        "phi4": {
+          "text": "Here's a function:\n\ndef reverse_string(text):\n    return text[::-1]\n\nThis uses Python slicing.",
+          "latency_ms": 280
+        }
+      },
+      "scores": {
+        "qwen-coder": {
+          "total": 9.0,
+          "accuracy": 10,
+          "completeness": 8,
+          "conciseness": 9,
+          "reasoning": "Correct and concise implementation."
+        },
+        "phi4": {
+          "total": 8.5,
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 7,
+          "reasoning": "Correct with helpful explanation but less concise."
+        }
+      },
+      "winner": "qwen-coder"
+    }
+  ],
+  "summary": {
+    "qwen-coder": {
+      "avg_total": 9.0,
+      "avg_accuracy": 10,
+      "avg_completeness": 8,
+      "avg_conciseness": 9,
+      "avg_latency_ms": 200,
+      "wins": 1
+    },
+    "phi4": {
+      "avg_total": 8.5,
+      "avg_accuracy": 10,
+      "avg_completeness": 9,
+      "avg_conciseness": 7,
+      "avg_latency_ms": 280,
+      "wins": 0
+    }
+  }
+}

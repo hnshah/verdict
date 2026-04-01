@@ -1,7 +1,7 @@
 {
   "id": "2026-03-31-2026-03-31T07-53-37",
   "name": "Qwen Family + Phi4 + Gemma2",
-  "date": "2026-03-31",
+  "date": "Mar 31, 2026, 1:02 AM PT",
   "run_id": "2026-03-31T07-53-37",
   "eval_pack": {
     "file": "eval-packs/general.yaml",
@@ -542,5 +542,6 @@
       ],
       "avg_score": 9
     }
-  ]
+  ],
+  "last_updated": "Mar 31, 2026, 9:53 PM PT"
 }

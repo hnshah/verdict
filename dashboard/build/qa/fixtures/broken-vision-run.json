@@ -1,0 +1,59 @@
+{
+  "name": "Broken Vision Benchmark",
+  "timestamp": "2026-03-31T21:00:00Z",
+  "run_id": "2026-03-31T21-00-00",
+  "eval_pack": "vision.yaml",
+  "models": ["phi4", "llava-13b"],
+  "cases": [
+    {
+      "case_id": "vision-1",
+      "prompt": "Describe the scene in this image.",
+      "category": "vision",
+      "responses": {
+        "phi4": {
+          "text": "I cannot view images, but I'd be happy to help if you describe what you see!",
+          "latency_ms": 150
+        },
+        "llava-13b": {
+          "text": "The image shows a sunset over mountains with orange and purple clouds.",
+          "latency_ms": 320
+        }
+      },
+      "scores": {
+        "phi4": {
+          "total": 8.5,
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 10,
+          "reasoning": "Very helpful and polite response, offering assistance."
+        },
+        "llava-13b": {
+          "total": 8.0,
+          "accuracy": 10,
+          "completeness": 8,
+          "conciseness": 6,
+          "reasoning": "Accurate description but could be more concise."
+        }
+      },
+      "winner": "phi4"
+    }
+  ],
+  "summary": {
+    "phi4": {
+      "avg_total": 8.5,
+      "avg_accuracy": 0,
+      "avg_completeness": 0,
+      "avg_conciseness": 10,
+      "avg_latency_ms": 150,
+      "wins": 1
+    },
+    "llava-13b": {
+      "avg_total": 8.0,
+      "avg_accuracy": 10,
+      "avg_completeness": 8,
+      "avg_conciseness": 6,
+      "avg_latency_ms": 320,
+      "wins": 0
+    }
+  }
+}

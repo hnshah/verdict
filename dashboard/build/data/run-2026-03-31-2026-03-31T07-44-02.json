@@ -1,7 +1,7 @@
 {
   "id": "2026-03-31-2026-03-31T07-44-02",
   "name": "5 Models - 50 Cases",
-  "date": "2026-03-31",
+  "date": "Mar 31, 2026, 1:45 AM PT",
   "run_id": "2026-03-31T07-44-02",
   "eval_pack": {
     "file": "eval-packs/gsm8k-(grade-school-math).yaml",
@@ -2973,5 +2973,6 @@
       ],
       "avg_score": 5.8
     }
-  ]
+  ],
+  "last_updated": "Mar 31, 2026, 9:53 PM PT"
 }

@@ -1,7 +1,7 @@
 {
   "id": "2026-03-31-2026-03-31T07-51-23",
   "name": "7B Models Re-test",
-  "date": "2026-03-31",
+  "date": "Mar 31, 2026, 12:53 AM PT",
   "run_id": "2026-03-31T07-51-23",
   "eval_pack": {
     "file": "eval-packs/general.yaml",
@@ -431,5 +431,6 @@
       ],
       "avg_score": 9
     }
-  ]
+  ],
+  "last_updated": "Mar 31, 2026, 9:53 PM PT"
 }

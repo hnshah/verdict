@@ -1,7 +1,7 @@
 {
   "id": "2026-04-01-2026-04-01T03-18-00",
   "name": "Vision Model Benchmark (First Multimodal!)",
-  "date": "2026-04-01",
+  "date": "Mar 31, 2026, 8:18 PM PT",
   "run_id": "2026-04-01T03-18-00",
   "eval_pack": {
     "file": "eval-packs/vision-basics.yaml",
@@ -165,5 +165,6 @@
       ],
       "avg_score": 8.4
     }
-  ]
+  ],
+  "last_updated": "Mar 31, 2026, 9:53 PM PT"
 }

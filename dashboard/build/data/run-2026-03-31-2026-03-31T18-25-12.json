@@ -1,7 +1,7 @@
 {
   "id": "2026-03-31-2026-03-31T18-25-12",
   "name": "Verdict Auto-Dashboard",
-  "date": "2026-03-31",
+  "date": "Mar 31, 2026, 11:36 AM PT",
   "run_id": "2026-03-31T18-25-12",
   "eval_pack": {
     "file": "eval-packs/gsm8k-(grade-school-math-8k).yaml",
@@ -1233,5 +1233,6 @@
       ],
       "avg_score": 9.3
     }
-  ]
+  ],
+  "last_updated": "Mar 31, 2026, 9:53 PM PT"
 }

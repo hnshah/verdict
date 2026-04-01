@@ -1,7 +1,7 @@
 {
   "id": "2026-03-31-2026-03-31T07-36-33",
   "name": "Code Models Benchmark (4 models)",
-  "date": "2026-03-31",
+  "date": "Mar 31, 2026, 12:43 AM PT",
   "run_id": "2026-03-31T07-36-33",
   "eval_pack": {
     "file": "eval-packs/general.yaml",
@@ -542,5 +542,6 @@
       ],
       "avg_score": 8.9
     }
-  ]
+  ],
+  "last_updated": "Mar 31, 2026, 9:53 PM PT"
 }
