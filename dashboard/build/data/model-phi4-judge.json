@@ -1,0 +1,75 @@
+{
+  "model_name": "phi4-judge",
+  "total_runs": 1,
+  "total_cases": 10,
+  "avg_score": 4.9,
+  "total_wins": 2,
+  "avg_latency": 2.3,
+  "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T03-35-29",
+      "name": "Vision Models Only Benchmark",
+      "date": "2026-04-01",
+      "score": 4.9,
+      "accuracy": 4.2,
+      "completeness": 4.8,
+      "conciseness": 9.2,
+      "wins": 2,
+      "latency": 2.3
+    }
+  ],
+  "best_cases": [
+    {
+      "id": "scene-city",
+      "prompt": "What type of environment is shown in this image?",
+      "score": 7.9
+    },
+    {
+      "id": "object-animal",
+      "prompt": "What animal do you see in this image?",
+      "score": 7.5
+    },
+    {
+      "id": "scene-nature",
+      "prompt": "Describe the landscape in this image.",
+      "score": 6.6
+    },
+    {
+      "id": "detail-hands",
+      "prompt": "What is the person doing in this image?",
+      "score": 6.6
+    },
+    {
+      "id": "scene-beach",
+      "prompt": "Describe the scene in this image in detail.",
+      "score": 4.9
+    }
+  ],
+  "worst_cases": [
+    {
+      "id": "spatial-composition",
+      "prompt": "Describe the composition and spatial layout of this image.",
+      "score": 2.1
+    },
+    {
+      "id": "object-tech",
+      "prompt": "What technology or electronic devices do you see in this image?",
+      "score": 2.5
+    },
+    {
+      "id": "object-food",
+      "prompt": "What specific food items can you identify in this image?",
+      "score": 3.3
+    },
+    {
+      "id": "text-reading",
+      "prompt": "What text can you read in this image?",
+      "score": 3.3
+    },
+    {
+      "id": "detail-count",
+      "prompt": "Count the number of distinct objects visible in this image.",
+      "score": 4.1
+    }
+  ]
+}

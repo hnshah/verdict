@@ -1,11 +1,22 @@
 {
   "model_name": "llama-vision-11b",
-  "total_runs": 1,
-  "total_cases": 3,
-  "avg_score": 4.8,
+  "total_runs": 2,
+  "total_cases": 13,
+  "avg_score": 3.4,
   "total_wins": 0,
-  "avg_latency": 0.6,
+  "avg_latency": 0.8,
   "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T03-35-29",
+      "name": "Vision Models Only Benchmark",
+      "date": "2026-04-01",
+      "score": 2,
+      "accuracy": 1.1,
+      "completeness": 1.2,
+      "conciseness": 10,
+      "wins": 0,
+      "latency": 0.9
+    },
     {
       "id": "2026-04-01-2026-04-01T03-18-00",
       "name": "Vision Model Benchmark (First Multimodal!)",
@@ -30,26 +41,46 @@
       "score": 4.8
     },
     {
+      "id": "object-food",
+      "prompt": "What specific food items can you identify in this image?",
+      "score": 3.4
+    },
+    {
       "id": "describe-1",
       "prompt": "Describe what you see in this image in one sentence.",
       "score": 3.1
+    },
+    {
+      "id": "scene-city",
+      "prompt": "What type of environment is shown in this image?",
+      "score": 2.5
     }
   ],
   "worst_cases": [
     {
-      "id": "describe-1",
-      "prompt": "Describe what you see in this image in one sentence.",
-      "score": 3.1
+      "id": "scene-beach",
+      "prompt": "Describe the scene in this image in detail.",
+      "score": 1.6
     },
     {
-      "id": "describe-2",
-      "prompt": "What is the main subject of this image?",
-      "score": 4.8
+      "id": "scene-nature",
+      "prompt": "Describe the landscape in this image.",
+      "score": 1.6
     },
     {
-      "id": "describe-3",
-      "prompt": "What type of location or setting is shown in this image?",
-      "score": 6.6
+      "id": "object-tech",
+      "prompt": "What technology or electronic devices do you see in this image?",
+      "score": 1.6
+    },
+    {
+      "id": "detail-count",
+      "prompt": "Count the number of distinct objects visible in this image.",
+      "score": 1.6
+    },
+    {
+      "id": "spatial-composition",
+      "prompt": "Describe the composition and spatial layout of this image.",
+      "score": 1.6
     }
   ]
 }
