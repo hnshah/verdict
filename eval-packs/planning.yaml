@@ -1,0 +1,369 @@
+name: Planning & Constraint Satisfaction
+description: Tests multi-step planning, scheduling under constraints, resource allocation, and dependency reasoning. A strong differentiator between frontier and local models — weaker models hallucinate valid-looking plans that violate stated constraints.
+
+cases:
+  # ── Scheduling ────────────────────────────────────────────────────────────
+  - id: plan-001
+    description: "Meeting scheduling with timezone and availability constraints"
+    category: scheduling
+    prompt: |
+      Find a 1-hour meeting slot for 4 people next week (Mon–Fri):
+      - Alice: PST, available 9am–5pm PST, blocked Thu afternoon
+      - Bob: EST, available 10am–6pm EST, blocked Mon all day
+      - Chen: UTC+8, available 9am–6pm UTC+8
+      - Diana: CET (UTC+1), available 8am–4pm CET
+
+      Find a slot that works for everyone. Show your reasoning.
+    criteria: |
+      Must correctly convert all timezones. Valid overlap exists on certain days:
+      - PST 9am = EST 12pm = UTC+8 1am (too early for Chen) = CET 6pm (too late for Diana)
+      - A valid slot: PST 8am (EST 11am, UTC+8 12am... actually problematic). 
+      The correct answer is that NO clean overlap exists given Chen's UTC+8 timezone (9am UTC+8 = 1am PST, 6pm UTC+8 = 2am PST) — this is outside everyone's PST/EST working hours.
+      Model should identify the timezone conflict clearly, explain why no slot works, and suggest alternatives (async communication, someone taking an off-hours call).
+    tags: [scheduling, timezone, constraints, hard]
+
+  - id: plan-002
+    description: "Project scheduling with hard dependencies and deadline"
+    category: scheduling
+    prompt: |
+      Schedule these tasks to meet a Friday 5pm deadline. Today is Monday 9am.
+      Available hours: 9am–5pm Mon–Fri (8h/day).
+
+      Tasks and dependencies:
+      - A: 6h (no dependencies)
+      - B: 4h (depends on A)
+      - C: 3h (no dependencies)
+      - D: 5h (depends on B and C)
+      - E: 2h (depends on D)
+
+      Critical path? Will we make the deadline? If not, what's the minimum crunch needed?
+    criteria: |
+      Critical path: A(6h) → B(4h) → D(5h) → E(2h) = 17 hours.
+      C can run in parallel: 3h (fits within A's 6h window).
+      Total sequential hours needed: 17h.
+      Available: 5 days × 8h = 40h. But serial critical path = 17h minimum.
+      With parallel work: Mon: A (6h) + start C || Tue: B (4h) + finish C || Wed: D (5h) || Thu: E (2h) — comfortably done by Thursday.
+      Deadline is met. Model should identify critical path correctly and show the parallel schedule.
+    tags: [scheduling, dependencies, critical-path, medium]
+
+  - id: plan-003
+    description: "Resource allocation with budget and priority constraints"
+    category: resource-allocation
+    prompt: |
+      Allocate a $10,000 marketing budget across 4 channels. Constraints:
+      - SEO: minimum $1,000, maximum $4,000, expected ROI 3x
+      - Paid Search: minimum $2,000, no max, expected ROI 2.5x
+      - Social Ads: minimum $500, maximum $3,000, expected ROI 2x
+      - Email: minimum $500, maximum $1,500, expected ROI 4x
+
+      Goal: maximize total expected return. What's the optimal allocation?
+    criteria: |
+      Optimal strategy: maximize highest-ROI channels first within constraints.
+      Email has highest ROI (4x): allocate max $1,500.
+      SEO next (3x): allocate max $4,000.
+      Remaining: $10,000 - $1,500 - $4,000 = $4,500.
+      Paid Search minimum $2,000 (must meet). Remaining: $2,500 for Social Ads (within $3,000 max).
+      Final: Email $1,500 + SEO $4,000 + Paid Search $2,000 + Social $2,500 = $10,000.
+      Expected return: $6,000 + $12,000 + $5,000 + $5,000 = $28,000.
+      Model should show the greedy allocation logic and verify sum = $10,000.
+    tags: [resource-allocation, optimization, budget, medium]
+
+  # ── Constraint satisfaction ───────────────────────────────────────────────
+  - id: plan-004
+    description: "Seating arrangement with multiple hard constraints"
+    category: constraints
+    prompt: |
+      Seat 6 people (A, B, C, D, E, F) at a round table with these constraints:
+      - A and B must sit together (adjacent)
+      - C and D must NOT sit together
+      - E must sit directly across from F
+      - B and C must NOT sit together
+
+      Is this possible? If so, provide a valid arrangement.
+    criteria: |
+      Round table of 6: positions 1-6. Across = position ± 3.
+      E across F: e.g., E=1, F=4.
+      A and B adjacent. B and C not adjacent. C and D not adjacent.
+      Valid arrangement exists: E(1), A(2), B(3), F(4), D(5), C(6).
+      Check: A-B adjacent ✓, C(6) not adjacent to D(5)... wait, 5-6 ARE adjacent. 
+      Try: E(1), C(2), A(3), F(4), B(5), D(6). A-B: 3-5 not adjacent ✗.
+      Valid: E(1), A(2), B(3), F(4), C(5), D(6). B-C: 3-5 not adjacent ✓. C-D: 5-6 adjacent ✗.
+      Valid: E(1), D(2), A(3), F(4), B(5), C(6). A-B: 3-5 not adjacent ✗.
+      Valid: E(1), A(2), B(3), F(4), D(5), C(6). C-D: 6 and 5 adjacent in round table ✗.
+      Model should work through systematically and either find a valid arrangement or prove none exists. Credit for showing constraint-checking process even if final answer differs — this is a genuine hard constraint puzzle.
+    tags: [constraints, combinatorics, hard]
+
+  - id: plan-005
+    description: "Diet planning with nutritional constraints"
+    category: constraints
+    prompt: |
+      Plan a day of meals meeting all these nutritional targets:
+      - Calories: 1800–2000 kcal
+      - Protein: minimum 120g
+      - Carbs: maximum 150g
+      - Fat: maximum 70g
+      - Must include: breakfast, lunch, dinner, one snack
+      - No meal over 600 kcal
+      - Person is lactose intolerant (no dairy)
+
+      Provide a specific meal plan with approximate macros.
+    criteria: |
+      Plan must:
+      1. Total calories within 1800–2000 range
+      2. Protein sum ≥ 120g
+      3. Carbs sum ≤ 150g
+      4. Fat sum ≤ 70g
+      5. No single meal > 600 kcal
+      6. 4 meals (breakfast/lunch/dinner/snack)
+      7. Zero dairy ingredients
+      Model should provide specific foods with rough macros that actually sum correctly. Penalize plans where macros obviously don't add up or contain dairy (yogurt, cheese, butter, milk).
+    tags: [constraints, planning, nutrition, medium]
+
+  - id: plan-006
+    description: "Itinerary planning with time windows and travel constraints"
+    category: scheduling
+    prompt: |
+      Plan a day trip to visit 4 attractions in a city:
+      - Museum: open 10am–5pm, takes 2h, last entry 3pm
+      - Park: open all day, takes 1.5h, best 11am–2pm (crowds otherwise)
+      - Market: open 8am–1pm, takes 1h
+      - Tower: open 9am–8pm, takes 1h, closes for maintenance 12pm–2pm
+
+      You arrive at 9am, leave at 6pm. Travel between each attraction: 20 minutes.
+
+      Create a valid itinerary. Is it possible to see all 4?
+    criteria: |
+      Valid itinerary: Market (9am–10am) → travel (20min) → Tower (10:20am–11:20am, before maintenance) → travel (20min) → Park (11:40am–1:10pm, best window) → travel (20min) → Museum (1:30pm–3:30pm, before last entry 3pm cutoff).
+      Done by 3:30pm, well before 6pm departure.
+      All 4 visited. Market must be first (closes 1pm). Tower before noon (maintenance 12-2pm). Park in sweet spot. Museum last entry by 3pm — 1:30 entry gives 2h, done by 3:30.
+      Model should derive a valid ordering and verify time windows.
+    tags: [scheduling, time-windows, itinerary, medium]
+
+  # ── Multi-step planning ───────────────────────────────────────────────────
+  - id: plan-007
+    description: "Backward planning from a deadline"
+    category: planning
+    prompt: |
+      You need to submit a research paper by Friday noon. Working backward, what's the latest you can start each step?
+      
+      Steps required (in order):
+      1. Research & notes: 8 hours
+      2. Outline: 2 hours (needs research done)
+      3. First draft: 6 hours (needs outline)
+      4. Peer review: someone else needs 4 hours (needs first draft, available only Mon/Wed afternoons)
+      5. Revision: 3 hours (needs peer review back)
+      6. Final proofread: 1 hour (needs revision)
+
+      Today is Sunday 9pm. You can work 8am–10pm daily. Peer reviewer is available Monday and Wednesday afternoons (1pm–5pm).
+    criteria: |
+      Work backwards from Friday noon:
+      - Proofread (1h): must end Fri noon → start Fri 11am
+      - Revision (3h): must end by Fri 11am → start Fri 8am
+      - Peer review (4h): Wed afternoon (1pm–5pm) works if draft is ready before then
+      - First draft (6h): must finish before Wed 1pm → if starting Wed 8am, done by 2pm (too late). Must finish Tue. Draft 6h on Tue: start Tue 8am, done Tue 2pm. Or Mon-Tue split.
+      - Outline (2h): before draft starts. 
+      - Research (8h): can start Sunday night and Mon.
+      
+      Valid critical path exists. Model should work through it and identify that Wed peer review is the binding constraint. Penalize plans that don't verify the peer reviewer availability window.
+    tags: [planning, backward-chaining, dependencies, hard]
+
+  - id: plan-008
+    description: "Inventory replenishment planning"
+    category: planning
+    prompt: |
+      A small shop sells 50 units/day of a product. Current stock: 200 units.
+      Lead time for reorder: 5 days. Reorder quantity: 500 units.
+      Safety stock target: 100 units minimum.
+
+      When should the shop reorder? What happens if they wait until stock hits 100?
+    criteria: |
+      Reorder point = lead time demand + safety stock = (50 × 5) + 100 = 350 units.
+      Current stock: 200 units. Days until stock hits 350: stock is already BELOW reorder point (200 < 350). Should have reordered already.
+      If reorder now: arrives in 5 days. In 5 days: 200 - (50 × 5) = 200 - 250 = -50 units. Stock-out occurs in 4 days (200/50 = 4 days until zero).
+      If wait until 100 units: already at 200, so 2 more days. At 100 units, reorder → 5 day lead time → stock-out in 2 days from now regardless.
+      Model should identify: reorder should have already happened, stock-out is imminent, need emergency order.
+    tags: [planning, inventory, math, medium]
+
+  - id: plan-009
+    description: "Hiring plan with budget and timeline constraints"
+    category: resource-allocation
+    prompt: |
+      A startup needs to grow from 5 to 12 engineers in 6 months. Constraints:
+      - Monthly hiring budget: $40,000 (covers recruiter fees + onboarding)
+      - Each hire: $8,000 all-in cost + 1 month ramp time
+      - Senior engineers: $15,000 cost, take 2 weeks to ramp, can mentor 2 juniors simultaneously
+      - Junior engineers: $5,000 cost, take 6 weeks to ramp, need mentor for first 4 weeks
+      - Must maintain 1 senior per 3 juniors ratio at all times
+      - Need 7 new engineers total
+
+      Create a 6-month hiring plan. What mix of senior/junior makes sense?
+    criteria: |
+      Need 7 new engineers. Ratio constraint: 1 senior per 3 juniors.
+      Current team: 5 engineers (assume some ratio). 
+      If adding 7: optimal split depends on cost. Senior $15k each, Junior $5k each.
+      Budget: $40k/month × 6 = $240k total.
+      7 juniors: $35k — fits budget but violates ratio (need at least 2-3 seniors).
+      Reasonable plan: 2 seniors ($30k) + 5 juniors ($25k) = $55k total cost within $240k budget.
+      Monthly budget $40k: can hire in batches. Month 1: 1 senior ($15k) + 2 juniors ($10k) = $25k. Month 2: etc.
+      Model should identify ratio constraint and show it's feasible within budget. Any reasonable valid plan with correct math and ratio maintained scores well.
+    tags: [resource-allocation, constraints, hiring, medium]
+
+  - id: plan-010
+    description: "Event logistics planning"
+    category: planning
+    prompt: |
+      Plan a conference for 200 attendees. You have:
+      - Main hall: capacity 250, setup takes 3h, teardown 2h
+      - 2 breakout rooms: capacity 60 each, setup 1h, teardown 1h  
+      - Catering: can serve 200 in 45 min, needs 1h kitchen prep before each meal
+      - AV team: 2 people, each setup takes 2h, can work in parallel
+
+      Schedule for a 1-day event starting 9am:
+      - Opening keynote: 1h (main hall)
+      - 2 concurrent workshops: 1.5h each (breakout rooms)
+      - Lunch: 1h
+      - Afternoon keynote: 45min (main hall)
+      - Closing: 30min (main hall)
+    criteria: |
+      Must account for setup times. AV setup: 2h before event = 7am start.
+      Hall setup: 3h before use = 6am (AV team can set up hall from 7am in parallel if they do 2h = 9am ready, OK since setup overlaps).
+      Valid schedule:
+      - 9:00–10:00: Opening keynote (main hall)
+      - 10:00–11:30: Concurrent workshops (breakout rooms)
+      - 11:30–12:30: Catering prep starts at 10:30 → Lunch 11:30–12:30
+      - 12:30–13:15: Afternoon keynote
+      - 13:15–13:45: Closing
+      Catering needs 1h prep before lunch: prep at 10:30, serve at 11:30 ✓.
+      Model should flag any conflicts (e.g., catering can't prep if hall teardown/setup overlaps).
+    tags: [planning, logistics, scheduling, medium]
+
+  # ── Prioritization ────────────────────────────────────────────────────────
+  - id: plan-011
+    description: "Task prioritization with effort/impact matrix"
+    category: prioritization
+    prompt: |
+      Prioritize these 8 tasks using effort/impact reasoning:
+
+      | Task | Effort | Impact | Urgency |
+      |------|--------|--------|---------|
+      | Fix critical bug in prod | Low | High | Today |
+      | Refactor legacy module | High | Low | This quarter |
+      | Write onboarding docs | Medium | Medium | This week |
+      | Add requested feature (5 customers waiting) | High | High | This week |
+      | Security patch (known vuln, low risk) | Low | High | This week |
+      | Team training session | Medium | Medium | Flexible |
+      | Optimize slow query (minor perf issue) | Low | Low | Flexible |
+      | Customer demo prep | High | High | Tomorrow |
+
+      Recommend execution order for the next 48 hours.
+    criteria: |
+      Priority framework: Urgency × Impact, then effort as tiebreaker (prefer low effort when impact is equal).
+      Clear order for 48h:
+      1. Fix critical bug (Today, Low effort, High impact) — do immediately
+      2. Security patch (Low effort, High impact, this week) — quick win
+      3. Customer demo prep (High impact, Tomorrow deadline) — must start now
+      4. Write onboarding docs (Medium effort, this week)
+      Defer: Refactor legacy (high effort, low impact), optimize slow query (low impact), team training (flexible), requested feature (important but high effort, not urgent enough to displace demo prep).
+      Model should explain the reasoning clearly using urgency+impact logic and acknowledge trade-offs.
+    tags: [prioritization, decision-making, medium]
+
+  - id: plan-012
+    description: "Sprint planning with velocity and story points"
+    category: planning
+    prompt: |
+      Plan a 2-week sprint. Team velocity: 40 points/sprint.
+      
+      Backlog (in priority order):
+      - Auth refactor: 13 pts (blocker for stories below)
+      - User dashboard: 8 pts (needs auth refactor)
+      - Email notifications: 5 pts (independent)
+      - Performance logging: 3 pts (independent)
+      - Mobile responsive: 13 pts (independent)
+      - Dark mode: 8 pts (independent)
+      - Export to PDF: 5 pts (independent)
+
+      Team also has: 2 days of planned vacation reducing capacity by 8 pts.
+
+      What goes in the sprint? What's left in backlog?
+    criteria: |
+      Adjusted capacity: 40 - 8 = 32 points.
+      Must include auth refactor (13 pts) as it's a blocker. Can include dashboard (8 pts) since auth is in same sprint. 
+      Subtotal: 13 + 8 = 21 pts. Remaining capacity: 11 pts.
+      Email notifications (5 pts): yes. Performance logging (3 pts): yes. Total: 29 pts. 3 pts remaining.
+      Export to PDF (5 pts): doesn't fit (29 + 5 = 34 > 32). 
+      Final sprint: Auth (13) + Dashboard (8) + Email (5) + Perf logging (3) = 29 pts. Under capacity, could add export to PDF? No, 34 > 32.
+      Backlog: Mobile responsive (13), Dark mode (8), Export to PDF (5).
+      Model should respect both capacity constraint and dependency order.
+    tags: [planning, sprint, agile, medium]
+
+  - id: plan-013
+    description: "Supply chain routing with cost and time constraints"
+    category: optimization
+    prompt: |
+      Choose a shipping route from warehouse to customer. Must arrive within 3 days. Budget: $150 max.
+
+      Options:
+      A) Ground (5 days, $50)
+      B) Air (2 days, $200)
+      C) Express Ground (3 days, $100)
+      D) Air + Ground relay (1 day air to hub, 1 day ground, total 2 days, $175)
+      E) Regional courier (2 days, $130)
+
+      Which options meet both constraints? Which is optimal?
+    criteria: |
+      Filter by constraints:
+      - Time ≤ 3 days AND Cost ≤ $150
+      A: 5 days ✗ (too slow)
+      B: 2 days ✓, $200 ✗ (over budget)
+      C: 3 days ✓, $100 ✓ → VALID
+      D: 2 days ✓, $175 ✗ (over budget)
+      E: 2 days ✓, $130 ✓ → VALID
+      Valid options: C and E. Optimal: E ($130) is faster (2 days vs 3) and more expensive but within budget. If minimizing cost: C. If minimizing time within budget: E.
+      Model should identify both valid options and explain the trade-off. Optimal = E if speed preferred, C if cost minimized.
+    tags: [optimization, constraints, routing, easy]
+
+  - id: plan-014
+    description: "Capacity planning for a growing service"
+    category: resource-allocation
+    prompt: |
+      A web service has 10,000 daily active users today, growing 15% month-over-month.
+      Each server handles 2,000 DAU. Servers cost $500/month. Current setup: 5 servers.
+      
+      - When will current capacity be exceeded?
+      - How many servers needed at 6 months? 12 months?
+      - Monthly cost at 12 months vs today?
+    criteria: |
+      Current: 10,000 DAU, 5 servers (10,000/2,000 = 5) — exactly at capacity.
+      Month 1: 10,000 × 1.15 = 11,500 → needs 6 servers (11,500/2,000 = 5.75, round up)
+      Current capacity exceeded immediately (month 1).
+      Month 6: 10,000 × 1.15^6 = 10,000 × 2.313 ≈ 23,130 DAU → 23,130/2,000 = 11.57 → 12 servers
+      Month 12: 10,000 × 1.15^12 = 10,000 × 5.35 ≈ 53,500 DAU → 53,500/2,000 = 26.75 → 27 servers
+      Cost today: 5 × $500 = $2,500/month
+      Cost month 12: 27 × $500 = $13,500/month (5.4× increase)
+      Model should show compound growth math correctly and round up servers.
+    tags: [planning, capacity, math, medium]
+
+  - id: plan-015
+    description: "Contingency planning with failure modes"
+    category: planning
+    prompt: |
+      You're launching a product in 4 weeks. Key risks and their probability:
+      - Supplier delay (30% chance): adds 2 weeks
+      - QA failure requiring rework (40% chance): adds 1 week
+      - Both happen (12% chance, independent): adds 3 weeks
+      - Regulatory approval needed (20% chance): adds 4 weeks
+
+      What's the probability of launching on time (4 weeks)?
+      What's the expected launch date?
+      What contingency plan would you recommend?
+    criteria: |
+      On-time probability: need no delays. 
+      P(on time) = P(no supplier delay) × P(no QA failure) × P(no regulatory issue)
+      = 0.70 × 0.60 × 0.80 = 0.336 = 33.6%
+      (Note: "Both happen" is already captured in the joint probabilities, not additive)
+      Expected delay = 0.30×2 + 0.40×1 + 0.20×4 = 0.6 + 0.4 + 0.8 = 1.8 weeks average delay
+      (Correlation between supplier/QA is tricky — model gets credit for reasonable approach)
+      Expected launch: ~5.8 weeks from now.
+      Contingency: parallel-track regulatory approval, pre-qualify backup supplier, add QA buffer in schedule.
+      Model should do the probability math clearly and recommend specific mitigation actions.
+    tags: [planning, risk, probability, hard]
