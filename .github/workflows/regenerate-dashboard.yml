@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'dashboard/published/*.json'
+  workflow_dispatch:  # Allow manual trigger
 
 permissions:
   contents: write
@@ -37,18 +38,22 @@ jobs:
       - name: Regenerate complete dashboard (main + runs + models)
         run: |
           COUNT=$(ls dashboard/published/*.json 2>/dev/null | grep -v dashboard-data | wc -l | tr -d ' ')
-          echo "Regenerating complete dashboard from $COUNT result files..."
+          echo "🏗️  Regenerating complete dashboard from $COUNT result files..."
           chmod +x dashboard/build/generate-all.sh
-          bash dashboard/build/generate-all.sh
-          echo "✅ Complete dashboard regenerated"
-          echo "   - Main dashboard (index.html)"
-          echo "   - $COUNT run detail pages"
-          echo "   - Model detail pages"
+          cd dashboard/build
+          ./generate-all.sh
+          cd ../..
+          echo ""
+          echo "✅ Dashboard regeneration complete!"
+          echo "   Files updated:"
+          git diff --stat dashboard/published/ || echo "   No changes detected"
 
-      - name: Commit updated dashboard files
+      - name: Commit updated dashboard HTML
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore(dashboard): regenerate complete dashboard from ${{ github.event.head_commit.message }} [skip ci]"
-          file_pattern: "dashboard/published/"
+          commit_message: "chore(dashboard): auto-regenerate HTML after new eval results"
+          file_pattern: "dashboard/published/*.html dashboard/published/runs/ dashboard/published/models/"
           commit_user_name: "Verdict Dashboard Bot"
           commit_user_email: "bot@verdict.dev"
+          skip_dirty_check: false
+          add_options: '--all'
