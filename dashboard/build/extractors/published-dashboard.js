@@ -64,11 +64,12 @@ files.forEach(filePath => {
   if (!isTestRun) {
     Object.entries(data.summary || {}).forEach(([model, stats]) => {
       if (!modelStats[model]) {
-        modelStats[model] = { name: model, scores: [], wins: 0, runs: 0, latencies: [] };
+        modelStats[model] = { name: model, scores: [], wins: 0, runs: 0, totalCases: 0, latencies: [] };
       }
       modelStats[model].scores.push(stats.avg_total);
       modelStats[model].wins += stats.wins || 0;
       modelStats[model].runs++;
+      modelStats[model].totalCases += caseCount; // Track total cases for win rate
       if (stats.avg_latency_ms) modelStats[model].latencies.push(stats.avg_latency_ms);
     });
   }
@@ -80,7 +81,7 @@ const topModels = Object.values(modelStats)
     avg_score: Math.round((m.scores.reduce((a,b) => a+b, 0) / m.scores.length) * 10) / 10,
     runs: m.runs,
     total_wins: m.wins,
-    win_rate: m.scores.length > 0 ? Math.round((m.wins / m.scores.length) * 100) : 0,
+    win_rate: m.totalCases > 0 ? Math.round((m.wins / m.totalCases) * 100) : 0,
     avg_latency: m.latencies.length > 0
       ? Math.round((m.latencies.reduce((a,b) => a+b, 0) / m.latencies.length) / 100) / 10
       : 0

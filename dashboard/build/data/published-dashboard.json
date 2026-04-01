@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-01T05:41:28.818Z",
+  "generated_at": "2026-04-01T16:01:20.899Z",
   "stats": {
     "total_runs": 22,
     "total_cases": 222,
@@ -327,7 +327,7 @@
       "avg_score": 9.5,
       "runs": 1,
       "total_wins": 2,
-      "win_rate": 200,
+      "win_rate": 4,
       "avg_latency": 24.4,
       "rank": 1,
       "medal": "🥇"
@@ -337,7 +337,7 @@
       "avg_score": 9.4,
       "runs": 1,
       "total_wins": 5,
-      "win_rate": 500,
+      "win_rate": 25,
       "avg_latency": 4.5,
       "rank": 2,
       "medal": "🥈"
@@ -347,7 +347,7 @@
       "avg_score": 9.4,
       "runs": 1,
       "total_wins": 47,
-      "win_rate": 4700,
+      "win_rate": 94,
       "avg_latency": 11.6,
       "rank": 3,
       "medal": "🥉"
@@ -357,7 +357,7 @@
       "avg_score": 9.3,
       "runs": 1,
       "total_wins": 10,
-      "win_rate": 1000,
+      "win_rate": 100,
       "avg_latency": 3.9,
       "rank": 4,
       "medal": ""
@@ -377,7 +377,7 @@
       "avg_score": 9.2,
       "runs": 3,
       "total_wins": 11,
-      "win_rate": 367,
+      "win_rate": 28,
       "avg_latency": 6,
       "rank": 6,
       "medal": ""
@@ -387,7 +387,7 @@
       "avg_score": 9.2,
       "runs": 4,
       "total_wins": 8,
-      "win_rate": 200,
+      "win_rate": 20,
       "avg_latency": 12,
       "rank": 7,
       "medal": ""
@@ -397,7 +397,7 @@
       "avg_score": 9.2,
       "runs": 5,
       "total_wins": 20,
-      "win_rate": 400,
+      "win_rate": 40,
       "avg_latency": 5.7,
       "rank": 8,
       "medal": ""
@@ -407,7 +407,7 @@
       "avg_score": 9.1,
       "runs": 2,
       "total_wins": 2,
-      "win_rate": 100,
+      "win_rate": 10,
       "avg_latency": 19.9,
       "rank": 9,
       "medal": ""
@@ -447,7 +447,7 @@
       "avg_score": 9,
       "runs": 1,
       "total_wins": 1,
-      "win_rate": 100,
+      "win_rate": 2,
       "avg_latency": 150.1,
       "rank": 13,
       "medal": ""
@@ -457,7 +457,7 @@
       "avg_score": 8.8,
       "runs": 8,
       "total_wins": 33,
-      "win_rate": 413,
+      "win_rate": 44,
       "avg_latency": 6,
       "rank": 14,
       "medal": ""
@@ -467,7 +467,7 @@
       "avg_score": 8.4,
       "runs": 4,
       "total_wins": 5,
-      "win_rate": 125,
+      "win_rate": 11,
       "avg_latency": 5.3,
       "rank": 15,
       "medal": ""
@@ -477,7 +477,7 @@
       "avg_score": 8.3,
       "runs": 1,
       "total_wins": 13,
-      "win_rate": 1300,
+      "win_rate": 65,
       "avg_latency": 1.9,
       "rank": 16,
       "medal": ""
@@ -487,7 +487,7 @@
       "avg_score": 7.8,
       "runs": 5,
       "total_wins": 18,
-      "win_rate": 360,
+      "win_rate": 60,
       "avg_latency": 3.4,
       "rank": 17,
       "medal": ""
@@ -497,7 +497,7 @@
       "avg_score": 6.6,
       "runs": 9,
       "total_wins": 22,
-      "win_rate": 244,
+      "win_rate": 29,
       "avg_latency": 5.7,
       "rank": 18,
       "medal": ""
@@ -507,7 +507,7 @@
       "avg_score": 4.9,
       "runs": 1,
       "total_wins": 2,
-      "win_rate": 200,
+      "win_rate": 20,
       "avg_latency": 2.3,
       "rank": 19,
       "medal": ""
@@ -517,7 +517,7 @@
       "avg_score": 4.6,
       "runs": 4,
       "total_wins": 7,
-      "win_rate": 175,
+      "win_rate": 18,
       "avg_latency": 3.5,
       "rank": 20,
       "medal": ""
