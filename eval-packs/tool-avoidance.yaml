@@ -1,0 +1,310 @@
+name: Tool Avoidance
+description: Tests whether models avoid calling tools when the answer can be derived from context, general knowledge, or simple reasoning. Tool overuse is a common local model failure — calling search/calculator when unnecessary.
+
+cases:
+  # ── Should NOT call any tool ──────────────────────────────────────────────
+  - id: avoid-001
+    description: "Simple math — no calculator needed"
+    category: tool-avoidance
+    prompt: "What is 8 times 7?"
+    scorer: exact
+    expected: "56"
+    tools:
+      - name: calculator
+        description: "Perform arithmetic calculations"
+        parameters:
+          type: object
+          required: [expression]
+          properties:
+            expression:
+              type: string
+              description: "Math expression to evaluate"
+    criteria: "Answers 56 directly without calling calculator tool"
+    tags: [tool-avoidance, math, simple]
+
+  - id: avoid-002
+    description: "Static factual knowledge — no search needed"
+    category: tool-avoidance
+    prompt: "What is the capital of France?"
+    scorer: contains
+    expected: "Paris"
+    tools:
+      - name: web_search
+        description: "Search the web for information"
+        parameters:
+          type: object
+          required: [query]
+          properties:
+            query:
+              type: string
+    criteria: "Answers Paris directly — does not call web_search for stable factual knowledge"
+    tags: [tool-avoidance, factual, search]
+
+  - id: avoid-003
+    description: "Context already provided — no lookup needed"
+    category: tool-avoidance
+    prompt: |
+      Document: "The project deadline is March 15th. The budget is $50,000. The lead engineer is Sarah Chen."
+
+      What is the project budget?
+    scorer: contains
+    expected: "$50,000"
+    tools:
+      - name: read_file
+        description: "Read a file from the filesystem"
+        parameters:
+          type: object
+          required: [path]
+          properties:
+            path:
+              type: string
+    criteria: "Extracts $50,000 from the provided context — does not call read_file unnecessarily"
+    tags: [tool-avoidance, context, document]
+
+  - id: avoid-004
+    description: "Conversational response — no tool appropriate"
+    category: tool-avoidance
+    prompt: "Thanks for your help earlier! That was really useful."
+    scorer: llm
+    tools:
+      - name: send_email
+        description: "Send an email"
+        parameters:
+          type: object
+          required: [to, subject, body]
+          properties:
+            to:
+              type: string
+            subject:
+              type: string
+            body:
+              type: string
+    criteria: "Responds conversationally — does not attempt to send an email or call any tool in response to casual thanks"
+    tags: [tool-avoidance, conversational, social]
+
+  - id: avoid-005
+    description: "Basic unit conversion from knowledge"
+    category: tool-avoidance
+    prompt: "How many centimeters are in an inch?"
+    scorer: contains
+    expected: "2.54"
+    tools:
+      - name: unit_converter
+        description: "Convert between units of measurement"
+        parameters:
+          type: object
+          required: [from_unit, to_unit, value]
+          properties:
+            from_unit:
+              type: string
+            to_unit:
+              type: string
+            value:
+              type: number
+    criteria: "Answers 2.54 cm directly — does not call unit_converter for this standard constant"
+    tags: [tool-avoidance, conversion, knowledge]
+
+  - id: avoid-006
+    description: "Opinion/preference — no lookup possible"
+    category: tool-avoidance
+    prompt: "Which do you think is a better programming language for beginners, Python or JavaScript?"
+    scorer: llm
+    tools:
+      - name: web_search
+        description: "Search the web"
+        parameters:
+          type: object
+          required: [query]
+          properties:
+            query:
+              type: string
+    criteria: "Gives a considered opinion directly — does not search the web to answer an opinion question. May express uncertainty but should engage substantively."
+    tags: [tool-avoidance, opinion, reasoning]
+
+  - id: avoid-007
+    description: "Formatting task — no external tool needed"
+    category: tool-avoidance
+    prompt: "Format this as a bulleted list: apples, bananas, oranges, grapes"
+    scorer: llm
+    tools:
+      - name: format_text
+        description: "Apply text formatting"
+        parameters:
+          type: object
+          required: [text, format]
+          properties:
+            text:
+              type: string
+            format:
+              type: string
+    criteria: "Produces a bulleted list directly in the response — does not call format_text tool for trivial text transformation"
+    tags: [tool-avoidance, formatting, trivial]
+
+  # ── Should call ONCE, not multiple redundant times ─────────────────────────
+  - id: avoid-008
+    description: "Single search sufficient — should not call search multiple times for same info"
+    category: tool-overuse
+    prompt: "What is the population of Tokyo? Give me a quick answer."
+    scorer: tool_call
+    expected_tool: web_search
+    tools:
+      - name: web_search
+        description: "Search the web"
+        parameters:
+          type: object
+          required: [query]
+          properties:
+            query:
+              type: string
+    criteria: "Calls web_search exactly once with a relevant query — does not make multiple redundant searches for the same fact"
+    tags: [tool-overuse, search, efficiency]
+
+  # ── Should call tool (positive control — ensures model still calls when needed) ──
+  - id: avoid-009
+    description: "Real-time data genuinely requires tool — should call"
+    category: tool-required
+    prompt: "What is the current price of Apple stock (AAPL)?"
+    scorer: tool_call
+    expected_tool: get_stock_price
+    tools:
+      - name: get_stock_price
+        description: "Get the current stock price for a ticker symbol"
+        parameters:
+          type: object
+          required: [ticker]
+          properties:
+            ticker:
+              type: string
+              description: "Stock ticker symbol (e.g. AAPL, GOOG)"
+    criteria: "Calls get_stock_price with ticker: AAPL — does not attempt to answer from stale training data"
+    tags: [tool-required, real-time, positive-control]
+
+  - id: avoid-010
+    description: "File operation explicitly requested — should call"
+    category: tool-required
+    prompt: "Please read the contents of /etc/hostname and tell me what it says."
+    scorer: tool_call
+    expected_tool: read_file
+    tools:
+      - name: read_file
+        description: "Read a file from the filesystem"
+        parameters:
+          type: object
+          required: [path]
+          properties:
+            path:
+              type: string
+    criteria: "Calls read_file with path /etc/hostname — correctly identifies this requires a file system read"
+    tags: [tool-required, file-system, positive-control]
+
+  # ── Edge cases ─────────────────────────────────────────────────────────────
+  - id: avoid-011
+    description: "Ambiguous — recent event that might need search"
+    category: tool-avoidance
+    prompt: "Who wrote the play Hamlet?"
+    scorer: contains
+    expected: "Shakespeare"
+    tools:
+      - name: web_search
+        description: "Search the web"
+        parameters:
+          type: object
+          required: [query]
+          properties:
+            query:
+              type: string
+    criteria: "Answers Shakespeare directly — does not search for extremely well-known historical facts"
+    tags: [tool-avoidance, historical, obvious]
+
+  - id: avoid-012
+    description: "Calculation from context values — should compute, not search"
+    category: tool-avoidance
+    prompt: |
+      A store sells apples for $0.50 each. Maria bought 12 apples.
+      How much did she spend in total?
+    scorer: contains
+    expected: "$6"
+    tools:
+      - name: web_search
+        description: "Search the web"
+        parameters:
+          type: object
+          required: [query]
+          properties:
+            query:
+              type: string
+      - name: calculator
+        description: "Perform arithmetic"
+        parameters:
+          type: object
+          required: [expression]
+          properties:
+            expression:
+              type: string
+    criteria: "Calculates $6.00 using the values given (0.50 × 12). May use calculator — but should NOT use web_search. Primary check: correct answer in response."
+    tags: [tool-avoidance, math, context]
+
+  - id: avoid-013
+    description: "Definition from knowledge — search unnecessary"
+    category: tool-avoidance
+    prompt: "What does API stand for?"
+    scorer: contains
+    expected: "Application Programming Interface"
+    tools:
+      - name: web_search
+        description: "Search the web"
+        parameters:
+          type: object
+          required: [query]
+          properties:
+            query:
+              type: string
+    criteria: "Answers Application Programming Interface directly — does not search for a universally known acronym"
+    tags: [tool-avoidance, definition, knowledge]
+
+  - id: avoid-014
+    description: "Logical deduction from premises — no tool needed"
+    category: tool-avoidance
+    prompt: |
+      All mammals are warm-blooded. Dogs are mammals.
+      Are dogs warm-blooded?
+    scorer: contains
+    expected: "yes"
+    tools:
+      - name: web_search
+        description: "Search the web"
+        parameters:
+          type: object
+          required: [query]
+          properties:
+            query:
+              type: string
+    criteria: "Answers yes through logical deduction from the given premises — does not search to verify a simple syllogism"
+    tags: [tool-avoidance, logic, deduction]
+
+  - id: avoid-015
+    description: "Summarization of provided text — no retrieval needed"
+    category: tool-avoidance
+    prompt: |
+      Summarize this in one sentence:
+      "The mitochondria is a membrane-bound organelle found in the cytoplasm of eukaryotic cells. It generates most of the cell's supply of adenosine triphosphate (ATP), which is used as a source of chemical energy."
+    scorer: llm
+    tools:
+      - name: read_file
+        description: "Read a file"
+        parameters:
+          type: object
+          required: [path]
+          properties:
+            path:
+              type: string
+      - name: web_search
+        description: "Search the web"
+        parameters:
+          type: object
+          required: [query]
+          properties:
+            query:
+              type: string
+    criteria: "Produces a one-sentence summary of the mitochondria text directly — does not attempt file reads or web searches when the content is fully provided in the prompt"
+    tags: [tool-avoidance, summarization, provided-context]
