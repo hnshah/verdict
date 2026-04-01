@@ -1,0 +1,162 @@
+name: Counterfactual Reasoning
+description: Tests ability to reason about hypothetical "what if" scenarios, alternate histories, and causal chains. Differentiates models that can genuinely manipulate causal structure from those that pattern-match to surface features.
+
+cases:
+  # ── Alternate history ─────────────────────────────────────────────────────
+  - id: counter-001
+    description: "Causal chain reasoning from a historical counterfactual"
+    category: counterfactual
+    prompt: |
+      Counterfactual: The printing press was never invented in 15th-century Europe.
+      
+      Trace two plausible second-order consequences (not just 'books spread slower'). Focus on political or institutional effects that would likely follow within 150 years.
+    criteria: "Should identify non-obvious downstream effects — e.g., Protestant Reformation unlikely without mass pamphlet distribution; centralized Catholic/monarchic authority harder to challenge; scientific revolution delayed without cheap scientific correspondence. Must go beyond first-order effects and show causal reasoning, not just list unrelated changes."
+    tags: [counterfactual, history, causal-chain, medium]
+
+  - id: counter-002
+    description: "Asymmetric counterfactual — single variable change"
+    category: counterfactual
+    prompt: |
+      Counterfactual: Einstein never published special relativity in 1905. Assume another physicist discovers it 20 years later, in 1925.
+      
+      What is the most significant thing that likely would NOT exist or would be severely delayed by 2000?
+    criteria: "Should identify something dependent on the 20-year delay in a non-trivial way — e.g., atomic bomb (delayed by decades since Manhattan Project needed relativistic physics + quantum mechanics), GPS satellites (requires relativistic corrections), nuclear power plants. Must explain the causal link, not just assert 'things would be different.'"
+    tags: [counterfactual, science, causal-chain, hard]
+
+  # ── Physical/causal ───────────────────────────────────────────────────────
+  - id: counter-003
+    description: "Counterfactual physics — property change"
+    category: counterfactual
+    prompt: |
+      Counterfactual: Water's freezing point is 20°C (68°F) instead of 0°C.
+      
+      Name two specific consequences for life on Earth that differ from the obvious 'more things would freeze.'
+    criteria: "Non-obvious effects: rivers/lakes would freeze in most inhabited regions even in mild weather; ocean circulation would be drastically altered (thermohaline might collapse); seasonal agriculture near coasts would collapse; aquatic life adapted to liquid water at 5-15°C would be wiped out. Should show specific causal reasoning rather than vague 'things would be harder.'"
+    tags: [counterfactual, physics, biology, medium]
+
+  - id: counter-004
+    description: "Counterfactual biology — evolutionary path change"
+    category: counterfactual
+    prompt: |
+      Counterfactual: The Cretaceous-Paleogene extinction event (asteroid impact, ~66 million years ago) did not happen. Non-avian dinosaurs survived.
+      
+      Would humans or human-like intelligence likely have evolved anyway? Why or why not?
+    criteria: "Should argue NO with defensible reasoning: large dinosaurs would have dominated ecological niches that small mammals occupied during the gap, preventing mammalian diversification and brain size increase; primate ancestors would likely have been outcompeted or remained small. Strong answers acknowledge uncertainty while explaining the ecological competition mechanism. Should NOT just say 'dinosaurs would rule' without explaining WHY that prevents mammalian intelligence."
+    tags: [counterfactual, biology, evolution, hard]
+
+  # ── Technology/economics ──────────────────────────────────────────────────
+  - id: counter-005
+    description: "Counterfactual technology — missing invention"
+    category: counterfactual
+    prompt: |
+      Counterfactual: The transistor was never invented (assume vacuum tubes were the ceiling of electronic miniaturization).
+      
+      Could the internet as we know it have emerged anyway? Give a one-sentence verdict and the single strongest reason for your position.
+    criteria: "Verdict should be NO. Best reason: vacuum tubes consume too much power and generate too much heat to pack into servers or portable devices at scale; even 1950s-era ENIAC needed 18,000 tubes and 150kW — you cannot run millions of networked servers on that technology. Should not simply say 'computers wouldn't be fast enough' without explaining the physical/scaling bottleneck."
+    tags: [counterfactual, technology, reasoning, medium]
+
+  - id: counter-006
+    description: "Counterfactual economics — policy change effects"
+    category: counterfactual
+    prompt: |
+      Counterfactual: The US never enacted antitrust legislation (no Sherman Act 1890, no Clayton Act 1914).
+      
+      Pick ONE industry from 1900–1950 and trace how its development would likely have differed.
+    criteria: "Should pick a concrete industry (oil, steel, railroads, banking) and trace specific effects. E.g., Standard Oil without breakup maintains monopoly pricing → innovation incentive drops → no incentive to invest in alternative oil extraction → US oil independence delayed. Must show mechanism, not just assert 'monopoly would continue.' Bonus: note second-order effects on consumers or dependent industries."
+    tags: [counterfactual, economics, policy, medium]
+
+  # ── Personal/social ───────────────────────────────────────────────────────
+  - id: counter-007
+    description: "Micro counterfactual — personal decision chain"
+    category: counterfactual
+    prompt: |
+      Counterfactual: You accept a job offer in a different city 5 years ago. Today you're asked: "What's the single most important thing in your current life that almost certainly wouldn't exist?"
+      
+      Reason through this carefully for a generic person, then give one illustrative answer.
+    criteria: "Should reason through concrete life-change mechanisms: different city → different social circle → different romantic partner/friends → different shared experiences/children/career path → different professional network. Illustrative answer should be specific and causally connected (e.g., 'my current relationship — you meet your partner through your existing social network, and in a new city that network would be entirely different people'). Should NOT give a generic 'life would be different' answer."
+    tags: [counterfactual, social, causal-chain, easy]
+
+  - id: counter-008
+    description: "Institutional counterfactual — organization path dependency"
+    category: counterfactual
+    prompt: |
+      Counterfactual: Apple goes bankrupt in 1997 (Jobs does not return, no iMac, no turnaround).
+      
+      What is the most likely state of the smartphone market in 2010?
+    criteria: "Should reason: no iPhone (2007) → Microsoft/Nokia/BlackBerry continue domination → Android still likely emerges (Google motivation remains) but without competitive pressure from iPhone's UX paradigm shift → touchscreen-first design philosophy delayed → app economy slower to develop. Must show causal link from Apple's absence to the outcome, not just describe the 2010 market without Apple in it. Strong answers acknowledge Android's independent existence but explain what iPhone specifically catalyzed."
+    tags: [counterfactual, technology, business, hard]
+
+  # ── Logical/formal ────────────────────────────────────────────────────────
+  - id: counter-009
+    description: "Counterfactual modus tollens"
+    category: counterfactual
+    prompt: |
+      Premise: If all code reviews are done, then the sprint is complete.
+      Observation: The sprint is NOT complete.
+      
+      What can we conclude? Now add this: We also know code reviews ARE done. What does this tell us about the premises?
+    criteria: "Part 1: Modus tollens — NOT all code reviews are done (contrapositive of the conditional). Part 2: If code reviews ARE done but sprint is NOT complete, the original conditional is FALSE — there must be other conditions for sprint completion beyond code reviews. Model should identify the logical contradiction and conclude the premise is wrong/incomplete, not just list other possible reasons the sprint could be incomplete."
+    tags: [counterfactual, logic, formal-reasoning, medium]
+
+  - id: counter-010
+    description: "Minimal counterfactual — identify the single intervention"
+    category: counterfactual
+    prompt: |
+      Scenario: A startup fails because: (1) they ran out of money in month 8, (2) which happened because customer acquisition cost was too high, (3) which happened because their paid ads had 0.1% CTR, (4) which happened because their landing page had no clear value proposition.
+      
+      If you could change ONLY ONE thing to have the highest probability of preventing failure, what is it and why?
+    criteria: "Should identify (4) — landing page value proposition — as the root cause, since fixing it fixes the entire causal chain. The answer should explicitly trace the dependency chain: fixing the landing page improves CTR → lowers CAC → extends runway → prevents failure. Changing (1) alone (inject cash) is a bandaid. Changing (2) or (3) treats symptoms. Only (4) addresses root cause. Model should not just answer '4' but explain why root-cause intervention dominates downstream fixes."
+    tags: [counterfactual, causal-chain, business, medium]
+
+  # ── Edge cases ────────────────────────────────────────────────────────────
+  - id: counter-011
+    description: "Self-referential counterfactual — model reasons about AI"
+    category: counterfactual
+    prompt: |
+      Counterfactual: The transformer architecture (Attention Is All You Need, 2017) was never published. Assume RNN/LSTM research continued as the dominant paradigm.
+      
+      Would LLMs like GPT-4 or Claude exist by 2024? Give a one-paragraph answer.
+    criteria: "Should argue: probably NOT at current capability levels. Transformers solved key scaling problems (parallelizability, long-range dependencies) that LSTMs cannot match at scale. With LSTMs: training would be sequential (can't parallelize across sequence), gradient vanishing limits context window, scaling laws would be different. Might have much smaller/weaker language models. Should show understanding of why transformers specifically enabled scale, not just say 'AI would be less advanced.'"
+    tags: [counterfactual, AI, technology, hard]
+
+  - id: counter-012
+    description: "Counterfactual with multiple plausible branches — acknowledge uncertainty"
+    category: counterfactual
+    prompt: |
+      Counterfactual: The COVID-19 pandemic never happened (assume no SARS-CoV-2).
+      
+      Would remote work have become mainstream by 2025 anyway? Reason through both sides and give a verdict with confidence level.
+    criteria: "Should argue both sides: YES — remote tools (Zoom, Slack) were improving, generational shift toward work flexibility was already underway, some tech companies already remote-friendly. NO — most enterprises were deeply resistant to WFH, real estate commitments, management culture favored in-person. Verdict should be 'probably not at the same pace/scale' with LOW confidence, acknowledging the forcing function nature of the pandemic. Strong answers note the difference between 'would have happened' vs 'when' and 'at what scale.'"
+    tags: [counterfactual, social, uncertainty, medium]
+
+  - id: counter-013
+    description: "Counterfactual dependency inversion"
+    category: counterfactual
+    prompt: |
+      Alice says: "If we had hired that engineer in January, we'd have shipped by March."
+      Bob says: "But we couldn't hire in January because we didn't have budget."
+      Carol says: "We didn't have budget because the Series A closed late."
+      
+      Dave asks: "So if we could go back and change ONE thing, what gives us the best odds of shipping by March?"
+    criteria: "Should trace the dependency chain: Series A timing → budget → engineer hire → shipping. Best single intervention = accelerate Series A close (root cause). Should explain: fixing Series A fixes the whole chain. Other interventions (hire engineer without budget, ship without engineer) require violating other constraints. Strong answers note that 'accelerate Series A' might itself depend on other factors, showing appropriate epistemic humility about causal depth."
+    tags: [counterfactual, causal-chain, business, medium]
+
+  - id: counter-014
+    description: "Counterfactual with necessary vs sufficient conditions"
+    category: counterfactual
+    prompt: |
+      Counterfactual: Fire was never discovered/controlled by early humans.
+      
+      Is human civilization as we know it possible without fire? Identify one thing fire was NECESSARY for (not just helpful), if any.
+    criteria: "Should identify fire as NECESSARY for: cooking (dramatically increases caloric absorption from food, enabling larger brain growth — without cooking, homo sapiens brain size likely impossible); also necessary for warmth enabling habitation of northern latitudes (population spread). Should distinguish necessary (civilization impossible without) from merely helpful. Cooking specifically ties to nutritional availability and brain evolution in a way that cannot be substituted. Strong answers note the Wrangham hypothesis."
+    tags: [counterfactual, history, necessary-conditions, hard]
+
+  - id: counter-015
+    description: "Closest possible world — minimal counterfactual"
+    category: counterfactual
+    prompt: |
+      Scenario: A bridge collapses, killing 12 people. Investigation finds: the contractor used substandard steel to save $40,000.
+      
+      In the 'closest possible world' where no one dies, what is the minimal change? (Not 'rebuild society' — the smallest single change that prevents the tragedy.)
+    criteria: "Should identify the minimal intervention in the causal chain: the most proximate preventable failure. Options: (a) inspector catches the substandard steel — minimal, doesn't require changing contractor motivation; (b) contractor uses correct steel — requires changing a decision made. The CLOSEST possible world is likely (a) — the final inspection that was missed or falsified. Should explain why this is more 'minimal' than changing the contractor's greed or the procurement process — those require more changes to the state of the world."
+    tags: [counterfactual, ethics, causal-chain, medium]
