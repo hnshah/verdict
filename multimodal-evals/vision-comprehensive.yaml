@@ -1,0 +1,79 @@
+name: Vision Comprehensive Benchmark
+description: Comprehensive vision understanding across multiple categories
+version: "1.0"
+
+cases:
+  # Scene Understanding
+  - id: scene-beach
+    prompt: "Describe the scene in this image."
+    image: "multimodal-evals/images/parking.jpg"
+    criteria: "Accurately describes the overall scene"
+    category: "scene-understanding"
+    scorer: llm
+    
+  - id: scene-city
+    prompt: "What type of environment is shown in this image?"
+    image: "multimodal-evals/images/cityscape.jpg"
+    criteria: "Correctly identifies urban/city environment"
+    category: "scene-understanding"
+    scorer: llm
+    
+  - id: scene-nature
+    prompt: "Describe the landscape in this image."
+    image: "multimodal-evals/images/landscape.jpg"
+    criteria: "Accurately describes natural landscape elements"
+    category: "scene-understanding"
+    scorer: llm
+  
+  # Object Recognition
+  - id: object-food
+    prompt: "What food items can you identify in this image?"
+    image: "multimodal-evals/images/food-plate.jpg"
+    criteria: "Correctly identifies food items present"
+    category: "object-recognition"
+    scorer: llm
+    
+  - id: object-tech
+    prompt: "What technology or electronic devices do you see?"
+    image: "multimodal-evals/images/technology.jpg"
+    criteria: "Correctly identifies technology present"
+    category: "object-recognition"
+    scorer: llm
+    
+  - id: object-animal
+    prompt: "What animal do you see in this image?"
+    image: "multimodal-evals/images/animal.jpg"
+    criteria: "Correctly identifies the animal"
+    category: "object-recognition"
+    scorer: llm
+  
+  # Text Reading (OCR)
+  - id: ocr-sign
+    prompt: "What text can you read in this image?"
+    image: "multimodal-evals/images/text-sign.jpg"
+    criteria: "Accurately reads visible text"
+    category: "ocr"
+    scorer: llm
+  
+  # Detail Detection
+  - id: detail-hands
+    prompt: "What is the person doing in this image?"
+    image: "multimodal-evals/images/cat.jpg"
+    criteria: "Identifies specific actions or activities"
+    category: "detail-detection"
+    scorer: llm
+    
+  - id: detail-count
+    prompt: "How many distinct objects can you identify?"
+    image: "multimodal-evals/images/apples.jpg"
+    criteria: "Provides accurate count of objects"
+    category: "detail-detection"
+    scorer: llm
+  
+  # Spatial Reasoning
+  - id: spatial-composition
+    prompt: "Describe the composition and layout of this image."
+    image: "multimodal-evals/images/stop-sign.jpg"
+    criteria: "Accurately describes spatial arrangement"
+    category: "spatial-reasoning"
+    scorer: llm

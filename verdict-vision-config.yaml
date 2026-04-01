@@ -1,13 +1,7 @@
 version: "1.0"
-name: "Vision Model Comparison"
+name: "Vision Comprehensive Benchmark"
 
 models:
-  - id: llama-vision-11b
-    provider: ollama
-    model: llama3.2-vision:11b
-    timeout_ms: 180000
-    max_tokens: 512
-    
   - id: llava-13b
     provider: ollama
     model: llava:13b
@@ -31,7 +25,7 @@ judge:
 run:
   concurrency: 1
   retries: 1
-  cache: true
+  cache: false
 
 output:
   dir: ./results
@@ -39,4 +33,5 @@ output:
   delta: true
 
 settings:
-  auto_contribute: false
+  auto_contribute: true
+  contribution_author: "Ren (Multimodal Vision Evals - 256GB)"
