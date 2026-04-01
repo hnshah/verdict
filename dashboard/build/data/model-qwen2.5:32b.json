@@ -1,22 +1,11 @@
 {
   "model_name": "qwen2.5:32b",
-  "total_runs": 2,
+  "total_runs": 1,
   "total_cases": 10,
   "avg_score": 9,
   "total_wins": 0,
-  "avg_latency": 7.9,
+  "avg_latency": 8.4,
   "runs": [
-    {
-      "id": "2026-03-31-2026-03-31T07-53-03",
-      "name": "Comprehensive Benchmark (10 models)",
-      "date": "2026-03-31",
-      "score": 9,
-      "accuracy": 9.3,
-      "completeness": 9,
-      "conciseness": 8.6,
-      "wins": 0,
-      "latency": 7.4
-    },
     {
       "id": "2026-03-31-2026-03-31T07-48-00",
       "name": "Comprehensive Benchmark (10 models)",

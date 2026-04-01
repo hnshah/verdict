@@ -1,0 +1,86 @@
+{
+  "model_name": "llava-13b",
+  "total_runs": 2,
+  "total_cases": 13,
+  "avg_score": 8.5,
+  "total_wins": 6,
+  "avg_latency": 1,
+  "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T03-19-27",
+      "name": "Vision Comprehensive Benchmark",
+      "date": "2026-04-01",
+      "score": 8,
+      "accuracy": 7.8,
+      "completeness": 7.4,
+      "conciseness": 9.5,
+      "wins": 3,
+      "latency": 1.4
+    },
+    {
+      "id": "2026-04-01-2026-04-01T03-18-00",
+      "name": "Vision Model Benchmark (First Multimodal!)",
+      "date": "2026-04-01",
+      "score": 9.1,
+      "accuracy": 9.3,
+      "completeness": 8.7,
+      "conciseness": 9,
+      "wins": 3,
+      "latency": 0.6
+    }
+  ],
+  "best_cases": [
+    {
+      "id": "detail-count",
+      "prompt": "How many distinct objects can you identify?",
+      "score": 10
+    },
+    {
+      "id": "describe-1",
+      "prompt": "Describe what you see in this image in one sentence.",
+      "score": 10
+    },
+    {
+      "id": "describe-3",
+      "prompt": "What type of location or setting is shown in this image?",
+      "score": 9.3
+    },
+    {
+      "id": "scene-beach",
+      "prompt": "Describe the scene in this image.",
+      "score": 8.9
+    },
+    {
+      "id": "scene-nature",
+      "prompt": "Describe the landscape in this image.",
+      "score": 8.9
+    }
+  ],
+  "worst_cases": [
+    {
+      "id": "scene-city",
+      "prompt": "What type of environment is shown in this image?",
+      "score": 3.4
+    },
+    {
+      "id": "ocr-sign",
+      "prompt": "What text can you read in this image?",
+      "score": 7.7
+    },
+    {
+      "id": "object-food",
+      "prompt": "What food items can you identify in this image?",
+      "score": 7.9
+    },
+    {
+      "id": "object-animal",
+      "prompt": "What animal do you see in this image?",
+      "score": 7.9
+    },
+    {
+      "id": "detail-hands",
+      "prompt": "What is the person doing in this image?",
+      "score": 7.9
+    }
+  ]
+}

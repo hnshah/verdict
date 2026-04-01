@@ -35,7 +35,20 @@
 <div class="max-w-7xl mx-auto px-6 py-8">
 
   <section class="card" style="margin-top:0">
-    <h1 class="text-2xl font-bold text-gray-900 mb-6 mono">qwen2.5:32b</h1>
+    <div class="flex items-start justify-between mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 mono">qwen2.5:32b</h1>
+      <a href="https://huggingface.co/qwen2.5/32b" 
+         target="_blank" 
+         rel="noopener noreferrer"
+         class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-sm font-semibold rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/>
+          <path d="M8 7h8v2H8V7zm0 4h8v2H8v-2zm0 4h5v2H8v-2z"/>
+        </svg>
+        View on Hugging Face
+      </a>
+    </div>
+    
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
       <div>
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Score</p>
@@ -47,11 +60,11 @@
       </div>
       <div>
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Runs</p>
-        <p class="text-2xl font-bold text-gray-900">2</p>
+        <p class="text-2xl font-bold text-gray-900">1</p>
       </div>
       <div>
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Latency</p>
-        <p class="text-2xl font-bold text-gray-900">7.9<span class="text-base text-gray-500">s</span></p>
+        <p class="text-2xl font-bold text-gray-900">8.4<span class="text-base text-gray-500">s</span></p>
       </div>
     </div>
   </section>
@@ -73,19 +86,6 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
-          
-          <tr>
-            <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-31</td>
-            <td class="py-3 pr-4">
-              <a href="../../runs/2026-03-31-2026-03-31T07-53-03/" class="text-gray-900 hover:text-blue-600">Comprehensive Benchmark (10 models)</a>
-            </td>
-            <td class="py-3 pr-4 text-right font-bold text-gray-900">9/10</td>
-            <td class="py-3 pr-4 text-right text-gray-700">9.3</td>
-            <td class="py-3 pr-4 text-right text-gray-700">9</td>
-            <td class="py-3 pr-4 text-right text-gray-700">8.6</td>
-            <td class="py-3 pr-4 text-right"><span class="badge-b">0</span></td>
-            <td class="py-3 text-right mono text-xs text-gray-500">7.4s</td>
-          </tr>
           
           <tr>
             <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-31</td>

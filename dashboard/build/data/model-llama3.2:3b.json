@@ -1,21 +1,21 @@
 {
   "model_name": "llama3.2:3b",
-  "total_runs": 2,
+  "total_runs": 4,
   "total_cases": 10,
-  "avg_score": 9.1,
-  "total_wins": 6,
-  "avg_latency": 4.4,
+  "avg_score": 9.2,
+  "total_wins": 17,
+  "avg_latency": 6.1,
   "runs": [
     {
-      "id": "2026-03-31-2026-03-31T07-53-03",
-      "name": "Comprehensive Benchmark (10 models)",
+      "id": "2026-03-31-2026-03-31T07-51-23",
+      "name": "7B Models Re-test",
       "date": "2026-03-31",
-      "score": 9.1,
+      "score": 9.2,
       "accuracy": 9.4,
-      "completeness": 8.8,
-      "conciseness": 8.9,
-      "wins": 3,
-      "latency": 4.2
+      "completeness": 9.1,
+      "conciseness": 9.2,
+      "wins": 4,
+      "latency": 6.3
     },
     {
       "id": "2026-03-31-2026-03-31T07-48-00",
@@ -27,6 +27,28 @@
       "conciseness": 8.9,
       "wins": 3,
       "latency": 4.6
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-40-52",
+      "name": "Popular 7B Models Comparison",
+      "date": "2026-03-31",
+      "score": 9.2,
+      "accuracy": 9.4,
+      "completeness": 9.1,
+      "conciseness": 9.2,
+      "wins": 4,
+      "latency": 9.3
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-19-11",
+      "name": "Qwen vs Llama Comparison",
+      "date": "2026-03-31",
+      "score": 9.2,
+      "accuracy": 9.4,
+      "completeness": 9.1,
+      "conciseness": 9.2,
+      "wins": 6,
+      "latency": 4.1
     }
   ],
   "best_cases": [
@@ -51,36 +73,36 @@
       "score": 10
     },
     {
-      "id": "gen-009",
-      "prompt": "Write a haiku about debugging code.",
-      "score": 8.8
+      "id": "gen-003",
+      "prompt": "Explain the difference between a process and a thread in one paragraph.",
+      "score": 8.9
     }
   ],
   "worst_cases": [
-    {
-      "id": "gen-002",
-      "prompt": "What does RAM stand for and what does it do?",
-      "score": 8.2
-    },
     {
       "id": "gen-007",
       "prompt": "What is the time complexity of binary search and why?",
       "score": 8.2
     },
     {
-      "id": "gen-010",
-      "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
-      "score": 8.2
-    },
-    {
-      "id": "gen-003",
-      "prompt": "Explain the difference between a process and a thread in one paragraph.",
-      "score": 8.6
-    },
-    {
       "id": "gen-008",
       "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
       "score": 8.6
+    },
+    {
+      "id": "gen-009",
+      "prompt": "Write a haiku about debugging code.",
+      "score": 8.7
+    },
+    {
+      "id": "gen-002",
+      "prompt": "What does RAM stand for and what does it do?",
+      "score": 8.8
+    },
+    {
+      "id": "gen-010",
+      "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
+      "score": 8.8
     }
   ]
 }

@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7B Models Re-test — Verdict</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  body { font-family: 'Inter', sans-serif; }
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+  
+  .badge-a { background: #EFF6FF; color: #1D4ED8; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-b { background: #ECFDF5; color: #065F46; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-c { background: #FFFBEB; color: #92400E; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  
+  .card { background: white; border-radius: 0.75rem; border: 1px solid #E5E7EB; padding: 2rem; margin-top: 2rem; }
+  
+  details summary { cursor: pointer; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details[open] summary .chevron { transform: rotate(180deg); }
+  .chevron { transition: transform 0.2s; display: inline-block; }
+  
+  tr:hover { background: #F9FAFB; }
+  
+  @media print { .no-print { display: none; } }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 no-print">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="../../" class="text-sm text-gray-500 hover:text-gray-900">← Dashboard</a>
+      <span class="text-gray-300">·</span>
+      <span class="font-semibold text-gray-900">7B Models Re-test</span>
+    </div>
+    <span class="text-xs text-gray-400">2026-03-31</span>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-6 py-8">
+
+  <!-- Run Stats -->
+  <section class="card" style="margin-top:0">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">7B Models Re-test</h1>
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-6">
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Cases</p>
+        <p class="text-2xl font-bold text-gray-900">10</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Models</p>
+        <p class="text-2xl font-bold text-gray-900">3</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Score</p>
+        <p class="text-2xl font-bold text-gray-900">9.2<span class="text-base text-gray-500">/10</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Pass Rate</p>
+        <p class="text-2xl font-bold text-gray-900">100<span class="text-base text-gray-500">%</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Latency</p>
+        <p class="text-2xl font-bold text-gray-900">6.6<span class="text-base text-gray-500">s</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Model Leaderboard -->
+  <section class="card">
+    <h2 class="text-xl font-bold text-gray-900 mb-6">Model Performance</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs text-gray-400 border-b border-gray-100">
+            <th class="pb-3 pr-4 font-semibold">Rank</th>
+            <th class="pb-3 pr-4 font-semibold">Model</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Score</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Accuracy</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Complete</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Concise</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Wins</th>
+            <th class="pb-3 text-right font-semibold">Latency</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold text-gray-900">1</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">mistral:7b</span>
+              <span>🥇</span>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">9.3/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.2</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.2</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">4</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">6.1s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold text-gray-900">2</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">qwen2.5:7b</span>
+              <span>🥈</span>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">9.2/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.3</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.1</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.2</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">2</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">7.5s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold text-gray-900">3</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">llama3.2:3b</span>
+              <span>🥉</span>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">9.2/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.1</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.2</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">4</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">6.3s</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Test Cases -->
+  <section class="card">
+    <h2 class="text-xl font-bold text-gray-900 mb-6">Test Cases (10)</h2>
+    <div class="space-y-4">
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">gen-001</span>
+            <span class="badge-b">
+              10/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">What is the capital of France?</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">mistral:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">0.6s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 The capital of France is Paris.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">correct and concise, fully addresses the question</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen2.5:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.3s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The capital of France is Paris.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">correct and concise, fully addresses the question</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llama3.2:3b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.6s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The capital of France is Paris.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">correct and concise, fully addresses the question</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">gen-002</span>
+            <span class="badge-b">
+              9/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">What does RAM stand for and what does it do?</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llama3.2:3b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">8.7s</span>
+                  <span class="badge-b">
+                    9/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                RAM stands for Random Access Memory. It's a type of computer memory that temporarily stores data and applications while the computer is running.
+
+RAM allows the computer to access and process data quickly, making it an essential component of a computer's performance. When you open a program or application, it is loaded into RAM, where it can be accessed and manipulated by the computer's processor.
+
+Here's how RAM works:
+
+1. The computer's processor retrieves data from the hard drive or solid-state drive (SSD) and stores it in RAM.
+2. The processor can access the data in RAM quickly, making it available for processing.
+3. When the processor is done with the data, it is stored back in the hard drive or SSD.
+
+The amount of RAM in a computer determines how many applications can be run simultaneously without a significant decrease in performance. More RAM means more applications can be run at the same time, making it ideal for tasks like video editing, gaming, and multitasking.
+
+In summary, RAM is a type of computer memory that temporarily stores data and applications, allowing the computer to access and process it quickly, which is essential for smooth performance.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response is accurate, complete, and concise, with minor room for additional detail.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">mistral:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">9.3s</span>
+                  <span class="badge-b">
+                    9/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 RAM stands for Random Access Memory. It is a type of volatile memory used in computers to store data and instructions that the CPU can quickly access.
+
+When a computer is turned on, the operating system and applications are loaded into the RAM, allowing the CPU to access them quickly, which significantly improves the computer's performance. The faster the RAM, the quicker the data can be read and written, resulting in a more responsive system.
+
+Once the computer is turned off, the data stored in the RAM is lost, as it requires power to maintain the stored information. In contrast, non-volatile memory, such as hard drives, retains data even when the power is off.
+
+In summary, RAM plays a crucial role in the overall performance of a computer by providing a fast, temporary storage area for data and instructions that the CPU needs to access frequently.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response is accurate, complete, and concise, with minor room for additional detail.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen2.5:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">11.9s</span>
+                  <span class="badge-b">
+                    9/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                RAM stands for Random Access Memory. It is a type of volatile memory used by computers and other devices to store data and machine code currently being used. Here are some key points about RAM:
+
+1. **Function**: RAM serves as a temporary storage area for data that the CPU (Central Processing Unit) needs to access quickly. It allows the computer to work with data and programs more efficiently.
+
+2. **Access**: The term "random access" means that the CPU can read or write to any part of the memory without having to process the data in a specific sequence. This is in contrast to other types of memory, like magnetic tape, where data must be accessed in a sequential manner.
+
+3. **Volatile Memory**: Unlike non-volatile memory (like hard drives or SSDs), RAM loses its data when the power is turned off. This makes it faster but less suitable for long-term storage.
+
+4. **Types**: There are several types of RAM, including DRAM (Dynamic RAM), SRAM (Static RAM), and newer technologies like DDR (Double Data Rate) RAM and GDDR (Graphics Double Data Rate) RAM.
+
+5. **Performance Impact**: The amount and speed of RAM can significantly affect a computer's performance. More RAM allows the computer to handle more applications and processes simultaneously, while faster RAM can improve the overall speed of data access.
+
+In summary, RAM is crucial for the efficient operation of a computer, providing fast access to data and instructions that the CPU needs to process.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately covers the definition, function, and key characteristics of RAM, aligning well with the evaluation criteria.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">gen-003</span>
+            <span class="badge-b">
+              8.3/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Explain the difference between a process and a thread in one paragraph.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llama3.2:3b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">5.2s</span>
+                  <span class="badge-b">
+                    9/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                A process and a thread are two fundamental concepts in computer science that are often confused with each other. A process is an independent unit of execution that runs on a computer's operating system, with its own memory space, resources, and memory allocation. Each process has its own program counter, stack, and memory, allowing multiple processes to run concurrently without sharing resources. On the other hand, a thread is a lightweight process that shares the same memory space as other threads within the same process, allowing for efficient communication and synchronization between threads. Threads are scheduled by the operating system, whereas processes are scheduled independently, making threads a more efficient way to manage concurrent execution within a process.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response is accurate, covers all criteria, and is concise without padding.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen2.5:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">5.8s</span>
+                  <span class="badge-c">
+                    7.6/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                In computing, a process is an instance of a computer program that is being executed. It includes the program code and its current activity. Processes are often used to manage resources and provide a level of isolation between different programs. A thread, on the other hand, is a smaller unit of processing than a process and represents the flow of control within a process. While a process can contain one or more threads, threads within the same process share the process's resources, such as memory and file handles, which allows them to communicate and synchronize more easily than processes can.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">Accuracy is good but could be more precise. Completeness is acceptable but misses mentioning the overhead difference. Conciseness is appropriate.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">mistral:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">7s</span>
+                  <span class="badge-b">
+                    8.4/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 A process and a thread are both fundamental units of execution in a computer system, but they serve different purposes and have distinct characteristics. A process is an instance of a program that is being executed, and it has its own memory space, system resources, and execution context. Each process runs in its own address space and has its own set of open files, environment variables, and other system resources. On the other hand, a thread is a lighter-weight unit of execution that is created within a process and shares the process's memory space, system resources, and execution context. Threads can run concurrently within the same process, allowing for more efficient use of system resources and improved responsiveness. In summary, while a process is a complete instance of a program, a thread is a smaller unit of execution that can run concurrently within a process.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response is accurate and covers the main points, but it could be more precise in explaining the overhead difference and use cases.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">gen-004</span>
+            <span class="badge-b">
+              10/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">If all mammals are warm-blooded, and dolphins are mammals, what can we conclude about dolphins?</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">mistral:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">2.5s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 We can conclude that dolphins are warm-blooded. Since all mammals are warm-blooded, and dolphins are mammals, it follows that dolphins share this characteristic with other mammals.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">clearly addresses all criteria with accurate, complete, and concise reasoning</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llama3.2:3b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">3.6s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                If all mammals are warm-blooded, and dolphins are mammals, then we can conclude that dolphins are warm-blooded.
+
+This is an example of a syllogism, a form of logical argument that uses deductive reasoning. The syllogism is as follows:
+
+All mammals are warm-blooded.
+Dolphins are mammals.
+∴ Dolphins are warm-blooded.
+
+In this case, the first premise is a general statement about all mammals, the second premise is a specific statement about dolphins, and the conclusion is a logical inference based on the premises.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">clearly addresses all criteria with correct and complete reasoning</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen2.5:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">4.1s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Given the statements:
+
+1. All mammals are warm-blooded.
+2. Dolphins are mammals.
+
+We can logically conclude that:
+
+- Dolphins are warm-blooded.
+
+This conclusion follows from the logical structure known as a syllogism, where if all members of one group (mammals) have a certain characteristic (warm-blooded), and a specific member of that group (dolphins) is also part of the group (mammals), then that specific member must also have the characteristic.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">clearly meets all evaluation criteria</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">gen-005</span>
+            <span class="badge-b">
+              10/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">List exactly 3 benefits of regular exercise. Numbered list. Max 12 words per item.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen2.5:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.4s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                1. Improves cardiovascular health.
+2. Enhances mental well-being.
+3. Boosts energy levels.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">meets all criteria perfectly</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llama3.2:3b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.7s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Here are three benefits of regular exercise:
+
+1. Improves cardiovascular health and reduces risk of heart disease.
+2. Boosts mood and reduces symptoms of anxiety and depression.
+3. Increases energy levels and enhances overall physical function.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">meets all criteria perfectly</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">mistral:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.7s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 1. Improves cardiovascular health
+
+2. Boosts mental well-being and mood
+
+3. Enhances physical strength and flexibility
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">all criteria met perfectly</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">gen-006</span>
+            <span class="badge-b">
+              10/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Write a JavaScript function that returns the sum of all even numbers in an array.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llama3.2:3b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">6.5s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                // Function to calculate the sum of all even numbers in an array
+function sumEvenNumbers(array) {
+    // Initialize a variable to store the sum of even numbers
+    let sum = 0;
+    
+    // Iterate over each number in the array
+    for (let i = 0; i < array.length; i++) {
+        // Check if the current number is even
+        if (array[i] % 2 === 0) {
+            // If the number is even, add it to the sum
+            sum += array[i];
+        }
+    }
+    
+    // Return the sum of even numbers
+    return sum;
+}
+
+// Example usage:
+let numbers = [1, 2, 3, 4, 5, 6];
+console.log(sumEvenNumbers(numbers));  // Output: 12
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The function correctly calculates the sum of all even numbers in an array, handles an empty array by default, filters even numbers using the modulus operator, and is appropriately scoped without unnecessary code.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">mistral:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">10.2s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 Here's a JavaScript function that calculates the sum of all even numbers in an array:
+
+```javascript
+function sumEvenNumbers(arr) {
+  return arr.reduce((sum, num) => {
+    if (num % 2 === 0) {
+      sum += num;
+    }
+    return sum;
+  }, 0);
+}
+```
+
+This function uses the `reduce` method to iterate through the array and accumulate the sum of even numbers. The initial value of the accumulator (`sum`) is set to 0.
+
+You can use this function like this:
+
+```javascript
+const numbers = [1, 2, 3, 4, 5, 6];
+console.log(sumEvenNumbers(numbers)); // Output: 12
+```
+
+This will output `12`, which is the sum of the even numbers in the array (`2`, `4`, and `6`).
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response meets all the criteria accurately, completely, and concisely.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen2.5:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">11.3s</span>
+                  <span class="badge-b">
+                    10/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Certainly! Below is a JavaScript function that takes an array of numbers as input and returns the sum of all even numbers in that array:
+
+```javascript
+function sumOfEvenNumbers(arr) {
+    // Filter the array to keep only even numbers and then reduce it to sum them up
+    return arr.filter(num => num % 2 === 0).reduce((acc, num) => acc + num, 0);
+}
+
+// Example usage:
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+console.log(sumOfEvenNumbers(numbers)); // Output: 30
+```
+
+### Explanation:
+1. **`filter(num => num % 2 === 0)`**: This method creates a new array with all elements that pass the test implemented by the provided function. In this case, it filters out only the even numbers.
+2. **`reduce((acc, num) => acc + num, 0)`**: This method reduces the array to a single value by applying a function against an accumulator and each element in the array (from left to right). The initial value of the accumulator is `0`.
+
+This function will work with any array of numbers and will correctly sum up all the even numbers in it.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response meets all the criteria accurately, comprehensively, and concisely.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">gen-007</span>
+            <span class="badge-b">
+              8.3/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">What is the time complexity of binary search and why?</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">mistral:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">9.8s</span>
+                  <span class="badge-b">
+                    8.4/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 Binary search has a time complexity of O(log n), where n is the size of the sorted array.
+
+The reason for this is that binary search works by repeatedly dividing the search interval in half. At each step, it compares the middle element of the current interval with the target value and discards half of the interval. This means that the number of elements to be searched is reduced by a factor of 2 at each step, leading to a logarithmic growth in the number of steps required to find the target.
+
+For example, if the array has 1024 elements, binary search would require at most 10 steps to find the target, as 1024 = 2^10. In contrast, linear search would require up to 1024 steps in the worst case, making binary search much more efficient for large sorted arrays.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">Accuracy is high, but minor improvements could be made for completeness and conciseness.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llama3.2:3b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">11.9s</span>
+                  <span class="badge-b">
+                    8.2/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The time complexity of binary search is O(log n), where n is the number of elements in the sorted array.
+
+To understand why, let's analyze the process of binary search:
+
+1. The algorithm starts by comparing the target element to the middle element of the array.
+2. If the target element is less than the middle element, the algorithm repeats the process with the left half of the array.
+3. If the target element is greater than the middle element, the algorithm repeats the process with the right half of the array.
+4. This process continues until the target element is found or the array is exhausted.
+
+The key insight behind binary search is that each comparison reduces the search space by half. In other words, if the algorithm compares the target element to the middle element, it effectively divides the array into two halves, each of which contains at most half of the original elements.
+
+This process can be represented recursively as follows:
+
+T(n) = T(n/2) + 1
+
+where T(n) is the time complexity of searching for an element in an array of size n.
+
+Using the master theorem, we can solve this recurrence relation to get:
+
+T(n) = O(log n)
+
+This is because the number of comparisons required to search for an element in an array of size n is proportional to the logarithm of the size of the array.
+
+In more detail, the time complexity of binary search can be broken down as follows:
+
+* The first comparison takes O(1) time.
+* Each subsequent comparison takes O(log n) time, since the search space is reduced by half at each step.
+* The total number of comparisons required is therefore O(log n).
+
+Therefore, the time complexity of binary search is O(log n), making it a very efficient algorithm for searching large datasets.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">Accuracy is high, completeness covers the main points, but could be more concise and address the halving process more directly.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen2.5:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">13s</span>
+                  <span class="badge-b">
+                    8.4/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The time complexity of binary search is O(log n), where n is the number of elements in the sorted array or list being searched.
+
+Here's why:
+
+1. **Initial Setup**: Binary search starts by examining the middle element of the array. This is the first comparison.
+
+2. **Halving the Search Space**: If the middle element is not the target, the search space is effectively halved. For example, if the target is less than the middle element, the search continues in the left half of the array; if the target is greater, it continues in the right half.
+
+3. **Repeating the Process**: This process of halving the search space is repeated. With each comparison, the search space is reduced by half.
+
+4. **Logarithmic Growth**: The number of comparisons needed to reduce the search space to a single element grows logarithmically with the size of the input. This is because each step roughly halves the remaining search space.
+
+5. **Mathematical Explanation**: If you start with n elements, after one comparison, you have n/2 elements left. After two comparisons, you have n/4 elements left, and so on. The number of comparisons needed to reduce the search space to 1 element is the number of times you can divide n by 2 before reaching 1, which is log₂(n).
+
+Therefore, the time complexity of binary search is O(log n), making it very efficient for large datasets.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response is accurate and addresses the criteria well, but could be slightly more precise in the logarithmic base and the explanation of the halving process.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">gen-008</span>
+            <span class="badge-b">
+              8.6/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llama3.2:3b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">3.9s</span>
+                  <span class="badge-b">
+                    8.6/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                A transformer model is a type of neural network architecture that uses self-attention mechanisms to process sequential data, such as text or time series data. Unlike traditional recurrent neural networks (RNNs), transformer models do not rely on recurrent connections to capture temporal dependencies, instead using a parallelized attention mechanism to weigh the importance of different input elements. This allows transformer models to be more efficient and scalable, making them particularly well-suited for tasks like language translation, text classification, and image captioning.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response is accurate and covers the attention mechanism and parallel processing, but could mention the specific improvement in NLP tasks more directly.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen2.5:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">3.9s</span>
+                  <span class="badge-b">
+                    8.6/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                A transformer model is a type of neural network architecture that excels in sequence-to-sequence tasks, such as machine translation, by using self-attention mechanisms to weigh the importance of different words in a sentence, enabling more efficient and context-aware processing. This architecture has revolutionized natural language processing by significantly improving the speed and quality of translations and text generation.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">slightly incomplete as it does not explicitly mention parallel processing vs RNN, but still accurate and concise</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">mistral:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">4.1s</span>
+                  <span class="badge-b">
+                    8.6/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 A Transformer model is a type of neural network architecture introduced in the paper "Attention is All You Need" by Vaswani et al. It's designed for natural language processing tasks, such as machine translation, and uses self-attention mechanisms to focus on relevant parts of the input sequence when generating output, making it more efficient and effective compared to traditional recurrent neural networks for such tasks.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">slightly incomplete as it does not explicitly mention parallel processing, but otherwise accurate and concise</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">gen-009</span>
+            <span class="badge-b">
+              9.1/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Write a haiku about debugging code.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llama3.2:3b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">0.8s</span>
+                  <span class="badge-b">
+                    8.6/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Lines of code entwine
+Error messages whisper clues
+Logic's gentle art
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The haiku accurately captures the essence of debugging code and follows the 5-7-5 syllable structure. It mentions 'code' and 'error messages,' but does not explicitly state 'debugging.' It is concise and coherent.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen2.5:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1s</span>
+                  <span class="badge-b">
+                    9.4/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                Lines of code appear,
+Errors hide like shadows deep—
+Debugging begins.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The haiku accurately captures the essence of debugging code, mentions code and debugging, and follows the 5-7-5 syllable structure. It is concise and coherent.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">mistral:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.2s</span>
+                  <span class="badge-b">
+                    9.4/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 Code's maze unfolds,
+
+Seeking errors, patience grows,
+
+Solution, finally found.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The haiku accurately captures the essence of debugging, mentioning the process, patience, and resolution, adheres to the 5-7-5 structure, and is concise without padding.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">gen-010</span>
+            <span class="badge-b">
+              9/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">What is the CAP theorem and what does it mean for distributed systems design?</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">mistral:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">14.6s</span>
+                  <span class="badge-b">
+                    9/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 The CAP theorem is a concept in distributed computing that describes the trade-offs that can be made in the design of distributed systems. It states that it is impossible for a distributed system to simultaneously provide all three of the following guarantees:
+
+1. Consistency (C): All nodes see the same data at the same time.
+2. Availability (A): Every request receives a response, without guarantee that it contains the most recent version of the data.
+3. Partition tolerance (P): The system continues to function when network partitions occur.
+
+The theorem suggests that in a distributed system, as the network becomes more unreliable, a system must choose to either sacrifice consistency, availability, or partition tolerance. For example, a system that prioritizes consistency and partition tolerance may sacrifice availability by not responding to requests when network partitions occur. On the other hand, a system that prioritizes availability and partition tolerance may sacrifice consistency by returning stale or inconsistent data in some cases.
+
+The CAP theorem is an important consideration in the design of distributed systems, as it helps designers understand the trade-offs they must make when building scalable and fault-tolerant systems. It is often used as a guide for choosing the appropriate data storage and replication strategies for different use cases.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately and concisely covers the CAP theorem, its implications, and its importance in distributed systems design without unnecessary details.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llama3.2:3b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">19.2s</span>
+                  <span class="badge-b">
+                    9/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The CAP theorem, also known as the Brewer's CAP theorem, is a fundamental concept in distributed systems design that states that it is impossible for a distributed data store to simultaneously guarantee all three of the following:
+
+1. **Consistency**: Every read operation will see the most recent write or an error.
+2. **Availability**: Every request receives a response, without the guarantee that it contains the most recent write.
+3. **Partition tolerance**: The system continues to operate and make progress even when there are network partitions (i.e., when some nodes in the system cannot communicate with each other).
+
+In other words, the CAP theorem states that you can't have all three of these properties simultaneously in a distributed system. You have to choose two out of the three, and sacrifice one of them.
+
+Here's a simple example to illustrate this:
+
+Imagine a distributed database with two nodes, A and B. Node A is responsible for writing data, while node B is responsible for reading data. If node A is writing data and node B is reading data, the system must choose between consistency and availability.
+
+* If the system prioritizes consistency, node B will see the most recent write, but it may not receive a response if node A is down or experiencing network issues. This means the system is not available.
+* If the system prioritizes availability, node B will receive a response, but it may see stale data if node A is writing data. This means the system is not consistent.
+
+The CAP theorem has significant implications for distributed systems design. Here are some key takeaways:
+
+1. **Trade-offs**: When designing a distributed system, you must make trade-offs between consistency, availability, and partition tolerance. You can't have it all.
+2. **Consistency vs. availability**: If you prioritize consistency, you may sacrifice availability. If you prioritize availability, you may sacrifice consistency.
+3. **Partition tolerance**: If you prioritize partition tolerance, you may sacrifice both consistency and availability.
+4. **System design**: The CAP theorem implies that system design should focus on the specific use case and requirements. For example, a financial system may prioritize consistency and availability, while a social media platform may prioritize availability and partition tolerance.
+
+The CAP theorem has been influential in shaping the design of various distributed systems, including:
+
+1. **NoSQL databases**: Many NoSQL databases, such as Cassandra and Riak, prioritize availability and partition tolerance over consistency.
+2. **Cloud storage**: Cloud storage services, such as Amazon S3 and Google Cloud Storage, prioritize availability and partition tolerance over consistency.
+3. **Real-time systems**: Real-time systems, such as financial trading platforms and IoT systems, often prioritize consistency and availability.
+
+In summary, the CAP theorem is a fundamental concept in distributed systems design that highlights the trade-offs between consistency, availability, and partition tolerance. By understanding the CAP theorem, system designers can make informed decisions about the design of their systems and prioritize the specific requirements of their use case.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately explains the CAP theorem and its implications, addresses all criteria, and is concise without padding.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">qwen2.5:7b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">21.6s</span>
+                  <span class="badge-b">
+                    9/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                The CAP theorem, also known as the Brewer's theorem, is a principle in distributed computing that states that a distributed system can at most satisfy two out of the three desirable properties listed below in any given time:
+
+1. **Consistency**: Every read operation must see the most recent write operation. In other words, all nodes see the same data at the same time.
+
+2. **Availability**: Every request receives a response, ensuring that the system remains operational and responsive under any circumstances.
+
+3. **Partition Tolerance**: The system continues to operate despite any arbitrary failure of part of the system, including network partitions (where nodes are unable to communicate with each other).
+
+### Implications for Distributed Systems Design
+
+The CAP theorem has significant implications for the design of distributed systems, as it forces designers to make trade-offs between these three critical properties. Here’s how it impacts design choices:
+
+1. **Consistency vs. Availability**:
+   - **Consistency First**: In this approach, the system prioritizes consistency over availability. This is common in scenarios where data integrity is paramount, such as financial transactions. Examples include traditional relational databases.
+   - **Availability First**: Here, the system prioritizes availability over consistency. This is useful in scenarios where the system must remain operational even if some data might be temporarily inconsistent. Examples include many web applications and real-time systems.
+
+2. **Partition Tolerance**:
+   - Since partition tolerance is a fundamental requirement for any distributed system, it is always considered. The challenge lies in designing the system to handle partitions gracefully, ensuring that the system remains functional and provides a useful service even when some parts are unavailable.
+
+### Examples of Trade-offs
+
+- **DynamoDB (Amazon)**: Designed for high availability and partition tolerance, it sacrifices strong consistency in favor of eventual consistency. This makes it suitable for applications where occasional data staleness is acceptable.
+- **Cassandra**: Also designed for high availability and partition tolerance, it uses a distributed hash table and a masterless architecture, allowing it to operate even when some nodes are down.
+- **MongoDB**: Offers both sharding and replica sets, allowing for high availability and partition tolerance. It can be configured to provide strong consistency or eventually consistent reads.
+
+### Conclusion
+
+The CAP theorem is a fundamental concept in distributed systems that guides the design of systems that need to operate in a networked environment. It forces developers and architects to make informed decisions about the trade-offs between consistency, availability, and partition tolerance, ensuring that the system meets the specific requirements of the application.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately explains the CAP theorem and its implications, addresses all criteria, and is concise without padding.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

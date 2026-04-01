@@ -1,22 +1,11 @@
 {
   "model_name": "mathstral:7b",
-  "total_runs": 2,
+  "total_runs": 1,
   "total_cases": 10,
   "avg_score": 0,
   "total_wins": 0,
   "avg_latency": 0.1,
   "runs": [
-    {
-      "id": "2026-03-31-2026-03-31T07-53-03",
-      "name": "Comprehensive Benchmark (10 models)",
-      "date": "2026-03-31",
-      "score": 0,
-      "accuracy": 0,
-      "completeness": 0,
-      "conciseness": 0,
-      "wins": 0,
-      "latency": 0.1
-    },
     {
       "id": "2026-03-31-2026-03-31T07-48-00",
       "name": "Comprehensive Benchmark (10 models)",

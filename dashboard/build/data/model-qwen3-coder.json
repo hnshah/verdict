@@ -1,21 +1,21 @@
 {
   "model_name": "qwen3-coder",
   "total_runs": 2,
-  "total_cases": 10,
-  "avg_score": 9.6,
-  "total_wins": 5,
-  "avg_latency": 6.2,
+  "total_cases": 30,
+  "avg_score": 9.7,
+  "total_wins": 3,
+  "avg_latency": 6.5,
   "runs": [
     {
-      "id": "2026-03-31-2026-03-31T14-13-39",
-      "name": "3 Model Comparison - 10 cases",
+      "id": "2026-03-31-2026-03-31T18-25-12",
+      "name": "Verdict Auto-Dashboard",
       "date": "2026-03-31",
-      "score": 9.6,
-      "accuracy": 9.9,
-      "completeness": 9.6,
-      "conciseness": 8.8,
-      "wins": 2,
-      "latency": 6.2
+      "score": 9.8,
+      "accuracy": 10,
+      "completeness": 10,
+      "conciseness": 8.9,
+      "wins": 0,
+      "latency": 6.9
     },
     {
       "id": "2026-03-31-2026-03-31T14-02-35",
@@ -46,13 +46,13 @@
       "score": 10
     },
     {
-      "id": "gen-004",
-      "prompt": "If all mammals are warm-blooded, and dolphins are mammals, what can we conclude about dolphins?",
+      "id": "gsm8k-0001",
+      "prompt": "Janet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
       "score": 9.8
     },
     {
-      "id": "gen-006",
-      "prompt": "Write a JavaScript function that returns the sum of all even numbers in an array.",
+      "id": "gsm8k-0002",
+      "prompt": "A robe takes 2 bolts of blue fiber and half that much white fiber.  How many bolts in total does it take?",
       "score": 9.8
     }
   ],

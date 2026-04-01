@@ -1,0 +1,55 @@
+{
+  "model_name": "llama-vision-11b",
+  "total_runs": 1,
+  "total_cases": 3,
+  "avg_score": 4.8,
+  "total_wins": 0,
+  "avg_latency": 0.6,
+  "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T03-18-00",
+      "name": "Vision Model Benchmark (First Multimodal!)",
+      "date": "2026-04-01",
+      "score": 4.8,
+      "accuracy": 3,
+      "completeness": 4.7,
+      "conciseness": 9.7,
+      "wins": 0,
+      "latency": 0.6
+    }
+  ],
+  "best_cases": [
+    {
+      "id": "describe-3",
+      "prompt": "What type of location or setting is shown in this image?",
+      "score": 6.6
+    },
+    {
+      "id": "describe-2",
+      "prompt": "What is the main subject of this image?",
+      "score": 4.8
+    },
+    {
+      "id": "describe-1",
+      "prompt": "Describe what you see in this image in one sentence.",
+      "score": 3.1
+    }
+  ],
+  "worst_cases": [
+    {
+      "id": "describe-1",
+      "prompt": "Describe what you see in this image in one sentence.",
+      "score": 3.1
+    },
+    {
+      "id": "describe-2",
+      "prompt": "What is the main subject of this image?",
+      "score": 4.8
+    },
+    {
+      "id": "describe-3",
+      "prompt": "What type of location or setting is shown in this image?",
+      "score": 6.6
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+version: "1.0"
+name: "Vision Models Only Benchmark"
+
+models:
+  - id: llava-13b
+    provider: ollama
+    model: llava:13b
+    timeout_ms: 180000
+    max_tokens: 512
+    
+  - id: llama-vision-11b
+    provider: ollama
+    model: llama3.2-vision:11b
+    timeout_ms: 180000
+    max_tokens: 512
+    
+  - id: phi4-judge
+    provider: ollama
+    model: phi4:14b
+    timeout_ms: 60000
+    max_tokens: 1024
+    
+judge:
+  model: phi4-judge
+  blind: true
+  rubric:
+    accuracy: 0.6
+    completeness: 0.3
+    conciseness: 0.1
+
+run:
+  concurrency: 1
+  retries: 1
+  cache: false
+
+output:
+  dir: ./results
+  formats: [json, markdown]
+  delta: true
+
+settings:
+  auto_contribute: true
+  contribution_author: "Ren (Vision Models Only - Fixed Eval)"

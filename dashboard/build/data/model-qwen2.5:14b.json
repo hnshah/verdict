@@ -2,20 +2,20 @@
   "model_name": "qwen2.5:14b",
   "total_runs": 2,
   "total_cases": 10,
-  "avg_score": 8.9,
+  "avg_score": 9.1,
   "total_wins": 0,
-  "avg_latency": 6.2,
+  "avg_latency": 18.7,
   "runs": [
     {
-      "id": "2026-03-31-2026-03-31T07-53-03",
-      "name": "Comprehensive Benchmark (10 models)",
+      "id": "2026-03-31-2026-03-31T07-53-37",
+      "name": "Qwen Family + Phi4 + Gemma2",
       "date": "2026-03-31",
-      "score": 8.9,
-      "accuracy": 9.2,
-      "completeness": 8.9,
-      "conciseness": 8.3,
+      "score": 9.2,
+      "accuracy": 9.3,
+      "completeness": 9.1,
+      "conciseness": 9.2,
       "wins": 0,
-      "latency": 6.6
+      "latency": 31.8
     },
     {
       "id": "2026-03-31-2026-03-31T07-48-00",
@@ -48,39 +48,39 @@
     {
       "id": "gen-006",
       "prompt": "Write a JavaScript function that returns the sum of all even numbers in an array.",
-      "score": 9.2
+      "score": 9.6
     },
     {
       "id": "gen-008",
       "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
-      "score": 8.8
+      "score": 8.7
     }
   ],
   "worst_cases": [
     {
-      "id": "gen-002",
-      "prompt": "What does RAM stand for and what does it do?",
-      "score": 8.2
-    },
-    {
       "id": "gen-003",
       "prompt": "Explain the difference between a process and a thread in one paragraph.",
-      "score": 8.2
+      "score": 8.3
     },
     {
       "id": "gen-007",
       "prompt": "What is the time complexity of binary search and why?",
-      "score": 8.2
+      "score": 8.3
     },
     {
       "id": "gen-009",
       "prompt": "Write a haiku about debugging code.",
-      "score": 8.2
+      "score": 8.4
+    },
+    {
+      "id": "gen-002",
+      "prompt": "What does RAM stand for and what does it do?",
+      "score": 8.6
     },
     {
       "id": "gen-010",
       "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
-      "score": 8.2
+      "score": 8.6
     }
   ]
 }

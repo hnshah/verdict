@@ -1,21 +1,21 @@
 {
   "model_name": "phi4:14b",
-  "total_runs": 2,
+  "total_runs": 3,
   "total_cases": 10,
-  "avg_score": 8.9,
-  "total_wins": 0,
-  "avg_latency": 5.9,
+  "avg_score": 9.3,
+  "total_wins": 8,
+  "avg_latency": 14,
   "runs": [
     {
-      "id": "2026-03-31-2026-03-31T07-53-03",
-      "name": "Comprehensive Benchmark (10 models)",
+      "id": "2026-03-31-2026-03-31T07-53-37",
+      "name": "Qwen Family + Phi4 + Gemma2",
       "date": "2026-03-31",
-      "score": 8.9,
-      "accuracy": 9.3,
-      "completeness": 8.7,
-      "conciseness": 8.4,
-      "wins": 0,
-      "latency": 5.8
+      "score": 9.6,
+      "accuracy": 9.5,
+      "completeness": 9.6,
+      "conciseness": 9.6,
+      "wins": 4,
+      "latency": 18
     },
     {
       "id": "2026-03-31-2026-03-31T07-48-00",
@@ -27,6 +27,17 @@
       "conciseness": 8.4,
       "wins": 0,
       "latency": 5.9
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-36-33",
+      "name": "Code Models Benchmark (4 models)",
+      "date": "2026-03-31",
+      "score": 9.6,
+      "accuracy": 9.5,
+      "completeness": 9.6,
+      "conciseness": 9.6,
+      "wins": 4,
+      "latency": 18.1
     }
   ],
   "best_cases": [
@@ -48,39 +59,39 @@
     {
       "id": "gen-008",
       "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
-      "score": 8.8
+      "score": 9.6
     },
     {
-      "id": "gen-009",
-      "prompt": "Write a haiku about debugging code.",
-      "score": 8.8
+      "id": "gen-001",
+      "prompt": "What is the capital of France?",
+      "score": 9.5
     }
   ],
   "worst_cases": [
     {
       "id": "gen-002",
       "prompt": "What does RAM stand for and what does it do?",
-      "score": 8.2
+      "score": 8.7
     },
     {
       "id": "gen-003",
       "prompt": "Explain the difference between a process and a thread in one paragraph.",
-      "score": 8.2
+      "score": 8.7
     },
     {
-      "id": "gen-007",
-      "prompt": "What is the time complexity of binary search and why?",
-      "score": 8.2
+      "id": "gen-009",
+      "prompt": "Write a haiku about debugging code.",
+      "score": 8.7
     },
     {
       "id": "gen-010",
       "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
-      "score": 8.2
+      "score": 8.7
     },
     {
-      "id": "gen-001",
-      "prompt": "What is the capital of France?",
-      "score": 8.4
+      "id": "gen-007",
+      "prompt": "What is the time complexity of binary search and why?",
+      "score": 9.4
     }
   ]
 }

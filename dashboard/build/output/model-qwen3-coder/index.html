@@ -35,15 +35,28 @@
 <div class="max-w-7xl mx-auto px-6 py-8">
 
   <section class="card" style="margin-top:0">
-    <h1 class="text-2xl font-bold text-gray-900 mb-6 mono">qwen3-coder</h1>
+    <div class="flex items-start justify-between mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 mono">qwen3-coder</h1>
+      <a href="https://huggingface.co/qwen3-coder" 
+         target="_blank" 
+         rel="noopener noreferrer"
+         class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-sm font-semibold rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/>
+          <path d="M8 7h8v2H8V7zm0 4h8v2H8v-2zm0 4h5v2H8v-2z"/>
+        </svg>
+        View on Hugging Face
+      </a>
+    </div>
+    
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
       <div>
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Score</p>
-        <p class="text-2xl font-bold text-gray-900">9.6<span class="text-base text-gray-500">/10</span></p>
+        <p class="text-2xl font-bold text-gray-900">9.7<span class="text-base text-gray-500">/10</span></p>
       </div>
       <div>
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Total Wins</p>
-        <p class="text-2xl font-bold text-gray-900">5</p>
+        <p class="text-2xl font-bold text-gray-900">3</p>
       </div>
       <div>
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Runs</p>
@@ -51,7 +64,7 @@
       </div>
       <div>
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Latency</p>
-        <p class="text-2xl font-bold text-gray-900">6.2<span class="text-base text-gray-500">s</span></p>
+        <p class="text-2xl font-bold text-gray-900">6.5<span class="text-base text-gray-500">s</span></p>
       </div>
     </div>
   </section>
@@ -77,14 +90,14 @@
           <tr>
             <td class="py-3 pr-4 mono text-xs text-gray-500">2026-03-31</td>
             <td class="py-3 pr-4">
-              <a href="../../runs/2026-03-31-2026-03-31T14-13-39/" class="text-gray-900 hover:text-blue-600">3 Model Comparison - 10 cases</a>
+              <a href="../../runs/2026-03-31-2026-03-31T18-25-12/" class="text-gray-900 hover:text-blue-600">Verdict Auto-Dashboard</a>
             </td>
-            <td class="py-3 pr-4 text-right font-bold text-gray-900">9.6/10</td>
-            <td class="py-3 pr-4 text-right text-gray-700">9.9</td>
-            <td class="py-3 pr-4 text-right text-gray-700">9.6</td>
-            <td class="py-3 pr-4 text-right text-gray-700">8.8</td>
-            <td class="py-3 pr-4 text-right"><span class="badge-b">2</span></td>
-            <td class="py-3 text-right mono text-xs text-gray-500">6.2s</td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">9.8/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.9</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">0</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">6.9s</td>
           </tr>
           
           <tr>
@@ -136,16 +149,16 @@
         
         <div class="flex items-center justify-between p-3 rounded bg-gray-50">
           <div class="flex-1">
-            <p class="mono text-sm font-medium text-gray-900">gen-004</p>
-            <p class="text-xs text-gray-500">If all mammals are warm-blooded, and dolphins are mammals...</p>
+            <p class="mono text-sm font-medium text-gray-900">gsm8k-0001</p>
+            <p class="text-xs text-gray-500">Janet’s ducks lay 16 eggs per day. She eats three for bre...</p>
           </div>
           <span class="badge-b ml-3">9.8/10</span>
         </div>
         
         <div class="flex items-center justify-between p-3 rounded bg-gray-50">
           <div class="flex-1">
-            <p class="mono text-sm font-medium text-gray-900">gen-006</p>
-            <p class="text-xs text-gray-500">Write a JavaScript function that returns the sum of all e...</p>
+            <p class="mono text-sm font-medium text-gray-900">gsm8k-0002</p>
+            <p class="text-xs text-gray-500">A robe takes 2 bolts of blue fiber and half that much whi...</p>
           </div>
           <span class="badge-b ml-3">9.8/10</span>
         </div>
