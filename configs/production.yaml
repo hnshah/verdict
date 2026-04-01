@@ -1,0 +1,76 @@
+# verdict.yaml - Model evaluation configuration
+# Copy this to get started, then configure your models
+
+models:
+  # Small efficient models (3-7B)
+  - id: qwen2.5:7b
+    model: qwen2.5:7b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+  - id: llama3.2:3b
+    model: llama3.2:3b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+  # Medium models (9-14B)
+  - id: phi4:14b
+    model: phi4:14b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+  - id: qwen2.5:14b
+    model: qwen2.5:14b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+  - id: gemma2:9b
+    model: gemma2:9b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+  # Large models (32-70B) - optional, requires lots of RAM
+  - id: llama3.3:70b
+    model: llama3.3:70b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+  - id: qwen2.5:32b
+    model: qwen2.5:32b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+  # Specialist models
+  - id: mistral:7b
+    model: mistral:7b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+  - id: deepseek-coder:6.7b
+    model: deepseek-coder:6.7b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+  - id: mathstral:7b
+    model: mathstral:7b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+# Judge model (used to score responses)
+judge:
+  provider: ollama
+  model: qwen2.5:7b
+  base_url: http://localhost:11434/v1
+  api_key: none
+  max_tokens: 1000
+  temperature: 0

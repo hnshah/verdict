@@ -1,0 +1,42 @@
+version: "1.0"
+name: "Judge Test: deepseek-r1:7b"
+
+models:
+  - id: llava-13b
+    provider: ollama
+    model: llava:13b
+    timeout_ms: 180000
+    max_tokens: 512
+    
+  - id: phi4
+    provider: ollama
+    model: phi4:14b
+    timeout_ms: 60000
+    max_tokens: 1024
+    
+  - id: deepseek-r1:7b
+    provider: ollama
+    model: deepseek-r1:7b
+    timeout_ms: 60000
+    max_tokens: 1024
+    
+judge:
+  model: deepseek-r1:7b
+  blind: true
+  rubric:
+    accuracy: 0.4
+    completeness: 0.3
+    conciseness: 0.3
+
+run:
+  concurrency: 1
+  retries: 1
+  cache: false
+
+output:
+  dir: ./results
+  formats: [json]
+
+settings:
+  auto_contribute: true
+  contribution_author: "Ren (Judge: deepseek-r1:7b)"

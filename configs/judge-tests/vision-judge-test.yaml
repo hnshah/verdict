@@ -1,0 +1,27 @@
+name: "Judge Reliability Test - Vision"
+
+cases:
+  - id: scene-description
+    prompt: "Describe the scene in this image."
+    category: vision
+    criteria: "vision-description"
+    
+  - id: object-detection
+    prompt: "What objects can you see in this picture?"
+    category: vision
+    criteria: "vision-description"
+    
+  - id: main-subject
+    prompt: "What is the main subject of this image?"
+    category: vision
+    criteria: "vision-description"
+    
+  - id: color-lighting
+    prompt: "Describe the colors and lighting in this scene."
+    category: vision
+    criteria: "vision-description"
+    
+  - id: activity
+    prompt: "What activity is taking place in this image?"
+    category: vision
+    criteria: "vision-description"
