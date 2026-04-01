@@ -1,0 +1,665 @@
+{
+  "run_id": "2026-04-01T03-35-29",
+  "name": "Vision Models Only Benchmark",
+  "timestamp": "2026-04-01T03:37:34.696Z",
+  "models": [
+    "llava-13b",
+    "llama-vision-11b",
+    "phi4-judge"
+  ],
+  "cases": [
+    {
+      "case_id": "scene-beach",
+      "prompt": "Describe the scene in this image in detail.",
+      "criteria": "Must describe SPECIFIC visual elements actually present in the image. Generic descriptions without visual details score 0.",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The image depicts a serene landscape under a clear blue sky. In the foreground, there is a tranquil body of water that reflects the azure expanse above. On the left side of the image, partially submerged in the water, is a large rock formation. This rock appears to be weathered and eroded, suggesting it has been part of this landscape for a long time.\n\nOn the right side of the image, there's a sandy beach that gently slopes upwards towards a line of trees. The trees are lush and green, providing a stark contrast to the blue of the sky and water. Their presence adds a touch of wilderness to this otherwise peaceful scene.\n\nThe overall composition of the image suggests a harmonious coexistence between nature's elements - the water, rock, beach, and trees. The absence of any man-made structures or signs of human activity enhances the sense of tranquility and natural beauty. The colors in the image are predominantly blue (from the sky and water), green (from the trees), and gray (from the rock formation).\n\nThis image could be used to evoke feelings of calmness, relaxation, or even inspiration for those who view it. It's a snapshot of a moment in nature that is undisturbed by human activity, offering a glimpse into the world's natural beauty.",
+          "input_tokens": 21,
+          "output_tokens": 301,
+          "latency_ms": 5378,
+          "cost_usd": 0
+        },
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "Unfortunately, I don't see an image in our conversation. Could you please provide the image or describe it to me, and I'll do my best to paint a vivid picture of the scene in detail?",
+          "input_tokens": 18,
+          "output_tokens": 42,
+          "latency_ms": 3026,
+          "cost_usd": 0
+        },
+        "phi4-judge": {
+          "model_id": "phi4-judge",
+          "text": "I'm unable to view images directly, but I can help you describe a scene if you provide some details about it. You might consider describing elements such as:\n\n1. **Setting**: Where is the scene taking place? Is it indoors or outdoors? What kind of environment is depicted (e.g., cityscape, forest, beach)?\n\n2. **Time of Day/Weather**: Is it daytime or nighttime? Are there any notable weather conditions like rain, snow, or sunshine?\n\n3. **Main Subjects**: Who or what are the main subjects in the image? Are they people, animals, objects, etc.?\n\n4. **Activities**: What actions are taking place? Are people interacting with each other or engaging in specific activities?\n\n5. **Colors and Lighting**: What colors dominate the scene? Is there a particular lighting effect that stands out (e.g., shadows, highlights)?\n\n6. **Mood/Atmosphere**: What mood does the image convey? Is it serene, chaotic, joyful, somber, etc.?\n\n7. **Details**: Are there any specific details or objects that stand out and might be significant to the scene?\n\nFeel free to provide more information based on these aspects, and I can help you craft a detailed description!",
+          "input_tokens": 19,
+          "output_tokens": 253,
+          "latency_ms": 5100,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.5,
+          "reasoning": "The response accurately describes specific visual elements present in the image, such as the rock formation, sandy beach, and tree line."
+        },
+        "llama-vision-11b": {
+          "accuracy": 1,
+          "completeness": 0,
+          "conciseness": 10,
+          "total": 1.6,
+          "reasoning": "The response does not describe any specific visual elements as it lacks the image to evaluate."
+        },
+        "phi4-judge": {
+          "accuracy": 3,
+          "completeness": 7,
+          "conciseness": 10,
+          "total": 4.9,
+          "reasoning": "The response provides a structured approach to describing an image but lacks specific visual details as it does not have access to the actual image."
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "scene-city",
+      "prompt": "What type of environment is shown in this image?",
+      "criteria": "Must identify the ACTUAL environment type shown. Cannot score if model admits it cannot see the image.",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The image shows a desert environment.",
+          "input_tokens": 21,
+          "output_tokens": 8,
+          "latency_ms": 264,
+          "cost_usd": 0
+        },
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "I don't see an image. Can you describe the image or provide more context?",
+          "input_tokens": 19,
+          "output_tokens": 18,
+          "latency_ms": 579,
+          "cost_usd": 0
+        },
+        "phi4-judge": {
+          "model_id": "phi4-judge",
+          "text": "As an AI text-based model, I'm unable to view images directly. However, if you describe the features or elements present in the image, I can help identify the type of environment it might depict. For example, mention details like vegetation types, weather conditions, structures, or any notable landmarks, and I'll do my best to assist based on that information.",
+          "input_tokens": 20,
+          "output_tokens": 74,
+          "latency_ms": 1321,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 1,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 4.6,
+          "reasoning": "The evaluator cannot verify the accuracy of the response as they cannot see the image."
+        },
+        "llama-vision-11b": {
+          "accuracy": 1,
+          "completeness": 3,
+          "conciseness": 10,
+          "total": 2.5,
+          "reasoning": "The response does not identify the environment type as it cannot see the image."
+        },
+        "phi4-judge": {
+          "accuracy": 7,
+          "completeness": 9,
+          "conciseness": 10,
+          "total": 7.9,
+          "reasoning": "The response correctly explains the AI's limitations and provides a clear method for identifying the environment type based on description."
+        }
+      },
+      "winner": "phi4-judge"
+    },
+    {
+      "case_id": "scene-nature",
+      "prompt": "Describe the landscape in this image.",
+      "criteria": "Must describe SPECIFIC landscape features visible in the image (not generic landscape elements).",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The image depicts a vast, open landscape that appears to be a desert or arid region. The terrain is flat and barren, with no visible vegetation except for some scattered shrubs and small trees. The color palette of the landscape is dominated by shades of brown and gray, reflecting the dry and dusty conditions typical of such environments. In the distance, there are faint outlines of mountains or hills, which add depth to the scene but do not detract from the overall sense of emptiness and isolation. The sky above is clear with no clouds in sight, suggesting a hot and sunny day. There are no visible signs of human activity or infrastructure, reinforcing the impression of a remote and uninhabited area.",
+          "input_tokens": 19,
+          "output_tokens": 159,
+          "latency_ms": 2350,
+          "cost_usd": 0
+        },
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "Unfortunately, I don't see an image in our conversation. Could you please provide the image or describe it to me, and I'll be happy to help you describe the landscape?",
+          "input_tokens": 16,
+          "output_tokens": 37,
+          "latency_ms": 799,
+          "cost_usd": 0
+        },
+        "phi4-judge": {
+          "model_id": "phi4-judge",
+          "text": "As an AI, I can't view images directly. However, if you describe the elements present in the image or provide more context, I'd be happy to help you create a vivid description of the landscape based on that information! You might consider mentioning aspects like terrain (mountains, plains, forests), bodies of water (lakes, rivers, oceans), weather conditions (sunny, cloudy, rainy), and any notable features (wildlife, vegetation, human-made structures).",
+          "input_tokens": 17,
+          "output_tokens": 97,
+          "latency_ms": 1780,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 9,
+          "total": 7.8,
+          "reasoning": "The response accurately describes specific features like the flat terrain, scattered shrubs, distant mountains, and clear sky but lacks mention of any unique or standout elements that might be present."
+        },
+        "llama-vision-11b": {
+          "accuracy": 1,
+          "completeness": 0,
+          "conciseness": 10,
+          "total": 1.6,
+          "reasoning": "The response does not describe any specific landscape features as it lacks the image to evaluate."
+        },
+        "phi4-judge": {
+          "accuracy": 7,
+          "completeness": 5,
+          "conciseness": 9,
+          "total": 6.6,
+          "reasoning": "The response accurately states the AI's inability to view images but lacks specific landscape feature descriptions."
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "object-food",
+      "prompt": "What specific food items can you identify in this image?",
+      "criteria": "Must name SPECIFIC food items visible in the image. Cannot score if model cannot identify actual items present.",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " In the image, I can see a variety of food items that include:\n\n1. A bowl of soup or stew with visible ingredients such as carrots and possibly other vegetables or meat.\n2. A plate with what appears to be fried plantains or similar type of cooked fruit.\n3. A dish that could be a type of casserole or baked dish, containing rice and possibly some kind of meat or seafood.\n4. A small portion of what looks like grilled fish or seafood.\n5. A plate with what might be a type of salad or cooked greens.\n6. A bowl that could contain a sauce or condiment, such as salsa or a chili-based dish.\n7. A small portion of what looks like a dessert or sweet treat, possibly a pastry or bread pudding.\n\nPlease note that without more specific details or a clearer view of the food items, it's difficult to provide exact identifications.",
+          "input_tokens": 22,
+          "output_tokens": 226,
+          "latency_ms": 3254,
+          "cost_usd": 0
+        },
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "Unfortunately, I don't see an image in our conversation. Could you please share the image or describe it to me, and I'll do my best to identify the specific food items?",
+          "input_tokens": 20,
+          "output_tokens": 38,
+          "latency_ms": 792,
+          "cost_usd": 0
+        },
+        "phi4-judge": {
+          "model_id": "phi4-judge",
+          "text": "As an AI language model, I'm unable to view images directly. However, if you describe the image or provide details about what's visible in it, I might be able to help identify potential food items based on your description. Please share any relevant information you can!",
+          "input_tokens": 21,
+          "output_tokens": 55,
+          "latency_ms": 1088,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 7,
+          "completeness": 6,
+          "conciseness": 8,
+          "total": 6.8,
+          "reasoning": "The response provides a general identification of food items but lacks specificity and certainty in identifying exact foods."
+        },
+        "llama-vision-11b": {
+          "accuracy": 3,
+          "completeness": 2,
+          "conciseness": 10,
+          "total": 3.4,
+          "reasoning": "The response does not identify any specific food items as it lacks the image to evaluate."
+        },
+        "phi4-judge": {
+          "accuracy": 3,
+          "completeness": 2,
+          "conciseness": 9,
+          "total": 3.3,
+          "reasoning": "The response does not identify specific food items as required."
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "object-tech",
+      "prompt": "What technology or electronic devices do you see in this image?",
+      "criteria": "Must identify SPECIFIC devices visible in THIS image. Listing general tech categories scores 0.",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " In the image, I can see a smartphone with a camera on its back. The phone appears to be an iPhone, which is a product of Apple Inc.",
+          "input_tokens": 23,
+          "output_tokens": 34,
+          "latency_ms": 630,
+          "cost_usd": 0
+        },
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "I don't see any technology or electronic devices in this image. The image appears to be a blank space. Can I help you with anything else?",
+          "input_tokens": 21,
+          "output_tokens": 31,
+          "latency_ms": 721,
+          "cost_usd": 0
+        },
+        "phi4-judge": {
+          "model_id": "phi4-judge",
+          "text": "As an AI language model, I'm unable to view images directly. However, if you describe the image to me, I can help identify potential technologies or electronic devices that might be present based on your description. Please provide details about what is visible in the image, and I'll do my best to assist!",
+          "input_tokens": 22,
+          "output_tokens": 63,
+          "latency_ms": 1232,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 7,
+          "completeness": 5,
+          "conciseness": 9,
+          "total": 6.6,
+          "reasoning": "The response identifies a specific device but lacks detail on other visible devices."
+        },
+        "llama-vision-11b": {
+          "accuracy": 1,
+          "completeness": 0,
+          "conciseness": 10,
+          "total": 1.6,
+          "reasoning": "The response inaccurately claims there are no devices in the image without evaluating it."
+        },
+        "phi4-judge": {
+          "accuracy": 1,
+          "completeness": 3,
+          "conciseness": 10,
+          "total": 2.5,
+          "reasoning": "The response does not identify specific devices as it cannot view images, but it offers a method to assist based on descriptions."
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "object-animal",
+      "prompt": "What animal do you see in this image?",
+      "criteria": "Must identify the SPECIFIC animal present in the image. Cannot score if model cannot see the image.",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " I'm sorry, but I am unable to view images. If you can describe the image or provide more context, I might be able to help you with your question about an animal.",
+          "input_tokens": 20,
+          "output_tokens": 39,
+          "latency_ms": 690,
+          "cost_usd": 0
+        },
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "I don't see an image. This conversation just started. Would you like to describe the image or share it with me?",
+          "input_tokens": 18,
+          "output_tokens": 26,
+          "latency_ms": 677,
+          "cost_usd": 0
+        },
+        "phi4-judge": {
+          "model_id": "phi4-judge",
+          "text": "As an AI text-based model, I'm unable to view or analyze images directly. However, if you describe the features of the animal in the image—such as its size, color, shape, and any distinctive markings—I might be able to help identify it based on your description. Alternatively, using an image recognition tool or app could provide a more accurate identification.",
+          "input_tokens": 19,
+          "output_tokens": 74,
+          "latency_ms": 1411,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 7,
+          "completeness": 5,
+          "conciseness": 9,
+          "total": 6.6,
+          "reasoning": "The response correctly states the inability to view images but does not fully address the criteria by providing a method for identifying the animal through description."
+        },
+        "llama-vision-11b": {
+          "accuracy": 1,
+          "completeness": 2,
+          "conciseness": 10,
+          "total": 2.2,
+          "reasoning": "The response does not identify the specific animal as it cannot see the image."
+        },
+        "phi4-judge": {
+          "accuracy": 7,
+          "completeness": 8,
+          "conciseness": 9,
+          "total": 7.5,
+          "reasoning": "The response correctly states the AI's inability to view images and offers a practical alternative for identification."
+        }
+      },
+      "winner": "phi4-judge"
+    },
+    {
+      "case_id": "detail-hands",
+      "prompt": "What is the person doing in this image?",
+      "criteria": "Must describe the SPECIFIC action/activity shown in the image based on visual evidence.",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The person in the image appears to be sitting on a bench and looking at their phone.",
+          "input_tokens": 20,
+          "output_tokens": 20,
+          "latency_ms": 431,
+          "cost_usd": 0
+        },
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "I don't see an image. Can you describe it or provide more context?",
+          "input_tokens": 18,
+          "output_tokens": 17,
+          "latency_ms": 580,
+          "cost_usd": 0
+        },
+        "phi4-judge": {
+          "model_id": "phi4-judge",
+          "text": "As an AI text-based model, I'm unable to view or analyze images directly. However, if you describe the scene or provide details about what's happening in the image, I can help interpret or suggest possible activities based on your description. Please share more information so I can assist you better!",
+          "input_tokens": 19,
+          "output_tokens": 60,
+          "latency_ms": 1102,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 10,
+          "total": 9.7,
+          "reasoning": "The response accurately describes the specific action of sitting and looking at a phone, addressing all criteria with no unnecessary details."
+        },
+        "llama-vision-11b": {
+          "accuracy": 1,
+          "completeness": 2,
+          "conciseness": 10,
+          "total": 2.2,
+          "reasoning": "The response does not describe any specific action or activity as it lacks visual evidence."
+        },
+        "phi4-judge": {
+          "accuracy": 7,
+          "completeness": 5,
+          "conciseness": 9,
+          "total": 6.6,
+          "reasoning": "The response acknowledges the inability to view images but offers a helpful alternative approach."
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "detail-count",
+      "prompt": "Count the number of distinct objects visible in this image.",
+      "criteria": "Must provide a SPECIFIC count based on what is actually visible. Generic responses score 0.",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " I'm sorry, but I am unable to count the number of distinct objects in an image as it requires visual perception and understanding of the content which is beyond my capabilities as a text-based AI model.",
+          "input_tokens": 22,
+          "output_tokens": 45,
+          "latency_ms": 790,
+          "cost_usd": 0
+        },
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "I can't estimate the number of distinct objects in the image you provided. Can I help you with anything else?",
+          "input_tokens": 20,
+          "output_tokens": 24,
+          "latency_ms": 735,
+          "cost_usd": 0
+        },
+        "phi4-judge": {
+          "model_id": "phi4-judge",
+          "text": "As an AI text-based model, I'm unable to view or analyze images directly. To count the number of distinct objects in an image, you would need to visually inspect it yourself or use image processing software that can identify and differentiate between various elements within the picture.\n\nIf you have access to such tools, here are some general steps you might follow:\n\n1. **Manual Inspection**: Look at the image carefully and try to distinguish different objects based on their shapes, colors, sizes, and positions.\n\n2. **Image Processing Software**: Use software like Adobe Photoshop or specialized programs like MATLAB with computer vision toolboxes, which can help in object detection and counting.\n\n3. **Machine Learning Models**: Utilize pre-trained models for object detection (e.g., YOLO, Faster R-CNN) that can automatically identify and count objects within an image.\n\nIf you have specific questions about how to use these tools or need guidance on a particular method, feel free to ask!",
+          "input_tokens": 21,
+          "output_tokens": 195,
+          "latency_ms": 3406,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 6,
+          "completeness": 7,
+          "conciseness": 10,
+          "total": 6.7,
+          "reasoning": "The response correctly states the AI's inability to count objects but does not provide a specific count."
+        },
+        "llama-vision-11b": {
+          "accuracy": 1,
+          "completeness": 0,
+          "conciseness": 10,
+          "total": 1.6,
+          "reasoning": "The response does not provide a specific count of distinct objects as required."
+        },
+        "phi4-judge": {
+          "accuracy": 3,
+          "completeness": 5,
+          "conciseness": 8,
+          "total": 4.1,
+          "reasoning": "The response does not provide a specific count of objects as required."
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "spatial-composition",
+      "prompt": "Describe the composition and spatial layout of this image.",
+      "criteria": "Must describe the ACTUAL spatial arrangement in THIS image. Generic composition advice scores 0.",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The image is a photograph that captures an indoor scene, specifically a room with architectural features. In the foreground, there's a partial view of a person sitting on what appears to be a bench or a low table, wearing dark clothing and facing away from the camera. The individual's head is turned slightly towards the camera, but their face is not visible.\n\nThe room has a high ceiling with exposed ductwork, suggesting an industrial or warehouse-like setting. There are large windows on the left side of the image that allow natural light to enter and illuminate the space. The walls are painted in a neutral color, and there's a visible structural beam running across the ceiling.\n\nOn the right side of the image, there is a large, open doorway leading to another room or area outside the frame. The floor appears to be made of concrete, which contributes to the industrial feel of the space. There are no texts or distinctive brands visible in the image. The overall composition and spatial layout suggest an urban or semi-industrial setting with a focus on architectural elements and natural lighting.",
+          "input_tokens": 22,
+          "output_tokens": 243,
+          "latency_ms": 3508,
+          "cost_usd": 0
+        },
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "I don't have any information about the image you're referring to. Can you provide more context or details about the image?",
+          "input_tokens": 19,
+          "output_tokens": 26,
+          "latency_ms": 684,
+          "cost_usd": 0
+        },
+        "phi4-judge": {
+          "model_id": "phi4-judge",
+          "text": "To provide a detailed description of an image's composition and spatial layout, I would need to see the image or have specific details about it. However, I can guide you on how to analyze these aspects:\n\n### Composition:\n1. **Elements**: Identify the main elements in the image such as people, objects, nature, architecture, etc.\n2. **Color Scheme**: Note the dominant colors and their distribution. Are they warm (reds, oranges) or cool (blues, greens)?\n3. **Lighting**: Observe how light is used. Is it natural or artificial? Where are the highlights and shadows?\n4. **Texture**: Describe any noticeable textures that add depth or interest.\n5. **Patterns**: Look for repeating patterns or motifs.\n\n### Spatial Layout:\n1. **Foreground, Middleground, Background**: Determine which elements are in the foreground, middleground, and background to understand depth.\n2. **Perspective**: Note if there is a vanishing point or use of perspective lines that guide the viewer’s eye.\n3. **Balance**: Assess whether the composition feels balanced (symmetrical/asymmetrical) or if it leans towards one side.\n4. **Focal Point**: Identify where the main focus of the image lies and what draws attention to this area.\n5. **Movement**: Consider how elements are arranged to suggest movement or flow within the image.\n\nIf you can provide more details about the specific image, I can offer a more tailored analysis!",
+          "input_tokens": 20,
+          "output_tokens": 298,
+          "latency_ms": 5154,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 9,
+          "total": 7.8,
+          "reasoning": "The response accurately describes the spatial arrangement and key elements of the image, but lacks some specific details about the objects' exact positions."
+        },
+        "llama-vision-11b": {
+          "accuracy": 1,
+          "completeness": 0,
+          "conciseness": 10,
+          "total": 1.6,
+          "reasoning": "The response does not describe the spatial arrangement of the image."
+        },
+        "phi4-judge": {
+          "accuracy": 1,
+          "completeness": 2,
+          "conciseness": 9,
+          "total": 2.1,
+          "reasoning": "The response provides generic advice without describing the actual spatial arrangement of a specific image."
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "text-reading",
+      "prompt": "What text can you read in this image?",
+      "criteria": "Must read SPECIFIC text visible in the image. Admitting inability to see text scores 0.",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The image is too small and blurry for me to read the text clearly. If you can provide a clearer image or type out the text, I would be happy to help you with that.",
+          "input_tokens": 20,
+          "output_tokens": 41,
+          "latency_ms": 727,
+          "cost_usd": 0
+        },
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "I can't view the image you provided. Can you provide more context or describe the image to me?",
+          "input_tokens": 18,
+          "output_tokens": 22,
+          "latency_ms": 607,
+          "cost_usd": 0
+        },
+        "phi4-judge": {
+          "model_id": "phi4-judge",
+          "text": "I'm unable to view or analyze images directly. However, if you describe the content of the image or provide a transcription of any visible text, I'd be happy to help with information or context related to it!",
+          "input_tokens": 19,
+          "output_tokens": 44,
+          "latency_ms": 916,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 3,
+          "completeness": 5,
+          "conciseness": 9,
+          "total": 4.2,
+          "reasoning": "The response admits inability to read the text, which is correct but does not attempt any specific reading."
+        },
+        "llama-vision-11b": {
+          "accuracy": 0,
+          "completeness": 3,
+          "conciseness": 10,
+          "total": 1.9,
+          "reasoning": "The response admits inability to see the image, thus failing accuracy."
+        },
+        "phi4-judge": {
+          "accuracy": 3,
+          "completeness": 2,
+          "conciseness": 9,
+          "total": 3.3,
+          "reasoning": "The response admits inability to read the image, which is correct but does not address the specific task of reading text."
+        }
+      },
+      "winner": "llava-13b"
+    }
+  ],
+  "summary": {
+    "llava-13b": {
+      "model_id": "llava-13b",
+      "avg_total": 7.03,
+      "avg_accuracy": 6.7,
+      "avg_completeness": 7,
+      "avg_conciseness": 9.1,
+      "avg_latency_ms": 1802.2,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 80,
+      "wins": 8,
+      "cases_run": 10,
+      "avg_solve_rate": 0
+    },
+    "llama-vision-11b": {
+      "model_id": "llama-vision-11b",
+      "avg_total": 2.02,
+      "avg_accuracy": 1.1,
+      "avg_completeness": 1.2,
+      "avg_conciseness": 10,
+      "avg_latency_ms": 920,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 10,
+      "avg_solve_rate": 0
+    },
+    "phi4-judge": {
+      "model_id": "phi4-judge",
+      "avg_total": 4.88,
+      "avg_accuracy": 4.2,
+      "avg_completeness": 4.8,
+      "avg_conciseness": 9.2,
+      "avg_latency_ms": 2251,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 20,
+      "wins": 2,
+      "cases_run": 10,
+      "avg_solve_rate": 0
+    }
+  },
+  "run_meta": {
+    "run_id": "2026-04-01T03-35-29",
+    "config_file": "verdict.yaml",
+    "verdict_version": "0.2.0",
+    "hardware": "Apple M3 Ultra 256GB"
+  },
+  "hardware": {
+    "cpu": "Apple M3 Ultra",
+    "cpu_cores": 32,
+    "cpu_arch": "arm64",
+    "ram_gb": 256,
+    "os": "macOS",
+    "os_version": "25.3.0"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v22.22.1",
+    "provider_versions": {
+      "ollama": "0.18.3"
+    }
+  },
+  "eval_pack": {
+    "file": "eval-packs/vision-comprehensive-benchmark-(fixed-criteria).yaml",
+    "description": "Vision understanding - VISION MODELS ONLY",
+    "total_cases": 10
+  },
+  "judge": {
+    "model": "phi4-judge",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p Vision Comprehensive Benchmark (Fixed Criteria) -m llava-13b,llama-vision-11b,phi4-judge",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "llava-13b": {
+        "provider": "ollama",
+        "model": "llava:13b",
+        "temperature": 0.7,
+        "max_tokens": 512
+      },
+      "llama-vision-11b": {
+        "provider": "ollama",
+        "model": "llama3.2-vision:11b",
+        "temperature": 0.7,
+        "max_tokens": 512
+      },
+      "phi4-judge": {
+        "provider": "ollama",
+        "model": "phi4:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      }
+    }
+  }
+}
