@@ -1,0 +1,54 @@
+name: Vision Quick Test
+description: Fast vision capability test (10 questions)
+version: "1.0"
+
+cases:
+  - id: simple-ocr
+    name: "Simple Text Reading"
+    prompt: "What text do you see in this image?"
+    category: ocr
+    
+  - id: object-count
+    name: "Object Counting"
+    prompt: "How many objects are visible in this image?"
+    category: counting
+    
+  - id: color-detection
+    name: "Color Recognition"
+    prompt: "What is the dominant color in this image?"
+    category: perception
+    
+  - id: scene-understanding
+    name: "Scene Description"
+    prompt: "Describe what is happening in this image."
+    category: reasoning
+    
+  - id: spatial-reasoning
+    name: "Spatial Relationships"
+    prompt: "What is positioned to the left of the main subject?"
+    category: spatial
+    
+  - id: detail-observation
+    name: "Detail Detection"
+    prompt: "What small details can you notice in this image?"
+    category: observation
+    
+  - id: action-recognition
+    name: "Action Identification"
+    prompt: "What action is being performed in this image?"
+    category: action
+    
+  - id: emotion-detection
+    name: "Emotional Context"
+    prompt: "What emotion or mood does this image convey?"
+    category: emotion
+    
+  - id: brand-recognition
+    name: "Logo/Brand Recognition"
+    prompt: "Can you identify any logos or brands in this image?"
+    category: recognition
+    
+  - id: complex-reasoning
+    name: "Multi-step Reasoning"
+    prompt: "Based on the context clues in this image, what might happen next?"
+    category: reasoning

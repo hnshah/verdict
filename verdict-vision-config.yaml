@@ -1,0 +1,42 @@
+version: "1.0"
+name: "Vision Model Comparison"
+
+models:
+  - id: llama-vision-11b
+    provider: ollama
+    model: llama3.2-vision:11b
+    timeout_ms: 180000
+    max_tokens: 512
+    
+  - id: llava-13b
+    provider: ollama
+    model: llava:13b
+    timeout_ms: 180000
+    max_tokens: 512
+    
+  - id: phi4
+    provider: ollama
+    model: phi4:14b
+    timeout_ms: 60000
+    max_tokens: 1024
+    
+judge:
+  model: phi4
+  blind: true
+  rubric:
+    accuracy: 0.5
+    completeness: 0.3
+    conciseness: 0.2
+
+run:
+  concurrency: 1
+  retries: 1
+  cache: true
+
+output:
+  dir: ./results
+  formats: [json, markdown]
+  delta: true
+
+settings:
+  auto_contribute: false

@@ -1,0 +1,6 @@
+name: Simple Test
+cases:
+  - id: test-1
+    prompt: "Say hello"
+    criteria: "Says hello"
+    scorer: llm

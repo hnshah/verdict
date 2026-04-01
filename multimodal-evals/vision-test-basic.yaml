@@ -1,0 +1,22 @@
+name: Vision Basics
+description: Basic vision understanding test
+version: "1.0"
+
+cases:
+  - id: describe-1
+    prompt: "Describe what you see in this image in one sentence."
+    image: "multimodal-evals/images/cat.jpg"
+    criteria: "Accurate description of image content"
+    scorer: llm
+    
+  - id: describe-2
+    prompt: "What is the main subject of this image?"
+    image: "multimodal-evals/images/stop-sign.jpg"
+    criteria: "Correctly identifies main subject"
+    scorer: llm
+    
+  - id: describe-3
+    prompt: "What type of location or setting is shown in this image?"
+    image: "multimodal-evals/images/parking.jpg"
+    criteria: "Correctly identifies the setting"
+    scorer: llm
