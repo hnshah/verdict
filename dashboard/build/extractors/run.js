@@ -16,6 +16,16 @@ if (!filePath) {
 const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 const fileName = path.basename(filePath, '.json');
 
+// Convert UTC timestamp to Pacific Time
+function toPacificTime(utcString) {
+  const date = new Date(utcString);
+  return date.toLocaleString('en-US', { 
+    timeZone: 'America/Los_Angeles',
+    dateStyle: 'medium',
+    timeStyle: 'short'
+  }) + ' PT';
+}
+
 // Calculate run stats
 const caseCount = data.cases?.length || 0;
 const modelCount = data.models?.length || 0;
@@ -77,10 +87,17 @@ const cases = (data.cases || []).map(c => ({
     : 0
 }));
 
+// Generate "last updated" timestamp in Pacific Time
+const lastUpdated = new Date().toLocaleString('en-US', {
+  timeZone: 'America/Los_Angeles',
+  dateStyle: 'medium',
+  timeStyle: 'short'
+}) + ' PT';
+
 console.log(JSON.stringify({
   id: fileName,
   name: data.name,
-  date: data.timestamp.split('T')[0],
+  date: toPacificTime(data.timestamp),
   run_id: data.run_id,
   eval_pack: data.eval_pack,
   stats: {
@@ -91,5 +108,6 @@ console.log(JSON.stringify({
     avg_latency: avgLatency
   },
   model_leaderboard: modelLeaderboard,
-  cases
+  cases,
+  last_updated: lastUpdated
 }, null, 2));
