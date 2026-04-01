@@ -1,11 +1,22 @@
 {
   "model_name": "phi4:14b",
-  "total_runs": 4,
-  "total_cases": 10,
+  "total_runs": 5,
+  "total_cases": 90,
   "avg_score": 9.2,
   "total_wins": 8,
-  "avg_latency": 12,
+  "avg_latency": 10.5,
   "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T14-51-35",
+      "name": "Comprehensive Benchmark - 4 Domains (80 Questions)",
+      "date": "2026-04-01",
+      "score": 9,
+      "accuracy": 9.6,
+      "completeness": 8.9,
+      "conciseness": 7.6,
+      "wins": 0,
+      "latency": 4.7
+    },
     {
       "id": "2026-03-31-2026-03-31T07-53-37",
       "name": "Qwen Family + Phi4 + Gemma2",
@@ -68,41 +79,41 @@
       "score": 10
     },
     {
-      "id": "gen-008",
-      "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
-      "score": 9.4
+      "id": "mmlu-19",
+      "prompt": "What are the three types of rocks?",
+      "score": 9.8
     },
     {
-      "id": "gen-001",
-      "prompt": "What is the capital of France?",
-      "score": 9.2
+      "id": "gsm8k-1",
+      "prompt": "If John has 5 apples and buys 3 more, how many apples does he have?",
+      "score": 9.6
     }
   ],
   "worst_cases": [
     {
-      "id": "gen-002",
-      "prompt": "What does RAM stand for and what does it do?",
-      "score": 8.6
+      "id": "mmlu-11",
+      "prompt": "What is the speed of light?",
+      "score": 7.1
     },
     {
-      "id": "gen-003",
-      "prompt": "Explain the difference between a process and a thread in one paragraph.",
-      "score": 8.6
+      "id": "mmlu-20",
+      "prompt": "Who invented the telephone?",
+      "score": 7.3
     },
     {
-      "id": "gen-010",
-      "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
-      "score": 8.6
+      "id": "arc-1",
+      "prompt": "If all roses are flowers and some flowers fade quickly, what can we conclude?",
+      "score": 7.3
     },
     {
-      "id": "gen-009",
-      "prompt": "Write a haiku about debugging code.",
-      "score": 8.7
+      "id": "arc-3",
+      "prompt": "Why do objects appear to bend when partially submerged in water?",
+      "score": 7.3
     },
     {
-      "id": "gen-007",
-      "prompt": "What is the time complexity of binary search and why?",
-      "score": 9.1
+      "id": "arc-12",
+      "prompt": "You have 12 balls, one is slightly heavier. Using a balance scale only 3 times, how do you find the heavy ball?",
+      "score": 7.3
     }
   ]
 }

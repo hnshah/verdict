@@ -1,0 +1,75 @@
+{
+  "model_name": "qwen2.5-coder:32b",
+  "total_runs": 1,
+  "total_cases": 80,
+  "avg_score": 9.1,
+  "total_wins": 54,
+  "avg_latency": 10.6,
+  "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T14-51-35",
+      "name": "Comprehensive Benchmark - 4 Domains (80 Questions)",
+      "date": "2026-04-01",
+      "score": 9.1,
+      "accuracy": 9.7,
+      "completeness": 8.9,
+      "conciseness": 7.7,
+      "wins": 54,
+      "latency": 10.6
+    }
+  ],
+  "best_cases": [
+    {
+      "id": "mmlu-1",
+      "prompt": "What is the capital of France?",
+      "score": 10
+    },
+    {
+      "id": "mmlu-9",
+      "prompt": "What is the chemical formula for water?",
+      "score": 10
+    },
+    {
+      "id": "gsm8k-1",
+      "prompt": "If John has 5 apples and buys 3 more, how many apples does he have?",
+      "score": 9.6
+    },
+    {
+      "id": "gsm8k-2",
+      "prompt": "A store sells shirts for $15 each. If you buy 4 shirts, how much do you pay?",
+      "score": 9.6
+    },
+    {
+      "id": "gsm8k-6",
+      "prompt": "If 5 notebooks cost $20, how much does one notebook cost?",
+      "score": 9.6
+    }
+  ],
+  "worst_cases": [
+    {
+      "id": "humaneval-18",
+      "prompt": "Write a function to find the second largest number in a list.",
+      "score": 7.3
+    },
+    {
+      "id": "arc-1",
+      "prompt": "If all roses are flowers and some flowers fade quickly, what can we conclude?",
+      "score": 7.3
+    },
+    {
+      "id": "arc-14",
+      "prompt": "A man pushes his car to a hotel and realizes he's bankrupt. Why?",
+      "score": 7.3
+    },
+    {
+      "id": "arc-15",
+      "prompt": "Why is the sky blue?",
+      "score": 7.3
+    },
+    {
+      "id": "mmlu-20",
+      "prompt": "Who invented the telephone?",
+      "score": 8.1
+    }
+  ]
+}

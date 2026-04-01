@@ -1,13 +1,13 @@
 # Dashboard QA Report
 
-**Generated:** Mar 31, 2026, 10:17 PM PT
+**Generated:** Apr 1, 2026, 11:07 AM PT
 
 ---
 
 ## Summary
 
-- ✅ 3/4 checks passed
-- ❌ 1 check(s) failed
+- ✅ 2/4 checks passed
+- ❌ 2 check(s) failed
 
 ---
 
@@ -22,7 +22,7 @@ All checks passed.
 ```
 🔍 Scoring Sanity Checker
 
-Checking 22 result files
+Checking 23 result files
 
 ============================================================
 
@@ -82,9 +82,27 @@ Checking 22 result files
 
 All checks passed.
 
-### ✅ Link Checker
+### ❌ Link Checker
 
-All checks passed.
+```
+🔍 Link Checker
+
+Checking links in /Users/bobshah/.openclaw/ren-workspace/verdict/dashboard/published
+
+============================================================
+
+Total Links Checked: 208
+Files Checked: 68
+
+❌ BROKEN LINKS (1):
+
+  index.html
+  → "models/qwen2-5-coder-32b/" → models/qwen2-5-coder-32b/index.html (NOT FOUND)
+
+============================================================
+
+
+```
 
 ---
 

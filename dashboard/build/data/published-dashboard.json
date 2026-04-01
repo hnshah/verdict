@@ -1,14 +1,27 @@
 {
-  "generated_at": "2026-04-01T16:01:20.899Z",
+  "generated_at": "2026-04-01T18:07:33.279Z",
   "stats": {
-    "total_runs": 22,
-    "total_cases": 222,
-    "total_models": 26,
-    "avg_score": 7.8,
+    "total_runs": 23,
+    "total_cases": 302,
+    "total_models": 29,
+    "avg_score": 7.9,
     "test_runs": 3,
-    "real_runs": 19
+    "real_runs": 20
   },
   "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T14-51-35",
+      "name": "Comprehensive Benchmark - 4 Domains (80 Questions)",
+      "date": "2026-04-01",
+      "cases": 80,
+      "models": 6,
+      "avg_score": 9,
+      "start_time": "10:15am",
+      "duration": "",
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
     {
       "id": "2026-04-01-2026-04-01T05-07-50",
       "name": "Judge Test: deepseek-r1:7b",
@@ -373,22 +386,22 @@
       "medal": ""
     },
     {
+      "name": "phi4:14b",
+      "avg_score": 9.2,
+      "runs": 5,
+      "total_wins": 8,
+      "win_rate": 7,
+      "avg_latency": 10.5,
+      "rank": 6,
+      "medal": ""
+    },
+    {
       "name": "qwen-coder",
       "avg_score": 9.2,
       "runs": 3,
       "total_wins": 11,
       "win_rate": 28,
       "avg_latency": 6,
-      "rank": 6,
-      "medal": ""
-    },
-    {
-      "name": "phi4:14b",
-      "avg_score": 9.2,
-      "runs": 4,
-      "total_wins": 8,
-      "win_rate": 20,
-      "avg_latency": 12,
       "rank": 7,
       "medal": ""
     },
@@ -403,13 +416,33 @@
       "medal": ""
     },
     {
+      "name": "qwen2.5-coder:32b",
+      "avg_score": 9.1,
+      "runs": 1,
+      "total_wins": 54,
+      "win_rate": 68,
+      "avg_latency": 10.6,
+      "rank": 9,
+      "medal": ""
+    },
+    {
       "name": "llama3.3:70b",
       "avg_score": 9.1,
-      "runs": 2,
-      "total_wins": 2,
-      "win_rate": 10,
-      "avg_latency": 19.9,
-      "rank": 9,
+      "runs": 3,
+      "total_wins": 6,
+      "win_rate": 6,
+      "avg_latency": 20.5,
+      "rank": 10,
+      "medal": ""
+    },
+    {
+      "name": "qwen2.5:32b",
+      "avg_score": 9.1,
+      "runs": 3,
+      "total_wins": 6,
+      "win_rate": 6,
+      "avg_latency": 7.8,
+      "rank": 11,
       "medal": ""
     },
     {
@@ -419,7 +452,27 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 6.8,
-      "rank": 10,
+      "rank": 12,
+      "medal": ""
+    },
+    {
+      "name": "deepseek-r1:32b",
+      "avg_score": 9,
+      "runs": 1,
+      "total_wins": 13,
+      "win_rate": 16,
+      "avg_latency": 32.1,
+      "rank": 13,
+      "medal": ""
+    },
+    {
+      "name": "qwen3:30b",
+      "avg_score": 9,
+      "runs": 1,
+      "total_wins": 3,
+      "win_rate": 4,
+      "avg_latency": 18.4,
+      "rank": 14,
       "medal": ""
     },
     {
@@ -429,17 +482,7 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 14.7,
-      "rank": 11,
-      "medal": ""
-    },
-    {
-      "name": "qwen2.5:32b",
-      "avg_score": 9,
-      "runs": 2,
-      "total_wins": 0,
-      "win_rate": 0,
-      "avg_latency": 7.9,
-      "rank": 12,
+      "rank": 15,
       "medal": ""
     },
     {
@@ -449,7 +492,7 @@
       "total_wins": 1,
       "win_rate": 2,
       "avg_latency": 150.1,
-      "rank": 13,
+      "rank": 16,
       "medal": ""
     },
     {
@@ -459,7 +502,7 @@
       "total_wins": 33,
       "win_rate": 44,
       "avg_latency": 6,
-      "rank": 14,
+      "rank": 17,
       "medal": ""
     },
     {
@@ -469,7 +512,7 @@
       "total_wins": 5,
       "win_rate": 11,
       "avg_latency": 5.3,
-      "rank": 15,
+      "rank": 18,
       "medal": ""
     },
     {
@@ -479,7 +522,7 @@
       "total_wins": 13,
       "win_rate": 65,
       "avg_latency": 1.9,
-      "rank": 16,
+      "rank": 19,
       "medal": ""
     },
     {
@@ -489,7 +532,7 @@
       "total_wins": 18,
       "win_rate": 60,
       "avg_latency": 3.4,
-      "rank": 17,
+      "rank": 20,
       "medal": ""
     },
     {
@@ -499,7 +542,7 @@
       "total_wins": 22,
       "win_rate": 29,
       "avg_latency": 5.7,
-      "rank": 18,
+      "rank": 21,
       "medal": ""
     },
     {
@@ -509,7 +552,7 @@
       "total_wins": 2,
       "win_rate": 20,
       "avg_latency": 2.3,
-      "rank": 19,
+      "rank": 22,
       "medal": ""
     },
     {
@@ -519,7 +562,7 @@
       "total_wins": 7,
       "win_rate": 18,
       "avg_latency": 3.5,
-      "rank": 20,
+      "rank": 23,
       "medal": ""
     },
     {
@@ -529,7 +572,7 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 3.8,
-      "rank": 21,
+      "rank": 24,
       "medal": ""
     },
     {
@@ -539,7 +582,7 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 4.6,
-      "rank": 22,
+      "rank": 25,
       "medal": ""
     },
     {
@@ -549,7 +592,7 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 3.7,
-      "rank": 23,
+      "rank": 26,
       "medal": ""
     },
     {
@@ -559,7 +602,7 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 16.3,
-      "rank": 24,
+      "rank": 27,
       "medal": ""
     },
     {
@@ -569,7 +612,7 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 0.1,
-      "rank": 25,
+      "rank": 28,
       "medal": ""
     },
     {
@@ -579,7 +622,7 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 0.2,
-      "rank": 26,
+      "rank": 29,
       "medal": ""
     }
   ]

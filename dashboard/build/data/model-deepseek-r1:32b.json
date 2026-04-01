@@ -1,0 +1,75 @@
+{
+  "model_name": "deepseek-r1:32b",
+  "total_runs": 1,
+  "total_cases": 80,
+  "avg_score": 9,
+  "total_wins": 13,
+  "avg_latency": 32.1,
+  "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T14-51-35",
+      "name": "Comprehensive Benchmark - 4 Domains (80 Questions)",
+      "date": "2026-04-01",
+      "score": 9,
+      "accuracy": 9.6,
+      "completeness": 8.9,
+      "conciseness": 7.7,
+      "wins": 13,
+      "latency": 32.1
+    }
+  ],
+  "best_cases": [
+    {
+      "id": "mmlu-1",
+      "prompt": "What is the capital of France?",
+      "score": 10
+    },
+    {
+      "id": "mmlu-19",
+      "prompt": "What are the three types of rocks?",
+      "score": 9.8
+    },
+    {
+      "id": "gsm8k-1",
+      "prompt": "If John has 5 apples and buys 3 more, how many apples does he have?",
+      "score": 9.6
+    },
+    {
+      "id": "gsm8k-4",
+      "prompt": "A pizza is cut into 8 slices. If you eat 3 slices, what fraction of the pizza is left?",
+      "score": 9.6
+    },
+    {
+      "id": "gsm8k-6",
+      "prompt": "If 5 notebooks cost $20, how much does one notebook cost?",
+      "score": 9.6
+    }
+  ],
+  "worst_cases": [
+    {
+      "id": "humaneval-12",
+      "prompt": "Write a function to check if a number is prime.",
+      "score": 0
+    },
+    {
+      "id": "humaneval-18",
+      "prompt": "Write a function to find the second largest number in a list.",
+      "score": 0
+    },
+    {
+      "id": "arc-8",
+      "prompt": "If you have a 3-liter jug and a 5-liter jug, how can you measure exactly 4 liters?",
+      "score": 0
+    },
+    {
+      "id": "arc-12",
+      "prompt": "You have 12 balls, one is slightly heavier. Using a balance scale only 3 times, how do you find the heavy ball?",
+      "score": 0
+    },
+    {
+      "id": "arc-14",
+      "prompt": "A man pushes his car to a hotel and realizes he's bankrupt. Why?",
+      "score": 0
+    }
+  ]
+}

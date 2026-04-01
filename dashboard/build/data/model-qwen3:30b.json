@@ -1,0 +1,75 @@
+{
+  "model_name": "qwen3:30b",
+  "total_runs": 1,
+  "total_cases": 80,
+  "avg_score": 9,
+  "total_wins": 3,
+  "avg_latency": 18.4,
+  "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T14-51-35",
+      "name": "Comprehensive Benchmark - 4 Domains (80 Questions)",
+      "date": "2026-04-01",
+      "score": 9,
+      "accuracy": 9.7,
+      "completeness": 8.9,
+      "conciseness": 7.4,
+      "wins": 3,
+      "latency": 18.4
+    }
+  ],
+  "best_cases": [
+    {
+      "id": "gsm8k-1",
+      "prompt": "If John has 5 apples and buys 3 more, how many apples does he have?",
+      "score": 9.6
+    },
+    {
+      "id": "gsm8k-3",
+      "prompt": "Sarah has 20 cookies and gives away 7. How many cookies does she have left?",
+      "score": 9.6
+    },
+    {
+      "id": "gsm8k-8",
+      "prompt": "A rectangle has a length of 10 cm and width of 5 cm. What is its area?",
+      "score": 9.6
+    },
+    {
+      "id": "gsm8k-9",
+      "prompt": "If 3/4 of a number is 12, what is the number?",
+      "score": 9.6
+    },
+    {
+      "id": "gsm8k-11",
+      "prompt": "If you save $5 per day, how much will you have after 30 days?",
+      "score": 9.6
+    }
+  ],
+  "worst_cases": [
+    {
+      "id": "humaneval-3",
+      "prompt": "Write a function to check if a number is even or odd.",
+      "score": 0
+    },
+    {
+      "id": "humaneval-6",
+      "prompt": "Write a function to check if a string is a palindrome.",
+      "score": 0
+    },
+    {
+      "id": "humaneval-15",
+      "prompt": "Write a function to calculate x to the power of y.",
+      "score": 0
+    },
+    {
+      "id": "humaneval-18",
+      "prompt": "Write a function to find the second largest number in a list.",
+      "score": 0
+    },
+    {
+      "id": "humaneval-19",
+      "prompt": "Write a function to check if two strings are anagrams.",
+      "score": 0
+    }
+  ]
+}
