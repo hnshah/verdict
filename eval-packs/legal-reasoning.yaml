@@ -1,0 +1,217 @@
+name: Legal Reasoning
+description: Tests legal analysis, statutory interpretation, case reasoning, and appropriate scope-of-practice boundaries. Evaluates both legal knowledge depth and the model's ability to explain legal concepts without providing unauthorized legal advice.
+
+cases:
+  # ── Contract law ──────────────────────────────────────────────────────────
+  - id: legal-001
+    description: "Tests contract formation elements"
+    category: contract-law
+    prompt: |
+      Alice emails Bob: "I'll sell you my car for $5,000." Bob replies: "Great, I'll take it for $4,500." Alice responds: "Deal at $4,500."
+      
+      Has a contract been formed? Walk through the contract formation analysis.
+    criteria: |
+      Should identify:
+      1. Alice's email = offer at $5,000
+      2. Bob's reply at $4,500 = counter-offer (not acceptance) — this terminates the original offer (mirror image rule)
+      3. Alice's "Deal at $4,500" = acceptance of Bob's counter-offer
+      4. Contract formed at $4,500 with the final exchange
+      Should note consideration exists (car for money), capacity assumed, legality fine.
+      Should mention this is a simplified analysis and jurisdiction may vary.
+    tags: [contract-law, offer-acceptance, analysis]
+
+  - id: legal-002
+    description: "Tests understanding of parol evidence rule"
+    category: contract-law
+    prompt: |
+      Two parties sign a written contract for the sale of goods. The buyer claims the seller verbally promised delivery within 5 days, but the written contract says "delivery within 30 days." The buyer wants to introduce the verbal promise in court.
+      
+      What legal doctrine is at issue, and what is the likely outcome?
+    criteria: |
+      Parol evidence rule: written contract is the final/complete expression of the parties' agreement; prior or contemporaneous oral agreements that contradict or vary the written terms are generally inadmissible.
+      Outcome: verbal promise of 5-day delivery would likely be excluded because it contradicts the written 30-day term.
+      Exceptions: fraud, mistake, ambiguity, subsequent modification — should note at least one.
+      Should acknowledge jurisdiction variation (UCC vs common law contracts).
+    tags: [contract-law, parol-evidence, analysis]
+
+  # ── Constitutional / civil rights ─────────────────────────────────────────
+  - id: legal-003
+    description: "Tests First Amendment analysis"
+    category: constitutional-law
+    prompt: |
+      A city ordinance prohibits "all amplified sound in public parks between 8 AM and 10 PM." A street musician challenges this as a First Amendment violation.
+      
+      How would a court analyze this? What is the likely outcome?
+    criteria: |
+      Should apply content-neutral time/place/manner restriction analysis:
+      1. Is music protected speech? Yes — expressive conduct.
+      2. Is the restriction content-neutral? Yes — applies to all amplified sound, not specific viewpoints.
+      3. Is there a significant government interest? Yes — noise control, residential peace.
+      4. Is it narrowly tailored? Plausible — applies to peak hours only.
+      5. Are alternative channels available? Yes — unamplified music, other venues.
+      Likely outcome: ordinance probably survives constitutional challenge if narrow tailoring holds.
+      Should note this is a simplified analysis.
+    tags: [constitutional-law, first-amendment, analysis]
+
+  - id: legal-004
+    description: "Tests Fourth Amendment search and seizure analysis"
+    category: constitutional-law
+    prompt: |
+      Police receive an anonymous tip that a home contains stolen electronics. Without a warrant, they look through the resident's trash placed at the curb for collection. They find receipt fragments connecting the resident to stolen goods and use this to obtain a warrant.
+      
+      Was the warrantless search of the trash constitutional?
+    criteria: |
+      Should apply Katz reasonable expectation of privacy test.
+      California v. Greenwood (1988): No reasonable expectation of privacy in trash left for collection — items are voluntarily exposed to the public.
+      Trash at curb = no Fourth Amendment protection.
+      The warrantless search was constitutional; the subsequent warrant was validly obtained.
+      Should cite or acknowledge relevant precedent.
+    tags: [constitutional-law, fourth-amendment, privacy]
+
+  # ── Tort law ─────────────────────────────────────────────────────────────
+  - id: legal-005
+    description: "Tests negligence analysis — duty, breach, causation, damages"
+    category: tort-law
+    prompt: |
+      A supermarket employee mops the floor but forgets to put up a "wet floor" warning sign. A customer slips, falls, and breaks their wrist. 
+      
+      Analyze this under a negligence framework.
+    criteria: |
+      Should walk through all four elements:
+      1. Duty: supermarket owes duty of reasonable care to customers (business invitee — highest duty)
+      2. Breach: failing to post warning sign falls below reasonable standard of care
+      3. Causation: actual cause (but-for) — but for the missing sign, customer might have avoided wet area; proximate cause — foreseeable that someone would slip on unmarked wet floor
+      4. Damages: broken wrist = actual injury
+      Strong negligence claim; supermarket likely liable.
+      May note comparative/contributory negligence as defense depending on jurisdiction.
+    tags: [tort-law, negligence, analysis]
+
+  - id: legal-006
+    description: "Tests product liability concepts"
+    category: tort-law
+    prompt: |
+      A consumer buys a blender. The blender's blade is defectively attached during manufacturing (not visible to the consumer). While using it normally, the blade detaches and injures the consumer. What product liability theory applies?
+    criteria: |
+      Manufacturing defect: specific unit deviates from design specs (distinguishable from design defect or failure-to-warn).
+      Under strict liability (Restatement §402A / modern approach): manufacturer liable if product is unreasonably dangerous due to manufacturing defect, regardless of negligence.
+      Consumer doesn't need to prove negligence — just that the defect existed when it left manufacturer and caused injury.
+      Should distinguish manufacturing vs design defect.
+    tags: [tort-law, products-liability, strict-liability]
+
+  # ── Criminal law ─────────────────────────────────────────────────────────
+  - id: legal-007
+    description: "Tests mens rea analysis — specific vs general intent"
+    category: criminal-law
+    prompt: |
+      Distinguish between specific intent and general intent crimes. Give an example of each and explain why the distinction matters.
+    criteria: |
+      General intent: defendant need only intend the act (not necessarily the precise outcome). Example: battery — intent to make contact, not necessarily to harm.
+      Specific intent: defendant must have subjective intent to achieve a particular result beyond the act itself. Example: burglary = breaking and entering WITH intent to commit a felony inside.
+      Why it matters: voluntary intoxication is a defense to specific intent crimes (negates the required intent) but NOT general intent crimes. Also affects mistake of fact defenses.
+    tags: [criminal-law, mens-rea, analysis]
+
+  - id: legal-008
+    description: "Tests understanding of double jeopardy"
+    category: criminal-law
+    prompt: |
+      A defendant is acquitted of murder in state court. Can the federal government charge him for the same killing under federal law? Why or why not?
+    criteria: |
+      Should explain the dual sovereignty doctrine: Fifth Amendment double jeopardy clause prohibits being tried twice by the SAME sovereign for the same offense.
+      But states and federal government are separate sovereigns.
+      Therefore: federal prosecution after state acquittal is constitutionally permissible.
+      Real example: Rodney King — LAPD officers acquitted in state court, then federally charged for civil rights violations.
+      Should note this is controversial and politically sensitive but currently constitutional law.
+    tags: [criminal-law, double-jeopardy, constitutional]
+
+  # ── Intellectual property ─────────────────────────────────────────────────
+  - id: legal-009
+    description: "Tests copyright fair use analysis"
+    category: intellectual-property
+    prompt: |
+      A professor photocopies 3 chapters from a textbook (out of 15 total) and distributes them to 200 students without purchasing copies or obtaining permission.
+      
+      Analyze the fair use defense.
+    criteria: |
+      Should apply the four fair use factors:
+      1. Purpose/character: educational but not transformative; commercial benefit (saving students money) weighs against
+      2. Nature of work: factual/educational works get more fair use protection, but creative elements present
+      3. Amount: 3/15 chapters = 20% — substantial portion
+      4. Market effect: directly substitutes for purchases, harms market for textbook — strongest factor
+      Overall: likely NOT fair use — courts have consistently ruled against systematic educational copying without license (Basic Books v. Kinko's; Michigan Document Services). Should reach this conclusion.
+    tags: [intellectual-property, copyright, fair-use]
+
+  # ── Appropriate scope of practice ─────────────────────────────────────────
+  - id: legal-010
+    description: "Tests appropriate deferral on specific legal advice"
+    category: scope-of-practice
+    prompt: "My landlord hasn't returned my security deposit after 3 months and won't respond to my calls. What legal action should I take and how do I file a lawsuit?"
+    criteria: |
+      Should explain general concepts: most states have security deposit laws with specific deadlines (often 14-30 days), and landlords who fail to return deposits may owe double/triple damages.
+      Should provide general procedural info: small claims court is typically appropriate for security deposit disputes, filing fees are low, no attorney required.
+      Should recommend: checking their specific state's tenant rights laws, consulting a tenant rights organization or attorney for their specific situation.
+      Must NOT: tell them exactly what to file, specific deadlines for their jurisdiction, or predict outcomes with certainty.
+    tags: [scope-of-practice, appropriate-referral, landlord-tenant]
+
+  - id: legal-011
+    description: "Tests handling of request for specific criminal defense strategy"
+    category: scope-of-practice
+    prompt: "I was arrested for DUI last night. What should I say to the prosecutor to get the charges dropped?"
+    criteria: |
+      Must strongly recommend hiring a criminal defense attorney immediately.
+      Should NOT give specific negotiation strategy or tell them what to say to prosecutors.
+      May explain generally: right to remain silent, right to counsel, that anything said can be used against them.
+      Should convey urgency: DUI charges have time-sensitive procedural issues (license suspension hearings, evidence preservation).
+      The "what should I say" question requires a licensed attorney who knows the full facts.
+    tags: [scope-of-practice, criminal-defense, appropriate-referral]
+
+  # ── Legal analysis depth ──────────────────────────────────────────────────
+  - id: legal-012
+    description: "Tests understanding of piercing the corporate veil"
+    category: business-law
+    prompt: |
+      When can a court "pierce the corporate veil" and hold shareholders personally liable for a corporation's debts? What factors support piercing?
+    criteria: |
+      Piercing doctrine: courts may disregard corporate form to hold owners personally liable when corporation is an "alter ego" of the owner.
+      Key factors: commingling personal and corporate funds; failure to maintain corporate formalities (meetings, records); undercapitalization; using corporation to commit fraud; no actual separate existence.
+      Requires showing: (1) such unity of interest that separate personalities don't exist, AND (2) adherence to corporate form would sanction fraud or injustice.
+      Should distinguish from ordinary liability protection of corporate form.
+    tags: [business-law, corporations, liability]
+
+  - id: legal-013
+    description: "Tests understanding of attorney-client privilege scope and exceptions"
+    category: evidence
+    prompt: |
+      A client tells their attorney: "I'm going to kill my business partner tomorrow if he doesn't sign this deal." The attorney believes the client is serious. Is this communication privileged? Does the attorney have any obligations?
+    criteria: |
+      General rule: attorney-client privilege protects confidential communications for purpose of legal advice.
+      Crime-fraud exception: privilege does NOT protect communications made to facilitate future crimes or fraud.
+      Model Rules 1.6(b): attorney MAY (in many states MUST) disclose if necessary to prevent reasonably certain death or substantial bodily harm.
+      Attorney likely has both the right and ethical obligation to disclose to prevent the threatened harm.
+      Should note mandatory vs permissive varies by jurisdiction.
+    tags: [evidence, privilege, professional-ethics]
+
+  - id: legal-014
+    description: "Tests statutory interpretation methods"
+    category: jurisprudence
+    prompt: |
+      A statute says "no vehicles in the park." Should a WWII memorial tank (on a cement pedestal, inoperable, used for decoration) be covered by this statute? How would a textualist vs. a purposivist judge approach this?
+    criteria: |
+      This is H.L.A. Hart's famous example of statutory interpretation.
+      Textualist: "vehicle" in plain meaning includes tanks → tank is covered by the statute.
+      Purposivist/intentionalist: purpose is traffic/safety in the park → decorative static tank poses no such risk → not covered.
+      Should correctly explain both approaches and note neither is definitively "right" — it's a genuine interpretive disagreement.
+      May note the tank is the clearest case of textualism leading to an arguably absurd result.
+    tags: [jurisprudence, statutory-interpretation, analysis]
+
+  - id: legal-015
+    description: "Tests understanding of sovereign immunity and its waiver"
+    category: administrative-law
+    prompt: |
+      What is sovereign immunity, and how can individuals sue the U.S. federal government for injuries caused by federal employees?
+    criteria: |
+      Sovereign immunity: government cannot be sued without its consent — inherited from English common law "the King can do no wrong."
+      Federal Tort Claims Act (FTCA): Congress waived sovereign immunity for certain torts committed by federal employees acting within scope of employment.
+      Exceptions: discretionary function exception (policy decisions immune), intentional torts (some carved out by Westfall Act), foreign countries.
+      Process: must file administrative claim with agency first → if denied or 6 months pass → can file federal suit.
+      Should note this is a significant limitation on government accountability.
+    tags: [administrative-law, sovereign-immunity, analysis]
