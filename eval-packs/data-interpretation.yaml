@@ -1,0 +1,258 @@
+name: Data Interpretation
+description: Tests ability to read tables, spot anomalies, calculate derived metrics, and generate actionable summaries from structured data. Practical for analytics, dashboards, and business intelligence use cases.
+
+cases:
+  # ── Table reading ─────────────────────────────────────────────────────────
+  - id: data-001
+    description: "Read a simple revenue table and identify the top performer"
+    category: table-reading
+    prompt: |
+      Sales by region this quarter:
+      
+      | Region     | Q3 Revenue | Q4 Revenue |
+      |------------|------------|------------|
+      | North      | $142,000   | $168,000   |
+      | South      | $198,000   | $187,000   |
+      | East       | $211,000   | $243,000   |
+      | West       | $89,000    | $94,000    |
+      
+      Which region had the highest Q4 revenue?
+    scorer: contains
+    expected: "East"
+    tags: [data, tables, reading]
+
+  - id: data-002
+    description: "Calculate percent change from table data"
+    category: calculation
+    prompt: |
+      Monthly active users:
+      
+      | Month | MAU    |
+      |-------|--------|
+      | Jan   | 12,400 |
+      | Feb   | 13,950 |
+      | Mar   | 15,200 |
+      
+      What is the percentage growth from January to March? Round to one decimal place.
+    scorer: contains
+    expected: "22.6"
+    tags: [data, math, percent-change]
+
+  - id: data-003
+    description: "Identify the anomaly in a time-series table"
+    category: anomaly-detection
+    prompt: |
+      Server response times (ms) — last 7 days:
+      
+      | Day | Avg Response Time |
+      |-----|-------------------|
+      | Mon | 142               |
+      | Tue | 138               |
+      | Wed | 145               |
+      | Thu | 891               |
+      | Fri | 147               |
+      | Sat | 139               |
+      | Sun | 141               |
+      
+      Identify the anomaly and what day it occurred.
+    scorer: contains
+    expected: "Thursday"
+    tags: [data, anomaly-detection, time-series]
+
+  - id: data-004
+    description: "Compute a weighted average from a dataset"
+    category: calculation
+    prompt: |
+      Customer satisfaction scores by segment (score out of 10, weighted by customer count):
+      
+      | Segment    | Score | Customers |
+      |------------|-------|-----------|
+      | Enterprise | 8.4   | 120       |
+      | Mid-market | 7.1   | 340       |
+      | SMB        | 6.8   | 890       |
+      
+      What is the overall weighted average satisfaction score? Round to 2 decimal places.
+    scorer: contains
+    expected: "7.18"
+    tags: [data, weighted-average, calculation]
+
+  - id: data-005
+    description: "Identify trend direction from sequential data"
+    category: trend-analysis
+    prompt: |
+      Weekly churn rate over 6 weeks:
+      Week 1: 3.2%
+      Week 2: 3.0%
+      Week 3: 2.8%
+      Week 4: 2.9%
+      Week 5: 2.6%
+      Week 6: 2.4%
+      
+      Is churn trending up, down, or flat? What is the total change from week 1 to week 6?
+    scorer: llm
+    criteria: "Correctly identifies a downward trend. States total change as -0.8 percentage points (or equivalent phrasing like 'decreased by 0.8%'). Does not confuse direction."
+    tags: [data, trends, churn]
+
+  # ── Anomaly detection ─────────────────────────────────────────────────────
+  - id: data-006
+    description: "Spot a sign error in financial data"
+    category: anomaly-detection
+    prompt: |
+      Q1 P&L summary ($000s):
+      
+      Revenue:          $4,200
+      COGS:             ($1,800)
+      Gross Profit:     $2,400
+      Operating Expenses: ($3,100)
+      Operating Income: $1,300
+      
+      Is there an error in this P&L? If so, what is it?
+    scorer: llm
+    criteria: "Identifies the arithmetic error: $2,400 - $3,100 = -$700 (operating loss), not +$1,300. The operating income figure is wrong — it should be -$700, not $1,300."
+    tags: [data, finance, error-detection]
+
+  - id: data-007
+    description: "Detect a data integrity issue — duplicate IDs"
+    category: anomaly-detection
+    prompt: |
+      Customer records exported from CRM:
+      
+      ID: 1042 | Name: Acme Corp    | ARR: $48,000
+      ID: 1057 | Name: Beta LLC     | ARR: $12,000
+      ID: 1042 | Name: Gamma Inc    | ARR: $31,000
+      ID: 1089 | Name: Delta Co     | ARR: $67,000
+      ID: 1057 | Name: Beta LLC     | ARR: $12,000
+      
+      What data quality issues do you see?
+    scorer: llm
+    criteria: "Identifies: (1) ID 1042 is shared by two different companies (Acme Corp and Gamma Inc) — data integrity issue / likely ID collision. (2) ID 1057 appears twice with identical data — likely a duplicate record. Both issues should be mentioned."
+    tags: [data, integrity, duplicates]
+
+  # ── Summaries + insights ──────────────────────────────────────────────────
+  - id: data-008
+    description: "Generate an executive summary from a metrics table"
+    category: summarization
+    prompt: |
+      Monthly product metrics — Q4:
+      
+      | Metric           | Oct   | Nov   | Dec   |
+      |------------------|-------|-------|-------|
+      | New signups      | 1,240 | 1,380 | 1,890 |
+      | Churned users    | 210   | 198   | 187   |
+      | Revenue ($)      | 84,000| 92,000|118,000|
+      | Support tickets  | 340   | 312   | 289   |
+      
+      Write a 2-sentence executive summary of Q4 performance.
+    scorer: llm
+    criteria: "Summary captures the key positive trends: signups accelerating (especially Dec), revenue growth, churn declining, support tickets declining. Should be 2 sentences. Should not cherry-pick only one metric. Tone should be factual, not overly promotional."
+    tags: [data, summarization, executive-summary]
+
+  - id: data-009
+    description: "Identify the most actionable insight from a dataset"
+    category: insight-generation
+    prompt: |
+      Feature usage by plan tier (% of users who used the feature in last 30 days):
+      
+      | Feature          | Free  | Pro   | Enterprise |
+      |------------------|-------|-------|------------|
+      | Export to PDF    | 12%   | 67%   | 89%        |
+      | API access       | 3%    | 41%   | 94%        |
+      | Team sharing     | 8%    | 72%   | 96%        |
+      | Advanced filters | 5%    | 58%   | 87%        |
+      | Bulk import      | 2%    | 34%   | 71%        |
+      
+      What is the single most actionable insight for a product team trying to convert Free users to Pro?
+    scorer: llm
+    criteria: "Should identify that Free users barely use the power features (API, advanced filters, bulk import have <5% usage). Key insight: Free users likely don't know about or haven't experienced the features that drive Pro/Enterprise stickiness. Actionable recommendation should relate to improving feature discovery or onboarding for Free tier. Should NOT just list all the gaps — should identify the most actionable one and explain why."
+    tags: [data, product, insight, conversion]
+
+  # ── Derived metrics ───────────────────────────────────────────────────────
+  - id: data-010
+    description: "Calculate LTV from given data"
+    category: calculation
+    prompt: |
+      Given these metrics:
+      - Average monthly revenue per customer: $85
+      - Average customer lifespan: 28 months
+      - Average gross margin: 72%
+      
+      Calculate the customer Lifetime Value (LTV). Show your work.
+    scorer: llm
+    criteria: "Correct LTV = $85 × 28 × 0.72 = $1,713.60. Must show the formula: LTV = ARPU × Average Lifespan × Gross Margin. Final answer should be $1,713.60 or $1,714 (rounding). Must not omit the gross margin factor."
+    tags: [data, ltv, saas-metrics]
+
+  - id: data-011
+    description: "Calculate CAC payback period"
+    category: calculation
+    prompt: |
+      - Customer Acquisition Cost (CAC): $420
+      - Monthly recurring revenue per customer: $65
+      - Gross margin: 78%
+      
+      How many months until CAC is recovered (CAC payback period)?
+    scorer: llm
+    criteria: "CAC payback = CAC / (MRR × Gross Margin) = $420 / ($65 × 0.78) = $420 / $50.70 ≈ 8.3 months. Answer should be approximately 8.3 months (accept 8-9 month range). Must use gross margin in the calculation."
+    tags: [data, cac, payback, saas-metrics]
+
+  - id: data-012
+    description: "Derive net revenue retention from cohort data"
+    category: calculation
+    prompt: |
+      Cohort from January (100 customers, starting ARR $240,000):
+      - By December, 88 customers remain
+      - 6 customers expanded (avg $3,200 additional ARR each)
+      - 12 customers churned (avg $2,400 ARR each)
+      
+      What is the Net Revenue Retention (NRR) for this cohort?
+    scorer: llm
+    criteria: "NRR = (Starting ARR - Churned ARR + Expansion ARR) / Starting ARR. Churned ARR = 12 × $2,400 = $28,800. Expansion ARR = 6 × $3,200 = $19,200. Ending ARR = $240,000 - $28,800 + $19,200 = $230,400. NRR = $230,400 / $240,000 = 96%. Accept 96% as correct."
+    tags: [data, nrr, cohort, saas-metrics]
+
+  # ── Comparison + ranking ──────────────────────────────────────────────────
+  - id: data-013
+    description: "Rank options by a composite score"
+    category: ranking
+    prompt: |
+      Vendor evaluation scores (1-10 scale):
+      
+      | Vendor  | Price | Features | Support | Integration |
+      |---------|-------|----------|---------|-------------|
+      | Acme    | 8     | 6        | 9       | 7           |
+      | Beta    | 5     | 9        | 7       | 8           |
+      | Gamma   | 7     | 8        | 6       | 9           |
+      
+      Weights: Price=30%, Features=25%, Support=20%, Integration=25%
+      
+      Rank the vendors by weighted score. Show calculations.
+    scorer: llm
+    criteria: "Acme: (8×0.30)+(6×0.25)+(9×0.20)+(7×0.25) = 2.4+1.5+1.8+1.75 = 7.45. Beta: (5×0.30)+(9×0.25)+(7×0.20)+(8×0.25) = 1.5+2.25+1.4+2.0 = 7.15. Gamma: (7×0.30)+(8×0.25)+(6×0.20)+(9×0.25) = 2.1+2.0+1.2+2.25 = 7.55. Ranking: Gamma (7.55) > Acme (7.45) > Beta (7.15). Must show calculations."
+    tags: [data, ranking, weighted-score]
+
+  - id: data-014
+    description: "Identify the cohort with best retention from partial data"
+    category: cohort-analysis
+    prompt: |
+      6-month retention by signup cohort:
+      
+      | Cohort | Month 1 | Month 3 | Month 6 |
+      |--------|---------|---------|---------|
+      | Jan    | 89%     | 74%     | 61%     |
+      | Feb    | 91%     | 71%     | 58%     |
+      | Mar    | 87%     | 78%     | 67%     |
+      | Apr    | 92%     | 76%     | 63%     |
+      
+      Which cohort has the best 6-month retention, and what might explain it?
+    scorer: llm
+    criteria: "March cohort has best 6-month retention at 67%. Correct identification required. Explanation should note that March also has notably strong month-3 retention (78%), suggesting strong early activation. Speculative explanations are acceptable (product change, onboarding improvement, seasonality) as long as the data point is correctly identified first."
+    tags: [data, cohorts, retention]
+
+  - id: data-015
+    description: "Spot the misleading chart description"
+    category: critical-analysis
+    prompt: |
+      A report states: "Our NPS score improved dramatically this quarter — from 42 to 47 points, a 12% increase."
+      
+      Is this an accurate representation of the data?
+    scorer: llm
+    criteria: "The 12% figure is mathematically correct (5/42 ≈ 11.9%) but potentially misleading in context. NPS is an absolute scale (-100 to +100) — a 5-point improvement is meaningful but framing it as a '12% increase' implies proportional improvement that doesn't reflect how NPS actually works. The model should flag this as technically accurate but potentially misleading framing, and explain why percentage increases on NPS scores can be misleading."
+    tags: [data, critical-analysis, nps, statistics]
