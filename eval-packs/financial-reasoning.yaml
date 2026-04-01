@@ -1,0 +1,113 @@
+name: Financial Reasoning
+description: P&L interpretation, unit economics, SaaS metrics, valuation concepts, and business math. Tests practical financial reasoning useful for benchmarking models in business and analytical contexts.
+
+cases:
+  # ── Unit economics ────────────────────────────────────────────────────────
+  - id: fin-001
+    description: "Calculate LTV:CAC ratio and interpret it"
+    category: unit-economics
+    prompt: "A SaaS company has: average contract value $1,200/year, gross margin 75%, average customer lifespan 3 years, and CAC of $800. Calculate LTV, LTV:CAC ratio, and assess whether this is healthy."
+    criteria: "LTV = ACV × gross_margin × lifespan = $1,200 × 0.75 × 3 = $2,700. LTV:CAC = $2,700 / $800 = 3.375. This is healthy — the benchmark is >3x. Should note that <3x suggests marketing inefficiency, >5x may mean under-investing in growth. Correct calculation + correct interpretation."
+    tags: [unit-economics, saas, ltv-cac]
+
+  - id: fin-002
+    description: "Payback period calculation"
+    category: unit-economics
+    prompt: "Monthly recurring revenue per customer: $150. Gross margin: 70%. CAC: $630. What is the payback period in months? Is this good or bad for a B2B SaaS?"
+    criteria: "Monthly gross profit per customer = $150 × 0.70 = $105. Payback period = $630 / $105 = 6 months. For B2B SaaS: <12 months is good, <6 months is excellent. 6 months is at the strong end — should call it good/excellent. Correct formula + benchmark context."
+    tags: [unit-economics, saas, payback-period]
+
+  - id: fin-003
+    description: "Gross margin vs net margin distinction"
+    category: unit-economics
+    prompt: "A company has revenue of $10M, COGS of $3M, operating expenses of $5M, and interest expense of $0.5M. Calculate gross margin, operating margin, and net margin (assume 25% tax on pre-tax income). What does each tell you?"
+    criteria: "Gross profit = $10M - $3M = $7M. Gross margin = 70%. Operating income = $7M - $5M = $2M. Operating margin = 20%. Pre-tax income = $2M - $0.5M = $1.5M. Tax = $0.375M. Net income = $1.125M. Net margin = 11.25%. Gross margin = core product economics; operating margin = operational efficiency; net margin = what shareholders keep. All three correct."
+    tags: [unit-economics, margins, financial-statements]
+
+  # ── SaaS metrics ──────────────────────────────────────────────────────────
+  - id: fin-004
+    description: "MRR movement calculation"
+    category: saas-metrics
+    prompt: "Starting MRR: $100K. New MRR from new customers: $12K. Expansion MRR (upgrades): $5K. Contraction MRR (downgrades): $3K. Churned MRR: $8K. What is ending MRR and net MRR growth rate?"
+    criteria: "Ending MRR = $100K + $12K + $5K - $3K - $8K = $106K. Net MRR growth = $6K / $100K = 6%. Should break out new + expansion - contraction - churn as the standard MRR movement formula."
+    tags: [saas-metrics, mrr, growth]
+
+  - id: fin-005
+    description: "Net Revenue Retention calculation and meaning"
+    category: saas-metrics
+    prompt: "You start the year with 100 customers all paying $1,000/month. By year end: 10 churned (lost $10K MRR), 20 upgraded to $1,500/month (+$10K MRR from expansion), 5 downgraded to $800/month (-$1K MRR). What is Net Revenue Retention? What does a result >100% mean?"
+    criteria: "Starting MRR from cohort = $100K. Churned: -$10K. Expansion: +$10K. Contraction: -$1K. Ending MRR from original cohort = $99K. NRR = $99K / $100K = 99%. NRR >100% means expansion revenue from existing customers more than offsets churn — the cohort grows without new customers. This result (99%) is just below breakeven. Correct calc + clear explanation of what >100% means."
+    tags: [saas-metrics, nrr, retention]
+
+  - id: fin-006
+    description: "Rule of 40 for SaaS"
+    category: saas-metrics
+    prompt: "A SaaS company grows revenue 35% YoY and has a -5% free cash flow margin. Another grows 15% with a 30% FCF margin. Which passes the Rule of 40? What is the Rule of 40?"
+    criteria: "Rule of 40: growth rate % + profit margin % ≥ 40. Company A: 35 + (-5) = 30 — fails. Company B: 15 + 30 = 45 — passes. Rule of 40 is a heuristic that balances growth and profitability for SaaS companies. Both calculations correct + definition accurate."
+    tags: [saas-metrics, rule-of-40, valuation]
+
+  # ── Valuation concepts ────────────────────────────────────────────────────
+  - id: fin-007
+    description: "Revenue multiple vs EBITDA multiple context"
+    category: valuation
+    prompt: "Company A trades at 10x revenue with 5% EBITDA margin. Company B trades at 4x revenue with 25% EBITDA margin. Which has a higher EV/EBITDA multiple? Which is more 'expensive' on a profitability basis?"
+    criteria: "EV/EBITDA for A: revenue multiple / EBITDA margin = 10 / 0.05 = 200x EBITDA. EV/EBITDA for B: 4 / 0.25 = 16x EBITDA. Company A is far more expensive on an EBITDA basis (200x vs 16x) — the market is pricing in very high growth expectations. Should correctly derive both EV/EBITDA multiples and identify A as more expensive on profitability basis."
+    tags: [valuation, multiples, ebitda]
+
+  - id: fin-008
+    description: "Dilution from funding round"
+    category: valuation
+    prompt: "A startup has 10M shares outstanding, valued at $50M pre-money. They raise $10M in a new round. What is the post-money valuation? How many new shares are issued? What percentage do new investors own?"
+    criteria: "Post-money valuation = $50M + $10M = $60M. Price per share = $50M / 10M shares = $5. New shares = $10M / $5 = 2M shares. Total shares post = 12M. Investor ownership = 2M / 12M = 16.67%. All four answers correct."
+    tags: [valuation, dilution, fundraising]
+
+  - id: fin-009
+    description: "DCF concept: why future cash flows are discounted"
+    category: valuation
+    prompt: "A company projects free cash flows of $1M per year for 5 years. Using a 10% discount rate, what is the present value of year 5's cash flow? Why is $1M in year 5 worth less than $1M today?"
+    criteria: "PV of year 5 cash flow = $1M / (1.10)^5 = $1M / 1.6105 = $620,921. Reasons: (1) opportunity cost — $620K invested today at 10% becomes $1M in 5 years, (2) time preference — money now is more useful than later, (3) inflation risk, (4) uncertainty increases with time. Should provide the correct PV calculation and at least two coherent reasons."
+    tags: [valuation, dcf, time-value-of-money]
+
+  # ── P&L and financial statement interpretation ─────────────────────────────
+  - id: fin-010
+    description: "Identify concerning trend in P&L"
+    category: financial-statements
+    prompt: "Year 1: Revenue $5M, COGS $2M, OpEx $2M. Year 2: Revenue $8M, COGS $4M, OpEx $4M. Year 3: Revenue $10M, COGS $6M, OpEx $5M. What trend is most concerning and why?"
+    criteria: "Gross margin is deteriorating: Y1=60%, Y2=50%, Y3=40%. Operating margin: Y1=20%, Y2=0%, Y3=-10%. Most concerning: gross margins compressing rapidly despite revenue growth — suggests either pricing pressure, rising COGS (infrastructure/fulfillment costs scaling faster than revenue), or mix shift to lower-margin products. Operating leverage is negative (opex growing as % of revenue). Should identify gross margin compression as the primary concern with a coherent explanation."
+    tags: [financial-statements, trend-analysis, margins]
+
+  - id: fin-011
+    description: "Cash vs accrual: revenue recognition"
+    category: financial-statements
+    prompt: "A SaaS company sells a $12,000 annual contract in January, paid upfront. Under accrual accounting, how much revenue is recognized in Q1 (Jan-Mar)? What happens to the other $9,000? How would this differ under cash accounting?"
+    criteria: "Accrual: $3,000 recognized in Q1 (3/12 months × $12K). Remaining $9,000 sits as deferred revenue (a liability on the balance sheet). Under cash accounting: all $12,000 recognized in January when payment received. Should correctly explain deferred revenue as a liability, quarterly recognition of $3K, and the cash vs accrual distinction."
+    tags: [financial-statements, revenue-recognition, accrual]
+
+  # ── Business math ──────────────────────────────────────────────────────────
+  - id: fin-012
+    description: "Price elasticity interpretation"
+    category: business-math
+    prompt: "A product sells 1,000 units at $100. Price increases to $120 and sales drop to 850 units. Calculate price elasticity of demand. Is demand elastic or inelastic? Should the company raise the price?"
+    criteria: "% change in quantity = (850-1000)/1000 = -15%. % change in price = (120-100)/100 = +20%. Price elasticity = -15% / 20% = -0.75. |elasticity| < 1 = inelastic demand. Revenue before: $100K. Revenue after: $102K. Since demand is inelastic, raising price increases revenue — yes, the company should raise the price (from a revenue standpoint). All calculations correct + correct recommendation."
+    tags: [business-math, pricing, elasticity]
+
+  - id: fin-013
+    description: "Contribution margin and fixed cost leverage"
+    category: business-math
+    prompt: "Fixed costs: $200K/month. Variable cost per unit: $30. Selling price: $80. Current volume: 5,000 units/month. What is contribution margin per unit, contribution margin ratio, and operating profit? If volume increases 20%, how does operating profit change?"
+    criteria: "CM/unit = $80 - $30 = $50. CM ratio = $50/$80 = 62.5%. Operating profit = (5,000 × $50) - $200K = $250K - $200K = $50K. At 6,000 units: (6,000 × $50) - $200K = $300K - $200K = $100K. Operating profit doubles (+100%) on a 20% volume increase — this is operating leverage. Should identify this as leverage and note that fixed costs amplify profit swings."
+    tags: [business-math, contribution-margin, operating-leverage]
+
+  - id: fin-014
+    description: "Burn rate and runway"
+    category: business-math
+    prompt: "A startup has $2.4M in the bank. Monthly revenues: $80K. Monthly expenses: $200K. What is net burn rate? How many months of runway? If they cut expenses to $160K next month (revenues unchanged), how much does runway extend?"
+    criteria: "Net burn = $200K - $80K = $120K/month. Runway = $2.4M / $120K = 20 months. With $160K expenses: net burn = $80K/month. Runway = $2.4M / $80K = 30 months. +10 months of runway. All correct."
+    tags: [business-math, burn-rate, runway]
+
+  - id: fin-015
+    description: "Cohort revenue projection with churn"
+    category: business-math
+    prompt: "You acquire 100 customers in Month 1, each paying $50/month. Monthly churn rate is 5%. What is total revenue from this cohort over 12 months? (Ignore new customer acquisition.)"
+    criteria: "Customers each month: M1=100, M2=95, M3=90.25, ... Mn = 100 × (0.95)^(n-1). Revenue each month = customers × $50. Total = $50 × Σ[100 × 0.95^(n-1)] for n=1 to 12 = $50 × 100 × (1 - 0.95^12) / (1 - 0.95) = $50 × 100 × (1 - 0.5404) / 0.05 = $50 × 100 × 9.192 = $45,960. Acceptable range: $44K–$48K with correct geometric series approach. Should show the decay pattern."
+    tags: [business-math, cohort-analysis, churn]
