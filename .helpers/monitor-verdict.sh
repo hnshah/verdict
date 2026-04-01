@@ -1,11 +1,12 @@
 #!/bin/bash
-# monitor-verdict.sh - Monitor verdict eval runs with health checks
-# Usage: ./monitor-verdict.sh <config-file> [poll-interval-sec]
+# monitor-verdict.sh - Monitor verdict eval runs with health checks + Telegram updates
+# Usage: ./monitor-verdict.sh <config-file> [poll-interval-sec] [telegram-chat-id]
 
 set -euo pipefail
 
 CONFIG_FILE="${1:?Config file required}"
 POLL_INTERVAL="${2:-60}"  # Default 60s poll interval
+TELEGRAM_CHAT_ID="${3:-24087015}"  # Hiten's Telegram chat ID
 RESULTS_DIR="$(dirname "$0")/../results"
 
 # Colors
@@ -15,21 +16,34 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Logging
+# Telegram notification helper
+send_telegram() {
+    local MESSAGE="$1"
+    # Use openclaw message tool to send to Telegram
+    openclaw message send --channel telegram --target "$TELEGRAM_CHAT_ID" --message "$MESSAGE" >/dev/null 2>&1 || true
+}
+
+# Logging (with optional Telegram sync)
 log_info() {
     echo -e "${BLUE}[$(date '+%H:%M:%S')]${NC} $*"
 }
 
 log_success() {
-    echo -e "${GREEN}[$(date '+%H:%M:%S')]${NC} ✅ $*"
+    local MSG="$*"
+    echo -e "${GREEN}[$(date '+%H:%M:%S')]${NC} ✅ $MSG"
+    send_telegram "✅ $MSG"
 }
 
 log_warn() {
-    echo -e "${YELLOW}[$(date '+%H:%M:%S')]${NC} ⚠️  $*"
+    local MSG="$*"
+    echo -e "${YELLOW}[$(date '+%H:%M:%S')]${NC} ⚠️  $MSG"
+    send_telegram "⚠️ $MSG"
 }
 
 log_error() {
-    echo -e "${RED}[$(date '+%H:%M:%S')]${NC} ❌ $*"
+    local MSG="$*"
+    echo -e "${RED}[$(date '+%H:%M:%S')]${NC} ❌ $MSG"
+    send_telegram "❌ $MSG"
 }
 
 # Get baseline result count
@@ -45,6 +59,10 @@ npm run dev -- run --config "$CONFIG_FILE" > /tmp/verdict-monitor-$$.log 2>&1 &
 VERDICT_PID=$!
 
 log_success "Verdict started (PID: $VERDICT_PID)"
+
+# Send startup notification
+RUN_NAME=$(basename "$CONFIG_FILE" .yaml)
+send_telegram "🚀 Started: $RUN_NAME (monitoring every ${POLL_INTERVAL}s)"
 
 # Track state
 START_TIME=$(date +%s)
@@ -70,8 +88,18 @@ while kill -0 $VERDICT_PID 2>/dev/null; do
         if command -v jq &> /dev/null; then
             MODELS=$(jq -r '.summary | keys | join(", ")' "$NEW_RESULT" 2>/dev/null || echo "unknown")
             CASES=$(jq '.cases | length' "$NEW_RESULT" 2>/dev/null || echo "unknown")
+            WINNER=$(jq -r '.summary | to_entries | max_by(.value.avg_total) | "\(.key): \(.value.avg_total)/10"' "$NEW_RESULT" 2>/dev/null || echo "unknown")
             log_info "Models: $MODELS"
             log_info "Cases: $CASES"
+            log_info "Winner: $WINNER"
+            
+            # Send detailed completion to Telegram
+            RUNTIME_MIN=$((ELAPSED / 60))
+            send_telegram "✅ COMPLETE: $RUN_NAME
+🏆 Winner: $WINNER
+📊 Cases: $CASES
+⏱️ Runtime: ${RUNTIME_MIN}m
+📁 Result: $(basename "$NEW_RESULT")"
         fi
         
         # Wait for process to finish cleanup
@@ -103,6 +131,22 @@ while kill -0 $VERDICT_PID 2>/dev/null; do
     # Health check report (every poll)
     MIN_ELAPSED=$((ELAPSED / 60))
     SEC_ELAPSED=$((ELAPSED % 60))
+    
+    # Send Telegram update every 15 minutes
+    LAST_TELEGRAM_UPDATE=${LAST_TELEGRAM_UPDATE:-$START_TIME}
+    if [ $((CURRENT_TIME - LAST_TELEGRAM_UPDATE)) -ge 900 ]; then
+        # 900s = 15 minutes
+        if $PRELOAD_COMPLETE; then
+            if $EVAL_STARTED; then
+                send_telegram "⏰ Run 2: Running evals (${MIN_ELAPSED}m elapsed)"
+            else
+                send_telegram "⏰ Run 2: Pre-load complete, starting evals (${MIN_ELAPSED}m elapsed)"
+            fi
+        else
+            send_telegram "⏰ Run 2: Pre-loading models (${MIN_ELAPSED}m elapsed)"
+        fi
+        LAST_TELEGRAM_UPDATE=$CURRENT_TIME
+    fi
     
     if $PRELOAD_COMPLETE; then
         if $EVAL_STARTED; then
