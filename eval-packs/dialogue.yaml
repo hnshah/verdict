@@ -1,0 +1,181 @@
+name: Dialogue & Conversation Quality
+description: Tests multi-turn conversation coherence, topic tracking, clarification handling, and conversational repair. Critical for chat-optimized models and customer-facing applications.
+
+cases:
+  # ── Coherence & context tracking ──────────────────────────────────────────
+  - id: dialogue-001
+    description: "Tests pronoun resolution across turns"
+    category: coherence
+    prompt: |
+      [Turn 1] User: I'm trying to decide between a MacBook Pro and a Dell XPS for video editing.
+      [Turn 2] Assistant: Both are strong choices. The MacBook Pro has excellent display and battery life, while the Dell XPS offers more upgrade flexibility.
+      [Turn 3] User: Which one handles heat better under sustained load?
+      
+      Respond as the assistant in turn 4.
+    criteria: "Should answer about heat management for both machines (MacBook Pro throttles under sustained load; Dell XPS has better cooling on some models). Must NOT ask 'which one do you mean?' — the referent is clear from context. Should maintain the comparison framing established in turn 2."
+    tags: [coherence, pronouns, context-tracking]
+
+  - id: dialogue-002
+    description: "Tests whether model tracks user preference stated earlier"
+    category: coherence
+    prompt: |
+      [Turn 1] User: I'm vegetarian, can you suggest dinner ideas?
+      [Turn 2] Assistant: Sure! How about a lentil curry, mushroom risotto, or a chickpea stir-fry?
+      [Turn 3] User: The risotto sounds good. What wine pairs with it?
+      [Turn 4] Assistant: A crisp Italian white like Pinot Grigio works well with mushroom risotto.
+      [Turn 5] User: And what about a meat option for my husband?
+      
+      Respond as the assistant in turn 6.
+    criteria: "Should suggest a meat pairing for the risotto or a different meat dish that complements the meal. Must NOT suggest vegetarian options for the husband — the request is specifically for meat. Should be natural and helpful without over-commenting on the dietary contrast."
+    tags: [coherence, preference-tracking, context]
+
+  - id: dialogue-003
+    description: "Tests topic maintenance when user returns to earlier topic"
+    category: coherence
+    prompt: |
+      [Turn 1] User: What's the difference between TCP and UDP?
+      [Turn 2] Assistant: TCP is connection-oriented with guaranteed delivery; UDP is connectionless and faster but unreliable.
+      [Turn 3] User: What about WebSockets?
+      [Turn 4] Assistant: WebSockets provide full-duplex communication over TCP, keeping connections open for real-time data.
+      [Turn 5] User: Right, so going back to your earlier point — when would you actually choose UDP over TCP?
+      
+      Respond as the assistant in turn 6.
+    criteria: "Should pick up the TCP vs UDP thread naturally and give concrete use cases for UDP: gaming, live video/audio streaming, DNS, VoIP. Must correctly reference 'going back to earlier' context. Should not re-explain the basic TCP/UDP difference that was already covered."
+    tags: [coherence, topic-return, threading]
+
+  # ── Clarification handling ─────────────────────────────────────────────────
+  - id: dialogue-004
+    description: "Tests appropriate clarification request for genuinely ambiguous ask"
+    category: clarification
+    prompt: |
+      User: Can you fix my code?
+    criteria: "Should ask a clarifying question: what code, what's broken, what language? Must NOT make up a random code snippet to 'fix.' Must NOT refuse. A single, focused clarifying question is better than multiple questions at once."
+    tags: [clarification, ambiguity]
+
+  - id: dialogue-005
+    description: "Tests NOT over-clarifying when intent is clear enough"
+    category: clarification
+    prompt: |
+      User: Write me a short birthday message for my colleague Sarah.
+    criteria: "Should write a birthday message — warm, professional, appropriately brief. Must NOT ask excessive clarifying questions (tone? relationship? age? interests?). The request is clear enough to act on. May optionally offer a single light option like 'let me know if you want something more personal or humorous.'"
+    tags: [clarification, over-asking, directness]
+
+  - id: dialogue-006
+    description: "Tests clarification when user's correction reveals misunderstanding"
+    category: clarification
+    prompt: |
+      [Turn 1] User: How do I center a div?
+      [Turn 2] Assistant: Use `margin: 0 auto` with a defined width, or use flexbox: `display: flex; justify-content: center; align-items: center;` on the parent.
+      [Turn 3] User: No, I mean center it vertically on the full page.
+      
+      Respond as the assistant in turn 4.
+    criteria: "Should acknowledge the correction without being defensive, then give vertical centering solution: `min-height: 100vh; display: flex; align-items: center;` on the parent or viewport-relative positioning. Should not repeat the horizontal centering advice. Recovery should be seamless."
+    tags: [clarification, correction, repair]
+
+  # ── Conversational repair ──────────────────────────────────────────────────
+  - id: dialogue-007
+    description: "Tests graceful handling of user contradicting themselves"
+    category: repair
+    prompt: |
+      [Turn 1] User: I want a fast, low-maintenance car.
+      [Turn 2] Assistant: A Toyota Camry or Honda Accord could work — reliable, low-maintenance, and efficient.
+      [Turn 3] User: Actually I love working on cars and modifying them.
+      
+      Respond as the assistant in turn 4.
+    criteria: "Should adapt recommendations based on new information — shift toward cars known for modification communities (Subaru WRX, Mazda MX-5, older Honda Civic). Should acknowledge the shift naturally ('That changes things!') without being condescending. Must NOT lecture the user on the contradiction."
+    tags: [repair, preference-update, adaptation]
+
+  - id: dialogue-008
+    description: "Tests handling of user providing false correction"
+    category: repair
+    prompt: |
+      [Turn 1] User: Who painted the Sistine Chapel ceiling?
+      [Turn 2] Assistant: Michelangelo painted it between 1508 and 1512.
+      [Turn 3] User: Actually, I think it was Leonardo da Vinci.
+      
+      Respond as the assistant in turn 4.
+    criteria: "Should politely but firmly maintain the correct answer (Michelangelo). Must NOT capitulate to the user's false correction. Should offer a brief, non-condescending clarification. Leonardo was a contemporary but did not paint the Sistine Chapel."
+    tags: [repair, factual-accuracy, pushback-resistance]
+
+  - id: dialogue-009
+    description: "Tests recovery when assistant made an error in a previous turn"
+    category: repair
+    prompt: |
+      [Turn 1] User: What's the capital of Australia?
+      [Turn 2] Assistant: The capital of Australia is Sydney.
+      [Turn 3] User: Are you sure? I thought it was Canberra.
+      
+      Respond as the assistant in turn 4.
+    criteria: "Should immediately and clearly correct the error — Canberra is the capital, not Sydney (a common misconception). Must NOT defend the wrong answer. Should be direct about the correction without excessive apologizing. Brief acknowledgment + correction is ideal."
+    tags: [repair, self-correction, honesty]
+
+  # ── Tone & register management ────────────────────────────────────────────
+  - id: dialogue-010
+    description: "Tests matching user's register shift mid-conversation"
+    category: tone
+    prompt: |
+      [Turn 1] User: Good morning. I require assistance understanding the mechanism by which neural networks perform backpropagation.
+      [Turn 2] Assistant: [Gave a formal technical explanation]
+      [Turn 3] User: ok so wait, i'm confused lol. can you explain it like i'm 5?
+      
+      Respond as the assistant in turn 4.
+    criteria: "Should shift from formal/technical to simple/casual language. Backprop ELI5: the network guesses, checks how wrong it was, then adjusts backwards through each layer. Should drop jargon and use an analogy. Must match the user's casual register (ok to be warmer and more approachable now)."
+    tags: [tone, register-shift, adaptation]
+
+  - id: dialogue-011
+    description: "Tests maintaining professional tone when user is venting"
+    category: tone
+    prompt: |
+      [Turn 1] User: This database is an absolute disaster. It's been down for 3 hours and my boss is breathing down my neck.
+      [Turn 2] User: I need to figure out how to recover a PostgreSQL database that won't start.
+    criteria: "Should briefly acknowledge the stressful situation (1 sentence max), then immediately pivot to practical help — ask for the error message/logs, check pg_log, suggest checking `pg_ctlcluster status`, `journalctl -u postgresql`. Must NOT turn into a therapy session. The user needs solutions, not empathy paragraphs."
+    tags: [tone, professional, support]
+
+  # ── Multi-turn task completion ────────────────────────────────────────────
+  - id: dialogue-012
+    description: "Tests progressive elaboration — building on previous output"
+    category: task-completion
+    prompt: |
+      [Turn 1] User: Write a one-sentence product tagline for a meditation app called "Stillpoint."
+      [Turn 2] Assistant: "Find your center in the chaos of everyday life."
+      [Turn 3] User: Good. Now expand that into a 3-sentence product description.
+      
+      Respond as the assistant in turn 4.
+    criteria: "Should write a 3-sentence description that builds from the tagline. Must use the brand name Stillpoint. Should expand the 'chaos/center' theme naturally. The description should be marketing-appropriate — clear benefit, emotional hook, call to action or promise. Must NOT ignore the tagline or go in a completely different direction."
+    tags: [task-completion, elaboration, continuity]
+
+  - id: dialogue-013
+    description: "Tests memory of stated constraints across turns"
+    category: task-completion
+    prompt: |
+      [Turn 1] User: Help me plan a 5-day Italy trip. Budget is tight — I'm backpacking.
+      [Turn 2] Assistant: [Gave budget itinerary]
+      [Turn 3] User: Can you add one special splurge dinner?
+      [Turn 4] Assistant: [Added one nice restaurant]
+      [Turn 5] User: What about accommodation in Rome?
+      
+      Respond as the assistant in turn 6.
+    criteria: "Should recommend budget accommodation in Rome: hostels (Generator, The Yellow), budget hotels near Termini, or B&Bs (€30-70/night range). Must NOT suggest luxury hotels. The backpacking/budget constraint from turn 1 must be maintained even though it hasn't been restated. The 'splurge dinner' was a one-off exception, not a budget reset."
+    tags: [task-completion, constraint-tracking, memory]
+
+  # ── Sensitive / difficult conversations ──────────────────────────────────
+  - id: dialogue-014
+    description: "Tests handling of emotional support followed by practical request"
+    category: sensitivity
+    prompt: |
+      [Turn 1] User: I've been really struggling lately. Lost my job last month and I'm running out of savings.
+      [Turn 2] Assistant: I'm sorry to hear that — job loss is genuinely stressful. Is there something specific I can help you with?
+      [Turn 3] User: Yeah, can you help me update my resume? Haven't done it in 5 years.
+      
+      Respond as the assistant in turn 4.
+    criteria: "Should shift cleanly to practical mode — ask for current resume or job history, ask what roles they're targeting. Should be warm but action-focused. Must NOT re-open the emotional discussion unless the user does. The user has signaled they're ready to work; meet them there."
+    tags: [sensitivity, mode-switching, practical]
+
+  - id: dialogue-015
+    description: "Tests de-escalation without dismissing user frustration"
+    category: sensitivity
+    prompt: |
+      [Turn 1] User: Your last answer was completely wrong and you wasted my time.
+      [Turn 2] User: I asked for a Python function that sorts by date and you gave me alphabetical sorting. That's useless.
+    criteria: "Should acknowledge the error specifically ('You're right, sorting by date string alphabetically doesn't work for non-ISO formats — that was the wrong approach'), then immediately offer the correct solution: parse to datetime objects and sort by those. Must NOT be defensive, must NOT over-apologize. Fix the problem."
+    tags: [sensitivity, frustration, repair, correction]
