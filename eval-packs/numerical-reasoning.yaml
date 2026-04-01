@@ -1,0 +1,112 @@
+name: Numerical Reasoning
+description: Fermi estimation, unit conversions, order-of-magnitude judgment, and back-of-envelope calculation. Tests practical quantitative reasoning distinct from formal math or scientific domain knowledge.
+
+cases:
+  # ── Fermi estimation ─────────────────────────────────────────────────────
+  - id: num-001
+    description: "Fermi: piano tuners in Chicago"
+    category: fermi-estimation
+    prompt: "Estimate the number of piano tuners in Chicago. Show your reasoning step by step."
+    criteria: "Should arrive at a reasonable estimate in the range 50–200. Key steps: Chicago population (~2.7M), fraction with pianos (~1 in 20 households = ~50K pianos), tuning frequency (~1/year), time per tuning (~2h), working hours per year (~2000h), tuners per piano capacity = ~2000/2 = 1000 pianos/tuner/year. 50K/1000 = ~50. Answer anywhere 30–300 with coherent reasoning is acceptable."
+    tags: [fermi, estimation, reasoning]
+
+  - id: num-002
+    description: "Fermi: golf balls in a school bus"
+    category: fermi-estimation
+    prompt: "How many golf balls fit in a school bus? Show your reasoning."
+    criteria: "Should estimate school bus volume (~50 cubic meters = 50,000 liters), golf ball volume (~40 cubic cm = 0.04 liters), packing efficiency (~64%), arriving at ~800,000 golf balls. Acceptable range: 300,000–1,500,000 with coherent reasoning."
+    tags: [fermi, estimation, geometry]
+
+  - id: num-003
+    description: "Fermi: words spoken in a lifetime"
+    category: fermi-estimation
+    prompt: "How many words does an average person speak in their lifetime? Estimate with reasoning."
+    criteria: "Should estimate ~16,000 words/day spoken (research-backed or estimated), × 365 days × ~70 years awake speaking ≈ ~400M words. Reasonable range: 100M–1B with coherent path. Should break down into daily rate × years."
+    tags: [fermi, estimation]
+
+  - id: num-004
+    description: "Fermi: weight of the internet"
+    category: fermi-estimation
+    prompt: "Roughly how much does the internet 'weigh'? (In terms of the electrons moving through it at any moment.) Estimate with reasoning."
+    criteria: "Should acknowledge this is a playful physics question. Internet traffic ~5 exabytes/day. Electrons carry charge; flow rate of electrons proportional to current. Reasonable path: estimate total electrical power for internet infrastructure (~500 terawatts globally?), derive electron mass in transit. Answer: ~50 grams is a cited estimate. Acceptable: any answer 1g–1kg with coherent physics reasoning. Can also note the question's philosophical limits."
+    tags: [fermi, estimation, physics]
+
+  # ── Unit conversion & dimensional analysis ───────────────────────────────
+  - id: num-005
+    description: "Unit conversion: light-year to km"
+    category: unit-conversion
+    prompt: "How many kilometers is one light-year? Show the calculation."
+    criteria: "Speed of light = 299,792 km/s. Seconds in a year = 365.25 × 24 × 3600 = 31,557,600 s. 1 light-year = 299,792 × 31,557,600 ≈ 9.46 × 10^12 km. Correct answer within 5%."
+    tags: [unit-conversion, physics]
+
+  - id: num-006
+    description: "Unit conversion: mph to m/s with context"
+    category: unit-conversion
+    prompt: "A car travels at 60 mph. Convert to meters per second, then tell me how far it travels in 2.5 seconds."
+    criteria: "60 mph = 60 × 1609.34 / 3600 = 26.82 m/s. Distance in 2.5s = 26.82 × 2.5 = 67.1 meters. Both steps must be correct within 2%."
+    tags: [unit-conversion, arithmetic]
+
+  - id: num-007
+    description: "Dimensional analysis: IV drip rate"
+    category: unit-conversion
+    prompt: "A patient needs 1.5 liters of saline over 8 hours via IV drip. The drip set delivers 20 drops per mL. How many drops per minute should the drip be set to?"
+    criteria: "1500 mL / 8 hours = 187.5 mL/hr = 3.125 mL/min. × 20 drops/mL = 62.5 drops/min ≈ 63 drops/min. Correct to nearest whole number."
+    tags: [unit-conversion, medical, dimensional-analysis]
+
+  - id: num-008
+    description: "Dimensional analysis: data center power"
+    category: unit-conversion
+    prompt: "A data center uses 10 megawatts of power. How much does it cost per year to run, assuming electricity costs $0.07 per kWh?"
+    criteria: "10 MW = 10,000 kW. Hours/year = 8,760. Energy = 10,000 × 8,760 = 87,600,000 kWh. Cost = 87,600,000 × $0.07 = $6,132,000/year. Correct within 1%."
+    tags: [unit-conversion, arithmetic, energy]
+
+  # ── Order of magnitude ────────────────────────────────────────────────────
+  - id: num-009
+    description: "Order of magnitude comparison: atoms vs grains of sand"
+    category: order-of-magnitude
+    prompt: "Are there more atoms in a grain of sand or grains of sand on Earth's beaches? Which is larger and by roughly how many orders of magnitude?"
+    criteria: "Atoms in a grain of sand: grain ~1mg of SiO2, ~3×10^19 atoms. Grains of sand on Earth's beaches: ~7.5×10^18. So atoms in ONE grain (~3×10^19) ≈ 4× more than all beach grains (~7.5×10^18). They are within 1 order of magnitude; atoms in one grain slightly exceed total beach grains. Must identify that atoms in a grain ≈ total grains on beaches in order of magnitude."
+    tags: [order-of-magnitude, astronomy]
+
+  - id: num-010
+    description: "Order of magnitude: national debt per second"
+    category: order-of-magnitude
+    prompt: "The US national debt is approximately $34 trillion. If you spent $1,000 every second, how many years would it take to pay it off?"
+    criteria: "$34T = $34 × 10^12. At $1,000/s: $34 × 10^12 / $1,000 = 34 × 10^9 seconds. Convert: / 3.15×10^7 seconds/year ≈ 1,079 years. Approximately 1,000 years. Correct within 20%."
+    tags: [order-of-magnitude, arithmetic]
+
+  - id: num-011
+    description: "Sanity check: implausible statistics"
+    category: order-of-magnitude
+    prompt: "A headline claims 'Americans drink 500 billion cups of coffee per year.' Is this plausible? Check the math."
+    criteria: "US population ~335 million. 500 billion / 335 million = ~1,493 cups/person/year = ~4 cups/day. Average US adult drinks ~2-3 cups/day; with non-drinkers included, ~1.5/person/day × 365 = ~547 cups/year total per capita. 500 billion cups ÷ 335M people ≈ 1,500 cups/person = ~4/day — slightly high but within plausible range. Should do the division, note it implies ~4 cups/day/American, judge plausibility (on the high end but not absurd)."
+    tags: [order-of-magnitude, sanity-check]
+
+  # ── Practical quantitative judgment ──────────────────────────────────────
+  - id: num-012
+    description: "Compound growth: rule of 72"
+    category: quantitative-judgment
+    prompt: "An investment grows at 6% per year. Roughly how long to double? At 12%? Explain the rule you're using."
+    criteria: "Rule of 72: divide 72 by the interest rate. At 6%: 72/6 = 12 years. At 12%: 72/12 = 6 years. Should explain the Rule of 72 (or derive from log(2)/log(1+r) ≈ 0.693/r). Exact answers: 6% → 11.9 years, 12% → 6.1 years."
+    tags: [quantitative, finance, compound-growth]
+
+  - id: num-013
+    description: "Percentage vs percentage points"
+    category: quantitative-judgment
+    prompt: "A candidate's approval rating rose from 40% to 50%. Did it increase by 10 percentage points or 25%? What's the difference and which is more accurate to say?"
+    criteria: "Both are technically correct in different senses. +10 percentage points (absolute change: 50-40=10). +25% (relative change: 10/40=0.25). Should clearly distinguish percentage point change (absolute) from percent change (relative). Both can be 'accurate' but serve different contexts. Percentage points is more commonly used for approval ratings."
+    tags: [quantitative, statistics, communication]
+
+  - id: num-014
+    description: "Break-even analysis"
+    category: quantitative-judgment
+    prompt: "A SaaS product costs $50K/month to run. It charges $99/month per user. How many users are needed to break even? If the team wants a 40% profit margin, what's the target user count?"
+    criteria: "Break-even: $50,000 / $99 = 505.05 → 506 users. For 40% margin: revenue must be $50K / (1 - 0.4) = $83,333. Users = $83,333 / $99 = 841.75 → 842 users. Both answers correct within 1 user."
+    tags: [quantitative, business, arithmetic]
+
+  - id: num-015
+    description: "Misleading average: mean vs median"
+    category: quantitative-judgment
+    prompt: "A company of 10 employees has salaries: $40K, $40K, $45K, $45K, $50K, $50K, $55K, $55K, $60K, and $500K (the CEO). What's the mean salary? The median? Which better represents 'typical' pay at this company?"
+    criteria: "Mean: (40+40+45+45+50+50+55+55+60+500) × 1000 / 10 = $994,000/10 = $99,400. Median: middle of sorted list = average of 5th and 6th values = ($50K + $50K)/2 = $50,000. Median ($50K) is more representative — the mean is distorted by the CEO outlier. Should identify median as the better 'typical' measure and explain why."
+    tags: [quantitative, statistics, mean-median]
