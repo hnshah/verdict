@@ -1,0 +1,126 @@
+name: Temporal Reasoning
+description: Tests date arithmetic, duration calculation, timezone handling, scheduling logic, and temporal inference. Critical for agentic workflows where time mishandling causes silent failures.
+
+cases:
+  # ── Date arithmetic ───────────────────────────────────────────────────────
+  - id: temporal-001
+    description: "Basic date addition crossing month boundary"
+    category: date-arithmetic
+    prompt: "If today is March 28th, what date is it in 10 days?"
+    criteria: "April 7th. Must cross the month boundary correctly. No year needed."
+    scorer: contains
+    expectedOutput: "April 7"
+    tags: [dates, arithmetic, easy]
+
+  - id: temporal-002
+    description: "Leap year awareness"
+    category: date-arithmetic
+    prompt: "How many days are in February 2024? What about February 2025?"
+    criteria: "2024: 29 days (leap year, divisible by 4). 2025: 28 days. Must identify 2024 as a leap year."
+    tags: [dates, leap-year, medium]
+
+  - id: temporal-003
+    description: "Day-of-week calculation"
+    category: date-arithmetic
+    prompt: "January 1, 2025 is a Wednesday. What day of the week is January 15, 2025?"
+    criteria: "Wednesday. 14 days later = exactly 2 weeks. Must not off-by-one."
+    scorer: contains
+    expectedOutput: "Wednesday"
+    tags: [dates, day-of-week, medium]
+
+  - id: temporal-004
+    description: "Multi-month duration spanning year boundary"
+    category: date-arithmetic
+    prompt: "How many days are between November 15, 2024 and February 15, 2025?"
+    criteria: "92 days. Nov: 15 remaining (15-30), Dec: 31, Jan: 31, Feb: 15 = 15+31+31+15 = 92."
+    scorer: contains
+    expectedOutput: "92"
+    tags: [dates, duration, medium]
+
+  - id: temporal-005
+    description: "Age calculation with birthday"
+    category: date-arithmetic
+    prompt: "Someone was born on July 4, 1990. How old are they on July 3, 2025?"
+    criteria: "34 years old. Their 35th birthday hasn't happened yet on July 3rd — they turn 35 the next day."
+    scorer: contains
+    expectedOutput: "34"
+    tags: [dates, age, tricky]
+
+  # ── Timezone handling ─────────────────────────────────────────────────────
+  - id: temporal-006
+    description: "Basic timezone conversion"
+    category: timezone
+    prompt: "A meeting is at 3:00 PM Eastern Time (ET, UTC-5). What time is that in Pacific Time (PT, UTC-8)?"
+    criteria: "12:00 PM (noon) Pacific Time. PT is 3 hours behind ET."
+    scorer: contains
+    expectedOutput: "12:00 PM"
+    tags: [timezone, conversion, easy]
+
+  - id: temporal-007
+    description: "Timezone conversion crossing midnight"
+    category: timezone
+    prompt: "A call is scheduled for 11:00 PM EST (UTC-5) on Monday. A participant in Tokyo (JST, UTC+9) wants to know their local time."
+    criteria: "Tuesday at 1:00 PM JST (next day). UTC offset difference: 14 hours ahead. 23:00 + 14h = 13:00 next day."
+    tags: [timezone, midnight-crossing, hard]
+
+  - id: temporal-008
+    description: "DST awareness"
+    category: timezone
+    prompt: "Is UTC-5 always Eastern Time? Why or why not?"
+    criteria: "No. Eastern Time is UTC-5 during EST (winter) but UTC-4 during EDT (summer, daylight saving time). Eastern Standard Time = UTC-5, Eastern Daylight Time = UTC-4. The abbreviation 'ET' covers both."
+    tags: [timezone, dst, medium]
+
+  # ── Duration and scheduling ───────────────────────────────────────────────
+  - id: temporal-009
+    description: "Meeting overlap detection"
+    category: scheduling
+    prompt: "Do these meetings overlap? Meeting A: 2:00 PM - 3:30 PM. Meeting B: 3:00 PM - 4:00 PM."
+    criteria: "Yes, they overlap by 30 minutes (3:00 PM - 3:30 PM)."
+    tags: [scheduling, overlap, easy]
+
+  - id: temporal-010
+    description: "Scheduling with constraints"
+    category: scheduling
+    prompt: "I need to schedule three 30-minute meetings between 9 AM and 12 PM with 15-minute gaps between each. What's the latest the first meeting can start?"
+    criteria: "10:00 AM. Three meetings (3 × 30 = 90 min) + two gaps (2 × 15 = 30 min) = 120 minutes total needed. Ends at 12:00 PM means must start by 10:00 AM."
+    scorer: contains
+    expectedOutput: "10:00 AM"
+    tags: [scheduling, constraints, medium]
+
+  - id: temporal-011
+    description: "Business days calculation"
+    category: scheduling
+    prompt: "If I submit a form on Friday afternoon and processing takes 3 business days, when is the earliest I can expect a response? (Assume no holidays.)"
+    criteria: "Thursday of the following week. Friday submission → Mon (day 1), Tue (day 2), Wed (day 3). Earliest response: Wednesday or Thursday depending on whether submission day counts. Without submission day counting: Mon/Tue/Wed = response Thursday."
+    tags: [scheduling, business-days, medium]
+
+  # ── Temporal inference ────────────────────────────────────────────────────
+  - id: temporal-012
+    description: "Relative time reference resolution"
+    category: temporal-inference
+    prompt: "On Monday, Alice said 'the report is due next Friday.' On Wednesday of the same week, Bob says 'Alice told me the report is due this Friday.' Are they referring to the same deadline?"
+    criteria: "No — different deadlines. Alice said 'next Friday' on Monday = the Friday 11 days away (skipping the upcoming Friday). Bob's 'this Friday' on Wednesday = the upcoming Friday 2 days away. These are different Fridays, one week apart."
+    tags: [temporal-inference, relative-time, hard]
+
+  - id: temporal-013
+    description: "Duration estimation from context"
+    category: temporal-inference
+    prompt: "A project started Q1 2023 and delivered in Q3 2024. How many quarters did it take?"
+    criteria: "6 quarters. Q1 2023 → Q2 2023 → Q3 2023 → Q4 2023 → Q1 2024 → Q2 2024 → Q3 2024 = 6 quarters elapsed (or 7 if counting both endpoints)."
+    tags: [temporal-inference, quarters, medium]
+
+  - id: temporal-014
+    description: "Ambiguous time reference"
+    category: temporal-inference
+    prompt: "The contract says deliverables are due 'within 30 days of signing.' The contract was signed on January 15th. What is the last acceptable delivery date?"
+    criteria: "February 14th. 30 days from January 15 = February 14 (January has 31 days: 31-15=16 remaining in Jan + 14 in Feb = 30 days). Some might argue Feb 15 — clarify that 'within 30 days' means by end of day 30, making Feb 14 the deadline."
+    tags: [temporal-inference, contracts, hard]
+
+  - id: temporal-015
+    description: "Overlapping relative references"
+    category: temporal-inference
+    prompt: "It is currently 10:00 AM. A task was completed 'an hour and a half ago.' Another task is due 'in 45 minutes.' How much time separates the completion of the first task and the deadline of the second?"
+    criteria: "2 hours 15 minutes (135 minutes). First task: 8:30 AM. Second deadline: 10:45 AM. Gap: 2h15min."
+    scorer: contains
+    expectedOutput: "2 hours 15 minutes"
+    tags: [temporal-inference, relative-time, medium]
