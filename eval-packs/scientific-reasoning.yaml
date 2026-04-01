@@ -1,0 +1,112 @@
+name: Scientific Reasoning
+description: Tests physics, chemistry, biology, and earth science reasoning. Covers conceptual understanding, quantitative problems, and real-world application. Useful for distinguishing models that parrot facts vs actually reason through science problems.
+
+cases:
+  # ── Physics ───────────────────────────────────────────────────────────────
+  - id: sci-001
+    description: "Tests Newton's third law application"
+    category: physics
+    prompt: "A truck and a small car collide head-on. Which experiences the greater force of impact, and which experiences the greater acceleration? Explain."
+    criteria: "Forces are EQUAL (Newton's 3rd law — equal and opposite). Acceleration differs — the car accelerates MORE because it has less mass (F=ma, same F, smaller m → larger a). Must correctly separate force (equal) from acceleration (unequal)."
+    tags: [physics, newtons-laws, mechanics]
+
+  - id: sci-002
+    description: "Tests thermodynamics: heat transfer and entropy"
+    category: physics
+    prompt: "Why does ice melt faster in your hand than in a bowl of water at the same temperature as your hand (37°C)?"
+    criteria: "Your hand has better thermal conductivity (skin + tissue conducts heat better than water for the contact scenario) but more importantly: your hand maintains constant temperature via blood flow, acting as an infinite heat reservoir. The water in a bowl of fixed volume cools as it transfers heat to the ice. The rate of transfer depends on the temperature differential — your hand maintains the gradient. Accepts explanation about contact/conduction differences too."
+    tags: [physics, thermodynamics, heat-transfer]
+
+  - id: sci-003
+    description: "Tests wave optics: why sky is blue"
+    category: physics
+    prompt: "Why is the sky blue, and why are sunsets red/orange? Use the same underlying physics to explain both."
+    criteria: "Rayleigh scattering: shorter wavelengths (blue/violet) scatter more than longer wavelengths. Sky appears blue because scattered blue light reaches our eyes from all directions. Sunsets: light travels through more atmosphere at low angles, so blue is scattered away — only longer red/orange wavelengths reach us directly. Both explained by same mechanism (wavelength-dependent scattering)."
+    tags: [physics, optics, scattering]
+
+  - id: sci-004
+    description: "Tests quantitative kinematics"
+    category: physics
+    prompt: "A ball is dropped from a 45-meter building. Ignoring air resistance, how long does it take to hit the ground, and what is its velocity at impact? (g = 10 m/s²)"
+    criteria: "Time: h = ½gt² → 45 = ½(10)t² → t² = 9 → t = 3 seconds. Velocity: v = gt = 10 × 3 = 30 m/s. Both correct values required with shown work or clear reasoning."
+    tags: [physics, kinematics, quantitative]
+
+  - id: sci-005
+    description: "Tests understanding of buoyancy and density"
+    category: physics
+    prompt: "A steel ship floats, but a steel ball sinks. Explain why, using density and buoyancy concepts."
+    criteria: "An object floats if its average density ≤ fluid density. A solid steel ball has density ~8000 kg/m³ > water (1000 kg/m³) → sinks. A ship's hull is shaped to displace a large volume of water. The ship's average density (steel + air inside) < water → floats. Key: average density of the whole object, not just the hull material."
+    tags: [physics, buoyancy, density]
+
+  # ── Chemistry ─────────────────────────────────────────────────────────────
+  - id: sci-006
+    description: "Tests acid-base equilibrium understanding"
+    category: chemistry
+    prompt: "Why does adding a small amount of strong acid to a buffer solution barely change the pH, while adding the same amount to pure water causes a dramatic pH drop?"
+    criteria: "A buffer contains a weak acid and its conjugate base (or weak base + conjugate acid). The conjugate base neutralizes added H⁺ ions: A⁻ + H⁺ → HA. This consumes the acid before it can significantly change [H⁺]. Pure water has no such reservoir — all added H⁺ directly raises [H⁺]. Henderson-Hasselbalch equation governs buffer pH."
+    tags: [chemistry, acid-base, buffers]
+
+  - id: sci-007
+    description: "Tests electronegativity and molecular polarity"
+    category: chemistry
+    prompt: "CO₂ has polar bonds but is a nonpolar molecule. H₂O has polar bonds and is a polar molecule. Why the difference?"
+    criteria: "CO₂ is linear (O=C=O) — the two polar C=O bonds are equal and opposite, so dipole moments cancel → net dipole = 0 → nonpolar. H₂O is bent (~104.5°) — the two O-H bond dipoles don't cancel (they point in similar directions). Net dipole ≠ 0 → polar. Molecular geometry determines whether bond polarities cancel."
+    tags: [chemistry, molecular-polarity, geometry]
+
+  - id: sci-008
+    description: "Tests reaction stoichiometry"
+    category: chemistry
+    prompt: "How many grams of water are produced when 4g of hydrogen (H₂) reacts completely with oxygen? (H=1, O=16 g/mol)"
+    criteria: "Balanced equation: 2H₂ + O₂ → 2H₂O. Molar mass H₂ = 2 g/mol. 4g H₂ = 2 mol H₂. Ratio: 2 mol H₂ → 2 mol H₂O. Molar mass H₂O = 18 g/mol. 2 mol × 18 g/mol = 36g of water. Answer: 36 grams."
+    tags: [chemistry, stoichiometry, quantitative]
+
+  - id: sci-009
+    description: "Tests Le Chatelier's principle"
+    category: chemistry
+    prompt: "For the reaction N₂ + 3H₂ ⇌ 2NH₃ (ΔH < 0), what happens to the equilibrium position if: (a) pressure is increased, (b) temperature is increased?"
+    criteria: "(a) Increasing pressure shifts equilibrium toward fewer moles of gas → products side (4 mol gas → 2 mol gas) → more NH₃ produced. (b) Increasing temperature for an exothermic reaction shifts equilibrium LEFT (toward reactants) → less NH₃. Le Chatelier: system opposes the change."
+    tags: [chemistry, equilibrium, le-chatelier]
+
+  # ── Biology ───────────────────────────────────────────────────────────────
+  - id: sci-010
+    description: "Tests understanding of natural selection mechanism"
+    category: biology
+    prompt: "A population of bacteria is exposed to an antibiotic. Most die, but a few survive and reproduce. After several generations, the population is resistant. Did the antibiotic cause the resistance mutations, or was something else happening?"
+    criteria: "The antibiotic did NOT cause the mutations. Random mutations were already present in the population (pre-existing variation). The antibiotic acted as a selection pressure — killing susceptible bacteria and allowing naturally resistant ones to survive and reproduce. This is natural selection, not directed/Lamarckian evolution. The antibiotic changed which organisms survived, not what mutations occurred."
+    tags: [biology, evolution, natural-selection]
+
+  - id: sci-011
+    description: "Tests cell biology: membrane transport"
+    category: biology
+    prompt: "Red blood cells shrink in saltwater but swell (and can burst) in pure water. Explain using osmosis."
+    criteria: "Osmosis: water moves from low solute concentration (high water concentration) to high solute concentration through a semipermeable membrane. In saltwater: outside has higher solute concentration → water flows OUT of cells → cells shrink (crenation). In pure water: inside has higher solute concentration → water flows IN → cells swell → may lyse (burst). Water always moves toward higher solute concentration."
+    tags: [biology, osmosis, cell-biology]
+
+  - id: sci-012
+    description: "Tests genetics: dominant vs recessive inheritance"
+    category: biology
+    prompt: "Two parents who both have brown eyes have a child with blue eyes. How is this possible genetically?"
+    criteria: "Both parents must be heterozygous (Bb) for eye color. Brown (B) is dominant, blue (b) is recessive. If both parents are Bb: cross Bb × Bb → BB (25%), Bb (50%), bb (25%). The bb child expresses the recessive blue-eye phenotype. The parents don't show blue eyes because one dominant allele (B) is sufficient to produce brown eyes."
+    tags: [biology, genetics, mendelian]
+
+  # ── Earth Science ─────────────────────────────────────────────────────────
+  - id: sci-013
+    description: "Tests plate tectonics: subduction vs collision"
+    category: earth-science
+    prompt: "Why do oceanic-continental plate collisions form volcanic mountain ranges (like the Andes), while continental-continental collisions form non-volcanic mountains (like the Himalayas)?"
+    criteria: "Oceanic-continental: oceanic plate is denser → subducts under continental plate. As it descends into the mantle, water from oceanic crust lowers the mantle's melting point → magma forms → volcanoes. Continental-continental: both plates are similar density → neither easily subducts. Plates buckle and fold instead → massive non-volcanic mountain range (no melting, no volcanism)."
+    tags: [earth-science, plate-tectonics, geology]
+
+  - id: sci-014
+    description: "Tests climate science: greenhouse effect mechanism"
+    category: earth-science
+    prompt: "Explain the greenhouse effect. Why do CO₂ and water vapor trap heat, but N₂ and O₂ (which make up most of the atmosphere) do not?"
+    criteria: "Greenhouse gases (CO₂, H₂O, CH₄) absorb and re-emit infrared radiation. The key is molecular structure: greenhouse gases are asymmetric molecules that have vibrational modes that can absorb IR photons. N₂ and O₂ are diatomic symmetric molecules — their vibrational modes do NOT interact with IR radiation. Earth's surface emits IR, greenhouse gases absorb it and re-radiate in all directions (including back to Earth), warming the surface."
+    tags: [earth-science, climate, greenhouse-effect]
+
+  - id: sci-015
+    description: "Tests astronomy: why moon phases occur"
+    category: earth-science
+    prompt: "What causes the phases of the moon? Specifically, why do we see a full moon vs a new moon?"
+    criteria: "Moon phases are caused by the relative positions of Earth, Moon, and Sun as the Moon orbits Earth. The Moon itself is always half-illuminated by the Sun. Full moon: Earth is between the Sun and Moon (roughly) — we see the fully illuminated face. New moon: Moon is between Earth and Sun — we see the unlit side (dark). The phases are NOT caused by Earth's shadow (that's a lunar eclipse, a different phenomenon). Key misconception to correct if stated."
+    tags: [earth-science, astronomy, moon-phases]
