@@ -1,10 +1,10 @@
 {
   "model_name": "llama-vision-11b",
-  "total_runs": 2,
-  "total_cases": 13,
-  "avg_score": 3.4,
-  "total_wins": 0,
-  "avg_latency": 0.8,
+  "total_runs": 5,
+  "total_cases": 16,
+  "avg_score": 4.3,
+  "total_wins": 1,
+  "avg_latency": 2.4,
   "runs": [
     {
       "id": "2026-04-01-2026-04-01T03-35-29",
@@ -27,18 +27,51 @@
       "conciseness": 9.7,
       "wins": 0,
       "latency": 0.6
+    },
+    {
+      "id": "2026-04-01-2026-04-01T03-14-13",
+      "name": "Vision Model Comparison",
+      "date": "2026-04-01",
+      "score": 4.8,
+      "accuracy": 3,
+      "completeness": 4.7,
+      "conciseness": 9.7,
+      "wins": 0,
+      "latency": 0.6
+    },
+    {
+      "id": "2026-04-01-2026-04-01T03-13-11",
+      "name": "Vision Model Comparison",
+      "date": "2026-04-01",
+      "score": 9.8,
+      "accuracy": 10,
+      "completeness": 10,
+      "conciseness": 9,
+      "wins": 1,
+      "latency": 3.5
+    },
+    {
+      "id": "2026-04-01-2026-04-01T03-10-56",
+      "name": "Vision Model Comparison",
+      "date": "2026-04-01",
+      "score": 0,
+      "accuracy": 0,
+      "completeness": 0,
+      "conciseness": 0,
+      "wins": 0,
+      "latency": 6.6
     }
   ],
   "best_cases": [
     {
-      "id": "describe-3",
-      "prompt": "What type of location or setting is shown in this image?",
-      "score": 6.6
+      "id": "test-1",
+      "prompt": "Say hello",
+      "score": 9.8
     },
     {
-      "id": "describe-2",
-      "prompt": "What is the main subject of this image?",
-      "score": 4.8
+      "id": "describe-3",
+      "prompt": "What type of location or setting is shown in this image?",
+      "score": 4.4
     },
     {
       "id": "object-food",
@@ -46,9 +79,9 @@
       "score": 3.4
     },
     {
-      "id": "describe-1",
-      "prompt": "Describe what you see in this image in one sentence.",
-      "score": 3.1
+      "id": "describe-2",
+      "prompt": "What is the main subject of this image?",
+      "score": 3.2
     },
     {
       "id": "scene-city",
@@ -57,6 +90,16 @@
     }
   ],
   "worst_cases": [
+    {
+      "id": "describe-4",
+      "prompt": "What food item do you see in this image?",
+      "score": 0
+    },
+    {
+      "id": "describe-5",
+      "prompt": "What do you see in this image? Be specific.",
+      "score": 0
+    },
     {
       "id": "scene-beach",
       "prompt": "Describe the scene in this image in detail.",
@@ -70,16 +113,6 @@
     {
       "id": "object-tech",
       "prompt": "What technology or electronic devices do you see in this image?",
-      "score": 1.6
-    },
-    {
-      "id": "detail-count",
-      "prompt": "Count the number of distinct objects visible in this image.",
-      "score": 1.6
-    },
-    {
-      "id": "spatial-composition",
-      "prompt": "Describe the composition and spatial layout of this image.",
       "score": 1.6
     }
   ]

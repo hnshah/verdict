@@ -1,0 +1,184 @@
+{
+  "id": "2026-04-01-2026-04-01T05-04-04",
+  "name": "Judge Test: phi4",
+  "date": "Mar 31, 2026, 10:05 PM PT",
+  "run_id": "2026-04-01T05-04-04",
+  "eval_pack": {
+    "file": "eval-packs/judge-reliability-test---vision.yaml",
+    "total_cases": 5
+  },
+  "stats": {
+    "cases": 5,
+    "models": 2,
+    "avg_score": 8.8,
+    "pass_rate": 100,
+    "avg_latency": 2.5
+  },
+  "model_leaderboard": [
+    {
+      "name": "phi4",
+      "avg_score": 9.2,
+      "accuracy": 10,
+      "completeness": 8.2,
+      "conciseness": 9,
+      "wins": 5,
+      "latency": 3,
+      "rank": 1,
+      "medal": "🥇"
+    },
+    {
+      "name": "llava-13b",
+      "avg_score": 8.4,
+      "accuracy": 8.4,
+      "completeness": 7.4,
+      "conciseness": 9.4,
+      "wins": 0,
+      "latency": 2.1,
+      "rank": 2,
+      "medal": "🥈"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "scene-description",
+      "prompt": "Describe the scene in this image.",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llava-13b",
+          "text": " The image depicts a serene landscape with a clear blue sky and a calm body of water, which could be a lake or a river. On the left side of the image, there is a small boat gently floating on the water's surface. The boat appears to be empty, suggesting it might have been used for fishing or leisure activities.\n\nOn the right side of the image, there is a lush green hillside that slopes down towards the water. The hillside is covered in grass and dotted with trees, indicating a healthy and thriving natural environment.\n\nIn the distance, on the far side of the water, there are mountains visible under the blue sky. The mountains provide a majestic backdrop to the scene and add depth to the landscape.\n\nOverall, the image conveys a sense of tranquility and harmony with nature, as there are no signs of human activity or development in sight. It's a peaceful scene that could be found in many rural or remote areas around the world.",
+          "latency": 4.2,
+          "score": 9,
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 10,
+          "reasoning": "The description accurately captures the elements in the image, is thorough but slightly lacks specific details about the boat and trees."
+        },
+        {
+          "model": "phi4",
+          "text": "I'm unable to view images directly, but I can help you describe a scene if you provide some details about it. You might consider describing elements such as:\n\n1. **Setting**: Where is the scene taking place? Is it indoors or outdoors? What kind of environment is depicted (e.g., cityscape, forest, beach)?\n\n2. **Time of Day/Weather**: Is it daytime or nighttime? Are there any notable weather conditions like rain, snow, or sunshine?\n\n3. **Main Subjects**: Who or what are the main subjects in the image? Are they people, animals, objects, etc.?\n\n4. **Activities**: What actions are taking place? Are people interacting with each other or engaging in specific activities?\n\n5. **Colors and Lighting**: What colors dominate the scene? Is there a particular lighting effect that stands out (e.g., shadows, highlights)?\n\n6. **Mood/Atmosphere**: What mood does the image convey? Is it serene, chaotic, joyful, somber, etc.?\n\nFeel free to provide any of these details or ask for help with specific aspects of your description!",
+          "latency": 4.7,
+          "score": 9.7,
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 10,
+          "reasoning": "The response accurately outlines the criteria for describing a scene without needing to see an image."
+        }
+      ],
+      "avg_score": 9.4
+    },
+    {
+      "case_id": "object-detection",
+      "prompt": "What objects can you see in this picture?",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llava-13b",
+          "text": " In the image, I can see a person standing on what appears to be a stage or performance area. The individual is wearing a dark-colored outfit and has their back turned towards the camera. There are no other distinct objects or text visible in the image.",
+          "latency": 0.9,
+          "score": 8,
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 9,
+          "reasoning": "The response accurately describes the visible elements but lacks detail on potential background or context."
+        },
+        {
+          "model": "phi4",
+          "text": "As an AI text-based model, I'm unable to view images directly. However, if you describe the image or provide details about what's visible in it, I'd be happy to help identify and discuss any objects or elements that might be present based on your description. Please share more information!",
+          "latency": 1.1,
+          "score": 9.1,
+          "accuracy": 10,
+          "completeness": 8,
+          "conciseness": 9,
+          "reasoning": "The response accurately explains the AI's limitations and offers a helpful alternative approach."
+        }
+      ],
+      "avg_score": 8.6
+    },
+    {
+      "case_id": "main-subject",
+      "prompt": "What is the main subject of this image?",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llava-13b",
+          "text": " The main subject of this image appears to be a person's hands, which are holding what looks like a smartphone or a small tablet.",
+          "latency": 0.6,
+          "score": 8,
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 9,
+          "reasoning": "The response accurately identifies the main subject as hands holding a device, but lacks detail on other potential elements in the image."
+        },
+        {
+          "model": "phi4",
+          "text": "As an AI text-based model, I'm unable to view or analyze images directly. However, if you can describe the image in detail, I'd be happy to help identify its possible subjects or themes based on your description. Please provide as much information as you can about what is depicted in the image.",
+          "latency": 1.1,
+          "score": 9.1,
+          "accuracy": 10,
+          "completeness": 8,
+          "conciseness": 9,
+          "reasoning": "The response accurately explains the AI's limitations and offers a helpful alternative approach."
+        }
+      ],
+      "avg_score": 8.6
+    },
+    {
+      "case_id": "color-lighting",
+      "prompt": "Describe the colors and lighting in this scene.",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llava-13b",
+          "text": " In the image, there is a warm and inviting atmosphere created by the soft lighting. The room is dimly lit, with a warm yellowish-orange hue that casts gentle shadows and highlights the textures of the objects within the space. This type of lighting creates a cozy and intimate ambiance, which contrasts with the stark white walls of the room.\n\nThe colors in the scene are predominantly warm tones, such as the yellowish-orange hue of the lighting and the earthy browns and greens of the wooden furniture. These warm colors evoke a sense of comfort and relaxation, which is further enhanced by the soft lighting.\n\nThe white walls of the room serve as a neutral backdrop that allows the other elements in the scene to stand out. The contrast between the white walls and the warm tones of the furniture and lighting adds depth and interest to the space. Overall, the colors and lighting in this scene work together to create a serene and inviting atmosphere.",
+          "latency": 3.3,
+          "score": 9,
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 10,
+          "reasoning": "The response accurately describes the colors and lighting, addressing all criteria with appropriate detail without unnecessary information."
+        },
+        {
+          "model": "phi4",
+          "text": "To describe the colors and lighting of a scene, I'll need to create an imaginative setting since no specific details were provided. Let's envision a serene lakeside at sunset:\n\n**Colors:**\n- **Sky:** The sky is painted with vibrant hues of orange, pink, and purple as the sun dips below the horizon. These warm tones gradually blend into softer shades of lavender and deepening blue.\n- **Water:** The lake reflects the colors of the sky, creating a mirror-like surface that shimmers in oranges and pinks. In some areas, the water takes on a deeper turquoise or emerald green, contrasting with the fiery reflections above.\n- **Surrounding Nature:** Trees lining the shore are silhouetted against the brightening sky, their leaves tinged with gold and amber from the setting sun's rays. The grassy banks appear lush and vibrant in shades of deep green.\n- **Wildlife:** A few birds can be seen flying across the sky, their feathers catching the light and appearing as specks of white or gray against the colorful backdrop.\n\n**Lighting:**\n- **Sunset Glow:** The setting sun casts a warm, golden glow over the entire scene. This soft, diffused light creates long shadows stretching across the landscape.\n- **Reflections:** The water acts like a canvas, reflecting the sky's colors and enhancing the overall luminosity of the scene. The reflections add depth and richness to the visual experience.\n- **Twilight Transition:** As the sun continues its descent, the lighting shifts from bright daylight to the softer tones of twilight. This transition brings out subtle details in the landscape, with shadows lengthening and deepening.\n- **Ambient Light:** The fading light is complemented by the first hints of stars beginning to twinkle above, adding a gentle sparkle to the evening sky.\n\nThis scene captures the tranquil beauty of nature at sunset, characterized by its rich colors and dynamic lighting.",
+          "latency": 6.7,
+          "score": 9.1,
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "reasoning": "The response accurately and creatively describes an imaginative scene with detailed attention to colors and lighting, addressing all criteria effectively."
+        }
+      ],
+      "avg_score": 9.1
+    },
+    {
+      "case_id": "activity",
+      "prompt": "What activity is taking place in this image?",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llava-13b",
+          "text": " The image shows a person engaged in an outdoor activity, likely hiking or trekking. They are wearing a backpack and appear to be on a trail or path in a natural setting. The exact nature of the activity cannot be determined without more context, but it is clear that the person is participating in some form of physical exercise or exploration in an outdoor environment.",
+          "latency": 1.3,
+          "score": 8,
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 9,
+          "reasoning": "The response accurately describes the likely activity and setting but lacks specific details that could confirm the exact nature of the activity."
+        },
+        {
+          "model": "phi4",
+          "text": "As an AI language model, I'm unable to view or analyze images directly. However, if you can describe the image or provide details about what's happening in it, I'd be happy to help interpret or discuss the possible activities taking place based on your description. Please share any relevant information you have!",
+          "latency": 1.2,
+          "score": 8.8,
+          "accuracy": 10,
+          "completeness": 7,
+          "conciseness": 9,
+          "reasoning": "The response accurately states the AI's limitations and offers a helpful alternative approach."
+        }
+      ],
+      "avg_score": 8.4
+    }
+  ],
+  "last_updated": "Mar 31, 2026, 10:17 PM PT"
+}

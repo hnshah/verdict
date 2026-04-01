@@ -1,11 +1,55 @@
 {
   "model_name": "llava-13b",
-  "total_runs": 3,
-  "total_cases": 14,
-  "avg_score": 8,
-  "total_wins": 14,
-  "avg_latency": 1.3,
+  "total_runs": 8,
+  "total_cases": 19,
+  "avg_score": 8.3,
+  "total_wins": 24,
+  "avg_latency": 2.3,
   "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T05-07-50",
+      "name": "Judge Test: deepseek-r1:7b",
+      "date": "2026-04-01",
+      "score": 8.8,
+      "accuracy": 10,
+      "completeness": 7,
+      "conciseness": 9,
+      "wins": 1,
+      "latency": 9.4
+    },
+    {
+      "id": "2026-04-01-2026-04-01T05-06-51",
+      "name": "Judge Test: qwen3-coder",
+      "date": "2026-04-01",
+      "score": 6.5,
+      "accuracy": 5.8,
+      "completeness": 7,
+      "conciseness": 7,
+      "wins": 4,
+      "latency": 1.9
+    },
+    {
+      "id": "2026-04-01-2026-04-01T05-05-53",
+      "name": "Judge Test: qwen2.5:7b",
+      "date": "2026-04-01",
+      "score": 8,
+      "accuracy": 7.6,
+      "completeness": 8.2,
+      "conciseness": 8.4,
+      "wins": 5,
+      "latency": 1.9
+    },
+    {
+      "id": "2026-04-01-2026-04-01T05-04-04",
+      "name": "Judge Test: phi4",
+      "date": "2026-04-01",
+      "score": 8.4,
+      "accuracy": 8.4,
+      "completeness": 7.4,
+      "conciseness": 9.4,
+      "wins": 0,
+      "latency": 2.1
+    },
     {
       "id": "2026-04-01-2026-04-01T03-35-29",
       "name": "Vision Models Only Benchmark",
@@ -18,17 +62,6 @@
       "latency": 1.8
     },
     {
-      "id": "2026-04-01-2026-04-01T03-19-27",
-      "name": "Vision Comprehensive Benchmark",
-      "date": "2026-04-01",
-      "score": 8,
-      "accuracy": 7.8,
-      "completeness": 7.4,
-      "conciseness": 9.5,
-      "wins": 3,
-      "latency": 1.4
-    },
-    {
       "id": "2026-04-01-2026-04-01T03-18-00",
       "name": "Vision Model Benchmark (First Multimodal!)",
       "date": "2026-04-01",
@@ -38,6 +71,28 @@
       "conciseness": 9,
       "wins": 3,
       "latency": 0.6
+    },
+    {
+      "id": "2026-04-01-2026-04-01T03-14-13",
+      "name": "Vision Model Comparison",
+      "date": "2026-04-01",
+      "score": 9.1,
+      "accuracy": 9.3,
+      "completeness": 8.7,
+      "conciseness": 9,
+      "wins": 3,
+      "latency": 0.5
+    },
+    {
+      "id": "2026-04-01-2026-04-01T03-13-11",
+      "name": "Vision Model Comparison",
+      "date": "2026-04-01",
+      "score": 9.8,
+      "accuracy": 10,
+      "completeness": 10,
+      "conciseness": 9,
+      "wins": 0,
+      "latency": 0.3
     }
   ],
   "best_cases": [
@@ -47,51 +102,51 @@
       "score": 10
     },
     {
-      "id": "describe-3",
-      "prompt": "What type of location or setting is shown in this image?",
-      "score": 9.3
-    },
-    {
-      "id": "scene-beach",
-      "prompt": "Describe the scene in this image in detail.",
-      "score": 9.2
+      "id": "test-1",
+      "prompt": "Say hello",
+      "score": 9.8
     },
     {
       "id": "detail-hands",
       "prompt": "What is the person doing in this image?",
-      "score": 8.8
+      "score": 9.7
     },
     {
-      "id": "scene-nature",
-      "prompt": "Describe the landscape in this image.",
-      "score": 8.4
+      "id": "scene-beach",
+      "prompt": "Describe the scene in this image in detail.",
+      "score": 9.5
+    },
+    {
+      "id": "describe-3",
+      "prompt": "What type of location or setting is shown in this image?",
+      "score": 9.3
     }
   ],
   "worst_cases": [
-    {
-      "id": "scene-city",
-      "prompt": "What type of environment is shown in this image?",
-      "score": 4
-    },
     {
       "id": "text-reading",
       "prompt": "What text can you read in this image?",
       "score": 4.2
     },
     {
-      "id": "object-animal",
-      "prompt": "What animal do you see in this image?",
-      "score": 7.3
+      "id": "scene-city",
+      "prompt": "What type of environment is shown in this image?",
+      "score": 4.6
     },
     {
-      "id": "object-food",
-      "prompt": "What specific food items can you identify in this image?",
-      "score": 7.4
+      "id": "object-detection",
+      "prompt": "What objects can you see in this picture?",
+      "score": 5.2
     },
     {
-      "id": "object-tech",
-      "prompt": "What technology or electronic devices do you see in this image?",
-      "score": 7.7
+      "id": "activity",
+      "prompt": "What activity is taking place in this image?",
+      "score": 5.7
+    },
+    {
+      "id": "scene-description",
+      "prompt": "Describe the scene in this image.",
+      "score": 6
     }
   ]
 }

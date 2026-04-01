@@ -1,11 +1,22 @@
 {
   "model_name": "qwen2.5:7b",
-  "total_runs": 6,
-  "total_cases": 10,
-  "avg_score": 9.2,
-  "total_wins": 27,
-  "avg_latency": 7.1,
+  "total_runs": 8,
+  "total_cases": 15,
+  "avg_score": 8.8,
+  "total_wins": 33,
+  "avg_latency": 6,
   "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T05-05-53",
+      "name": "Judge Test: qwen2.5:7b",
+      "date": "2026-04-01",
+      "score": 6.4,
+      "accuracy": 4.8,
+      "completeness": 7.8,
+      "conciseness": 7,
+      "wins": 0,
+      "latency": 1.5
+    },
     {
       "id": "2026-03-31-2026-03-31T07-53-37",
       "name": "Qwen Family + Phi4 + Gemma2",
@@ -16,6 +27,17 @@
       "conciseness": 9.2,
       "wins": 6,
       "latency": 6.5
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-53-03",
+      "name": "Comprehensive Benchmark (10 models)",
+      "date": "2026-03-31",
+      "score": 9.1,
+      "accuracy": 9.3,
+      "completeness": 9.1,
+      "conciseness": 8.7,
+      "wins": 6,
+      "latency": 3.7
     },
     {
       "id": "2026-03-31-2026-03-31T07-51-23",
@@ -97,34 +119,34 @@
     {
       "id": "gen-009",
       "prompt": "Write a haiku about debugging code.",
-      "score": 9.4
+      "score": 9.3
     }
   ],
   "worst_cases": [
+    {
+      "id": "scene-description",
+      "prompt": "Describe the scene in this image.",
+      "score": 4
+    },
+    {
+      "id": "activity",
+      "prompt": "What activity is taking place in this image?",
+      "score": 5.2
+    },
+    {
+      "id": "object-detection",
+      "prompt": "What objects can you see in this picture?",
+      "score": 7
+    },
     {
       "id": "gen-003",
       "prompt": "Explain the difference between a process and a thread in one paragraph.",
       "score": 7.5
     },
     {
-      "id": "gen-007",
-      "prompt": "What is the time complexity of binary search and why?",
-      "score": 8.4
-    },
-    {
-      "id": "gen-008",
-      "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
-      "score": 8.6
-    },
-    {
-      "id": "gen-002",
-      "prompt": "What does RAM stand for and what does it do?",
-      "score": 8.9
-    },
-    {
-      "id": "gen-010",
-      "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
-      "score": 9.1
+      "id": "main-subject",
+      "prompt": "What is the main subject of this image?",
+      "score": 7.6
     }
   ]
 }

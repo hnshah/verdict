@@ -1,7 +1,7 @@
 {
   "id": "2026-03-31-2026-03-31T07-53-03",
   "name": "Comprehensive Benchmark (10 models)",
-  "date": "2026-03-31",
+  "date": "Mar 31, 2026, 1:00 AM PT",
   "run_id": "2026-03-31T07-53-03",
   "eval_pack": {
     "file": "eval-packs/general.yaml",
@@ -1208,5 +1208,6 @@
       ],
       "avg_score": 5.1
     }
-  ]
+  ],
+  "last_updated": "Mar 31, 2026, 10:17 PM PT"
 }

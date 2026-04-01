@@ -1,11 +1,22 @@
 {
   "model_name": "qwen3-coder",
-  "total_runs": 2,
-  "total_cases": 30,
-  "avg_score": 9.7,
-  "total_wins": 3,
-  "avg_latency": 6.5,
+  "total_runs": 4,
+  "total_cases": 35,
+  "avg_score": 8.4,
+  "total_wins": 5,
+  "avg_latency": 5.3,
   "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T05-06-51",
+      "name": "Judge Test: qwen3-coder",
+      "date": "2026-04-01",
+      "score": 4.8,
+      "accuracy": 3,
+      "completeness": 4,
+      "conciseness": 8,
+      "wins": 0,
+      "latency": 2.1
+    },
     {
       "id": "2026-03-31-2026-03-31T18-25-12",
       "name": "Verdict Auto-Dashboard",
@@ -16,6 +27,17 @@
       "conciseness": 8.9,
       "wins": 0,
       "latency": 6.9
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-13-39",
+      "name": "3 Model Comparison - 10 cases",
+      "date": "2026-03-31",
+      "score": 9.6,
+      "accuracy": 9.9,
+      "completeness": 9.6,
+      "conciseness": 8.8,
+      "wins": 2,
+      "latency": 6.2
     },
     {
       "id": "2026-03-31-2026-03-31T14-02-35",
@@ -58,29 +80,29 @@
   ],
   "worst_cases": [
     {
-      "id": "gen-002",
-      "prompt": "What does RAM stand for and what does it do?",
-      "score": 9.2
+      "id": "scene-description",
+      "prompt": "Describe the scene in this image.",
+      "score": 4.8
     },
     {
-      "id": "gen-003",
-      "prompt": "Explain the difference between a process and a thread in one paragraph.",
-      "score": 9.2
+      "id": "object-detection",
+      "prompt": "What objects can you see in this picture?",
+      "score": 4.8
     },
     {
-      "id": "gen-007",
-      "prompt": "What is the time complexity of binary search and why?",
-      "score": 9.2
+      "id": "main-subject",
+      "prompt": "What is the main subject of this image?",
+      "score": 4.8
     },
     {
-      "id": "gen-008",
-      "prompt": "Explain what a transformer model is in 2-3 sentences for a software engineer who knows ML basics.",
-      "score": 9.2
+      "id": "color-lighting",
+      "prompt": "Describe the colors and lighting in this scene.",
+      "score": 4.8
     },
     {
-      "id": "gen-010",
-      "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
-      "score": 9.2
+      "id": "activity",
+      "prompt": "What activity is taking place in this image?",
+      "score": 4.8
     }
   ]
 }

@@ -1,0 +1,93 @@
+{
+  "id": "2026-04-01-2026-04-01T03-13-11",
+  "name": "Vision Model Comparison",
+  "date": "Mar 31, 2026, 8:13 PM PT",
+  "run_id": "2026-04-01T03-13-11",
+  "eval_pack": {
+    "file": "eval-packs/simple-test.yaml",
+    "total_cases": 1
+  },
+  "stats": {
+    "cases": 1,
+    "models": 3,
+    "avg_score": 9.8,
+    "pass_rate": 100,
+    "avg_latency": 2.5
+  },
+  "model_leaderboard": [
+    {
+      "name": "llama-vision-11b",
+      "avg_score": 9.8,
+      "accuracy": 10,
+      "completeness": 10,
+      "conciseness": 9,
+      "wins": 1,
+      "latency": 3.5,
+      "rank": 1,
+      "medal": "🥇"
+    },
+    {
+      "name": "llava-13b",
+      "avg_score": 9.8,
+      "accuracy": 10,
+      "completeness": 10,
+      "conciseness": 9,
+      "wins": 0,
+      "latency": 0.3,
+      "rank": 2,
+      "medal": "🥈"
+    },
+    {
+      "name": "phi4",
+      "avg_score": 9.8,
+      "accuracy": 10,
+      "completeness": 10,
+      "conciseness": 9,
+      "wins": 0,
+      "latency": 3.6,
+      "rank": 3,
+      "medal": "🥉"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "test-1",
+      "prompt": "Say hello",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llama-vision-11b",
+          "text": "Hello! How can I assist you today?",
+          "latency": 3.5,
+          "score": 9.8,
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "reasoning": "The response correctly says hello and offers assistance, meeting all criteria with minimal padding."
+        },
+        {
+          "model": "llava-13b",
+          "text": " Hello! How can I help you today?",
+          "latency": 0.3,
+          "score": 9.8,
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "reasoning": "The response correctly says hello and offers further assistance, fully addressing the criteria with minimal padding."
+        },
+        {
+          "model": "phi4",
+          "text": "Hello! How can I assist you today?",
+          "latency": 3.6,
+          "score": 9.8,
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 9,
+          "reasoning": "The response correctly says hello and offers assistance, meeting all criteria with minimal padding."
+        }
+      ],
+      "avg_score": 9.8
+    }
+  ],
+  "last_updated": "Mar 31, 2026, 10:17 PM PT"
+}

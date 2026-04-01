@@ -1,11 +1,22 @@
 {
   "model_name": "llama3.2:3b",
-  "total_runs": 4,
+  "total_runs": 5,
   "total_cases": 10,
   "avg_score": 9.2,
-  "total_wins": 17,
-  "avg_latency": 6.1,
+  "total_wins": 20,
+  "avg_latency": 5.7,
   "runs": [
+    {
+      "id": "2026-03-31-2026-03-31T07-53-03",
+      "name": "Comprehensive Benchmark (10 models)",
+      "date": "2026-03-31",
+      "score": 9.1,
+      "accuracy": 9.4,
+      "completeness": 8.8,
+      "conciseness": 8.9,
+      "wins": 3,
+      "latency": 4.2
+    },
     {
       "id": "2026-03-31-2026-03-31T07-51-23",
       "name": "7B Models Re-test",
@@ -75,7 +86,7 @@
     {
       "id": "gen-003",
       "prompt": "Explain the difference between a process and a thread in one paragraph.",
-      "score": 8.9
+      "score": 8.8
     }
   ],
   "worst_cases": [
@@ -90,19 +101,19 @@
       "score": 8.6
     },
     {
+      "id": "gen-002",
+      "prompt": "What does RAM stand for and what does it do?",
+      "score": 8.7
+    },
+    {
       "id": "gen-009",
       "prompt": "Write a haiku about debugging code.",
       "score": 8.7
     },
     {
-      "id": "gen-002",
-      "prompt": "What does RAM stand for and what does it do?",
-      "score": 8.8
-    },
-    {
       "id": "gen-010",
       "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
-      "score": 8.8
+      "score": 8.7
     }
   ]
 }

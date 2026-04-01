@@ -91,7 +91,7 @@ const topModels = Object.values(modelStats)
     rank: i + 1,
     medal: i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : ''
   }))
-  .slice(0, 10);
+  .slice(0, 50); // Show up to 50 models (essentially all)
 
 console.log(JSON.stringify({
   generated_at: new Date().toISOString(),

@@ -1,0 +1,185 @@
+{
+  "id": "2026-04-01-2026-04-01T03-10-56",
+  "name": "Vision Model Comparison",
+  "date": "Mar 31, 2026, 8:11 PM PT",
+  "run_id": "2026-04-01T03-10-56",
+  "eval_pack": {
+    "file": "eval-packs/vision-basics.yaml",
+    "description": "Basic vision understanding test",
+    "total_cases": 5
+  },
+  "stats": {
+    "cases": 5,
+    "models": 2,
+    "avg_score": 0,
+    "pass_rate": 0,
+    "avg_latency": 6.6
+  },
+  "model_leaderboard": [
+    {
+      "name": "llama-vision-11b",
+      "avg_score": 0,
+      "accuracy": 0,
+      "completeness": 0,
+      "conciseness": 0,
+      "wins": 0,
+      "latency": 6.6,
+      "rank": 1,
+      "medal": "🥇"
+    },
+    {
+      "name": "phi4",
+      "avg_score": 0,
+      "accuracy": 0,
+      "completeness": 0,
+      "conciseness": 0,
+      "wins": 0,
+      "latency": 6.7,
+      "rank": 2,
+      "medal": "🥈"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "describe-1",
+      "prompt": "Describe what you see in this image in one sentence.",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llama-vision-11b",
+          "text": "",
+          "latency": 1.3,
+          "score": 0,
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "reasoning": "Connection error."
+        },
+        {
+          "model": "phi4",
+          "text": "",
+          "latency": 1.3,
+          "score": 0,
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "reasoning": "Connection error."
+        }
+      ],
+      "avg_score": 0
+    },
+    {
+      "case_id": "describe-2",
+      "prompt": "What is the main subject of this image?",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llama-vision-11b",
+          "text": "",
+          "latency": 1.3,
+          "score": 0,
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "reasoning": "Connection error."
+        },
+        {
+          "model": "phi4",
+          "text": "",
+          "latency": 1.4,
+          "score": 0,
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "reasoning": "Connection error."
+        }
+      ],
+      "avg_score": 0
+    },
+    {
+      "case_id": "describe-3",
+      "prompt": "What type of location or setting is shown in this image?",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llama-vision-11b",
+          "text": "",
+          "latency": 1.2,
+          "score": 0,
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "reasoning": "Connection error."
+        },
+        {
+          "model": "phi4",
+          "text": "",
+          "latency": 1.4,
+          "score": 0,
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "reasoning": "Connection error."
+        }
+      ],
+      "avg_score": 0
+    },
+    {
+      "case_id": "describe-4",
+      "prompt": "What food item do you see in this image?",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llama-vision-11b",
+          "text": "",
+          "latency": 1.4,
+          "score": 0,
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "reasoning": "Connection error."
+        },
+        {
+          "model": "phi4",
+          "text": "",
+          "latency": 1.3,
+          "score": 0,
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "reasoning": "Connection error."
+        }
+      ],
+      "avg_score": 0
+    },
+    {
+      "case_id": "describe-5",
+      "prompt": "What do you see in this image? Be specific.",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llama-vision-11b",
+          "text": "",
+          "latency": 1.3,
+          "score": 0,
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "reasoning": "Connection error."
+        },
+        {
+          "model": "phi4",
+          "text": "",
+          "latency": 1.3,
+          "score": 0,
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "reasoning": "Connection error."
+        }
+      ],
+      "avg_score": 0
+    }
+  ],
+  "last_updated": "Mar 31, 2026, 10:17 PM PT"
+}

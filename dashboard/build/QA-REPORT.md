@@ -1,6 +1,6 @@
 # Dashboard QA Report
 
-**Generated:** Mar 31, 2026, 9:53 PM PT
+**Generated:** Mar 31, 2026, 10:17 PM PT
 
 ---
 
@@ -22,11 +22,17 @@ All checks passed.
 ```
 🔍 Scoring Sanity Checker
 
-Checking 13 result files
+Checking 22 result files
 
 ============================================================
 
-❌ CRITICAL ISSUES (5):
+❌ CRITICAL ISSUES (10):
+
+  2026-04-01-2026-04-01T03-14-13
+  → Text-only model phi4 scored 8/10 in vision eval (expected <5)
+
+  2026-04-01-2026-04-01T03-14-13
+  → Text-only phi4 (8) scored higher than vision llama-vision-11b (4.83)
 
   2026-04-01-2026-04-01T03-18-00
   → Text-only model phi4 scored 8/10 in vision eval (expected <5)
@@ -34,22 +40,40 @@ Checking 13 result files
   2026-04-01-2026-04-01T03-18-00
   → Text-only phi4 (8) scored higher than vision llama-vision-11b (4.83)
 
-  2026-04-01-2026-04-01T03-19-27
-  → Text-only model phi4 scored 8.51/10 in vision eval (expected <5)
-
-  2026-04-01-2026-04-01T03-19-27
-  → Text-only phi4 (8.51) scored higher than vision llava-13b (8.02)
-
   2026-04-01-2026-04-01T03-35-29
   → Text-only phi4-judge (4.88) scored higher than vision llama-vision-11b (2.02)
 
-⚠️  WARNINGS (2):
+  2026-04-01-2026-04-01T05-04-04
+  → Text-only model phi4 scored 9.16/10 in vision eval (expected <5)
+
+  2026-04-01-2026-04-01T05-04-04
+  → Text-only phi4 (9.16) scored higher than vision llava-13b (8.4)
+
+  2026-04-01-2026-04-01T05-05-53
+  → Text-only model phi4 scored 7.26/10 in vision eval (expected <5)
+
+  2026-04-01-2026-04-01T05-05-53
+  → Text-only model qwen2.5:7b scored 6.36/10 in vision eval (expected <5)
+
+  2026-04-01-2026-04-01T05-06-51
+  → Text-only model phi4 scored 5.5/10 in vision eval (expected <5)
+
+⚠️  WARNINGS (5):
+
+  2026-04-01-2026-04-01T03-10-56
+  → Vision model llama-vision-11b scored only 0/10 (expected >6)
+
+  2026-04-01-2026-04-01T03-14-13
+  → Vision model llama-vision-11b scored only 4.83/10 (expected >6)
 
   2026-04-01-2026-04-01T03-18-00
   → Vision model llama-vision-11b scored only 4.83/10 (expected >6)
 
   2026-04-01-2026-04-01T03-35-29
   → Vision model llama-vision-11b scored only 2.02/10 (expected >6)
+
+  2026-04-01-2026-04-01T05-05-53
+  → Case 4: Model qwen2.5:7b scored 5.2/10 for non-answer response
 
 
 ```

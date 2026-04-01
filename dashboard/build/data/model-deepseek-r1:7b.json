@@ -1,0 +1,75 @@
+{
+  "model_name": "deepseek-r1:7b",
+  "total_runs": 1,
+  "total_cases": 5,
+  "avg_score": 0,
+  "total_wins": 0,
+  "avg_latency": 16.3,
+  "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T05-07-50",
+      "name": "Judge Test: deepseek-r1:7b",
+      "date": "2026-04-01",
+      "score": 0,
+      "accuracy": 0,
+      "completeness": 0,
+      "conciseness": 0,
+      "wins": 0,
+      "latency": 16.3
+    }
+  ],
+  "best_cases": [
+    {
+      "id": "scene-description",
+      "prompt": "Describe the scene in this image.",
+      "score": 0
+    },
+    {
+      "id": "object-detection",
+      "prompt": "What objects can you see in this picture?",
+      "score": 0
+    },
+    {
+      "id": "main-subject",
+      "prompt": "What is the main subject of this image?",
+      "score": 0
+    },
+    {
+      "id": "color-lighting",
+      "prompt": "Describe the colors and lighting in this scene.",
+      "score": 0
+    },
+    {
+      "id": "activity",
+      "prompt": "What activity is taking place in this image?",
+      "score": 0
+    }
+  ],
+  "worst_cases": [
+    {
+      "id": "scene-description",
+      "prompt": "Describe the scene in this image.",
+      "score": 0
+    },
+    {
+      "id": "object-detection",
+      "prompt": "What objects can you see in this picture?",
+      "score": 0
+    },
+    {
+      "id": "main-subject",
+      "prompt": "What is the main subject of this image?",
+      "score": 0
+    },
+    {
+      "id": "color-lighting",
+      "prompt": "Describe the colors and lighting in this scene.",
+      "score": 0
+    },
+    {
+      "id": "activity",
+      "prompt": "What activity is taking place in this image?",
+      "score": 0
+    }
+  ]
+}

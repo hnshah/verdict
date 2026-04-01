@@ -1,14 +1,66 @@
 {
-  "generated_at": "2026-04-01T04:57:36.016Z",
+  "generated_at": "2026-04-01T05:22:03.731Z",
   "stats": {
-    "total_runs": 12,
-    "total_cases": 163,
-    "total_models": 24,
-    "avg_score": 8.2,
-    "test_runs": 1,
-    "real_runs": 11
+    "total_runs": 22,
+    "total_cases": 222,
+    "total_models": 26,
+    "avg_score": 7.8,
+    "test_runs": 3,
+    "real_runs": 19
   },
   "runs": [
+    {
+      "id": "2026-04-01-2026-04-01T05-07-50",
+      "name": "Judge Test: deepseek-r1:7b",
+      "date": "2026-04-01",
+      "cases": 5,
+      "models": 3,
+      "avg_score": 2.9,
+      "start_time": "10:09pm",
+      "duration": "",
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-04-01-2026-04-01T05-06-51",
+      "name": "Judge Test: qwen3-coder",
+      "date": "2026-04-01",
+      "cases": 5,
+      "models": 3,
+      "avg_score": 5.6,
+      "start_time": "10:07pm",
+      "duration": "",
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-04-01-2026-04-01T05-05-53",
+      "name": "Judge Test: qwen2.5:7b",
+      "date": "2026-04-01",
+      "cases": 5,
+      "models": 3,
+      "avg_score": 7.2,
+      "start_time": "10:06pm",
+      "duration": "",
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-04-01-2026-04-01T05-04-04",
+      "name": "Judge Test: phi4",
+      "date": "2026-04-01",
+      "cases": 5,
+      "models": 2,
+      "avg_score": 8.8,
+      "start_time": "10:05pm",
+      "duration": "",
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
     {
       "id": "2026-04-01-2026-04-01T03-35-29",
       "name": "Vision Models Only Benchmark",
@@ -41,6 +93,55 @@
       "is_single_model": false
     },
     {
+      "id": "2026-04-01-2026-04-01T03-14-13",
+      "name": "Vision Model Comparison",
+      "date": "2026-04-01",
+      "cases": 3,
+      "models": 3,
+      "avg_score": 7.3,
+      "start_time": "8:14pm",
+      "duration": "",
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-04-01-2026-04-01T03-13-11",
+      "name": "Vision Model Comparison",
+      "date": "2026-04-01",
+      "cases": 1,
+      "models": 3,
+      "avg_score": 9.8,
+      "start_time": "8:13pm",
+      "duration": "",
+      "badges": [
+        {
+          "type": "test",
+          "label": "Test Run"
+        }
+      ],
+      "is_test": true,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-04-01-2026-04-01T03-10-56",
+      "name": "Vision Model Comparison",
+      "date": "2026-04-01",
+      "cases": 5,
+      "models": 2,
+      "avg_score": 0,
+      "start_time": "8:11pm",
+      "duration": "",
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
       "id": "2026-03-31-2026-03-31T18-25-12",
       "name": "Verdict Auto-Dashboard",
       "date": "2026-03-31",
@@ -48,6 +149,37 @@
       "models": 5,
       "avg_score": 9.2,
       "start_time": "11:36am",
+      "duration": "",
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T15-12-50",
+      "name": "test-phi4 - 10 cases",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 1,
+      "avg_score": 9.3,
+      "start_time": "8:13am",
+      "duration": "",
+      "badges": [
+        {
+          "type": "single",
+          "label": "Single Model"
+        }
+      ],
+      "is_test": false,
+      "is_single_model": true
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-13-39",
+      "name": "3 Model Comparison - 10 cases",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 3,
+      "avg_score": 9.4,
+      "start_time": "7:15am",
       "duration": "",
       "badges": [],
       "is_test": false,
@@ -92,6 +224,19 @@
       "models": 4,
       "avg_score": 9.3,
       "start_time": "1:02am",
+      "duration": "",
+      "badges": [],
+      "is_test": false,
+      "is_single_model": false
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-53-03",
+      "name": "Comprehensive Benchmark (10 models)",
+      "date": "2026-03-31",
+      "cases": 10,
+      "models": 10,
+      "avg_score": 5.4,
+      "start_time": "1:00am",
       "duration": "",
       "badges": [],
       "is_test": false,
@@ -178,34 +323,14 @@
   ],
   "top_models": [
     {
-      "name": "qwen3-coder",
-      "avg_score": 9.7,
-      "runs": 2,
-      "total_wins": 3,
-      "win_rate": 150,
-      "avg_latency": 6.5,
-      "rank": 1,
-      "medal": "🥇"
-    },
-    {
-      "name": "phi4",
-      "avg_score": 9.5,
-      "runs": 3,
-      "total_wins": 14,
-      "win_rate": 467,
-      "avg_latency": 5.4,
-      "rank": 2,
-      "medal": "🥈"
-    },
-    {
       "name": "qwen-32b",
       "avg_score": 9.5,
       "runs": 1,
       "total_wins": 2,
       "win_rate": 200,
       "avg_latency": 24.4,
-      "rank": 3,
-      "medal": "🥉"
+      "rank": 1,
+      "medal": "🥇"
     },
     {
       "name": "qwen2.5-7b",
@@ -214,8 +339,8 @@
       "total_wins": 5,
       "win_rate": 500,
       "avg_latency": 4.5,
-      "rank": 4,
-      "medal": ""
+      "rank": 2,
+      "medal": "🥈"
     },
     {
       "name": "qwen-7b",
@@ -224,17 +349,17 @@
       "total_wins": 47,
       "win_rate": 4700,
       "avg_latency": 11.6,
-      "rank": 5,
-      "medal": ""
+      "rank": 3,
+      "medal": "🥉"
     },
     {
-      "name": "phi4:14b",
+      "name": "test-phi4",
       "avg_score": 9.3,
-      "runs": 3,
-      "total_wins": 8,
-      "win_rate": 267,
-      "avg_latency": 14,
-      "rank": 6,
+      "runs": 1,
+      "total_wins": 10,
+      "win_rate": 1000,
+      "avg_latency": 3.9,
+      "rank": 4,
       "medal": ""
     },
     {
@@ -244,37 +369,217 @@
       "total_wins": 0,
       "win_rate": 0,
       "avg_latency": 7.5,
-      "rank": 7,
+      "rank": 5,
       "medal": ""
     },
     {
-      "name": "qwen2.5:7b",
+      "name": "qwen-coder",
       "avg_score": 9.2,
-      "runs": 6,
-      "total_wins": 27,
-      "win_rate": 450,
-      "avg_latency": 7.1,
-      "rank": 8,
+      "runs": 3,
+      "total_wins": 11,
+      "win_rate": 367,
+      "avg_latency": 6,
+      "rank": 6,
+      "medal": ""
+    },
+    {
+      "name": "phi4:14b",
+      "avg_score": 9.2,
+      "runs": 4,
+      "total_wins": 8,
+      "win_rate": 200,
+      "avg_latency": 12,
+      "rank": 7,
       "medal": ""
     },
     {
       "name": "llama3.2:3b",
       "avg_score": 9.2,
-      "runs": 4,
-      "total_wins": 17,
-      "win_rate": 425,
-      "avg_latency": 6.1,
+      "runs": 5,
+      "total_wins": 20,
+      "win_rate": 400,
+      "avg_latency": 5.7,
+      "rank": 8,
+      "medal": ""
+    },
+    {
+      "name": "llama3.3:70b",
+      "avg_score": 9.1,
+      "runs": 2,
+      "total_wins": 2,
+      "win_rate": 100,
+      "avg_latency": 19.9,
       "rank": 9,
       "medal": ""
     },
     {
-      "name": "qwen-coder",
+      "name": "cogito",
       "avg_score": 9.1,
-      "runs": 2,
-      "total_wins": 5,
-      "win_rate": 250,
-      "avg_latency": 6.9,
+      "runs": 1,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 6.8,
       "rank": 10,
+      "medal": ""
+    },
+    {
+      "name": "qwen2.5:14b",
+      "avg_score": 9,
+      "runs": 3,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 14.7,
+      "rank": 11,
+      "medal": ""
+    },
+    {
+      "name": "qwen2.5:32b",
+      "avg_score": 9,
+      "runs": 2,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 7.9,
+      "rank": 12,
+      "medal": ""
+    },
+    {
+      "name": "qwen3-4b",
+      "avg_score": 9,
+      "runs": 1,
+      "total_wins": 1,
+      "win_rate": 100,
+      "avg_latency": 150.1,
+      "rank": 13,
+      "medal": ""
+    },
+    {
+      "name": "qwen2.5:7b",
+      "avg_score": 8.8,
+      "runs": 8,
+      "total_wins": 33,
+      "win_rate": 413,
+      "avg_latency": 6,
+      "rank": 14,
+      "medal": ""
+    },
+    {
+      "name": "qwen3-coder",
+      "avg_score": 8.4,
+      "runs": 4,
+      "total_wins": 5,
+      "win_rate": 125,
+      "avg_latency": 5.3,
+      "rank": 15,
+      "medal": ""
+    },
+    {
+      "name": "llama3.2-3b",
+      "avg_score": 8.3,
+      "runs": 1,
+      "total_wins": 13,
+      "win_rate": 1300,
+      "avg_latency": 1.9,
+      "rank": 16,
+      "medal": ""
+    },
+    {
+      "name": "llava-13b",
+      "avg_score": 7.8,
+      "runs": 5,
+      "total_wins": 18,
+      "win_rate": 360,
+      "avg_latency": 3.4,
+      "rank": 17,
+      "medal": ""
+    },
+    {
+      "name": "phi4",
+      "avg_score": 6.6,
+      "runs": 9,
+      "total_wins": 22,
+      "win_rate": 244,
+      "avg_latency": 5.7,
+      "rank": 18,
+      "medal": ""
+    },
+    {
+      "name": "phi4-judge",
+      "avg_score": 4.9,
+      "runs": 1,
+      "total_wins": 2,
+      "win_rate": 200,
+      "avg_latency": 2.3,
+      "rank": 19,
+      "medal": ""
+    },
+    {
+      "name": "mistral:7b",
+      "avg_score": 4.6,
+      "runs": 4,
+      "total_wins": 7,
+      "win_rate": 175,
+      "avg_latency": 3.5,
+      "rank": 20,
+      "medal": ""
+    },
+    {
+      "name": "gemma2:9b",
+      "avg_score": 3.1,
+      "runs": 3,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 3.8,
+      "rank": 21,
+      "medal": ""
+    },
+    {
+      "name": "deepseek-coder:6.7b",
+      "avg_score": 2.1,
+      "runs": 3,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 4.6,
+      "rank": 22,
+      "medal": ""
+    },
+    {
+      "name": "llama-vision-11b",
+      "avg_score": 1,
+      "runs": 2,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 3.7,
+      "rank": 23,
+      "medal": ""
+    },
+    {
+      "name": "deepseek-r1:7b",
+      "avg_score": 0,
+      "runs": 1,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 16.3,
+      "rank": 24,
+      "medal": ""
+    },
+    {
+      "name": "mathstral:7b",
+      "avg_score": 0,
+      "runs": 2,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 0.1,
+      "rank": 25,
+      "medal": ""
+    },
+    {
+      "name": "deepseek-coder",
+      "avg_score": 0,
+      "runs": 1,
+      "total_wins": 0,
+      "win_rate": 0,
+      "avg_latency": 0.2,
+      "rank": 26,
       "medal": ""
     }
   ]

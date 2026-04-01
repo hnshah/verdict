@@ -1,21 +1,54 @@
 {
   "model_name": "phi4",
-  "total_runs": 5,
-  "total_cases": 43,
-  "avg_score": 9,
-  "total_wins": 21,
-  "avg_latency": 4.1,
+  "total_runs": 12,
+  "total_cases": 41,
+  "avg_score": 7.1,
+  "total_wins": 22,
+  "avg_latency": 4.8,
   "runs": [
     {
-      "id": "2026-04-01-2026-04-01T03-19-27",
-      "name": "Vision Comprehensive Benchmark",
+      "id": "2026-04-01-2026-04-01T05-07-50",
+      "name": "Judge Test: deepseek-r1:7b",
       "date": "2026-04-01",
-      "score": 8.5,
-      "accuracy": 8.7,
-      "completeness": 8,
-      "conciseness": 8.8,
-      "wins": 7,
+      "score": 0,
+      "accuracy": 0,
+      "completeness": 0,
+      "conciseness": 0,
+      "wins": 0,
+      "latency": 14.3
+    },
+    {
+      "id": "2026-04-01-2026-04-01T05-06-51",
+      "name": "Judge Test: qwen3-coder",
+      "date": "2026-04-01",
+      "score": 5.5,
+      "accuracy": 4,
+      "completeness": 5.6,
+      "conciseness": 7.4,
+      "wins": 1,
       "latency": 2.9
+    },
+    {
+      "id": "2026-04-01-2026-04-01T05-05-53",
+      "name": "Judge Test: qwen2.5:7b",
+      "date": "2026-04-01",
+      "score": 7.3,
+      "accuracy": 5.4,
+      "completeness": 8.6,
+      "conciseness": 8.4,
+      "wins": 0,
+      "latency": 2.9
+    },
+    {
+      "id": "2026-04-01-2026-04-01T05-04-04",
+      "name": "Judge Test: phi4",
+      "date": "2026-04-01",
+      "score": 9.2,
+      "accuracy": 10,
+      "completeness": 8.2,
+      "conciseness": 9,
+      "wins": 5,
+      "latency": 3
     },
     {
       "id": "2026-04-01-2026-04-01T03-18-00",
@@ -29,6 +62,39 @@
       "latency": 1.5
     },
     {
+      "id": "2026-04-01-2026-04-01T03-14-13",
+      "name": "Vision Model Comparison",
+      "date": "2026-04-01",
+      "score": 8,
+      "accuracy": 8,
+      "completeness": 7.3,
+      "conciseness": 9,
+      "wins": 0,
+      "latency": 1.5
+    },
+    {
+      "id": "2026-04-01-2026-04-01T03-13-11",
+      "name": "Vision Model Comparison",
+      "date": "2026-04-01",
+      "score": 9.8,
+      "accuracy": 10,
+      "completeness": 10,
+      "conciseness": 9,
+      "wins": 0,
+      "latency": 3.6
+    },
+    {
+      "id": "2026-04-01-2026-04-01T03-10-56",
+      "name": "Vision Model Comparison",
+      "date": "2026-04-01",
+      "score": 0,
+      "accuracy": 0,
+      "completeness": 0,
+      "conciseness": 0,
+      "wins": 0,
+      "latency": 6.7
+    },
+    {
       "id": "2026-03-31-2026-03-31T18-25-12",
       "name": "Verdict Auto-Dashboard",
       "date": "2026-03-31",
@@ -38,6 +104,17 @@
       "conciseness": 9,
       "wins": 2,
       "latency": 6.6
+    },
+    {
+      "id": "2026-03-31-2026-03-31T14-13-39",
+      "name": "3 Model Comparison - 10 cases",
+      "date": "2026-03-31",
+      "score": 9.3,
+      "accuracy": 9.9,
+      "completeness": 9.2,
+      "conciseness": 8.2,
+      "wins": 2,
+      "latency": 5.6
     },
     {
       "id": "2026-03-31-2026-03-31T14-02-35",
@@ -69,6 +146,11 @@
       "score": 10
     },
     {
+      "id": "test-1",
+      "prompt": "Say hello",
+      "score": 9.8
+    },
+    {
       "id": "gsm8k-0001",
       "prompt": "Janet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?",
       "score": 9.8
@@ -82,38 +164,33 @@
       "id": "gsm8k-0003",
       "prompt": "Josh decides to try flipping a house.  He buys a house for $80,000 and then puts in $50,000 in repairs.  This increased the value of the house by 150%.  How much profit did he make?",
       "score": 9.8
-    },
-    {
-      "id": "gsm8k-0004",
-      "prompt": "James decides to run 3 sprints 3 times a week.  He runs 60 meters each sprint.  How many total meters does he run a week?",
-      "score": 9.8
     }
   ],
   "worst_cases": [
     {
-      "id": "scene-city",
-      "prompt": "What type of environment is shown in this image?",
-      "score": 6.4
+      "id": "describe-4",
+      "prompt": "What food item do you see in this image?",
+      "score": 0
+    },
+    {
+      "id": "describe-5",
+      "prompt": "What do you see in this image? Be specific.",
+      "score": 0
     },
     {
       "id": "describe-1",
       "prompt": "Describe what you see in this image in one sentence.",
-      "score": 6.8
+      "score": 4.5
     },
     {
-      "id": "object-food",
-      "prompt": "What food items can you identify in this image?",
-      "score": 7.1
+      "id": "object-detection",
+      "prompt": "What objects can you see in this picture?",
+      "score": 5
     },
     {
-      "id": "detail-hands",
-      "prompt": "What is the person doing in this image?",
-      "score": 7.1
-    },
-    {
-      "id": "describe-2",
-      "prompt": "What is the main subject of this image?",
-      "score": 7.9
+      "id": "activity",
+      "prompt": "What activity is taking place in this image?",
+      "score": 5.3
     }
   ]
 }

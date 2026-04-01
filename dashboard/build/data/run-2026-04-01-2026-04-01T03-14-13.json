@@ -1,0 +1,170 @@
+{
+  "id": "2026-04-01-2026-04-01T03-14-13",
+  "name": "Vision Model Comparison",
+  "date": "Mar 31, 2026, 8:14 PM PT",
+  "run_id": "2026-04-01T03-14-13",
+  "eval_pack": {
+    "file": "eval-packs/vision-basics.yaml",
+    "description": "Basic vision understanding test",
+    "total_cases": 3
+  },
+  "stats": {
+    "cases": 3,
+    "models": 3,
+    "avg_score": 7.3,
+    "pass_rate": 33,
+    "avg_latency": 0.9
+  },
+  "model_leaderboard": [
+    {
+      "name": "llava-13b",
+      "avg_score": 9.1,
+      "accuracy": 9.3,
+      "completeness": 8.7,
+      "conciseness": 9,
+      "wins": 3,
+      "latency": 0.5,
+      "rank": 1,
+      "medal": "🥇"
+    },
+    {
+      "name": "phi4",
+      "avg_score": 8,
+      "accuracy": 8,
+      "completeness": 7.3,
+      "conciseness": 9,
+      "wins": 0,
+      "latency": 1.5,
+      "rank": 2,
+      "medal": "🥈"
+    },
+    {
+      "name": "llama-vision-11b",
+      "avg_score": 4.8,
+      "accuracy": 3,
+      "completeness": 4.7,
+      "conciseness": 9.7,
+      "wins": 0,
+      "latency": 0.6,
+      "rank": 3,
+      "medal": "🥉"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "describe-1",
+      "prompt": "Describe what you see in this image in one sentence.",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llama-vision-11b",
+          "text": "I don't see an image. This conversation just started.",
+          "latency": 0.6,
+          "score": 3.1,
+          "accuracy": 1,
+          "completeness": 2,
+          "conciseness": 10,
+          "reasoning": "The response acknowledges the absence of an image, which is accurate given the context."
+        },
+        {
+          "model": "llava-13b",
+          "text": " The image shows a person standing on a stage with their back to the camera, facing a microphone and a large audience.",
+          "latency": 0.5,
+          "score": 10,
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "reasoning": "The response accurately describes the image content by mentioning a person on stage, facing a microphone and audience, with their back to the camera."
+        },
+        {
+          "model": "phi4",
+          "text": "As an AI, I'm unable to view images directly. However, if you describe the image or provide details about it, I can help interpret or analyze the content based on that description. Please share more information!",
+          "latency": 0.9,
+          "score": 6.8,
+          "accuracy": 7,
+          "completeness": 5,
+          "conciseness": 9,
+          "reasoning": "The response acknowledges the inability to view images and offers assistance based on a description, but it does not directly describe any image content."
+        }
+      ],
+      "avg_score": 6.6
+    },
+    {
+      "case_id": "describe-2",
+      "prompt": "What is the main subject of this image?",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llama-vision-11b",
+          "text": "I cannot verify what the main subject of this image is. Is there anything else I can help you with?",
+          "latency": 0.6,
+          "score": 4.8,
+          "accuracy": 3,
+          "completeness": 5,
+          "conciseness": 9,
+          "reasoning": "The response correctly states inability to identify the subject but does not address the criteria of identifying it."
+        },
+        {
+          "model": "llava-13b",
+          "text": " The main subject of this image appears to be a person's hands, which are holding what looks like a smartphone or a small tablet.",
+          "latency": 0.6,
+          "score": 7.9,
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 9,
+          "reasoning": "The response correctly identifies the main subject as hands holding a device, but lacks detail on other potential elements in the image."
+        },
+        {
+          "model": "phi4",
+          "text": "As an AI text-based model, I'm unable to view or analyze images directly. However, if you can describe the image in detail, I'd be happy to help identify its possible subjects or themes based on your description. Please provide as much information as you can about what is depicted in the image.",
+          "latency": 1.2,
+          "score": 7.9,
+          "accuracy": 7,
+          "completeness": 8,
+          "conciseness": 10,
+          "reasoning": "The response correctly explains the AI's limitations and offers a helpful alternative approach."
+        }
+      ],
+      "avg_score": 6.9
+    },
+    {
+      "case_id": "describe-3",
+      "prompt": "What type of location or setting is shown in this image?",
+      "category": "general",
+      "responses": [
+        {
+          "model": "llama-vision-11b",
+          "text": "I don't see an image in this conversation. If you provide the image, I can try to help you identify the type of location or setting shown.",
+          "latency": 0.7,
+          "score": 6.6,
+          "accuracy": 5,
+          "completeness": 7,
+          "conciseness": 10,
+          "reasoning": "The response correctly states the inability to identify an image without seeing it, but does not attempt to infer or guess based on context."
+        },
+        {
+          "model": "llava-13b",
+          "text": " The image shows a beach scene with sand, water, and what appears to be waves. There are also some rocks visible in the foreground.",
+          "latency": 0.6,
+          "score": 9.3,
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "reasoning": "The response accurately identifies the setting as a beach scene, covering key elements like sand, water, waves, and rocks."
+        },
+        {
+          "model": "phi4",
+          "text": "As an AI text-based model, I'm unable to view images directly. However, you can describe the elements visible in the image, such as buildings, natural features, objects, people, and activities. Based on your description, I might be able to help identify the type of location or setting it represents.\n\nFor example:\n- If there are skyscrapers, busy streets, and lots of cars, it could be an urban cityscape.\n- If you see mountains, trees, and possibly a lake, it might be a natural landscape or park.\n- If there are historical buildings with cobblestone streets, it could be a historic town or village.\n\nFeel free to provide more details!",
+          "latency": 2.5,
+          "score": 9.3,
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "reasoning": "The response effectively guides the user on how to describe an image for identification, covering various potential settings."
+        }
+      ],
+      "avg_score": 8.4
+    }
+  ],
+  "last_updated": "Mar 31, 2026, 10:17 PM PT"
+}

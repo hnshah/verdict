@@ -1,11 +1,22 @@
 {
   "model_name": "llama3.3:70b",
-  "total_runs": 1,
+  "total_runs": 2,
   "total_cases": 10,
   "avg_score": 9.1,
-  "total_wins": 1,
-  "avg_latency": 18.6,
+  "total_wins": 2,
+  "avg_latency": 19.9,
   "runs": [
+    {
+      "id": "2026-03-31-2026-03-31T07-53-03",
+      "name": "Comprehensive Benchmark (10 models)",
+      "date": "2026-03-31",
+      "score": 9.1,
+      "accuracy": 9.3,
+      "completeness": 9,
+      "conciseness": 8.8,
+      "wins": 1,
+      "latency": 21.2
+    },
     {
       "id": "2026-03-31-2026-03-31T07-48-00",
       "name": "Comprehensive Benchmark (10 models)",

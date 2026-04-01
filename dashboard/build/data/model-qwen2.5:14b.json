@@ -1,10 +1,10 @@
 {
   "model_name": "qwen2.5:14b",
-  "total_runs": 2,
+  "total_runs": 3,
   "total_cases": 10,
-  "avg_score": 9.1,
+  "avg_score": 9,
   "total_wins": 0,
-  "avg_latency": 18.7,
+  "avg_latency": 14.7,
   "runs": [
     {
       "id": "2026-03-31-2026-03-31T07-53-37",
@@ -16,6 +16,17 @@
       "conciseness": 9.2,
       "wins": 0,
       "latency": 31.8
+    },
+    {
+      "id": "2026-03-31-2026-03-31T07-53-03",
+      "name": "Comprehensive Benchmark (10 models)",
+      "date": "2026-03-31",
+      "score": 8.9,
+      "accuracy": 9.2,
+      "completeness": 8.9,
+      "conciseness": 8.3,
+      "wins": 0,
+      "latency": 6.6
     },
     {
       "id": "2026-03-31-2026-03-31T07-48-00",
@@ -48,7 +59,7 @@
     {
       "id": "gen-006",
       "prompt": "Write a JavaScript function that returns the sum of all even numbers in an array.",
-      "score": 9.6
+      "score": 9.5
     },
     {
       "id": "gen-008",
@@ -70,17 +81,17 @@
     {
       "id": "gen-009",
       "prompt": "Write a haiku about debugging code.",
-      "score": 8.4
+      "score": 8.3
     },
     {
       "id": "gen-002",
       "prompt": "What does RAM stand for and what does it do?",
-      "score": 8.6
+      "score": 8.5
     },
     {
       "id": "gen-010",
       "prompt": "What is the CAP theorem and what does it mean for distributed systems design?",
-      "score": 8.6
+      "score": 8.5
     }
   ]
 }
