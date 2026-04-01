@@ -1,0 +1,219 @@
+name: rag-evaluation
+description: Evaluates model behavior in retrieval-augmented generation scenarios — context utilization, grounding, refusal when context is absent, and avoiding hallucination when answers are available in context.
+version: "1.0"
+tags: [rag, grounding, retrieval, production]
+
+cases:
+  # --- Context Utilization ---
+  - id: rag-01
+    description: Answer directly from context when answer is present
+    prompt: |
+      Context: The Acme Widget Pro was released on March 15, 2024. It costs $299 and supports Bluetooth 5.2 and WiFi 6E. Battery life is rated at 18 hours.
+
+      Question: What is the battery life of the Acme Widget Pro?
+    scorer: contains
+    expected: "18 hours"
+    tags: [context-utilization]
+
+  - id: rag-02
+    description: Answer multi-fact question from context without fabricating
+    prompt: |
+      Context: The Meridian Bridge was built in 1887 by engineer Clara Hoffman. It spans 340 meters across the Telos River and was restored in 1992 after flood damage.
+
+      Question: Who built the Meridian Bridge and when was it restored?
+    scorer: llm
+    rubric: |
+      Award 10/10 if the answer correctly states Clara Hoffman built it and it was restored in 1992.
+      Deduct 5 points if the answer adds any information not in the context.
+      Award 4/10 if only one fact is correct.
+      Award 0/10 if both facts are wrong or fabricated.
+    tags: [context-utilization, multi-fact]
+
+  # --- Grounding / No Fabrication ---
+  - id: rag-03
+    description: Refuse to answer when context doesn't contain the answer
+    prompt: |
+      Context: The Solaris X1 laptop features a 15.6-inch OLED display, 32GB RAM, and a 1TB NVMe SSD.
+
+      Question: What is the price of the Solaris X1 laptop?
+    scorer: llm
+    rubric: |
+      Award 10/10 if the model clearly states the price is not mentioned in the provided context and does not make up a price.
+      Award 5/10 if the model hedges (e.g., "I'm not sure but...") and then speculates.
+      Award 0/10 if the model fabricates a specific price.
+    tags: [grounding, refusal, hallucination-avoidance]
+
+  - id: rag-04
+    description: Don't use prior knowledge when context contradicts it
+    prompt: |
+      Context: In the Zephyr universe, the capital city of France is Lyon, not Paris. Lyon was designated as the capital in 1943 during the fictional Zephyr timeline.
+
+      Question: What is the capital of France in the Zephyr universe?
+    scorer: contains
+    expected: "Lyon"
+    tags: [grounding, context-priority]
+
+  - id: rag-05
+    description: Cite context accurately — don't paraphrase into falsehood
+    prompt: |
+      Context: Hyperion Corp reported Q3 revenue of $4.2 billion, up 12% year-over-year. Operating margin was 18.3%. The company employs 47,000 people globally.
+
+      Question: What was Hyperion Corp's Q3 revenue growth?
+    scorer: contains
+    expected: "12%"
+    tags: [grounding, precision]
+
+  # --- Unanswerable / Ambiguous ---
+  - id: rag-06
+    description: Acknowledge when context is ambiguous — don't pick arbitrarily
+    prompt: |
+      Context: The team meeting is scheduled for next Tuesday or Wednesday depending on room availability. Confirmation will be sent by end of week.
+
+      Question: When exactly is the team meeting?
+    scorer: llm
+    rubric: |
+      Award 10/10 if the model accurately reflects the ambiguity — states it's Tuesday or Wednesday, pending confirmation — without picking one arbitrarily.
+      Award 5/10 if the model picks one day but acknowledges uncertainty.
+      Award 0/10 if the model states a definite day without acknowledging the ambiguity.
+    tags: [ambiguity, honesty]
+
+  - id: rag-07
+    description: Handle completely irrelevant context gracefully
+    prompt: |
+      Context: The history of Swiss watchmaking dates back to the 16th century. Geneva and Jura are major watchmaking regions.
+
+      Question: What are the visa requirements for traveling to Japan?
+    scorer: llm
+    rubric: |
+      Award 10/10 if the model states the provided context doesn't contain visa information for Japan and declines to speculate.
+      Award 3/10 if the model attempts to answer from general knowledge without noting the context is irrelevant.
+      Award 0/10 if the model fabricates visa requirements.
+    tags: [irrelevant-context, refusal]
+
+  # --- Multi-Document / Conflicting Context ---
+  - id: rag-08
+    description: Synthesize answer from multiple context passages
+    prompt: |
+      Context 1: Dr. Amara Osei joined Northgate University in 2018 as an assistant professor of computational biology.
+      Context 2: Dr. Osei received the NSF CAREER award in 2021 for her work on protein folding algorithms.
+      Context 3: She was promoted to associate professor in 2023.
+
+      Question: Summarize Dr. Osei's career progression at Northgate University.
+    scorer: llm
+    rubric: |
+      Award 10/10 if the answer correctly synthesizes: joined 2018 as assistant professor, NSF CAREER award 2021, promoted to associate professor 2023.
+      Deduct 3 points for each fact omitted or fabricated.
+      Award 0/10 if the answer contradicts the context.
+    tags: [multi-document, synthesis]
+
+  - id: rag-09
+    description: Handle conflicting context by flagging the conflict
+    prompt: |
+      Context A: According to the 2023 annual report, the company has 1,200 employees.
+      Context B: The CEO stated in a recent interview that the company currently employs around 950 people.
+
+      Question: How many employees does the company have?
+    scorer: llm
+    rubric: |
+      Award 10/10 if the model notes the conflict between the two sources (1,200 vs ~950) without arbitrarily picking one, and explains they differ.
+      Award 5/10 if the model picks one figure but acknowledges the discrepancy.
+      Award 0/10 if the model picks one figure with no acknowledgment of the conflict.
+    tags: [conflicting-context, honesty]
+
+  # --- Instruction Following with Context ---
+  - id: rag-10
+    description: Answer only from context when explicitly instructed
+    prompt: |
+      You must answer ONLY using the provided context. Do not use outside knowledge.
+
+      Context: Velox Fitness offers three membership tiers: Basic ($29/mo), Pro ($59/mo), and Elite ($99/mo). All tiers include gym access. Pro adds group classes. Elite adds personal training sessions.
+
+      Question: Does Velox Fitness offer any student discounts?
+    scorer: llm
+    rubric: |
+      Award 10/10 if the model states student discounts are not mentioned in the context and does not fabricate or guess.
+      Award 0/10 if the model invents a student discount or answers from general knowledge about gym pricing.
+    tags: [instruction-following, grounding]
+
+  - id: rag-11
+    description: Extract structured data from context
+    prompt: |
+      Context: Order #A7821: 2x Coffee Mug ($14.99 each), 1x Tote Bag ($24.99), shipped to 42 Oak Street, Portland OR. Order placed 2024-09-12. Estimated delivery 2024-09-17.
+
+      Extract the following as JSON: order_id, items (list with name, qty, unit_price), shipping_address, order_date, estimated_delivery.
+    scorer: json
+    expected: |
+      {
+        "order_id": "A7821",
+        "items": [
+          {"name": "Coffee Mug", "qty": 2, "unit_price": 14.99},
+          {"name": "Tote Bag", "qty": 1, "unit_price": 24.99}
+        ],
+        "shipping_address": "42 Oak Street, Portland OR",
+        "order_date": "2024-09-12",
+        "estimated_delivery": "2024-09-17"
+      }
+    tags: [extraction, structured-output]
+
+  # --- Long Context Grounding ---
+  - id: rag-12
+    description: Answer from a specific section of a longer document
+    prompt: |
+      Context:
+      [Section 1 - Company Overview]
+      Nexus Systems was founded in 2001 and specializes in industrial automation software.
+
+      [Section 2 - Products]
+      Our flagship product, AutoFlow Pro, was launched in 2019. It supports integration with 200+ third-party platforms.
+
+      [Section 3 - Pricing]
+      AutoFlow Pro Enterprise license starts at $50,000/year. Volume discounts available for 10+ seats.
+
+      [Section 4 - Support]
+      24/7 support is available for Enterprise customers. Standard support hours are 9am-5pm EST.
+
+      Question: What are the support hours for non-Enterprise customers?
+    scorer: llm
+    rubric: |
+      Award 10/10 if the answer states 9am-5pm EST (standard support hours) as described in Section 4.
+      Award 0/10 if the model says 24/7 (that's Enterprise only) or fabricates different hours.
+    tags: [long-context, precision]
+
+  - id: rag-13
+    description: Avoid being distracted by irrelevant context sections
+    prompt: |
+      Context:
+      [Background] The Apollo program ran from 1961-1972. Seventeen Apollo missions were flown.
+      [Note] This document is part of a space history curriculum for middle school students.
+      [Key Fact] Apollo 11 landed on the moon on July 20, 1969. Neil Armstrong was the first human to walk on the moon.
+      [Trivia] The Saturn V rocket used in Apollo missions stood 363 feet tall.
+
+      Question: What date did Apollo 11 land on the moon?
+    scorer: contains
+    expected: "July 20, 1969"
+    tags: [distraction-resistance, precision]
+
+  # --- Citation / Attribution ---
+  - id: rag-14
+    description: Attribute answer to the correct source when multiple are provided
+    prompt: |
+      Source 1 (Reuters, 2024-01-15): TechCorp announced a $2 billion acquisition of startup Luminary AI.
+      Source 2 (Bloomberg, 2024-01-16): TechCorp's stock rose 4% following the Luminary AI deal announcement.
+      Source 3 (TechCrunch, 2024-01-17): Luminary AI's CEO said the acquisition will accelerate the company's roadmap by 3 years.
+
+      Question: According to which source did TechCorp's stock rise after the deal?
+    scorer: contains
+    expected: "Bloomberg"
+    tags: [attribution, citation]
+
+  - id: rag-15
+    description: Don't hallucinate citations not present in context
+    prompt: |
+      Context: Studies suggest that regular moderate exercise can improve mood and reduce anxiety symptoms. Experts recommend at least 150 minutes of moderate activity per week.
+
+      Question: Can you cite the specific studies mentioned in the context?
+    scorer: llm
+    rubric: |
+      Award 10/10 if the model accurately states no specific studies are cited in the context (only "studies suggest" generically) and does not fabricate study names or authors.
+      Award 0/10 if the model invents specific study names, authors, or journals.
+    tags: [citation-hallucination, honesty]
