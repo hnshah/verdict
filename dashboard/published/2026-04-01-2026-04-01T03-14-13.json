@@ -1,0 +1,280 @@
+{
+  "run_id": "2026-04-01T03-14-13",
+  "name": "Vision Model Comparison",
+  "timestamp": "2026-04-01T03:14:43.264Z",
+  "models": [
+    "llama-vision-11b",
+    "llava-13b",
+    "phi4"
+  ],
+  "cases": [
+    {
+      "case_id": "describe-1",
+      "prompt": "Describe what you see in this image in one sentence.",
+      "criteria": "Accurate description of image content",
+      "responses": {
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "I don't see an image. This conversation just started.",
+          "input_tokens": 20,
+          "output_tokens": 13,
+          "latency_ms": 556,
+          "cost_usd": 0
+        },
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The image shows a person standing on a stage with their back to the camera, facing a microphone and a large audience.",
+          "input_tokens": 23,
+          "output_tokens": 26,
+          "latency_ms": 510,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "As an AI, I'm unable to view images directly. However, if you describe the image or provide details about it, I can help interpret or analyze the content based on that description. Please share more information!",
+          "input_tokens": 21,
+          "output_tokens": 44,
+          "latency_ms": 902,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llama-vision-11b": {
+          "accuracy": 1,
+          "completeness": 2,
+          "conciseness": 10,
+          "total": 3.1,
+          "reasoning": "The response acknowledges the absence of an image, which is accurate given the context."
+        },
+        "llava-13b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 10,
+          "total": 10,
+          "reasoning": "The response accurately describes the image content by mentioning a person on stage, facing a microphone and audience, with their back to the camera."
+        },
+        "phi4": {
+          "accuracy": 7,
+          "completeness": 5,
+          "conciseness": 9,
+          "total": 6.8,
+          "reasoning": "The response acknowledges the inability to view images and offers assistance based on a description, but it does not directly describe any image content."
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "describe-2",
+      "prompt": "What is the main subject of this image?",
+      "criteria": "Correctly identifies main subject",
+      "responses": {
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "I cannot verify what the main subject of this image is. Is there anything else I can help you with?",
+          "input_tokens": 18,
+          "output_tokens": 23,
+          "latency_ms": 627,
+          "cost_usd": 0
+        },
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The main subject of this image appears to be a person's hands, which are holding what looks like a smartphone or a small tablet.",
+          "input_tokens": 20,
+          "output_tokens": 31,
+          "latency_ms": 573,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "As an AI text-based model, I'm unable to view or analyze images directly. However, if you can describe the image in detail, I'd be happy to help identify its possible subjects or themes based on your description. Please provide as much information as you can about what is depicted in the image.",
+          "input_tokens": 19,
+          "output_tokens": 62,
+          "latency_ms": 1208,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llama-vision-11b": {
+          "accuracy": 3,
+          "completeness": 5,
+          "conciseness": 9,
+          "total": 4.8,
+          "reasoning": "The response correctly states inability to identify the subject but does not address the criteria of identifying it."
+        },
+        "llava-13b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 9,
+          "total": 7.9,
+          "reasoning": "The response correctly identifies the main subject as hands holding a device, but lacks detail on other potential elements in the image."
+        },
+        "phi4": {
+          "accuracy": 7,
+          "completeness": 8,
+          "conciseness": 10,
+          "total": 7.9,
+          "reasoning": "The response correctly explains the AI's limitations and offers a helpful alternative approach."
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "describe-3",
+      "prompt": "What type of location or setting is shown in this image?",
+      "criteria": "Correctly identifies the setting",
+      "responses": {
+        "llama-vision-11b": {
+          "model_id": "llama-vision-11b",
+          "text": "I don't see an image in this conversation. If you provide the image, I can try to help you identify the type of location or setting shown.",
+          "input_tokens": 21,
+          "output_tokens": 32,
+          "latency_ms": 678,
+          "cost_usd": 0
+        },
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The image shows a beach scene with sand, water, and what appears to be waves. There are also some rocks visible in the foreground.",
+          "input_tokens": 23,
+          "output_tokens": 30,
+          "latency_ms": 562,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "As an AI text-based model, I'm unable to view images directly. However, you can describe the elements visible in the image, such as buildings, natural features, objects, people, and activities. Based on your description, I might be able to help identify the type of location or setting it represents.\n\nFor example:\n- If there are skyscrapers, busy streets, and lots of cars, it could be an urban cityscape.\n- If you see mountains, trees, and possibly a lake, it might be a natural landscape or park.\n- If there are historical buildings with cobblestone streets, it could be a historic town or village.\n\nFeel free to provide more details!",
+          "input_tokens": 22,
+          "output_tokens": 140,
+          "latency_ms": 2499,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llama-vision-11b": {
+          "accuracy": 5,
+          "completeness": 7,
+          "conciseness": 10,
+          "total": 6.6,
+          "reasoning": "The response correctly states the inability to identify an image without seeing it, but does not attempt to infer or guess based on context."
+        },
+        "llava-13b": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.3,
+          "reasoning": "The response accurately identifies the setting as a beach scene, covering key elements like sand, water, waves, and rocks."
+        },
+        "phi4": {
+          "accuracy": 10,
+          "completeness": 9,
+          "conciseness": 8,
+          "total": 9.3,
+          "reasoning": "The response effectively guides the user on how to describe an image for identification, covering various potential settings."
+        }
+      },
+      "winner": "llava-13b"
+    }
+  ],
+  "summary": {
+    "llama-vision-11b": {
+      "model_id": "llama-vision-11b",
+      "avg_total": 4.83,
+      "avg_accuracy": 3,
+      "avg_completeness": 4.67,
+      "avg_conciseness": 9.67,
+      "avg_latency_ms": 620.3333333333334,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 3,
+      "avg_solve_rate": 0
+    },
+    "llava-13b": {
+      "model_id": "llava-13b",
+      "avg_total": 9.07,
+      "avg_accuracy": 9.33,
+      "avg_completeness": 8.67,
+      "avg_conciseness": 9,
+      "avg_latency_ms": 548.3333333333334,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 100,
+      "wins": 3,
+      "cases_run": 3,
+      "avg_solve_rate": 0
+    },
+    "phi4": {
+      "model_id": "phi4",
+      "avg_total": 8,
+      "avg_accuracy": 8,
+      "avg_completeness": 7.33,
+      "avg_conciseness": 9,
+      "avg_latency_ms": 1536.3333333333333,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 3,
+      "avg_solve_rate": 0
+    }
+  },
+  "run_meta": {
+    "run_id": "2026-04-01T03-14-13",
+    "config_file": "verdict.yaml",
+    "verdict_version": "0.2.0",
+    "hardware": "Apple M3 Ultra 256GB"
+  },
+  "hardware": {
+    "cpu": "Apple M3 Ultra",
+    "cpu_cores": 32,
+    "cpu_arch": "arm64",
+    "ram_gb": 256,
+    "os": "macOS",
+    "os_version": "25.3.0"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v22.22.1",
+    "provider_versions": {
+      "ollama": "0.18.3"
+    }
+  },
+  "eval_pack": {
+    "file": "eval-packs/vision-basics.yaml",
+    "description": "Basic vision understanding test",
+    "total_cases": 3
+  },
+  "judge": {
+    "model": "phi4",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p Vision Basics -m llama-vision-11b,llava-13b,phi4",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "llama-vision-11b": {
+        "provider": "ollama",
+        "model": "llama3.2-vision:11b",
+        "temperature": 0.7,
+        "max_tokens": 512
+      },
+      "llava-13b": {
+        "provider": "ollama",
+        "model": "llava:13b",
+        "temperature": 0.7,
+        "max_tokens": 512
+      },
+      "phi4": {
+        "provider": "ollama",
+        "model": "phi4:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      }
+    }
+  }
+}

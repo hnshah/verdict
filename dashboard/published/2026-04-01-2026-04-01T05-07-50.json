@@ -1,0 +1,385 @@
+{
+  "run_id": "2026-04-01T05-07-50",
+  "name": "Judge Test: deepseek-r1:7b",
+  "timestamp": "2026-04-01T05:09:10.139Z",
+  "models": [
+    "llava-13b",
+    "phi4",
+    "deepseek-r1:7b"
+  ],
+  "cases": [
+    {
+      "case_id": "scene-description",
+      "prompt": "Describe the scene in this image.",
+      "criteria": "vision-description",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The image depicts a serene landscape with a clear blue sky and a calm body of water, which could be a lake or a river. On the left side of the image, there is a small boat gently floating on the water's surface. The boat appears to be empty, suggesting it might have been used for fishing or leisure activities.\n\nOn the right side of the image, there is a lush green hillside that slopes down towards the water. The hillside is covered in grass and dotted with trees, indicating a healthy and thriving natural environment.\n\nIn the distance, on the far side of the water, there are mountains visible under the blue sky. The mountains provide a majestic backdrop to the scene and add depth to the landscape.\n\nOverall, the image conveys a sense of tranquility and harmony with nature, as there are no signs of human activity or development in sight. It's a peaceful scene that could be found in many rural or remote areas around the world.",
+          "input_tokens": 19,
+          "output_tokens": 224,
+          "latency_ms": 3316,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "I'm unable to view images directly, but I can help you describe a scene if you provide some details about it. You might consider describing elements such as:\n\n1. **Setting**: Where is the scene taking place? Is it indoors or outdoors? What kind of environment is depicted (e.g., cityscape, forest, beach)?\n\n2. **Time of Day/Weather**: Is it daytime or nighttime? Are there any notable weather conditions like rain, snow, or sunshine?\n\n3. **Main Subjects**: Who or what are the main subjects in the image? Are they people, animals, objects, etc.?\n\n4. **Activities**: What actions are taking place? Are people interacting with each other or engaging in specific activities?\n\n5. **Colors and Lighting**: What colors dominate the scene? Is there a particular lighting effect that stands out (e.g., shadows, highlights)?\n\n6. **Mood/Atmosphere**: What mood does the image convey? Is it serene, chaotic, joyful, somber, etc.?\n\nFeel free to provide any of these details or ask for help with specific aspects of your description!",
+          "input_tokens": 17,
+          "output_tokens": 228,
+          "latency_ms": 3970,
+          "cost_usd": 0
+        },
+        "deepseek-r1:7b": {
+          "model_id": "deepseek-r1:7b",
+          "text": "The scene unfolds in a serene and tranquil landscape, where jagged mountain peaks rise gracefully against a crystal-clear lake, creating a picturesque backdrop for the action. At the center of this serene environment, traditional attire-clad individuals row smoothly across the water, their calm demeanor contrasting with the tranquility of their surroundings. Birds fly overhead, adding a sense of movement without disrupting the peaceful atmosphere.\n\nThe sunset casts a warm, golden glow over the scene, with soft hues of orange and amber painting the sky, complemented by scattered clouds that provide visual contrast. As the day fades into night, a boat gently lands on the shore, with water lapping against the rocks and reflections in the lake enhancing the depth and beauty of the moment. The entire scene is bathed in a warm, golden light, evoking a sense of peace and connection to nature.",
+          "input_tokens": 10,
+          "output_tokens": 438,
+          "latency_ms": 6890,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: "
+        },
+        "phi4": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: {\"accuracy\":1,\"completeness\":0,\"conciseness\":2,\"reasoning\":\"The response admits inability to view images but fails to"
+        },
+        "deepseek-r1:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: "
+        }
+      }
+    },
+    {
+      "case_id": "object-detection",
+      "prompt": "What objects can you see in this picture?",
+      "criteria": "vision-description",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " In the image, I can see a person standing on what appears to be a stage or performance area. The individual is wearing a dark-colored outfit and has their back turned towards the camera. There are no other distinct objects or text visible in the image.",
+          "input_tokens": 20,
+          "output_tokens": 56,
+          "latency_ms": 924,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "As an AI text-based model, I'm unable to view images directly. However, if you describe the image or provide details about what's visible in it, I'd be happy to help identify and discuss any objects or elements that might be present based on your description. Please share more information!",
+          "input_tokens": 19,
+          "output_tokens": 60,
+          "latency_ms": 1182,
+          "cost_usd": 0
+        },
+        "deepseek-r1:7b": {
+          "model_id": "deepseek-r1:7b",
+          "text": "I'm unable to view or analyze images directly. However, if you describe the picture to me, I can help you identify and understand the objects within it!",
+          "input_tokens": 12,
+          "output_tokens": 37,
+          "latency_ms": 521,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: {\"accuracy\":10,\"completeness\":9"
+        },
+        "phi4": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: "
+        },
+        "deepseek-r1:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: "
+        }
+      }
+    },
+    {
+      "case_id": "main-subject",
+      "prompt": "What is the main subject of this image?",
+      "criteria": "vision-description",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The main subject of this image appears to be a person's hands, which are holding what looks like a smartphone or a small tablet.",
+          "input_tokens": 20,
+          "output_tokens": 31,
+          "latency_ms": 580,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "As an AI text-based model, I'm unable to view or analyze images directly. However, if you can describe the image in detail, I'd be happy to help identify its possible subjects or themes based on your description. Please provide as much information as you can about what is depicted in the image.",
+          "input_tokens": 19,
+          "output_tokens": 62,
+          "latency_ms": 1218,
+          "cost_usd": 0
+        },
+        "deepseek-r1:7b": {
+          "model_id": "deepseek-r1:7b",
+          "text": "I'm unable to view or analyze images directly. However, if you describe the image to me, I can help you identify and understand its content!",
+          "input_tokens": 12,
+          "output_tokens": 35,
+          "latency_ms": 503,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 10,
+          "completeness": 7,
+          "conciseness": 9,
+          "total": 8.8,
+          "reasoning": "The response accurately identifies the main subject of the image as a person's hands holding a smartphone or tablet. It is complete in addressing all criteria and concise without unnecessary details."
+        },
+        "phi4": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: "
+        },
+        "deepseek-r1:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: "
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "color-lighting",
+      "prompt": "Describe the colors and lighting in this scene.",
+      "criteria": "vision-description",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " In the image, there is a warm and inviting atmosphere created by the soft lighting. The room is dimly lit, with a warm yellowish-orange hue that casts gentle shadows and highlights the textures of the objects within the space. This type of lighting creates a cozy and intimate ambiance, which contrasts with the stark white walls of the room.\n\nThe colors in the scene are predominantly warm tones, such as the yellowish-orange hue of the lighting and the earthy browns and greens of the wooden furniture. These warm colors evoke a sense of comfort and relaxation, which is further enhanced by the soft lighting.\n\nThe white walls of the room serve as a neutral backdrop that allows the other elements in the scene to stand out. The contrast between the white walls and the warm tones of the furniture and lighting adds depth and interest to the space. Overall, the colors and lighting in this scene work together to create a serene and inviting atmosphere.",
+          "input_tokens": 22,
+          "output_tokens": 226,
+          "latency_ms": 3280,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "To describe the colors and lighting of a scene, I'll need to create an imaginative setting since no specific details were provided. Let's envision a serene lakeside at sunset:\n\n**Colors:**\n- **Sky:** The sky is painted with vibrant hues of orange, pink, and purple as the sun dips below the horizon. These warm tones gradually blend into softer shades of lavender and deepening blue.\n- **Water:** The lake reflects the colors of the sky, creating a mirror-like surface that shimmers in oranges and pinks. In some areas, the water takes on a deeper turquoise or emerald green, contrasting with the fiery reflections above.\n- **Surrounding Nature:** Trees lining the shore are silhouetted against the brightening sky, their leaves tinged with gold and amber from the setting sun's rays. The grassy banks appear lush and vibrant in shades of deep green.\n- **Wildlife:** A few birds can be seen flying across the sky, their feathers catching the light and appearing as specks of white or gray against the colorful backdrop.\n\n**Lighting:**\n- **Sunset Glow:** The setting sun casts a warm, golden glow over the entire scene. This soft, diffused light creates long shadows stretching across the landscape.\n- **Reflections:** The water acts like a canvas, reflecting the sky's colors and enhancing the overall luminosity of the scene. The reflections add depth and richness to the visual experience.\n- **Twilight Transition:** As the sun continues its descent, the lighting shifts from bright daylight to the softer tones of twilight. This transition brings out subtle details in the landscape, with shadows lengthening and deepening.\n- **Ambient Light:** The fading light is complemented by the first hints of stars beginning to twinkle above, adding a gentle sparkle to the evening sky.\n\nThis scene captures the tranquil beauty of nature at sunset, characterized by its rich colors and dynamic lighting.",
+          "input_tokens": 19,
+          "output_tokens": 391,
+          "latency_ms": 6692,
+          "cost_usd": 0
+        },
+        "deepseek-r1:7b": {
+          "model_id": "deepseek-r1:7b",
+          "text": "To effectively describe the colors and lighting in a scene, consider the following structured approach:\n\n1. **Identify Primary Colors**: Note the dominant hues present. These could be warm (oranges, reds) or cool (blues, greens), each evoking different moods.\n\n2. **Consider Secondary and Tertiary Colors**: These are mixed tones that can add complexity to the scene. For example, a sunset might feature tertiary colors like salmon pink from mixing orange and red.\n\n3. **Light Source Analysis**:\n   - **Natural Light**: Check if sunlight is diffused (soft) or direct (sharp). The time of day affects color intensity—sunrise/sunset offers vibrant hues, while midday is brighter but less colorful.\n   - **Artificial Lighting**: Determine if the scene uses stage lights, which are consistent yet sometimes harsh. Consider how these contribute to mood.\n\n4. **Lighting Interaction**:\n   - **Shadows and Highlights**: These create contrast and depth, defining shapes and adding texture through reflections on surfaces like water or mirrors.\n   - **Color Temperature**: Cool tones (blues, grays) suggest calmness, while warm tones (oranges, yellows) evoke warmth and energy.\n\n5. **Mood and Atmosphere**: Reflect how colors and lighting together create an overall atmosphere—whether serene, bright, tense, or warm.\n\nBy applying this framework to any scene, you can systematically describe its visual elements and emotional impact.",
+          "input_tokens": 12,
+          "output_tokens": 823,
+          "latency_ms": 7961,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: "
+        },
+        "phi4": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: "
+        },
+        "deepseek-r1:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: "
+        }
+      }
+    },
+    {
+      "case_id": "activity",
+      "prompt": "What activity is taking place in this image?",
+      "criteria": "vision-description",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The image shows a person engaged in an outdoor activity, likely hiking or trekking. They are wearing a backpack and appear to be on a trail or path in a natural setting. The exact nature of the activity cannot be determined without more context, but it is clear that the person is participating in some form of physical exercise or exploration in an outdoor environment.",
+          "input_tokens": 20,
+          "output_tokens": 81,
+          "latency_ms": 1268,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "As an AI language model, I'm unable to view or analyze images directly. However, if you can describe the image or provide details about what's happening in it, I'd be happy to help interpret or discuss the possible activities taking place based on your description. Please share any relevant information you have!",
+          "input_tokens": 19,
+          "output_tokens": 62,
+          "latency_ms": 1210,
+          "cost_usd": 0
+        },
+        "deepseek-r1:7b": {
+          "model_id": "deepseek-r1:7b",
+          "text": "I can't see images, but if you describe it to me, I'll do my best to help!",
+          "input_tokens": 12,
+          "output_tokens": 27,
+          "latency_ms": 429,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: "
+        },
+        "phi4": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: "
+        },
+        "deepseek-r1:7b": {
+          "accuracy": 0,
+          "completeness": 0,
+          "conciseness": 0,
+          "total": 0,
+          "reasoning": "judge error: Error: Judge returned non-JSON: {\"accuracy\":1,\"completeness\":1,\"conciseness\":"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "llava-13b": {
+      "model_id": "llava-13b",
+      "avg_total": 8.8,
+      "avg_accuracy": 10,
+      "avg_completeness": 7,
+      "avg_conciseness": 9,
+      "avg_latency_ms": 9368,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 20,
+      "wins": 1,
+      "cases_run": 1,
+      "avg_solve_rate": 0
+    },
+    "phi4": {
+      "model_id": "phi4",
+      "avg_total": 0,
+      "avg_accuracy": 0,
+      "avg_completeness": 0,
+      "avg_conciseness": 0,
+      "avg_latency_ms": 14272,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 0,
+      "avg_solve_rate": 0
+    },
+    "deepseek-r1:7b": {
+      "model_id": "deepseek-r1:7b",
+      "avg_total": 0,
+      "avg_accuracy": 0,
+      "avg_completeness": 0,
+      "avg_conciseness": 0,
+      "avg_latency_ms": 16304,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 0,
+      "avg_solve_rate": 0
+    }
+  },
+  "run_meta": {
+    "run_id": "2026-04-01T05-07-50",
+    "config_file": "verdict.yaml",
+    "verdict_version": "0.2.0",
+    "hardware": "Apple M3 Ultra 256GB"
+  },
+  "hardware": {
+    "cpu": "Apple M3 Ultra",
+    "cpu_cores": 32,
+    "cpu_arch": "arm64",
+    "ram_gb": 256,
+    "os": "macOS",
+    "os_version": "25.3.0"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v22.22.1",
+    "provider_versions": {
+      "ollama": "0.18.3"
+    }
+  },
+  "eval_pack": {
+    "file": "eval-packs/judge-reliability-test---vision.yaml",
+    "total_cases": 5
+  },
+  "judge": {
+    "model": "deepseek-r1:7b",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p Judge Reliability Test - Vision -m llava-13b,phi4,deepseek-r1:7b",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "llava-13b": {
+        "provider": "ollama",
+        "model": "llava:13b",
+        "temperature": 0.7,
+        "max_tokens": 512
+      },
+      "phi4": {
+        "provider": "ollama",
+        "model": "phi4:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "deepseek-r1:7b": {
+        "provider": "ollama",
+        "model": "deepseek-r1:7b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      }
+    }
+  }
+}

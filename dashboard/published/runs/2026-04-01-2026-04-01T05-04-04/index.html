@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Judge Test: phi4 — Verdict</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  body { font-family: 'Inter', sans-serif; }
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+  
+  .badge-a { background: #EFF6FF; color: #1D4ED8; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-b { background: #ECFDF5; color: #065F46; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  .badge-c { background: #FFFBEB; color: #92400E; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+  
+  .card { background: white; border-radius: 0.75rem; border: 1px solid #E5E7EB; padding: 2rem; margin-top: 2rem; }
+  
+  details summary { cursor: pointer; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details[open] summary .chevron { transform: rotate(180deg); }
+  .chevron { transition: transform 0.2s; display: inline-block; }
+  
+  tr:hover { background: #F9FAFB; }
+  
+  @media print { .no-print { display: none; } }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 no-print">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="../../" class="text-sm text-gray-500 hover:text-gray-900">← Dashboard</a>
+      <span class="text-gray-300">·</span>
+      <span class="font-semibold text-gray-900">Judge Test: phi4</span>
+    </div>
+    <span class="text-xs text-gray-400">Mar 31, 2026, 10:05 PM PT</span>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-6 py-8">
+
+  <!-- Warning Banner for Invalid Runs -->
+  
+
+  <!-- Run Stats -->
+  <section class="card" style="margin-top:0">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Judge Test: phi4</h1>
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-6">
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Cases</p>
+        <p class="text-2xl font-bold text-gray-900">5</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Models</p>
+        <p class="text-2xl font-bold text-gray-900">2</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Score</p>
+        <p class="text-2xl font-bold text-gray-900">8.8<span class="text-base text-gray-500">/10</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Pass Rate</p>
+        <p class="text-2xl font-bold text-gray-900">100<span class="text-base text-gray-500">%</span></p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Avg Latency</p>
+        <p class="text-2xl font-bold text-gray-900">2.5<span class="text-base text-gray-500">s</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Model Leaderboard -->
+  <section class="card">
+    <h2 class="text-xl font-bold text-gray-900 mb-6">Model Performance</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs text-gray-400 border-b border-gray-100">
+            <th class="pb-3 pr-4 font-semibold">Rank</th>
+            <th class="pb-3 pr-4 font-semibold">Model</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Score</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Accuracy</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Complete</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Concise</th>
+            <th class="pb-3 pr-4 text-right font-semibold">Wins</th>
+            <th class="pb-3 text-right font-semibold">Latency</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold text-gray-900">1</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">phi4</span>
+              <span>🥇</span>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">9.2/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.2</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">5</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">3s</td>
+          </tr>
+          
+          <tr>
+            <td class="py-3 pr-4 font-bold text-gray-900">2</td>
+            <td class="py-3 pr-4 flex items-center gap-2">
+              <span class="text-gray-900">llava-13b</span>
+              <span>🥈</span>
+            </td>
+            <td class="py-3 pr-4 text-right font-bold text-gray-900">8.4/10</td>
+            <td class="py-3 pr-4 text-right text-gray-700">8.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">7.4</td>
+            <td class="py-3 pr-4 text-right text-gray-700">9.4</td>
+            <td class="py-3 pr-4 text-right"><span class="badge-b">0</span></td>
+            <td class="py-3 text-right mono text-xs text-gray-500">2.1s</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Test Cases -->
+  <section class="card">
+    <h2 class="text-xl font-bold text-gray-900 mb-6">Test Cases (5)</h2>
+    <div class="space-y-4">
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">scene-description</span>
+            <span class="badge-b">
+              9.4/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Describe the scene in this image.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llava-13b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">4.2s</span>
+                  <span class="badge-b">
+                    9/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 The image depicts a serene landscape with a clear blue sky and a calm body of water, which could be a lake or a river. On the left side of the image, there is a small boat gently floating on the water's surface. The boat appears to be empty, suggesting it might have been used for fishing or leisure activities.
+
+On the right side of the image, there is a lush green hillside that slopes down towards the water. The hillside is covered in grass and dotted with trees, indicating a healthy and thriving natural environment.
+
+In the distance, on the far side of the water, there are mountains visible under the blue sky. The mountains provide a majestic backdrop to the scene and add depth to the landscape.
+
+Overall, the image conveys a sense of tranquility and harmony with nature, as there are no signs of human activity or development in sight. It's a peaceful scene that could be found in many rural or remote areas around the world.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The description accurately captures the elements in the image, is thorough but slightly lacks specific details about the boat and trees.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">phi4</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">4.7s</span>
+                  <span class="badge-b">
+                    9.7/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                I'm unable to view images directly, but I can help you describe a scene if you provide some details about it. You might consider describing elements such as:
+
+1. **Setting**: Where is the scene taking place? Is it indoors or outdoors? What kind of environment is depicted (e.g., cityscape, forest, beach)?
+
+2. **Time of Day/Weather**: Is it daytime or nighttime? Are there any notable weather conditions like rain, snow, or sunshine?
+
+3. **Main Subjects**: Who or what are the main subjects in the image? Are they people, animals, objects, etc.?
+
+4. **Activities**: What actions are taking place? Are people interacting with each other or engaging in specific activities?
+
+5. **Colors and Lighting**: What colors dominate the scene? Is there a particular lighting effect that stands out (e.g., shadows, highlights)?
+
+6. **Mood/Atmosphere**: What mood does the image convey? Is it serene, chaotic, joyful, somber, etc.?
+
+Feel free to provide any of these details or ask for help with specific aspects of your description!
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately outlines the criteria for describing a scene without needing to see an image.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">object-detection</span>
+            <span class="badge-b">
+              8.6/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">What objects can you see in this picture?</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llava-13b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">0.9s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 In the image, I can see a person standing on what appears to be a stage or performance area. The individual is wearing a dark-colored outfit and has their back turned towards the camera. There are no other distinct objects or text visible in the image.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately describes the visible elements but lacks detail on potential background or context.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">phi4</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.1s</span>
+                  <span class="badge-b">
+                    9.1/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                As an AI text-based model, I'm unable to view images directly. However, if you describe the image or provide details about what's visible in it, I'd be happy to help identify and discuss any objects or elements that might be present based on your description. Please share more information!
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately explains the AI's limitations and offers a helpful alternative approach.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">main-subject</span>
+            <span class="badge-b">
+              8.6/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">What is the main subject of this image?</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llava-13b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">0.6s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 The main subject of this image appears to be a person's hands, which are holding what looks like a smartphone or a small tablet.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately identifies the main subject as hands holding a device, but lacks detail on other potential elements in the image.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">phi4</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.1s</span>
+                  <span class="badge-b">
+                    9.1/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                As an AI text-based model, I'm unable to view or analyze images directly. However, if you can describe the image in detail, I'd be happy to help identify its possible subjects or themes based on your description. Please provide as much information as you can about what is depicted in the image.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately explains the AI's limitations and offers a helpful alternative approach.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">color-lighting</span>
+            <span class="badge-b">
+              9.1/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">Describe the colors and lighting in this scene.</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llava-13b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">3.3s</span>
+                  <span class="badge-b">
+                    9/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 In the image, there is a warm and inviting atmosphere created by the soft lighting. The room is dimly lit, with a warm yellowish-orange hue that casts gentle shadows and highlights the textures of the objects within the space. This type of lighting creates a cozy and intimate ambiance, which contrasts with the stark white walls of the room.
+
+The colors in the scene are predominantly warm tones, such as the yellowish-orange hue of the lighting and the earthy browns and greens of the wooden furniture. These warm colors evoke a sense of comfort and relaxation, which is further enhanced by the soft lighting.
+
+The white walls of the room serve as a neutral backdrop that allows the other elements in the scene to stand out. The contrast between the white walls and the warm tones of the furniture and lighting adds depth and interest to the space. Overall, the colors and lighting in this scene work together to create a serene and inviting atmosphere.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately describes the colors and lighting, addressing all criteria with appropriate detail without unnecessary information.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">phi4</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">6.7s</span>
+                  <span class="badge-b">
+                    9.1/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                To describe the colors and lighting of a scene, I'll need to create an imaginative setting since no specific details were provided. Let's envision a serene lakeside at sunset:
+
+**Colors:**
+- **Sky:** The sky is painted with vibrant hues of orange, pink, and purple as the sun dips below the horizon. These warm tones gradually blend into softer shades of lavender and deepening blue.
+- **Water:** The lake reflects the colors of the sky, creating a mirror-like surface that shimmers in oranges and pinks. In some areas, the water takes on a deeper turquoise or emerald green, contrasting with the fiery reflections above.
+- **Surrounding Nature:** Trees lining the shore are silhouetted against the brightening sky, their leaves tinged with gold and amber from the setting sun's rays. The grassy banks appear lush and vibrant in shades of deep green.
+- **Wildlife:** A few birds can be seen flying across the sky, their feathers catching the light and appearing as specks of white or gray against the colorful backdrop.
+
+**Lighting:**
+- **Sunset Glow:** The setting sun casts a warm, golden glow over the entire scene. This soft, diffused light creates long shadows stretching across the landscape.
+- **Reflections:** The water acts like a canvas, reflecting the sky's colors and enhancing the overall luminosity of the scene. The reflections add depth and richness to the visual experience.
+- **Twilight Transition:** As the sun continues its descent, the lighting shifts from bright daylight to the softer tones of twilight. This transition brings out subtle details in the landscape, with shadows lengthening and deepening.
+- **Ambient Light:** The fading light is complemented by the first hints of stars beginning to twinkle above, adding a gentle sparkle to the evening sky.
+
+This scene captures the tranquil beauty of nature at sunset, characterized by its rich colors and dynamic lighting.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately and creatively describes an imaginative scene with detailed attention to colors and lighting, addressing all criteria effectively.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+      <details class="border border-gray-200 rounded-lg">
+        <summary class="px-4 py-3 hover:bg-gray-50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="mono text-sm font-medium text-gray-900">activity</span>
+            <span class="badge-b">
+              8.4/10
+            </span>
+          </div>
+          <span class="chevron text-gray-400">▼</span>
+        </summary>
+        <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Prompt</p>
+          <p class="text-sm text-gray-700 mb-4">What activity is taking place in this image?</p>
+          
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Responses</p>
+          <div class="space-y-3">
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">llava-13b</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.3s</span>
+                  <span class="badge-b">
+                    8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                 The image shows a person engaged in an outdoor activity, likely hiking or trekking. They are wearing a backpack and appear to be on a trail or path in a natural setting. The exact nature of the activity cannot be determined without more context, but it is clear that the person is participating in some form of physical exercise or exploration in an outdoor environment.
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately describes the likely activity and setting but lacks specific details that could confirm the exact nature of the activity.</p>
+              </details>
+              
+            </div>
+            
+            <div class="bg-white border border-gray-200 rounded p-3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-900">phi4</span>
+                <div class="flex items-center gap-2">
+                  <span class="mono text-xs text-gray-500">1.2s</span>
+                  <span class="badge-b">
+                    8.8/10
+                  </span>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-2 mono text-xs text-gray-700 max-h-40 overflow-y-auto">
+                As an AI language model, I'm unable to view or analyze images directly. However, if you can describe the image or provide details about what's happening in it, I'd be happy to help interpret or discuss the possible activities taking place based on your description. Please share any relevant information you have!
+              </div>
+              
+              <details class="mt-2">
+                <summary class="text-xs text-gray-500 cursor-pointer">Judge reasoning</summary>
+                <p class="text-xs text-gray-600 mt-1">The response accurately states the AI's limitations and offers a helpful alternative approach.</p>
+              </details>
+              
+            </div>
+            
+          </div>
+        </div>
+      </details>
+      
+    </div>
+  </section>
+
+</div>
+
+<footer class="text-center text-xs text-gray-400 mt-12 pb-6">
+  Last updated: Mar 31, 2026, 10:17 PM PT
+</footer>
+
+</body>
+</html>

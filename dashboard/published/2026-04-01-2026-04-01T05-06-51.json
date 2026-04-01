@@ -1,0 +1,389 @@
+{
+  "run_id": "2026-04-01T05-06-51",
+  "name": "Judge Test: qwen3-coder",
+  "timestamp": "2026-04-01T05:07:36.397Z",
+  "models": [
+    "llava-13b",
+    "phi4",
+    "qwen3-coder"
+  ],
+  "cases": [
+    {
+      "case_id": "scene-description",
+      "prompt": "Describe the scene in this image.",
+      "criteria": "vision-description",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The image depicts a serene landscape with a clear blue sky and a calm body of water, which could be a lake or a river. On the left side of the image, there is a small boat gently floating on the water's surface. The boat appears to be empty, suggesting it might have been used for fishing or leisure activities.\n\nOn the right side of the image, there is a lush green hillside that slopes down towards the water. The hillside is covered in grass and dotted with trees, indicating a healthy and thriving natural environment.\n\nIn the distance, on the far side of the water, there are mountains visible under the blue sky. The mountains provide a majestic backdrop to the scene and add depth to the landscape.\n\nOverall, the image conveys a sense of tranquility and harmony with nature, as there are no signs of human activity or development in sight. It's a peaceful scene that could be found in many rural or remote areas around the world.",
+          "input_tokens": 19,
+          "output_tokens": 224,
+          "latency_ms": 3327,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "I'm unable to view images directly, but I can help you describe a scene if you provide some details about it. You might consider describing elements such as:\n\n1. **Setting**: Where is the scene taking place? Is it indoors or outdoors? What kind of environment is depicted (e.g., cityscape, forest, beach)?\n\n2. **Time of Day/Weather**: Is it daytime or nighttime? Are there any notable weather conditions like rain, snow, or sunshine?\n\n3. **Main Subjects**: Who or what are the main subjects in the image? Are they people, animals, objects, etc.?\n\n4. **Activities**: What actions are taking place? Are people interacting with each other or engaging in specific activities?\n\n5. **Colors and Lighting**: What colors dominate the scene? Is there a particular lighting effect that stands out (e.g., shadows, highlights)?\n\n6. **Mood/Atmosphere**: What mood does the image convey? Is it serene, chaotic, joyful, somber, etc.?\n\nFeel free to provide any of these details or ask for help with specific aspects of your description!",
+          "input_tokens": 17,
+          "output_tokens": 228,
+          "latency_ms": 3968,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "I don't see any image attached to your message. Could you please share the image you'd like me to describe? Once you upload it, I'll be happy to provide a detailed description of the scene depicted in the image.",
+          "input_tokens": 15,
+          "output_tokens": 47,
+          "latency_ms": 5858,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 7,
+          "completeness": 8,
+          "conciseness": 6,
+          "total": 7,
+          "reasoning": "Response accurately describes a peaceful natural landscape with water, boat, hillside, and mountains, though it makes some assumptions about the boat's purpose and lacks specific visual details that would be needed for complete accuracy"
+        },
+        "phi4": {
+          "accuracy": 3,
+          "completeness": 4,
+          "conciseness": 6,
+          "total": 4.2,
+          "reasoning": "Response correctly identifies inability to view images but provides helpful framework for description instead of claiming to describe an actual image, though it doesn't actually describe any scene and the scoring reflects the mismatch between stated capability and actual performance"
+        },
+        "qwen3-coder": {
+          "accuracy": 3,
+          "completeness": 4,
+          "conciseness": 8,
+          "total": 4.8,
+          "reasoning": "The response correctly identifies the lack of an image but fails to provide actual scene description as requested, making it inaccurate to the task despite being concise and complete in its own context"
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "object-detection",
+      "prompt": "What objects can you see in this picture?",
+      "criteria": "vision-description",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " In the image, I can see a person standing on what appears to be a stage or performance area. The individual is wearing a dark-colored outfit and has their back turned towards the camera. There are no other distinct objects or text visible in the image.",
+          "input_tokens": 20,
+          "output_tokens": 56,
+          "latency_ms": 927,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "As an AI text-based model, I'm unable to view images directly. However, if you describe the image or provide details about what's visible in it, I'd be happy to help identify and discuss any objects or elements that might be present based on your description. Please share more information!",
+          "input_tokens": 19,
+          "output_tokens": 60,
+          "latency_ms": 1174,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "I don't see any picture attached to your message. Could you please share the image you're referring to? Once you upload it, I'll be happy to help you identify the objects in the picture.",
+          "input_tokens": 17,
+          "output_tokens": 42,
+          "latency_ms": 964,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 3,
+          "completeness": 4,
+          "conciseness": 8,
+          "total": 4.8,
+          "reasoning": "Response accurately describes a person on a stage with back turned but lacks specific visual details mentioned in the question about objects in the picture"
+        },
+        "phi4": {
+          "accuracy": 3,
+          "completeness": 4,
+          "conciseness": 8,
+          "total": 4.8,
+          "reasoning": "Response correctly states inability to view images but provides helpful alternative approach, though doesn't actually identify objects from an image as requested"
+        },
+        "qwen3-coder": {
+          "accuracy": 3,
+          "completeness": 4,
+          "conciseness": 8,
+          "total": 4.8,
+          "reasoning": "The response correctly identifies the lack of an image but fails to accurately describe objects that would be visible in the picture since no picture was provided."
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "main-subject",
+      "prompt": "What is the main subject of this image?",
+      "criteria": "vision-description",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The main subject of this image appears to be a person's hands, which are holding what looks like a smartphone or a small tablet.",
+          "input_tokens": 20,
+          "output_tokens": 31,
+          "latency_ms": 577,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "As an AI text-based model, I'm unable to view or analyze images directly. However, if you can describe the image in detail, I'd be happy to help identify its possible subjects or themes based on your description. Please provide as much information as you can about what is depicted in the image.",
+          "input_tokens": 19,
+          "output_tokens": 62,
+          "latency_ms": 1206,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "I don't see any image attached to your message. Could you please share the image you're referring to? Once you upload it, I'll be happy to help identify the main subject of the image.",
+          "input_tokens": 17,
+          "output_tokens": 42,
+          "latency_ms": 909,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 6,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 6.9,
+          "reasoning": "The response correctly identifies hands holding a device but doesn't specify what the image actually shows, making it somewhat vague despite being factually reasonable."
+        },
+        "phi4": {
+          "accuracy": 3,
+          "completeness": 6,
+          "conciseness": 8,
+          "total": 5.4,
+          "reasoning": "The response correctly identifies the limitation of a text-based AI in viewing images but fails to address the actual question about the main subject of an image that was presumably provided, making it incomplete despite being factually correct about AI capabilities."
+        },
+        "qwen3-coder": {
+          "accuracy": 3,
+          "completeness": 4,
+          "conciseness": 8,
+          "total": 4.8,
+          "reasoning": "The response correctly identifies that no image was provided but fails to address what the actual main subject would be if an image were present, making it incomplete for the evaluation criteria."
+        }
+      },
+      "winner": "llava-13b"
+    },
+    {
+      "case_id": "color-lighting",
+      "prompt": "Describe the colors and lighting in this scene.",
+      "criteria": "vision-description",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " In the image, there is a warm and inviting atmosphere created by the soft lighting. The room is dimly lit, with a warm yellowish-orange hue that casts gentle shadows and highlights the textures of the objects within the space. This type of lighting creates a cozy and intimate ambiance, which contrasts with the stark white walls of the room.\n\nThe colors in the scene are predominantly warm tones, such as the yellowish-orange hue of the lighting and the earthy browns and greens of the wooden furniture. These warm colors evoke a sense of comfort and relaxation, which is further enhanced by the soft lighting.\n\nThe white walls of the room serve as a neutral backdrop that allows the other elements in the scene to stand out. The contrast between the white walls and the warm tones of the furniture and lighting adds depth and interest to the space. Overall, the colors and lighting in this scene work together to create a serene and inviting atmosphere.",
+          "input_tokens": 22,
+          "output_tokens": 226,
+          "latency_ms": 3284,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "To describe the colors and lighting of a scene, I'll need to create an imaginative setting since no specific details were provided. Let's envision a serene lakeside at sunset:\n\n**Colors:**\n- **Sky:** The sky is painted with vibrant hues of orange, pink, and purple as the sun dips below the horizon. These warm tones gradually blend into softer shades of lavender and deepening blue.\n- **Water:** The lake reflects the colors of the sky, creating a mirror-like surface that shimmers in oranges and pinks. In some areas, the water takes on a deeper turquoise or emerald green, contrasting with the fiery reflections above.\n- **Surrounding Nature:** Trees lining the shore are silhouetted against the brightening sky, their leaves tinged with gold and amber from the setting sun's rays. The grassy banks appear lush and vibrant in shades of deep green.\n- **Wildlife:** A few birds can be seen flying across the sky, their feathers catching the light and appearing as specks of white or gray against the colorful backdrop.\n\n**Lighting:**\n- **Sunset Glow:** The setting sun casts a warm, golden glow over the entire scene. This soft, diffused light creates long shadows stretching across the landscape.\n- **Reflections:** The water acts like a canvas, reflecting the sky's colors and enhancing the overall luminosity of the scene. The reflections add depth and richness to the visual experience.\n- **Twilight Transition:** As the sun continues its descent, the lighting shifts from bright daylight to the softer tones of twilight. This transition brings out subtle details in the landscape, with shadows lengthening and deepening.\n- **Ambient Light:** The fading light is complemented by the first hints of stars beginning to twinkle above, adding a gentle sparkle to the evening sky.\n\nThis scene captures the tranquil beauty of nature at sunset, characterized by its rich colors and dynamic lighting.",
+          "input_tokens": 19,
+          "output_tokens": 391,
+          "latency_ms": 6695,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "I don't see any scene or image attached to your message. Could you please share the scene you'd like me to describe? Once you provide the image, I'll be happy to describe the colors and lighting in detail, including elements like:\n\n- The dominant color palette\n- Light sources and their quality (soft, harsh, warm, cool)\n- Shadows and highlights\n- Overall mood lighting\n- Color temperature and contrast\n\nPlease share the image and I'll give you a thorough description of its visual elements.",
+          "input_tokens": 17,
+          "output_tokens": 104,
+          "latency_ms": 1573,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 7,
+          "completeness": 8,
+          "conciseness": 6,
+          "total": 7,
+          "reasoning": "Response accurately describes warm lighting and colors but lacks specific visual details and could be more concise"
+        },
+        "phi4": {
+          "accuracy": 8,
+          "completeness": 10,
+          "conciseness": 7,
+          "total": 8.3,
+          "reasoning": "Response accurately describes colors and lighting in a sunset lakeside scene with rich detail, fully addressing the criteria but slightly verbose in places."
+        },
+        "qwen3-coder": {
+          "accuracy": 3,
+          "completeness": 4,
+          "conciseness": 8,
+          "total": 4.8,
+          "reasoning": "Response correctly identifies it cannot evaluate without an image, accurately describes what it would analyze if provided, but fails to meet the evaluation criteria since no actual scene description was given"
+        }
+      },
+      "winner": "phi4"
+    },
+    {
+      "case_id": "activity",
+      "prompt": "What activity is taking place in this image?",
+      "criteria": "vision-description",
+      "responses": {
+        "llava-13b": {
+          "model_id": "llava-13b",
+          "text": " The image shows a person engaged in an outdoor activity, likely hiking or trekking. They are wearing a backpack and appear to be on a trail or path in a natural setting. The exact nature of the activity cannot be determined without more context, but it is clear that the person is participating in some form of physical exercise or exploration in an outdoor environment.",
+          "input_tokens": 20,
+          "output_tokens": 81,
+          "latency_ms": 1269,
+          "cost_usd": 0
+        },
+        "phi4": {
+          "model_id": "phi4",
+          "text": "As an AI language model, I'm unable to view or analyze images directly. However, if you can describe the image or provide details about what's happening in it, I'd be happy to help interpret or discuss the possible activities taking place based on your description. Please share any relevant information you have!",
+          "input_tokens": 19,
+          "output_tokens": 62,
+          "latency_ms": 1214,
+          "cost_usd": 0
+        },
+        "qwen3-coder": {
+          "model_id": "qwen3-coder",
+          "text": "I don't see any image attached to your message. Could you please share the image you're referring to? Once you upload it, I'll be happy to help identify what activity is taking place in the photograph.",
+          "input_tokens": 17,
+          "output_tokens": 44,
+          "latency_ms": 958,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "llava-13b": {
+          "accuracy": 6,
+          "completeness": 7,
+          "conciseness": 8,
+          "total": 6.9,
+          "reasoning": "Response correctly identifies outdoor activity and hiking/trekking context but could be more specific about trail features and environmental details"
+        },
+        "phi4": {
+          "accuracy": 3,
+          "completeness": 4,
+          "conciseness": 8,
+          "total": 4.8,
+          "reasoning": "Response correctly states inability to view images but provides helpful alternative approach, though doesn't actually answer the question about activity in the image"
+        },
+        "qwen3-coder": {
+          "accuracy": 3,
+          "completeness": 4,
+          "conciseness": 8,
+          "total": 4.8,
+          "reasoning": "The response correctly identifies that no image was provided but fails to address the actual question about activity in an image that was presumably shared earlier in the conversation."
+        }
+      },
+      "winner": "llava-13b"
+    }
+  ],
+  "summary": {
+    "llava-13b": {
+      "model_id": "llava-13b",
+      "avg_total": 6.52,
+      "avg_accuracy": 5.8,
+      "avg_completeness": 7,
+      "avg_conciseness": 7,
+      "avg_latency_ms": 1876.8,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 80,
+      "wins": 4,
+      "cases_run": 5,
+      "avg_solve_rate": 0
+    },
+    "phi4": {
+      "model_id": "phi4",
+      "avg_total": 5.5,
+      "avg_accuracy": 4,
+      "avg_completeness": 5.6,
+      "avg_conciseness": 7.4,
+      "avg_latency_ms": 2851.4,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 20,
+      "wins": 1,
+      "cases_run": 5,
+      "avg_solve_rate": 0
+    },
+    "qwen3-coder": {
+      "model_id": "qwen3-coder",
+      "avg_total": 4.8,
+      "avg_accuracy": 3,
+      "avg_completeness": 4,
+      "avg_conciseness": 8,
+      "avg_latency_ms": 2052.4,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 5,
+      "avg_solve_rate": 0
+    }
+  },
+  "run_meta": {
+    "run_id": "2026-04-01T05-06-51",
+    "config_file": "verdict.yaml",
+    "verdict_version": "0.2.0",
+    "hardware": "Apple M3 Ultra 256GB"
+  },
+  "hardware": {
+    "cpu": "Apple M3 Ultra",
+    "cpu_cores": 32,
+    "cpu_arch": "arm64",
+    "ram_gb": 256,
+    "os": "macOS",
+    "os_version": "25.3.0"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v22.22.1",
+    "provider_versions": {
+      "ollama": "0.18.3"
+    }
+  },
+  "eval_pack": {
+    "file": "eval-packs/judge-reliability-test---vision.yaml",
+    "total_cases": 5
+  },
+  "judge": {
+    "model": "qwen3-coder",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p Judge Reliability Test - Vision -m llava-13b,phi4,qwen3-coder",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "llava-13b": {
+        "provider": "ollama",
+        "model": "llava:13b",
+        "temperature": 0.7,
+        "max_tokens": 512
+      },
+      "phi4": {
+        "provider": "ollama",
+        "model": "phi4:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "qwen3-coder": {
+        "provider": "ollama",
+        "model": "qwen3-coder:30b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      }
+    }
+  }
+}
