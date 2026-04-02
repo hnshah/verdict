@@ -1,0 +1,418 @@
+name: "Comprehensive Mix - 4 Domains (80 Questions)"
+
+cases:
+  # ========================================
+  # DOMAIN 1: MMLU (Knowledge) - 20 questions
+  # ========================================
+  
+  - id: mmlu-1
+    prompt: "What is the capital of France?"
+    category: mmlu-geography
+    criteria: factual-accuracy
+    
+  - id: mmlu-2
+    prompt: "Explain the difference between mitosis and meiosis."
+    category: mmlu-biology
+    criteria: factual-accuracy
+    
+  - id: mmlu-3
+    prompt: "What is the Pythagorean theorem?"
+    category: mmlu-math
+    criteria: factual-accuracy
+    
+  - id: mmlu-4
+    prompt: "Who wrote 'Pride and Prejudice'?"
+    category: mmlu-literature
+    criteria: factual-accuracy
+    
+  - id: mmlu-5
+    prompt: "What are the three branches of the US government?"
+    category: mmlu-civics
+    criteria: factual-accuracy
+    
+  - id: mmlu-6
+    prompt: "Explain Newton's first law of motion."
+    category: mmlu-physics
+    criteria: factual-accuracy
+    
+  - id: mmlu-7
+    prompt: "What is photosynthesis?"
+    category: mmlu-biology
+    criteria: factual-accuracy
+    
+  - id: mmlu-8
+    prompt: "When did World War II end?"
+    category: mmlu-history
+    criteria: factual-accuracy
+    
+  - id: mmlu-9
+    prompt: "What is the chemical formula for water?"
+    category: mmlu-chemistry
+    criteria: factual-accuracy
+    
+  - id: mmlu-10
+    prompt: "Explain supply and demand in economics."
+    category: mmlu-economics
+    criteria: factual-accuracy
+    
+  - id: mmlu-11
+    prompt: "What is the speed of light?"
+    category: mmlu-physics
+    criteria: factual-accuracy
+    
+  - id: mmlu-12
+    prompt: "Who was the first US President?"
+    category: mmlu-history
+    criteria: factual-accuracy
+    
+  - id: mmlu-13
+    prompt: "What is DNA?"
+    category: mmlu-biology
+    criteria: factual-accuracy
+    
+  - id: mmlu-14
+    prompt: "Explain the water cycle."
+    category: mmlu-earth-science
+    criteria: factual-accuracy
+    
+  - id: mmlu-15
+    prompt: "What is democracy?"
+    category: mmlu-civics
+    criteria: factual-accuracy
+    
+  - id: mmlu-16
+    prompt: "Who painted the Mona Lisa?"
+    category: mmlu-art
+    criteria: factual-accuracy
+    
+  - id: mmlu-17
+    prompt: "What is E=mc²?"
+    category: mmlu-physics
+    criteria: factual-accuracy
+    
+  - id: mmlu-18
+    prompt: "Explain the greenhouse effect."
+    category: mmlu-environmental-science
+    criteria: factual-accuracy
+    
+  - id: mmlu-19
+    prompt: "What are the three types of rocks?"
+    category: mmlu-geology
+    criteria: factual-accuracy
+    
+  - id: mmlu-20
+    prompt: "Who invented the telephone?"
+    category: mmlu-history
+    criteria: factual-accuracy
+    
+  # ========================================
+  # DOMAIN 2: GSM8K (Math) - 20 questions
+  # ========================================
+  
+  - id: gsm8k-1
+    prompt: "If John has 5 apples and buys 3 more, how many apples does he have?"
+    category: gsm8k-basic
+    criteria: math-accuracy
+    
+  - id: gsm8k-2
+    prompt: "A store sells shirts for $15 each. If you buy 4 shirts, how much do you pay?"
+    category: gsm8k-multiplication
+    criteria: math-accuracy
+    
+  - id: gsm8k-3
+    prompt: "Sarah has 20 cookies and gives away 7. How many cookies does she have left?"
+    category: gsm8k-subtraction
+    criteria: math-accuracy
+    
+  - id: gsm8k-4
+    prompt: "A pizza is cut into 8 slices. If you eat 3 slices, what fraction of the pizza is left?"
+    category: gsm8k-fractions
+    criteria: math-accuracy
+    
+  - id: gsm8k-5
+    prompt: "A car travels 60 miles per hour. How far does it travel in 3 hours?"
+    category: gsm8k-multiplication
+    criteria: math-accuracy
+    
+  - id: gsm8k-6
+    prompt: "If 5 notebooks cost $20, how much does one notebook cost?"
+    category: gsm8k-division
+    criteria: math-accuracy
+    
+  - id: gsm8k-7
+    prompt: "Tom has $50 and spends $12 on lunch and $8 on a book. How much money does he have left?"
+    category: gsm8k-multi-step
+    criteria: math-accuracy
+    
+  - id: gsm8k-8
+    prompt: "A rectangle has a length of 10 cm and width of 5 cm. What is its area?"
+    category: gsm8k-geometry
+    criteria: math-accuracy
+    
+  - id: gsm8k-9
+    prompt: "If 3/4 of a number is 12, what is the number?"
+    category: gsm8k-fractions
+    criteria: math-accuracy
+    
+  - id: gsm8k-10
+    prompt: "A store offers 20% off a $40 item. What is the sale price?"
+    category: gsm8k-percentages
+    criteria: math-accuracy
+    
+  - id: gsm8k-11
+    prompt: "If you save $5 per day, how much will you have after 30 days?"
+    category: gsm8k-multiplication
+    criteria: math-accuracy
+    
+  - id: gsm8k-12
+    prompt: "A train travels 120 miles in 2 hours. What is its average speed?"
+    category: gsm8k-division
+    criteria: math-accuracy
+    
+  - id: gsm8k-13
+    prompt: "If 2x + 3 = 11, what is x?"
+    category: gsm8k-algebra
+    criteria: math-accuracy
+    
+  - id: gsm8k-14
+    prompt: "A box contains 6 red balls and 4 blue balls. What fraction of the balls are red?"
+    category: gsm8k-fractions
+    criteria: math-accuracy
+    
+  - id: gsm8k-15
+    prompt: "If you walk 2 miles in 30 minutes, how long will it take to walk 5 miles at the same pace?"
+    category: gsm8k-proportions
+    criteria: math-accuracy
+    
+  - id: gsm8k-16
+    prompt: "A circle has a radius of 7. What is its circumference? (Use π ≈ 3.14)"
+    category: gsm8k-geometry
+    criteria: math-accuracy
+    
+  - id: gsm8k-17
+    prompt: "If you triple a number and add 5, you get 26. What is the number?"
+    category: gsm8k-algebra
+    criteria: math-accuracy
+    
+  - id: gsm8k-18
+    prompt: "A book has 240 pages. If you read 15 pages per day, how many days will it take to finish?"
+    category: gsm8k-division
+    criteria: math-accuracy
+    
+  - id: gsm8k-19
+    prompt: "If 40% of students in a class of 50 are girls, how many girls are there?"
+    category: gsm8k-percentages
+    criteria: math-accuracy
+    
+  - id: gsm8k-20
+    prompt: "A ladder is 13 feet long and leans against a wall. If the bottom is 5 feet from the wall, how high up the wall does it reach?"
+    category: gsm8k-geometry
+    criteria: math-accuracy
+    
+  # ========================================
+  # DOMAIN 3: HumanEval (Coding) - 20 questions
+  # ========================================
+  
+  - id: humaneval-1
+    prompt: "Write a Python function that returns the sum of two numbers."
+    category: humaneval-basic
+    criteria: code-quality
+    
+  - id: humaneval-2
+    prompt: "Write a function to reverse a string."
+    category: humaneval-strings
+    criteria: code-quality
+    
+  - id: humaneval-3
+    prompt: "Write a function to check if a number is even or odd."
+    category: humaneval-logic
+    criteria: code-quality
+    
+  - id: humaneval-4
+    prompt: "Write a function to find the maximum element in a list."
+    category: humaneval-arrays
+    criteria: code-quality
+    
+  - id: humaneval-5
+    prompt: "Write a function to calculate factorial of a number."
+    category: humaneval-recursion
+    criteria: code-quality
+    
+  - id: humaneval-6
+    prompt: "Write a function to check if a string is a palindrome."
+    category: humaneval-strings
+    criteria: code-quality
+    
+  - id: humaneval-7
+    prompt: "Write a function to count vowels in a string."
+    category: humaneval-strings
+    criteria: code-quality
+    
+  - id: humaneval-8
+    prompt: "Write a function to sort a list of numbers in ascending order."
+    category: humaneval-arrays
+    criteria: code-quality
+    
+  - id: humaneval-9
+    prompt: "Write a function to generate the first n Fibonacci numbers."
+    category: humaneval-sequences
+    criteria: code-quality
+    
+  - id: humaneval-10
+    prompt: "Write a function to remove duplicates from a list."
+    category: humaneval-arrays
+    criteria: code-quality
+    
+  - id: humaneval-11
+    prompt: "Write a function to calculate the average of numbers in a list."
+    category: humaneval-arrays
+    criteria: code-quality
+    
+  - id: humaneval-12
+    prompt: "Write a function to check if a number is prime."
+    category: humaneval-logic
+    criteria: code-quality
+    
+  - id: humaneval-13
+    prompt: "Write a function to merge two sorted lists."
+    category: humaneval-arrays
+    criteria: code-quality
+    
+  - id: humaneval-14
+    prompt: "Write a function to find the length of the longest word in a sentence."
+    category: humaneval-strings
+    criteria: code-quality
+    
+  - id: humaneval-15
+    prompt: "Write a function to calculate x to the power of y."
+    category: humaneval-math
+    criteria: code-quality
+    
+  - id: humaneval-16
+    prompt: "Write a function to count the occurrences of a character in a string."
+    category: humaneval-strings
+    criteria: code-quality
+    
+  - id: humaneval-17
+    prompt: "Write a function to convert Celsius to Fahrenheit."
+    category: humaneval-math
+    criteria: code-quality
+    
+  - id: humaneval-18
+    prompt: "Write a function to find the second largest number in a list."
+    category: humaneval-arrays
+    criteria: code-quality
+    
+  - id: humaneval-19
+    prompt: "Write a function to check if two strings are anagrams."
+    category: humaneval-strings
+    criteria: code-quality
+    
+  - id: humaneval-20
+    prompt: "Write a function to flatten a nested list."
+    category: humaneval-arrays
+    criteria: code-quality
+    
+  # ========================================
+  # DOMAIN 4: ARC-Challenge (Reasoning) - 20 questions
+  # ========================================
+  
+  - id: arc-1
+    prompt: "If all roses are flowers and some flowers fade quickly, what can we conclude?"
+    category: arc-logic
+    criteria: reasoning-quality
+    
+  - id: arc-2
+    prompt: "A farmer has chickens and rabbits. There are 20 heads and 56 legs total. How many chickens are there?"
+    category: arc-problem-solving
+    criteria: reasoning-quality
+    
+  - id: arc-3
+    prompt: "Why do objects appear to bend when partially submerged in water?"
+    category: arc-science
+    criteria: reasoning-quality
+    
+  - id: arc-4
+    prompt: "If it takes 5 machines 5 minutes to make 5 widgets, how long would it take 100 machines to make 100 widgets?"
+    category: arc-logic
+    criteria: reasoning-quality
+    
+  - id: arc-5
+    prompt: "Why does ice float on water?"
+    category: arc-science
+    criteria: reasoning-quality
+    
+  - id: arc-6
+    prompt: "A bat and a ball cost $1.10 total. The bat costs $1.00 more than the ball. How much does the ball cost?"
+    category: arc-problem-solving
+    criteria: reasoning-quality
+    
+  - id: arc-7
+    prompt: "Why do we see lightning before we hear thunder?"
+    category: arc-science
+    criteria: reasoning-quality
+    
+  - id: arc-8
+    prompt: "If you have a 3-liter jug and a 5-liter jug, how can you measure exactly 4 liters?"
+    category: arc-problem-solving
+    criteria: reasoning-quality
+    
+  - id: arc-9
+    prompt: "Why does the moon appear larger near the horizon?"
+    category: arc-science
+    criteria: reasoning-quality
+    
+  - id: arc-10
+    prompt: "Three switches control three light bulbs in another room. How can you determine which switch controls which bulb with one trip to the room?"
+    category: arc-problem-solving
+    criteria: reasoning-quality
+    
+  - id: arc-11
+    prompt: "Why do planets orbit the sun in elliptical paths?"
+    category: arc-science
+    criteria: reasoning-quality
+    
+  - id: arc-12
+    prompt: "You have 12 balls, one is slightly heavier. Using a balance scale only 3 times, how do you find the heavy ball?"
+    category: arc-problem-solving
+    criteria: reasoning-quality
+    
+  - id: arc-13
+    prompt: "Why do seasons occur on Earth?"
+    category: arc-science
+    criteria: reasoning-quality
+    
+  - id: arc-14
+    prompt: "A man pushes his car to a hotel and realizes he's bankrupt. Why?"
+    category: arc-lateral-thinking
+    criteria: reasoning-quality
+    
+  - id: arc-15
+    prompt: "Why is the sky blue?"
+    category: arc-science
+    criteria: reasoning-quality
+    
+  - id: arc-16
+    prompt: "If you overtake the person in second place in a race, what position are you in?"
+    category: arc-logic
+    criteria: reasoning-quality
+    
+  - id: arc-17
+    prompt: "Why do hot air balloons rise?"
+    category: arc-science
+    criteria: reasoning-quality
+    
+  - id: arc-18
+    prompt: "You're in a room with 3 light switches. One controls a bulb in another room. How do you determine which switch it is with only one visit?"
+    category: arc-problem-solving
+    criteria: reasoning-quality
+    
+  - id: arc-19
+    prompt: "Why does salt melt ice?"
+    category: arc-science
+    criteria: reasoning-quality
+    
+  - id: arc-20
+    prompt: "A doctor gives you three pills and tells you to take one every half hour. How long will they last?"
+    category: arc-logic
+    criteria: reasoning-quality

@@ -1,0 +1,64 @@
+version: "1.0"
+name: "Comprehensive Benchmark - 4 Domains (80 Questions)"
+
+models:
+  # Code specialists
+  - id: qwen2.5-coder:32b
+    provider: ollama
+    model: qwen2.5-coder:32b
+    timeout_ms: 90000
+    max_tokens: 2048
+    
+  - id: deepseek-r1:32b
+    provider: ollama
+    model: deepseek-r1:32b
+    timeout_ms: 90000
+    max_tokens: 2048
+    
+  # General large models
+  - id: llama3.3:70b
+    provider: ollama
+    model: llama3.3:70b
+    timeout_ms: 120000
+    max_tokens: 2048
+    
+  - id: qwen2.5:32b
+    provider: ollama
+    model: qwen2.5:32b
+    timeout_ms: 90000
+    max_tokens: 2048
+    
+  # Reasoning specialist
+  - id: qwen3:30b
+    provider: ollama
+    model: qwen3:30b
+    timeout_ms: 90000
+    max_tokens: 2048
+    
+  # Efficient model (baseline)
+  - id: phi4:14b
+    provider: ollama
+    model: phi4:14b
+    timeout_ms: 60000
+    max_tokens: 2048
+    
+judge:
+  model: qwen2.5:32b
+  blind: true
+  rubric:
+    accuracy: 0.5
+    completeness: 0.3
+    conciseness: 0.2
+
+run:
+  concurrency: 1
+  retries: 1
+  cache: false
+
+output:
+  dir: ./results
+  formats: [json]
+
+settings:
+  auto_contribute: true
+  contribution_author: "Ren (Comprehensive 4-Domain Benchmark - 80 Questions)"
