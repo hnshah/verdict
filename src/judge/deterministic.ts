@@ -357,3 +357,32 @@ export function scoreDeterministic(
   if (scorer === 'ends_with') return scoreEndsWith(output, expectedStr)
   return null
 }
+
+export function scoreLatency(latencyMs: number, thresholdMs: number): JudgeScore {
+  if (latencyMs <= thresholdMs) {
+    return {
+      accuracy: 10, completeness: 10, conciseness: 10, total: 10,
+      reasoning: `Latency ${latencyMs}ms is within ${thresholdMs}ms threshold.`,
+    }
+  }
+  // Linear decay from 10 at threshold to 0 at 2x threshold
+  const score = Math.max(0, Math.round(10 * (1 - (latencyMs - thresholdMs) / thresholdMs)))
+  return {
+    accuracy: score, completeness: score, conciseness: score, total: score,
+    reasoning: `Latency ${latencyMs}ms exceeds ${thresholdMs}ms threshold (score: ${score}/10).`,
+  }
+}
+
+export function scoreCost(costUsd: number, thresholdUsd: number): JudgeScore {
+  if (costUsd <= thresholdUsd) {
+    return {
+      accuracy: 10, completeness: 10, conciseness: 10, total: 10,
+      reasoning: `Cost $${costUsd.toFixed(6)} is within $${thresholdUsd} threshold.`,
+    }
+  }
+  const score = Math.max(0, Math.round(10 * (1 - (costUsd - thresholdUsd) / thresholdUsd)))
+  return {
+    accuracy: score, completeness: score, conciseness: score, total: score,
+    reasoning: `Cost $${costUsd.toFixed(6)} exceeds $${thresholdUsd} threshold (score: ${score}/10).`,
+  }
+}

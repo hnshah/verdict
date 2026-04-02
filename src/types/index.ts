@@ -82,7 +82,7 @@ export interface ToolCallResult {
 
 // ─── Eval packs ──────────────────────────────────────────────────────────────
 
-export const ScorerEnum = z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex', 'javascript', 'starts_with', 'ends_with'])
+export const ScorerEnum = z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex', 'javascript', 'starts_with', 'ends_with', 'latency', 'cost', 'similar', 'faithfulness'])
 
 export const AssertionSchema = z.object({
   scorer: ScorerEnum,
@@ -105,6 +105,8 @@ export const EvalCaseSchema = z.object({
   description: z.string().optional(),
   category: z.string().optional(),
   ideal_latency_ms: z.number().optional(),
+  threshold: z.number().optional(),  // Used by latency/cost/similar scorers
+  context: z.string().optional(),    // Used by faithfulness scorer (RAG source context)
   prompt: z.string().default(''),
   system_prompt: z.string().optional(),
   criteria: z.string(),
@@ -150,7 +152,7 @@ export const EvalPackSchema = z.object({
   cases: z.array(EvalCaseSchema).default([]),
   samples_file: z.string().optional(),
   // Pack-level defaults applied to JSONL cases that don't specify these fields
-  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex', 'starts_with', 'ends_with']).optional(),
+  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex', 'starts_with', 'ends_with', 'latency', 'cost', 'similar', 'faithfulness']).optional(),
   criteria: z.string().optional(),
   judge_style: JudgeStyleEnum.optional(),
 })
