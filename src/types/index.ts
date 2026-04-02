@@ -40,6 +40,16 @@ export const JudgeConfigSchema = z.object({
     completeness: z.number().default(0.4),
     conciseness: z.number().default(0.2),
   }).default({}),
+  examples: z.array(z.object({
+    prompt: z.string(),
+    response: z.string(),
+    scores: z.object({
+      accuracy: z.number(),
+      completeness: z.number(),
+      conciseness: z.number(),
+    }),
+    reasoning: z.string(),
+  })).optional(),
 })
 export type JudgeConfig = z.infer<typeof JudgeConfigSchema>
 
@@ -178,6 +188,7 @@ export interface JudgeScore {
   total: number
   reasoning: string
   structured_reasoning?: StructuredReasoning
+  confidence?: number  // 0-10, optional — how certain is the judge?
 }
 
 export interface CaseResult {
