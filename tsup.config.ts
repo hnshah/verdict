@@ -29,4 +29,15 @@ export default defineConfig([
     shims: false,
     external: ['openai', 'better-sqlite3'],
   },
+  // Integrations bundle — `import { describeEvals } from 'verdict/vitest'`
+  {
+    entry: { integrations: 'src/integrations/index.ts' },
+    format: ['esm'],
+    target: 'node18',
+    outDir: 'dist',
+    clean: false,
+    dts: true,
+    shims: false,
+    external: ['openai', 'better-sqlite3', 'vitest'],
+  },
 ])
