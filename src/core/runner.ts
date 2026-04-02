@@ -116,21 +116,20 @@ export function aggregateScores(
     return { accuracy: 0, completeness: 0, conciseness: 0, total: 0, reasoning: 'No assertions scored.' }
   }
 
-  const fields: Array<keyof JudgeScore> = ['accuracy', 'completeness', 'conciseness', 'total']
+  type NumericField = 'accuracy' | 'completeness' | 'conciseness' | 'total'
+  const fields: NumericField[] = ['accuracy', 'completeness', 'conciseness', 'total']
   const reasoning = scores.map((s, i) => `[${i + 1}] ${s.reasoning}`).join(' | ')
 
   if (mode === 'min') {
-    const result: Partial<JudgeScore> = {}
-    for (const f of fields) result[f] = Math.min(...scores.map(s => s[f] as number))
-    result.reasoning = reasoning
-    return result as JudgeScore
+    const vals: Record<NumericField, number> = { accuracy: 0, completeness: 0, conciseness: 0, total: 0 }
+    for (const f of fields) vals[f] = Math.min(...scores.map(s => s[f] as number))
+    return { ...vals, reasoning }
   }
 
   if (mode === 'max') {
-    const result: Partial<JudgeScore> = {}
-    for (const f of fields) result[f] = Math.max(...scores.map(s => s[f] as number))
-    result.reasoning = reasoning
-    return result as JudgeScore
+    const vals: Record<NumericField, number> = { accuracy: 0, completeness: 0, conciseness: 0, total: 0 }
+    for (const f of fields) vals[f] = Math.max(...scores.map(s => s[f] as number))
+    return { ...vals, reasoning }
   }
 
   if (mode === 'avg' || mode === 'weighted') {
@@ -138,12 +137,11 @@ export function aggregateScores(
       ? weights.map(x => x / weights.reduce((a, b) => a + b, 0))  // normalize
       : scores.map(() => 1 / scores.length)  // equal weights for avg
 
-    const result: Partial<JudgeScore> = {}
+    const vals: Record<NumericField, number> = { accuracy: 0, completeness: 0, conciseness: 0, total: 0 }
     for (const f of fields) {
-      result[f] = +scores.reduce((sum, s, i) => sum + (s[f] as number) * w[i], 0).toFixed(1)
+      vals[f] = +scores.reduce((sum, s, i) => sum + (s[f] as number) * w[i], 0).toFixed(1)
     }
-    result.reasoning = reasoning
-    return result as JudgeScore
+    return { ...vals, reasoning }
   }
 
   // fallback
