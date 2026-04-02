@@ -43,3 +43,9 @@ pyproject.toml
 *.sh
 !scripts/*.sh
 automation-state/WEBHOOK-SECRET.txt
+
+# Cloudflare credentials and deployment artifacts
+**/wrangler.toml
+**/.wrangler/
+**/.dev.vars
+.wrangler-auth.json
