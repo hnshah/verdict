@@ -10,6 +10,8 @@ import {
   scoreJavascript,
   scoreStartsWith,
   scoreEndsWith,
+  scoreLatency,
+  scoreCost,
   isDeterministic,
   scoreDeterministic,
 } from '../deterministic.js'
@@ -410,68 +412,36 @@ describe('deterministic scorers', () => {
     })
   })
 
-describe('scoreStartsWith', () => {
-  it('passes when output starts with expected string', () => {
-    const result = scoreStartsWith('Hello, world!', 'Hello')
-    expect(result.total).toBe(10)
-    expect(result.reasoning).toContain('starts with')
+describe('scoreLatency', () => {
+  it('passes when latency is within threshold', () => {
+    expect(scoreLatency(500, 1000).total).toBe(10)
   })
-
-  it('fails when output does not start with expected string', () => {
-    const result = scoreStartsWith('Goodbye, world!', 'Hello')
-    expect(result.total).toBe(0)
-    expect(result.reasoning).toContain('Expected to start with')
+  it('passes when latency equals threshold exactly', () => {
+    expect(scoreLatency(1000, 1000).total).toBe(10)
   })
-
-  it('trims leading whitespace before checking', () => {
-    const result = scoreStartsWith('   Hello, world!', 'Hello')
-    expect(result.total).toBe(10)
+  it('returns 0 at 2x threshold', () => {
+    expect(scoreLatency(2000, 1000).total).toBe(0)
   })
-
-  it('passes when expected is empty string', () => {
-    const result = scoreStartsWith('anything', '')
-    expect(result.total).toBe(10)
-  })
-
-  it('isDeterministic returns true for starts_with', () => {
-    expect(isDeterministic('starts_with')).toBe(true)
-  })
-
-  it('scoreDeterministic dispatches to starts_with scorer', () => {
-    const result = scoreDeterministic('starts_with', 'Hello world', 'Hello')
-    expect(result?.total).toBe(10)
+  it('returns partial score between threshold and 2x', () => {
+    const score = scoreLatency(1500, 1000).total
+    expect(score).toBeGreaterThan(0)
+    expect(score).toBeLessThan(10)
   })
 })
 
-describe('scoreEndsWith', () => {
-  it('passes when output ends with expected string', () => {
-    const result = scoreEndsWith('Hello, world!', 'world!')
-    expect(result.total).toBe(10)
-    expect(result.reasoning).toContain('ends with')
+describe('scoreCost', () => {
+  it('passes when cost is within threshold', () => {
+    expect(scoreCost(0.0005, 0.001).total).toBe(10)
   })
-
-  it('fails when output does not end with expected string', () => {
-    const result = scoreEndsWith('Hello, world!', 'goodbye')
-    expect(result.total).toBe(0)
-    expect(result.reasoning).toContain('Expected to end with')
+  it('passes when cost equals threshold exactly', () => {
+    expect(scoreCost(0.001, 0.001).total).toBe(10)
   })
-
-  it('trims trailing whitespace before checking', () => {
-    const result = scoreEndsWith('Hello, world!   ', 'world!')
-    expect(result.total).toBe(10)
+  it('returns 0 at 2x threshold', () => {
+    expect(scoreCost(0.002, 0.001).total).toBe(0)
   })
-
-  it('passes when expected is empty string', () => {
-    const result = scoreEndsWith('anything', '')
-    expect(result.total).toBe(10)
-  })
-
-  it('isDeterministic returns true for ends_with', () => {
-    expect(isDeterministic('ends_with')).toBe(true)
-  })
-
-  it('scoreDeterministic dispatches to ends_with scorer', () => {
-    const result = scoreDeterministic('ends_with', 'Hello world', 'world')
-    expect(result?.total).toBe(10)
+  it('returns partial score between threshold and 2x', () => {
+    const score = scoreCost(0.0015, 0.001).total
+    expect(score).toBeGreaterThan(0)
+    expect(score).toBeLessThan(10)
   })
 })

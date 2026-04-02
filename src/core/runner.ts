@@ -5,7 +5,7 @@ import { execSync } from 'child_process'
 import type { Config, EvalPack, RunResult, ModelSummary, CaseResult, Checkpoint, JudgeScore, Assertion, RunMeta } from '../types/index.js'
 import { callModel, callModelMultiTurn, callModelWithTools } from '../providers/compat.js'
 import { judgeResponse, judgeResponseCot } from '../judge/llm.js'
-import { scoreDeterministic, isDeterministic, scoreToolCall } from '../judge/deterministic.js'
+import { scoreDeterministic, isDeterministic, scoreToolCall, scoreLatency, scoreCost } from '../judge/deterministic.js'
 import { detectHardware, toRunResultFormat } from './hardware.js'
 import { preloadModels } from './preload.js'
 
@@ -343,8 +343,11 @@ export async function runEvals(
             const s = scoreAssertion(assertion, resp.text, resp.tool_calls)
             if (s) assertionScores.push(s)
           }
-          const weights = evalCase.assertions.map(a => a.weight ?? 1)
-          score = aggregateScores(assertionScores, evalCase.aggregation ?? 'min', weights)
+          score = aggregateScores(assertionScores)
+        } else if (evalCase.scorer === 'latency') {
+          score = scoreLatency(resp.latency_ms ?? 0, evalCase.threshold ?? 2000)
+        } else if (evalCase.scorer === 'cost') {
+          score = scoreCost(resp.cost_usd ?? 0, evalCase.threshold ?? 0.01)
         } else if (evalCase.scorer === 'tool_call') {
           score = scoreToolCall(resp.tool_calls, evalCase.expected_tool ?? '', evalCase.expected_args)
         } else if (usesDeterministic) {
