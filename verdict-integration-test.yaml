@@ -1,12 +1,12 @@
 models:
-  - id: llama3.1
-    model: llama3.1
+  - id: qwen-7b
+    model: qwen2.5:7b
     provider: ollama
     base_url: http://localhost:11434/v1
     api_key: none
 
 judge:
-  model: llama3.1
+  model: qwen-7b
   embedding_model:
     base_url: http://localhost:11434/v1
     api_key: none
@@ -15,5 +15,4 @@ judge:
 packs:
   - eval-packs/integration-test.yaml
 
-output:
-  dir: results/integration
+output_dir: results/integration

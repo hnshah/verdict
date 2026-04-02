@@ -1,0 +1,27 @@
+models:
+  - id: qwen-7b
+    model: qwen2.5:7b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+judge:
+  model: qwen-7b
+  embedding_model:
+    base_url: http://localhost:11434/v1
+    api_key: none
+    model: nomic-embed-text
+  examples:
+    - prompt: "What is 2+2?"
+      response: "4"
+      scores: { accuracy: 10, completeness: 10, conciseness: 10 }
+      reasoning: "Correct, complete, and concise."
+    - prompt: "What is 2+2?"
+      response: "Well, when you add the number 2 to another number 2, you get the result which is 4, as any mathematician would tell you."
+      scores: { accuracy: 10, completeness: 10, conciseness: 2 }
+      reasoning: "Correct but extremely verbose."
+
+packs:
+  - eval-packs/integration-test.yaml
+
+output_dir: results/integration
