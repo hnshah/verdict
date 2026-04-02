@@ -5,6 +5,91 @@ import type { RunResult, ModelSummary } from '../../types/index.js'
 
 interface CompareOptions {
   output?: string
+  /** Path to baseline JSON (alternative interface to positional args) */
+  baseline?: string
+  /** Path to current run JSON (alternative interface to positional args) */
+  current?: string
+  /** Regression threshold — exit 1 if any model drops by more than this (default: none) */
+  threshold?: number
+  /** Output format: 'text' (default) or 'json' */
+  format?: string
+}
+
+// ─── Structured compare result (for --format json) ───────────────────────────
+
+export interface CompareResult {
+  baseline: { path: string; timestamp: string; cases: number }
+  current: { path: string; timestamp: string; cases: number }
+  models: Array<{
+    model: string
+    scoreBaseline: number | null
+    scoreCurrent: number | null
+    delta: number | null
+    pctChange: number | null
+    status: 'improved' | 'declined' | 'no_change' | 'new' | 'removed' | 'regression'
+    regression: boolean
+  }>
+  summary: {
+    regressionDetected: boolean
+    improved: number
+    declined: number
+    noChange: number
+    newModels: number
+    removedModels: number
+  }
+}
+
+export function runCompare(fileA: string, fileB: string, threshold = Infinity): CompareResult {
+  function loadResult(filePath: string): RunResult {
+    const full = path.resolve(filePath)
+    if (!fs.existsSync(full)) throw new Error(`File not found: ${full}`)
+    try {
+      return JSON.parse(fs.readFileSync(full, 'utf8')) as RunResult
+    } catch {
+      throw new Error(`Could not parse JSON: ${full}`)
+    }
+  }
+
+  const runA = loadResult(fileA)
+  const runB = loadResult(fileB)
+  const allModels = [...new Set([...runA.models, ...runB.models])]
+
+  let regressionDetected = false
+  let improved = 0, declined = 0, noChange = 0, newModels = 0, removedModels = 0
+
+  const models: CompareResult['models'] = []
+
+  for (const model of allModels) {
+    const a: ModelSummary | undefined = runA.summary[model]
+    const b: ModelSummary | undefined = runB.summary[model]
+
+    if (!a && b) {
+      newModels++
+      models.push({ model, scoreBaseline: null, scoreCurrent: b.avg_total, delta: null, pctChange: null, status: 'new', regression: false })
+    } else if (a && !b) {
+      removedModels++
+      models.push({ model, scoreBaseline: a.avg_total, scoreCurrent: null, delta: null, pctChange: null, status: 'removed', regression: false })
+    } else if (a && b) {
+      const d = +(b.avg_total - a.avg_total).toFixed(2)
+      const pct = a.avg_total > 0 ? +((d / a.avg_total) * 100).toFixed(1) : 0
+      const regression = d < -threshold
+      if (regression) regressionDetected = true
+      const status: CompareResult['models'][0]['status'] = regression ? 'regression'
+        : Math.abs(d) < 0.05 ? 'no_change'
+        : d > 0 ? 'improved' : 'declined'
+      if (status === 'improved') improved++
+      else if (status === 'declined' || status === 'regression') declined++
+      else noChange++
+      models.push({ model, scoreBaseline: a.avg_total, scoreCurrent: b.avg_total, delta: d, pctChange: pct, status, regression })
+    }
+  }
+
+  return {
+    baseline: { path: fileA, timestamp: runA.timestamp?.slice(0, 19).replace('T', ' ') ?? 'unknown', cases: runA.cases.length },
+    current: { path: fileB, timestamp: runB.timestamp?.slice(0, 19).replace('T', ' ') ?? 'unknown', cases: runB.cases.length },
+    models: models.sort((a, b) => (b.scoreCurrent ?? b.scoreBaseline ?? 0) - (a.scoreCurrent ?? a.scoreBaseline ?? 0)),
+    summary: { regressionDetected, improved, declined, noChange, newModels, removedModels },
+  }
 }
 
 function loadResult(filePath: string): RunResult {
@@ -28,22 +113,48 @@ function col(s: string, w: number): string {
   return s.slice(0, w).padEnd(w)
 }
 
-export async function compareCommand(fileA: string, fileB: string, opts: CompareOptions): Promise<void> {
+export async function compareCommand(fileAArg: string | undefined, fileBArg: string | undefined, opts: CompareOptions): Promise<void> {
+  // Support two call styles:
+  //   verdict compare <run-a> <run-b>              (positional)
+  //   verdict compare --baseline <x> --current <y> (named flags, issue #104)
+  const resolvedA = opts.baseline ?? fileAArg
+  const resolvedB = opts.current ?? fileBArg
+
+  if (!resolvedA || !resolvedB) {
+    console.error(chalk.red('  Usage: verdict compare <run-a> <run-b>'))
+    console.error(chalk.dim('     or: verdict compare --baseline <path> --current <path>'))
+    process.exit(1)
+  }
+
+  // --format json: skip all console output, just print JSON result
+  if (opts.format === 'json') {
+    try {
+      const threshold = opts.threshold ?? Infinity
+      const result = runCompare(resolvedA, resolvedB, threshold)
+      process.stdout.write(JSON.stringify(result, null, 2) + '\n')
+      if (result.summary.regressionDetected) process.exit(1)
+    } catch (err) {
+      process.stderr.write(JSON.stringify({ error: err instanceof Error ? err.message : String(err) }) + '\n')
+      process.exit(1)
+    }
+    return
+  }
+
   console.log()
   console.log(chalk.bold('  verdict') + chalk.dim(' compare'))
   console.log()
 
   let runA: RunResult, runB: RunResult
   try {
-    runA = loadResult(fileA)
-    runB = loadResult(fileB)
+    runA = loadResult(resolvedA)
+    runB = loadResult(resolvedB)
   } catch (err) {
     console.error(chalk.red(`  ${err instanceof Error ? err.message : err}`))
     process.exit(1)
   }
 
-  const nameA = path.basename(fileA, '.json')
-  const nameB = path.basename(fileB, '.json')
+  const nameA = path.basename(resolvedA, '.json')
+  const nameB = path.basename(resolvedB, '.json')
 
   console.log(`  ${chalk.bold('A:')} ${chalk.cyan(nameA)}  (${runA.timestamp.slice(0, 19).replace('T', ' ')} UTC, ${runA.cases.length} cases)`)
   console.log(`  ${chalk.bold('B:')} ${chalk.cyan(nameB)}  (${runB.timestamp.slice(0, 19).replace('T', ' ')} UTC, ${runB.cases.length} cases)`)
@@ -221,5 +332,19 @@ export async function compareCommand(fileA: string, fileB: string, opts: Compare
     fs.writeFileSync(opts.output, lines.join('\n') + '\n')
     console.log(chalk.dim(`  report: ${opts.output}`))
     console.log()
+  }
+
+  // --- Regression exit code (--threshold flag, issue #104) ---
+  if (opts.threshold !== undefined) {
+    const regressions = allModels.filter(model => {
+      const a = runA.summary[model]
+      const b = runB.summary[model]
+      return a && b && (b.avg_total - a.avg_total) < -opts.threshold!
+    })
+    if (regressions.length > 0) {
+      console.log(chalk.red(`  ❌ Regression detected: ${regressions.join(', ')} dropped >${opts.threshold}pts`))
+      console.log()
+      process.exit(1)
+    }
   }
 }
