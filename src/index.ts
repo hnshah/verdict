@@ -73,6 +73,15 @@ export {
   parseSince,
 } from './db/client.js'
 
+// ─── Inline score API ────────────────────────────────────────────────────────
+export { verdictScore } from './score.js'
+export type {
+  VerdictScoreOptions,
+  VerdictScoreModelOptions,
+  VerdictScoreJudgeOptions,
+  VerdictScoreResult,
+} from './score.js'
+
 // ─── Types (re-exported for consumers) ───────────────────────────────────────
 export type {
   Config,
