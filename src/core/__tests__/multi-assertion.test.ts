@@ -137,4 +137,36 @@ describe('multi-assertion support', () => {
       expect(result.total).toBe(8)
     })
   })
+
+  describe('aggregateScores modes', () => {
+    const scores: JudgeScore[] = [
+      { accuracy: 10, completeness: 10, conciseness: 10, total: 10, reasoning: 'a' },
+      { accuracy: 0, completeness: 0, conciseness: 0, total: 0, reasoning: 'b' },
+    ]
+
+    it('min takes minimum', () => expect(aggregateScores(scores, 'min').total).toBe(0))
+    it('max takes maximum', () => expect(aggregateScores(scores, 'max').total).toBe(10))
+    it('avg takes mean', () => expect(aggregateScores(scores, 'avg').total).toBe(5))
+    it('weighted respects weights', () => {
+      expect(aggregateScores(scores, 'weighted', [3, 1]).total).toBe(7.5)
+    })
+    it('weighted with equal weights behaves like avg', () => {
+      expect(aggregateScores(scores, 'weighted', [1, 1]).total).toBe(5)
+    })
+    it('max returns 10 when both pass', () => {
+      const both: JudgeScore[] = [
+        { accuracy: 8, completeness: 8, conciseness: 8, total: 8, reasoning: 'x' },
+        { accuracy: 6, completeness: 6, conciseness: 6, total: 6, reasoning: 'y' },
+      ]
+      expect(aggregateScores(both, 'max').total).toBe(8)
+    })
+    it('avg computes correct mean for multiple scores', () => {
+      const three: JudgeScore[] = [
+        { accuracy: 10, completeness: 10, conciseness: 10, total: 10, reasoning: 'a' },
+        { accuracy: 4, completeness: 4, conciseness: 4, total: 4, reasoning: 'b' },
+        { accuracy: 7, completeness: 7, conciseness: 7, total: 7, reasoning: 'c' },
+      ]
+      expect(aggregateScores(three, 'avg').total).toBe(7)
+    })
+  })
 })
