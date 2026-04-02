@@ -5,7 +5,7 @@ import { execSync } from 'child_process'
 import type { Config, EvalPack, RunResult, ModelSummary, CaseResult, Checkpoint, JudgeScore, Assertion, RunMeta } from '../types/index.js'
 import { callModel, callModelMultiTurn, callModelWithTools } from '../providers/compat.js'
 import { judgeResponse, judgeResponseCot } from '../judge/llm.js'
-import { judgeFaithfulness } from '../judge/faithfulness.js'
+import { scoreSimilar } from '../judge/similar.js'
 import { scoreDeterministic, isDeterministic, scoreToolCall, scoreLatency, scoreCost } from '../judge/deterministic.js'
 import { detectHardware, toRunResultFormat } from './hardware.js'
 import { preloadModels } from './preload.js'
@@ -343,10 +343,23 @@ export async function runEvals(
             if (s) assertionScores.push(s)
           }
           score = aggregateScores(assertionScores)
+        } else if (evalCase.scorer === 'similar') {
+          const embeddingConfig = config.judge.embedding_model ?? {
+            base_url: judgeModel.base_url ?? '',
+            api_key: judgeModel.api_key ?? 'no-key',
+            model: 'nomic-embed-text',
+          }
+          score = await scoreSimilar(resp.text, String(evalCase.expected ?? ''), evalCase.threshold ?? 0.85, embeddingConfig)
         } else if (evalCase.scorer === 'latency') {
           score = scoreLatency(resp.latency_ms ?? 0, evalCase.threshold ?? 2000)
         } else if (evalCase.scorer === 'cost') {
           score = scoreCost(resp.cost_usd ?? 0, evalCase.threshold ?? 0.01)
+        } else if (evalCase.scorer === 'faithfulness') {
+          if (!evalCase.context) {
+            console.warn(`[verdict] Case "${evalCase.prompt.slice(0, 40)}" uses faithfulness scorer but has no context field`)
+          }
+          const { judgeFaithfulness } = await import('../judge/faithfulness.js')
+          score = await judgeFaithfulness(judgeModel, config.judge, evalCase.prompt, resp.text, evalCase.context ?? '')
         } else if (evalCase.scorer === 'tool_call') {
           score = scoreToolCall(resp.tool_calls, evalCase.expected_tool ?? '', evalCase.expected_args)
         } else if (usesDeterministic) {
