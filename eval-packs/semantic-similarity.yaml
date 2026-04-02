@@ -1,0 +1,164 @@
+name: Semantic Similarity
+description: Tests using the 'similar' embedding scorer — cases where meaning matters more than exact wording. Exercises paraphrase detection, synonym usage, conceptual equivalence, and translation quality. Requires embedding endpoint configured.
+
+scorer_notes: |
+  These cases are designed for the 'similar' scorer (cosine embedding distance).
+  Set threshold: 0.85 for most cases, 0.90 for stricter paraphrase tests.
+  Expected values represent canonical reference answers — semantically equivalent
+  responses should score well even with different wording.
+
+cases:
+  # ── Paraphrase detection ──────────────────────────────────────────────────
+  - id: sim-001
+    description: "Paraphrase: definition of machine learning"
+    category: paraphrase
+    prompt: "In one sentence, what is machine learning?"
+    expected: "Machine learning is a branch of AI where systems learn from data to improve their performance on tasks without being explicitly programmed."
+    scorer: similar
+    threshold: 0.82
+    criteria: "Should convey: learning from data, improving performance, without explicit programming. Exact wording not required — semantic equivalence is."
+    tags: [semantic, paraphrase, definitions]
+
+  - id: sim-002
+    description: "Paraphrase: explain recursion simply"
+    category: paraphrase
+    prompt: "Explain recursion in one sentence for a beginner."
+    expected: "Recursion is when a function calls itself to solve a smaller version of the same problem until it reaches a simple base case."
+    scorer: similar
+    threshold: 0.80
+    criteria: "Should mention: self-reference/calling itself, solving smaller subproblems, base case. Semantically equivalent phrasing acceptable."
+    tags: [semantic, paraphrase, programming]
+
+  - id: sim-003
+    description: "Paraphrase: TCP vs UDP"
+    category: paraphrase
+    prompt: "What is the key difference between TCP and UDP? One sentence."
+    expected: "TCP guarantees reliable, ordered delivery with error checking, while UDP is faster but offers no delivery guarantees."
+    scorer: similar
+    threshold: 0.83
+    criteria: "Should contrast reliability/ordering (TCP) against speed/no guarantees (UDP). Semantically equivalent descriptions acceptable."
+    tags: [semantic, paraphrase, networking]
+
+  # ── Synonym and word-choice variance ─────────────────────────────────────
+  - id: sim-004
+    description: "Synonym variance: describe a fast algorithm"
+    category: synonym-variance
+    prompt: "Describe an O(log n) algorithm in plain terms."
+    expected: "An O(log n) algorithm becomes only slightly slower as input grows — doubling the input adds just one extra step, making it extremely efficient for large datasets."
+    scorer: similar
+    threshold: 0.80
+    criteria: "Should convey: sub-linear growth, efficiency for large inputs, halving/logarithmic behavior. Word choice may vary significantly."
+    tags: [semantic, synonyms, algorithms]
+
+  - id: sim-005
+    description: "Synonym variance: what is latency"
+    category: synonym-variance
+    prompt: "Define network latency in plain language."
+    expected: "Network latency is the time it takes for data to travel from one point to another across a network, measured in milliseconds."
+    scorer: similar
+    threshold: 0.83
+    criteria: "Should capture: time delay, data transmission, network context. Synonyms for 'delay', 'travel', 'time' are all acceptable."
+    tags: [semantic, synonyms, networking]
+
+  # ── Conceptual equivalence ────────────────────────────────────────────────
+  - id: sim-006
+    description: "Conceptual equivalence: SOLID principles summary"
+    category: conceptual
+    prompt: "What does the 'S' in SOLID stand for and what does it mean? One sentence."
+    expected: "The S stands for Single Responsibility Principle, meaning a class or module should have only one reason to change — it should do one thing well."
+    scorer: similar
+    threshold: 0.85
+    criteria: "Must include: Single Responsibility, one reason to change / one job / one concern. Conceptually equivalent phrasing acceptable."
+    tags: [semantic, conceptual, software-design]
+
+  - id: sim-007
+    description: "Conceptual equivalence: what is a hash collision"
+    category: conceptual
+    prompt: "What is a hash collision?"
+    expected: "A hash collision occurs when two different inputs produce the same hash output, which can cause problems in hash tables and cryptographic applications."
+    scorer: similar
+    threshold: 0.83
+    criteria: "Must convey: two different inputs → same hash output, problematic in hash tables/crypto. Phrasing may vary."
+    tags: [semantic, conceptual, data-structures]
+
+  - id: sim-008
+    description: "Conceptual equivalence: CAP theorem summary"
+    category: conceptual
+    prompt: "Summarize the CAP theorem in one sentence."
+    expected: "The CAP theorem states that a distributed system can only guarantee two of three properties — consistency, availability, and partition tolerance — at the same time."
+    scorer: similar
+    threshold: 0.85
+    criteria: "Must reference: consistency, availability, partition tolerance, and the trade-off (pick 2). Exact order/wording not required."
+    tags: [semantic, conceptual, distributed-systems]
+
+  - id: sim-009
+    description: "Conceptual equivalence: gradient descent intuition"
+    category: conceptual
+    prompt: "Explain gradient descent in one sentence without math."
+    expected: "Gradient descent is an optimization algorithm that iteratively adjusts model parameters in the direction that reduces the error, like finding the lowest point in a valley by always stepping downhill."
+    scorer: similar
+    threshold: 0.80
+    criteria: "Should capture: iterative adjustment, reducing error/loss, moving in the direction of improvement. The 'downhill' metaphor or equivalent intuition expected."
+    tags: [semantic, conceptual, machine-learning]
+
+  # ── Reformulation quality ─────────────────────────────────────────────────
+  - id: sim-010
+    description: "Reformulation: simplify a technical definition"
+    category: reformulation
+    prompt: "Rewrite this for a non-technical audience: 'Idempotency is a property of operations whereby applying them multiple times produces the same result as applying them once.'"
+    expected: "An idempotent operation is one you can repeat as many times as you want and always get the same result — like pressing an elevator button multiple times doesn't summon multiple elevators."
+    scorer: similar
+    threshold: 0.78
+    criteria: "Should preserve meaning (doing it multiple times = same as doing it once) in accessible language. Analogies may differ but semantic meaning must be equivalent."
+    tags: [semantic, reformulation, simplification]
+
+  - id: sim-011
+    description: "Reformulation: make passive voice active"
+    category: reformulation
+    prompt: "Rewrite in active voice: 'The bug was identified by the engineer during code review.'"
+    expected: "The engineer identified the bug during code review."
+    scorer: similar
+    threshold: 0.90
+    criteria: "Should convert to active voice. Semantic content must be essentially identical — who did what when. High threshold because content is constrained."
+    tags: [semantic, reformulation, writing]
+
+  - id: sim-012
+    description: "Reformulation: formalize an informal statement"
+    category: reformulation
+    prompt: "Make this more formal: 'Our product is way better than what the competition offers and way cheaper too.'"
+    expected: "Our product delivers superior performance compared to competing solutions while maintaining a significantly lower price point."
+    scorer: similar
+    threshold: 0.80
+    criteria: "Should preserve both claims: better quality AND lower cost. Formal register expected. Semantic content must match."
+    tags: [semantic, reformulation, writing]
+
+  # ── Semantic boundary cases ────────────────────────────────────────────────
+  - id: sim-013
+    description: "Should score LOW: opposite meaning"
+    category: boundary
+    prompt: "Is TCP connection-oriented or connectionless?"
+    expected: "TCP is connection-oriented — it establishes a connection before data transfer through a three-way handshake."
+    scorer: similar
+    threshold: 0.88
+    criteria: "Must answer 'connection-oriented'. A response saying 'connectionless' should score LOW on semantic similarity. This tests that the scorer catches meaning reversal, not just topic match."
+    tags: [semantic, boundary, networking]
+
+  - id: sim-014
+    description: "Concise vs verbose: same meaning"
+    category: boundary
+    prompt: "What does REST stand for?"
+    expected: "REST stands for Representational State Transfer."
+    scorer: similar
+    threshold: 0.90
+    criteria: "High threshold — factual answer is constrained. Both a one-word expansion and a verbose explanation should score high if they include the correct expansion. Tests scorer doesn't penalize brevity."
+    tags: [semantic, boundary, definitions]
+
+  - id: sim-015
+    description: "Semantic drift: code comment quality"
+    category: boundary
+    prompt: "Write a one-line comment for this Python function: `def calculate_area(radius): return 3.14159 * radius ** 2`"
+    expected: "# Calculate the area of a circle given its radius"
+    scorer: similar
+    threshold: 0.82
+    criteria: "Should describe: computing circle area, radius parameter. Variations like 'Compute circular area from radius', 'Returns area of circle with given radius' should score high. Comments about pi or the formula specifically score lower."
+    tags: [semantic, boundary, code-documentation]
