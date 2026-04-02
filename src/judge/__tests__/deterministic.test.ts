@@ -29,9 +29,11 @@ describe('deterministic scorers', () => {
       expect(result.total).toBe(10)
     })
 
-    it('gives partial credit for malformed JSON-like output', () => {
+    it('gives 0/10 for malformed JSON-like output (no partial credit)', () => {
       const result = scoreJson('{key: value}')
-      expect(result.total).toBe(2)
+      expect(result.total).toBe(0)
+      expect(result.reasoning).toContain('JSON-like structure found but failed to parse')
+      expect(result.reasoning).toContain('{key: value}')
     })
 
     it('scores non-JSON as 0/10', () => {

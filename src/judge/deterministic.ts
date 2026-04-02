@@ -56,8 +56,8 @@ export function scoreJson(output: string): JudgeScore {
     }
   } catch (err) {
     return {
-      accuracy: 2, completeness: 2, conciseness: 2, total: 2,
-      reasoning: `JSON structure found but parse failed: ${err instanceof Error ? err.message : err}`,
+      accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+      reasoning: `JSON-like structure found but failed to parse: ${err instanceof Error ? err.message : err}. Got: "${extracted.slice(0, 80)}"`,
     }
   }
 }
