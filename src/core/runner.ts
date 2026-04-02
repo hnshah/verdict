@@ -107,20 +107,47 @@ export function scoreAssertion(
   return null
 }
 
-export function aggregateScores(scores: JudgeScore[]): JudgeScore {
+export function aggregateScores(
+  scores: JudgeScore[],
+  mode: 'min' | 'max' | 'avg' | 'weighted' = 'min',
+  weights?: number[]
+): JudgeScore {
   if (scores.length === 0) {
     return { accuracy: 0, completeness: 0, conciseness: 0, total: 0, reasoning: 'No assertions scored.' }
   }
-  // Use minimum — all assertions must pass
-  const min = (field: keyof JudgeScore) =>
-    Math.min(...scores.map(s => s[field] as number))
-  return {
-    accuracy: min('accuracy'),
-    completeness: min('completeness'),
-    conciseness: min('conciseness'),
-    total: min('total'),
-    reasoning: scores.map((s, i) => `[${i + 1}] ${s.reasoning}`).join(' | '),
+
+  const fields: Array<keyof JudgeScore> = ['accuracy', 'completeness', 'conciseness', 'total']
+  const reasoning = scores.map((s, i) => `[${i + 1}] ${s.reasoning}`).join(' | ')
+
+  if (mode === 'min') {
+    const result: Partial<JudgeScore> = {}
+    for (const f of fields) result[f] = Math.min(...scores.map(s => s[f] as number))
+    result.reasoning = reasoning
+    return result as JudgeScore
   }
+
+  if (mode === 'max') {
+    const result: Partial<JudgeScore> = {}
+    for (const f of fields) result[f] = Math.max(...scores.map(s => s[f] as number))
+    result.reasoning = reasoning
+    return result as JudgeScore
+  }
+
+  if (mode === 'avg' || mode === 'weighted') {
+    const w = mode === 'weighted' && weights?.length === scores.length
+      ? weights.map(x => x / weights.reduce((a, b) => a + b, 0))  // normalize
+      : scores.map(() => 1 / scores.length)  // equal weights for avg
+
+    const result: Partial<JudgeScore> = {}
+    for (const f of fields) {
+      result[f] = +scores.reduce((sum, s, i) => sum + (s[f] as number) * w[i], 0).toFixed(1)
+    }
+    result.reasoning = reasoning
+    return result as JudgeScore
+  }
+
+  // fallback
+  return aggregateScores(scores, 'min')
 }
 
 export function computeConfigHash(config: Config): string {
@@ -310,13 +337,14 @@ export async function runEvals(
         let score: JudgeScore
 
         if (evalCase.assertions && evalCase.assertions.length > 0) {
-          // Multi-assertion mode: run each assertion, aggregate with min
+          // Multi-assertion mode: run each assertion, aggregate with configured mode
           const assertionScores: JudgeScore[] = []
           for (const assertion of evalCase.assertions) {
             const s = scoreAssertion(assertion, resp.text, resp.tool_calls)
             if (s) assertionScores.push(s)
           }
-          score = aggregateScores(assertionScores)
+          const weights = evalCase.assertions.map(a => a.weight ?? 1)
+          score = aggregateScores(assertionScores, evalCase.aggregation ?? 'min', weights)
         } else if (evalCase.scorer === 'tool_call') {
           score = scoreToolCall(resp.tool_calls, evalCase.expected_tool ?? '', evalCase.expected_args)
         } else if (usesDeterministic) {

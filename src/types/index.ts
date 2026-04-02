@@ -88,6 +88,7 @@ export const AssertionSchema = z.object({
   scorer: ScorerEnum,
   expected: z.union([z.string(), z.array(z.string())]).optional(),
   schema: z.record(z.unknown()).optional(),
+  weight: z.number().optional(),
 })
 export type Assertion = z.infer<typeof AssertionSchema>
 
@@ -119,6 +120,8 @@ export const EvalCaseSchema = z.object({
   scorer_code: z.string().optional(),
   // Multi-assertion: run multiple scorers against the same output, score = min of all
   assertions: z.array(AssertionSchema).optional(),
+  // Aggregation mode for multi-assertion: 'min' (default), 'max', 'avg', or 'weighted'
+  aggregation: z.enum(['min', 'max', 'avg', 'weighted']).optional(),
   choices: z.array(z.string()).optional(),
   schema: z.record(z.unknown()).optional(),
   turns: z.array(z.object({
