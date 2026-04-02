@@ -26,26 +26,57 @@ export function clearJudgeClientCache(): void {
   judgeClientCache.clear()
 }
 
-function buildPrompt(prompt: string, criteria: string, response: string, rubric: JudgeConfig['rubric']): string {
-  return `You are an impartial evaluator. You do not know which AI model produced this response.
+function buildPrompt(prompt: string, criteria: string, response: string, rubric: JudgeConfig['rubric'], examples?: JudgeConfig['examples']): string {
+  const criteriaSection = `You are an impartial evaluator. You do not know which AI model produced this response.
 
 Question: ${prompt}
 
 Evaluation Criteria: ${criteria}
 
-Response to evaluate:
-${response}
-
 Score on three dimensions. Use integers 1-10.
 - accuracy (${Math.round(rubric.accuracy * 100)}% weight): Is the content correct and factual?
 - completeness (${Math.round(rubric.completeness * 100)}% weight): Does it address all criteria?
-- conciseness (${Math.round(rubric.conciseness * 100)}% weight): Appropriately scoped, no padding?
+- conciseness (${Math.round(rubric.conciseness * 100)}% weight): Appropriately scoped, no padding?`
 
-Output ONLY a JSON object on a single line. No markdown, no citations, no other text:
-{"accuracy":N,"completeness":N,"conciseness":N,"reasoning":"one sentence"}`
+  const outputInstruction = `Output ONLY a JSON object on a single line. No markdown, no citations, no other text:
+{"accuracy":N,"completeness":N,"conciseness":N,"confidence":N,"reasoning":"one sentence"}
+Where confidence is 1-10: 10 = "completely unambiguous", 1 = "I am guessing."`
+
+  if (examples && examples.length > 0) {
+    const examplesText = examples.map((ex, i) => {
+      const correctScores = JSON.stringify({
+        accuracy: ex.scores.accuracy,
+        completeness: ex.scores.completeness,
+        conciseness: ex.scores.conciseness,
+        reasoning: ex.reasoning,
+      })
+      return `Example ${i + 1}:
+Question: ${ex.prompt}
+Response: ${ex.response}
+Correct scores: ${correctScores}`
+    }).join('\n\n')
+
+    return `${criteriaSection}
+
+Here are calibration examples to guide your scoring:
+
+${examplesText}
+
+Now evaluate this new response:
+${response}
+
+${outputInstruction}`
+  }
+
+  return `${criteriaSection}
+
+Response to evaluate:
+${response}
+
+${outputInstruction}`
 }
 
-function parseJudgeJson(text: string): { accuracy: number; completeness: number; conciseness: number; reasoning: string } | null {
+function parseJudgeJson(text: string): { accuracy: number; completeness: number; conciseness: number; confidence?: number; reasoning: string } | null {
   // Strip markdown fences and citation markers (e.g. [1][2][3] from Perplexity)
   const cleaned = text
     .replace(/```(?:json)?/gi, '')
@@ -76,7 +107,7 @@ export async function judgeResponse(
   criteria: string,
   response: string
 ): Promise<JudgeScore> {
-  const judgePrompt = buildPrompt(prompt, criteria, response, config.rubric)
+  const judgePrompt = buildPrompt(prompt, criteria, response, config.rubric, config.examples)
   vlog('debug', `judge ${judgeModel.id}: request`, judgePrompt)
 
   let text: string
@@ -128,12 +159,15 @@ export async function judgeResponse(
     conciseness * rubric.conciseness
   ).toFixed(1)
 
+  const confidence = parsed.confidence !== undefined ? clamp(parsed.confidence) : undefined
+
   return {
     accuracy,
     completeness,
     conciseness,
     total,
     reasoning: typeof parsed.reasoning === 'string' ? parsed.reasoning : '',
+    ...(confidence !== undefined ? { confidence } : {}),
   }
 }
 
@@ -255,11 +289,25 @@ export async function judgeResponseCot(
     ? reasoningLines[reasoningLines.length - 1].slice(0, 200)
     : `Chose ${chosen.letter}`
 
+  // Map choice score to confidence:
+  // Extreme choices (0 or 10) → 8 (clear case)
+  // Middle choice (5) → 4 (ambiguous)
+  // Other choices → 6
+  let confidence: number
+  if (chosen.score === 0 || chosen.score === 10) {
+    confidence = 8
+  } else if (chosen.score === 5) {
+    confidence = 4
+  } else {
+    confidence = 6
+  }
+
   return {
     accuracy: score,
     completeness: score,
     conciseness: score,
     total: score,
     reasoning: `[cot_classify=${chosen.letter}] ${reasoning}`,
+    confidence,
   }
 }
