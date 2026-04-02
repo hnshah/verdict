@@ -1,0 +1,19 @@
+models:
+  - id: llama3.1
+    model: llama3.1
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+
+judge:
+  model: llama3.1
+  embedding_model:
+    base_url: http://localhost:11434/v1
+    api_key: none
+    model: nomic-embed-text
+
+packs:
+  - eval-packs/integration-test.yaml
+
+output:
+  dir: results/integration

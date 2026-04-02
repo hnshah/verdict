@@ -1,0 +1,30 @@
+name: Integration Test
+description: Verifies LLM-dependent scorers work end-to-end
+cases:
+  # Test faithfulness scorer
+  - id: faith-positive
+    prompt: "What is the capital of France?"
+    context: "France is a country in Western Europe. Its capital city is Paris, which has a population of over 2 million."
+    criteria: "Response must be grounded in the provided context"
+    scorer: faithfulness
+
+  - id: faith-negative
+    prompt: "What is the capital of France?"
+    context: "Germany is a country in Central Europe. Its capital is Berlin."
+    criteria: "Response must be grounded in the provided context — should score low since France/Paris not mentioned"
+    scorer: faithfulness
+
+  # Test similar scorer
+  - id: similar-positive
+    prompt: "What is 2 + 2?"
+    expected: "The answer is four"
+    criteria: "Response should mean the same as expected"
+    scorer: similar
+    threshold: 0.75
+
+  - id: similar-negative
+    prompt: "What is 2 + 2?"
+    expected: "The sky is blue and clouds are white"
+    criteria: "Should score low — completely unrelated"
+    scorer: similar
+    threshold: 0.75

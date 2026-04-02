@@ -5,6 +5,7 @@ import { execSync } from 'child_process'
 import type { Config, EvalPack, RunResult, ModelSummary, CaseResult, Checkpoint, JudgeScore, Assertion, RunMeta } from '../types/index.js'
 import { callModel, callModelMultiTurn, callModelWithTools } from '../providers/compat.js'
 import { judgeResponse, judgeResponseCot } from '../judge/llm.js'
+import { judgeFaithfulness } from '../judge/faithfulness.js'
 import { scoreSimilar } from '../judge/similar.js'
 import { scoreDeterministic, isDeterministic, scoreToolCall, scoreLatency, scoreCost } from '../judge/deterministic.js'
 import { detectHardware, toRunResultFormat } from './hardware.js'
@@ -344,10 +345,14 @@ export async function runEvals(
           }
           score = aggregateScores(assertionScores)
         } else if (evalCase.scorer === 'similar') {
-          const embeddingConfig = config.judge.embedding_model ?? {
-            base_url: judgeModel.base_url ?? '',
+          const baseEmbeddingConfig = config.judge.embedding_model ?? {
+            base_url: judgeModel.base_url ?? 'http://localhost:11434/v1',
             api_key: judgeModel.api_key ?? 'no-key',
             model: 'nomic-embed-text',
+          }
+          const embeddingConfig = {
+            ...baseEmbeddingConfig,
+            api_key: baseEmbeddingConfig.api_key || 'no-key'
           }
           score = await scoreSimilar(resp.text, String(evalCase.expected ?? ''), evalCase.threshold ?? 0.85, embeddingConfig)
         } else if (evalCase.scorer === 'latency') {
@@ -358,17 +363,11 @@ export async function runEvals(
           if (!evalCase.context) {
             console.warn(`[verdict] Case "${evalCase.prompt.slice(0, 40)}" uses faithfulness scorer but has no context field`)
           }
-          const { judgeFaithfulness } = await import('../judge/faithfulness.js')
           score = await judgeFaithfulness(judgeModel, config.judge, evalCase.prompt, resp.text, evalCase.context ?? '')
         } else if (evalCase.scorer === 'tool_call') {
           score = scoreToolCall(resp.tool_calls, evalCase.expected_tool ?? '', evalCase.expected_args)
         } else if (usesDeterministic) {
           score = scoreDeterministic(evalCase.scorer, resp.text, evalCase.expected, evalCase.schema, evalCase.choices, evalCase.scorer_code)!
-        } else if (evalCase.scorer === 'faithfulness') {
-          if (!evalCase.context) {
-            console.warn(`[verdict] Case "${evalCase.prompt.slice(0, 40)}" uses faithfulness scorer but has no context field`)
-          }
-          score = await judgeFaithfulness(judgeModel, config.judge, evalCase.prompt, resp.text, evalCase.context ?? '')
         } else if (evalCase.judge_style === 'cot_classify') {
           score = await judgeResponseCot(judgeModel, config.judge, evalCase.prompt, evalCase.criteria, resp.text, evalCase.cot_choices)
         } else {

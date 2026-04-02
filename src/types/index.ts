@@ -45,6 +45,16 @@ export const JudgeConfigSchema = z.object({
     api_key: z.string().optional(),
     model: z.string(),
   }).optional(),
+  examples: z.array(z.object({
+    prompt: z.string(),
+    response: z.string(),
+    scores: z.object({
+      accuracy: z.number(),
+      completeness: z.number(),
+      conciseness: z.number(),
+    }),
+    reasoning: z.string(),
+  })).optional(),
 })
 export type JudgeConfig = z.infer<typeof JudgeConfigSchema>
 
