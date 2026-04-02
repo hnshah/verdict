@@ -1,0 +1,877 @@
+{
+  "run_id": "2026-04-02T06-54-56",
+  "name": "My Evals",
+  "timestamp": "2026-04-02T07:07:17.802Z",
+  "models": [
+    "qwen-coder-7b",
+    "qwen-coder-14b",
+    "qwen-coder-32b",
+    "qwen-7b"
+  ],
+  "cases": [
+    {
+      "case_id": "code-001",
+      "prompt": "Write a Python function that finds the two numbers in a list that sum to a target value. Return their indices. Assume exactly one solution exists.",
+      "criteria": "Correct O(n) solution using a hash map. Returns tuple/list of two indices. Handles the case where the same element can't be used twice.",
+      "responses": {
+        "qwen-coder-7b": {
+          "model_id": "qwen-coder-7b",
+          "text": "```python\ndef find_two_sum(nums, target):\n    # Create a dictionary to store the difference and its index\n    num_dict = {}\n    \n    # Iterate over the list of numbers\n    for i, num in enumerate(nums):\n        # Calculate the complement that would sum up to the target\n        complement = target - num\n        \n        # Check if the complement exists in the dictionary\n        if complement in num_dict:\n            # If it does, return the indices of the complement and the current number\n            return [num_dict[complement], i]\n        \n        # Store the number and its index in the dictionary\n        num_dict[num] = i\n    \n    # If no solution is found, raise an exception (though problem states there will be one)\n    raise ValueError(\"No two sum solution\")\n\n# Example usage:\nnums = [2, 7, 11, 15]\ntarget = 9\nprint(find_two_sum(nums, target))  # Output: [0, 1]\n```\n\nThis Python function `find_two_sum` takes a list of integers `nums` and an integer `target`. It uses a dictionary to store the difference between the target and each number as it iterates through the list. If at any point the current number is found in the dictionary, it means that the complement (the number needed to reach the target) has already been seen, and thus, their indices are returned. This approach ensures that the function runs efficiently with a time complexity of O(n), where n is the length of the list.",
+          "input_tokens": 58,
+          "output_tokens": 319,
+          "latency_ms": 7459,
+          "cost_usd": 0
+        },
+        "qwen-coder-14b": {
+          "model_id": "qwen-coder-14b",
+          "text": "Here's a Python function that solves the problem of finding two numbers in a list that add up to a specific target value and returns their indices:\n\n```python\ndef find_two_sum(nums, target):\n    # Create a dictionary to store the number and its index\n    num_to_index = {}\n    \n    # Iterate over the list of numbers\n    for index, num in enumerate(nums):\n        # Calculate the complement that would sum with the current number to reach the target\n        complement = target - num\n        \n        # Check if the complement is already in the dictionary\n        if complement in num_to_index:\n            # If found, return the indices of the two numbers\n            return [num_to_index[complement], index]\n        \n        # Store the number and its index in the dictionary\n        num_to_index[num] = index\n    \n    # Return an empty list if no solution is found (though the problem guarantees one)\n    return []\n\n# Example usage:\nnums = [2, 7, 11, 15]\ntarget = 9\nprint(find_two_sum(nums, target))  # Output: [0, 1]\n```\n\n### Explanation:\n\n- **Dictionary Usage**: The function uses a dictionary `num_to_index` to store each number and its index as it iterates through the list. This allows for O(1) average time complexity for lookups.\n\n- **Complement Calculation**: For each number in the list, the function calculates its complement with respect to the target (i.e., `complement = target - num`). It checks if this complement is already in the dictionary.\n\n- **Immediate Return**: If the complement is found in the dictionary, it means we have found two numbers that add up to the target. The function returns their indices immediately.\n\n- **Single Pass Efficiency**: This approach ensures that the solution is found in a single pass through the list, making it efficient with a time complexity of O(n), where n is the number of elements in the list.\n\nThis method is optimal for solving the \"Two Sum\" problem efficiently.",
+          "input_tokens": 58,
+          "output_tokens": 422,
+          "latency_ms": 39419,
+          "cost_usd": 0
+        },
+        "qwen-coder-32b": {
+          "model_id": "qwen-coder-32b",
+          "text": "Certainly! To solve this problem efficiently, we can use a hash map (dictionary in Python) to store the numbers and their corresponding indices as we iterate through the list. This allows us to check in constant time whether the complement of the current number (i.e., `target - current_number`) has already been seen.\n\nHere's the implementation:\n\n```python\ndef two_sum(nums, target):\n    # Create a dictionary to store the numbers and their indices\n    num_to_index = {}\n    \n    # Iterate through the list of numbers\n    for index, num in enumerate(nums):\n        # Calculate the complement that we need to find\n        complement = target - num\n        \n        # Check if the complement is already in the dictionary\n        if complement in num_to_index:\n            # If it is, return the indices of the two numbers\n            return [num_to_index[complement], index]\n        \n        # Otherwise, add the current number and its index to the dictionary\n        num_to_index[num] = index\n    \n    # The problem guarantees that there is exactly one solution,\n    # so this line should never be reached.\n    raise ValueError(\"No two sum solution found\")\n\n# Example usage:\nnums = [2, 7, 11, 15]\ntarget = 9\nprint(two_sum(nums, target))  # Output: [0, 1]\n```\n\n### Explanation:\n- We use a dictionary `num_to_index` to map each number in the list to its index.\n- As we iterate through the list with `enumerate`, for each number `num` at index `index`, we calculate its complement as `target - num`.\n- We then check if this complement is already in the dictionary. If it is, we have found our solution and return the indices of the two numbers.\n- If not, we add the current number and its index to the dictionary and continue.\n\nThis approach ensures that we only pass through the list once, making the time complexity O(n), where n is the length of the list. The space complexity is also O(n) due to the storage required for the dictionary.",
+          "input_tokens": 58,
+          "output_tokens": 434,
+          "latency_ms": 48560,
+          "cost_usd": 0
+        },
+        "qwen-7b": {
+          "model_id": "qwen-7b",
+          "text": "Certainly! Below is a Python function that takes a list of integers and a target sum, then returns the indices of the two numbers that add up to the target. The function assumes there is exactly one unique pair of numbers in the list that sums to the target.\n\n```python\ndef two_sum(nums, target):\n    # Create an empty dictionary to store the value and its index\n    num_to_index = {}\n    \n    # Iterate through the list with both the index and value\n    for i, num in enumerate(nums):\n        # Calculate the complement of the current number\n        complement = target - num\n        \n        # Check if the complement exists in the dictionary\n        if complement in num_to_index:\n            # If it does, return the indices of the two numbers\n            return [num_to_index[complement], i]\n        \n        # Otherwise, add the current number and its index to the dictionary\n        num_to_index[num] = i\n    \n    # This line will never be reached if there is exactly one solution\n    raise ValueError(\"No two sum solution\")\n\n# Example usage:\nnums = [2, 7, 11, 15]\ntarget = 9\nprint(two_sum(nums, target))  # Output: [0, 1]\n\nnums = [3, 2, 4]\ntarget = 6\nprint(two_sum(nums, target))  # Output: [1, 2]\n\nnums = [3, 3]\ntarget = 6\nprint(two_sum(nums, target))  # Output: [0, 1]\n```\n\n### Explanation:\n- **Dictionary (`num_to_index`)**: This dictionary is used to store the value of each number and its corresponding index as we iterate through the list.\n- **Complement Calculation**: For each element in the list, calculate the complement by subtracting the current number from the target. If this complement exists in the dictionary, it means we have found the two numbers that sum up to the target.\n- **Return Indices**: Once the complement is found, return the indices of both the current number and its complement.\n\nThis approach ensures a time complexity of \\(O(n)\\) since each lookup, insertion, and iteration in the dictionary takes constant time on average.",
+          "input_tokens": 58,
+          "output_tokens": 464,
+          "latency_ms": 8708,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The function correctly implements the O(n) solution using a hash map, returns the indices of the two numbers that sum to the target, and handles the case where the same element cannot be used twice. It is clear and concise, but could include a brief explanation of the logic within comments for completeness.",
+          "confidence": 9
+        },
+        "qwen-coder-14b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The function correctly implements the O(n) solution using a hash map, returns the indices as required, and handles the case where the same element cannot be used twice. The explanation is clear but could be more concise.",
+          "confidence": 9
+        },
+        "qwen-coder-32b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response provides a correct and efficient O(n) solution using a hash map, addresses all criteria, and is concise. However, it could be slightly more concise by removing the unnecessary example usage.",
+          "confidence": 9
+        },
+        "qwen-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The function correctly implements the two-sum problem using a hash map with O(n) complexity. It returns the indices of the two numbers that sum to the target. The explanation is clear, but it could be more concise.",
+          "confidence": 9
+        }
+      },
+      "winner": "qwen-coder-7b"
+    },
+    {
+      "case_id": "code-002",
+      "prompt": "Debug this JavaScript: function flatten(arr) { return arr.reduce((acc, val) => acc.concat(val), []); } — it only flattens one level deep. Fix it to flatten arrays of any depth.",
+      "criteria": "Correct recursive or iterative solution. Works for arbitrarily nested arrays. Preserves non-array values.",
+      "responses": {
+        "qwen-coder-14b": {
+          "model_id": "qwen-coder-14b",
+          "text": "To fix the `flatten` function so that it can handle arrays of any depth, you need to use recursion. The current implementation only flattens one level deep because it assumes all elements in the array are not themselves arrays. Here's how you can modify the function to handle arrays of any depth:\n\n```javascript\nfunction flatten(arr) {\n  return arr.reduce((acc, val) => \n    acc.concat(Array.isArray(val) ? flatten(val) : val), []);\n}\n```\n\n### Explanation:\n- **`Array.isArray(val)`**: This checks if the current value `val` is an array.\n- If `val` is an array, the function calls itself recursively (`flatten(val)`) to flatten that sub-array before concatenating it to the accumulator `acc`.\n- If `val` is not an array, it simply concatenates `val` to `acc`.\n\nThis recursive approach ensures that all levels of nested arrays are flattened.",
+          "input_tokens": 72,
+          "output_tokens": 190,
+          "latency_ms": 8220,
+          "cost_usd": 0
+        },
+        "qwen-coder-7b": {
+          "model_id": "qwen-coder-7b",
+          "text": "To fix the `flatten` function so that it can handle arrays of any depth, you need to check if each value is an array and recursively flatten it if necessary. Here's a way to do it using recursion:\n\n```javascript\nfunction flatten(arr) {\n  return arr.reduce((acc, val) => {\n    if (Array.isArray(val)) {\n      acc.push(...flatten(val));\n    } else {\n      acc.push(val);\n    }\n    return acc;\n  }, []);\n}\n```\n\n### Explanation:\n- **`arr.reduce((acc, val) => { ... }, [])`:** This uses the `reduce` method to iterate over each element in the array.\n- **`if (Array.isArray(val)) { ... }`:** Checks if the current value is an array.\n  - If it is, it recursively calls `flatten(val)` and spreads (`...`) the result into the accumulator (`acc`).\n  - If it's not an array, it simply pushes the value into the accumulator.\n- **`return acc;`:** Returns the accumulated flattened array.\n\nThis function will now correctly flatten arrays of any depth.",
+          "input_tokens": 72,
+          "output_tokens": 229,
+          "latency_ms": 8641,
+          "cost_usd": 0
+        },
+        "qwen-coder-32b": {
+          "model_id": "qwen-coder-32b",
+          "text": "To flatten an array of any depth in JavaScript, you can use a recursive approach. The current implementation only handles one level of nesting because `concat` is used directly on the elements of the array without checking if they are arrays themselves.\n\nHere's how you can modify the function to handle arrays of any depth:\n\n```javascript\nfunction flatten(arr) {\n    return arr.reduce((acc, val) => \n        Array.isArray(val) ? acc.concat(flatten(val)) : acc.concat(val), \n        []\n    );\n}\n\n// Example usage:\nconst nestedArray = [1, [2, [3, 4], 5], 6];\nconsole.log(flatten(nestedArray)); // Output: [1, 2, 3, 4, 5, 6]\n```\n\n### Explanation:\n\n- **`Array.isArray(val)`**: This checks if the current element (`val`) is an array.\n- If `val` is an array, we recursively call `flatten(val)`, which will flatten that sub-array and then concatenate it to the accumulator (`acc`).\n- If `val` is not an array, we simply concatenate it to the accumulator.\n\nThis approach ensures that all levels of nested arrays are flattened into a single-level array.",
+          "input_tokens": 72,
+          "output_tokens": 255,
+          "latency_ms": 28876,
+          "cost_usd": 0
+        },
+        "qwen-7b": {
+          "model_id": "qwen-7b",
+          "text": "To flatten an array of any depth in JavaScript, you can use a recursive approach. The current implementation only flattens one level deep because the `reduce` method is applied directly on each sub-array without considering its depth.\n\nHere's how you can modify your function to handle arrays of any depth:\n\n```javascript\nfunction flatten(arr) {\n    return arr.reduce((acc, val) => \n        Array.isArray(val) ? acc.concat(flatten(val)) : acc.concat(val), []\n    );\n}\n```\n\n### Explanation:\n- **`Array.isArray(val)`**: This checks if the current value `val` is an array. If it is, we recursively call `flatten(val)` to handle its contents.\n- **`acc.concat(flatten(val))`**: If `val` is an array, we concatenate its flattened result into the accumulator `acc`.\n- **`acc.concat(val)`**: If `val` is not an array, we simply add it directly to the accumulator.\n\nThis approach ensures that all levels of nested arrays are flattened correctly. Here's a quick example:\n\n```javascript\nconst nestedArray = [1, [2, [3, 4], 5], 6];\nconsole.log(flatten(nestedArray)); // Output: [1, 2, 3, 4, 5, 6]\n```\n\nThis will correctly flatten the array to a single level.",
+          "input_tokens": 72,
+          "output_tokens": 284,
+          "latency_ms": 5467,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder-14b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response correctly identifies the need for recursion and provides a working implementation. It explains the logic clearly but could be more concise in its explanation.",
+          "confidence": 10
+        },
+        "qwen-coder-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response correctly addresses the problem by providing a recursive solution that flattens arrays of any depth while preserving non-array values. It is clear and concise, though it could be slightly more detailed in explaining the use of `Array.isArray` and the spread operator.",
+          "confidence": 10
+        },
+        "qwen-coder-32b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response correctly identifies the issue and provides a recursive solution that works for arrays of any depth. It also explains the logic behind the solution, but could be slightly more concise in its explanation.",
+          "confidence": 9
+        },
+        "qwen-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response correctly identifies the issue and provides a recursive solution that works for arrays of any depth. It also includes an explanation and an example, which is helpful but could be more concise.",
+          "confidence": 9
+        }
+      },
+      "winner": "qwen-coder-14b"
+    },
+    {
+      "case_id": "code-003",
+      "prompt": "Write a SQL query that finds the top 3 customers by total order value from tables: orders(id, customer_id, amount) and customers(id, name). Include customer name and total.",
+      "criteria": "Uses JOIN, GROUP BY, SUM, ORDER BY DESC, LIMIT 3. Correct column references. Returns name + total.",
+      "responses": {
+        "qwen-coder-14b": {
+          "model_id": "qwen-coder-14b",
+          "text": "To find the top 3 customers by total order value, you can use the following SQL query:\n\n```sql\nSELECT c.name AS customer_name, SUM(o.amount) AS total_order_value\nFROM orders o\nJOIN customers c ON o.customer_id = c.id\nGROUP BY c.id, c.name\nORDER BY total_order_value DESC\nLIMIT 3;\n```\n\nThis query performs the following steps:\n1. Joins the `orders` table with the `customers` table on the `customer_id` field.\n2. Groups the results by customer ID and name to aggregate the order amounts for each customer.\n3. Calculates the sum of the `amount` field for each customer, which represents their total order value.\n4. Orders the results in descending order based on the total order value.\n5. Limits the output to the top 3 customers with the highest total order values.",
+          "input_tokens": 67,
+          "output_tokens": 180,
+          "latency_ms": 8501,
+          "cost_usd": 0
+        },
+        "qwen-coder-7b": {
+          "model_id": "qwen-coder-7b",
+          "text": "To find the top 3 customers by their total order value, you can use the following SQL query:\n\n```sql\nSELECT \n    c.id AS customer_id,\n    c.name AS customer_name,\n    SUM(o.amount) AS total_order_value\nFROM \n    orders o\nJOIN \n    customers c ON o.customer_id = c.id\nGROUP BY \n    c.id, c.name\nORDER BY \n    total_order_value DESC\nLIMIT 3;\n```\n\n### Explanation:\n1. **SELECT Clause**: We select the customer's ID and name from the `customers` table and calculate the sum of the order amounts for each customer.\n2. **FROM Clause**: The query starts with the `orders` table (aliased as `o`) and joins it with the `customers` table (aliased as `c`) on their common field (`customer_id`).\n3. **GROUP BY Clause**: We group the results by the customer's ID and name to aggregate the order amounts for each customer.\n4. **ORDER BY Clause**: The results are ordered in descending order based on the total order value.\n5. **LIMIT Clause**: Finally, we limit the result set to the top 3 customers.\n\nThis query will give you the names of the top 3 customers along with their total order values.",
+          "input_tokens": 67,
+          "output_tokens": 265,
+          "latency_ms": 8712,
+          "cost_usd": 0
+        },
+        "qwen-coder-32b": {
+          "model_id": "qwen-coder-32b",
+          "text": "To find the top 3 customers by total order value, you can use the following SQL query. This query joins the `orders` and `customers` tables, calculates the total order value for each customer, and then selects the top 3 customers based on this total.\n\n```sql\nSELECT \n    c.name AS customer_name,\n    SUM(o.amount) AS total_order_value\nFROM \n    orders o\nJOIN \n    customers c ON o.customer_id = c.id\nGROUP BY \n    c.name\nORDER BY \n    total_order_value DESC\nLIMIT 3;\n```\n\n### Explanation:\n- **SELECT**: We select the customer's name and the sum of their order amounts.\n- **SUM(o.amount)**: This calculates the total order value for each customer.\n- **FROM orders o JOIN customers c ON o.customer_id = c.id**: This joins the `orders` table with the `customers` table on the `customer_id`.\n- **GROUP BY c.name**: This groups the results by customer name so that we can calculate the sum of order amounts for each customer.\n- **ORDER BY total_order_value DESC**: This orders the results in descending order based on the total order value, so the customers with the highest totals appear first.\n- **LIMIT 3**: This limits the result to the top 3 customers.",
+          "input_tokens": 67,
+          "output_tokens": 270,
+          "latency_ms": 28715,
+          "cost_usd": 0
+        },
+        "qwen-7b": {
+          "model_id": "qwen-7b",
+          "text": "Certainly! To find the top 3 customers by total order value, you can use a combination of `JOIN`, `GROUP BY`, and `ORDER BY` clauses in your SQL query. Here's how you can write it:\n\n```sql\nSELECT \n    c.name,\n    SUM(o.amount) AS total_order_value\nFROM \n    orders o\nJOIN \n    customers c ON o.customer_id = c.id\nGROUP BY \n    c.id, c.name\nORDER BY \n    total_order_value DESC\nLIMIT 3;\n```\n\n### Explanation:\n- **`orders o` and `customers c`:** These are the tables being used in the query.\n- **`JOIN ... ON o.customer_id = c.id`:** This joins the `orders` table with the `customers` table based on the customer ID.\n- **`SUM(o.amount) AS total_order_value`:** This calculates the total order value for each customer.\n- **`GROUP BY c.id, c.name`:** This groups the results by customer ID and name to ensure that the sum is calculated per customer.\n- **`ORDER BY total_order_value DESC`:** This orders the result set in descending order based on the total order value.\n- **`LIMIT 3`:** This limits the output to the top 3 customers with the highest total order values.\n\nThis query will return the names of the top 3 customers along with their total order values.",
+          "input_tokens": 67,
+          "output_tokens": 292,
+          "latency_ms": 5817,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder-14b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 8,
+          "total": 9.6,
+          "reasoning": "The query correctly uses JOIN, GROUP BY, SUM, ORDER BY DESC, and LIMIT 3. It returns the customer name and total order value as required.",
+          "confidence": 10
+        },
+        "qwen-coder-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The query correctly uses JOIN, GROUP BY, SUM, ORDER BY DESC, and LIMIT 3. It also includes the customer name and total order value. However, it selects the customer ID which is not required by the question.",
+          "confidence": 8
+        },
+        "qwen-coder-32b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 8,
+          "total": 9.6,
+          "reasoning": "The query correctly uses JOIN, GROUP BY, SUM, ORDER BY DESC, and LIMIT 3. It also returns the customer name and total order value as required.",
+          "confidence": 10
+        },
+        "qwen-7b": {
+          "accuracy": 10,
+          "completeness": 10,
+          "conciseness": 8,
+          "total": 9.6,
+          "reasoning": "The query correctly uses JOIN, GROUP BY, SUM, ORDER BY DESC, and LIMIT 3. It also returns the customer name and total order value as required.",
+          "confidence": 10
+        }
+      },
+      "winner": "qwen-coder-14b"
+    },
+    {
+      "case_id": "code-004",
+      "prompt": "Implement a basic LRU (Least Recently Used) cache in Python with get(key) and put(key, value) methods. Capacity is set at init. Both operations must be O(1).",
+      "criteria": "O(1) for both ops — requires OrderedDict or doubly-linked-list + hashmap. Evicts least recently used on capacity overflow. Correct get/put interface.",
+      "responses": {
+        "qwen-coder-7b": {
+          "model_id": "qwen-coder-7b",
+          "text": "To implement an LRU Cache in Python that supports `get` and `put` operations with a time complexity of O(1), we can use a combination of a dictionary and a doubly linked list. The dictionary will provide quick access to the nodes, while the doubly linked list will help maintain the order of usage.\n\nHere's a step-by-step implementation:\n\n1. **Node Class**: Represents each entry in the cache.\n2. **LRUCache Class**: Manages the cache operations using a dictionary and a doubly linked list.\n\n```python\nclass Node:\n    def __init__(self, key=None, value=None):\n        self.key = key\n        self.value = value\n        self.prev = None\n        self.next = None\n\nclass LRUCache:\n    def __init__(self, capacity: int):\n        if capacity <= 0:\n            raise ValueError(\"Capacity must be a positive integer\")\n        \n        self.capacity = capacity\n        self.cache = {}\n        self.head = Node()\n        self.tail = Node()\n        self.head.next = self.tail\n        self.tail.prev = self.head\n\n    def _add_node(self, node: Node):\n        # Add a node right after the head\n        node.prev = self.head\n        node.next = self.head.next\n        self.head.next.prev = node\n        self.head.next = node\n\n    def _remove_node(self, node: Node):\n        # Remove a node from its current position\n        prev = node.prev\n        new = node.next\n        prev.next = new\n        new.prev = prev\n\n    def _move_to_head(self, node: Node):\n        # Move an existing node to the head of the list\n        self._remove_node(node)\n        self._add_node(node)\n\n    def get(self, key: int) -> int:\n        if key not in self.cache:\n            return -1\n        \n        node = self.cache[key]\n        self._move_to_head(node)\n        return node.value\n\n    def put(self, key: int, value: int):\n        if key in self.cache:\n            node = self.cache[key]\n            node.value = value\n            self._move_to_head(node)\n        else:\n            if len(self.cache) >= self.capacity:\n                # Remove the least recently used item (tail.prev)\n                lru_node = self.tail.prev\n                self._remove_node(lru_node)\n                del self.cache[lru_node.key]\n            \n            new_node = Node(key, value)\n            self._add_node(new_node)\n            self.cache[key] = new_node\n\n# Example usage:\ncache = LRUCache(2)\ncache.put(1, 1)\ncache.put(2, 2)\nprint(cache.get(1))       # returns 1\ncache.put(3, 3)          # evicts key 2\nprint(cache.get(2))       # returns -1 (not found)\ncache.put(4, 4)          # evicts key 1\nprint(cache.get(1))       # returns -1 (not found)\nprint(cache.get(3))       # returns 3\nprint(cache.get(4))       # returns 4\n```\n\n### Explanation:\n- **Node Class**: Represents a single entry in the cache. Each node has `key`, `value`, and pointers to the previous and next nodes.\n- **LRUCache Class**:\n  - **Initialization**: Sets up the capacity, initializes an empty dictionary for quick access, and creates dummy head and tail nodes to manage the linked list.\n  - **_add_node**: Adds a new node right after the head of the list.\n  - **_remove_node**: Removes a node from its current position in the list.\n  - **_move_to_head**: Moves an existing node to the head of the list, making it the most recently used item.\n  - **get(key)**: Retrieves the value associated with `key`. If the key exists, it moves the corresponding node to the head and returns the value. If the key does not exist, it returns `-1`.\n  - **put(key, value)**: Inserts a new key-value pair into the cache. If the key already exists, it updates the value and moves the node to the head. If the cache is at capacity, it removes the least recently used item (the node before the tail) before adding the new item.\n\nThis implementation ensures that both `get` and `put` operations are O(1).",
+          "input_tokens": 68,
+          "output_tokens": 917,
+          "latency_ms": 26415,
+          "cost_usd": 0
+        },
+        "qwen-coder-14b": {
+          "model_id": "qwen-coder-14b",
+          "text": "To implement an LRU Cache in Python with `get` and `put` methods that operate in O(1) time complexity, we can use a combination of a dictionary and a doubly linked list. The dictionary will provide fast access to the nodes by key, while the doubly linked list will maintain the order of usage.\n\nHere's how you can implement this:\n\n```python\nclass Node:\n    def __init__(self, key, value):\n        self.key = key\n        self.value = value\n        self.prev = None\n        self.next = None\n\nclass LRUCache:\n    def __init__(self, capacity: int):\n        self.capacity = capacity\n        self.cache = {}\n        self.left = Node(0, 0)  # left is the least recently used\n        self.right = Node(0, 0) # right is the most recently used\n        self.left.next = self.right\n        self.right.prev = self.left\n\n    def remove(self, node):\n        prev = node.prev\n        nxt = node.next\n        prev.next = nxt\n        nxt.prev = prev\n\n    def insert(self, node):\n        prev = self.right.prev\n        nxt = self.right\n        prev.next = node\n        nxt.prev = node\n        node.next = nxt\n        node.prev = prev\n\n    def get(self, key: int) -> int:\n        if key in self.cache:\n            self.remove(self.cache[key])\n            self.insert(self.cache[key])\n            return self.cache[key].value\n        return -1\n\n    def put(self, key: int, value: int) -> None:\n        if key in self.cache:\n            self.remove(self.cache[key])\n        self.cache[key] = Node(key, value)\n        self.insert(self.cache[key])\n\n        if len(self.cache) > self.capacity:\n            lru = self.left.next\n            self.remove(lru)\n            del self.cache[lru.key]\n\n# Example usage:\ncache = LRUCache(2)\ncache.put(1, 1)\ncache.put(2, 2)\nprint(cache.get(1))       # returns 1\ncache.put(3, 3)           # evicts key 2\nprint(cache.get(2))       # returns -1 (not found)\ncache.put(4, 4)           # evicts key 1\nprint(cache.get(1))       # returns -1 (not found)\nprint(cache.get(3))       # returns 3\nprint(cache.get(4))       # returns 4\n```\n\n### Explanation:\n\n- **Node Class**: Represents each entry in the cache with `key`, `value`, `prev`, and `next` pointers.\n  \n- **LRUCache Class**:\n  - **Initialization**: Sets up the capacity, an empty dictionary for caching, and two sentinel nodes (`left` and `right`) to mark the boundaries of the doubly linked list.\n  - **remove(node)**: Removes a node from the doubly linked list.\n  - **insert(node)**: Inserts a node right before the `right` sentinel node, marking it as the most recently used.\n  - **get(key)**: Retrieves the value associated with the key. If the key exists, it moves the corresponding node to the end of the list (most recently used) and returns its value. If not found, it returns `-1`.\n  - **put(key, value)**: Adds a new entry or updates an existing one. If the cache exceeds its capacity after adding a new entry, it removes the least recently used item (the node next to `left`).\n\nThis implementation ensures that both `get` and `put` operations are performed in O(1) time complexity.",
+          "input_tokens": 68,
+          "output_tokens": 765,
+          "latency_ms": 37759,
+          "cost_usd": 0
+        },
+        "qwen-coder-32b": {
+          "model_id": "qwen-coder-32b",
+          "text": "To implement an LRU (Least Recently Used) cache in Python where both `get` and `put` operations are O(1), we can use a combination of a dictionary and a doubly linked list. The dictionary will provide O(1) access to the nodes, while the doubly linked list will help us maintain the order of usage efficiently.\n\nHere's how you can implement this:\n\n```python\nclass Node:\n    def __init__(self, key: int, value: int):\n        self.key = key\n        self.value = value\n        self.prev = None\n        self.next = None\n\nclass LRUCache:\n    def __init__(self, capacity: int):\n        self.capacity = capacity\n        self.cache = {}  # Maps keys to nodes in the doubly linked list\n        self.head = Node(0, 0)  # Dummy head node\n        self.tail = Node(0, 0)  # Dummy tail node\n        self.head.next = self.tail\n        self.tail.prev = self.head\n\n    def _remove(self, node: Node):\n        \"\"\"Remove a node from the doubly linked list.\"\"\"\n        prev_node = node.prev\n        next_node = node.next\n        prev_node.next = next_node\n        next_node.prev = prev_node\n\n    def _add_to_head(self, node: Node):\n        \"\"\"Add a node right after the head in the doubly linked list.\"\"\"\n        node.prev = self.head\n        node.next = self.head.next\n        self.head.next.prev = node\n        self.head.next = node\n\n    def get(self, key: int) -> int:\n        if key not in self.cache:\n            return -1  # Key not found\n        node = self.cache[key]\n        self._remove(node)\n        self._add_to_head(node)\n        return node.value\n\n    def put(self, key: int, value: int):\n        if key in self.cache:\n            # Update the existing node's value and move it to the head\n            node = self.cache[key]\n            node.value = value\n            self._remove(node)\n            self._add_to_head(node)\n        else:\n            if len(self.cache) == self.capacity:\n                # Remove the least recently used item (tail.prev)\n                lru_node = self.tail.prev\n                self._remove(lru_node)\n                del self.cache[lru_node.key]\n            \n            # Create a new node and add it to the cache and head of the list\n            new_node = Node(key, value)\n            self.cache[key] = new_node\n            self._add_to_head(new_node)\n\n# Example usage:\nlru_cache = LRUCache(2)\nlru_cache.put(1, 1)\nlru_cache.put(2, 2)\nprint(lru_cache.get(1))    # returns 1\nlru_cache.put(3, 3)        # evicts key 2\nprint(lru_cache.get(2))    # returns -1 (not found)\nlru_cache.put(4, 4)        # evicts key 1\nprint(lru_cache.get(1))    # returns -1 (not found)\nprint(lru_cache.get(3))    # returns 3\nprint(lru_cache.get(4))    # returns 4\n```\n\n### Explanation:\n- **Node Class**: Represents each entry in the cache with `key`, `value`, and pointers to the previous and next nodes.\n- **LRUCache Class**:\n  - **Initialization**: Sets up a dummy head and tail for the doubly linked list, initializes the cache dictionary, and sets the capacity.\n  - **_remove Method**: Removes a node from the doubly linked list.\n  - **_add_to_head Method**: Adds a node right after the head in the doubly linked list.\n  - **get Method**: Retrieves the value of the key if it exists, moves the accessed node to the front (most recently used), and returns the value. If the key does not exist, it returns `-1`.\n  - **put Method**: Inserts or updates a key-value pair. If the cache is at capacity, it removes the least recently used item (the one before the tail) before adding the new node to the front.\n\nThis implementation ensures that both `get` and `put` operations are O(1).",
+          "input_tokens": 68,
+          "output_tokens": 895,
+          "latency_ms": 88840,
+          "cost_usd": 0
+        },
+        "qwen-7b": {
+          "model_id": "qwen-7b",
+          "text": "To implement an LRU Cache in Python where both `get` and `put` operations are O(1), we can use a combination of a dictionary for quick lookups and a doubly linked list to maintain the order of usage. The doubly linked list will help us efficiently remove and insert nodes based on their recency.\n\nHere's how you can implement it:\n\n```python\nclass Node:\n    def __init__(self, key=None, value=None):\n        self.key = key\n        self.value = value\n        self.prev = None\n        self.next = None\n\nclass LRUCache:\n    def __init__(self, capacity: int):\n        self.capacity = capacity\n        self.cache = {}  # Maps keys to nodes in the doubly linked list\n        \n        # Dummy head and tail nodes for easier manipulation\n        self.head = Node()\n        self.tail = Node()\n        self.head.next = self.tail\n        self.tail.prev = self.head\n\n    def get(self, key: int) -> int:\n        if key in self.cache:\n            node = self.cache[key]\n            # Move the accessed node to the front of the list\n            self._remove(node)\n            self._add(node)\n            return node.value\n        return -1  # Return -1 if the key is not found\n\n    def put(self, key: int, value: int) -> None:\n        if key in self.cache:\n            # If the key already exists, update its value and move it to the front of the list\n            node = self.cache[key]\n            node.value = value\n            self._remove(node)\n            self._add(node)\n        else:\n            # If the cache is at capacity, remove the least recently used item first\n            if len(self.cache) >= self.capacity:\n                removed_node = self.tail.prev\n                del self.cache[removed_node.key]\n                self._remove(removed_node)\n            \n            # Add a new node to the front of the list and update the cache\n            new_node = Node(key, value)\n            self.cache[key] = new_node\n            self._add(new_node)\n\n    def _remove(self, node: Node) -> None:\n        prev_node = node.prev\n        next_node = node.next\n        prev_node.next = next_node\n        next_node.prev = prev_node\n\n    def _add(self, node: Node) -> None:\n        # Add the new node to the front of the list\n        head_next = self.head.next\n        self.head.next = node\n        node.prev = self.head\n        node.next = head_next\n        head_next.prev = node\n\n# Example usage:\ncache = LRUCache(2)\ncache.put(1, 1)  # cache is {1=1}\ncache.put(2, 2)  # cache is {1=1, 2=2}\nprint(cache.get(1))  # returns 1\ncache.put(3, 3)  # evicts key 2, cache is {1=1, 3=3}\nprint(cache.get(2))  # returns -1 (not found)\ncache.put(4, 4)  # evicts key 1, cache is {3=3, 4=4}\nprint(cache.get(1))  # returns -1 (not found)\nprint(cache.get(3))  # returns 3\nprint(cache.get(4))  # returns 4\n```\n\n### Explanation:\n- **Node Class**: Represents each entry in the cache. Each node has a key, value, and pointers to its previous and next nodes.\n- **LRUCache Class**:\n  - `__init__`: Initializes the cache with a given capacity and sets up dummy head and tail nodes for easier manipulation.\n  - `get(key)`: Retrieves the value of the specified key. If the key exists, it moves the node to the front (most recently used position).\n  - `put(key, value)`: Inserts or updates the value of the specified key. If the cache is at capacity, it removes the least recently used item before adding the new one.\n  - `_remove(node)`: Removes a node from its current position in the list.\n  - `_add(node)`: Adds a node to the front of the list.\n\nThis implementation ensures that both `get` and `put` operations are O(1).",
+          "input_tokens": 68,
+          "output_tokens": 905,
+          "latency_ms": 15407,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The implementation is correct and addresses all criteria, but it could be more concise by using OrderedDict instead of a custom doubly linked list.",
+          "confidence": 8
+        },
+        "qwen-coder-14b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The implementation is correct and addresses all criteria, but it could be more concise by using OrderedDict instead of a custom doubly linked list.",
+          "confidence": 8
+        },
+        "qwen-coder-32b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The implementation is correct and addresses all criteria, but it could be more concise by using OrderedDict instead of a custom doubly linked list.",
+          "confidence": 9
+        },
+        "qwen-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The implementation is correct and addresses all criteria, but it could be more concise by using OrderedDict instead of a custom doubly linked list.",
+          "confidence": 8
+        }
+      },
+      "winner": "qwen-coder-7b"
+    },
+    {
+      "case_id": "code-005",
+      "prompt": "What's wrong with this Go code? func main() { var wg sync.WaitGroup; for i := 0; i < 5; i++ { wg.Add(1); go func() { defer wg.Done(); fmt.Println(i) }() }; wg.Wait() }",
+      "criteria": "Identifies the closure variable capture bug — all goroutines capture the same 'i', likely printing 5 five times. Fix: pass i as an argument to the goroutine function.",
+      "responses": {
+        "qwen-coder-7b": {
+          "model_id": "qwen-coder-7b",
+          "text": "The issue with the provided Go code is that it prints the same value of `i` five times, which is likely not what you intended. This happens because all goroutines are accessing and printing the same variable `i`, which has been incremented to 5 by the time any of them start executing.\n\nTo fix this, you need to ensure that each goroutine gets its own copy of the loop variable `i`. You can achieve this by using a closure or by passing the value of `i` as an argument to the anonymous function. Here's how you can modify the code:\n\n```go\npackage main\n\nimport (\n\t\"fmt\"\n\t\"sync\"\n)\n\nfunc main() {\n\tvar wg sync.WaitGroup\n\tfor i := 0; i < 5; i++ {\n\t\twg.Add(1)\n\t\tgo func(i int) { // Pass i as an argument to the anonymous function\n\t\t\tdefer wg.Done()\n\t\t\tfmt.Println(i)\n\t\t}(i) // Immediately invoke the function with the current value of i\n\t}\n\twg.Wait()\n}\n```\n\nIn this modified version, each goroutine receives its own copy of `i` through a closure. This ensures that when each goroutine prints `i`, it is printing the value of `i` at the time the goroutine was started, rather than the final value of `i` after the loop has completed.",
+          "input_tokens": 85,
+          "output_tokens": 281,
+          "latency_ms": 9400,
+          "cost_usd": 0
+        },
+        "qwen-coder-14b": {
+          "model_id": "qwen-coder-14b",
+          "text": "The issue with the provided Go code is related to variable scoping and closures. The `i` variable in the loop is shared among all goroutines, which means that by the time any of the goroutines execute, the value of `i` has already been incremented to 5. As a result, each goroutine will print the final value of `i`, which is 5.\n\nTo fix this issue, you can pass the current value of `i` as an argument to the anonymous function inside the loop. This way, each goroutine captures its own copy of `i`. Here's the corrected code:\n\n```go\npackage main\n\nimport (\n\t\"fmt\"\n\t\"sync\"\n)\n\nfunc main() {\n\tvar wg sync.WaitGroup\n\tfor i := 0; i < 5; i++ {\n\t\twg.Add(1)\n\t\tgo func(i int) { // Pass i as an argument to the anonymous function\n\t\t\tdefer wg.Done()\n\t\t\tfmt.Println(i)\n\t\t}(i) // Pass the current value of i\n\t}\n\twg.Wait()\n}\n```\n\nWith this change, each goroutine will print its own copy of `i`, resulting in the output:\n\n```\n0\n1\n2\n3\n4\n```",
+          "input_tokens": 85,
+          "output_tokens": 254,
+          "latency_ms": 10965,
+          "cost_usd": 0
+        },
+        "qwen-coder-32b": {
+          "model_id": "qwen-coder-32b",
+          "text": "The issue with the provided Go code is related to variable capture in closures. In the loop, you are launching goroutines that print the value of `i`. However, all these goroutines share the same variable `i`, which is incremented in each iteration of the loop. By the time any of the goroutines execute and print `i`, the loop has already completed, and `i` will have its final value (which is 5 in this case).\n\nTo fix this issue, you can pass the current value of `i` to the anonymous function as a parameter. Here's how you can modify the code:\n\n```go\npackage main\n\nimport (\n\t\"fmt\"\n\t\"sync\"\n)\n\nfunc main() {\n\tvar wg sync.WaitGroup\n\tfor i := 0; i < 5; i++ {\n\t\twg.Add(1)\n\t\tgo func(i int) { // Pass 'i' as a parameter to the anonymous function\n\t\t\tdefer wg.Done()\n\t\t\tfmt.Println(i)\n\t\t}(i) // Call the anonymous function with 'i'\n\t}\n\twg.Wait()\n}\n```\n\nIn this corrected version, each goroutine receives its own copy of `i` through the function parameter, so they will print the correct values from 0 to 4.",
+          "input_tokens": 85,
+          "output_tokens": 258,
+          "latency_ms": 28299,
+          "cost_usd": 0
+        },
+        "qwen-7b": {
+          "model_id": "qwen-7b",
+          "text": "The issue in your Go code is related to the use of a loop variable `i` inside a goroutine. By the time the goroutines run, the value of `i` will be 5 because the loop has already finished executing and incremented `i` to 5 for each iteration. Therefore, all goroutines will print the value `5`.\n\nTo fix this issue, you should create a new variable inside the loop that is captured by the goroutine. Here's how you can modify your code:\n\n```go\npackage main\n\nimport (\n\t\"fmt\"\n\t\"sync\"\n)\n\nfunc main() {\n\tvar wg sync.WaitGroup\n\tfor i := 0; i < 5; i++ {\n\t\twg.Add(1)\n\t\tgo func(i int) { // Capture the value of `i` in a new variable\n\t\t\tdefer wg.Done()\n\t\t\tfmt.Println(i)\n\t\t}(i) // Pass the current value of `i`\n\t}\n\twg.Wait()\n}\n```\n\nIn this corrected version, each goroutine receives its own copy of the loop variable `i`, so they will print the correct values from 0 to 4.",
+          "input_tokens": 85,
+          "output_tokens": 234,
+          "latency_ms": 5156,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response correctly identifies the closure variable capture bug and provides a fix by passing 'i' as an argument to the goroutine function. It is clear, relevant, and addresses all criteria.",
+          "confidence": 9
+        },
+        "qwen-coder-14b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response correctly identifies the closure variable capture bug and provides a fix. It is clear, relevant, and addresses all criteria.",
+          "confidence": 9
+        },
+        "qwen-coder-32b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response correctly identifies the closure variable capture bug and provides a fix. It is clear, relevant, and addresses all criteria.",
+          "confidence": 9
+        },
+        "qwen-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response correctly identifies the closure variable capture bug and provides a fix. It is clear, relevant, and addresses all criteria.",
+          "confidence": 9
+        }
+      },
+      "winner": "qwen-coder-7b"
+    },
+    {
+      "case_id": "code-006",
+      "prompt": "Write a TypeScript generic function `groupBy<T>(arr: T[], key: keyof T): Record<string, T[]>` that groups an array of objects by a given key.",
+      "criteria": "Correct TypeScript generics. Uses keyof T constraint. Returns Record<string, T[]>. Handles missing/undefined keys gracefully.",
+      "responses": {
+        "qwen-coder-14b": {
+          "model_id": "qwen-coder-14b",
+          "text": "Certainly! Below is a TypeScript generic function `groupBy` that takes an array of objects and a key, and returns an object where the keys are the unique values of the specified property, and the values are arrays of objects that have that property value.\n\n```typescript\nfunction groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {\n    return arr.reduce((acc, item) => {\n        const keyValue = item[key] as string;\n        if (!acc[keyValue]) {\n            acc[keyValue] = [];\n        }\n        acc[keyValue].push(item);\n        return acc;\n    }, {} as Record<string, T[]>);\n}\n\n// Example usage:\ninterface Person {\n    name: string;\n    age: number;\n}\n\nconst people: Person[] = [\n    { name: 'Alice', age: 25 },\n    { name: 'Bob', age: 30 },\n    { name: 'Charlie', age: 25 },\n    { name: 'David', age: 30 }\n];\n\nconst groupedByAge = groupBy(people, 'age');\nconsole.log(groupedByAge);\n// Output:\n// {\n//   \"25\": [\n//     { name: 'Alice', age: 25 },\n//     { name: 'Charlie', age: 25 }\n//   ],\n//   \"30\": [\n//     { name: 'Bob', age: 30 },\n//     { name: 'David', age: 30 }\n//   ]\n// }\n```\n\n### Explanation:\n- **Generic Function**: The function `groupBy` is generic, meaning it can work with any type of object (`T`) as long as the key provided exists on that object.\n- **Parameters**:\n  - `arr`: An array of objects of type `T`.\n  - `key`: A key of type `keyof T`, which means it must be a valid property of the objects in the array.\n- **Return Type**: The function returns a `Record<string, T[]>`, which is an object where each key is a string (the value of the specified key) and each value is an array of objects (`T[]`) that have that key value.\n- **Implementation**:\n  - We use `reduce` to iterate over the array and accumulate the results in an object (`acc`).\n  - For each item, we extract the value of the specified key and use it as a key in the accumulator object.\n  - If the key does not exist in the accumulator, we initialize it with an empty array.\n  - We then push the current item into the array corresponding to its key value.\n\nThis function is flexible and can be used to group any array of objects by any valid property.",
+          "input_tokens": 64,
+          "output_tokens": 565,
+          "latency_ms": 29365,
+          "cost_usd": 0
+        },
+        "qwen-coder-32b": {
+          "model_id": "qwen-coder-32b",
+          "text": "Certainly! Below is a TypeScript generic function `groupBy` that takes an array of objects and a key, and returns an object where each key corresponds to a unique value from the specified key in the input array, and the values are arrays of objects that have that key.\n\n```typescript\nfunction groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {\n    return arr.reduce((acc, item) => {\n        const keyValue = item[key] as unknown as string;\n        if (!acc[keyValue]) {\n            acc[keyValue] = [];\n        }\n        acc[keyValue].push(item);\n        return acc;\n    }, {} as Record<string, T[]>);\n}\n\n// Example usage:\ninterface Person {\n    name: string;\n    age: number;\n    city: string;\n}\n\nconst people: Person[] = [\n    { name: 'Alice', age: 25, city: 'New York' },\n    { name: 'Bob', age: 30, city: 'Chicago' },\n    { name: 'Charlie', age: 25, city: 'New York' },\n    { name: 'David', age: 30, city: 'Los Angeles' }\n];\n\nconst groupedByCity = groupBy(people, 'city');\nconsole.log(groupedByCity);\n// Output:\n// {\n//   'New York': [\n//     { name: 'Alice', age: 25, city: 'New York' },\n//     { name: 'Charlie', age: 25, city: 'New York' }\n//   ],\n//   'Chicago': [\n//     { name: 'Bob', age: 30, city: 'Chicago' }\n//   ],\n//   'Los Angeles': [\n//     { name: 'David', age: 30, city: 'Los Angeles' }\n//   ]\n// }\n```\n\n### Explanation:\n1. **Generic Function**: The function `groupBy<T>` is generic, meaning it can work with any type `T` of objects.\n2. **Parameters**:\n   - `arr`: An array of objects of type `T`.\n   - `key`: A key of the object type `T` which will be used to group the objects.\n3. **Return Type**: The function returns a `Record<string, T[]>`, where each key is a string (the value of the specified key in the objects), and the value is an array of objects that have that key.\n4. **Implementation**:\n   - We use the `reduce` method to iterate over the array and build the result object.\n   - For each item in the array, we extract the value of the specified key (`keyValue`).\n   - If the `keyValue` does not exist in the accumulator object (`acc`), we initialize it with an empty array.\n   - We then push the current item into the array corresponding to `keyValue`.\n5. **Type Assertion**: Since `keyValue` is of type `T[keyof T]`, which can be any type, we assert it as `unknown as string` to ensure it fits the `Record<string, T[]>` structure.\n\nThis function should work for any object type and key provided, as long as the values of the specified key are stringifiable (i.e., can be used as keys in an object).",
+          "input_tokens": 64,
+          "output_tokens": 691,
+          "latency_ms": 57396,
+          "cost_usd": 0
+        },
+        "qwen-coder-7b": {
+          "model_id": "qwen-coder-7b",
+          "text": "```typescript\nfunction groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {\n  return arr.reduce((acc, item) => {\n    const keyValue = item[key];\n    if (!acc[keyValue]) {\n      acc[keyValue] = [];\n    }\n    acc[keyValue].push(item);\n    return acc;\n  }, {} as Record<string, T[]>);\n}\n```\n\n**Explanation**:\nThe `groupBy` function takes an array of objects (`arr`) and a key (`key`) that is a property of the objects in the array. It returns an object where each key is a unique value from the specified key in the input objects, and the corresponding value is an array of objects that have that key-value pair.\n\nThe function uses the `reduce` method to iterate over each item in the array. For each item, it extracts the value associated with the specified key. If this value does not exist as a property in the accumulator object (`acc`), it initializes it as an empty array. Then, it pushes the current item into the array corresponding to its key-value pair.\n\nThe initial value of the accumulator is set to an empty object using type assertion (`as Record<string, T[]>`) to ensure that TypeScript knows the structure of the accumulator correctly.",
+          "input_tokens": 64,
+          "output_tokens": 262,
+          "latency_ms": 63789,
+          "cost_usd": 0
+        },
+        "qwen-7b": {
+          "model_id": "qwen-7b",
+          "text": "Certainly! Below is a TypeScript generic function `groupBy` that takes an array of objects and a key to group the objects by:\n\n```typescript\nfunction groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {\n    const grouped: Record<string, T[]> = {};\n\n    arr.forEach(item => {\n        const keyValue = item[key];\n        if (!grouped[keyValue]) {\n            grouped[keyValue] = [];\n        }\n        grouped[keyValue].push(item);\n    });\n\n    return grouped;\n}\n\n// Example usage:\ninterface Person {\n    name: string;\n    age: number;\n}\n\nconst people: Person[] = [\n    { name: \"Alice\", age: 25 },\n    { name: \"Bob\", age: 30 },\n    { name: \"Charlie\", age: 25 },\n    { name: \"David\", age: 30 }\n];\n\nconst groupedPeople = groupBy(people, 'age');\nconsole.log(groupedPeople);\n```\n\n### Explanation:\n- **Generic Function**: The function `groupBy` is defined with a generic type parameter `T`, which represents the type of objects in the array.\n- **Key Type**: The key to group by is specified using `keyof T`, meaning it can be any valid property name of the object type `T`.\n- **Record Type**: The return type is `Record<string, T[]>`, indicating that the result will be an object where each value is an array of objects.\n- **Grouping Logic**:\n  - An empty record `grouped` is initialized to store the grouped items.\n  - Each item in the input array is iterated over using `forEach`.\n  - The key's value from the current item is used as a key in the `grouped` object. If this key does not exist, an empty array is created for it.\n  - The current item is then pushed into the corresponding array.\n\n### Example Usage:\n- In the example usage, we define a `Person` interface and create an array of `Person` objects.\n- We call `groupBy(people, 'age')`, which groups people by their age.\n- The result will be an object where each key is an age value, and the corresponding value is an array of `Person` objects with that age.\n\nThis function can be used to group any type of object based on a specified key.",
+          "input_tokens": 64,
+          "output_tokens": 489,
+          "latency_ms": 8535,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder-14b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The function correctly implements the groupBy logic with TypeScript generics and handles missing/undefined keys gracefully. It is concise but could be slightly more detailed in explaining how it handles undefined keys.",
+          "confidence": 8
+        },
+        "qwen-coder-32b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The function correctly implements the groupBy logic with TypeScript generics and handles missing/undefined keys gracefully. It is concise but could be slightly more detailed in explaining how it handles different types of key values.",
+          "confidence": 8
+        },
+        "qwen-coder-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The function correctly groups objects by a specified key, uses TypeScript generics and keyof constraint, and handles missing/undefined keys gracefully. It is concise but could be slightly more detailed in handling edge cases.",
+          "confidence": 9
+        },
+        "qwen-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The function correctly implements the grouping logic and handles missing/undefined keys gracefully. It uses TypeScript generics and keyof constraint appropriately, but could be slightly more concise by removing unnecessary comments and explanations.",
+          "confidence": 8
+        }
+      },
+      "winner": "qwen-coder-14b"
+    },
+    {
+      "case_id": "code-007",
+      "prompt": "Given a binary tree, write a function to check if it's a valid BST (Binary Search Tree). Don't just compare each node to its parent — consider the full range constraint.",
+      "criteria": "Passes min/max bounds through recursion. Handles equal values (typically not allowed in BST). Correct base case for null nodes.",
+      "responses": {
+        "qwen-coder-7b": {
+          "model_id": "qwen-coder-7b",
+          "text": "To determine if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node in the tree, all nodes in its left subtree are less than the node's value and all nodes in its right subtree are greater than the node's value. This must hold true for every node in the tree.\n\nHere’s how you can implement this:\n\n1. **Define a Helper Function**: Create a helper function that takes three parameters: the current node, the minimum allowed value, and the maximum allowed value.\n2. **Base Case**: If the current node is `None`, return `True` because an empty subtree is considered valid.\n3. **Check Current Node**: Ensure the current node's value lies within the given range (i.e., greater than the minimum and less than the maximum).\n4. **Recursive Calls**: Recursively check the left and right subtrees with updated ranges:\n   - For the left subtree, update the maximum allowed value to be the current node's value.\n   - For the right subtree, update the minimum allowed value to be the current node's value.\n\nHere is a Python implementation of this approach:\n\n```python\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef isValidBST(root: TreeNode) -> bool:\n    def helper(node, low=float('-inf'), high=float('inf')):\n        if not node:\n            return True\n        \n        # Check if the current node's value is within the valid range\n        if node.val <= low or node.val >= high:\n            return False\n        \n        # Recursively check the left and right subtrees with updated ranges\n        return (helper(node.left, low, node.val) and \n                helper(node.right, node.val, high))\n    \n    return helper(root)\n\n# Example usage:\n# Constructing a simple BST\n#       2\n#      / \\\n#     1   3\n\nroot = TreeNode(2)\nroot.left = TreeNode(1)\nroot.right = TreeNode(3)\n\nprint(isValidBST(root))  # Output: True\n```\n\n### Explanation:\n- **TreeNode Class**: Defines the structure of a node in the binary tree.\n- **isValidBST Function**: Main function to check if the tree is a valid BST.\n- **helper Function**: Recursive helper function that checks each node against the current range.\n\nThis implementation ensures that every node's value respects the BST property with respect to its entire subtree, not just its immediate parent.",
+          "input_tokens": 66,
+          "output_tokens": 525,
+          "latency_ms": 14894,
+          "cost_usd": 0
+        },
+        "qwen-coder-14b": {
+          "model_id": "qwen-coder-14b",
+          "text": "To determine if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node in the tree, all nodes in its left subtree are less than the node's value, and all nodes in its right subtree are greater than the node's value. This property must hold true for every node in the tree.\n\nA common approach is to use a recursive function that checks each node against a range of valid values. Initially, the range can be set from negative infinity to positive infinity. As we traverse down the tree, we update these ranges:\n\n- For the left child of a node, the maximum value in its subtree should be less than the node's value.\n- For the right child of a node, the minimum value in its subtree should be greater than the node's value.\n\nHere's a Python function that implements this logic:\n\n```python\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef isValidBST(root: TreeNode) -> bool:\n    def validate(node, low=float('-inf'), high=float('inf')):\n        # An empty tree is a valid BST\n        if not node:\n            return True\n        \n        # The current node's value must be between low and high\n        if node.val <= low or node.val >= high:\n            return False\n        \n        # Recursively validate the left subtree and right subtree\n        # Update the range for the left child to [low, node.val)\n        # Update the range for the right child to (node.val, high]\n        return (validate(node.left, low, node.val) and\n                validate(node.right, node.val, high))\n    \n    return validate(root)\n\n# Example usage:\n# Constructing a simple BST\n#       2\n#      / \\\n#     1   3\n\nroot = TreeNode(2)\nroot.left = TreeNode(1)\nroot.right = TreeNode(3)\n\nprint(isValidBST(root))  # Output: True\n```\n\n### Explanation:\n\n- **Base Case**: If the node is `None`, it means we've reached a leaf's child, and an empty tree is considered a valid BST.\n- **Value Check**: For each node, check if its value is within the allowed range (`low < node.val < high`).\n- **Recursive Calls**: Recursively validate the left subtree with an updated upper bound (`high = node.val`) and the right subtree with an updated lower bound (`low = node.val`).\n\nThis approach ensures that every node in the tree adheres to the BST properties by considering the full range of valid values for each node.",
+          "input_tokens": 66,
+          "output_tokens": 551,
+          "latency_ms": 27036,
+          "cost_usd": 0
+        },
+        "qwen-coder-32b": {
+          "model_id": "qwen-coder-32b",
+          "text": "To determine if a binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node, all nodes in its left subtree are less than the node's value, and all nodes in its right subtree are greater than the node's value. This condition must hold true for all nodes in the tree.\n\nTo achieve this, we can use a recursive approach where we keep track of the valid range for each node as we traverse the tree. Initially, the range is set to negative infinity to positive infinity. As we move down the tree, we update these bounds:\n\n- For the left child, the upper bound becomes the value of the current node.\n- For the right child, the lower bound becomes the value of the current node.\n\nHere's a Python function that implements this logic:\n\n```python\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef is_valid_bst(root: TreeNode) -> bool:\n    def validate(node, low=float('-inf'), high=float('inf')):\n        # An empty tree is a valid BST\n        if not node:\n            return True\n        \n        # The current node's value must be within the range defined by low and high\n        if not (low < node.val < high):\n            return False\n        \n        # Recursively validate the left and right subtrees with updated bounds\n        return (validate(node.left, low, node.val) and\n                validate(node.right, node.val, high))\n    \n    return validate(root)\n\n# Example usage:\n# Constructing a simple BST\n#       2\n#      / \\\n#     1   3\n\nroot = TreeNode(2)\nroot.left = TreeNode(1)\nroot.right = TreeNode(3)\n\nprint(is_valid_bst(root))  # Output: True\n```\n\n### Explanation:\n\n- **Base Case**: If the node is `None`, it means we've reached a leaf's child, and by definition, an empty tree is a valid BST.\n- **Range Check**: For each node, check if its value lies within the valid range (`low < node.val < high`). If not, return `False`.\n- **Recursive Calls**: Recursively validate the left subtree with the updated upper bound (`node.val`) and the right subtree with the updated lower bound (`node.val`).\n\nThis approach ensures that we correctly enforce the BST property for all nodes in the tree.",
+          "input_tokens": 66,
+          "output_tokens": 511,
+          "latency_ms": 54012,
+          "cost_usd": 0
+        },
+        "qwen-7b": {
+          "model_id": "qwen-7b",
+          "text": "To determine whether a given binary tree is a valid Binary Search Tree (BST), we need to ensure that for every node in the tree, all nodes in its left subtree have values less than the node's value and all nodes in its right subtree have values greater than the node's value.\n\nA common approach is to use an in-order traversal of the tree. In a valid BST, an in-order traversal will yield a strictly increasing sequence of node values. We can leverage this property by keeping track of the last visited node during the traversal and comparing it with the current node.\n\nHere’s how you could implement such a function in Python:\n\n```python\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef isValidBST(root: TreeNode) -> bool:\n    def inorder_traversal(node: TreeNode, lower=float('-inf'), upper=float('inf')) -> bool:\n        if not node:\n            return True\n        \n        # The current node's value must be between lower and upper bounds\n        if not (lower < node.val < upper):\n            return False\n        \n        # Check the left subtree with updated upper bound\n        if not inorder_traversal(node.left, lower, node.val):\n            return False\n        \n        # Check the right subtree with updated lower bound\n        if not inorder_traversal(node.right, node.val, upper):\n            return False\n        \n        return True\n    \n    return inorder_traversal(root)\n\n# Example usage:\n# Constructing a simple BST for demonstration\nroot = TreeNode(2)\nroot.left = TreeNode(1)\nroot.right = TreeNode(3)\n\nprint(isValidBST(root))  # Output: True\n\n# Constructing an invalid BST\ninvalid_root = TreeNode(5)\ninvalid_root.left = TreeNode(1)\ninvalid_root.right = TreeNode(4)\ninvalid_root.right.left = TreeNode(3)  # This node violates the BST property\n\nprint(isValidBST(invalid_root))  # Output: False\n```\n\n### Explanation:\n- **TreeNode Class**: Defines a simple binary tree node with `val`, `left`, and `right` attributes.\n- **isValidBST Function**: This function checks if the given tree is a valid BST. It uses an inner helper function, `inorder_traversal`, which performs an in-order traversal while maintaining lower and upper bounds for each node's value.\n  - If the current node’s value violates the bounds (i.e., it should be greater than the lower bound and less than the upper bound), the function returns `False`.\n  - The function recursively checks both left and right subtrees, updating the appropriate bounds.\n\nThis approach ensures that every node in the tree is checked against its valid range, making sure the entire structure adheres to the BST properties.",
+          "input_tokens": 66,
+          "output_tokens": 576,
+          "latency_ms": 10526,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response provides a clear and detailed explanation of how to check if a binary tree is a valid BST, including a Python implementation. It covers the main points but could be more concise in some areas.",
+          "confidence": 8
+        },
+        "qwen-coder-14b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response correctly explains the logic for validating a BST using recursion and range constraints, but it could be more concise in its explanation.",
+          "confidence": 8
+        },
+        "qwen-coder-32b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response correctly implements a recursive function to validate a BST, considering the full range constraint. It handles null nodes and explains the logic well, but it could be more concise in some parts.",
+          "confidence": 8
+        },
+        "qwen-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response provides a clear and detailed explanation of how to check if a binary tree is a valid BST using an in-order traversal approach. It addresses the need to consider the full range constraint for each node, but it does not explicitly handle equal values (typically not allowed in BST) as a separate criterion.",
+          "confidence": 8
+        }
+      },
+      "winner": "qwen-coder-7b"
+    },
+    {
+      "case_id": "code-008",
+      "prompt": "Refactor this code to remove duplication: if (type === 'admin') { log('admin action'); audit('admin', userId); } if (type === 'user') { log('user action'); audit('user', userId); } if (type === 'guest') { log('guest action'); audit('guest', userId); }",
+      "criteria": "Single code path for all types. Eliminates duplication. Readable and maintainable. Works correctly for all three types.",
+      "responses": {
+        "qwen-coder-14b": {
+          "model_id": "qwen-coder-14b",
+          "text": "To refactor the code and remove duplication, you can use a function to encapsulate the common logic. Here's how you can do it:\n\n```javascript\nfunction handleAction(type, userId) {\n    const actions = {\n        admin: { logMessage: 'admin action', auditType: 'admin' },\n        user: { logMessage: 'user action', auditType: 'user' },\n        guest: { logMessage: 'guest action', auditType: 'guest' }\n    };\n\n    if (actions[type]) {\n        const { logMessage, auditType } = actions[type];\n        log(logMessage);\n        audit(auditType, userId);\n    } else {\n        console.error(`Unknown type: ${type}`);\n    }\n}\n\n// Usage\nhandleAction('admin', userId);\nhandleAction('user', userId);\nhandleAction('guest', userId);\n```\n\nIn this refactored version, a `handleAction` function is defined to handle different types of actions. It uses an object `actions` to map each type to its corresponding log message and audit type. This way, the duplication is removed, and the code becomes more maintainable and easier to extend.",
+          "input_tokens": 97,
+          "output_tokens": 239,
+          "latency_ms": 11181,
+          "cost_usd": 0
+        },
+        "qwen-coder-7b": {
+          "model_id": "qwen-coder-7b",
+          "text": "You can refactor the code to remove duplication by using a function that handles both logging and auditing based on the type. Here's an example in JavaScript:\n\n```javascript\nfunction handleAction(type, userId) {\n    const actionType = type === 'admin' ? 'admin' : type === 'user' ? 'user' : 'guest';\n    log(`${actionType} action`);\n    audit(actionType, userId);\n}\n\n// Usage:\nif (type === 'admin') { handleAction('admin', userId); }\nif (type === 'user') { handleAction('user', userId); }\nif (type === 'guest') { handleAction('guest', userId); }\n```\n\nThis way, you avoid duplicating the logging and auditing logic for each type.",
+          "input_tokens": 97,
+          "output_tokens": 155,
+          "latency_ms": 18479,
+          "cost_usd": 0
+        },
+        "qwen-coder-32b": {
+          "model_id": "qwen-coder-32b",
+          "text": "You can refactor the code to remove duplication by using a mapping object or a switch statement. Here's how you can do it with both approaches:\n\n### Using a Mapping Object\n\n```javascript\nconst actions = {\n  admin: 'admin action',\n  user: 'user action',\n  guest: 'guest action'\n};\n\nif (actions[type]) {\n  log(actions[type]);\n  audit(type, userId);\n}\n```\n\n### Using a Switch Statement\n\n```javascript\nswitch (type) {\n  case 'admin':\n  case 'user':\n  case 'guest':\n    log(`${type} action`);\n    audit(type, userId);\n    break;\n  default:\n    // Handle unexpected types if necessary\n    break;\n}\n```\n\nBoth of these approaches reduce the duplication by centralizing the logic for logging and auditing based on the `type`. The mapping object approach is more flexible if you need to add or modify actions in the future. The switch statement can be simpler and clearer when dealing with a small, fixed set of cases.",
+          "input_tokens": 97,
+          "output_tokens": 207,
+          "latency_ms": 35710,
+          "cost_usd": 0
+        },
+        "qwen-7b": {
+          "model_id": "qwen-7b",
+          "text": "Certainly! You can refactor the code to remove duplication by using a single function that handles the common logic. Here's an example of how you can do it:\n\n```javascript\nfunction handleAction(type, userId) {\n    const action = {\n        admin: 'admin action',\n        user: 'user action',\n        guest: 'guest action'\n    };\n\n    if (action[type]) {\n        log(action[type]);\n        audit(type, userId);\n    } else {\n        console.error(`Unknown type: ${type}`);\n    }\n}\n\n// Usage\nif (type === 'admin') {\n    handleAction('admin', userId);\n} else if (type === 'user') {\n    handleAction('user', userId);\n} else if (type === 'guest') {\n    handleAction('guest', userId');\n}\n```\n\nAlternatively, you can simplify it further by directly calling the function with the appropriate type:\n\n```javascript\nfunction handleAction(type, userId) {\n    const action = {\n        admin: () => { log('admin action'); audit('admin', userId); },\n        user: () => { log('user action'); audit('user', userId); },\n        guest: () => { log('guest action'); audit('guest', userId); }\n    };\n\n    if (action[type]) {\n        action[type]();\n    } else {\n        console.error(`Unknown type: ${type}`);\n    }\n}\n\n// Usage\nhandleAction(type, userId);\n```\n\nThis approach ensures that the common logic is encapsulated in a single function and avoids code duplication.",
+          "input_tokens": 97,
+          "output_tokens": 313,
+          "latency_ms": 9014,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder-14b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The refactored code removes duplication and uses a single function to handle different types, making it more maintainable. It addresses all criteria but could be slightly more concise by removing the else block if unknown types are not expected.",
+          "confidence": 9
+        },
+        "qwen-coder-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The refactored code removes duplication and maintains readability, but it could be more concise by directly passing the type to the function without an additional ternary operation.",
+          "confidence": 9
+        },
+        "qwen-coder-32b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response provides two valid refactoring approaches and addresses the criteria well, but could be more concise in explaining the switch statement approach.",
+          "confidence": 8
+        },
+        "qwen-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The refactored code removes duplication and maintains readability, but the original question asked for a single code path for all types, which is not fully addressed in the response. The second alternative provides a more concise solution by directly calling the function with the appropriate type.",
+          "confidence": 9
+        }
+      },
+      "winner": "qwen-coder-14b"
+    },
+    {
+      "case_id": "code-009",
+      "prompt": "Write a bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing size and path.",
+      "criteria": "Uses find or du. Sorts by size numerically. Outputs top 5. Shows human-readable or byte sizes with file paths. Works on macOS and Linux.",
+      "responses": {
+        "qwen-coder-14b": {
+          "model_id": "qwen-coder-14b",
+          "text": "```bash\nfind . -type f -exec ls -lh {} + | sort -hr | head -n 5\n```",
+          "input_tokens": 56,
+          "output_tokens": 28,
+          "latency_ms": 2430,
+          "cost_usd": 0
+        },
+        "qwen-coder-32b": {
+          "model_id": "qwen-coder-32b",
+          "text": "Certainly! You can use the `find` command combined with `sort` and `head` to achieve this. Here's a one-liner that will list the 5 largest files along with their sizes and paths:\n\n```bash\nfind . -type f -exec ls -lh {} + | sort -k 5 -hr | head -n 6 | tail -n 5\n```\n\nExplanation:\n- `find . -type f`: Finds all files (`-type f`) in the current directory and its subdirectories.\n- `-exec ls -lh {} +`: Executes `ls -lh` on each file found, which lists the files with human-readable sizes.\n- `sort -k 5 -hr`: Sorts the output by the 5th column (file size) in human-readable format (`-h`) and in reverse order (`-r`), so the largest files come first.\n- `head -n 6`: Takes the first 6 lines of the sorted output. The extra line is to account for the header from `ls`.\n- `tail -n 5`: Removes the header line, leaving only the top 5 largest files.\n\nThis command will give you a clean list of the 5 largest files along with their sizes and paths.",
+          "input_tokens": 56,
+          "output_tokens": 262,
+          "latency_ms": 25577,
+          "cost_usd": 0
+        },
+        "qwen-coder-7b": {
+          "model_id": "qwen-coder-7b",
+          "text": "```bash\nfind . -type f -exec ls -lh {} + | sort -rhk 1,1 | head -n 6 | sed 's/^-rw-r--r-- \\([0-9]*\\).*/\\1 \\2/'\n```",
+          "input_tokens": 56,
+          "output_tokens": 57,
+          "latency_ms": 28064,
+          "cost_usd": 0
+        },
+        "qwen-7b": {
+          "model_id": "qwen-7b",
+          "text": "Certainly! You can use the following bash one-liner to find the 5 largest files in the current directory and its subdirectories, showing their size and path:\n\n```bash\nfind . -type f -exec du -h {} + | sort -rh | head -n 5\n```\n\nExplanation:\n- `find . -type f`: Finds all regular files starting from the current directory (`.`).\n- `-exec du -h {} +`: For each file found, runs `du -h` to get human-readable file sizes.\n- `sort -rh`: Sorts the output by size in reverse order (largest first).\n- `head -n 5`: Displays only the top 5 largest files.",
+          "input_tokens": 56,
+          "output_tokens": 148,
+          "latency_ms": 4840,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder-14b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 9,
+          "total": 7.8,
+          "reasoning": "The command uses find and ls, sorts by size, outputs top 5, and shows human-readable sizes. It works on both macOS and Linux. However, it does not show the full path for each file.",
+          "confidence": 8
+        },
+        "qwen-coder-32b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 6,
+          "total": 7.2,
+          "reasoning": "The command uses `find` and `ls`, sorts by size, outputs top 5, shows human-readable sizes with file paths, and works on both macOS and Linux. However, it could be more concise.",
+          "confidence": 9
+        },
+        "qwen-coder-7b": {
+          "accuracy": 8,
+          "completeness": 7,
+          "conciseness": 6,
+          "total": 7.2,
+          "reasoning": "The command uses find and ls, sorts by size, outputs top 5, and shows human-readable sizes with file paths. However, it incorrectly includes the sixth largest file due to head -n 6 instead of head -n 5.",
+          "confidence": 8
+        },
+        "qwen-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The command is mostly correct and addresses the criteria, but it uses 'du' inside 'find -exec', which can be inefficient. A more efficient approach would use 'find' with '-printf' to get sizes directly.",
+          "confidence": 8
+        }
+      },
+      "winner": "qwen-7b"
+    },
+    {
+      "case_id": "code-010",
+      "prompt": "Design the data model (tables + key fields) for a multi-tenant SaaS app where each tenant has users, projects, and tasks. Tasks belong to projects, projects belong to tenants. Consider indexing strategy.",
+      "criteria": "Correct tenant isolation (tenant_id on all tables). User-tenant membership table. Proper foreign keys. Suggests composite indexes (tenant_id + ...) for query performance.",
+      "responses": {
+        "qwen-coder-7b": {
+          "model_id": "qwen-coder-7b",
+          "text": "To design a data model for a multi-tenant SaaS application with the specified relationships between entities (tenants, users, projects, and tasks), we need to ensure that each entity is properly linked and indexed for efficient querying.\n\n### Tables and Key Fields\n\n1. **Tenants**\n   - `TenantID` (Primary Key)\n   - `Name`\n   - `Email`\n   - `CreatedDate`\n   - `UpdatedDate`\n\n2. **Users**\n   - `UserID` (Primary Key)\n   - `Username`\n   - `PasswordHash`\n   - `Email`\n   - `Role` (e.g., Admin, User)\n   - `TenantID` (Foreign Key referencing Tenants.TenantID)\n\n3. **Projects**\n   - `ProjectID` (Primary Key)\n   - `Name`\n   - `Description`\n   - `StartDate`\n   - `EndDate`\n   - `TenantID` (Foreign Key referencing Tenants.TenantID)\n\n4. **Tasks**\n   - `TaskID` (Primary Key)\n   - `Title`\n   - `Description`\n   - `DueDate`\n   - `Status` (e.g., Pending, In Progress, Completed)\n   - `UserID` (Foreign Key referencing Users.UserID) - This links the task to a specific user who is responsible for it.\n   - `ProjectID` (Foreign Key referencing Projects.ProjectID)\n\n### Indexing Strategy\n\n1. **Tenants Table**\n   - Index on `TenantID` (Primary Key)\n   - Index on `Email` if email-based authentication or lookups are frequent.\n\n2. **Users Table**\n   - Index on `UserID` (Primary Key)\n   - Index on `Username` for quick user lookup.\n   - Index on `Email` for email-based authentication.\n   - Index on `TenantID` to quickly find users within a specific tenant.\n\n3. **Projects Table**\n   - Index on `ProjectID` (Primary Key)\n   - Index on `Name` if project name searches are frequent.\n   - Index on `TenantID` to quickly find projects within a specific tenant.\n\n4. **Tasks Table**\n   - Index on `TaskID` (Primary Key)\n   - Index on `Title` for quick task title searches.\n   - Index on `DueDate` for sorting tasks by due date.\n   - Index on `Status` for filtering tasks based on their status.\n   - Index on `UserID` to quickly find tasks assigned to a specific user.\n   - Index on `ProjectID` to quickly find tasks within a specific project.\n\n### Relationships\n\n- **Tenants** can have multiple **Users**, **Projects**, and **Tasks**.\n- **Users** belong to one **Tenant**.\n- **Projects** belong to one **Tenant** and can have multiple **Tasks**.\n- **Tasks** belong to one **Project** and are assigned to one **User**.\n\n### Example SQL for Creating Tables\n\n```sql\nCREATE TABLE Tenants (\n    TenantID INT PRIMARY KEY AUTO_INCREMENT,\n    Name VARCHAR(255) NOT NULL,\n    Email VARCHAR(255) UNIQUE NOT NULL,\n    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,\n    UpdatedDate DATETIME ON UPDATE CURRENT_TIMESTAMP\n);\n\nCREATE TABLE Users (\n    UserID INT PRIMARY KEY AUTO_INCREMENT,\n    Username VARCHAR(255) UNIQUE NOT NULL,\n    PasswordHash VARCHAR(255) NOT NULL,\n    Email VARCHAR(255) UNIQUE NOT NULL,\n    Role ENUM('Admin', 'User') DEFAULT 'User',\n    TenantID INT,\n    FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID)\n);\n\nCREATE TABLE Projects (\n    ProjectID INT PRIMARY KEY AUTO_INCREMENT,\n    Name VARCHAR(255) NOT NULL,\n    Description TEXT,\n    StartDate DATE,\n    EndDate DATE,\n    TenantID INT,\n    FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID)\n);\n\nCREATE TABLE Tasks (\n    TaskID INT PRIMARY KEY AUTO_INCREMENT,\n    Title VARCHAR(255) NOT NULL,\n    Description TEXT,\n    DueDate DATE,\n    Status ENUM('Pending', 'In Progress', 'Completed') DEFAULT 'Pending',\n    UserID INT,\n    ProjectID INT,\n    FOREIGN KEY (UserID) REFERENCES Users(UserID),\n    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)\n);\n```\n\n### Indexes\n\n```sql\nCREATE INDEX idx_tenants_email ON Tenants(Email);\nCREATE INDEX idx_users_username ON Users(Username);\nCREATE INDEX idx_users_email ON Users(Email);\nCREATE INDEX idx_users_tenantid ON Users(TenantID);\n\nCREATE INDEX idx_projects_name ON Projects(Name);\nCREATE INDEX idx_projects_tenantid ON Projects(TenantID);\n\nCREATE INDEX idx_tasks_title ON Tasks(Title);\nCREATE INDEX idx_tasks_duedate ON Tasks(DueDate);\nCREATE INDEX idx_tasks_status ON Tasks(Status);\nCREATE INDEX idx_tasks_userid ON Tasks(UserID);\nCREATE INDEX idx_tasks_projectid ON Tasks(ProjectID);\n```\n\nThis design ensures",
+          "input_tokens": 72,
+          "output_tokens": 1024,
+          "latency_ms": 28653,
+          "cost_usd": 0
+        },
+        "qwen-coder-14b": {
+          "model_id": "qwen-coder-14b",
+          "text": "Designing a data model for a multi-tenant SaaS application involves careful consideration of how to structure the database to efficiently manage data across multiple tenants while ensuring scalability and performance. Below is a proposed schema with tables, key fields, and an indexing strategy.\n\n### Tables\n\n1. **Tenants**\n   - `TenantID` (Primary Key)\n   - `Name`\n   - `CreatedDate`\n   - `IsActive`\n\n2. **Users**\n   - `UserID` (Primary Key)\n   - `TenantID` (Foreign Key referencing Tenants.TenantID)\n   - `Username`\n   - `Email`\n   - `PasswordHash`\n   - `Role` (e.g., Admin, User)\n   - `CreatedDate`\n\n3. **Projects**\n   - `ProjectID` (Primary Key)\n   - `TenantID` (Foreign Key referencing Tenants.TenantID)\n   - `Name`\n   - `Description`\n   - `StartDate`\n   - `EndDate`\n   - `Status` (e.g., Active, Completed)\n   - `CreatedDate`\n\n4. **Tasks**\n   - `TaskID` (Primary Key)\n   - `ProjectID` (Foreign Key referencing Projects.ProjectID)\n   - `Name`\n   - `Description`\n   - `DueDate`\n   - `Priority` (e.g., High, Medium, Low)\n   - `Status` (e.g., Not Started, In Progress, Completed)\n   - `AssignedToUserID` (Foreign Key referencing Users.UserID)\n   - `CreatedDate`\n\n### Indexing Strategy\n\n1. **Tenants Table**\n   - Index on `IsActive` for quick filtering of active tenants.\n\n2. **Users Table**\n   - Composite index on `(TenantID, Username)` to ensure uniqueness and speed up queries by tenant.\n   - Index on `Email` for quick lookups.\n   - Index on `Role` if role-based access control is frequently used.\n\n3. **Projects Table**\n   - Composite index on `(TenantID, Status)` to efficiently filter projects by status within a tenant.\n   - Index on `StartDate` and `EndDate` for date range queries.\n   - Index on `Name` for quick search capabilities.\n\n4. **Tasks Table**\n   - Composite index on `(ProjectID, Status)` to efficiently filter tasks by status within a project.\n   - Index on `DueDate` for upcoming task notifications.\n   - Index on `AssignedToUserID` for user-specific task queries.\n   - Index on `Priority` if priority-based sorting is common.\n\n### Additional Considerations\n\n- **Partitioning**: Consider partitioning the `Tasks` table by `TenantID` to improve performance and manageability, especially as the number of tenants grows.\n- **Soft Deletes**: Implement soft deletes for tables like `Users`, `Projects`, and `Tasks` by adding an `IsDeleted` flag instead of physically deleting records. This helps in maintaining data integrity and audit trails.\n- **Normalization vs. Denormalization**: Balance between normalization to reduce redundancy and denormalization to improve query performance based on the specific use cases and access patterns.\n\nThis schema provides a robust foundation for a multi-tenant SaaS application, ensuring efficient data management and retrieval while supporting scalability and performance optimization.",
+          "input_tokens": 72,
+          "output_tokens": 668,
+          "latency_ms": 32878,
+          "cost_usd": 0
+        },
+        "qwen-coder-32b": {
+          "model_id": "qwen-coder-32b",
+          "text": "Designing a data model for a multi-tenant SaaS application involves creating tables that can efficiently store and manage the relationships between tenants, users, projects, and tasks while ensuring scalability and performance. Below is a suggested schema with key fields and an indexing strategy.\n\n### Tables\n\n1. **Tenants**\n   - `tenant_id` (Primary Key): Unique identifier for each tenant.\n   - `name`: Name of the tenant.\n   - `created_at`: Timestamp when the tenant was created.\n   - `updated_at`: Timestamp when the tenant was last updated.\n\n2. **Users**\n   - `user_id` (Primary Key): Unique identifier for each user.\n   - `tenant_id` (Foreign Key): References `Tenants(tenant_id)`.\n   - `email`: Email address of the user.\n   - `name`: Name of the user.\n   - `role`: Role of the user within the tenant (e.g., admin, member).\n   - `created_at`: Timestamp when the user was created.\n   - `updated_at`: Timestamp when the user was last updated.\n\n3. **Projects**\n   - `project_id` (Primary Key): Unique identifier for each project.\n   - `tenant_id` (Foreign Key): References `Tenants(tenant_id)`.\n   - `name`: Name of the project.\n   - `description`: Description of the project.\n   - `created_at`: Timestamp when the project was created.\n   - `updated_at`: Timestamp when the project was last updated.\n\n4. **Tasks**\n   - `task_id` (Primary Key): Unique identifier for each task.\n   - `project_id` (Foreign Key): References `Projects(project_id)`.\n   - `name`: Name of the task.\n   - `description`: Description of the task.\n   - `status`: Status of the task (e.g., pending, in progress, completed).\n   - `assigned_to_user_id` (Foreign Key): References `Users(user_id)` (nullable if not assigned).\n   - `created_at`: Timestamp when the task was created.\n   - `updated_at`: Timestamp when the task was last updated.\n\n### Indexing Strategy\n\n1. **Tenants**\n   - Primary key index on `tenant_id`.\n   - Unique index on `name` to ensure no two tenants have the same name.\n\n2. **Users**\n   - Primary key index on `user_id`.\n   - Foreign key index on `tenant_id` for efficient querying of users within a tenant.\n   - Unique index on `email` to ensure no duplicate emails within a tenant.\n   - Composite index on `(tenant_id, role)` if frequently filtering by both tenant and role.\n\n3. **Projects**\n   - Primary key index on `project_id`.\n   - Foreign key index on `tenant_id` for efficient querying of projects within a tenant.\n   - Index on `name` to allow quick searches for project names.\n\n4. **Tasks**\n   - Primary key index on `task_id`.\n   - Foreign key index on `project_id` for efficient querying of tasks within a project.\n   - Foreign key index on `assigned_to_user_id` for efficient querying of tasks assigned to a specific user.\n   - Index on `status` if frequently filtering by task status.\n\n### Additional Considerations\n\n- **Soft Deletes**: Consider adding a `deleted_at` field in each table to support soft deletes, allowing records to be marked as deleted without actually removing them from the database.\n- **Audit Logs**: Implement audit logs for critical operations (e.g., creating, updating, deleting tenants, users, projects, tasks) to maintain an audit trail.\n- **Scalability**: Ensure that the schema can scale horizontally by partitioning tables or using a distributed database system if necessary.\n\nThis data model and indexing strategy should provide a solid foundation for managing a multi-tenant SaaS application with users, projects, and tasks.",
+          "input_tokens": 72,
+          "output_tokens": 798,
+          "latency_ms": 82040,
+          "cost_usd": 0
+        },
+        "qwen-7b": {
+          "model_id": "qwen-7b",
+          "text": "To design a data model for a multi-tenant SaaS application with support for users, projects, and tasks, we need to ensure that the schema is scalable, secure, and efficient. Here's a proposed data model:\n\n### Tables\n\n1. **Tenants**\n   - `TenantID` (Primary Key)\n   - `TenantName`\n   - `TenantDomain`\n\n2. **Users**\n   - `UserID` (Primary Key)\n   - `Username`\n   - `Email`\n   - `PasswordHash`\n   - `TenantID` (Foreign Key)\n\n3. **Projects**\n   - `ProjectID` (Primary Key)\n   - `ProjectName`\n   - `Description`\n   - `StartDate`\n   - `EndDate`\n   - `TenantID` (Foreign Key)\n\n4. **Tasks**\n   - `TaskID` (Primary Key)\n   - `TaskTitle`\n   - `Description`\n   - `DueDate`\n   - `Status` (e.g., 'todo', 'in progress', 'completed')\n   - `ProjectID` (Foreign Key)\n\n### Relationships\n\n- A tenant can have multiple users.\n- A user belongs to one tenant.\n- A tenant can have multiple projects.\n- A project belongs to one tenant and has many tasks.\n\n### Indexing Strategy\n\n1. **Tenant Table**\n   - Primary Key: `TenantID`\n   - Index on `TenantName` for quick lookups by name if needed.\n\n2. **Users Table**\n   - Primary Key: `UserID`\n   - Foreign Key: `TenantID`\n   - Index on `Username` and `Email` to support fast user searches.\n   - Consider adding a unique constraint on `Email`.\n\n3. **Projects Table**\n   - Primary Key: `ProjectID`\n   - Foreign Key: `TenantID`\n   - Index on `ProjectName` for quick project lookups.\n\n4. **Tasks Table**\n   - Primary Key: `TaskID`\n   - Foreign Key: `ProjectID`\n   - Index on `Status` to support filtering tasks by status.\n   - Consider adding an index on `DueDate` if you frequently query tasks based on their due date.\n\n### Example SQL Schema\n\n```sql\nCREATE TABLE Tenants (\n    TenantID INT PRIMARY KEY AUTO_INCREMENT,\n    TenantName VARCHAR(255) NOT NULL,\n    TenantDomain VARCHAR(255) UNIQUE NOT NULL\n);\n\nCREATE TABLE Users (\n    UserID INT PRIMARY KEY AUTO_INCREMENT,\n    Username VARCHAR(100) NOT NULL,\n    Email VARCHAR(255) NOT NULL,\n    PasswordHash VARCHAR(255) NOT NULL,\n    TenantID INT,\n    FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID),\n    UNIQUE (Email)\n);\n\nCREATE TABLE Projects (\n    ProjectID INT PRIMARY KEY AUTO_INCREMENT,\n    ProjectName VARCHAR(255) NOT NULL,\n    Description TEXT,\n    StartDate DATE,\n    EndDate DATE,\n    TenantID INT,\n    FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID)\n);\n\nCREATE TABLE Tasks (\n    TaskID INT PRIMARY KEY AUTO_INCREMENT,\n    TaskTitle VARCHAR(255) NOT NULL,\n    Description TEXT,\n    DueDate DATE,\n    Status ENUM('todo', 'in progress', 'completed') DEFAULT 'todo',\n    ProjectID INT,\n    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)\n);\n```\n\n### Additional Considerations\n\n- **Security**: Ensure that sensitive data like passwords are stored securely using hashing and salting.\n- **Scalability**: Use a database system that supports sharding or partitioning if the number of tenants grows significantly.\n- **Performance**: Regularly review and optimize queries, especially those involving joins between `Tenants`, `Users`, `Projects`, and `Tasks`.\n\nThis schema provides a solid foundation for a multi-tenant SaaS application while ensuring data integrity through foreign key constraints.",
+          "input_tokens": 72,
+          "output_tokens": 800,
+          "latency_ms": 14282,
+          "cost_usd": 0
+        }
+      },
+      "scores": {
+        "qwen-coder-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response provides a clear and detailed data model with tables, key fields, relationships, and indexing strategy. It addresses all the criteria but could be more concise in some parts.",
+          "confidence": 8
+        },
+        "qwen-coder-14b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response provides a detailed and accurate data model with proper tenant isolation, user-tenant membership, foreign keys, and indexing strategy. It addresses most criteria but could be more concise in some areas.",
+          "confidence": 8
+        },
+        "qwen-coder-32b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response provides a clear and detailed data model with tables, key fields, and indexing strategy. It addresses tenant isolation, user-tenant membership, foreign keys, and composite indexes for query performance. However, it could be more concise by removing some less critical details.",
+          "confidence": 8
+        },
+        "qwen-7b": {
+          "accuracy": 9,
+          "completeness": 8,
+          "conciseness": 7,
+          "total": 8.2,
+          "reasoning": "The response provides a clear and detailed data model with tables, relationships, and indexing strategy. It addresses the main criteria but could be more concise in some areas.",
+          "confidence": 8
+        }
+      },
+      "winner": "qwen-coder-7b"
+    }
+  ],
+  "summary": {
+    "qwen-coder-7b": {
+      "model_id": "qwen-coder-7b",
+      "avg_total": 8.1,
+      "avg_accuracy": 8.9,
+      "avg_completeness": 7.9,
+      "avg_conciseness": 6.9,
+      "avg_latency_ms": 21450.6,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 50,
+      "wins": 5,
+      "cases_run": 10,
+      "avg_solve_rate": 0
+    },
+    "qwen-coder-14b": {
+      "model_id": "qwen-coder-14b",
+      "avg_total": 8.3,
+      "avg_accuracy": 9,
+      "avg_completeness": 8.1,
+      "avg_conciseness": 7.3,
+      "avg_latency_ms": 20775.4,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 40,
+      "wins": 4,
+      "cases_run": 10,
+      "avg_solve_rate": 0
+    },
+    "qwen-coder-32b": {
+      "model_id": "qwen-coder-32b",
+      "avg_total": 8.24,
+      "avg_accuracy": 9,
+      "avg_completeness": 8.1,
+      "avg_conciseness": 7,
+      "avg_latency_ms": 47802.5,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 0,
+      "wins": 0,
+      "cases_run": 10,
+      "avg_solve_rate": 0
+    },
+    "qwen-7b": {
+      "model_id": "qwen-7b",
+      "avg_total": 8.34,
+      "avg_accuracy": 9.1,
+      "avg_completeness": 8.2,
+      "avg_conciseness": 7.1,
+      "avg_latency_ms": 8775.2,
+      "avg_tokens_per_sec": 0,
+      "total_cost_usd": 0,
+      "win_rate": 10,
+      "wins": 1,
+      "cases_run": 10,
+      "avg_solve_rate": 0
+    }
+  },
+  "run_meta": {
+    "run_id": "2026-04-02T06-54-56",
+    "config_file": "verdict.yaml",
+    "verdict_version": "0.2.0",
+    "hardware": "Apple M2 Max 64GB"
+  },
+  "hardware": {
+    "cpu": "Apple M2 Max",
+    "cpu_cores": 12,
+    "cpu_arch": "arm64",
+    "ram_gb": 64,
+    "gpu": "Apple M2 Max",
+    "os": "macOS",
+    "os_version": "26.4"
+  },
+  "environment": {
+    "verdict_version": "0.2.0",
+    "node_version": "v25.6.1",
+    "provider_versions": {
+      "ollama": "0.18.3"
+    }
+  },
+  "eval_pack": {
+    "file": "eval-packs/coding.yaml",
+    "description": "10 coding tasks across languages and difficulties — algorithms, debugging, refactoring, and system design.",
+    "total_cases": 10
+  },
+  "judge": {
+    "model": "qwen-coder-14b",
+    "temperature": 0,
+    "scoring_dimensions": [
+      "accuracy",
+      "completeness",
+      "conciseness"
+    ]
+  },
+  "reproducibility": {
+    "command": "verdict run -c verdict.yaml -p Coding -m qwen-coder-7b,qwen-coder-14b,qwen-coder-32b,qwen-7b",
+    "config_file": "verdict.yaml",
+    "model_configs": {
+      "qwen-coder-7b": {
+        "provider": "ollama",
+        "model": "qwen2.5-coder:7b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "qwen-coder-14b": {
+        "provider": "ollama",
+        "model": "qwen2.5-coder:14b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "qwen-coder-32b": {
+        "provider": "ollama",
+        "model": "qwen2.5-coder:32b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      },
+      "qwen-7b": {
+        "provider": "ollama",
+        "model": "qwen2.5:7b",
+        "temperature": 0.7,
+        "max_tokens": 1024
+      }
+    }
+  }
+}
