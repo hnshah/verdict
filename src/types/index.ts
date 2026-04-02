@@ -40,16 +40,11 @@ export const JudgeConfigSchema = z.object({
     completeness: z.number().default(0.4),
     conciseness: z.number().default(0.2),
   }).default({}),
-  examples: z.array(z.object({
-    prompt: z.string(),
-    response: z.string(),
-    scores: z.object({
-      accuracy: z.number(),
-      completeness: z.number(),
-      conciseness: z.number(),
-    }),
-    reasoning: z.string(),
-  })).optional(),
+  embedding_model: z.object({
+    base_url: z.string(),
+    api_key: z.string().optional(),
+    model: z.string(),
+  }).optional(),
 })
 export type JudgeConfig = z.infer<typeof JudgeConfigSchema>
 
