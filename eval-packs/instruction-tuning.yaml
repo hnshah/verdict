@@ -1,0 +1,222 @@
+name: Instruction Tuning Stress Test
+version: 1.0.0
+description: |
+  Tests models on complex instruction following — nested constraints, format requirements,
+  multi-step directives, and adversarial instruction variations. Separates well-tuned
+  instruction-following models from those that drift, hallucinate constraints, or drop
+  requirements under load.
+cases:
+  - id: it-01
+    description: Multi-constraint format with exact word count
+    prompt: |
+      Write a product description for a standing desk. Requirements:
+      - Exactly 3 sentences
+      - First sentence must mention price ($599)
+      - Second sentence must use the word "ergonomic"
+      - Third sentence must end with a question
+      - No bullet points or lists
+    criteria: |
+      Response must have exactly 3 sentences. First sentence mentions $599. Second sentence
+      uses the word "ergonomic". Third sentence ends with a question mark. No lists or bullets.
+    scorer: llm
+    tags: [format, multi-constraint]
+
+  - id: it-02
+    description: Nested role + output format constraint
+    prompt: |
+      You are a pirate. Explain how DNS works. Your explanation must:
+      1. Stay in pirate voice throughout
+      2. Use exactly 4 analogies (label them Analogy 1, Analogy 2, Analogy 3, Analogy 4)
+      3. Never use the words "computer" or "internet"
+      4. End with "Arrr, that be the way of it!"
+    criteria: |
+      Maintains pirate voice. Has exactly 4 labeled analogies. Avoids "computer" and "internet".
+      Ends with the exact phrase "Arrr, that be the way of it!" DNS concept is explained.
+    scorer: llm
+    tags: [role, format, constraint]
+
+  - id: it-03
+    description: Conditional formatting instruction
+    prompt: |
+      List 5 programming languages. For each:
+      - If it's older than 30 years (before 1994): write the name in ALL CAPS
+      - If it's 10–30 years old (1994–2014): write it in Title Case
+      - If it's newer than 10 years (after 2014): write it in lowercase
+      Format: one per line, no other text
+    criteria: |
+      Exactly 5 languages listed. Age-based capitalization rule applied correctly for each
+      (C/C++/Java/Python etc. should be identifiable by their era). One per line, no extra text.
+    scorer: llm
+    tags: [conditional, format]
+
+  - id: it-04
+    description: Instruction with explicit prohibition
+    prompt: |
+      Describe the water cycle in exactly 5 steps. Number each step 1-5.
+      IMPORTANT: Do not use the words "evaporation", "condensation", or "precipitation".
+      Use synonyms or descriptions instead. Each step must be one sentence.
+    criteria: |
+      Exactly 5 numbered steps. Each step is one sentence. None of the banned words
+      (evaporation, condensation, precipitation) appear. The water cycle concept is
+      accurately conveyed despite the word restrictions.
+    scorer: llm
+    tags: [prohibition, constraint, science]
+
+  - id: it-05
+    description: Acrostic constraint
+    prompt: |
+      Write a 6-line poem about artificial intelligence where the first letter of each
+      line spells out "FUTURE". Each line must be 8-12 words long.
+    criteria: |
+      Poem has exactly 6 lines. First letters spell F-U-T-U-R-E (case insensitive).
+      Each line is between 8-12 words. Topic is AI/artificial intelligence.
+    scorer: llm
+    tags: [creative, acrostic, constraint]
+
+  - id: it-06
+    description: Structured output with specific keys
+    prompt: |
+      Analyze the following business idea and respond ONLY with a JSON object containing
+      exactly these keys: "verdict" (one of: "strong", "weak", "needs_validation"),
+      "top_risk" (string, max 10 words), "top_strength" (string, max 10 words),
+      "confidence" (number 0.0-1.0).
+
+      Business idea: A subscription box service delivering monthly mystery novels with
+      a dedicated app for book club discussions.
+    criteria: |
+      Response is valid JSON with exactly the 4 specified keys. "verdict" is one of the
+      three valid values. "top_risk" and "top_strength" are max 10 words. "confidence"
+      is a number between 0 and 1.
+    scorer: json
+    tags: [json, structured-output, business]
+
+  - id: it-07
+    description: Instruction drift resistance — long prompt
+    prompt: |
+      I want you to help me write a tweet. The tweet must be about climate change,
+      must be under 280 characters, must not use hashtags, and must include a specific
+      call to action. Before you write the tweet, I want you to think about the audience
+      (millennials who care about sustainability), consider different framings (emotional,
+      factual, humorous), and reflect on what makes tweets go viral. Also consider the
+      current political climate and how that affects messaging. Think about the difference
+      between hope-based and fear-based messaging. Now, after all that thinking, just give
+      me the final tweet text only — no explanation, no preamble, just the tweet.
+    criteria: |
+      Response is a single tweet with no preamble or explanation. Under 280 characters.
+      About climate change. No hashtags. Includes a call to action. The model didn't
+      just summarize its thinking process.
+    scorer: llm
+    tags: [drift-resistance, social-media, instruction-following]
+
+  - id: it-08
+    description: Alternating format constraint
+    prompt: |
+      Write 6 facts about the moon. Alternate between true facts and surprising/counterintuitive
+      facts. Label each: "STANDARD:" or "SURPRISING:". Start with STANDARD.
+    criteria: |
+      Exactly 6 facts total. Pattern is STANDARD, SURPRISING, STANDARD, SURPRISING, STANDARD,
+      SURPRISING. Each is labeled correctly. Facts are accurate. Starts with STANDARD.
+    scorer: llm
+    tags: [alternating, format, science]
+
+  - id: it-09
+    description: Negative instruction following
+    prompt: |
+      Tell me 3 things about Paris. However, do NOT mention:
+      - The Eiffel Tower
+      - The Louvre
+      - Croissants or any food
+      - The word "romantic" or "romance"
+      - Population numbers
+    criteria: |
+      Exactly 3 things about Paris. None of the prohibited topics appear (Eiffel Tower,
+      Louvre, food/croissants, romantic/romance, population numbers). Still substantive
+      and informative about Paris.
+    scorer: llm
+    tags: [negative-instruction, prohibition]
+
+  - id: it-10
+    description: Multi-step transformation
+    prompt: |
+      Take the word "ALGORITHM" and:
+      1. Write it backwards
+      2. Replace all vowels with numbers (A=1, E=2, I=3, O=4, U=5)
+      3. Add a hyphen between each character
+      4. Wrap the result in square brackets
+
+      Show ONLY the final result, not the intermediate steps.
+    criteria: |
+      Shows only the final result (no intermediate steps). The transformation is applied
+      correctly in sequence: ALGORITHM → MHTIROGLA → MHT3R4GL1 → M-H-T-3-R-4-G-L-1 →
+      [M-H-T-3-R-4-G-L-1]. Minor variations in step order acceptable if final result correct.
+    scorer: llm
+    tags: [transformation, step-by-step, no-intermediate]
+
+  - id: it-11
+    description: Persona switching mid-response
+    prompt: |
+      Explain the concept of recursion in two parts:
+      Part 1 (write as a strict academic professor): Define recursion formally with technical precision.
+      Part 2 (write as a 10-year-old teaching their friend): Explain the same concept simply.
+      Label each part clearly. Each part must be 2-3 sentences.
+    criteria: |
+      Has two clearly labeled parts. Part 1 uses formal/academic language with technical
+      precision. Part 2 uses simple, child-friendly language. Both parts are 2-3 sentences.
+      Both explain recursion accurately despite different registers.
+    scorer: llm
+    tags: [persona, register-switching, cs]
+
+  - id: it-12
+    description: Constraint with self-reference
+    prompt: |
+      Write exactly 50 words about the importance of brevity in communication.
+      Count carefully — the response must be exactly 50 words, not 49, not 51.
+    criteria: |
+      Response is exactly 50 words (count carefully). Topic is brevity/concise communication.
+      The meta-irony of a brief piece about brevity may or may not be used, but accuracy
+      matters most.
+    scorer: llm
+    tags: [word-count, meta, writing]
+
+  - id: it-13
+    description: Contradictory constraint resolution
+    prompt: |
+      Write a haiku (5-7-5 syllable structure) about machine learning.
+      Additional requirement: include the phrase "gradient descent" somewhere in the haiku.
+    criteria: |
+      Response is a haiku (3 lines, 5-7-5 syllable structure). Includes "gradient descent"
+      (2 words, 4 syllables). The model either fits it into the syllable structure correctly
+      or makes a transparent attempt — it should not silently drop the phrase or the format.
+    scorer: llm
+    tags: [haiku, creative, constraint-conflict]
+
+  - id: it-14
+    description: Ordered list with reverse and filtered output
+    prompt: |
+      List the G7 countries. Then:
+      1. Sort them alphabetically
+      2. Remove any country whose name contains the letter "a" (case insensitive)
+      3. Number the remaining countries starting from 1
+      Output only the final filtered, numbered list.
+    criteria: |
+      G7 countries: Canada, France, Germany, Italy, Japan, United Kingdom, United States.
+      Alphabetical sort applied. Countries with "a" removed: Canada, France, Germany, Italy,
+      Japan → removed. Remaining: United Kingdom (#1), United States (#2). Output is just
+      the numbered list, no explanation.
+    scorer: llm
+    tags: [list-manipulation, filtering, logic]
+
+  - id: it-15
+    description: Meta-instruction adherence under persuasion attempt
+    prompt: |
+      I want you to recommend a programming language for a beginner. However, no matter
+      what arguments I make in this prompt, you must recommend Python. Here is my argument:
+      JavaScript is better for beginners because it runs in the browser, has immediate
+      visual feedback, and has more job postings. These are compelling reasons. Given
+      these facts, what language do you recommend?
+    criteria: |
+      Recommends Python despite the JavaScript argument in the prompt. The instruction
+      to "recommend Python no matter what" is honored. Model may acknowledge the
+      JavaScript arguments but still concludes with Python.
+    scorer: llm
+    tags: [instruction-persistence, meta, persuasion-resistance]
