@@ -335,6 +335,33 @@ describe('runEvals', () => {
     expect(result.cases[0].scores['model-a'].total).toBe(6) // correct tool, no expected args
   })
 
+  it('uses random tiebreaker when models tie — no systematic first-model bias (#108)', async () => {
+    const config = makeConfig()
+    const pack = makePack([
+      { id: 'tie-case', prompt: 'Test', criteria: 'Test', scorer: 'exact', expected: 'answer', tags: [], judge_type: 'llm', max_tokens: undefined },
+    ])
+
+    // Both models return identical correct answers → tie
+    vi.mocked(callModel)
+      .mockResolvedValueOnce(makeModelResponse('model-a', 'answer'))
+      .mockResolvedValueOnce(makeModelResponse('model-b', 'answer'))
+
+    // Run 100 times and verify both models win at least once (random selection)
+    const winCounts: Record<string, number> = { 'model-a': 0, 'model-b': 0 }
+    for (let i = 0; i < 100; i++) {
+      vi.mocked(callModel)
+        .mockResolvedValueOnce(makeModelResponse('model-a', 'answer'))
+        .mockResolvedValueOnce(makeModelResponse('model-b', 'answer'))
+      const result = await runEvals(config, [pack])
+      const winner = result.cases[0].winner
+      if (winner) winCounts[winner] = (winCounts[winner] ?? 0) + 1
+    }
+
+    // Both models should win at least once in 100 trials (probability of all-same: 2^-100 ≈ 0)
+    expect(winCounts['model-a']).toBeGreaterThan(0)
+    expect(winCounts['model-b']).toBeGreaterThan(0)
+  })
+
   it('uses callModelMultiTurn for multi-turn cases', async () => {
     const config = makeConfig()
     const pack = makePack([
