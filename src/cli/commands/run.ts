@@ -27,6 +27,12 @@ interface RunOptions {
   failIfRegression?: boolean
   verbose?: boolean
   debug?: boolean
+  /** CI mode: write GitHub Actions step summary, apply regression threshold */
+  ci?: boolean
+  /** Baseline path for CI regression comparison (default: results/baseline.json) */
+  baseline?: string
+  /** Regression threshold for CI mode (default: 0.5) */
+  failOnRegression?: number
 }
 
 export async function runCommand(opts: RunOptions): Promise<void> {
@@ -274,6 +280,88 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   // Auto-contribute if enabled and run succeeded
   if (config.settings?.auto_contribute && result.models.length > 0) {
     await tryAutoContribute(`${base}.json`, config, log)
+  }
+
+  // ─── CI mode (--ci flag, issue #105) ───────────────────────────────────────
+  if (opts.ci) {
+    const ciBaselinePath = opts.baseline ?? path.join(config.output.dir, 'baseline.json')
+    const failThreshold = opts.failOnRegression ?? 0.5
+
+    const sorted = result.models
+      .map(id => result.summary[id])
+      .filter(Boolean)
+      .sort((a, b) => b.avg_total - a.avg_total)
+
+    // Load baseline for comparison if it exists
+    let ciBaseline: import('../../types/index.js').RunResult | null = null
+    if (fs.existsSync(ciBaselinePath)) {
+      try {
+        ciBaseline = JSON.parse(fs.readFileSync(ciBaselinePath, 'utf8'))
+      } catch { /* baseline unreadable — skip comparison */ }
+    }
+
+    // Build step summary markdown
+    const summaryLines: string[] = [
+      `## verdict Eval Results`,
+      ``,
+      `**Run:** ${result.run_id} | **Cases:** ${result.cases.length} | **Date:** ${result.timestamp.slice(0, 19).replace('T', ' ')} UTC`,
+      ``,
+    ]
+
+    let ciRegressionDetected = false
+    const ciRegressions: string[] = []
+
+    if (ciBaseline) {
+      summaryLines.push(`| Model | Score | vs Baseline | Status |`)
+      summaryLines.push(`|-------|-------|-------------|--------|`)
+      for (const s of sorted) {
+        const prev = ciBaseline.summary[s.model_id]
+        if (prev) {
+          const d = s.avg_total - prev.avg_total
+          const dStr = d > 0 ? `+${d.toFixed(2)}` : d.toFixed(2)
+          const regression = d < -failThreshold
+          if (regression) { ciRegressionDetected = true; ciRegressions.push(s.model_id) }
+          const status = regression ? '⚠️ regression' : d > 0.05 ? '✅ improved' : d < -0.05 ? '📉 declined' : '➡️ no change'
+          summaryLines.push(`| ${s.model_id} | ${s.avg_total.toFixed(2)} | ${dStr} | ${status} |`)
+        } else {
+          summaryLines.push(`| ${s.model_id} | ${s.avg_total.toFixed(2)} | — | 🆕 new |`)
+        }
+      }
+    } else {
+      summaryLines.push(`| Model | Score | Win% | Latency |`)
+      summaryLines.push(`|-------|-------|------|---------|`)
+      for (const s of sorted) {
+        summaryLines.push(`| ${s.model_id} | ${s.avg_total.toFixed(2)} | ${s.win_rate}% | ${(s.avg_latency_ms / 1000).toFixed(1)}s |`)
+      }
+    }
+
+    if (ciRegressionDetected) {
+      summaryLines.push(``, `> ⚠️ **Regression detected** (threshold: ${failThreshold}): ${ciRegressions.join(', ')}`)
+    }
+
+    const stepSummaryContent = summaryLines.join('\n') + '\n'
+
+    // Write to GitHub Actions step summary if env var is set
+    const stepSummaryFile = process.env.GITHUB_STEP_SUMMARY
+    if (stepSummaryFile) {
+      try {
+        fs.appendFileSync(stepSummaryFile, stepSummaryContent)
+        log(chalk.dim(`  ci: step summary written to $GITHUB_STEP_SUMMARY`))
+      } catch (err) {
+        log(chalk.yellow(`  ci: failed to write step summary: ${err instanceof Error ? err.message : err}`))
+      }
+    } else {
+      // Not in GitHub Actions — print summary to console for local testing
+      log(chalk.dim('  ci: $GITHUB_STEP_SUMMARY not set — printing summary to console'))
+      log('')
+      log(stepSummaryContent)
+    }
+
+    if (ciRegressionDetected) {
+      log(chalk.red(`  ❌ CI: Regression detected — ${ciRegressions.join(', ')} dropped >${failThreshold}pts vs baseline`))
+      log()
+      process.exit(1)
+    }
   }
 
   log()

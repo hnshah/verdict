@@ -16,6 +16,7 @@ import { leaderboardCommand } from './commands/leaderboard.js'
 import { reportCommand } from './commands/report.js'
 import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } from './commands/eval.js'
 import { contributeCommand } from './commands/contribute.js'
+import { promoteCommand } from './commands/promote.js'
 // Dashboard CLI removed - use custom build system in dashboard/build/ instead
 // See WORKFLOW.md for complete dashboard workflow
 
@@ -48,6 +49,9 @@ program
   .option('--fail-if-regression', 'Exit with code 1 if any model regresses vs the default baseline')
   .option('--verbose', 'Show model call results, scores, and timing as they happen')
   .option('--debug', 'Show verbose output plus raw API request/response bodies')
+  .option('--ci', 'CI mode: write GitHub Actions step summary, apply regression threshold')
+  .option('--baseline <path>', 'Baseline JSON for CI regression comparison (default: results/baseline.json)')
+  .option('--fail-on-regression <n>', 'Exit 1 if any model drops more than this vs baseline (default: 0.5 in CI mode)', parseFloat)
   .action(runCommand)
 
 const models = program
@@ -62,10 +66,23 @@ models
   .action(discoverCommand)
 
 program
-  .command('compare <run-a> <run-b>')
+  .command('compare [run-a] [run-b]')
   .description('Compare two result JSON files — show score deltas and rank changes')
   .option('-o, --output <path>', 'Save comparison as markdown file')
+  .option('--baseline <path>', 'Baseline result JSON (alternative to positional arg)')
+  .option('--current <path>', 'Current result JSON (alternative to positional arg)')
+  .option('--threshold <n>', 'Exit 1 if any model drops more than this (default: no exit code)', parseFloat)
+  .option('--format <fmt>', 'Output format: text (default) or json')
   .action(compareCommand)
+
+program
+  .command('promote')
+  .description('Promote a run result as the baseline for future comparisons')
+  .option('--run <id>', 'Promote a specific run by ID')
+  .option('--nth <n>', 'Promote the nth most recent run (1 = latest)', parseInt)
+  .option('--force', 'Skip confirmation when overwriting existing baseline')
+  .option('--output <path>', 'Baseline destination path (default: results/baseline.json)')
+  .action(promoteCommand)
 
 const baseline = program
   .command('baseline')
