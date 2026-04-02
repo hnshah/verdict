@@ -1,0 +1,295 @@
+name: System Design
+version: "1.0.0"
+description: >
+  Tests architectural reasoning and system design judgment. Covers scalability
+  trade-offs, database selection, caching strategies, API design, and failure
+  handling. Rewards responses that identify key constraints, discuss trade-offs
+  honestly, and avoid cargo-culting patterns without justification.
+
+cases:
+  - id: sysdesign-url-shortener
+    category: classic
+    prompt: >
+      Design a URL shortener like bit.ly. The system must handle 100M URLs
+      stored, 10K writes/sec, and 100K reads/sec. Describe the core components,
+      storage strategy, and how you handle the read/write imbalance.
+    criteria: >
+      A strong answer identifies: hash collision strategy (or random ID +
+      uniqueness check), read-heavy optimization (cache layer like Redis for
+      hot URLs), database choice with reasoning (KV store or RDBMS with index
+      on short code), and CDN/edge for global latency. Should mention what
+      NOT to over-engineer at this scale. Penalize vague "use a load balancer"
+      without explaining where/why.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [classic, scalability, caching]
+
+  - id: sysdesign-rate-limiter
+    category: infrastructure
+    prompt: >
+      Design a distributed rate limiter for an API that serves 50K requests/sec
+      globally across 3 data centers. The limit is 1000 req/min per API key.
+      How do you enforce this accurately without a single point of failure?
+    criteria: >
+      Should cover: sliding window vs fixed window trade-offs, token bucket
+      algorithm, distributed counter challenge (Redis with INCR + TTL is common
+      but has clock skew issues across DCs), or approximate counting with
+      Lua scripts for atomicity. Must address the distributed consensus problem —
+      either accept slight inaccuracy (local counters + gossip) or pay the
+      latency cost of centralized. A good answer explains the trade-off clearly.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [infrastructure, distributed-systems, rate-limiting]
+
+  - id: sysdesign-notification-system
+    category: async
+    prompt: >
+      Design a notification system that sends push, email, and SMS notifications.
+      It needs to handle 5M notifications/day, support user preferences (opt-out
+      per channel), and guarantee delivery with at-most-once semantics for
+      transactional (OTP) vs at-least-once for marketing messages.
+    criteria: >
+      Key elements: message queue (Kafka/SQS) to decouple producers from
+      senders, separate queues or priorities for transactional vs marketing,
+      deduplication for at-most-once (idempotency keys), retry with backoff
+      for failures, preference lookup before send (cache user prefs),
+      provider abstraction layer for SMS/email/push. Should flag that
+      "at-most-once" for OTP is usually more important than delivery guarantees.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [async, messaging, queues]
+
+  - id: sysdesign-typeahead-search
+    category: search
+    prompt: >
+      Design a typeahead/autocomplete system for a search box that serves
+      10M users. It should return top 10 suggestions within 50ms for any
+      prefix. How do you keep suggestions fresh as content changes daily?
+    criteria: >
+      Strong answers: trie or prefix hash in memory (fast lookup), pre-computed
+      top-K per prefix (avoids real-time trie traversal), Redis for hot
+      prefixes, background job to recompute top suggestions from query logs,
+      CDN or edge caching for common prefixes. Should address the freshness
+      vs latency tension — batch updates are fine if daily refresh is
+      acceptable. Penalize solutions that require real-time DB query on
+      every keystroke.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [search, latency, caching]
+
+  - id: sysdesign-chat-system
+    category: realtime
+    prompt: >
+      Design the messaging backend for a chat app like WhatsApp that supports
+      1:1 and group chats (up to 500 members), 1B messages/day, and offline
+      delivery. Users expect messages within 200ms when online.
+    criteria: >
+      Core: WebSocket connections for online users (connection server tier),
+      message storage (append-only log per conversation, e.g. Cassandra for
+      write throughput), offline delivery via push notifications + message
+      inbox pull on reconnect, fan-out strategy for group chats (fan-out
+      on write for small groups, fan-out on read for large), message
+      sequencing (logical clock or server-assigned ID). Should distinguish
+      1:1 vs group differently. 500-member group fan-out is a non-trivial
+      problem that should be flagged.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [realtime, websockets, messaging]
+
+  - id: sysdesign-cdn
+    category: infrastructure
+    prompt: >
+      A video streaming platform serves 10PB of content globally. Videos are
+      uploaded once, watched millions of times. Design the content delivery
+      architecture. How do you handle cache misses, long-tail content that's
+      rarely watched, and hot content (viral videos)?
+    criteria: >
+      Should cover: CDN edge nodes with LRU/LFU eviction, origin pull model
+      (edge pulls from origin on miss), tiered caching (edge → regional →
+      origin), hot content detection and pre-warming, long-tail stored cheaply
+      (cold storage like S3 Glacier, pulled only on demand), and geo-routing
+      to nearest edge. Should mention that for 10PB, full edge replication is
+      impossible — intelligent caching is required. Adaptive bitrate streaming
+      (HLS/DASH) is a bonus.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [cdn, storage, video-streaming]
+
+  - id: sysdesign-payment-system
+    category: reliability
+    prompt: >
+      Design a payment processing system for an e-commerce platform.
+      100K transactions/day, must not double-charge, must handle partial
+      failures (network timeout after charge but before confirmation),
+      and reconcile with bank statements daily.
+    criteria: >
+      Critical elements: idempotency keys (client-generated UUID prevents
+      double-charge on retry), two-phase pattern or saga for distributed
+      transactions, payment state machine (PENDING → AUTHORIZED → CAPTURED
+      → SETTLED), at-least-once delivery with deduplication, reconciliation
+      job comparing internal DB with bank records. Must address the
+      "network timeout after charge" scenario explicitly — this is the
+      core challenge. Answers that ignore idempotency should score low.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [reliability, payments, idempotency]
+
+  - id: sysdesign-leaderboard
+    category: classic
+    prompt: >
+      Design a real-time gaming leaderboard that shows top 100 players globally
+      and each player's rank. 10M players, scores update frequently (thousands
+      per second). A player viewing their rank should see it within 1 second.
+    criteria: >
+      Redis sorted sets (ZADD/ZRANK) are the natural fit — O(log N) rank
+      lookup. For 10M players, ZRANK is fast (~10μs). Top-100 leaderboard
+      is trivially ZRANGE with REV. Challenge: hot players (top streamers)
+      getting millions of concurrent viewers polling. Solution: cache top-100
+      with short TTL (1-5s), individual rank on-demand. Should mention
+      that exact real-time rank for all 10M simultaneously is impossible —
+      eventual consistency of a few seconds is the honest trade-off.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [classic, redis, gaming]
+
+  - id: sysdesign-database-selection
+    category: trade-offs
+    prompt: >
+      A startup is building a social network with: user profiles, a social
+      graph (followers/following), posts (text + images), and a feed.
+      They expect 1M users in year 1. Which database(s) would you use for
+      each part and why? They have 2 backend engineers.
+    criteria: >
+      A pragmatic answer beats a "correct" distributed architecture. Given
+      2 engineers: PostgreSQL for profiles + posts (relational, team knows SQL,
+      handles 1M users easily), PostgreSQL or Redis for social graph at 1M
+      (graph DB like Neo4j is overkill at this scale), S3 for images.
+      Feed: denormalized in Redis or pre-computed. The right answer explicitly
+      flags that at 1M users, operational simplicity beats optimal architecture.
+      Penalize over-engineering (Cassandra, Kafka, dedicated graph DB) without
+      acknowledging team constraints.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [trade-offs, database-selection, pragmatism]
+
+  - id: sysdesign-eventual-consistency
+    category: distributed-systems
+    prompt: >
+      Your system has a "like count" on posts that is updated by millions of
+      concurrent users. You currently have a single counter in PostgreSQL
+      but it's causing lock contention at scale. Propose and compare at least
+      two approaches to fix this, discussing consistency trade-offs.
+    criteria: >
+      Good approaches: (1) Redis INCR for atomic increments + periodic sync
+      to DB — fast, eventually consistent, risk of losing increments on crash
+      unless persisted. (2) Sharded counters — N rows summed on read, reduces
+      contention. (3) Event stream (Kafka) + batch aggregation — exact count
+      with slight delay. Must explicitly discuss: what "consistency" means
+      here (exact count vs approximate), whether showing "1,203" vs "~1.2K"
+      is acceptable, and crash recovery. Penalize answers that just say
+      "use Redis" without addressing the sync/loss problem.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [distributed-systems, consistency, counters]
+
+  - id: sysdesign-api-versioning
+    category: api-design
+    prompt: >
+      Your public API has 500 third-party integrations. You need to make a
+      breaking change to a core endpoint (changing a required field name).
+      How do you handle this migration without breaking existing integrations?
+    criteria: >
+      Strong answer covers: versioning strategy (URL path /v1/ /v2/ or
+      header-based), deprecation timeline with notice period (90+ days),
+      backwards-compatible transition period where both field names work,
+      sunset headers in responses to notify clients, migration guide and
+      tooling for partners. Should acknowledge the social/communication
+      challenge is as hard as the technical one — 500 partners won't all
+      migrate cleanly. Penalize answers that say "just update all clients."
+    scorer: llm
+    judge_style: cot_classify
+    tags: [api-design, versioning, backward-compatibility]
+
+  - id: sysdesign-search-index
+    category: search
+    prompt: >
+      A SaaS product needs full-text search across 10M documents (user notes,
+      ~2KB avg). Search must return results in <200ms. Documents are added
+      and updated frequently. They currently use PostgreSQL ILIKE which is
+      too slow. What's your recommendation?
+    criteria: >
+      Options to discuss: (1) PostgreSQL full-text search with tsvector/GIN
+      index — often sufficient at 10M docs, no new infra, handles most cases.
+      (2) Elasticsearch/OpenSearch — more powerful, but significant ops burden
+      for a SaaS team. (3) Typesense or Meilisearch — easier to operate than
+      ES, good for this scale. The right answer depends on team size and
+      whether advanced relevance tuning is needed. Should recommend pg FTS
+      first (zero new infra) and explain when to graduate to dedicated search.
+      Penalize defaulting straight to Elasticsearch for 10M docs without
+      justification.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [search, database, pragmatism]
+
+  - id: sysdesign-multi-tenancy
+    category: architecture
+    prompt: >
+      You're building a B2B SaaS product and need to decide on a multi-tenancy
+      model: (A) shared database, shared schema with tenant_id column;
+      (B) shared database, separate schemas per tenant; or (C) separate
+      database per tenant. Compare these for a product expecting 10K tenants
+      with variable data sizes (most small, some enterprise with 10x average).
+    criteria: >
+      Should cover: (A) cheapest, hardest to enforce isolation, risk of noisy
+      neighbor, easier to query across tenants; (B) good balance, logical
+      isolation without DB overhead, PostgreSQL schemas work well here;
+      (C) strongest isolation, highest cost, easiest for enterprise compliance
+      (GDPR data residency), hard to manage 10K databases. Recommendation
+      should match the constraints — 10K tenants argues against option C for
+      small tenants, but a hybrid (A/B for small, C for enterprise) is a
+      reasonable answer. Should mention row-level security as an enhancement
+      for option A.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [architecture, multi-tenancy, saas]
+
+  - id: sysdesign-failure-modes
+    category: reliability
+    prompt: >
+      Your service makes 3 downstream API calls to complete a request:
+      payment processor, inventory service, and email notification.
+      Each has ~99% uptime independently. What patterns do you use to
+      ensure your service remains reliable even when dependencies fail?
+    criteria: >
+      Must cover: circuit breaker pattern (fail fast when dependency is down,
+      avoid cascading failure), timeout + retry with exponential backoff,
+      bulkhead pattern (isolate failures — payment failure shouldn't affect
+      inventory), fallback strategies (queue email for later if notification
+      service is down, since it's non-critical), and understanding which
+      calls are on the critical path vs compensatable. The key insight:
+      not all failures are equal — payment failure is blocking, email failure
+      is not. Combined uptime math (0.99^3 = 97%) should motivate the need.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [reliability, circuit-breaker, failure-handling]
+
+  - id: sysdesign-event-driven
+    category: architecture
+    prompt: >
+      When should you use event-driven architecture instead of direct
+      synchronous API calls between services? Give a concrete example of
+      each pattern where it's the right choice and one where it's the
+      wrong choice.
+    criteria: >
+      Event-driven right choice: order placed → triggers inventory update,
+      email, analytics simultaneously (fan-out, async, non-blocking).
+      Event-driven wrong choice: user login auth check (synchronous,
+      needs immediate response, event bus adds latency and complexity for
+      no benefit). Synchronous right choice: real-time data lookup (user
+      balance check during checkout must be fresh). Should cover: event-driven
+      pros (decoupling, fan-out, resilience) and cons (eventual consistency,
+      harder to debug, ordering guarantees). Penalize treating event-driven
+      as universally better or worse.
+    scorer: llm
+    judge_style: cot_classify
+    tags: [architecture, event-driven, trade-offs]
