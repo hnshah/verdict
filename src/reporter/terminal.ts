@@ -68,14 +68,14 @@ export function printSummary(result: RunResult): void {
 
 export function printCaseDetail(
   caseId: string, prompt: string,
-  scores: Record<string, { total: number; reasoning: string; confidence?: number }>
+  scores: Record<string, { total: number; reasoning: string; confidence?: number | null }>
 ): void {
   console.log(chalk.dim(`\n  [${caseId}] ${prompt.slice(0, 72)}${prompt.length > 72 ? '...' : ''}`))
   for (const [id, score] of Object.entries(scores)) {
     // Clamp score to 0-10 range to prevent negative repeat counts
     const scoreDisplay = Math.max(0, Math.min(10, Math.round(score.total)))
     const bar = '|'.repeat(scoreDisplay) + chalk.dim('.'.repeat(10 - scoreDisplay))
-    const lowConfidence = score.confidence !== undefined && score.confidence < 4
+    const lowConfidence = score.confidence != null && score.confidence < 4
       ? chalk.yellow(' ⚠ low confidence')
       : ''
     console.log(`    ${chalk.dim(id.padEnd(22))} ${bar} ${score.total.toFixed(1)}  ${chalk.dim(score.reasoning.slice(0, 60))}${lowConfidence}`)

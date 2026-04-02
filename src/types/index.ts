@@ -193,7 +193,8 @@ export interface JudgeScore {
   total: number
   reasoning: string
   structured_reasoning?: StructuredReasoning
-  confidence?: number  // 0-10, optional — how certain is the judge?
+  // 0-10 — how certain is the judge? null = LLM didn't return it; undefined = not an LLM judge
+  confidence?: number | null
 }
 
 export interface CaseResult {

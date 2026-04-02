@@ -159,7 +159,10 @@ export async function judgeResponse(
     conciseness * rubric.conciseness
   ).toFixed(1)
 
-  const confidence = parsed.confidence !== undefined ? clamp(parsed.confidence) : undefined
+  // Clamp confidence if present; default to null (not undefined) so it
+  // always appears in JSON output and consumers can distinguish "not asked"
+  // from "omitted by model"
+  const confidence = parsed.confidence !== undefined ? clamp(parsed.confidence) : null
 
   return {
     accuracy,
@@ -167,7 +170,7 @@ export async function judgeResponse(
     conciseness,
     total,
     reasoning: typeof parsed.reasoning === 'string' ? parsed.reasoning : '',
-    ...(confidence !== undefined ? { confidence } : {}),
+    confidence,
   }
 }
 

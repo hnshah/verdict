@@ -64,11 +64,11 @@ export function generateMarkdownReport(result: RunResult): string {
   for (const c of result.cases) {
     lines.push(`### ${c.case_id}`, ``, `> ${c.prompt}`, ``)
     // Check if any score has confidence data
-    const hasConfidence = Object.values(c.scores).some(s => s.confidence !== undefined)
+    const hasConfidence = Object.values(c.scores).some(s => s.confidence != null)
     if (hasConfidence) {
       lines.push(`| Model | Score | Confidence | Reasoning |`, `|-------|-------|------------|-----------|`)
       for (const [id, score] of Object.entries(c.scores)) {
-        const confStr = score.confidence !== undefined
+        const confStr = score.confidence != null
           ? (score.confidence < 4 ? `⚠ ${score.confidence}/10` : `${score.confidence}/10`)
           : '—'
         lines.push(`| ${id} | ${score.total} | ${confStr} | ${score.reasoning} |`)
