@@ -82,7 +82,7 @@ export interface ToolCallResult {
 
 // ─── Eval packs ──────────────────────────────────────────────────────────────
 
-export const ScorerEnum = z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex', 'javascript'])
+export const ScorerEnum = z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex', 'javascript', 'starts_with', 'ends_with'])
 
 export const AssertionSchema = z.object({
   scorer: ScorerEnum,
@@ -147,7 +147,7 @@ export const EvalPackSchema = z.object({
   cases: z.array(EvalCaseSchema).default([]),
   samples_file: z.string().optional(),
   // Pack-level defaults applied to JSONL cases that don't specify these fields
-  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex']).optional(),
+  scorer: z.enum(['llm', 'json', 'exact', 'contains', 'fuzzy_match', 'jsonschema', 'tool_call', 'multiple_choice', 'regex', 'starts_with', 'ends_with']).optional(),
   criteria: z.string().optional(),
   judge_style: JudgeStyleEnum.optional(),
 })
