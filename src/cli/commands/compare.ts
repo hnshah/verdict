@@ -5,6 +5,10 @@ import type { RunResult, ModelSummary } from '../../types/index.js'
 
 interface CompareOptions {
   output?: string
+  baseline?: string
+  current?: string
+  threshold?: number
+  format?: 'terminal' | 'json'
 }
 
 function loadResult(filePath: string): RunResult {
@@ -29,17 +33,29 @@ function col(s: string, w: number): string {
 }
 
 export async function compareCommand(fileA: string, fileB: string, opts: CompareOptions): Promise<void> {
-  console.log()
-  console.log(chalk.bold('  verdict') + chalk.dim(' compare'))
-  console.log()
+  // Support --baseline / --current flags
+  const pathA = opts.baseline || fileA
+  const pathB = opts.current || fileB
+  const threshold = opts.threshold ?? 0.5
+  const format = opts.format || 'terminal'
 
   let runA: RunResult, runB: RunResult
   try {
-    runA = loadResult(fileA)
-    runB = loadResult(fileB)
+    runA = loadResult(pathA)
+    runB = loadResult(pathB)
   } catch (err) {
-    console.error(chalk.red(`  ${err instanceof Error ? err.message : err}`))
+    if (format === 'json') {
+      console.log(JSON.stringify({ error: err instanceof Error ? err.message : String(err) }))
+    } else {
+      console.error(chalk.red(`  ${err instanceof Error ? err.message : err}`))
+    }
     process.exit(1)
+  }
+
+  if (format === 'terminal') {
+    console.log()
+    console.log(chalk.bold('  verdict') + chalk.dim(' compare'))
+    console.log()
   }
 
   const nameA = path.basename(fileA, '.json')
@@ -219,7 +235,66 @@ export async function compareCommand(fileA: string, fileB: string, opts: Compare
       }
     }
     fs.writeFileSync(opts.output, lines.join('\n') + '\n')
-    console.log(chalk.dim(`  report: ${opts.output}`))
+    if (format === 'terminal') {
+      console.log(chalk.dim(`  report: ${opts.output}`))
+      console.log()
+    }
+  }
+
+  // --- Regression detection ---
+  const regressions = allModels
+    .map(model => {
+      const a = runA.summary[model]
+      const b = runB.summary[model]
+      if (!a || !b) return null
+      const delta = b.avg_total - a.avg_total
+      if (delta < -threshold) {
+        return { model, baseline: a.avg_total, current: b.avg_total, delta }
+      }
+      return null
+    })
+    .filter((r): r is NonNullable<typeof r> => r !== null)
+
+  // --- JSON output ---
+  if (format === 'json') {
+    const jsonOutput = {
+      baseline: { name: nameA, timestamp: runA.timestamp, cases: runA.cases.length },
+      current: { name: nameB, timestamp: runB.timestamp, cases: runB.cases.length },
+      threshold,
+      models: allModels.map(model => {
+        const a = runA.summary[model]
+        const b = runB.summary[model]
+        return {
+          model,
+          baseline_score: a?.avg_total ?? null,
+          current_score: b?.avg_total ?? null,
+          delta: a && b ? b.avg_total - a.avg_total : null,
+          status: !a ? 'new' : !b ? 'removed' :
+            Math.abs(b.avg_total - a.avg_total) < 0.05 ? 'no_change' :
+            b.avg_total > a.avg_total ? 'improved' : 'declined',
+          regression: a && b && (b.avg_total - a.avg_total) < -threshold
+        }
+      }),
+      regressions: regressions.length > 0,
+      regression_details: regressions
+    }
+    console.log(JSON.stringify(jsonOutput, null, 2))
+  }
+
+  // --- Terminal regression report ---
+  if (format === 'terminal' && regressions.length > 0) {
+    console.log(chalk.bold.red('  ⚠️  Regressions detected'))
+    console.log(chalk.dim('  ' + '-'.repeat(60)))
+    for (const r of regressions) {
+      console.log(`  ${chalk.red('▼')} ${r.model.padEnd(24)} ${r.baseline.toFixed(2)} → ${r.current.toFixed(2)}  (${r.delta.toFixed(2)})`)
+    }
     console.log()
+    console.log(chalk.red(`  ❌ ${regressions.length} model(s) regressed beyond threshold (${threshold})`))
+    console.log()
+  }
+
+  // --- Exit code ---
+  if (regressions.length > 0) {
+    process.exit(1)
   }
 }

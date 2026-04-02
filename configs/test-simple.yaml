@@ -1,0 +1,24 @@
+# Test: Minimal config
+# 2 models × 5 cases = 10 evaluations (should complete in ~2 min)
+
+models:
+  - id: qwen-7b
+    name: Qwen 7B
+    provider: ollama
+    model: qwen2.5:7b
+  
+  - id: qwen-32b
+    name: Qwen 32B
+    provider: ollama
+    model: qwen2.5:32b
+
+judge:
+  model: qwen-32b
+
+packs:
+  - ../eval-packs/general.yaml
+
+metadata:
+  hardware: "Apple M2 Max 64GB"
+  author: "Rak"
+  purpose: "Test verdict works"

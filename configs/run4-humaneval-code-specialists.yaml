@@ -2,28 +2,28 @@
 # 4 models × 164 cases = 656 evaluations
 
 models:
-  - id: deepseek-6.7b
-    name: DeepSeek Coder 6.7B
-    provider: ollama
-    model: deepseek-coder:6.7b
-  
-  - id: deepseek-14b
-    name: DeepSeek Coder 14B
-    provider: ollama
-    model: deepseek-coder:14b
-  
-  - id: qwen-coder
+  - id: qwen-coder-7b
     name: Qwen 2.5 Coder 7B
     provider: ollama
     model: qwen2.5-coder:7b
   
-  - id: codestral
-    name: Codestral 22B
+  - id: qwen-coder-14b
+    name: Qwen 2.5 Coder 14B
     provider: ollama
-    model: codestral:22b
+    model: qwen2.5-coder:14b
+  
+  - id: qwen-coder-32b
+    name: Qwen 2.5 Coder 32B
+    provider: ollama
+    model: qwen2.5-coder:32b
+  
+  - id: qwen-7b
+    name: Qwen 2.5 7B (baseline)
+    provider: ollama
+    model: qwen2.5:7b
 
 judge:
-  model: deepseek-14b
+  model: qwen-coder-14b
 
 packs:
   - ../eval-packs/humaneval.yaml
@@ -31,4 +31,4 @@ packs:
 metadata:
   hardware: "Apple M2 Max 64GB"
   author: "Rak"
-  purpose: "HumanEval code specialist comparison"
+  purpose: "HumanEval - Python coding benchmark for specialists"

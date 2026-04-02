@@ -1,0 +1,20 @@
+# Quick test - 1 model × 5 cases
+
+models:
+  - id: qwen-7b
+    provider: ollama
+    model: qwen2.5:7b
+
+judge:
+  model: qwen-7b
+
+packs:
+  - ../eval-packs/general.yaml
+
+settings:
+  auto_contribute: false
+
+metadata:
+  hardware: "Apple M2 Max 64GB"
+  author: "Rak"
+  purpose: "Test verdict works"

@@ -62,10 +62,21 @@ models
   .action(discoverCommand)
 
 program
-  .command('compare <run-a> <run-b>')
+  .command('compare [run-a] [run-b]')
   .description('Compare two result JSON files — show score deltas and rank changes')
   .option('-o, --output <path>', 'Save comparison as markdown file')
-  .action(compareCommand)
+  .option('--baseline <path>', 'Baseline result file (alternative to run-a)')
+  .option('--current <path>', 'Current result file (alternative to run-b)')
+  .option('--threshold <number>', 'Regression threshold (default: 0.5)', parseFloat)
+  .option('--format <type>', 'Output format: terminal or json', /^(terminal|json)$/)
+  .action((runA, runB, opts) => {
+    // Support both positional and named arguments
+    if (!runA && !opts.baseline) {
+      console.error('Error: Provide either <run-a> <run-b> or --baseline --current')
+      process.exit(1)
+    }
+    return compareCommand(runA || '', runB || '', opts)
+  })
 
 const baseline = program
   .command('baseline')
