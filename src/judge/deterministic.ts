@@ -309,8 +309,36 @@ export function scoreMultipleChoice(output: string, expected: string, choices?: 
   return { accuracy: 0, completeness: 0, conciseness: 0, total: 0, reasoning: `Wrong choice: expected "${expectedLetter}", found "${found[0]}" in output.` }
 }
 
+export function scoreStartsWith(output: string, expected: string): JudgeScore {
+  const trimmed = output.trimStart()
+  if (trimmed.startsWith(expected)) {
+    return {
+      accuracy: 10, completeness: 10, conciseness: 10, total: 10,
+      reasoning: `Output starts with "${expected.slice(0, 40)}".`,
+    }
+  }
+  return {
+    accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+    reasoning: `Expected to start with "${expected.slice(0, 40)}", got "${trimmed.slice(0, 40)}"`,
+  }
+}
+
+export function scoreEndsWith(output: string, expected: string): JudgeScore {
+  const trimmed = output.trimEnd()
+  if (trimmed.endsWith(expected)) {
+    return {
+      accuracy: 10, completeness: 10, conciseness: 10, total: 10,
+      reasoning: `Output ends with "${expected.slice(0, 40)}".`,
+    }
+  }
+  return {
+    accuracy: 0, completeness: 0, conciseness: 0, total: 0,
+    reasoning: `Expected to end with "${expected.slice(0, 40)}", got "...${trimmed.slice(-40)}"`,
+  }
+}
+
 export function isDeterministic(scorer: string): boolean {
-  return scorer === 'json' || scorer === 'exact' || scorer === 'contains' || scorer === 'fuzzy_match' || scorer === 'regex' || scorer === 'jsonschema' || scorer === 'tool_call' || scorer === 'javascript'
+  return scorer === 'json' || scorer === 'exact' || scorer === 'contains' || scorer === 'fuzzy_match' || scorer === 'regex' || scorer === 'jsonschema' || scorer === 'tool_call' || scorer === 'javascript' || scorer === 'starts_with' || scorer === 'ends_with'
 }
 
 export function scoreDeterministic(
@@ -325,5 +353,7 @@ export function scoreDeterministic(
   if (scorer === 'multiple_choice') return scoreMultipleChoice(output, expectedStr, choices)
   if (scorer === 'regex') return scoreRegex(output, expectedStr)
   if (scorer === 'javascript') return scoreJavascript(output, expectedStr || undefined, scorerCode ?? '')
+  if (scorer === 'starts_with') return scoreStartsWith(output, expectedStr)
+  if (scorer === 'ends_with') return scoreEndsWith(output, expectedStr)
   return null
 }

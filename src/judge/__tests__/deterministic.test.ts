@@ -8,6 +8,8 @@ import {
   scoreToolCall,
   scoreJsonSchema,
   scoreJavascript,
+  scoreStartsWith,
+  scoreEndsWith,
   isDeterministic,
   scoreDeterministic,
 } from '../deterministic.js'
@@ -405,3 +407,69 @@ describe('deterministic scorers', () => {
       expect(result?.total).toBe(10)
     })
   })
+
+describe('scoreStartsWith', () => {
+  it('passes when output starts with expected string', () => {
+    const result = scoreStartsWith('Hello, world!', 'Hello')
+    expect(result.total).toBe(10)
+    expect(result.reasoning).toContain('starts with')
+  })
+
+  it('fails when output does not start with expected string', () => {
+    const result = scoreStartsWith('Goodbye, world!', 'Hello')
+    expect(result.total).toBe(0)
+    expect(result.reasoning).toContain('Expected to start with')
+  })
+
+  it('trims leading whitespace before checking', () => {
+    const result = scoreStartsWith('   Hello, world!', 'Hello')
+    expect(result.total).toBe(10)
+  })
+
+  it('passes when expected is empty string', () => {
+    const result = scoreStartsWith('anything', '')
+    expect(result.total).toBe(10)
+  })
+
+  it('isDeterministic returns true for starts_with', () => {
+    expect(isDeterministic('starts_with')).toBe(true)
+  })
+
+  it('scoreDeterministic dispatches to starts_with scorer', () => {
+    const result = scoreDeterministic('starts_with', 'Hello world', 'Hello')
+    expect(result?.total).toBe(10)
+  })
+})
+
+describe('scoreEndsWith', () => {
+  it('passes when output ends with expected string', () => {
+    const result = scoreEndsWith('Hello, world!', 'world!')
+    expect(result.total).toBe(10)
+    expect(result.reasoning).toContain('ends with')
+  })
+
+  it('fails when output does not end with expected string', () => {
+    const result = scoreEndsWith('Hello, world!', 'goodbye')
+    expect(result.total).toBe(0)
+    expect(result.reasoning).toContain('Expected to end with')
+  })
+
+  it('trims trailing whitespace before checking', () => {
+    const result = scoreEndsWith('Hello, world!   ', 'world!')
+    expect(result.total).toBe(10)
+  })
+
+  it('passes when expected is empty string', () => {
+    const result = scoreEndsWith('anything', '')
+    expect(result.total).toBe(10)
+  })
+
+  it('isDeterministic returns true for ends_with', () => {
+    expect(isDeterministic('ends_with')).toBe(true)
+  })
+
+  it('scoreDeterministic dispatches to ends_with scorer', () => {
+    const result = scoreDeterministic('ends_with', 'Hello world', 'world')
+    expect(result?.total).toBe(10)
+  })
+})
