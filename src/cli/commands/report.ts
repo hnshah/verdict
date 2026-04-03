@@ -64,7 +64,7 @@ export async function reportCommand(opts: ReportOptions): Promise<void> {
 /**
  * Generate detailed HTML report
  */
-function generateDetailedReport(result: RunResult): string {
+export function generateDetailedReport(result: RunResult): string {
   const date = new Date(result.timestamp).toLocaleString()
   const duration = calculateDuration(result)
   
