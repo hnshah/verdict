@@ -35,6 +35,20 @@ export interface JobRow {
   metadata: string | null
 }
 
+/** A row returned from the cost summary aggregation query. */
+export interface CostSummaryRow {
+  model_id: string
+  runs: number
+  cases: number
+  cost: number
+}
+
+/** Options for querying cost summary. */
+export interface CostOpts {
+  since?: string
+  groupBy?: 'model'
+}
+
 /** Options for querying eval history. */
 export interface HistoryOpts {
   modelId?: string
@@ -217,6 +231,29 @@ export function queryHistory(db: Database.Database, opts: HistoryOpts): EvalHist
   params.limit = limit
 
   return db.prepare(sql).all(params) as EvalHistoryRow[]
+}
+
+/**
+ * Aggregate cost data from eval_results, grouped by model.
+ * Returns one row per model with total runs, cases, and cost.
+ */
+export function queryCosts(db: Database.Database, opts: CostOpts): CostSummaryRow[] {
+  const conditions: string[] = []
+  const params: Record<string, string | number> = {}
+
+  if (opts.since) {
+    const sinceDate = parseSince(opts.since)
+    if (sinceDate) {
+      conditions.push('run_at >= @since')
+      params.since = sinceDate.toISOString()
+    }
+  }
+
+  const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+
+  const sql = `SELECT model_id, COUNT(DISTINCT run_id) as runs, SUM(cases_run) as cases, SUM(COALESCE(total_cost_usd, 0)) as cost FROM eval_results ${where} GROUP BY model_id ORDER BY cost DESC`
+
+  return db.prepare(sql).all(params) as CostSummaryRow[]
 }
 
 /** Detect provider from model id conventions. */

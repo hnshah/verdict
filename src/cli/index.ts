@@ -6,6 +6,7 @@ import { initCommand } from './commands/init.js'
 import { compareCommand } from './commands/compare.js'
 import { baselineSaveCommand, baselineListCommand, baselineCompareCommand } from './commands/baseline.js'
 import { historyCommand } from './commands/history.js'
+import { costsCommand } from './commands/costs.js'
 import { routeCommand } from './commands/route.js'
 import { serveCommand } from './commands/serve.js'
 import { daemonStartCommand, daemonStopCommand, daemonStatusCommand, daemonLogsCommand, daemonWorkerCommand } from './commands/daemon.js'
@@ -98,6 +99,13 @@ program
   .option('--sort <field>', 'Sort by: date (default), score')
   .option('--trend', 'Show sparkline score trends per model')
   .action(historyCommand)
+
+program
+  .command('costs')
+  .description('Summarize API spend across eval runs')
+  .option('--since <time>', 'Filter by time (e.g., 7d, 30d, 90d)')
+  .option('--by <field>', 'Group by field (model)')
+  .action(costsCommand)
 
 program
   .command('route <prompt>')
