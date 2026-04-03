@@ -16,6 +16,7 @@ import { leaderboardCommand } from './commands/leaderboard.js'
 import { reportCommand } from './commands/report.js'
 import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } from './commands/eval.js'
 import { contributeCommand } from './commands/contribute.js'
+import { importCommand } from './commands/import.js'
 // Dashboard CLI removed - use custom build system in dashboard/build/ instead
 // See WORKFLOW.md for complete dashboard workflow
 
@@ -214,6 +215,32 @@ evalCmd
 //   2. Add to dashboard: ./quick-add-run.sh results/LATEST.json
 //
 // See WORKFLOW.md for complete documentation
+
+program
+  .command('import')
+  .description('Import a dataset as an eval pack')
+  .option('--hf <dataset>', 'HuggingFace dataset name (e.g., openai/gsm8k)')
+  .option('--split <split>', 'Dataset split to use', 'test')
+  .option('--config <config>', 'HuggingFace dataset config (e.g., main, socratic)')
+  .option('--max <n>', 'Maximum number of cases to import', (v) => parseInt(v, 10), 100)
+  .option('-o, --output <path>', 'Output eval pack path (default: eval-packs/<dataset>-<split>.yaml)')
+  .option('--input-field <name>', 'Override auto-detected input field name')
+  .option('--output-field <name>', 'Override auto-detected output/expected field name')
+  .option('--criteria <text>', 'Evaluation criteria for all cases')
+  .option('--scorer <type>', 'Scorer type for all cases (default: llm)', 'llm')
+  .option('--dry-run', 'Preview without writing files')
+  .action((opts) => importCommand({
+    hf: opts.hf,
+    split: opts.split,
+    config: opts.config,
+    max: opts.max,
+    output: opts.output,
+    inputField: opts.inputField,
+    outputField: opts.outputField,
+    criteria: opts.criteria,
+    scorer: opts.scorer,
+    dryRun: opts.dryRun,
+  }))
 
 program
   .command('contribute')
