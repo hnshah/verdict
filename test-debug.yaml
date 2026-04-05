@@ -1,0 +1,13 @@
+models:
+  - id: qwen-7b
+    provider: ollama
+    model: qwen2.5:7b
+
+judge:
+  model: qwen-7b
+
+packs:
+  - eval-packs/humaneval.yaml
+
+run:
+  concurrency: 1

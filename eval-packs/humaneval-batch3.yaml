@@ -1,0 +1,1201 @@
+name: HumanEval Batch 3 (cases 42-62)
+description: Batch 3 of 8 - HumanEval Python coding benchmark
+cases:
+  - id: humaneval-42
+    prompt: |-
+      
+
+      def incr_list(l: list):
+          """Return list with elements incremented by 1.
+          >>> incr_list([1, 2, 3])
+          [2, 3, 4]
+          >>> incr_list([5, 3, 5, 2, 3, 3, 9, 0, 123])
+          [6, 4, 6, 3, 4, 4, 10, 1, 124]
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the incr_list function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          return [(e + 1) for e in l]
+
+
+      TESTS:
+
+
+
+      METADATA = {}
+
+
+
+      def check(candidate):
+          assert candidate([]) == []
+          assert candidate([3, 2, 1]) == [4, 3, 2]
+          assert candidate([5, 2, 5, 2, 3, 3, 9, 0, 123]) == [6, 3, 6, 3, 4, 4, 10, 1, 124]
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-43
+    prompt: |-
+      
+
+      def pairs_sum_to_zero(l):
+          """
+          pairs_sum_to_zero takes a list of integers as an input.
+          it returns True if there are two distinct elements in the list that
+          sum to zero, and False otherwise.
+          >>> pairs_sum_to_zero([1, 3, 5, 0])
+          False
+          >>> pairs_sum_to_zero([1, 3, -2, 1])
+          False
+          >>> pairs_sum_to_zero([1, 2, 3, 7])
+          False
+          >>> pairs_sum_to_zero([2, 4, -5, 3, 5, 7])
+          True
+          >>> pairs_sum_to_zero([1])
+          False
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the pairs_sum_to_zero function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          for i, l1 in enumerate(l):
+              for j in range(i + 1, len(l)):
+                  if l1 + l[j] == 0:
+                      return True
+          return False
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate([1, 3, 5, 0]) == False
+          assert candidate([1, 3, -2, 1]) == False
+          assert candidate([1, 2, 3, 7]) == False
+          assert candidate([2, 4, -5, 3, 5, 7]) == True
+          assert candidate([1]) == False
+
+          assert candidate([-3, 9, -1, 3, 2, 30]) == True
+          assert candidate([-3, 9, -1, 3, 2, 31]) == True
+          assert candidate([-3, 9, -1, 4, 2, 30]) == False
+          assert candidate([-3, 9, -1, 4, 2, 31]) == False
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-44
+    prompt: |-
+      
+
+      def change_base(x: int, base: int):
+          """Change numerical base of input number x to base.
+          return string representation after the conversion.
+          base numbers are less than 10.
+          >>> change_base(8, 3)
+          '22'
+          >>> change_base(8, 2)
+          '1000'
+          >>> change_base(7, 2)
+          '111'
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the change_base function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          ret = ""
+          while x > 0:
+              ret = str(x % base) + ret
+              x //= base
+          return ret
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate(8, 3) == "22"
+          assert candidate(9, 3) == "100"
+          assert candidate(234, 2) == "11101010"
+          assert candidate(16, 2) == "10000"
+          assert candidate(8, 2) == "1000"
+          assert candidate(7, 2) == "111"
+          for x in range(2, 8):
+              assert candidate(x, x + 1) == str(x)
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-45
+    prompt: |-
+      
+
+      def triangle_area(a, h):
+          """Given length of a side and high return area for a triangle.
+          >>> triangle_area(5, 3)
+          7.5
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the triangle_area function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          return a * h / 2.0
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate(5, 3) == 7.5
+          assert candidate(2, 2) == 2.0
+          assert candidate(10, 8) == 40.0
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-46
+    prompt: >-
+      
+
+      def fib4(n: int):
+          """The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
+          fib4(0) -> 0
+          fib4(1) -> 0
+          fib4(2) -> 2
+          fib4(3) -> 0
+          fib4(n) -> fib4(n-1) + fib4(n-2) + fib4(n-3) + fib4(n-4).
+          Please write a function to efficiently compute the n-th element of the fib4 number sequence.  Do not use recursion.
+          >>> fib4(5)
+          4
+          >>> fib4(6)
+          8
+          >>> fib4(7)
+          14
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the fib4 function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          results = [0, 0, 2, 0]
+          if n < 4:
+              return results[n]
+
+          for _ in range(4, n + 1):
+              results.append(results[-1] + results[-2] + results[-3] + results[-4])
+              results.pop(0)
+
+          return results[-1]
+
+
+      TESTS:
+
+
+
+      METADATA = {}
+
+
+
+      def check(candidate):
+          assert candidate(5) == 4
+          assert candidate(8) == 28
+          assert candidate(10) == 104
+          assert candidate(12) == 386
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-47
+    prompt: |-
+      
+
+      def median(l: list):
+          """Return median of elements in the list l.
+          >>> median([3, 1, 2, 4, 5])
+          3
+          >>> median([-10, 4, 6, 1000, 10, 20])
+          15.0
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the median function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          l = sorted(l)
+          if len(l) % 2 == 1:
+              return l[len(l) // 2]
+          else:
+              return (l[len(l) // 2 - 1] + l[len(l) // 2]) / 2.0
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate([3, 1, 2, 4, 5]) == 3
+          assert candidate([-10, 4, 6, 1000, 10, 20]) == 8.0
+          assert candidate([5]) == 5
+          assert candidate([6, 5]) == 5.5
+          assert candidate([8, 1, 3, 9, 9, 2, 7]) == 7 
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-48
+    prompt: |-
+      
+
+      def is_palindrome(text: str):
+          """
+          Checks if given string is a palindrome
+          >>> is_palindrome('')
+          True
+          >>> is_palindrome('aba')
+          True
+          >>> is_palindrome('aaaaa')
+          True
+          >>> is_palindrome('zbcd')
+          False
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the is_palindrome function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          for i in range(len(text)):
+              if text[i] != text[len(text) - 1 - i]:
+                  return False
+          return True
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate('') == True
+          assert candidate('aba') == True
+          assert candidate('aaaaa') == True
+          assert candidate('zbcd') == False
+          assert candidate('xywyx') == True
+          assert candidate('xywyz') == False
+          assert candidate('xywzx') == False
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-49
+    prompt: |-
+      
+
+      def modp(n: int, p: int):
+          """Return 2^n modulo p (be aware of numerics).
+          >>> modp(3, 5)
+          3
+          >>> modp(1101, 101)
+          2
+          >>> modp(0, 101)
+          1
+          >>> modp(3, 11)
+          8
+          >>> modp(100, 101)
+          1
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the modp function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          ret = 1
+          for i in range(n):
+              ret = (2 * ret) % p
+          return ret
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate(3, 5) == 3
+          assert candidate(1101, 101) == 2
+          assert candidate(0, 101) == 1
+          assert candidate(3, 11) == 8
+          assert candidate(100, 101) == 1
+          assert candidate(30, 5) == 4
+          assert candidate(31, 5) == 3
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-50
+    prompt: >-
+      
+
+      def encode_shift(s: str):
+          """
+          returns encoded string by shifting every character by 5 in the alphabet.
+          """
+          return "".join([chr(((ord(ch) + 5 - ord("a")) % 26) + ord("a")) for ch in s])
+
+
+      def decode_shift(s: str):
+          """
+          takes as input string encoded with encode_shift function. Returns decoded string.
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the decode_shift function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          return "".join([chr(((ord(ch) - 5 - ord("a")) % 26) + ord("a")) for ch in s])
+
+
+      TESTS:
+
+
+
+      METADATA = {}
+
+
+
+      def check(candidate):
+          from random import randint, choice
+          import copy
+          import string
+
+          letters = string.ascii_lowercase
+          for _ in range(100):
+              str = ''.join(choice(letters) for i in range(randint(10, 20)))
+              encoded_str = encode_shift(str)
+              assert candidate(copy.deepcopy(encoded_str)) == str
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-51
+    prompt: >-
+      
+
+      def remove_vowels(text):
+          """
+          remove_vowels is a function that takes string and returns string without vowels.
+          >>> remove_vowels('')
+          ''
+          >>> remove_vowels("abcdef\nghijklm")
+          'bcdf\nghjklm'
+          >>> remove_vowels('abcdef')
+          'bcdf'
+          >>> remove_vowels('aaaaa')
+          ''
+          >>> remove_vowels('aaBAA')
+          'B'
+          >>> remove_vowels('zbcd')
+          'zbcd'
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the remove_vowels function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          return "".join([s for s in text if s.lower() not in ["a", "e", "i", "o", "u"]])
+
+
+      TESTS:
+
+
+
+      METADATA = {}
+
+
+
+      def check(candidate):
+          assert candidate('') == ''
+          assert candidate("abcdef\nghijklm") == 'bcdf\nghjklm'
+          assert candidate('fedcba') == 'fdcb'
+          assert candidate('eeeee') == ''
+          assert candidate('acBAA') == 'cB'
+          assert candidate('EcBOO') == 'cB'
+          assert candidate('ybcd') == 'ybcd'
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-52
+    prompt: |-
+      
+
+      def below_threshold(l: list, t: int):
+          """Return True if all numbers in the list l are below threshold t.
+          >>> below_threshold([1, 2, 4, 10], 100)
+          True
+          >>> below_threshold([1, 20, 4, 10], 5)
+          False
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the below_threshold function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          for e in l:
+              if e >= t:
+                  return False
+          return True
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate([1, 2, 4, 10], 100)
+          assert not candidate([1, 20, 4, 10], 5)
+          assert candidate([1, 20, 4, 10], 21)
+          assert candidate([1, 20, 4, 10], 22)
+          assert candidate([1, 8, 4, 10], 11)
+          assert not candidate([1, 8, 4, 10], 10)
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-53
+    prompt: |-
+      
+
+      def add(x: int, y: int):
+          """Add two numbers x and y
+          >>> add(2, 3)
+          5
+          >>> add(5, 7)
+          12
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the add function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          return x + y
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          import random
+
+          assert candidate(0, 1) == 1
+          assert candidate(1, 0) == 1
+          assert candidate(2, 3) == 5
+          assert candidate(5, 7) == 12
+          assert candidate(7, 5) == 12
+
+          for i in range(100):
+              x, y = random.randint(0, 1000), random.randint(0, 1000)
+              assert candidate(x, y) == x + y
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-54
+    prompt: |-
+      
+
+      def same_chars(s0: str, s1: str):
+          """
+          Check if two words have the same characters.
+          >>> same_chars('eabcdzzzz', 'dddzzzzzzzddeddabc')
+          True
+          >>> same_chars('abcd', 'dddddddabc')
+          True
+          >>> same_chars('dddddddabc', 'abcd')
+          True
+          >>> same_chars('eabcd', 'dddddddabc')
+          False
+          >>> same_chars('abcd', 'dddddddabce')
+          False
+          >>> same_chars('eabcdzzzz', 'dddzzzzzzzddddabc')
+          False
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the same_chars function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          return set(s0) == set(s1)
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate('eabcdzzzz', 'dddzzzzzzzddeddabc') == True
+          assert candidate('abcd', 'dddddddabc') == True
+          assert candidate('dddddddabc', 'abcd') == True
+          assert candidate('eabcd', 'dddddddabc') == False
+          assert candidate('abcd', 'dddddddabcf') == False
+          assert candidate('eabcdzzzz', 'dddzzzzzzzddddabc') == False
+          assert candidate('aabb', 'aaccc') == False
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-55
+    prompt: |-
+      
+
+      def fib(n: int):
+          """Return n-th Fibonacci number.
+          >>> fib(10)
+          55
+          >>> fib(1)
+          1
+          >>> fib(8)
+          21
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the fib function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          if n == 0:
+              return 0
+          if n == 1:
+              return 1
+          return fib(n - 1) + fib(n - 2)
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate(10) == 55
+          assert candidate(1) == 1
+          assert candidate(8) == 21
+          assert candidate(11) == 89
+          assert candidate(12) == 144
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-56
+    prompt: >-
+      
+
+      def correct_bracketing(brackets: str):
+          """ brackets is a string of "<" and ">".
+          return True if every opening bracket has a corresponding closing bracket.
+
+          >>> correct_bracketing("<")
+          False
+          >>> correct_bracketing("<>")
+          True
+          >>> correct_bracketing("<<><>>")
+          True
+          >>> correct_bracketing("><<>")
+          False
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the correct_bracketing function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          depth = 0
+          for b in brackets:
+              if b == "<":
+                  depth += 1
+              else:
+                  depth -= 1
+              if depth < 0:
+                  return False
+          return depth == 0
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate("<>")
+          assert candidate("<<><>>")
+          assert candidate("<><><<><>><>")
+          assert candidate("<><><<<><><>><>><<><><<>>>")
+          assert not candidate("<<<><>>>>")
+          assert not candidate("><<>")
+          assert not candidate("<")
+          assert not candidate("<<<<")
+          assert not candidate(">")
+          assert not candidate("<<>")
+          assert not candidate("<><><<><>><>><<>")
+          assert not candidate("<><><<><>><>>><>")
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-57
+    prompt: >-
+      
+
+      def monotonic(l: list):
+          """Return True is list elements are monotonically increasing or decreasing.
+          >>> monotonic([1, 2, 4, 20])
+          True
+          >>> monotonic([1, 20, 4, 10])
+          False
+          >>> monotonic([4, 1, 0, -10])
+          True
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the monotonic function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          if l == sorted(l) or l == sorted(l, reverse=True):
+              return True
+          return False
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate([1, 2, 4, 10]) == True
+          assert candidate([1, 2, 4, 20]) == True
+          assert candidate([1, 20, 4, 10]) == False
+          assert candidate([4, 1, 0, -10]) == True
+          assert candidate([4, 1, 1, 0]) == True
+          assert candidate([1, 2, 3, 2, 5, 60]) == False
+          assert candidate([1, 2, 3, 4, 5, 60]) == True
+          assert candidate([9, 9, 9, 9]) == True
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-58
+    prompt: |-
+      
+
+      def common(l1: list, l2: list):
+          """Return sorted unique common elements for two lists.
+          >>> common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
+          [1, 5, 653]
+          >>> common([5, 3, 2, 8], [3, 2])
+          [2, 3]
+
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the common function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          ret = set()
+          for e1 in l1:
+              for e2 in l2:
+                  if e1 == e2:
+                      ret.add(e1)
+          return sorted(list(ret))
+
+
+      TESTS:
+
+
+
+      METADATA = {}
+
+
+
+      def check(candidate):
+          assert candidate([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121]) == [1, 5, 653]
+          assert candidate([5, 3, 2, 8], [3, 2]) == [2, 3]
+          assert candidate([4, 3, 2, 8], [3, 2, 4]) == [2, 3, 4]
+          assert candidate([4, 3, 2, 8], []) == []
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-59
+    prompt: >-
+      
+
+      def largest_prime_factor(n: int):
+          """Return the largest prime factor of n. Assume n > 1 and is not a prime.
+          >>> largest_prime_factor(13195)
+          29
+          >>> largest_prime_factor(2048)
+          2
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the largest_prime_factor function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          def is_prime(k):
+              if k < 2:
+                  return False
+              for i in range(2, k - 1):
+                  if k % i == 0:
+                      return False
+              return True
+          largest = 1
+          for j in range(2, n + 1):
+              if n % j == 0 and is_prime(j):
+                  largest = max(largest, j)
+          return largest
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate(15) == 5
+          assert candidate(27) == 3
+          assert candidate(63) == 7
+          assert candidate(330) == 11
+          assert candidate(13195) == 29
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-60
+    prompt: |-
+      
+
+      def sum_to_n(n: int):
+          """sum_to_n is a function that sums numbers from 1 to n.
+          >>> sum_to_n(30)
+          465
+          >>> sum_to_n(100)
+          5050
+          >>> sum_to_n(5)
+          15
+          >>> sum_to_n(10)
+          55
+          >>> sum_to_n(1)
+          1
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the sum_to_n function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          return sum(range(n + 1))
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate(1) == 1
+          assert candidate(6) == 21
+          assert candidate(11) == 66
+          assert candidate(30) == 465
+          assert candidate(100) == 5050
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-61
+    prompt: >-
+      
+
+      def correct_bracketing(brackets: str):
+          """ brackets is a string of "(" and ")".
+          return True if every opening bracket has a corresponding closing bracket.
+
+          >>> correct_bracketing("(")
+          False
+          >>> correct_bracketing("()")
+          True
+          >>> correct_bracketing("(()())")
+          True
+          >>> correct_bracketing(")(()")
+          False
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the correct_bracketing function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          depth = 0
+          for b in brackets:
+              if b == "(":
+                  depth += 1
+              else:
+                  depth -= 1
+              if depth < 0:
+                  return False
+          return depth == 0
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate("()")
+          assert candidate("(()())")
+          assert candidate("()()(()())()")
+          assert candidate("()()((()()())())(()()(()))")
+          assert not candidate("((()())))")
+          assert not candidate(")(()")
+          assert not candidate("(")
+          assert not candidate("((((")
+          assert not candidate(")")
+          assert not candidate("(()")
+          assert not candidate("()()(()())())(()")
+          assert not candidate("()()(()())()))()")
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-62
+    prompt: |-
+      
+
+      def derivative(xs: list):
+          """ xs represent coefficients of a polynomial.
+          xs[0] + xs[1] * x + xs[2] * x^2 + ....
+           Return derivative of this polynomial in the same form.
+          >>> derivative([3, 1, 2, 4, 5])
+          [1, 4, 12, 20]
+          >>> derivative([1, 2, 3])
+          [2, 6]
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the derivative function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          return [(i * x) for i, x in enumerate(xs)][1:]
+
+
+      TESTS:
+
+
+      METADATA = {}
+
+
+      def check(candidate):
+          assert candidate([3, 1, 2, 4, 5]) == [1, 4, 12, 20]
+          assert candidate([1, 2, 3]) == [2, 6]
+          assert candidate([3, 2, 1]) == [2, 2]
+          assert candidate([3, 2, 1, 0, 4]) == [2, 2, 0, 16]
+          assert candidate([1]) == []
+
+    tags:
+      - coding
+      - python
+      - function

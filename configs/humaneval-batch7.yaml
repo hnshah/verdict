@@ -1,0 +1,34 @@
+models:
+  - id: qwen-coder-7b
+    name: Qwen 2.5 Coder 7B
+    provider: ollama
+    model: qwen2.5-coder:7b
+  
+  - id: qwen-coder-14b
+    name: Qwen 2.5 Coder 14B
+    provider: ollama
+    model: qwen2.5-coder:14b
+  
+  - id: qwen-coder-32b
+    name: Qwen 2.5 Coder 32B
+    provider: ollama
+    model: qwen2.5-coder:32b
+  
+  - id: qwen-7b
+    name: Qwen 2.5 7B (baseline)
+    provider: ollama
+    model: qwen2.5:7b
+
+judge:
+  model: qwen-coder-14b
+
+packs:
+  - ../eval-packs/humaneval-batch7.yaml
+
+run:
+  concurrency: 1
+
+metadata:
+  hardware: "Apple M2 Max 64GB"
+  author: "Rak"
+  purpose: "HumanEval Batch 7/8 - Memory-safe sequential execution"

@@ -1,0 +1,1095 @@
+name: HumanEval Batch 8 (cases 147-163)
+description: Batch 8 of 8 - HumanEval Python coding benchmark
+cases:
+  - id: humaneval-147
+    prompt: >-
+      
+      def get_max_triples(n):
+          """
+          You are given a positive integer n. You have to create an integer array a of length n.
+              For each i (1 ≤ i ≤ n), the value of a[i] = i * i - i + 1.
+              Return the number of triples (a[i], a[j], a[k]) of a where i < j < k, 
+          and a[i] + a[j] + a[k] is a multiple of 3.
+
+          Example :
+              Input: n = 5
+              Output: 1
+              Explanation: 
+              a = [1, 3, 7, 13, 21]
+              The only valid triple is (1, 7, 13).
+          """
+
+
+      # Write the complete function implementation
+    criteria: |
+      MUST:
+      - Implement the get_max_triples function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          A = [i*i - i + 1 for i in range(1,n+1)]
+          ans = []
+          for i in range(n):
+              for j in range(i+1,n):
+                  for k in range(j+1,n):
+                      if (A[i]+A[j]+A[k])%3 == 0:
+                          ans += [(A[i],A[j],A[k])]
+          return len(ans)
+
+
+      TESTS:
+      def check(candidate):
+
+          assert candidate(5) == 1
+          assert candidate(6) == 4
+          assert candidate(10) == 36
+          assert candidate(100) == 53361
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-148
+    prompt: >-
+      
+      def bf(planet1, planet2):
+          '''
+          There are eight planets in our solar system: the closerst to the Sun 
+          is Mercury, the next one is Venus, then Earth, Mars, Jupiter, Saturn, 
+          Uranus, Neptune.
+          Write a function that takes two planet names as strings planet1 and planet2. 
+          The function should return a tuple containing all planets whose orbits are 
+          located between the orbit of planet1 and the orbit of planet2, sorted by 
+          the proximity to the sun. 
+          The function should return an empty tuple if planet1 or planet2
+          are not correct planet names. 
+          Examples
+          bf("Jupiter", "Neptune") ==> ("Saturn", "Uranus")
+          bf("Earth", "Mercury") ==> ("Venus")
+          bf("Mercury", "Uranus") ==> ("Venus", "Earth", "Mars", "Jupiter", "Saturn")
+          '''
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the bf function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          planet_names = ("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
+          if planet1 not in planet_names or planet2 not in planet_names or planet1 == planet2:
+              return ()
+          planet1_index = planet_names.index(planet1)
+          planet2_index = planet_names.index(planet2)
+          if planet1_index < planet2_index:
+              return (planet_names[planet1_index + 1: planet2_index])
+          else:
+              return (planet_names[planet2_index + 1 : planet1_index])
+
+
+      TESTS:
+
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate("Jupiter", "Neptune") == ("Saturn", "Uranus"), "First test error: " + str(len(candidate("Jupiter", "Neptune")))      
+          assert candidate("Earth", "Mercury") == ("Venus",), "Second test error: " + str(candidate("Earth", "Mercury"))  
+          assert candidate("Mercury", "Uranus") == ("Venus", "Earth", "Mars", "Jupiter", "Saturn"), "Third test error: " + str(candidate("Mercury", "Uranus"))      
+          assert candidate("Neptune", "Venus") == ("Earth", "Mars", "Jupiter", "Saturn", "Uranus"), "Fourth test error: " + str(candidate("Neptune", "Venus"))  
+
+
+          # Check some edge cases that are easy to work out by hand.
+          assert candidate("Earth", "Earth") == ()
+          assert candidate("Mars", "Earth") == ()
+          assert candidate("Jupiter", "Makemake") == ()
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-149
+    prompt: >-
+      
+      def sorted_list_sum(lst):
+          """Write a function that accepts a list of strings as a parameter,
+          deletes the strings that have odd lengths from it,
+          and returns the resulted list with a sorted order,
+          The list is always a list of strings and never an array of numbers,
+          and it may contain duplicates.
+          The order of the list should be ascending by length of each word, and you
+          should return the list sorted by that rule.
+          If two words have the same length, sort the list alphabetically.
+          The function should return a list of strings in sorted order.
+          You may assume that all words will have the same length.
+          For example:
+          assert list_sort(["aa", "a", "aaa"]) => ["aa"]
+          assert list_sort(["ab", "a", "aaa", "cd"]) => ["ab", "cd"]
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the sorted_list_sum function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          lst.sort()
+          new_lst = []
+          for i in lst:
+              if len(i)%2 == 0:
+                  new_lst.append(i)
+          return sorted(new_lst, key=len)
+
+
+      TESTS:
+
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate(["aa", "a", "aaa"]) == ["aa"]
+          assert candidate(["school", "AI", "asdf", "b"]) == ["AI", "asdf", "school"]
+          assert candidate(["d", "b", "c", "a"]) == []
+          assert candidate(["d", "dcba", "abcd", "a"]) == ["abcd", "dcba"]
+
+          # Check some edge cases that are easy to work out by hand.
+          assert candidate(["AI", "ai", "au"]) == ["AI", "ai", "au"]
+          assert candidate(["a", "b", "b", "c", "c", "a"]) == []
+          assert candidate(['aaaa', 'bbbb', 'dd', 'cc']) == ["cc", "dd", "aaaa", "bbbb"]
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-150
+    prompt: |-
+      
+      def x_or_y(n, x, y):
+          """A simple program which should return the value of x if n is 
+          a prime number and should return the value of y otherwise.
+
+          Examples:
+          for x_or_y(7, 34, 12) == 34
+          for x_or_y(15, 8, 5) == 5
+          
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the x_or_y function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          if n == 1:
+              return y
+          for i in range(2, n):
+              if n % i == 0:
+                  return y
+                  break
+          else:
+              return x
+
+
+      TESTS:
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate(7, 34, 12) == 34
+          assert candidate(15, 8, 5) == 5
+          assert candidate(3, 33, 5212) == 33
+          assert candidate(1259, 3, 52) == 3
+          assert candidate(7919, -1, 12) == -1
+          assert candidate(3609, 1245, 583) == 583
+          assert candidate(91, 56, 129) == 129
+          assert candidate(6, 34, 1234) == 1234
+          
+
+          # Check some edge cases that are easy to work out by hand.
+          assert candidate(1, 2, 0) == 0
+          assert candidate(2, 2, 0) == 2
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-151
+    prompt: >-
+      
+      def double_the_difference(lst):
+          '''
+          Given a list of numbers, return the sum of squares of the numbers
+          in the list that are odd. Ignore numbers that are negative or not integers.
+          
+          double_the_difference([1, 3, 2, 0]) == 1 + 9 + 0 + 0 = 10
+          double_the_difference([-1, -2, 0]) == 0
+          double_the_difference([9, -2]) == 81
+          double_the_difference([0]) == 0  
+         
+          If the input list is empty, return 0.
+          '''
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the double_the_difference function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          return sum([i**2 for i in lst if i > 0 and i%2!=0 and "." not in str(i)])
+
+
+      TESTS:
+
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate([]) == 0 , "This prints if this assert fails 1 (good for debugging!)"
+          assert candidate([5, 4]) == 25 , "This prints if this assert fails 2 (good for debugging!)"
+          assert candidate([0.1, 0.2, 0.3]) == 0 , "This prints if this assert fails 3 (good for debugging!)"
+          assert candidate([-10, -20, -30]) == 0 , "This prints if this assert fails 4 (good for debugging!)"
+
+
+          # Check some edge cases that are easy to work out by hand.
+          assert candidate([-1, -2, 8]) == 0, "This prints if this assert fails 5 (also good for debugging!)"
+          assert candidate([0.2, 3, 5]) == 34, "This prints if this assert fails 6 (also good for debugging!)"
+          lst = list(range(-99, 100, 2))
+          odd_sum = sum([i**2 for i in lst if i%2!=0 and i > 0])
+          assert candidate(lst) == odd_sum , "This prints if this assert fails 7 (good for debugging!)"
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-152
+    prompt: >-
+      
+      def compare(game,guess):
+          """I think we all remember that feeling when the result of some long-awaited
+          event is finally known. The feelings and thoughts you have at that moment are
+          definitely worth noting down and comparing.
+          Your task is to determine if a person correctly guessed the results of a number of matches.
+          You are given two arrays of scores and guesses of equal length, where each index shows a match. 
+          Return an array of the same length denoting how far off each guess was. If they have guessed correctly,
+          the value is 0, and if not, the value is the absolute difference between the guess and the score.
+          
+          
+          example:
+
+          compare([1,2,3,4,5,1],[1,2,3,4,2,-2]) -> [0,0,0,0,3,3]
+          compare([0,5,0,0,0,4],[4,1,1,0,0,-2]) -> [4,4,1,0,0,6]
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the compare function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          return [abs(x-y) for x,y in zip(game,guess)]
+
+
+      TESTS:
+
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate([1,2,3,4,5,1],[1,2,3,4,2,-2])==[0,0,0,0,3,3], "This prints if this assert fails 1 (good for debugging!)"
+          assert candidate([0,0,0,0,0,0],[0,0,0,0,0,0])==[0,0,0,0,0,0], "This prints if this assert fails 1 (good for debugging!)"
+          assert candidate([1,2,3],[-1,-2,-3])==[2,4,6], "This prints if this assert fails 1 (good for debugging!)"
+          assert candidate([1,2,3,5],[-1,2,3,4])==[2,0,0,1], "This prints if this assert fails 1 (good for debugging!)"
+
+          # Check some edge cases that are easy to work out by hand.
+          assert True, "This prints if this assert fails 2 (also good for debugging!)"
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-153
+    prompt: >-
+      
+      def Strongest_Extension(class_name, extensions):
+          """You will be given the name of a class (a string) and a list of extensions.
+          The extensions are to be used to load additional classes to the class. The
+          strength of the extension is as follows: Let CAP be the number of the uppercase
+          letters in the extension's name, and let SM be the number of lowercase letters 
+          in the extension's name, the strength is given by the fraction CAP - SM. 
+          You should find the strongest extension and return a string in this 
+          format: ClassName.StrongestExtensionName.
+          If there are two or more extensions with the same strength, you should
+          choose the one that comes first in the list.
+          For example, if you are given "Slices" as the class and a list of the
+          extensions: ['SErviNGSliCes', 'Cheese', 'StuFfed'] then you should
+          return 'Slices.SErviNGSliCes' since 'SErviNGSliCes' is the strongest extension 
+          (its strength is -1).
+          Example:
+          for Strongest_Extension('my_class', ['AA', 'Be', 'CC']) == 'my_class.AA'
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the Strongest_Extension function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          strong = extensions[0]
+          my_val = len([x for x in extensions[0] if x.isalpha() and x.isupper()]) - len([x for x in extensions[0] if x.isalpha() and x.islower()])
+          for s in extensions:
+              val = len([x for x in s if x.isalpha() and x.isupper()]) - len([x for x in s if x.isalpha() and x.islower()])
+              if val > my_val:
+                  strong = s
+                  my_val = val
+
+          ans = class_name + "." + strong
+          return ans
+
+
+
+      TESTS:
+
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate('Watashi', ['tEN', 'niNE', 'eIGHt8OKe']) == 'Watashi.eIGHt8OKe'
+          assert candidate('Boku123', ['nani', 'NazeDa', 'YEs.WeCaNe', '32145tggg']) == 'Boku123.YEs.WeCaNe'
+          assert candidate('__YESIMHERE', ['t', 'eMptY', 'nothing', 'zeR00', 'NuLl__', '123NoooneB321']) == '__YESIMHERE.NuLl__'
+          assert candidate('K', ['Ta', 'TAR', 't234An', 'cosSo']) == 'K.TAR'
+          assert candidate('__HAHA', ['Tab', '123', '781345', '-_-']) == '__HAHA.123'
+          assert candidate('YameRore', ['HhAas', 'okIWILL123', 'WorkOut', 'Fails', '-_-']) == 'YameRore.okIWILL123'
+          assert candidate('finNNalLLly', ['Die', 'NowW', 'Wow', 'WoW']) == 'finNNalLLly.WoW'
+
+          # Check some edge cases that are easy to work out by hand.
+          assert candidate('_', ['Bb', '91245']) == '_.Bb'
+          assert candidate('Sp', ['671235', 'Bb']) == 'Sp.671235'
+          
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-154
+    prompt: >-
+      
+      def cycpattern_check(a , b):
+          """You are given 2 words. You need to return True if the second word or any of its rotations is a substring in the first word
+          cycpattern_check("abcd","abd") => False
+          cycpattern_check("hello","ell") => True
+          cycpattern_check("whassup","psus") => False
+          cycpattern_check("abab","baa") => True
+          cycpattern_check("efef","eeff") => False
+          cycpattern_check("himenss","simen") => True
+
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the cycpattern_check function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          l = len(b)
+          pat = b + b
+          for i in range(len(a) - l + 1):
+              for j in range(l + 1):
+                  if a[i:i+l] == pat[j:j+l]:
+                      return True
+          return False
+
+
+      TESTS:
+
+      def check(candidate):
+
+          # Check some simple cases
+          #assert True, "This prints if this assert fails 1 (good for debugging!)"
+
+          # Check some edge cases that are easy to work out by hand.
+          #assert True, "This prints if this assert fails 2 (also good for debugging!)"
+          assert  candidate("xyzw","xyw") == False , "test #0"
+          assert  candidate("yello","ell") == True , "test #1"
+          assert  candidate("whattup","ptut") == False , "test #2"
+          assert  candidate("efef","fee") == True , "test #3"
+          assert  candidate("abab","aabb") == False , "test #4"
+          assert  candidate("winemtt","tinem") == True , "test #5"
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-155
+    prompt: >-
+      
+      def even_odd_count(num):
+          """Given an integer. return a tuple that has the number of even and odd digits respectively.
+
+           Example:
+              even_odd_count(-12) ==> (1, 1)
+              even_odd_count(123) ==> (1, 2)
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the even_odd_count function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          even_count = 0
+          odd_count = 0
+          for i in str(abs(num)):
+              if int(i)%2==0:
+                  even_count +=1
+              else:
+                  odd_count +=1
+          return (even_count, odd_count)
+
+
+      TESTS:
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate(7) == (0, 1)
+          assert candidate(-78) == (1, 1)
+          assert candidate(3452) == (2, 2)
+          assert candidate(346211) == (3, 3)
+          assert candidate(-345821) == (3, 3)
+          assert candidate(-2) == (1, 0)
+          assert candidate(-45347) == (2, 3)
+          assert candidate(0) == (1, 0)
+
+
+          # Check some edge cases that are easy to work out by hand.
+          assert True
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-156
+    prompt: >-
+      
+      def int_to_mini_roman(number):
+          """
+          Given a positive integer, obtain its roman numeral equivalent as a string,
+          and return it in lowercase.
+          Restrictions: 1 <= num <= 1000
+
+          Examples:
+          >>> int_to_mini_roman(19) == 'xix'
+          >>> int_to_mini_roman(152) == 'clii'
+          >>> int_to_mini_roman(426) == 'cdxxvi'
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the int_to_mini_roman function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          num = [1, 4, 5, 9, 10, 40, 50, 90,  
+                 100, 400, 500, 900, 1000] 
+          sym = ["I", "IV", "V", "IX", "X", "XL",  
+                 "L", "XC", "C", "CD", "D", "CM", "M"] 
+          i = 12
+          res = ''
+          while number: 
+              div = number // num[i] 
+              number %= num[i] 
+              while div: 
+                  res += sym[i] 
+                  div -= 1
+              i -= 1
+          return res.lower()
+
+
+      TESTS:
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate(19) == 'xix'
+          assert candidate(152) == 'clii'
+          assert candidate(251) == 'ccli'
+          assert candidate(426) == 'cdxxvi'
+          assert candidate(500) == 'd'
+          assert candidate(1) == 'i'
+          assert candidate(4) == 'iv'
+          assert candidate(43) == 'xliii'
+          assert candidate(90) == 'xc'
+          assert candidate(94) == 'xciv'
+          assert candidate(532) == 'dxxxii'
+          assert candidate(900) == 'cm'
+          assert candidate(994) == 'cmxciv'
+          assert candidate(1000) == 'm'
+
+          # Check some edge cases that are easy to work out by hand.
+          assert True
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-157
+    prompt: >-
+      
+      def right_angle_triangle(a, b, c):
+          '''
+          Given the lengths of the three sides of a triangle. Return True if the three
+          sides form a right-angled triangle, False otherwise.
+          A right-angled triangle is a triangle in which one angle is right angle or 
+          90 degree.
+          Example:
+          right_angle_triangle(3, 4, 5) == True
+          right_angle_triangle(1, 2, 3) == False
+          '''
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the right_angle_triangle function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          return a*a == b*b + c*c or b*b == a*a + c*c or c*c == a*a + b*b
+
+
+      TESTS:
+
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate(3, 4, 5) == True, "This prints if this assert fails 1 (good for debugging!)"
+          assert candidate(1, 2, 3) == False
+          assert candidate(10, 6, 8) == True
+          assert candidate(2, 2, 2) == False
+          assert candidate(7, 24, 25) == True
+          assert candidate(10, 5, 7) == False
+          assert candidate(5, 12, 13) == True
+          assert candidate(15, 8, 17) == True
+          assert candidate(48, 55, 73) == True
+
+          # Check some edge cases that are easy to work out by hand.
+          assert candidate(1, 1, 1) == False, "This prints if this assert fails 2 (also good for debugging!)"
+          assert candidate(2, 2, 10) == False
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-158
+    prompt: >-
+      
+      def find_max(words):
+          """Write a function that accepts a list of strings.
+          The list contains different words. Return the word with maximum number
+          of unique characters. If multiple strings have maximum number of unique
+          characters, return the one which comes first in lexicographical order.
+
+          find_max(["name", "of", "string"]) == "string"
+          find_max(["name", "enam", "game"]) == "enam"
+          find_max(["aaaaaaa", "bb" ,"cc"]) == ""aaaaaaa"
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the find_max function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          return sorted(words, key = lambda x: (-len(set(x)), x))[0]
+
+
+      TESTS:
+
+      def check(candidate):
+
+          # Check some simple cases
+          assert (candidate(["name", "of", "string"]) == "string"), "t1"
+          assert (candidate(["name", "enam", "game"]) == "enam"), 't2'
+          assert (candidate(["aaaaaaa", "bb", "cc"]) == "aaaaaaa"), 't3'
+          assert (candidate(["abc", "cba"]) == "abc"), 't4'
+          assert (candidate(["play", "this", "game", "of","footbott"]) == "footbott"), 't5'
+          assert (candidate(["we", "are", "gonna", "rock"]) == "gonna"), 't6'
+          assert (candidate(["we", "are", "a", "mad", "nation"]) == "nation"), 't7'
+          assert (candidate(["this", "is", "a", "prrk"]) == "this"), 't8'
+
+          # Check some edge cases that are easy to work out by hand.
+          assert (candidate(["b"]) == "b"), 't9'
+          assert (candidate(["play", "play", "play"]) == "play"), 't10'
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-159
+    prompt: >-
+      
+      def eat(number, need, remaining):
+          """
+          You're a hungry rabbit, and you already have eaten a certain number of carrots,
+          but now you need to eat more carrots to complete the day's meals.
+          you should return an array of [ total number of eaten carrots after your meals,
+                                          the number of carrots left after your meals ]
+          if there are not enough remaining carrots, you will eat all remaining carrots, but will still be hungry.
+          
+          Example:
+          * eat(5, 6, 10) -> [11, 4]
+          * eat(4, 8, 9) -> [12, 1]
+          * eat(1, 10, 10) -> [11, 0]
+          * eat(2, 11, 5) -> [7, 0]
+          
+          Variables:
+          @number : integer
+              the number of carrots that you have eaten.
+          @need : integer
+              the number of carrots that you need to eat.
+          @remaining : integer
+              the number of remaining carrots thet exist in stock
+          
+          Constrain:
+          * 0 <= number <= 1000
+          * 0 <= need <= 1000
+          * 0 <= remaining <= 1000
+
+          Have fun :)
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the eat function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          if(need <= remaining):
+              return [ number + need , remaining-need ]
+          else:
+              return [ number + remaining , 0]
+
+
+      TESTS:
+
+      def check(candidate):
+
+          # Check some simple cases
+          assert True, "This prints if this assert fails 1 (good for debugging!)"
+          assert candidate(5, 6, 10) == [11, 4], "Error"
+          assert candidate(4, 8, 9) == [12, 1], "Error"
+          assert candidate(1, 10, 10) == [11, 0], "Error"
+          assert candidate(2, 11, 5) == [7, 0], "Error"
+
+          # Check some edge cases that are easy to work out by hand.
+          assert True, "This prints if this assert fails 2 (also good for debugging!)"
+          assert candidate(4, 5, 7) == [9, 2], "Error"
+          assert candidate(4, 5, 1) == [5, 0], "Error"
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-160
+    prompt: >-
+      
+      def do_algebra(operator, operand):
+          """
+          Given two lists operator, and operand. The first list has basic algebra operations, and 
+          the second list is a list of integers. Use the two given lists to build the algebric 
+          expression and return the evaluation of this expression.
+
+          The basic algebra operations:
+          Addition ( + ) 
+          Subtraction ( - ) 
+          Multiplication ( * ) 
+          Floor division ( // ) 
+          Exponentiation ( ** ) 
+
+          Example:
+          operator['+', '*', '-']
+          array = [2, 3, 4, 5]
+          result = 2 + 3 * 4 - 5
+          => result = 9
+
+          Note:
+              The length of operator list is equal to the length of operand list minus one.
+              Operand is a list of of non-negative integers.
+              Operator list has at least one operator, and operand list has at least two operands.
+
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the do_algebra function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          expression = str(operand[0])
+          for oprt, oprn in zip(operator, operand[1:]):
+              expression+= oprt + str(oprn)
+          return eval(expression)
+
+
+      TESTS:
+
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate(['**', '*', '+'], [2, 3, 4, 5]) == 37
+          assert candidate(['+', '*', '-'], [2, 3, 4, 5]) == 9
+          assert candidate(['//', '*'], [7, 3, 4]) == 8, "This prints if this assert fails 1 (good for debugging!)"
+
+          # Check some edge cases that are easy to work out by hand.
+          assert True, "This prints if this assert fails 2 (also good for debugging!)"
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-161
+    prompt: >-
+      
+      def solve(s):
+          """You are given a string s.
+          if s[i] is a letter, reverse its case from lower to upper or vise versa, 
+          otherwise keep it as it is.
+          If the string contains no letters, reverse the string.
+          The function should return the resulted string.
+          Examples
+          solve("1234") = "4321"
+          solve("ab") = "AB"
+          solve("#a@C") = "#A@c"
+          """
+
+
+      # Write the complete function implementation
+    criteria: |
+      MUST:
+      - Implement the solve function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          flg = 0
+          idx = 0
+          new_str = list(s)
+          for i in s:
+              if i.isalpha():
+                  new_str[idx] = i.swapcase()
+                  flg = 1
+              idx += 1
+          s = ""
+          for i in new_str:
+              s += i
+          if flg == 0:
+              return s[len(s)::-1]
+          return s
+
+
+      TESTS:
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate("AsDf") == "aSdF"
+          assert candidate("1234") == "4321"
+          assert candidate("ab") == "AB"
+          assert candidate("#a@C") == "#A@c"
+          assert candidate("#AsdfW^45") == "#aSDFw^45"
+          assert candidate("#6@2") == "2@6#"
+
+          # Check some edge cases that are easy to work out by hand.
+          assert candidate("#$a^D") == "#$A^d"
+          assert candidate("#ccc") == "#CCC"
+
+          # Don't remove this line:
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-162
+    prompt: |-
+      
+      def string_to_md5(text):
+          """
+          Given a string 'text', return its md5 hash equivalent string.
+          If 'text' is an empty string, return None.
+
+          >>> string_to_md5('Hello world') == '3e25960a79dbc69b674cd4ec67a72c62'
+          """
+
+
+      # Write the complete function implementation
+    criteria: |+
+      MUST:
+      - Implement the string_to_md5 function correctly
+      - Pass all test cases
+      - Handle edge cases appropriately
+
+      QUALITY:
+      - Clean, readable code
+      - Proper error handling
+      - Efficient implementation
+
+      REFERENCE SOLUTION:
+          import hashlib
+          return hashlib.md5(text.encode('ascii')).hexdigest() if text else None
+
+
+      TESTS:
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate('Hello world') == '3e25960a79dbc69b674cd4ec67a72c62'
+          assert candidate('') == None
+          assert candidate('A B C') == '0ef78513b0cb8cef12743f5aeb35f888'
+          assert candidate('password') == '5f4dcc3b5aa765d61d8327deb882cf99'
+
+          # Check some edge cases that are easy to work out by hand.
+          assert True
+
+    tags:
+      - coding
+      - python
+      - function
+  - id: humaneval-163
+    prompt: |-
+      
+      def generate_integers(a, b):
+          """
+          Given two positive integers a and b, return the even digits between a
+          and b, in ascending order.
+
+          For example:
+          generate_integers(2, 8) => [2, 4, 6, 8]
+          generate_integers(8, 2) => [2, 4, 6, 8]
+          generate_integers(10, 14) => []
+          """
+
+
+      # Write the complete function implementation
+    criteria: >+
+      MUST:
+
+      - Implement the generate_integers function correctly
+
+      - Pass all test cases
+
+      - Handle edge cases appropriately
+
+
+      QUALITY:
+
+      - Clean, readable code
+
+      - Proper error handling
+
+      - Efficient implementation
+
+
+      REFERENCE SOLUTION:
+          lower = max(2, min(a, b))
+          upper = min(8, max(a, b))
+
+          return [i for i in range(lower, upper+1) if i % 2 == 0]
+
+
+      TESTS:
+
+      def check(candidate):
+
+          # Check some simple cases
+          assert candidate(2, 10) == [2, 4, 6, 8], "Test 1"
+          assert candidate(10, 2) == [2, 4, 6, 8], "Test 2"
+          assert candidate(132, 2) == [2, 4, 6, 8], "Test 3"
+          assert candidate(17,89) == [], "Test 4"
+
+          # Check some edge cases that are easy to work out by hand.
+          assert True, "This prints if this assert fails 2 (also good for debugging!)"
+
+    tags:
+      - coding
+      - python
+      - function

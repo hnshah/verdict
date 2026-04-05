@@ -1,0 +1,30 @@
+models:
+  - id: qwen-coder-7b
+    provider: ollama
+    model: qwen2.5-coder:7b
+  
+  - id: qwen-coder-14b
+    provider: ollama
+    model: qwen2.5-coder:14b
+  
+  - id: qwen-coder-32b
+    provider: ollama
+    model: qwen2.5-coder:32b
+  
+  - id: qwen-7b
+    provider: ollama
+    model: qwen2.5:7b
+
+judge:
+  model: qwen-coder-14b
+
+packs:
+  - eval-packs/humaneval-quick.yaml
+
+run:
+  concurrency: 1
+
+metadata:
+  hardware: "Apple M2 Max 64GB"
+  author: "Rak"
+  purpose: "Quick HumanEval test - 24 cases × 4 models"
