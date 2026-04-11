@@ -52,6 +52,29 @@ npm install -g verdict
 npx verdict init
 ```
 
+### Runtime notes
+
+Verdict uses `better-sqlite3` for local history, routing, and daemon state.
+That package has a native binding.
+
+If you switch Node versions or install on a fresh machine and see an error like:
+
+```text
+Could not locate the bindings file ... better_sqlite3.node
+```
+
+run:
+
+```bash
+npm rebuild better-sqlite3
+```
+
+Then rerun:
+
+```bash
+npm test
+```
+
 ### Initialize
 
 ```bash
@@ -439,6 +462,10 @@ verdict init                            # Create verdict.yaml + eval-packs/
 verdict validate [config]               # Check config for errors
 verdict models                          # Ping all configured models
 verdict models discover                 # Find Ollama/MLX models
+
+# Maintenance
+npm rebuild better-sqlite3              # Repair local SQLite native binding after Node changes
+npm test                                # Run full test suite
 
 # Run evals
 verdict run                             # Run all packs, all models
