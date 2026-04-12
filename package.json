@@ -26,13 +26,14 @@
   },
   "scripts": {
     "build": "tsup",
+    "preinstall": "node -e \"const v=process.versions.node.split('.') .map(Number); if(v[0] < 18){console.error('Verdict requires Node 18+'); process.exit(1)}\"",
     "prepublishOnly": "npm run build && npm run typecheck",
     "dev": "npx tsx src/cli/index.ts",
     "benchmark": "npx tsx scripts/benchmark.ts",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "npm run doctor && vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "npm run doctor && vitest run --coverage",
     "doctor": "node -e \"try{require('better-sqlite3');console.log('better-sqlite3 OK')}catch(e){console.error('better-sqlite3 missing or not built');console.error('Run: npm rebuild better-sqlite3');process.exit(1)}\""
   },
   "dependencies": {

@@ -72,6 +72,7 @@ npm rebuild better-sqlite3
 Then rerun:
 
 ```bash
+npm run doctor
 npm test
 ```
 
@@ -464,8 +465,9 @@ verdict models                          # Ping all configured models
 verdict models discover                 # Find Ollama/MLX models
 
 # Maintenance
+npm run doctor                          # Check native SQLite binding health
 npm rebuild better-sqlite3              # Repair local SQLite native binding after Node changes
-npm test                                # Run full test suite
+npm test                                # Run full test suite (runs doctor first)
 
 # Run evals
 verdict run                             # Run all packs, all models
