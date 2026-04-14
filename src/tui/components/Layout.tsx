@@ -18,12 +18,18 @@ const SCREEN_NAMES: Record<Screen, string> = {
   'home':       '1 Home',
   'runs':       '2 Runs',
   'models':     '3 Models',
+  'baselines':  '4 Baselines',
+  'daemon':     '5 Daemon',
+  'eval-packs': '6 Packs',
   'run-detail': 'Run Detail',
   'live-run':   'Live Run',
+  'new-run':    'New Run',
+  'compare':    'Compare',
+  'config':     'Config',
 }
 
 export function Layout({ screen, mode, title, children, footerHints }: LayoutProps) {
-  const tabs: Screen[] = ['home', 'runs', 'models']
+  const tabs: Screen[] = ['home', 'runs', 'models', 'baselines', 'daemon', 'eval-packs']
   const globalHints: [string, string][] = [
     [':', 'cmd'],
     ['/', 'filter'],

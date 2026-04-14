@@ -26,7 +26,13 @@ export type Screen =
   | 'runs'
   | 'run-detail'
   | 'live-run'
+  | 'new-run'
   | 'models'
+  | 'baselines'
+  | 'compare'
+  | 'daemon'
+  | 'eval-packs'
+  | 'config'
 
 export type Action =
   | { type: 'set-mode'; mode: Mode }
@@ -97,6 +103,9 @@ export function useKeymap() {
       if (input === '1') dispatch({ type: 'set-screen', screen: 'home' })
       if (input === '2') dispatch({ type: 'set-screen', screen: 'runs' })
       if (input === '3') dispatch({ type: 'set-screen', screen: 'models' })
+      if (input === '4') dispatch({ type: 'set-screen', screen: 'baselines' })
+      if (input === '5') dispatch({ type: 'set-screen', screen: 'daemon' })
+      if (input === '6') dispatch({ type: 'set-screen', screen: 'eval-packs' })
     }
   })
 

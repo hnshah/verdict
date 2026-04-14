@@ -17,7 +17,7 @@ const GLOBAL = [
   ['q',       'Quit'],
   ['Esc',     'Cancel / back to normal mode'],
   ['Tab',     'Next pane'],
-  ['1/2/3',   'Jump to Home / Runs / Models'],
+  ['1..6',    'Jump to Home / Runs / Models / Baselines / Daemon / Packs'],
 ]
 
 const SCREEN_KEYS: Record<string, string[][]> = {

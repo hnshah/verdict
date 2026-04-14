@@ -14,7 +14,13 @@ import { Home } from './screens/Home.js'
 import { Runs } from './screens/Runs.js'
 import { RunDetail } from './screens/RunDetail.js'
 import { LiveRun } from './screens/LiveRun.js'
+import { NewRun } from './screens/NewRun.js'
 import { Models } from './screens/Models.js'
+import { Baselines } from './screens/Baselines.js'
+import { Compare } from './screens/Compare.js'
+import { Daemon } from './screens/Daemon.js'
+import { EvalPacks } from './screens/EvalPacks.js'
+import { ConfigEditor } from './screens/ConfigEditor.js'
 import type { EvalHistoryRow } from '../db/client.js'
 
 export function App() {
@@ -37,7 +43,7 @@ export function App() {
             onFilterChange={(q) => dispatch({ type: 'set-filter-query', q })}
             onExitFilter={() => dispatch({ type: 'set-mode', mode: 'normal' })}
             onOpenRun={(row) => { setDetailRow(row); goto('run-detail') }}
-            onStartLiveRun={() => goto('live-run')}
+            onStartLiveRun={() => goto('new-run')}
           />
         )
       case 'run-detail':
@@ -49,12 +55,24 @@ export function App() {
               onFilterChange={(q) => dispatch({ type: 'set-filter-query', q })}
               onExitFilter={() => dispatch({ type: 'set-mode', mode: 'normal' })}
               onOpenRun={(row) => { setDetailRow(row); goto('run-detail') }}
-              onStartLiveRun={() => goto('live-run')}
+              onStartLiveRun={() => goto('new-run')}
             />
       case 'live-run':
         return <LiveRun onBack={() => goto('home')} />
+      case 'new-run':
+        return <NewRun onBack={() => goto('home')} />
       case 'models':
         return <Models onBack={() => goto('home')} />
+      case 'baselines':
+        return <Baselines onBack={() => goto('home')} />
+      case 'compare':
+        return <Compare onBack={() => goto('home')} />
+      case 'daemon':
+        return <Daemon onBack={() => goto('home')} />
+      case 'eval-packs':
+        return <EvalPacks onBack={() => goto('home')} />
+      case 'config':
+        return <ConfigEditor onBack={() => goto('home')} />
       default:
         return <Home />
     }

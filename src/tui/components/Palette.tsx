@@ -97,10 +97,15 @@ export function Palette({ commands, onClose }: PaletteProps) {
 /** Build the default command list given a dispatch. Used by App. */
 export function defaultCommands(goto: (s: Screen) => void): Command[] {
   return [
-    { id: 'goto:home',    label: 'Go to Home',         hint: '1', action: () => goto('home') },
-    { id: 'goto:runs',    label: 'Go to Runs',         hint: '2', action: () => goto('runs') },
-    { id: 'goto:models',  label: 'Go to Models',       hint: '3', action: () => goto('models') },
-    { id: 'goto:live',    label: 'New Live Run',       hint: 'Start a fresh eval', action: () => goto('live-run') },
-    { id: 'help',         label: 'Show help',          hint: '?', action: () => { /* overlay triggered by caller */ } },
+    { id: 'goto:home',      label: 'Go to Home',        hint: '1', action: () => goto('home') },
+    { id: 'goto:runs',      label: 'Go to Runs',        hint: '2', action: () => goto('runs') },
+    { id: 'goto:models',    label: 'Go to Models',      hint: '3', action: () => goto('models') },
+    { id: 'goto:baselines', label: 'Go to Baselines',   hint: '4', action: () => goto('baselines') },
+    { id: 'goto:daemon',    label: 'Go to Daemon',      hint: '5', action: () => goto('daemon') },
+    { id: 'goto:packs',     label: 'Go to Eval Packs',  hint: '6', action: () => goto('eval-packs') },
+    { id: 'goto:compare',   label: 'Compare two runs',  hint: 'Pick A vs B', action: () => goto('compare') },
+    { id: 'goto:config',    label: 'Open Config',       hint: 'verdict.yaml view + $EDITOR', action: () => goto('config') },
+    { id: 'goto:new-run',   label: 'New Run (custom)',  hint: 'Pick models + packs', action: () => goto('new-run') },
+    { id: 'goto:live',      label: 'Quick Live Run',    hint: 'All models, all packs', action: () => goto('live-run') },
   ]
 }
