@@ -16,6 +16,7 @@ import { leaderboardCommand } from './commands/leaderboard.js'
 import { reportCommand } from './commands/report.js'
 import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } from './commands/eval.js'
 import { contributeCommand } from './commands/contribute.js'
+import { tuiCommand } from './commands/tui.js'
 // Dashboard CLI removed - use custom build system in dashboard/build/ instead
 // See WORKFLOW.md for complete dashboard workflow
 
@@ -25,6 +26,11 @@ program
   .name('verdict')
   .description(chalk.bold('verdict') + '\nLLM eval framework. Benchmark local and cloud models with one config file.')
   .version('0.2.0')
+
+program
+  .command('tui')
+  .description('Open the interactive terminal UI (browse runs, launch evals, monitor daemon)')
+  .action(tuiCommand)
 
 program
   .command('init')
