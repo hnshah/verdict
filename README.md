@@ -431,12 +431,129 @@ judge:
 
 ---
 
+## Interactive TUI
+
+Don't want to remember 18 subcommands? Run
+
+```bash
+verdict tui
+```
+
+You get a single keyboard-driven terminal app that covers the entire
+workflow — browse runs, launch evals, diff baselines, manage the daemon,
+edit config, test the router, all without leaving your terminal.
+
+```
+╭─────────────────────────────────────────────────────────────────────╮
+│ verdict │ 1 Home  2 Runs  3 Models  4 Baselines  5 Daemon  6 Packs  │
+╰─────────────────────────────────────────────────────────────────────╯
+
+ ⚡ Top models  (avg across 15 runs)
+
+  1. gpt-4o            8.66  ▁▃▆▆█  5 runs  last 8.80
+  2. qwen-7b           7.70  ▁▃▆▇█  5 runs  last 8.20
+  3. llama-3           7.32  ▇█▆▄▁  5 runs  last 6.90
+
+ ⚠ 1 model regressed vs recent average: llama-3
+
+ 📈 Recent score trend  (top 3 models, last 5 runs)
+     10.00 ┤
+      8.33 ┤─╮──╭──╭──╯
+      6.66 ┤  ╰──╯
+      5.00 ┤
+
+ 🛰  Daemon   status: running   queue: 0   today: ✓ 14  ✗ 1
+
+ :cmd  /filter  ?help  t:theme  ^o:back  q:quit
+```
+
+### Screens
+
+| # | Screen | What it does |
+|---|---|---|
+| 1 | **Home** | Leaderboard, sparklines, trend chart, regression alerts, daemon status |
+| 2 | **Runs** | Full history table with `/` fuzzy filter; Enter opens per-case drill-in |
+| 3 | **Models** | Configured models + on-demand Ollama/MLX/LM Studio discovery |
+| 4 | **Baselines** | List saved baselines, `s` saves latest, Enter diffs side-by-side |
+| 5 | **Daemon** | Live job queue + tailing log (`p` to pause, `G` to resume) |
+| 6 | **Eval Packs** | Browse every pack under `./eval-packs/`, drill into cases |
+| · | **New Run** | Pick models + packs via Tab/Space, Enter launches with live progress |
+| · | **Compare** | Pick two result JSONs, side-by-side diff with regression highlights |
+| · | **Router** | Interactive prompt routing — type a prompt, see which model wins |
+| · | **Serve** | Start/stop the OpenAI-compat HTTP proxy, watch request log |
+| · | **Config** | Structured view of `verdict.yaml`; `E` opens `$EDITOR`, reloads on return |
+
+### Keymap
+
+**Global** (works from any screen)
+
+| Key | Action |
+|---|---|
+| `:` | Command palette (fuzzy-matches every screen + action) |
+| `/` | Filter the visible list |
+| `?` | Help overlay with context-sensitive keybinds |
+| `1`..`6` | Jump to tab 1..6 (lazygit-style) |
+| `Tab` / `Shift+Tab` | Next / previous pane |
+| `t` | Cycle theme (default → monokai → dracula → solarized) |
+| `Ctrl-o` | Back (navigation history, last 20 screens) |
+| `Esc` | Cancel / return to normal mode |
+| `q` | Quit |
+
+**List navigation**
+
+| Key | Action |
+|---|---|
+| `j` / `k` or `↓` / `↑` | Next / previous row |
+| `g` / `G` | Jump to top / bottom |
+| `PgDn` / `PgUp` | Scroll by page |
+| `Enter` | Open / drill in |
+
+**Screen-specific** (most useful)
+
+| Screen | Key | Action |
+|---|---|---|
+| Runs | `n` | Start a new run |
+| Models | `d` | Discover local Ollama / MLX / LM Studio models |
+| Baselines | `s` | Save latest result as a baseline |
+| Daemon | `p` / `G` | Pause / resume log auto-scroll |
+| New Run | `Space` | Toggle selection; `Tab` switches Models/Packs pane |
+| Router | `Tab` | Cycle task type; `L` prefers local models |
+| Serve | `s` | Start/stop proxy; `+`/`-` change port |
+| Config | `E` | Open `verdict.yaml` in `$EDITOR`; `r` reloads & revalidates |
+
+### Themes
+
+Four presets ship in the box:
+
+- `default` — ANSI 16-color (safe everywhere)
+- `monokai` — warm, high-contrast
+- `dracula` — cool purples and greens
+- `solarized` — muted classic
+
+Press `t` to cycle; your choice persists to `~/.verdict/tui-theme.json`
+so it's remembered across sessions.
+
+### Tips
+
+- **Everything reachable via `:`** — if you forget a keybind, hit `:` and
+  type a fragment of what you want (`com` → Compare, `rou` → Router,
+  `con` → Config).
+- **Filter anything with `/`** — on Runs, Models, Packs, the filter
+  matches across multiple columns (model ID, pack, provider, run ID).
+- **Back-button muscle memory** — `Ctrl-o` walks back like `hjkl` walks
+  sideways; it remembers the last 20 screens.
+- **`q` really quits** — even if a spinner is still animating, `q`
+  unmounts React and terminates the process within 50ms.
+
+---
+
 ## CLI Reference
 
 ```bash
 # Setup
 verdict init                            # Create verdict.yaml + eval-packs/
 verdict validate [config]               # Check config for errors
+verdict tui                             # Open the interactive terminal UI
 verdict models                          # Ping all configured models
 verdict models discover                 # Find Ollama/MLX models
 
