@@ -1,9 +1,10 @@
 /**
- * Top-to-bottom app chrome: header with the current screen + keybind footer.
+ * Top-to-bottom app chrome: header with the current screen + keybind footer
+ * + ephemeral toast line.
  */
 
 import { Box, Text } from 'ink'
-import { theme } from '../theme.js'
+import { theme, getThemeName } from '../theme.js'
 import type { Screen, Mode } from '../hooks/useKeymap.js'
 
 export interface LayoutProps {
@@ -12,6 +13,7 @@ export interface LayoutProps {
   title?: string
   children: React.ReactNode
   footerHints?: [string, string][]
+  toast?: string | null
 }
 
 const SCREEN_NAMES: Record<Screen, string> = {
@@ -26,14 +28,18 @@ const SCREEN_NAMES: Record<Screen, string> = {
   'new-run':    'New Run',
   'compare':    'Compare',
   'config':     'Config',
+  'router':     'Router',
+  'serve':      'Serve',
 }
 
-export function Layout({ screen, mode, title, children, footerHints }: LayoutProps) {
+export function Layout({ screen, mode, title, children, footerHints, toast }: LayoutProps) {
   const tabs: Screen[] = ['home', 'runs', 'models', 'baselines', 'daemon', 'eval-packs']
   const globalHints: [string, string][] = [
     [':', 'cmd'],
     ['/', 'filter'],
     ['?', 'help'],
+    ['t', 'theme'],
+    ['^o', 'back'],
     ['q', 'quit'],
   ]
   const hints = [...(footerHints ?? []), ...globalHints]
@@ -56,12 +62,20 @@ export function Layout({ screen, mode, title, children, footerHints }: LayoutPro
         <Text color={theme.accent}>{title ?? SCREEN_NAMES[screen]}</Text>
         <Box flexGrow={1}><Text> </Text></Box>
         <Text color={theme.muted}>[{mode}] </Text>
+        <Text color={theme.muted} dimColor>{getThemeName()}</Text>
       </Box>
 
       {/* Body */}
       <Box flexDirection="column" paddingX={1} paddingY={1}>
         {children}
       </Box>
+
+      {/* Toast line (only when present, above the footer) */}
+      {toast && (
+        <Box paddingX={1}>
+          <Text color={theme.highlight}>» {toast}</Text>
+        </Box>
+      )}
 
       {/* Footer */}
       <Box borderStyle="single" borderColor={theme.borderDim} paddingX={1}>
