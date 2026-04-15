@@ -117,6 +117,10 @@ export function useKeymap() {
     // Global exit (only in normal mode, to avoid eating q in search)
     if (state.mode === 'normal' && (input === 'q' || (key.ctrl && input === 'c'))) {
       exit()
+      // Ink's exit() unmounts React but does not force process termination.
+      // Any lingering handles (e.g. open sockets, sqlite WAL files) can keep
+      // Node's event loop alive. Give cleanup a tick, then hard-exit.
+      setTimeout(() => process.exit(0), 50)
       return
     }
     // Route openers

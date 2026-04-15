@@ -48,8 +48,10 @@ function detectRegressions(agg: ModelAgg[]): ModelAgg[] {
     if (m.scoreHistory.length < 3) return false
     const prev = m.scoreHistory.slice(-4, -1)
     const latest = m.lastScore
-    const prevAvg = prev.reduce((s, v) => s + v, 0) / prev.length
-    return latest < prevAvg - 0.5
+    // Flag if latest is meaningfully below the best of the previous 3 runs.
+    // Using max (not avg) surfaces gradual slides that avg-based checks miss.
+    const prevMax = Math.max(...prev)
+    return latest < prevMax - 0.4
   })
 }
 
