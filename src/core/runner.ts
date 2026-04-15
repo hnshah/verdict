@@ -15,7 +15,7 @@ import { preloadModels } from './preload.js'
  * Detect environment information
  */
 function detectEnvironment(): { verdict_version: string, node_version: string, provider_versions: { ollama?: string, mlx?: string } } {
-  const verdictVersion = '0.2.0' // TODO: Read from package.json
+  const verdictVersion = '0.3.0' // TODO: Read from package.json
   const nodeVersion = process.version
   
   const providerVersions: { ollama?: string, mlx?: string } = {}

@@ -25,7 +25,7 @@ const program = new Command()
 program
   .name('verdict')
   .description(chalk.bold('verdict') + '\nLLM eval framework. Benchmark local and cloud models with one config file.')
-  .version('0.2.0')
+  .version('0.3.0')
 
 program
   .command('tui')
