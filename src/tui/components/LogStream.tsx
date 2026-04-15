@@ -1,6 +1,8 @@
 /**
- * Auto-scrolling log pane. Last-N-lines view of a string[] source.
- * Pause behavior is Phase 2 — for MVP we always show the tail.
+ * Auto-scrolling log pane with pause support.
+ *
+ * Default: shows the tail. If `paused` is true, shows the snapshot captured
+ * at pause time (the parent should save & pass it — see Daemon screen).
  */
 
 import { Box, Text } from 'ink'
@@ -10,6 +12,7 @@ export interface LogStreamProps {
   lines: string[]
   height?: number
   title?: string
+  paused?: boolean
 }
 
 function colorFor(line: string): string {
@@ -21,12 +24,17 @@ function colorFor(line: string): string {
   return theme.text
 }
 
-export function LogStream({ lines, height = 12, title }: LogStreamProps) {
+export function LogStream({ lines, height = 12, title, paused }: LogStreamProps) {
   const tail = lines.slice(-height)
 
   return (
     <Box flexDirection="column">
-      {title && <Text color={theme.muted} bold>{title}</Text>}
+      {(title || paused) && (
+        <Box>
+          {title && <Text color={theme.muted} bold>{title}  </Text>}
+          {paused && <Text color={theme.warning}>[PAUSED]</Text>}
+        </Box>
+      )}
       {tail.length === 0 && <Text color={theme.muted}>  (no output yet)</Text>}
       {tail.map((line, i) => (
         <Text key={i} color={colorFor(line)}>{' '}{line.slice(0, 200)}</Text>

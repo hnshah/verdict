@@ -107,5 +107,7 @@ export function defaultCommands(goto: (s: Screen) => void): Command[] {
     { id: 'goto:config',    label: 'Open Config',       hint: 'verdict.yaml view + $EDITOR', action: () => goto('config') },
     { id: 'goto:new-run',   label: 'New Run (custom)',  hint: 'Pick models + packs', action: () => goto('new-run') },
     { id: 'goto:live',      label: 'Quick Live Run',    hint: 'All models, all packs', action: () => goto('live-run') },
+    { id: 'goto:router',    label: 'Router',            hint: 'Route a prompt to best model', action: () => goto('router') },
+    { id: 'goto:serve',     label: 'Serve proxy',       hint: 'OpenAI-compat HTTP server', action: () => goto('serve') },
   ]
 }

@@ -100,7 +100,7 @@ export function Daemon(_props: DaemonProps) {
             : <Text color={theme.muted}>(auto · p to pause)</Text>
           }
         </Box>
-        <LogStream lines={displayLog} height={10} />
+        <LogStream lines={displayLog} height={10} paused={paused} />
       </Box>
     </Box>
   )

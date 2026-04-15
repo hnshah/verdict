@@ -21,6 +21,8 @@ import { Compare } from './screens/Compare.js'
 import { Daemon } from './screens/Daemon.js'
 import { EvalPacks } from './screens/EvalPacks.js'
 import { ConfigEditor } from './screens/ConfigEditor.js'
+import { Router } from './screens/Router.js'
+import { Serve } from './screens/Serve.js'
 import type { EvalHistoryRow } from '../db/client.js'
 
 export function App() {
@@ -57,29 +59,30 @@ export function App() {
               onOpenRun={(row) => { setDetailRow(row); goto('run-detail') }}
               onStartLiveRun={() => goto('new-run')}
             />
-      case 'live-run':
-        return <LiveRun onBack={() => goto('home')} />
-      case 'new-run':
-        return <NewRun onBack={() => goto('home')} />
-      case 'models':
-        return <Models onBack={() => goto('home')} />
-      case 'baselines':
-        return <Baselines onBack={() => goto('home')} />
-      case 'compare':
-        return <Compare onBack={() => goto('home')} />
-      case 'daemon':
-        return <Daemon onBack={() => goto('home')} />
-      case 'eval-packs':
-        return <EvalPacks onBack={() => goto('home')} />
-      case 'config':
-        return <ConfigEditor onBack={() => goto('home')} />
-      default:
-        return <Home />
+      case 'live-run':    return <LiveRun onBack={() => goto('home')} />
+      case 'new-run':     return <NewRun onBack={() => goto('home')} />
+      case 'models':      return <Models onBack={() => goto('home')} />
+      case 'baselines':   return <Baselines onBack={() => goto('home')} />
+      case 'compare':     return <Compare onBack={() => goto('home')} />
+      case 'daemon':      return <Daemon onBack={() => goto('home')} />
+      case 'eval-packs':  return <EvalPacks onBack={() => goto('home')} />
+      case 'config':      return <ConfigEditor onBack={() => goto('home')} />
+      case 'router':      return <Router onBack={() => goto('home')} />
+      case 'serve':       return <Serve onBack={() => goto('home')} />
+      default:            return <Home />
     }
   }
 
+  // `themeTick` is read so React sees it and rerenders children that import
+  // the mutable theme object after it's been updated in place.
+  void state.themeTick
+
   return (
-    <Layout screen={state.screen} mode={state.mode}>
+    <Layout
+      screen={state.screen}
+      mode={state.mode}
+      toast={state.toast}
+    >
       {renderScreen()}
       {state.mode === 'command' && (
         <Box marginTop={1}>

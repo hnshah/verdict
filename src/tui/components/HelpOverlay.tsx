@@ -14,6 +14,8 @@ const GLOBAL = [
   [':',       'Command palette'],
   ['/',       'Filter visible list'],
   ['?',       'Toggle this help'],
+  ['t',       'Cycle theme (default / monokai / dracula / solarized)'],
+  ['Ctrl-o',  'Back (navigation history)'],
   ['q',       'Quit'],
   ['Esc',     'Cancel / back to normal mode'],
   ['Tab',     'Next pane'],
@@ -41,6 +43,40 @@ const SCREEN_KEYS: Record<string, string[][]> = {
   models: [
     ['d',       'Discover local models (Ollama/MLX/LM Studio)'],
     ['r',       'Refresh list'],
+  ],
+  daemon: [
+    ['p',       'Pause log auto-scroll'],
+    ['G',       'Resume / jump to bottom'],
+  ],
+  baselines: [
+    ['s',       'Save latest result as baseline'],
+    ['Enter',   'Diff latest against selected'],
+    ['r',       'Refresh list'],
+  ],
+  compare: [
+    ['Enter',   'Pick result A, then B'],
+  ],
+  'new-run': [
+    ['Tab',     'Switch between Models and Packs'],
+    ['Space',   'Toggle selection'],
+    ['Enter',   'Launch'],
+  ],
+  router: [
+    ['Enter',   'Route & call'],
+    ['Tab',     'Cycle task type'],
+    ['L',       'Toggle prefer-local'],
+    ['r',       'Reset (after done)'],
+  ],
+  serve: [
+    ['s',       'Start/stop proxy'],
+    ['+/-',     'Change port'],
+  ],
+  config: [
+    ['E',       'Open verdict.yaml in $EDITOR'],
+    ['r',       'Reload and revalidate'],
+  ],
+  'eval-packs': [
+    ['j/k',     'Navigate packs / cases'],
   ],
 }
 
