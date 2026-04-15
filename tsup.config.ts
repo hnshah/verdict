@@ -13,7 +13,7 @@ export default defineConfig([
     shims: false,
     // Mark openai as external so it loads from node_modules at runtime rather
     // than being bundled inline. Bundling the openai SDK breaks its HTTP handling.
-    external: ['openai', 'better-sqlite3', 'react', 'react/jsx-runtime', 'ink', '@inkjs/ui'],
+    external: ['openai', 'better-sqlite3', 'react', 'react/jsx-runtime', 'ink', '@inkjs/ui', '@ink-tools/ink-mouse'],
     banner: {
       js: '#!/usr/bin/env node',
     },
@@ -27,6 +27,6 @@ export default defineConfig([
     clean: false,
     dts: true,
     shims: false,
-    external: ['openai', 'better-sqlite3', 'react', 'react/jsx-runtime', 'ink', '@inkjs/ui'],
+    external: ['openai', 'better-sqlite3', 'react', 'react/jsx-runtime', 'ink', '@inkjs/ui', '@ink-tools/ink-mouse'],
   },
 ])

@@ -7,6 +7,7 @@ import { useMemo, useState } from 'react'
 import { Box, Text, useInput } from 'ink'
 import Fuse from 'fuse.js'
 import { theme } from '../theme.js'
+import { Clickable } from './Clickable.js'
 import type { Screen } from '../hooks/useKeymap.js'
 
 export interface Command {
@@ -79,14 +80,19 @@ export function Palette({ commands, onClose }: PaletteProps) {
         {results.map((cmd, i) => {
           const selected = i === cursor
           return (
-            <Box key={cmd.id}>
-              <Text color={selected ? theme.highlight : theme.text} inverse={selected}>
-                {' '}{cmd.label.padEnd(30)}
-              </Text>
-              {cmd.hint && (
-                <Text color={theme.muted} dimColor>{' '}{cmd.hint}</Text>
-              )}
-            </Box>
+            <Clickable
+              key={cmd.id}
+              onClick={() => { cmd.action(); onClose() }}
+            >
+              <Box>
+                <Text color={selected ? theme.highlight : theme.text} inverse={selected}>
+                  {' '}{cmd.label.padEnd(30)}
+                </Text>
+                {cmd.hint && (
+                  <Text color={theme.muted} dimColor>{' '}{cmd.hint}</Text>
+                )}
+              </Box>
+            </Clickable>
           )
         })}
       </Box>

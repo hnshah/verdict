@@ -46,8 +46,10 @@ describe('Phase 3 TUI smoke', () => {
     unmount()
   })
 
-  it('theme system ships 4 presets and can cycle', () => {
-    expect(Object.keys(THEMES).sort()).toEqual(['default', 'dracula', 'monokai', 'solarized'])
+  it('theme system ships 5 presets and can cycle', () => {
+    expect(Object.keys(THEMES).sort()).toEqual(
+      ['default', 'dracula', 'monochrome', 'monokai', 'solarized']
+    )
     applyTheme('default')
     expect(getThemeName()).toBe('default')
     const next = cycleTheme()

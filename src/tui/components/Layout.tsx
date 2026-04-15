@@ -1,10 +1,16 @@
 /**
  * Top-to-bottom app chrome: header with the current screen + keybind footer
  * + ephemeral toast line.
+ *
+ * Two responsive modes:
+ *   - wide   (≥ 100 cols): full tab labels, all footer hints visible
+ *   - narrow (< 100 cols): single-digit tab labels, compact footer
  */
 
-import { Box, Text } from 'ink'
+import { useEffect, useState } from 'react'
+import { Box, Text, useStdout } from 'ink'
 import { theme, getThemeName } from '../theme.js'
+import { Clickable } from './Clickable.js'
 import type { Screen, Mode } from '../hooks/useKeymap.js'
 
 export interface LayoutProps {
@@ -14,6 +20,7 @@ export interface LayoutProps {
   children: React.ReactNode
   footerHints?: [string, string][]
   toast?: string | null
+  onTabClick?: (screen: Screen) => void
 }
 
 const SCREEN_NAMES: Record<Screen, string> = {
@@ -32,9 +39,42 @@ const SCREEN_NAMES: Record<Screen, string> = {
   'serve':      'Serve',
 }
 
-export function Layout({ screen, mode, title, children, footerHints, toast }: LayoutProps) {
+const SHORT_NAMES: Record<Screen, string> = {
+  'home':       '1 Hm',
+  'runs':       '2 Rn',
+  'models':     '3 Mo',
+  'baselines':  '4 Bs',
+  'daemon':     '5 Dm',
+  'eval-packs': '6 Pk',
+  'run-detail': 'Det',
+  'live-run':   'Live',
+  'new-run':    'New',
+  'compare':    'Cmp',
+  'config':     'Cfg',
+  'router':     'Rtr',
+  'serve':      'Srv',
+}
+
+function useTerminalWidth(): number {
+  const { stdout } = useStdout()
+  const [width, setWidth] = useState(stdout?.columns ?? 120)
+  useEffect(() => {
+    if (!stdout) return
+    const onResize = () => setWidth(stdout.columns ?? 120)
+    stdout.on('resize', onResize)
+    return () => { stdout.off('resize', onResize) }
+  }, [stdout])
+  return width
+}
+
+export function Layout({ screen, mode, title, children, footerHints, toast, onTabClick }: LayoutProps) {
+  const cols = useTerminalWidth()
+  const narrow = cols < 100
+  const names = narrow ? SHORT_NAMES : SCREEN_NAMES
+
   const tabs: Screen[] = ['home', 'runs', 'models', 'baselines', 'daemon', 'eval-packs']
-  const globalHints: [string, string][] = [
+
+  const fullHints: [string, string][] = [
     [':', 'cmd'],
     ['/', 'filter'],
     ['?', 'help'],
@@ -42,7 +82,13 @@ export function Layout({ screen, mode, title, children, footerHints, toast }: La
     ['^o', 'back'],
     ['q', 'quit'],
   ]
-  const hints = [...(footerHints ?? []), ...globalHints]
+  const narrowHints: [string, string][] = [
+    [':', 'cmd'],
+    ['/', 'flt'],
+    ['?', 'help'],
+    ['q', 'quit'],
+  ]
+  const hints = [...(footerHints ?? []), ...(narrow ? narrowHints : fullHints)]
 
   return (
     <Box flexDirection="column">
@@ -50,19 +96,28 @@ export function Layout({ screen, mode, title, children, footerHints, toast }: La
       <Box borderStyle="round" borderColor={theme.border} paddingX={1}>
         <Text color={theme.primary} bold>verdict </Text>
         <Text color={theme.muted}>│ </Text>
-        {tabs.map(t => (
-          <Text
-            key={t}
-            color={t === screen ? theme.highlight : theme.muted}
-            bold={t === screen}
-          >
-            {SCREEN_NAMES[t]}  </Text>
-        ))}
-        <Text color={theme.muted}>│ </Text>
-        <Text color={theme.accent}>{title ?? SCREEN_NAMES[screen]}</Text>
+        {tabs.map(t => {
+          const label = names[t]
+          const active = t === screen
+          return onTabClick ? (
+            <Clickable key={t} onClick={() => onTabClick(t)}>
+              <Text color={active ? theme.highlight : theme.muted} bold={active}>
+                {label}  </Text>
+            </Clickable>
+          ) : (
+            <Text key={t} color={active ? theme.highlight : theme.muted} bold={active}>
+              {label}  </Text>
+          )
+        })}
+        {!narrow && (
+          <>
+            <Text color={theme.muted}>│ </Text>
+            <Text color={theme.accent}>{title ?? SCREEN_NAMES[screen]}</Text>
+          </>
+        )}
         <Box flexGrow={1}><Text> </Text></Box>
         <Text color={theme.muted}>[{mode}] </Text>
-        <Text color={theme.muted} dimColor>{getThemeName()}</Text>
+        {!narrow && <Text color={theme.muted} dimColor>{getThemeName()}</Text>}
       </Box>
 
       {/* Body */}

@@ -98,11 +98,29 @@ const SOLARIZED: ThemePalette = {
   regression: '#dc322f',
 }
 
+// Monochrome palette for NO_COLOR environments / terminals without color support.
+const MONOCHROME: ThemePalette = {
+  primary:    'white',
+  accent:     'white',
+  success:    'white',
+  warning:    'white',
+  danger:     'white',
+  muted:      'gray',
+  dim:        'gray',
+  text:       'white',
+  highlight:  'white',
+  border:     'white',
+  borderDim:  'gray',
+  winner:     'white',
+  regression: 'white',
+}
+
 export const THEMES: Record<string, ThemePalette> = {
-  default:   DEFAULT,
-  monokai:   MONOKAI,
-  dracula:   DRACULA,
-  solarized: SOLARIZED,
+  default:    DEFAULT,
+  monokai:    MONOKAI,
+  dracula:    DRACULA,
+  solarized:  SOLARIZED,
+  monochrome: MONOCHROME,
 }
 
 export const THEME_NAMES = Object.keys(THEMES) as (keyof typeof THEMES)[]
@@ -110,6 +128,9 @@ export const THEME_NAMES = Object.keys(THEMES) as (keyof typeof THEMES)[]
 const CONFIG_PATH = path.join(os.homedir(), '.verdict', 'tui-theme.json')
 
 function loadPersisted(): string {
+  // Respect NO_COLOR — common convention across CLIs. Takes precedence
+  // over user preference: if the environment says no color, we comply.
+  if (process.env['NO_COLOR'] !== undefined) return 'monochrome'
   try {
     const raw = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8')) as { name?: string }
     if (raw.name && THEMES[raw.name]) return raw.name

@@ -14,7 +14,12 @@ import { useHistory, useJobs } from '../hooks/useDb.js'
 import { useDaemonStatus } from '../hooks/useDaemon.js'
 import { Sparkline } from '../components/Sparkline.js'
 import { Chart } from '../components/Chart.js'
+import { Clickable } from '../components/Clickable.js'
 import type { EvalHistoryRow } from '../../db/client.js'
+
+export interface HomeProps {
+  onOpenRun?: (row: EvalHistoryRow) => void
+}
 
 interface ModelAgg {
   model_id: string
@@ -55,7 +60,7 @@ function detectRegressions(agg: ModelAgg[]): ModelAgg[] {
   })
 }
 
-export function Home() {
+export function Home({ onOpenRun }: HomeProps = {}) {
   const { rows } = useHistory({ limit: 200 }, 5000)
   const { rows: jobs } = useJobs(undefined, 3000)
   const { status, reachable } = useDaemonStatus()
@@ -126,23 +131,30 @@ export function Home() {
       {/* Latest run summary */}
       {latestRun && (
         <Box marginTop={2} flexDirection="column">
-          <Text color={theme.accent} bold>🕐 Most recent run</Text>
-          <Text>
-            <Text color={theme.muted}>  when:  </Text>
-            {new Date(latestRun.run_at).toISOString().slice(0, 19).replace('T', ' ')}
+          <Text color={theme.accent} bold>
+            🕐 Most recent run
+            {onOpenRun && <Text color={theme.muted}> (click to open)</Text>}
           </Text>
-          <Text>
-            <Text color={theme.muted}>  model: </Text>
-            <Text color={theme.text}>{latestRun.model_id}</Text>
-            <Text color={theme.muted}>  pack: </Text>
-            <Text color={theme.text}>{latestRun.pack}</Text>
-          </Text>
-          <Text>
-            <Text color={theme.muted}>  score: </Text>
-            <Text color={scoreColor(latestRun.score)} bold>{latestRun.score.toFixed(2)}</Text>
-            <Text color={theme.muted}>   cases {latestRun.cases_run}</Text>
-            <Text color={theme.muted}>   wins {latestRun.wins}</Text>
-          </Text>
+          <Clickable onClick={() => onOpenRun?.(latestRun)}>
+            <Box flexDirection="column">
+              <Text>
+                <Text color={theme.muted}>  when:  </Text>
+                {new Date(latestRun.run_at).toISOString().slice(0, 19).replace('T', ' ')}
+              </Text>
+              <Text>
+                <Text color={theme.muted}>  model: </Text>
+                <Text color={theme.text}>{latestRun.model_id}</Text>
+                <Text color={theme.muted}>  pack: </Text>
+                <Text color={theme.text}>{latestRun.pack}</Text>
+              </Text>
+              <Text>
+                <Text color={theme.muted}>  score: </Text>
+                <Text color={scoreColor(latestRun.score)} bold>{latestRun.score.toFixed(2)}</Text>
+                <Text color={theme.muted}>   cases {latestRun.cases_run}</Text>
+                <Text color={theme.muted}>   wins {latestRun.wins}</Text>
+              </Text>
+            </Box>
+          </Clickable>
         </Box>
       )}
 

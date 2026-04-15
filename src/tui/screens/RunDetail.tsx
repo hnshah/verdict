@@ -6,10 +6,12 @@
  */
 
 import { useEffect, useMemo, useState } from 'react'
-import { Box, Text } from 'ink'
+import { Box, Text, useInput } from 'ink'
 import { theme, scoreColor } from '../theme.js'
 import { Table, type Column } from '../components/Table.js'
 import { useDb } from '../hooks/useDb.js'
+import { useToast } from '../hooks/useToast.js'
+import { writeClipboard } from '../utils/clipboard.js'
 import type { EvalHistoryRow } from '../../db/client.js'
 
 export interface RunDetailProps {
@@ -29,6 +31,16 @@ export function RunDetail({ row, onBack: _onBack }: RunDetailProps) {
   const db = useDb()
   const [cases, setCases] = useState<CaseRow[]>([])
   const [selected, setSelected] = useState<CaseRow | null>(null)
+  const toast = useToast()
+
+  useInput((input) => {
+    if (input === 'y' && selected) {
+      const text = selected.response ?? ''
+      void writeClipboard(text).then(res => {
+        toast(res.ok ? `yanked ${text.length} chars of response` : 'clipboard tool not found')
+      })
+    }
+  })
 
   useEffect(() => {
     try {

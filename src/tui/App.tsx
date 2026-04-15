@@ -1,15 +1,25 @@
 /**
  * Root TUI component. Holds global keymap + screen router + overlays
  * (palette, help). Individual screens are mounted based on state.screen.
+ *
+ * Wraps the whole tree in:
+ *   - MouseProvider  (from @ink-tools/ink-mouse) — enables click + scroll
+ *   - ErrorBoundary  — catches render errors per screen
+ *
+ * Persists the active screen to ~/.verdict/tui-session.json so the next
+ * `verdict tui` invocation reopens where you left off.
  */
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Box } from 'ink'
+import { MouseProvider } from '@ink-tools/ink-mouse'
 import { useKeymap } from './hooks/useKeymap.js'
 import type { Screen } from './hooks/useKeymap.js'
+import { ToastProvider } from './hooks/useToast.js'
 import { Layout } from './components/Layout.js'
 import { Palette, defaultCommands } from './components/Palette.js'
 import { HelpOverlay } from './components/HelpOverlay.js'
+import { ErrorBoundary } from './components/ErrorBoundary.js'
 import { Home } from './screens/Home.js'
 import { Runs } from './screens/Runs.js'
 import { RunDetail } from './screens/RunDetail.js'
@@ -23,20 +33,46 @@ import { EvalPacks } from './screens/EvalPacks.js'
 import { ConfigEditor } from './screens/ConfigEditor.js'
 import { Router } from './screens/Router.js'
 import { Serve } from './screens/Serve.js'
+import { loadSession, updateSession } from './utils/session.js'
 import type { EvalHistoryRow } from '../db/client.js'
 
 export function App() {
   const { state, dispatch } = useKeymap()
   const [detailRow, setDetailRow] = useState<EvalHistoryRow | null>(null)
+  const [bootstrapped, setBootstrapped] = useState(false)
+
+  // Restore last active screen on first render (but skip run-detail which
+  // needs a hydrated row to make sense).
+  useEffect(() => {
+    if (bootstrapped) return
+    const sess = loadSession()
+    if (sess.lastScreen && sess.lastScreen !== 'run-detail' && sess.lastScreen !== state.screen) {
+      dispatch({ type: 'set-screen', screen: sess.lastScreen })
+    }
+    setBootstrapped(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Persist screen changes (but never 'run-detail' since it depends on
+  // ephemeral in-memory row selection).
+  useEffect(() => {
+    if (!bootstrapped) return
+    if (state.screen === 'run-detail') return
+    updateSession({ lastScreen: state.screen })
+  }, [state.screen, bootstrapped])
 
   const goto = (screen: Screen) => dispatch({ type: 'set-screen', screen })
+
+  const showToast = useCallback((message: string) => {
+    dispatch({ type: 'toast', message })
+  }, [dispatch])
 
   const commands = defaultCommands(goto)
 
   const renderScreen = () => {
     switch (state.screen) {
       case 'home':
-        return <Home />
+        return <Home onOpenRun={(row) => { setDetailRow(row); goto('run-detail') }} />
       case 'runs':
         return (
           <Runs
@@ -78,28 +114,35 @@ export function App() {
   void state.themeTick
 
   return (
-    <Layout
-      screen={state.screen}
-      mode={state.mode}
-      toast={state.toast}
-    >
-      {renderScreen()}
-      {state.mode === 'command' && (
-        <Box marginTop={1}>
-          <Palette
-            commands={commands}
-            onClose={() => dispatch({ type: 'reset' })}
-          />
-        </Box>
-      )}
-      {state.mode === 'help' && (
-        <Box marginTop={1}>
-          <HelpOverlay
-            screen={state.screen}
-            onClose={() => dispatch({ type: 'reset' })}
-          />
-        </Box>
-      )}
-    </Layout>
+    <MouseProvider>
+      <ToastProvider value={showToast}>
+      <Layout
+        screen={state.screen}
+        mode={state.mode}
+        toast={state.toast}
+        onTabClick={goto}
+      >
+        <ErrorBoundary screen={state.screen}>
+          {renderScreen()}
+        </ErrorBoundary>
+        {state.mode === 'command' && (
+          <Box marginTop={1}>
+            <Palette
+              commands={commands}
+              onClose={() => dispatch({ type: 'reset' })}
+            />
+          </Box>
+        )}
+        {state.mode === 'help' && (
+          <Box marginTop={1}>
+            <HelpOverlay
+              screen={state.screen}
+              onClose={() => dispatch({ type: 'reset' })}
+            />
+          </Box>
+        )}
+      </Layout>
+      </ToastProvider>
+    </MouseProvider>
   )
 }
