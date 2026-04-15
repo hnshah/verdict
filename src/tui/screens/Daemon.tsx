@@ -10,8 +10,11 @@ import { Box, Text, useInput } from 'ink'
 import { theme } from '../theme.js'
 import { useDaemonStatus, useDaemonLog } from '../hooks/useDaemon.js'
 import { useJobs } from '../hooks/useDb.js'
+import { useToast } from '../hooks/useToast.js'
+import { sendIpc } from '../../daemon/ipc.js'
 import { Table, type Column } from '../components/Table.js'
 import { LogStream } from '../components/LogStream.js'
+import { ConfirmDialog } from '../components/ConfirmDialog.js'
 import type { JobRow } from '../../db/client.js'
 
 export interface DaemonProps {
@@ -24,16 +27,28 @@ export function Daemon(_props: DaemonProps) {
   const log = useDaemonLog(500, 1000)
   const [paused, setPaused] = useState(false)
   const [savedLog, setSavedLog] = useState<string[]>([])
+  const [confirmStop, setConfirmStop] = useState(false)
+  const toast = useToast()
 
   useInput((input) => {
+    if (confirmStop) return  // dialog handles keys
     if (input === 'p') {
       if (!paused) setSavedLog(log)
       setPaused(p => !p)
     }
-    if (input === 'G' && paused) {
-      setPaused(false)
-    }
+    if (input === 'G' && paused) setPaused(false)
+    if (input === 'S' && reachable) setConfirmStop(true)
   })
+
+  const doStop = async () => {
+    setConfirmStop(false)
+    try {
+      const res = await sendIpc({ action: 'stop' })
+      toast(res.ok ? 'daemon stopping…' : `stop failed: ${res.error}`)
+    } catch (e) {
+      toast(`stop failed: ${(e as Error).message}`)
+    }
+  }
 
   const displayLog = paused ? savedLog : log
 
@@ -97,11 +112,23 @@ export function Daemon(_props: DaemonProps) {
           <Text color={theme.accent} bold>Log tail  </Text>
           {paused
             ? <Text color={theme.warning}>[PAUSED — press G or p to resume]</Text>
-            : <Text color={theme.muted}>(auto · p to pause)</Text>
+            : <Text color={theme.muted}>(auto · p to pause · S to stop daemon)</Text>
           }
         </Box>
         <LogStream lines={displayLog} height={10} paused={paused} />
       </Box>
+
+      {confirmStop && (
+        <Box marginTop={1}>
+          <ConfirmDialog
+            message="Stop the daemon? Any running job will be interrupted."
+            confirmLabel="Stop daemon"
+            cancelLabel="Keep running"
+            onConfirm={doStop}
+            onCancel={() => setConfirmStop(false)}
+          />
+        </Box>
+      )}
     </Box>
   )
 }

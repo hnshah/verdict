@@ -9,6 +9,8 @@ import { theme, scoreColor } from '../theme.js'
 import { Table, type Column } from '../components/Table.js'
 import { FilterInput } from '../components/FilterInput.js'
 import { useHistory } from '../hooks/useDb.js'
+import { useToast } from '../hooks/useToast.js'
+import { writeClipboard } from '../utils/clipboard.js'
 import type { EvalHistoryRow } from '../../db/client.js'
 import type { Mode } from '../hooks/useKeymap.js'
 
@@ -31,6 +33,7 @@ function fmtDate(iso: string): string {
 export function Runs({ mode, filterQuery, onFilterChange, onOpenRun, onStartLiveRun, onExitFilter }: RunsProps) {
   const { rows } = useHistory({ limit: 500 }, 5000)
   const [selected, setSelected] = useState<EvalHistoryRow | null>(null)
+  const toast = useToast()
 
   const filtered = useMemo(() => {
     const q = filterQuery.trim().toLowerCase()
@@ -47,7 +50,13 @@ export function Runs({ mode, filterQuery, onFilterChange, onOpenRun, onStartLive
 
   useInput((input) => {
     if (mode !== 'normal') return
-    if (input === 'n') onStartLiveRun()
+    if (input === 'n') { onStartLiveRun(); return }
+    if (input === 'y' && selected) {
+      const text = `${selected.run_id} ${selected.model_id}`
+      void writeClipboard(text).then(res => {
+        toast(res.ok ? `yanked: ${selected.run_id}` : 'clipboard tool not found')
+      })
+    }
   }, { isActive: mode === 'normal' })
 
   const columns: Column<EvalHistoryRow>[] = [

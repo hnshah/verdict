@@ -56,9 +56,22 @@ export function LiveRun({ onBack: _onBack }: LiveRunProps) {
       </Box>
 
       {state.phase === 'running' && (
-        <Box>
-          <Spinner />
-          <Text color={theme.primary}> {state.current || 'starting…'}</Text>
+        <Box flexDirection="column">
+          <Box>
+            <Spinner />
+            <Text color={theme.primary}> {state.current || 'starting…'}</Text>
+          </Box>
+          {state.casesTotal > 0 && (
+            <Text color={theme.muted}>
+              {'  '}case {state.casesCompleted}/{state.casesTotal}
+              {state.casesCompleted > 0 && state.startedAt && (() => {
+                const elapsed = (Date.now() - state.startedAt) / 1000
+                const per = elapsed / state.casesCompleted
+                const remaining = (state.casesTotal - state.casesCompleted) * per
+                return <Text color={theme.muted}>  ·  eta ~{Math.ceil(remaining)}s</Text>
+              })()}
+            </Text>
+          )}
         </Box>
       )}
       {state.phase === 'done' && (

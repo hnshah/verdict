@@ -25,6 +25,12 @@ export interface LiveRunState {
   log: string[]
   result: RunResult | null
   error: string | null
+  /** Running count of distinct case IDs we've seen so far. */
+  casesCompleted: number
+  /** Total cases in the run — estimated from the first message if possible. */
+  casesTotal: number
+  /** When the run started (epoch ms) — used for ETA. */
+  startedAt: number | null
 }
 
 export function useLiveRun() {
@@ -34,18 +40,33 @@ export function useLiveRun() {
     log: [],
     result: null,
     error: null,
+    casesCompleted: 0,
+    casesTotal: 0,
+    startedAt: null,
   })
   const pendingRef = useRef<string[]>([])
   const rafRef = useRef<NodeJS.Timeout | null>(null)
+  const seenCaseIds = useRef<Set<string>>(new Set())
 
   const flush = useCallback(() => {
     const pending = pendingRef.current
     if (pending.length === 0) return
     pendingRef.current = []
+    // Progress tracking: runner emits "<case_id>: running <N> model(s)"
+    // once per case; count each distinct id.
+    let addedCases = 0
+    for (const msg of pending) {
+      const m = msg.match(/^([\w:.\-]+):\s+running\s+\d+\s+model/)
+      if (m && !seenCaseIds.current.has(m[1])) {
+        seenCaseIds.current.add(m[1])
+        addedCases++
+      }
+    }
     setState(s => ({
       ...s,
       log: [...s.log, ...pending].slice(-500),
       current: pending[pending.length - 1] ?? s.current,
+      casesCompleted: s.casesCompleted + addedCases,
     }))
   }, [])
 
@@ -65,13 +86,30 @@ export function useLiveRun() {
     resume?: boolean
     categoryFilter?: string[]
   }) => {
-    setState({ phase: 'running', current: '', log: [], result: null, error: null })
+    seenCaseIds.current = new Set()
     try {
       const cfgPath = opts.configPath ?? './verdict.yaml'
       const config = opts.config ?? loadConfig(path.resolve(cfgPath))
       const packs = opts.packs ?? config.packs.map(p =>
         loadEvalPack(p, path.dirname(path.resolve(cfgPath)))
       )
+      // Total cases is deterministic ahead of time from pack + category filter
+      const total = packs.reduce((n, p) => {
+        const filtered = opts.categoryFilter
+          ? p.cases.filter(c => c.category !== undefined && opts.categoryFilter!.includes(c.category))
+          : p.cases
+        return n + filtered.length
+      }, 0)
+      setState({
+        phase: 'running',
+        current: '',
+        log: [],
+        result: null,
+        error: null,
+        casesCompleted: 0,
+        casesTotal: total,
+        startedAt: Date.now(),
+      })
       const result = await runEvals(
         config, packs, push, opts.resume, opts.categoryFilter, true, cfgPath
       )
