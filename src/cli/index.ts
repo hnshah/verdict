@@ -1,5 +1,6 @@
 import { Command } from 'commander'
 import chalk from 'chalk'
+import readline from 'readline'
 import { runCommand } from './commands/run.js'
 import { modelsCommand, discoverCommand } from './commands/models.js'
 import { initCommand } from './commands/init.js'
@@ -7,6 +8,7 @@ import { compareCommand } from './commands/compare.js'
 import { baselineSaveCommand, baselineListCommand, baselineCompareCommand } from './commands/baseline.js'
 import { historyCommand } from './commands/history.js'
 import { routeCommand } from './commands/route.js'
+import { reviewCommand } from './commands/review.js'
 import { serveCommand } from './commands/serve.js'
 import { daemonStartCommand, daemonStopCommand, daemonStatusCommand, daemonLogsCommand, daemonWorkerCommand } from './commands/daemon.js'
 import { watchCommand } from './commands/watch.js'
@@ -125,6 +127,24 @@ program
   .option('--dry-run', 'Show selected model without running inference')
   .option('--model <id>', 'Force a specific model')
   .action(routeCommand)
+
+program
+  .command('review')
+  .description('Review code with a coding model (pipe code via stdin: cat file.js | verdict review)')
+  .option('-c, --config <path>', 'Config file', './verdict.yaml')
+  .option('--model <id>', 'Model to use for review')
+  .option('--max-tokens <n>', 'Max output tokens', parseInt)
+  .option('--json', 'Output raw JSON instead of formatted review')
+  .action(async (opts) => {
+    // Read code from stdin
+    const code = await new Promise<string>((resolve) => {
+      const chunks: string[] = []
+      const rl = readline.createInterface({ input: process.stdin, crlfDelay: Infinity })
+      rl.on('line', (line) => chunks.push(line))
+      rl.on('close', () => resolve(chunks.join('\n')))
+    })
+    return reviewCommand(code, opts)
+  })
 
 program
   .command('serve')
