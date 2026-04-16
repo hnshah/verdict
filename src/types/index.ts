@@ -5,7 +5,7 @@ import { z } from 'zod'
 export const ModelConfigSchema = z.object({
   id: z.string(),
   // Provider shortcuts with deep integration
-  provider: z.enum(['ollama', 'mlx', 'openclaw', 'subagent']).optional(),
+  provider: z.enum(['ollama', 'mlx', 'lmstudio', 'openclaw', 'subagent']).optional(),
   // Or raw OpenAI-compat endpoint (covers everything else: OpenRouter, Groq, OpenAI, etc.)
   base_url: z.string().optional(),
   api_key: z.string().default('none'),
@@ -359,4 +359,6 @@ export interface DiscoveredModel {
   size_gb?: number
   is_moe?: boolean         // detected MoE architecture
   tags: string[]
+  display_name?: string    // human-readable name (LM Studio)
+  context_window?: number  // max context length (LM Studio)
 }

@@ -4,6 +4,7 @@ import { loadConfig } from '../../core/config.js'
 import { pingModel } from '../../providers/compat.js'
 import { discoverOllama, isOllamaRunning } from '../../providers/ollama.js'
 import { discoverMLX, isMLXRunning } from '../../providers/mlx.js'
+import { discoverLMStudio, isLMStudioRunning } from '../../providers/lmstudio.js'
 
 interface ModelsOptions { config: string }
 
@@ -125,7 +126,36 @@ export async function discoverCommand(): Promise<void> {
     console.log(chalk.dim('  Tip: also run general.yaml on a comparable dense model to see the delta.'))
   }
 
-  console.log()
-  console.log(chalk.dim('  LM Studio     localhost:1234    not checked (add --all to scan)'))
+  // LM Studio
+  const lmPort = Number(process.env['LMSTUDIO_PORT']) || 1234
+  const lmRunning = await isLMStudioRunning('localhost', lmPort)
+
+  if (lmRunning) {
+    const models = await discoverLMStudio('localhost', lmPort)
+    console.log(chalk.green(`  LM Studio     localhost:${lmPort}      running (GGUF)`))
+    if (models.length === 0) {
+      console.log(chalk.dim('    No LLM models loaded. Open LM Studio app or run: lms load <model>'))
+    }
+    for (const m of models) {
+      const size = m.size_gb ? chalk.dim(` ${m.size_gb}GB`) : ''
+      const ctx = m.context_window ? chalk.dim(` ctx:${m.context_window}`) : ''
+      console.log(`    ${(m.display_name ?? m.model).padEnd(35)}${size}${ctx}`)
+    }
+    if (models.length > 0) {
+      console.log()
+      console.log(chalk.dim('  Add to verdict.yaml:'))
+      for (const m of models.slice(0, 3)) {
+        console.log(chalk.dim(`    - id: ${m.id}`))
+        console.log(chalk.dim(`      provider: lmstudio`))
+        console.log(chalk.dim(`      model: ${m.model}`))
+        console.log(chalk.dim(`      base_url: http://localhost:${lmPort}/v1`))
+        console.log(chalk.dim(`      tags: [${m.tags.join(', ')}]`))
+      }
+    }
+  } else {
+    console.log(chalk.dim(`  LM Studio     localhost:${lmPort}      not running`))
+    console.log(chalk.dim('    Start: lms daemon up && lms server start'))  
+  }
+
   console.log()
 }
