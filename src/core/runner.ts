@@ -84,6 +84,7 @@ function buildModelConfigs(config: Config): Record<string, any> {
     configs[model.id] = {
       provider: model.provider,
       model: model.model,
+      base_url: model.base_url,
       temperature: 0.7, // TODO: Get from actual config if available
       max_tokens: model.max_tokens,
       // TODO: Add quantization if available from model metadata
