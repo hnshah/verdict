@@ -1,284 +1,225 @@
-name: Code Review
-description: Tests ability to identify bugs, security vulnerabilities, performance issues, and subtle logic errors in existing code. Evaluates the model as a reviewer, not a generator.
-
+name: code-review
+description: Evaluate how well a model reviews code and identifies bugs
 cases:
-  # ── Security vulnerabilities ─────────────────────────────────────────────
-  - id: review-sec-001
-    description: "SQL injection via string concatenation"
-    category: security
-    prompt: |
-      Review this Python code for issues:
-      
-      ```python
-      def get_user(username):
-          query = "SELECT * FROM users WHERE username = '" + username + "'"
-          return db.execute(query)
-      ```
-    criteria: "Must identify SQL injection vulnerability. Should recommend parameterized queries (e.g., `db.execute('SELECT * FROM users WHERE username = ?', (username,))`). May also note lack of input validation."
-    tags: [security, sql-injection, python]
+- id: review-closure-bug
+  category: code-review
+  tags:
+  - javascript
+  - bug
+  - closure
+  prompt: "Review this JavaScript code and return JSON:\n```javascript\nfor (var i\
+    \ = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 100);\n}\n```\nExpected\
+    \ bugs: closure / var hoisting\n"
+  criteria: Identifies var/closure bug in setTimeout loop. Mentions that var is function-scoped
+    and all callbacks share the same i, printing 5 three times. Suggests using let
+    or an IIFE.
+- id: review-null-ptr
+  category: code-review
+  tags:
+  - javascript
+  - bug
+  - null-check
+  prompt: "Review this JavaScript code and return JSON:\n```javascript\nfunction getName(user)\
+    \ {\n  return user.profile.name;\n}\n```\nExpected bugs: null/undefined access\
+    \ on user or profile\n"
+  criteria: Identifies that user.profile.name will throw if user or profile is null/undefined.
+    Suggests optional chaining (?.) or guard checks.
+- id: review-sql-injection
+  category: code-review
+  tags:
+  - security
+  - sql
+  - injection
+  prompt: "Review this Python code and return JSON:\n```python\ndef get_user(user_id):\n\
+    \    query = f\"SELECT * FROM users WHERE id = {user_id}\"\n    cursor.execute(query)\n\
+    \    return cursor.fetchone()\n```\nExpected bugs: SQL injection vulnerability\n"
+  criteria: Identifies SQL injection via f-string interpolation in query. Suggests
+    using parameterized queries with ? or %s placeholders.
+- id: review-race-condition
+  category: code-review
+  tags:
+  - go
+  - concurrency
+  - race
+  prompt: "Review this Go code and return JSON:\n```go\nfunc main() {\n    var wg\
+    \ sync.WaitGroup\n    for i := 0; i < 5; i++ {\n        wg.Add(1)\n        go\
+    \ func() {\n            defer wg.Done()\n            fmt.Println(i)\n        }()\n\
+    \    }\n    wg.Wait()\n}\n```\nExpected bugs: closure variable capture of loop\
+    \ counter\n"
+  criteria: 'Identifies Go closure capturing loop variable i. All goroutines print
+    5. Fix: pass i as an argument to the goroutine function.'
+- id: review-mutating-input
+  category: code-review
+  tags:
+  - python
+  - mutation
+  - side-effect
+  prompt: "Review this Python code and return JSON:\n```python\ndef process_items(items):\n\
+    \    for item in items:\n        if item.active:\n            items.remove(item)\n\
+    \    return items\n```\nExpected bugs: modifying list while iterating\n"
+  criteria: Identifies modifying list while iterating causes items to be skipped.
+    Suggests building a new list with list comprehension or filtering first.
+- id: review-resource-leak
+  category: code-review
+  tags:
+  - python
+  - resource
+  - leak
+  prompt: "Review this Python code and return JSON:\n```python\ndef read_config(path):\n\
+    \    f = open(path, 'r')\n    return json.load(f)\n```\nExpected bugs: file handle\
+    \ not closed / not using context manager\n"
+  criteria: Identifies file handle leak — file opened but never closed. Suggests using
+    with/open statement or explicit close in finally.
+- id: review-timing-attack
+  category: code-review
+  tags:
+  - security
+  - timing
+  - crypto
+  prompt: "Review this Python code and return JSON:\n```python\ndef check_password(plain,\
+    \ hashed):\n    return bcrypt.hash(plain) == hashed\n```\nExpected bugs: timing\
+    \ attack / comparing hashes with == instead of bcrypt.compare\n"
+  criteria: Identifies bcrypt.hash used instead of bcrypt.compare for password checking
+    causes timing attack vulnerability. Suggests bcrypt.checkpw or bcrypt.compare.
+- id: review-deadlock
+  category: code-review
+  tags:
+  - go
+  - concurrency
+  - deadlock
+  prompt: "Review this Go code and return JSON:\n```go\nfunc transfer(a, b *Account,\
+    \ amount int, ch chan bool) {\n    <-ch  // wait\n    a.Lock()\n    b.Lock()\n\
+    \    // transfer\n    a.Unlock()\n    b.Unlock()\n    ch <- true\n}\n```\nExpected\
+    \ bugs: potential deadlock / inconsistent lock ordering\n"
+  criteria: 'Identifies potential deadlock from inconsistent lock ordering between
+    transfer() calls on two accounts. Fix: always lock in consistent order.'
+- id: review-shallow-equal
+  category: code-review
+  tags:
+  - javascript
+  - equality
+  - comparison
+  prompt: 'Review this JavaScript code and return JSON:
 
-  - id: review-sec-002
-    description: "Hardcoded credentials"
-    category: security
-    prompt: |
-      Review this JavaScript code for issues:
-      
-      ```javascript
-      const config = {
-        database: {
-          host: 'prod-db.company.com',
-          user: 'admin',
-          password: 'Sup3rS3cret!',
-          port: 5432
-        }
-      };
-      
-      module.exports = config;
-      ```
-    criteria: "Must flag hardcoded credentials/password as a critical security issue. Should recommend environment variables or secrets management (e.g., process.env.DB_PASSWORD). Should mention not committing secrets to version control."
-    tags: [security, credentials, javascript]
+    ```javascript
 
-  - id: review-sec-003
-    description: "Path traversal vulnerability"
-    category: security
-    prompt: |
-      Review this Node.js code for issues:
-      
-      ```javascript
-      app.get('/file', (req, res) => {
-        const filename = req.query.name;
-        const filepath = path.join(__dirname, 'uploads', filename);
-        res.sendFile(filepath);
-      });
-      ```
-    criteria: "Must identify path traversal vulnerability — attacker can use `../../../etc/passwd` to read arbitrary files. Should recommend validating/sanitizing the filename, using path.resolve() to check the file stays within uploads/, or a whitelist approach."
-    tags: [security, path-traversal, nodejs]
+    const a = { x: 1 };
 
-  # ── Logic bugs ────────────────────────────────────────────────────────────
-  - id: review-bug-001
-    description: "Off-by-one error in pagination"
-    category: bugs
-    prompt: |
-      Review this Python pagination code for issues:
-      
-      ```python
-      def paginate(items, page, per_page):
-          start = page * per_page
-          end = start + per_page
-          return items[start:end]
-      
-      # Usage: page 1 = first page
-      results = paginate(data, 1, 10)
-      ```
-    criteria: "Must identify that if page 1 is the first page, `start = 1 * 10 = 10` — skipping the first 10 items. Fix: use `(page - 1) * per_page` or document that page is 0-indexed."
-    tags: [bugs, off-by-one, python]
+    const b = { x: 1 };
 
-  - id: review-bug-002
-    description: "Mutating a list while iterating over it"
-    category: bugs
-    prompt: |
-      Review this Python code for issues:
-      
-      ```python
-      def remove_negatives(numbers):
-          for n in numbers:
-              if n < 0:
-                  numbers.remove(n)
-          return numbers
-      
-      result = remove_negatives([-1, -2, 3, -4, 5])
-      ```
-    criteria: "Must identify that modifying a list while iterating over it causes items to be skipped (e.g., [-1,-2,3,-4,5] → removes -1, iterator advances, -2 gets skipped). Recommend iterating over a copy: `for n in numbers[:]` or use list comprehension: `return [n for n in numbers if n >= 0]`."
-    tags: [bugs, mutation, python, iteration]
+    console.log(a == b, a === b);
 
-  - id: review-bug-003
-    description: "Race condition in async code"
-    category: bugs
-    prompt: |
-      Review this JavaScript code for issues:
-      
-      ```javascript
-      let count = 0;
-      
-      async function incrementCounter() {
-        const current = count;
-        await someAsyncOperation();
-        count = current + 1;
-      }
-      
-      // Called concurrently 100 times
-      await Promise.all(Array(100).fill(null).map(() => incrementCounter()));
-      console.log(count); // Expected: 100
-      ```
-    criteria: "Must identify the race condition — multiple calls read the same `current` value before any write, so the final count will be far less than 100. Should explain why: all 100 calls read count=0, await, then all write count=1. Should suggest atomic operations, a mutex/lock pattern, or restructuring to avoid shared mutable state."
-    tags: [bugs, race-condition, async, javascript]
+    ```
 
-  - id: review-bug-004
-    description: "Incorrect error handling swallows exceptions"
-    category: bugs
-    prompt: |
-      Review this Python code for issues:
-      
-      ```python
-      def parse_config(filepath):
-          try:
-              with open(filepath) as f:
-                  return json.loads(f.read())
-          except:
-              return {}
-      ```
-    criteria: "Must flag bare `except:` which silently swallows ALL exceptions including KeyboardInterrupt, SystemExit, and programming errors like NameError. Should recommend: (1) catching specific exceptions (FileNotFoundError, json.JSONDecodeError), (2) at minimum using `except Exception:`, (3) logging the error before returning default."
-    tags: [bugs, error-handling, python]
+    Expected bugs: using == or === for object comparison (only false)
 
-  # ── Performance issues ─────────────────────────────────────────────────────
-  - id: review-perf-001
-    description: "N+1 query problem"
-    category: performance
-    prompt: |
-      Review this Python ORM code for issues:
-      
-      ```python
-      def get_posts_with_authors(limit=100):
-          posts = Post.objects.all()[:limit]
-          result = []
-          for post in posts:
-              result.append({
-                  'title': post.title,
-                  'author': post.author.name  # Fetches author separately
-              })
-          return result
-      ```
-    criteria: "Must identify the N+1 query problem — 1 query for posts + 1 query per post for author = 101 queries for 100 posts. Should recommend `select_related('author')` (Django) or equivalent eager loading to fetch in 1-2 queries."
-    tags: [performance, n+1, orm, python]
-
-  - id: review-perf-002
-    description: "Quadratic complexity string concatenation"
-    category: performance
-    prompt: |
-      Review this Python code for performance issues:
-      
-      ```python
-      def build_csv(rows):
-          result = ""
-          for row in rows:
-              result += ",".join(str(x) for x in row) + "\n"
-          return result
-      ```
-    criteria: "Must identify that string concatenation in a loop is O(n²) because each `+=` creates a new string object. For large datasets this is very slow. Should recommend: collecting into a list and using `''.join(...)`, using StringIO, or the csv module."
-    tags: [performance, string-concatenation, python, complexity]
-
-  # ── Code quality / subtle issues ──────────────────────────────────────────
-  - id: review-quality-001
-    description: "Mutable default argument"
-    category: quality
-    prompt: |
-      Review this Python code for issues:
-      
-      ```python
-      def append_item(item, lst=[]):
-          lst.append(item)
-          return lst
-      
-      print(append_item(1))  # [1]
-      print(append_item(2))  # Expected: [2], Actual: ???
-      ```
-    criteria: "Must identify that default mutable arguments are evaluated once at function definition, not per call. `lst=[]` creates a single shared list. Second call returns [1, 2], not [2]. Fix: use `lst=None` and set `if lst is None: lst = []` inside the function."
-    tags: [quality, mutable-defaults, python, gotcha]
-
-  - id: review-quality-002
-    description: "Floating point equality comparison"
-    category: quality
-    prompt: |
-      Review this code for issues:
-      
-      ```python
-      def calculate_tax(amount, rate):
-          tax = amount * rate
-          if tax == 0.1:
-              return "Minimum tax applies"
-          return f"Tax: {tax}"
-      
-      print(calculate_tax(1.0, 0.1))
-      ```
-    criteria: "Must identify that floating point arithmetic makes exact equality comparisons unreliable — `1.0 * 0.1` may not equal exactly `0.1` due to IEEE 754 representation. Should recommend using `math.isclose(tax, 0.1)` or comparing with a tolerance (epsilon), or working in integer cents."
-    tags: [quality, floating-point, python]
-
-  - id: review-quality-003
-    description: "Missing null/undefined check"
-    category: quality
-    prompt: |
-      Review this TypeScript code for issues:
-      
-      ```typescript
-      interface User {
-        name: string;
-        address?: {
-          city: string;
-          country: string;
-        };
-      }
-      
-      function formatLocation(user: User): string {
-        return `${user.address.city}, ${user.address.country}`;
-      }
-      ```
-    criteria: "Must identify that `user.address` is optional and accessing `.city` will throw a TypeError if address is undefined. Despite TypeScript types, the runtime will crash. Should recommend optional chaining (`user.address?.city`) or a null check before accessing. Note: TypeScript strict mode should also catch this with `strictNullChecks`."
-    tags: [quality, null-check, typescript]
-
-  - id: review-quality-004
-    description: "Incorrect use of async/await returning nested promise"
-    category: quality
-    prompt: |
-      Review this JavaScript code for issues:
-      
-      ```javascript
-      async function fetchData(url) {
-        return await fetch(url).then(res => res.json());
-      }
-      
-      async function processUsers() {
-        const users = fetchData('/api/users');  // Missing await
-        users.forEach(user => console.log(user.name));
-      }
-      ```
-    criteria: "Must identify that `fetchData('/api/users')` is missing `await` in `processUsers()` — `users` is a Promise, not an array. Calling `.forEach` on a Promise will silently fail (no `.forEach` method, or won't iterate). The error may not be obvious. Fix: `const users = await fetchData('/api/users')`."
-    tags: [quality, async-await, javascript, missing-await]
-
-  - id: review-quality-005
-    description: "Deep copy vs shallow copy bug"
-    category: quality
-    prompt: |
-      Review this JavaScript code for issues:
-      
-      ```javascript
-      function addDefaults(userConfig) {
-        const defaults = {
-          theme: 'light',
-          notifications: { email: true, push: false },
-          maxItems: 100
-        };
-        return Object.assign(defaults, userConfig);
-      }
-      
-      const config1 = addDefaults({ theme: 'dark' });
-      const config2 = addDefaults({ maxItems: 50 });
-      console.log(config1.notifications === config2.notifications); // true — shared reference
-      ```
-    criteria: "Must identify two issues: (1) Object.assign mutates `defaults` — since it's declared inside the function this is acceptable per-call, but (2) nested objects like `notifications` are shallow-copied — both configs share the same `notifications` reference, so mutating one affects the other. Fix: use `structuredClone(defaults)` or spread nested objects manually."
-    tags: [quality, shallow-copy, javascript]
-
-  - id: review-quality-006
-    description: "Resource leak — file handle not closed on exception"
-    category: quality
-    prompt: |
-      Review this Python code for issues:
-      
-      ```python
-      def read_config(path):
-          f = open(path)
-          data = json.load(f)
-          f.close()
-          return data
-      ```
-    criteria: "Must identify that if `json.load(f)` raises an exception, `f.close()` is never called — resource leak. Fix: use `with open(path) as f:` which guarantees the file is closed even on exception. May also note lack of specific exception handling."
-    tags: [quality, resource-leak, python, context-manager]
+    '
+  criteria: Correctly identifies that both == and === return false for distinct object
+    comparison. Explains this is reference equality, not value equality.
+- id: review-floating-point
+  category: code-review
+  tags:
+  - python
+  - floating-point
+  - precision
+  prompt: "Review this Python code and return JSON:\n```python\ndef calc_tax(price):\n\
+    \    tax = price * 0.08\n    return round(tax, 2)\n\nprint(calc_tax(0.1 + 0.2))\n\
+    ```\nExpected bugs: floating point precision error\n"
+  criteria: Identifies floating point precision error — (0.1 + 0.2) does not equal
+    0.3 in binary float. Suggests Decimal class or storing cents as integers.
+- id: review-auth-bypass
+  category: code-review
+  tags:
+  - security
+  - auth
+  - logic
+  prompt: "Review this Python code and return JSON:\n```python\ndef is_admin(user):\n\
+    \    if user.get('is_admin'):\n        return True\n    return check_db(user.id)\n\
+    \ndef delete_user(user_id, current_user):\n    if is_admin(current_user):\n  \
+    \      db.delete(user_id)\n```\nExpected bugs: logic error in is_admin / IDOR\
+    \ potential\n"
+  criteria: 'Identifies IDOR: is_admin() has a bypass path (returns True for is_admin=True
+    in dict without DB check) AND delete_user does not verify target user. Two separate
+    auth bugs.'
+- id: review-error-swallow
+  category: code-review
+  tags:
+  - python
+  - error-handling
+  - exception
+  prompt: "Review this Python code and return JSON:\n```python\ntry:\n    result =\
+    \ risky_operation(data)\nexcept Exception:\n    pass\nreturn default_value\n```\n\
+    Expected bugs: swallowing all exceptions / losing error information\n"
+  criteria: Identifies that bare except:pass loses all error information. Suggests
+    logging the exception or reraising with raise from.
+- id: review-n-plus-1
+  category: code-review
+  tags:
+  - python
+  - sql
+  - performance
+  prompt: "Review this Python code and return JSON:\n```python\ndef get_all_users_with_posts():\n\
+    \    users = db.query(\"SELECT * FROM users\")\n    for user in users:\n     \
+    \   user['posts'] = db.query(f\"SELECT * FROM posts WHERE user_id = {user['id']}\"\
+    )\n    return users\n```\nExpected bugs: N+1 query problem / SQL injection in\
+    \ second query\n"
+  criteria: 'Identifies N+1 query: first query gets all users then loop queries posts
+    one by one. Also SQL injection in the f-string query. Fix: use JOIN for both.'
+- id: review-oob-access
+  category: code-review
+  tags:
+  - python
+  - security
+  - out-of-bounds
+  prompt: "Review this Python code and return JSON:\n```python\ndef get_window(items,\
+    \ start, length):\n    return items[start:start + length]\n```\nExpected bugs:\
+    \ no bounds checking on start / potential negative index or overflow\n"
+  criteria: Identifies missing bounds checking on start index — negative values or
+    start+length exceeding array length will crash or return wrong slice. Suggests
+    explicit bounds validation.
+- id: review-hardcoded-secret
+  category: code-review
+  tags:
+  - security
+  - secrets
+  - api-key
+  prompt: "Review this Python code and return JSON:\n```python\nAPI_KEY = \"sk-abc123xyz789supersecretkey\"\
+    \n\ndef send_message(text):\n    headers = { \"Authorization\": f\"Bearer {API_KEY}\"\
+    \ }\n    return requests.post(WEBHOOK_URL, data={\"text\": text}, headers=headers)\n\
+    ```\nExpected bugs: hardcoded API key / secrets in source code\n"
+  criteria: Identifies hardcoded API key in source code. Suggests using environment
+    variables, .env files, or a secret manager like AWS Secrets Manager.
+- id: review-log-injection
+  category: code-review
+  tags:
+  - security
+  - logging
+  - injection
+  prompt: "Review this Python code and return JSON:\n```python\ndef log_request(user_input):\n\
+    \    log_file.write(f\"[USER INPUT] {user_input}\\n\")\n\nlog_request(request.args.get('name',\
+    \ ''))\n```\nExpected bugs: log injection / unsanitized user input in logs\n"
+  criteria: Identifies unsanitized user input written directly to logs — potential
+    log injection. Attacker could forge log entries. Suggests input sanitization or
+    structured logging.
+- id: review-crypto-weak
+  category: code-review
+  tags:
+  - python
+  - security
+  - cryptography
+  prompt: "Review this Python code and return JSON:\n```python\nimport hashlib\n\n\
+    def hash_password(password):\n    return hashlib.md5(password.encode()).hexdigest()\n\
+    ```\nExpected bugs: MD5 for passwords (too weak) / should use bcrypt or argon2\n"
+  criteria: Identifies MD5 is cryptographically broken and should never be used for
+    password hashing. Suggests bcrypt, scrypt, argon2, or PBKDF2.
+- id: review-path-traversal
+  category: code-review
+  tags:
+  - security
+  - file
+  - path-traversal
+  prompt: "Review this Python code and return JSON:\n```python\ndef serve_file(filename):\n\
+    \    path = os.path.join(SAFE_DIR, filename)\n    return open(path).read()\n```\n\
+    Expected bugs: path traversal vulnerability / no validation of filename\n"
+  criteria: 'Identifies path traversal: attacker can use ../../../etc/passwd to escape
+    SAFE_DIR. Suggests using os.path.basename(), path validation, or chroot jail.'
