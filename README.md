@@ -431,6 +431,82 @@ judge:
 
 ---
 
+## Automation
+
+Run evals on a schedule, get notified when a model regresses. Backed by
+the daemon's job queue — no external cron needed.
+
+### Add a schedule
+
+```bash
+verdict daemon start
+
+verdict schedule add nightly \
+  --cron "0 2 * * *" \
+  --pack general --pack coding \
+  --webhook "$SLACK_WEBHOOK" \
+  --baseline prod
+```
+
+Cron expressions accept the standard 5-field format and the usual
+aliases: `@hourly`, `@daily`, `@weekly`, `@monthly`, `@yearly`.
+
+### List and inspect
+
+```bash
+verdict schedule list
+# NAME       CRON       NEXT                  LAST   STATUS  SOURCE
+# nightly    0 2 * * *  2026-04-16 02:00:00   -      -       cli
+
+verdict schedule show nightly
+verdict schedule history nightly     # past runs triggered by this schedule
+```
+
+### Pause, resume, run now, remove
+
+```bash
+verdict schedule pause  nightly       # skip future fires, keep the row
+verdict schedule resume nightly
+verdict schedule run    nightly       # enqueue immediately
+verdict schedule remove nightly
+```
+
+### Declarative YAML schedules
+
+Put this in your `verdict.yaml` and the daemon will sync it on start.
+CLI-created schedules are preserved; YAML is authoritative for
+yaml-sourced rows (delete from the file → deleted from the DB).
+
+```yaml
+schedules:
+  - name: nightly-baseline
+    cron: "0 2 * * *"
+    packs: [general, coding]
+    models: [qwen-7b, llama-3]
+    on_regression:
+      webhook: ${SLACK_WEBHOOK:-}
+      baseline: prod
+  - name: hourly-smoke
+    cron: "@hourly"
+    packs: [general]
+```
+
+### Regression alerts
+
+If a schedule has `on_regression.baseline`, the daemon compares each
+fresh run's summary against the named baseline. When any model drops
+more than 0.5 points, it:
+
+- Prints a `⚠ Regression detected in "<schedule>"…` line to the daemon log
+- POSTs a JSON body to `on_regression.webhook` (Slack / Discord
+  compatible — sends a `text` field plus structured `regressions[]`).
+  Retries once on 5xx; 4xx is treated as permanent.
+
+The schedule row's `last_status` becomes `regression` (visible in
+`verdict schedule list` and the TUI Schedules screen).
+
+---
+
 ## Interactive TUI
 
 Don't want to remember 18 subcommands? Run
@@ -444,9 +520,9 @@ workflow — browse runs, launch evals, diff baselines, manage the daemon,
 edit config, test the router, all without leaving your terminal.
 
 ```
-╭─────────────────────────────────────────────────────────────────────╮
-│ verdict │ 1 Home  2 Runs  3 Models  4 Baselines  5 Daemon  6 Packs  │
-╰─────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────────────────────────────────────────────────────╮
+│ verdict │ 1 Home  2 Runs  3 Models  4 Baselines  5 Daemon  6 Packs  7 Sched. │
+╰──────────────────────────────────────────────────────────────────────────────╯
 
  ⚡ Top models  (avg across 15 runs)
 
@@ -477,6 +553,7 @@ edit config, test the router, all without leaving your terminal.
 | 4 | **Baselines** | List saved baselines, `s` saves latest, Enter diffs side-by-side |
 | 5 | **Daemon** | Live job queue + tailing log (`p` to pause, `G` to resume) |
 | 6 | **Eval Packs** | Browse every pack under `./eval-packs/`, drill into cases |
+| 7 | **Schedules** | Cron-driven eval schedules; `r` run now, Space pause/resume |
 | · | **New Run** | Pick models + packs via Tab/Space, Enter launches with live progress |
 | · | **Compare** | Pick two result JSONs, side-by-side diff with regression highlights |
 | · | **Router** | Interactive prompt routing — type a prompt, see which model wins |
@@ -492,7 +569,7 @@ edit config, test the router, all without leaving your terminal.
 | `:` | Command palette (fuzzy-matches every screen + action) |
 | `/` | Filter the visible list |
 | `?` | Help overlay with context-sensitive keybinds |
-| `1`..`6` | Jump to tab 1..6 (lazygit-style) |
+| `1`..`7` | Jump to tab 1..7 (lazygit-style) |
 | `Tab` / `Shift+Tab` | Next / previous pane |
 | `t` | Cycle theme (default → monokai → dracula → solarized) |
 | `Ctrl-o` | Back (navigation history, last 20 screens) |

@@ -7,12 +7,25 @@ import type Database from 'better-sqlite3'
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
-import { getDb, initSchema, getNextJob, updateJob, getJobs } from '../db/client.js'
-import type { JobRow } from '../db/client.js'
+import yaml from 'js-yaml'
+import {
+  getDb,
+  initSchema,
+  getNextJob,
+  updateJob,
+  addJob,
+  getDueSchedules,
+  updateSchedule,
+  upsertSchedule,
+  removeYamlSchedules,
+} from '../db/client.js'
+import type { JobRow, ScheduleRow, OnRegressionConfig } from '../db/client.js'
 import { selectModel } from '../router/selector.js'
 import { callModel } from '../providers/compat.js'
-import type { ModelConfig } from '../types/index.js'
 import { buildModelConfig } from '../utils/model-config.js'
+import { nextCronTime, isValidCron } from '../scheduler/cron.js'
+import { notifyRegression } from '../notify/index.js'
+import type { RunResult } from '../types/index.js'
 
 export interface DaemonStatus {
   running: boolean
@@ -40,11 +53,22 @@ export class VerdictDaemon {
   private running = false
   private currentJobId: number | null = null
   private pollIntervalMs: number
+  private schedulerIntervalMs: number
   private startedAt: number = 0
   private timer: ReturnType<typeof setTimeout> | null = null
+  private schedulerTimer: ReturnType<typeof setInterval> | null = null
+  // Holds the last RunResult produced by runEvalJob so processNextJob can
+  // forward it to notifyRegression when the job originated from a schedule.
+  private lastEvalResult: RunResult | null = null
 
-  constructor(opts?: { pollIntervalMs?: number; db?: Database.Database }) {
+  constructor(opts?: {
+    pollIntervalMs?: number
+    schedulerIntervalMs?: number
+    db?: Database.Database
+  }) {
     this.pollIntervalMs = opts?.pollIntervalMs ?? 5000
+    // Cron granularity is minutes, so a 60s scheduler tick is sufficient.
+    this.schedulerIntervalMs = opts?.schedulerIntervalMs ?? 60_000
     if (opts?.db) {
       this.db = opts.db
     } else {
@@ -59,7 +83,19 @@ export class VerdictDaemon {
     this.running = true
     this.startedAt = Date.now()
     fs.writeFileSync(PID_FILE, String(process.pid))
+    // Sync declarative YAML schedules into the DB at startup so they're
+    // always a mirror of verdict.yaml (CLI-created schedules are preserved).
+    try {
+      const synced = this.syncYamlSchedules('./verdict.yaml')
+      if (synced > 0) this.log(`synced ${synced} schedule(s) from verdict.yaml`)
+    } catch (err) {
+      this.log(`yaml schedule sync skipped: ${err instanceof Error ? err.message : String(err)}`)
+    }
     this.poll()
+    // Run an initial scheduler tick immediately so just-now-due schedules
+    // don't wait a full interval.
+    this.tickScheduler()
+    this.schedulerTimer = setInterval(() => this.tickScheduler(), this.schedulerIntervalMs)
   }
 
   stop(): void {
@@ -67,6 +103,10 @@ export class VerdictDaemon {
     if (this.timer) {
       clearTimeout(this.timer)
       this.timer = null
+    }
+    if (this.schedulerTimer) {
+      clearInterval(this.schedulerTimer)
+      this.schedulerTimer = null
     }
     try { fs.unlinkSync(PID_FILE) } catch { /* already gone */ }
   }
@@ -131,15 +171,20 @@ export class VerdictDaemon {
     this.log(`[job:${job.id}] starting type=${job.type}`)
 
     try {
+      this.lastEvalResult = null
       const output = await this.runJob(job)
       const completedAt = new Date().toISOString()
       updateJob(this.db, job.id, { status: 'done', output, completed_at: completedAt })
       this.log(`[job:${job.id}] done`)
+      // If this job originated from a schedule, run notifications + mark status
+      if (job.type === 'eval') await this.onEvalJobDone(job)
     } catch (err) {
       const completedAt = new Date().toISOString()
       const errorMsg = err instanceof Error ? err.message : String(err)
       updateJob(this.db, job.id, { status: 'failed', error: errorMsg, completed_at: completedAt })
       this.log(`[job:${job.id}] failed: ${errorMsg}`)
+      // Still mark the schedule's last_status so the TUI/CLI can surface errors
+      this.markScheduleStatus(job, 'error')
     } finally {
       this.currentJobId = null
     }
@@ -176,10 +221,19 @@ export class VerdictDaemon {
     }
 
     const configDir = path.dirname(path.resolve(configPath))
-    const packNames = input['pack'] ? [input['pack'] as string] : config.packs
+    // Accept either `pack` (legacy singular) or `packs` (array, from schedules)
+    let packNames: string[]
+    if (Array.isArray(input['packs']) && (input['packs'] as unknown[]).length > 0) {
+      packNames = input['packs'] as string[]
+    } else if (input['pack']) {
+      packNames = [input['pack'] as string]
+    } else {
+      packNames = config.packs
+    }
     const packs = packNames.map(p => loadEvalPack(p, configDir))
 
     const result = await runEvals(config, packs, msg => this.log(`  ${msg}`))
+    this.lastEvalResult = result
 
     const packLabel = (packNames[0] ?? 'unknown').replace(/^.*\//, '').replace(/\.ya?ml$/, '')
     saveRunResult(this.db, result, packLabel)
@@ -275,5 +329,174 @@ export class VerdictDaemon {
     const line = `[${ts}] ${msg}\n`
     ensureDir()
     fs.appendFileSync(LOG_FILE, line)
+  }
+
+  /**
+   * Post-eval-success hook. If the job carried a scheduleId in its metadata,
+   * detect regressions against the configured baseline, dispatch webhooks,
+   * and write `last_run_id` / `last_status` back to the schedules row.
+   */
+  private async onEvalJobDone(job: JobRow): Promise<void> {
+    const meta = parseScheduleMetadata(job.metadata)
+    if (!meta) return
+    const scheduleRow = this.db.prepare(
+      `SELECT * FROM schedules WHERE id = ? LIMIT 1`
+    ).get(meta.scheduleId) as ScheduleRow | undefined
+    if (!scheduleRow) return
+
+    const result = this.lastEvalResult
+    let status: 'ok' | 'regression' | 'error' = 'ok'
+
+    if (result) {
+      try {
+        const outcome = await notifyRegression({
+          schedule: scheduleRow,
+          result,
+          log: (m) => this.log(m),
+        })
+        if (outcome.report?.regressed) status = 'regression'
+      } catch (err) {
+        this.log(`[schedule:${scheduleRow.name}] notify failed: ${err instanceof Error ? err.message : String(err)}`)
+      }
+    }
+
+    updateSchedule(this.db, scheduleRow.id, {
+      last_run_id: result?.run_id ?? null,
+      last_status: status,
+    })
+  }
+
+  /** Mark a schedule's last_status when its associated job failed. */
+  private markScheduleStatus(job: JobRow, status: 'error'): void {
+    const meta = parseScheduleMetadata(job.metadata)
+    if (!meta) return
+    const row = this.db.prepare(
+      `SELECT id FROM schedules WHERE id = ? LIMIT 1`
+    ).get(meta.scheduleId) as { id: number } | undefined
+    if (!row) return
+    updateSchedule(this.db, row.id, { last_status: status })
+  }
+
+  /**
+   * Walk every enabled, due schedule and enqueue an `eval` job for it.
+   * The job input carries the schedule's filters, while metadata carries the
+   * schedule id so the worker can post-run notify on regressions.
+   * Also advances the schedule's next_run_at to the cron's next fire time.
+   *
+   * Exposed for testing (invoke after manually setting next_run_at).
+   */
+  tickScheduler(now: Date = new Date()): number {
+    if (!this.running) return 0
+    const due = getDueSchedules(this.db, now)
+    let fired = 0
+    for (const sched of due) {
+      try {
+        this.fireSchedule(sched, now)
+        fired++
+      } catch (err) {
+        this.log(`[schedule:${sched.name}] fire failed: ${err instanceof Error ? err.message : String(err)}`)
+        updateSchedule(this.db, sched.id, { last_status: 'error' })
+      }
+    }
+    return fired
+  }
+
+  private fireSchedule(sched: ScheduleRow, now: Date): void {
+    const input: Record<string, unknown> = {}
+    if (sched.config_path) input['configPath'] = sched.config_path
+    if (sched.packs) input['packs'] = sched.packs.split(',').map(s => s.trim()).filter(Boolean)
+    if (sched.models) input['models'] = sched.models.split(',').map(s => s.trim()).filter(Boolean)
+    if (sched.category) input['category'] = sched.category.split(',').map(s => s.trim()).filter(Boolean)
+
+    const jobId = addJob(this.db, {
+      type: 'eval',
+      input: JSON.stringify(input),
+      priority: 5,
+      metadata: JSON.stringify({ scheduleId: sched.id, scheduleName: sched.name }),
+    })
+
+    const next = nextCronTime(sched.cron, now)
+    updateSchedule(this.db, sched.id, {
+      next_run_at: next ? next.toISOString() : null,
+      last_run_at: now.toISOString(),
+    })
+    this.log(`[schedule:${sched.name}] enqueued job ${jobId}; next=${next?.toISOString() ?? 'none'}`)
+  }
+
+  /**
+   * Load `verdict.yaml` and upsert its `schedules:` block into the DB.
+   * - YAML-declared schedules always overwrite existing rows (keyed by name).
+   * - YAML-declared schedules that were removed from the file are deleted
+   *   (so the config file remains the source of truth).
+   * - CLI-created schedules (source='cli') are untouched.
+   *
+   * Returns the number of schedules upserted.
+   */
+  syncYamlSchedules(configPath: string): number {
+    if (!fs.existsSync(configPath)) return 0
+    // Lazy-load to avoid pulling the whole config module when no config exists
+    const yamlContent = fs.readFileSync(configPath, 'utf8')
+    // Minimal parse for just the `schedules:` field — use the same resolver
+    // the main config uses so env-var substitution works.
+    let parsed: unknown
+    try {
+      parsed = yaml.load(yamlContent)
+    } catch {
+      return 0
+    }
+
+    const raw = (parsed as Record<string, unknown> | null)?.['schedules']
+    if (!Array.isArray(raw)) {
+      // No schedules block — drop any stale yaml rows
+      removeYamlSchedules(this.db)
+      return 0
+    }
+
+    // Drop stale yaml rows first (schedules removed from the file)
+    removeYamlSchedules(this.db)
+
+    let count = 0
+    for (const item of raw) {
+      const entry = item as Record<string, unknown>
+      const name = entry['name']
+      const cron = entry['cron']
+      if (typeof name !== 'string' || typeof cron !== 'string' || !isValidCron(cron)) {
+        this.log(`skipping invalid schedule entry: name=${String(name)} cron=${String(cron)}`)
+        continue
+      }
+      const next = nextCronTime(cron)
+      upsertSchedule(this.db, {
+        name,
+        cron,
+        config_path: typeof entry['config_path'] === 'string' ? (entry['config_path'] as string) : null,
+        packs: Array.isArray(entry['packs']) ? (entry['packs'] as string[]).join(',') : null,
+        models: Array.isArray(entry['models']) ? (entry['models'] as string[]).join(',') : null,
+        category: Array.isArray(entry['category']) ? (entry['category'] as string[]).join(',') : null,
+        enabled: entry['enabled'] !== false,
+        on_regression: (entry['on_regression'] ?? null) as OnRegressionConfig | null,
+        next_run_at: next ? next.toISOString() : null,
+        source: 'yaml',
+      })
+      count++
+    }
+    return count
+  }
+}
+
+/**
+ * Parse the `metadata` blob attached to a job row. Only jobs enqueued by the
+ * scheduler tick or `verdict schedule run` will have a `scheduleId` field.
+ */
+function parseScheduleMetadata(metadata: string | null): { scheduleId: number; scheduleName: string } | null {
+  if (!metadata) return null
+  try {
+    const obj = JSON.parse(metadata) as Record<string, unknown>
+    if (typeof obj['scheduleId'] !== 'number') return null
+    return {
+      scheduleId: obj['scheduleId'] as number,
+      scheduleName: (obj['scheduleName'] as string) ?? String(obj['scheduleId']),
+    }
+  } catch {
+    return null
   }
 }

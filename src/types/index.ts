@@ -58,6 +58,29 @@ export const JudgeConfigSchema = z.object({
 })
 export type JudgeConfig = z.infer<typeof JudgeConfigSchema>
 
+// Webhook URL may be empty (env-var fallback unresolved) — accept either a
+// valid URL or the empty string. Downstream code treats "" as "no webhook".
+const WebhookUrlSchema = z.union([z.string().url(), z.literal('')]).optional()
+
+export const OnRegressionSchema = z.object({
+  webhook: WebhookUrlSchema,
+  stdout: z.boolean().default(true),
+  baseline: z.string().optional(),
+})
+export type OnRegression = z.infer<typeof OnRegressionSchema>
+
+export const ScheduleSchema = z.object({
+  name: z.string().min(1),
+  cron: z.string().min(1),
+  config_path: z.string().optional(),
+  packs: z.array(z.string()).optional(),
+  models: z.array(z.string()).optional(),
+  category: z.array(z.string()).optional(),
+  enabled: z.boolean().default(true),
+  on_regression: OnRegressionSchema.optional(),
+})
+export type ScheduleDef = z.infer<typeof ScheduleSchema>
+
 export const ConfigSchema = z.object({
   version: z.string().regex(/^[0-9]+\.[0-9]+$/).optional(),
   name: z.string().default('My Evals'),
@@ -78,6 +101,7 @@ export const ConfigSchema = z.object({
     auto_contribute: z.boolean().default(false),
     contribution_author: z.string().optional(),
   }).optional(),
+  schedules: z.array(ScheduleSchema).optional(),
 })
 export type Config = z.infer<typeof ConfigSchema>
 

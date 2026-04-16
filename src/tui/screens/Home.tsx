@@ -12,6 +12,8 @@ import { Box, Text } from 'ink'
 import { theme, scoreColor } from '../theme.js'
 import { useHistory, useJobs } from '../hooks/useDb.js'
 import { useDaemonStatus } from '../hooks/useDaemon.js'
+import { useSchedules } from '../hooks/useSchedules.js'
+import { describeNext } from '../../scheduler/cron.js'
 import { Sparkline } from '../components/Sparkline.js'
 import { Chart } from '../components/Chart.js'
 import { Clickable } from '../components/Clickable.js'
@@ -64,6 +66,17 @@ export function Home({ onOpenRun }: HomeProps = {}) {
   const { rows } = useHistory({ limit: 200 }, 5000)
   const { rows: jobs } = useJobs(undefined, 3000)
   const { status, reachable } = useDaemonStatus()
+  const { rows: schedules } = useSchedules(5000)
+
+  // Find the single nearest upcoming scheduled run across all enabled schedules.
+  const nextScheduled = useMemo(() => {
+    const upcoming = schedules
+      .filter(s => s.enabled && s.next_run_at)
+      .map(s => ({ name: s.name, at: new Date(s.next_run_at!) }))
+      .filter(s => !Number.isNaN(s.at.getTime()))
+      .sort((a, b) => a.at.getTime() - b.at.getTime())
+    return upcoming[0] ?? null
+  }, [schedules])
 
   const agg = useMemo(() => aggregateByModel(rows), [rows])
   const top = agg.slice(0, 8)
@@ -155,6 +168,19 @@ export function Home({ onOpenRun }: HomeProps = {}) {
               </Text>
             </Box>
           </Clickable>
+        </Box>
+      )}
+
+      {/* Next scheduled run */}
+      {nextScheduled && (
+        <Box marginTop={2} flexDirection="column">
+          <Text color={theme.accent} bold>⏰ Next scheduled</Text>
+          <Text>
+            <Text color={theme.muted}>   </Text>
+            <Text color={theme.text}>{nextScheduled.name}</Text>
+            <Text color={theme.muted}>  {describeNext(nextScheduled.at)}</Text>
+            <Text color={theme.muted} dimColor>  ({nextScheduled.at.toISOString().slice(0, 19).replace('T', ' ')})</Text>
+          </Text>
         </Box>
       )}
 

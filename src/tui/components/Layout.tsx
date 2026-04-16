@@ -30,6 +30,7 @@ const SCREEN_NAMES: Record<Screen, string> = {
   'baselines':  '4 Baselines',
   'daemon':     '5 Daemon',
   'eval-packs': '6 Packs',
+  'schedules':  '7 Schedules',
   'run-detail': 'Run Detail',
   'live-run':   'Live Run',
   'new-run':    'New Run',
@@ -46,6 +47,7 @@ const SHORT_NAMES: Record<Screen, string> = {
   'baselines':  '4 Bs',
   'daemon':     '5 Dm',
   'eval-packs': '6 Pk',
+  'schedules':  '7 Sc',
   'run-detail': 'Det',
   'live-run':   'Live',
   'new-run':    'New',
@@ -72,7 +74,7 @@ export function Layout({ screen, mode, title, children, footerHints, toast, onTa
   const narrow = cols < 100
   const names = narrow ? SHORT_NAMES : SCREEN_NAMES
 
-  const tabs: Screen[] = ['home', 'runs', 'models', 'baselines', 'daemon', 'eval-packs']
+  const tabs: Screen[] = ['home', 'runs', 'models', 'baselines', 'daemon', 'eval-packs', 'schedules']
 
   const fullHints: [string, string][] = [
     [':', 'cmd'],

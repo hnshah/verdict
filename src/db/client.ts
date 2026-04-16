@@ -232,6 +232,155 @@ function detectProvider(modelId: string): string | null {
   return null
 }
 
+// ─── Schedules ──────────────────────────────────────────────────────────────
+
+/** Regression notification config stored on a schedule row (JSON-encoded). */
+export interface OnRegressionConfig {
+  webhook?: string
+  stdout?: boolean
+  baseline?: string
+}
+
+/** Fields accepted when adding or upserting a schedule. */
+export interface ScheduleInsert {
+  name: string
+  cron: string
+  config_path?: string | null
+  packs?: string | null
+  models?: string | null
+  category?: string | null
+  enabled?: boolean
+  on_regression?: OnRegressionConfig | null
+  next_run_at?: string | null
+  source?: 'yaml' | 'cli'
+}
+
+/** A row from the schedules table. */
+export interface ScheduleRow {
+  id: number
+  name: string
+  cron: string
+  config_path: string | null
+  packs: string | null
+  models: string | null
+  category: string | null
+  enabled: number
+  on_regression: string | null
+  last_run_at: string | null
+  last_run_id: string | null
+  last_status: string | null
+  next_run_at: string | null
+  created_at: string
+  source: string
+}
+
+/** Insert a new schedule (fails on unique-name collision). */
+export function addSchedule(db: Database.Database, s: ScheduleInsert): number {
+  const stmt = db.prepare(`
+    INSERT INTO schedules (name, cron, config_path, packs, models, category, enabled, on_regression, next_run_at, source)
+    VALUES (@name, @cron, @config_path, @packs, @models, @category, @enabled, @on_regression, @next_run_at, @source)
+  `)
+  const info = stmt.run({
+    name: s.name,
+    cron: s.cron,
+    config_path: s.config_path ?? null,
+    packs: s.packs ?? null,
+    models: s.models ?? null,
+    category: s.category ?? null,
+    enabled: s.enabled === false ? 0 : 1,
+    on_regression: s.on_regression ? JSON.stringify(s.on_regression) : null,
+    next_run_at: s.next_run_at ?? null,
+    source: s.source ?? 'cli',
+  })
+  return Number(info.lastInsertRowid)
+}
+
+/** Upsert a schedule by name (used by YAML sync). */
+export function upsertSchedule(db: Database.Database, s: ScheduleInsert): number {
+  const existing = getScheduleByName(db, s.name)
+  if (existing) {
+    db.prepare(`
+      UPDATE schedules
+      SET cron = @cron,
+          config_path = @config_path,
+          packs = @packs,
+          models = @models,
+          category = @category,
+          enabled = @enabled,
+          on_regression = @on_regression,
+          next_run_at = @next_run_at,
+          source = @source
+      WHERE name = @name
+    `).run({
+      name: s.name,
+      cron: s.cron,
+      config_path: s.config_path ?? null,
+      packs: s.packs ?? null,
+      models: s.models ?? null,
+      category: s.category ?? null,
+      enabled: s.enabled === false ? 0 : 1,
+      on_regression: s.on_regression ? JSON.stringify(s.on_regression) : null,
+      next_run_at: s.next_run_at ?? null,
+      source: s.source ?? 'cli',
+    })
+    return existing.id
+  }
+  return addSchedule(db, s)
+}
+
+/** Update mutable fields on an existing schedule row. */
+export function updateSchedule(
+  db: Database.Database,
+  id: number,
+  update: Partial<Pick<ScheduleRow, 'enabled' | 'cron' | 'next_run_at' | 'last_run_at' | 'last_run_id' | 'last_status' | 'on_regression'>>,
+): void {
+  const fields: string[] = []
+  const params: Record<string, unknown> = { id }
+
+  for (const key of ['enabled', 'cron', 'next_run_at', 'last_run_at', 'last_run_id', 'last_status', 'on_regression'] as const) {
+    if (key in update) {
+      fields.push(`${key} = @${key}`)
+      params[key] = update[key]
+    }
+  }
+  if (fields.length === 0) return
+  db.prepare(`UPDATE schedules SET ${fields.join(', ')} WHERE id = @id`).run(params)
+}
+
+/** List all schedules, optionally filtered by `enabled`. */
+export function listSchedules(db: Database.Database, opts: { enabledOnly?: boolean } = {}): ScheduleRow[] {
+  const where = opts.enabledOnly ? 'WHERE enabled = 1' : ''
+  return db.prepare(
+    `SELECT * FROM schedules ${where} ORDER BY name ASC`
+  ).all() as ScheduleRow[]
+}
+
+/** Return schedules that are enabled and due (next_run_at is null or <= now). */
+export function getDueSchedules(db: Database.Database, now: Date = new Date()): ScheduleRow[] {
+  return db.prepare(
+    `SELECT * FROM schedules WHERE enabled = 1 AND (next_run_at IS NULL OR next_run_at <= ?) ORDER BY id ASC`
+  ).all(now.toISOString()) as ScheduleRow[]
+}
+
+/** Look up a schedule by unique name. */
+export function getScheduleByName(db: Database.Database, name: string): ScheduleRow | null {
+  return (db.prepare(
+    `SELECT * FROM schedules WHERE name = ? LIMIT 1`
+  ).get(name) as ScheduleRow | undefined) ?? null
+}
+
+/** Delete a schedule by name. Returns true if a row was removed. */
+export function removeSchedule(db: Database.Database, name: string): boolean {
+  const info = db.prepare(`DELETE FROM schedules WHERE name = ?`).run(name)
+  return info.changes > 0
+}
+
+/** Remove all yaml-sourced schedules (used before re-syncing from verdict.yaml). */
+export function removeYamlSchedules(db: Database.Database): number {
+  const info = db.prepare(`DELETE FROM schedules WHERE source = 'yaml'`).run()
+  return info.changes
+}
+
 /** Inserts a job into the queue and returns its id. */
 export function addJob(db: Database.Database, job: JobInsert): number {
   const stmt = db.prepare(`

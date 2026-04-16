@@ -109,6 +109,7 @@ export function defaultCommands(goto: (s: Screen) => void): Command[] {
     { id: 'goto:baselines', label: 'Go to Baselines',   hint: '4', action: () => goto('baselines') },
     { id: 'goto:daemon',    label: 'Go to Daemon',      hint: '5', action: () => goto('daemon') },
     { id: 'goto:packs',     label: 'Go to Eval Packs',  hint: '6', action: () => goto('eval-packs') },
+    { id: 'goto:schedules', label: 'Go to Schedules',   hint: '7', action: () => goto('schedules') },
     { id: 'goto:compare',   label: 'Compare two runs',  hint: 'Pick A vs B', action: () => goto('compare') },
     { id: 'goto:config',    label: 'Open Config',       hint: 'verdict.yaml view + $EDITOR', action: () => goto('config') },
     { id: 'goto:new-run',   label: 'New Run (custom)',  hint: 'Pick models + packs', action: () => goto('new-run') },

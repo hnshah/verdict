@@ -17,6 +17,16 @@ import { reportCommand } from './commands/report.js'
 import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } from './commands/eval.js'
 import { contributeCommand } from './commands/contribute.js'
 import { tuiCommand } from './commands/tui.js'
+import {
+  scheduleAddCommand,
+  scheduleListCommand,
+  scheduleShowCommand,
+  scheduleRemoveCommand,
+  schedulePauseCommand,
+  scheduleResumeCommand,
+  scheduleRunCommand,
+  scheduleHistoryCommand,
+} from './commands/schedule.js'
 // Dashboard CLI removed - use custom build system in dashboard/build/ instead
 // See WORKFLOW.md for complete dashboard workflow
 
@@ -25,7 +35,7 @@ const program = new Command()
 program
   .name('verdict')
   .description(chalk.bold('verdict') + '\nLLM eval framework. Benchmark local and cloud models with one config file.')
-  .version('0.3.0')
+  .version('0.4.0')
 
 program
   .command('tui')
@@ -231,6 +241,60 @@ evalCmd
 //   2. Add to dashboard: ./quick-add-run.sh results/LATEST.json
 //
 // See WORKFLOW.md for complete documentation
+
+const schedule = program
+  .command('schedule')
+  .description('Manage cron-driven eval schedules (fired by the daemon)')
+
+schedule
+  .command('add <name>')
+  .description('Create a new schedule (cron expression required)')
+  .requiredOption('--cron <expr>', 'Cron expression (e.g. "0 9 * * *" or "@hourly")')
+  .option('--pack <names...>', 'Eval pack(s) to run (repeatable or comma-less list)')
+  .option('--model <ids...>', 'Restrict to specific model id(s)')
+  .option('--category <cats...>', 'Filter cases by category')
+  .option('-c, --config <path>', 'Path to verdict.yaml', './verdict.yaml')
+  .option('--webhook <url>', 'Webhook URL to POST on regression')
+  .option('--baseline <name>', 'Baseline to compare against for regression detection')
+  .option('--disabled', 'Create in paused state')
+  .action(scheduleAddCommand)
+
+schedule
+  .command('list')
+  .description('List schedules with next-run times')
+  .option('--enabled', 'Show only enabled schedules')
+  .option('--json', 'Output as JSON')
+  .action(scheduleListCommand)
+
+schedule
+  .command('show <name>')
+  .description('Show full details of a schedule')
+  .action(scheduleShowCommand)
+
+schedule
+  .command('remove <name>')
+  .description('Delete a schedule')
+  .action(scheduleRemoveCommand)
+
+schedule
+  .command('pause <name>')
+  .description('Pause a schedule (keeps the row, skips future fires)')
+  .action(schedulePauseCommand)
+
+schedule
+  .command('resume <name>')
+  .description('Resume a paused schedule')
+  .action(scheduleResumeCommand)
+
+schedule
+  .command('run <name>')
+  .description('Enqueue a schedule immediately (ignores cron, requires daemon)')
+  .action(scheduleRunCommand)
+
+schedule
+  .command('history <name>')
+  .description('Show recent runs triggered by a schedule')
+  .action(scheduleHistoryCommand)
 
 program
   .command('contribute')

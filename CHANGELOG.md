@@ -1,5 +1,75 @@
 # Changelog
 
+## 0.4.0 (2026-04-16)
+
+### `verdict schedule` — cron-driven eval automation
+
+Run your evals automatically on a schedule, with optional webhook alerts
+when a model regresses vs a named baseline.
+
+**New CLI surface**
+
+```bash
+verdict schedule add nightly \
+  --cron "0 2 * * *" \
+  --pack general --pack coding \
+  --webhook "$SLACK_WEBHOOK" \
+  --baseline prod
+
+verdict schedule list
+verdict schedule show nightly
+verdict schedule pause nightly
+verdict schedule resume nightly
+verdict schedule run  nightly   # enqueue immediately
+verdict schedule history nightly
+verdict schedule remove nightly
+```
+
+Supports standard 5-field cron + `@hourly` / `@daily` / `@weekly` /
+`@monthly` / `@yearly` aliases.
+
+**Declarative YAML schedules**
+
+Add a `schedules:` block to `verdict.yaml` and the daemon will sync it
+on startup (YAML is the source of truth; CLI-created schedules are kept
+alongside):
+
+```yaml
+schedules:
+  - name: nightly-baseline
+    cron: "0 2 * * *"
+    packs: [general, coding]
+    on_regression:
+      webhook: ${SLACK_WEBHOOK:-}
+      baseline: prod
+  - name: hourly-smoke
+    cron: "@hourly"
+    packs: [general]
+```
+
+**Daemon integration**
+
+The daemon now ticks the scheduler every 60 seconds, enqueues an `eval`
+job for each due schedule, and — after the job completes — detects
+regressions against the configured baseline. On regression it posts a
+Slack-compatible JSON body to the webhook (with a single automatic
+retry on 5xx) and logs to stdout.
+
+**TUI Schedules screen** (press `7` or `:schedules`)
+
+Live-refreshed table of schedules with next-run countdown. Keys:
+`j`/`k` move, `r` run now, `Space` pause/resume, `d` delete, `Enter`
+show details. Home screen adds a new "Next scheduled" line showing the
+nearest upcoming run.
+
+**Under the hood**
+
+- New `src/scheduler/cron.ts` — thin wrapper around `cron-parser`
+- New `src/notify/` — regression detection + webhook POST
+- New `schedules` table in the SQLite DB (auto-migrated)
+- Jobs enqueued by the scheduler carry a `scheduleId` in their
+  metadata so the worker can route post-run notifications
+
 ## 0.3.0 (2026-04-15)
 
 ### `verdict tui` — the full interactive terminal UI

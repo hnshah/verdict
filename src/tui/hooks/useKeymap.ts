@@ -29,6 +29,7 @@ export type Screen =
   | 'config'
   | 'router'
   | 'serve'
+  | 'schedules'
 
 export interface KeymapState {
   mode: Mode
@@ -155,6 +156,7 @@ export function useKeymap() {
       if (input === '4') dispatch({ type: 'set-screen', screen: 'baselines' })
       if (input === '5') dispatch({ type: 'set-screen', screen: 'daemon' })
       if (input === '6') dispatch({ type: 'set-screen', screen: 'eval-packs' })
+      if (input === '7') dispatch({ type: 'set-screen', screen: 'schedules' })
     }
   })
 

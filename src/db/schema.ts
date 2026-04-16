@@ -76,6 +76,37 @@ CREATE TABLE IF NOT EXISTS watched_models (
   eval_pack TEXT DEFAULT 'general'
 )` as const
 
+/**
+ * Cron-based eval schedules. Rows created via YAML (source='yaml') are
+ * re-synced by the daemon on startup; rows created via `verdict schedule add`
+ * use source='cli' and persist unconditionally.
+ *
+ * `next_run_at` is the computed next fire time from the cron expression;
+ * the scheduler tick polls WHERE enabled=1 AND next_run_at <= now().
+ */
+export const CREATE_SCHEDULES = `
+CREATE TABLE IF NOT EXISTS schedules (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE,
+  cron TEXT NOT NULL,
+  config_path TEXT,
+  packs TEXT,
+  models TEXT,
+  category TEXT,
+  enabled INTEGER NOT NULL DEFAULT 1,
+  on_regression TEXT,
+  last_run_at TEXT,
+  last_run_id TEXT,
+  last_status TEXT,
+  next_run_at TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  source TEXT NOT NULL DEFAULT 'cli'
+)` as const
+
+export const CREATE_SCHEDULES_INDEX = `
+CREATE INDEX IF NOT EXISTS idx_schedules_due ON schedules(enabled, next_run_at)
+` as const
+
 /** All schema creation statements in order. */
 export const ALL_SCHEMAS = [
   CREATE_EVAL_RESULTS,
@@ -83,4 +114,6 @@ export const ALL_SCHEMAS = [
   CREATE_MODELS_REGISTRY,
   CREATE_JOBS,
   CREATE_WATCHED_MODELS,
+  CREATE_SCHEDULES,
+  CREATE_SCHEDULES_INDEX,
 ] as const

@@ -33,6 +33,7 @@ import { EvalPacks } from './screens/EvalPacks.js'
 import { ConfigEditor } from './screens/ConfigEditor.js'
 import { Router } from './screens/Router.js'
 import { Serve } from './screens/Serve.js'
+import { Schedules } from './screens/Schedules.js'
 import { loadSession, updateSession } from './utils/session.js'
 import type { EvalHistoryRow } from '../db/client.js'
 
@@ -105,6 +106,7 @@ export function App() {
       case 'config':      return <ConfigEditor onBack={() => goto('home')} />
       case 'router':      return <Router onBack={() => goto('home')} />
       case 'serve':       return <Serve onBack={() => goto('home')} />
+      case 'schedules':   return <Schedules onBack={() => goto('home')} />
       default:            return <Home />
     }
   }
