@@ -16,6 +16,7 @@ import { validateCommand } from './commands/validate.js'
 import { publishCommand } from './commands/publish.js'
 import { leaderboardCommand } from './commands/leaderboard.js'
 import { reportCommand } from './commands/report.js'
+import { shareCommand } from './commands/share.js'
 import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } from './commands/eval.js'
 import { contributeCommand } from './commands/contribute.js'
 import { tuiCommand } from './commands/tui.js'
@@ -217,6 +218,16 @@ program
   .option('--result <path>', 'Path to result JSON file', { required: true })
   .option('--output <path>', 'Output HTML file path (default: docs/runs/<run_id>.html)')
   .action((opts: any) => reportCommand({ result: opts.result, output: opts.output }))
+
+program
+  .command('share')
+  .description('Generate a self-contained HTML report from the latest (or specified) run')
+  .option('--run <id>', 'Run ID to share (default: latest)')
+  .option('--output <path>', 'Output file path (default: verdict-share/<run_id>.html)')
+  .option('--gist', 'Upload to GitHub Gist and return URL (requires GITHUB_TOKEN)')
+  .option('--open', 'Open the report in browser after generating')
+  .action((opts: any) => shareCommand({ run: opts.run, output: opts.output, gist: opts.gist, open: opts.open }))
+
 const evalCmd = program
   .command('eval')
   .description('Manage the named eval registry')
