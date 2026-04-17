@@ -388,11 +388,15 @@ export async function runEvals(
       }
     }
 
-    // Find winner
-    const winner = Object.entries(caseResult.scores)
-      .filter(([, s]) => s.total > 0)
-      .sort((a, b) => b[1].total - a[1].total)[0]
-    if (winner) { caseResult.winner = winner[0]; summary[winner[0]].wins++ }
+    // Find winner — random tiebreaker to avoid first-model bias (#108)
+    const validScores = Object.entries(caseResult.scores).filter(([, s]) => s.total > 0)
+    if (validScores.length > 0) {
+      const topScore = Math.max(...validScores.map(([, s]) => s.total))
+      const tied = validScores.filter(([, s]) => s.total === topScore)
+      const winner = tied[Math.floor(Math.random() * tied.length)]
+      caseResult.winner = winner[0]
+      summary[winner[0]].wins++
+    }
 
     cases.push(caseResult)
 
