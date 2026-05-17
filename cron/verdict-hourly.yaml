@@ -1,0 +1,28 @@
+# Verdict Hourly Evaluation Cron Job
+# For use with Hermes Agent cron system
+
+name: verdict-hourly-eval
+schedule: "0 * * * *"          # Every hour at minute 0
+repeat: 0                      # Run forever (0 = infinite)
+deliver: origin                # Send output back to current chat
+
+workdir: ~/code/verdict
+
+# Run as a pure script (no LLM agent overhead)
+no_agent: true
+
+script: |
+  cd ~/code/verdict
+  ./scripts/verdict-runner.sh \
+    --local \
+    --pack comprehensive-mix
+
+# Optional future enhancements:
+# - Add model rotation
+# - Add multiple eval packs
+# - Add notification on regression detection
+# - Add result archiving
+
+# To create this job:
+# hermes cron create --file cron/verdict-hourly.yaml
+# or use the cronjob tool with these parameters
