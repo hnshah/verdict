@@ -19,6 +19,7 @@ import { contributeCommand } from './commands/contribute.js'
 import { tuiCommand } from './commands/tui.js'
 import { dashboardBuildCommand } from './commands/dashboard.js'
 import { telemetryOnCommand, telemetryOffCommand, telemetryStatusCommand } from './commands/telemetry.js'
+import { setupCommand } from './commands/setup.js'
 
 process.stdout.on('error', err => {
   if ((err as NodeJS.ErrnoException).code === 'EPIPE') process.exit(0)
@@ -280,6 +281,13 @@ telemetryCmd
   .command('status')
   .description('Show current telemetry state')
   .action(telemetryStatusCommand)
+
+program
+  .command('setup')
+  .description('One-command setup helper (use --autonomous for 24/7 cron)')
+  .option('--autonomous', 'Install Hermes cron job + verify dashboard build path')
+  .option('--dry-run', 'Show what would run without invoking hermes')
+  .action(setupCommand)
 
 // 
 // The built-in `verdict dashboard` command has been removed in favor of the
