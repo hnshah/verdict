@@ -119,8 +119,8 @@ describe('runEvals', () => {
   it('runs the right number of models × cases', async () => {
     const config = makeConfig()
     const pack = makePack([
-      { id: 'case-1', prompt: 'Hello', criteria: 'Be polite', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
-      { id: 'case-2', prompt: 'World', criteria: 'Be concise', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
+      { id: 'case-1', prompt: 'Hello', criteria: 'Be polite', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
+      { id: 'case-2', prompt: 'World', criteria: 'Be concise', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
     ])
 
     vi.mocked(callModel)
@@ -143,7 +143,7 @@ describe('runEvals', () => {
   it('uses scoreDeterministic when scorer != llm', async () => {
     const config = makeConfig()
     const pack = makePack([
-      { id: 'exact-case', prompt: 'What is 2+2?', criteria: 'Exact match', scorer: 'exact', expected: '4', tags: [], judge_type: 'llm', max_tokens: undefined },
+      { id: 'exact-case', prompt: 'What is 2+2?', criteria: 'Exact match', scorer: 'exact', expected: '4', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
     ])
 
     vi.mocked(callModel)
@@ -162,7 +162,7 @@ describe('runEvals', () => {
   it('returns RunResult with expected shape', async () => {
     const config = makeConfig()
     const pack = makePack([
-      { id: 'shape-case', prompt: 'Test', criteria: 'Test criteria', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
+      { id: 'shape-case', prompt: 'Test', criteria: 'Test criteria', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
     ])
 
     vi.mocked(callModel).mockResolvedValue(makeModelResponse('model-a'))
@@ -204,9 +204,9 @@ describe('runEvals', () => {
   it('filters cases by categoryFilter', async () => {
     const config = makeConfig()
     const pack = makePack([
-      { id: 'code-case', prompt: 'Write code', criteria: 'Works', category: 'coding', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
-      { id: 'math-case', prompt: 'Solve 2+2', criteria: 'Correct', category: 'math', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
-      { id: 'writing-case', prompt: 'Write essay', criteria: 'Good', category: 'writing', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
+      { id: 'code-case', prompt: 'Write code', criteria: 'Works', category: 'coding', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
+      { id: 'math-case', prompt: 'Solve 2+2', criteria: 'Correct', category: 'math', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
+      { id: 'writing-case', prompt: 'Write essay', criteria: 'Good', category: 'writing', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
     ])
 
     vi.mocked(callModel).mockResolvedValue(makeModelResponse('model-a'))
@@ -224,9 +224,9 @@ describe('runEvals', () => {
   it('filters multiple categories', async () => {
     const config = makeConfig()
     const pack = makePack([
-      { id: 'code-case', prompt: 'Write code', criteria: 'Works', category: 'coding', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
-      { id: 'math-case', prompt: 'Solve 2+2', criteria: 'Correct', category: 'math', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
-      { id: 'writing-case', prompt: 'Write essay', criteria: 'Good', category: 'writing', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
+      { id: 'code-case', prompt: 'Write code', criteria: 'Works', category: 'coding', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
+      { id: 'math-case', prompt: 'Solve 2+2', criteria: 'Correct', category: 'math', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
+      { id: 'writing-case', prompt: 'Write essay', criteria: 'Good', category: 'writing', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
     ])
 
     vi.mocked(callModel).mockResolvedValue(makeModelResponse('model-a'))
@@ -248,7 +248,7 @@ describe('runEvals', () => {
       },
     })
     const pack = makePack([
-      { id: 'case-1', prompt: 'Hello', criteria: 'Be polite', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
+      { id: 'case-1', prompt: 'Hello', criteria: 'Be polite', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
     ])
 
     await expect(runEvals(config, [pack])).rejects.toThrow("Judge model 'nonexistent-model' not found")
@@ -257,7 +257,7 @@ describe('runEvals', () => {
   it('handles model errors gracefully with zero scores', async () => {
     const config = makeConfig()
     const pack = makePack([
-      { id: 'error-case', prompt: 'Test', criteria: 'Test', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
+      { id: 'error-case', prompt: 'Test', criteria: 'Test', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
     ])
 
     vi.mocked(callModel)
@@ -278,7 +278,7 @@ describe('runEvals', () => {
   it('determines winner from highest scoring model', async () => {
     const config = makeConfig()
     const pack = makePack([
-      { id: 'winner-case', prompt: 'Test', criteria: 'Test', scorer: 'exact', expected: 'correct', tags: [], judge_type: 'llm', max_tokens: undefined },
+      { id: 'winner-case', prompt: 'Test', criteria: 'Test', scorer: 'exact', expected: 'correct', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
     ])
 
     vi.mocked(callModel)
@@ -293,8 +293,8 @@ describe('runEvals', () => {
   it('computes averages in summary correctly', async () => {
     const config = makeConfig()
     const pack = makePack([
-      { id: 'avg-1', prompt: 'Test 1', criteria: 'Test', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
-      { id: 'avg-2', prompt: 'Test 2', criteria: 'Test', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
+      { id: 'avg-1', prompt: 'Test 1', criteria: 'Test', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
+      { id: 'avg-2', prompt: 'Test 2', criteria: 'Test', scorer: 'llm', tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined },
     ])
 
     vi.mocked(callModel).mockResolvedValue(makeModelResponse('model-a'))
@@ -319,7 +319,7 @@ describe('runEvals', () => {
       {
         id: 'tool-case', prompt: 'What is the weather?', criteria: 'Uses tool',
         scorer: 'tool_call', tools, expected_tool: 'get_weather',
-        tags: [], judge_type: 'llm', max_tokens: undefined,
+        tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined,
       },
     ])
 
@@ -346,7 +346,7 @@ describe('runEvals', () => {
           { role: 'assistant', content: '__model__' },
           { role: 'user', content: 'How are you?' },
         ],
-        tags: [], judge_type: 'llm', max_tokens: undefined,
+        tags: [], judge_type: 'llm', judge_style: 'standard', max_tokens: undefined,
       },
     ])
 

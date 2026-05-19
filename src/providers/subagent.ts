@@ -53,7 +53,9 @@ export async function callSubAgent(
     return {
       text: result.message,
       latency_ms: latency,
-      model: config.model,
+      model_id: config.id,
+      input_tokens: 0,
+      output_tokens: 0,
       metadata: {
         provider: 'subagent',
         session_key: spawnResult.childSessionKey,

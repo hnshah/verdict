@@ -214,7 +214,7 @@ program
 program
   .command('report')
   .description('Generate detailed HTML report from a result file')
-  .option('--result <path>', 'Path to result JSON file', { required: true })
+  .requiredOption('--result <path>', 'Path to result JSON file')
   .option('--output <path>', 'Output HTML file path (default: docs/runs/<run_id>.html)')
   .action((opts: any) => reportCommand({ result: opts.result, output: opts.output }))
 const evalCmd = program

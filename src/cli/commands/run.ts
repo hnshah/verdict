@@ -21,7 +21,7 @@ interface RunOptions {
   dryRun?: boolean
   resume?: boolean
   question?: string
-  noStore?: boolean
+  store?: boolean
   category?: string[]
   json?: boolean
   failIfRegression?: boolean
@@ -232,7 +232,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   fs.writeFileSync(`${base}.json`, JSON.stringify(result, null, 2))
 
   // Persist to SQLite unless --no-store
-  if (!opts.noStore) {
+  if (opts.store !== false) {
     try {
       const { getDb, initSchema, saveRunResult } = await import('../../db/client.js')
       const db = getDb()
@@ -271,8 +271,9 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   }
   log(chalk.dim(`  raw:    ${base}.json`))
 
-  // Auto-contribute if enabled and run succeeded
-  if (config.settings?.auto_contribute && result.models.length > 0) {
+  // Auto-contribute if enabled and run succeeded. Respect --no-store as a
+  // side-effect-free mode for disposable/CI runs.
+  if (opts.store !== false && config.settings?.auto_contribute && result.models.length > 0) {
     await tryAutoContribute(`${base}.json`, config, log)
   }
 

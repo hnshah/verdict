@@ -27,11 +27,7 @@ export function Clickable({ children, onClick, onWheelUp, onWheelDown }: Clickab
   const ref = useRef<DOMElement>(null)
   useOnClick(ref, onClick ?? null)
   useOnWheel(ref, (event) => {
-    // xterm-mouse uses negative deltaY for up, positive for down (scroll down)
-    // The library exposes `.direction` in MouseEvent — fall back to raw button
-    // codes 64 (up) / 65 (down) from SGR mouse protocol.
-    const anyEvent = event as InkMouseEvent & { button?: number; direction?: 'up' | 'down' }
-    const dir = anyEvent.direction ?? (anyEvent.button === 64 ? 'up' : 'down')
+    const dir = event.button === 'wheel-up' ? 'up' : 'down'
     if (dir === 'up') onWheelUp?.()
     else onWheelDown?.()
   })

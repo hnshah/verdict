@@ -122,12 +122,13 @@ Respond ONLY with valid JSON. No markdown code blocks, no text outside the JSON 
   const spinner = ora({ prefixText: '  ', text: 'Analyzing code...' }).start()
 
   let response: { text: string; latency_ms: number } | undefined
-  let result: ReviewResult
+  let result: ReviewResult | undefined
 
   try {
-    response = await callModel(modelConfig!, prompt, {
-      maxTokens: opts.maxTokens || 2000,
-    })
+    response = await callModel({
+      ...modelConfig!,
+      max_tokens: opts.maxTokens || modelConfig!.max_tokens || 2000,
+    }, prompt)
 
     spinner.succeed(`Review complete (${response.latency_ms}ms)`)
 
@@ -159,6 +160,10 @@ Respond ONLY with valid JSON. No markdown code blocks, no text outside the JSON 
     process.exit(1)
   }
 
+  if (!result) {
+    throw new Error('Review failed: missing parsed result')
+  }
+
   // Output
   if (opts.json) {
     console.log(JSON.stringify(result, null, 2))
@@ -179,7 +184,7 @@ Respond ONLY with valid JSON. No markdown code blocks, no text outside the JSON 
     for (const bug of result.bugs) {
       const sevColorFn = {
         critical: chalk.red,
-        high: chalk.orange,
+        high: chalk.hex('#f97316'),
         medium: chalk.yellow,
         low: chalk.dim,
       }[bug.severity as string] ?? chalk.dim
