@@ -22,6 +22,7 @@ import { telemetryOnCommand, telemetryOffCommand, telemetryStatusCommand } from 
 import { setupCommand } from './commands/setup.js'
 import { prCommentCommand } from './commands/pr-comment.js'
 import { badgeCommand } from './commands/badge.js'
+import { quantsCommand } from './commands/quants.js'
 
 process.stdout.on('error', err => {
   if ((err as NodeJS.ErrnoException).code === 'EPIPE') process.exit(0)
@@ -303,6 +304,14 @@ program
   .option('--show-model', 'Include winning model name in the badge text')
   .option('-o, --output <path>', 'Write SVG to this path instead of stdout')
   .action((result, opts) => badgeCommand(result, opts))
+
+program
+  .command('quants <base>')
+  .description('Compare all installed Ollama quants of a base model (e.g. qwen2.5:7b)')
+  .option('-c, --config <path>', 'Config file (for judge settings)', './verdict.yaml')
+  .option('--pack <path>', 'Eval pack to run (default: ./eval-packs/quantization.yaml)')
+  .option('--host <host>', 'Ollama host:port', 'localhost:11434')
+  .action((base, opts) => quantsCommand(base, opts))
 
 // 
 // The built-in `verdict dashboard` command has been removed in favor of the
