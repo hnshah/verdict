@@ -18,6 +18,7 @@ import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } f
 import { contributeCommand } from './commands/contribute.js'
 import { tuiCommand } from './commands/tui.js'
 import { dashboardBuildCommand } from './commands/dashboard.js'
+import { telemetryOnCommand, telemetryOffCommand, telemetryStatusCommand } from './commands/telemetry.js'
 
 process.stdout.on('error', err => {
   if ((err as NodeJS.ErrnoException).code === 'EPIPE') process.exit(0)
@@ -40,6 +41,7 @@ program
   .command('init')
   .description('Create verdict.yaml and starter eval packs')
   .option('--yes', 'Overwrite existing config')
+  .option('--telemetry <state>', 'Set telemetry on/off non-interactively (default: prompt)')
   .action(initCommand)
 
 program
@@ -259,6 +261,25 @@ dashboardCmd
   .description('Regenerate dashboard-data.json and rebuild all HTML pages')
   .option('--skip-regenerate', 'Use existing dashboard-data.json, only rebuild HTML')
   .action((opts) => dashboardBuildCommand({ skipRegenerate: opts.skipRegenerate }))
+
+const telemetryCmd = program
+  .command('telemetry')
+  .description('Manage opt-in anonymous telemetry (off by default)')
+
+telemetryCmd
+  .command('on')
+  .description('Opt in to anonymous telemetry')
+  .action(telemetryOnCommand)
+
+telemetryCmd
+  .command('off')
+  .description('Opt out of anonymous telemetry')
+  .action(telemetryOffCommand)
+
+telemetryCmd
+  .command('status')
+  .description('Show current telemetry state')
+  .action(telemetryStatusCommand)
 
 // 
 // The built-in `verdict dashboard` command has been removed in favor of the

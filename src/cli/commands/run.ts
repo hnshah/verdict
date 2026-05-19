@@ -290,6 +290,17 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     await tryAutoContribute(`${base}.json`, config, log)
   }
 
+  // Fire-and-forget telemetry ping (no-op unless user opted in AND
+  // VERDICT_TELEMETRY_URL is configured). Send minimal counts only.
+  try {
+    const { ping } = await import('../../utils/telemetry.js')
+    ping({
+      models_count: result.models.length,
+      packs_count: packs.length,
+      verdict_version: '0.3.0',
+    })
+  } catch { /* never let telemetry affect the user */ }
+
   log()
 }
 
