@@ -110,7 +110,7 @@ export async function contributeCommand(opts: ContributeOptions): Promise<void> 
       content: encoded,
       committer: {
         name: author,
-        email: 'bot@verdict.dev',
+        email: '41898282+github-actions[bot]@users.noreply.github.com',
       },
     }
     if (sha) body.sha = sha

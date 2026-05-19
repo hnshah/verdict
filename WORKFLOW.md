@@ -385,7 +385,7 @@ jobs:
       - name: Commit and push
         run: |
           git config user.name "Verdict Bot"
-          git config user.email "bot@verdict.dev"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dashboard/
           git commit -m "chore: Auto-update dashboard" || exit 0
           git push

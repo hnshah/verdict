@@ -1162,21 +1162,9 @@ curl http://localhost:11434/api/tags
 
 ## Community & Support
 
-### Is there a Discord?
-
-**Yes!** [Join here](https://discord.gg/verdict)
-
-**Channels:**
-- `#help` - Get support
-- `#show-and-tell` - Share your eval packs
-- `#feature-requests` - Suggest improvements
-- `#contributors` - Development discussion
-
----
-
 ### How do I report bugs?
 
-**GitHub Issues:** https://github.com/yourusername/verdict/issues
+**GitHub Issues:** https://github.com/hnshah/verdict/issues
 
 **Include:**
 - `verdict --version`
@@ -1188,10 +1176,7 @@ curl http://localhost:11434/api/tags
 
 ### Can I request features?
 
-**Yes!** Two ways:
-
-1. **GitHub Discussions:** https://github.com/yourusername/verdict/discussions
-2. **Discord:** `#feature-requests` channel
+**GitHub Discussions:** https://github.com/hnshah/verdict/discussions
 
 **Vote on existing requests to help us prioritize!**
 
@@ -1224,33 +1209,6 @@ curl http://localhost:11434/api/tags
 
 ---
 
-### Do you have office hours?
-
-**Yes! Tuesdays 2-3pm PT**
-
-[Add to calendar](https://cal.com/verdict)
-
-Come ask questions, get help, or just chat about evals!
-
----
-
-## Enterprise
-
-### Is there enterprise support?
-
-**Coming soon!**
-
-**What we're planning:**
-- Dedicated support channel
-- SLA guarantees
-- Custom integrations
-- Team training
-- Priority feature requests
-
-**Interested?** Email: enterprise@verdict.dev
-
----
-
 ### Can I self-host Verdict?
 
 **You already are!** Verdict runs entirely on your machine.
@@ -1259,21 +1217,6 @@ Come ask questions, get help, or just chat about evals!
 - No data sent to Verdict servers (there aren't any!)
 - Everything runs locally or via APIs you control
 - Full data privacy
-
----
-
-### Can we get custom features for our team?
-
-**Yes!** We offer consulting.
-
-**Services:**
-- Custom provider integrations
-- Domain-specific eval packs
-- Custom judge development
-- Team training
-- Architecture consultation
-
-**Contact:** consulting@verdict.dev
 
 ---
 
@@ -1301,7 +1244,7 @@ Come ask questions, get help, or just chat about evals!
 
 ---
 
-**More questions?** Ask in [Discord](https://discord.gg/verdict) or [file an issue](https://github.com/yourusername/verdict/issues)!
+**More questions?** [File an issue](https://github.com/hnshah/verdict/issues) or start a [discussion](https://github.com/hnshah/verdict/discussions).
 
 ---
 
