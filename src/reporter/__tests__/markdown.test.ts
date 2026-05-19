@@ -3,8 +3,8 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { generateMarkdownReport } from '../markdown.js'
-import type { RunResult, ModelSummary } from '../../types/index.js'
+import { generateMarkdownReport, generatePrCommentMarkdown } from '../markdown.js'
+import type { RunResult, ModelSummary, BaselineComparison } from '../../types/index.js'
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -158,5 +158,62 @@ describe('generateMarkdownReport', () => {
   it('includes timestamp in date field', () => {
     const md = generateMarkdownReport(makeRunResult())
     expect(md).toContain('2026-03-29 01:00:00 UTC')
+  })
+})
+
+describe('generatePrCommentMarkdown', () => {
+  it('starts with the sticky-comment marker', () => {
+    const md = generatePrCommentMarkdown(makeRunResult())
+    expect(md.startsWith('<!-- verdict-pr-comment -->')).toBe(true)
+  })
+
+  it('renders headline verdict and winner', () => {
+    const md = generatePrCommentMarkdown(makeRunResult())
+    expect(md).toMatch(/Verdict: (CLEAR|LEAN|INCONCLUSIVE)/)
+    expect(md).toMatch(/winner.*model-a/)
+  })
+
+  it('renders cost-quality callout when free matches paid', () => {
+    const result = makeRunResult({
+      models: ['local', 'cloud'],
+      summary: {
+        local: { ...makeModelSummary('local', 8.4), total_cost_usd: 0 },
+        cloud: { ...makeModelSummary('cloud', 8.6), total_cost_usd: 0.02 },
+      },
+    })
+    const md = generatePrCommentMarkdown(result)
+    expect(md).toMatch(/Use local, save/)
+  })
+
+  it('renders regression callout when baselineComparison.regressionAlert is true', () => {
+    const baselineComparison: BaselineComparison = {
+      baselineName: 'production', baselineDate: '2026-04-01',
+      deltas: [{ model: 'model-a', scoreA: 9, scoreB: 7, delta: -2, pctChange: -22, regression: true }],
+      newModels: [], removedModels: [], regressionAlert: true,
+    }
+    const md = generatePrCommentMarkdown(makeRunResult({ baselineComparison }))
+    expect(md).toMatch(/REGRESSION/)
+    expect(md).toMatch(/production/)
+  })
+
+  it('omits PR markdown clutter when no baseline', () => {
+    const md = generatePrCommentMarkdown(makeRunResult())
+    expect(md).not.toMatch(/baseline/i)
+  })
+
+  it('always includes a footer with run id', () => {
+    const md = generatePrCommentMarkdown(makeRunResult())
+    expect(md).toMatch(/run-test-001/)
+  })
+
+  it('handles all-zero / no-cases gracefully', () => {
+    const empty = makeRunResult({
+      summary: {
+        'model-a': { ...makeModelSummary('model-a', 0), cases_run: 0 },
+        'model-b': { ...makeModelSummary('model-b', 0), cases_run: 0 },
+      },
+    })
+    const md = generatePrCommentMarkdown(empty)
+    expect(md).toMatch(/Verdict/)
   })
 })

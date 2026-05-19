@@ -20,6 +20,7 @@ import { tuiCommand } from './commands/tui.js'
 import { dashboardBuildCommand } from './commands/dashboard.js'
 import { telemetryOnCommand, telemetryOffCommand, telemetryStatusCommand } from './commands/telemetry.js'
 import { setupCommand } from './commands/setup.js'
+import { prCommentCommand } from './commands/pr-comment.js'
 
 process.stdout.on('error', err => {
   if ((err as NodeJS.ErrnoException).code === 'EPIPE') process.exit(0)
@@ -288,6 +289,11 @@ program
   .option('--autonomous', 'Install Hermes cron job + verify dashboard build path')
   .option('--dry-run', 'Show what would run without invoking hermes')
   .action(setupCommand)
+
+program
+  .command('pr-comment <result>')
+  .description('Emit GitHub PR comment markdown from a result JSON (pipe to `gh pr comment`)')
+  .action(prCommentCommand)
 
 // 
 // The built-in `verdict dashboard` command has been removed in favor of the

@@ -47,6 +47,11 @@ inputs:
     required: false
     default: 'verdict-results'
 
+  comment-on-pr:
+    description: 'Post a sticky comment on the PR with leaderboard + verdict + regression callout. Requires GITHUB_TOKEN with pull-requests:write.'
+    required: false
+    default: 'true'
+
   node-version:
     description: 'Node.js version to use'
     required: false
@@ -210,3 +215,36 @@ runs:
         name: ${{ inputs.artifact-name }}
         path: ${{ inputs.working-directory }}/${{ inputs.output-file }}
         if-no-files-found: warn
+
+    - name: Post PR Comment
+      if: inputs.comment-on-pr == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        RESULTS_FILE="${{ inputs.output-file }}"
+        if [ ! -f "$RESULTS_FILE" ]; then
+          echo "No results file at $RESULTS_FILE — skipping PR comment."
+          exit 0
+        fi
+
+        # Render the sticky PR comment markdown via the verdict CLI.
+        MARKDOWN=$(verdict pr-comment "$RESULTS_FILE")
+
+        # Update an existing sticky comment if found, otherwise create one.
+        # Identified by the <!-- verdict-pr-comment --> HTML marker.
+        EXISTING_ID=$(gh api \
+          "/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
+          --jq '.[] | select(.body | contains("<!-- verdict-pr-comment -->")) | .id' \
+          | head -n1 || true)
+
+        if [ -n "$EXISTING_ID" ]; then
+          echo "Updating existing verdict comment $EXISTING_ID"
+          gh api -X PATCH \
+            "/repos/${{ github.repository }}/issues/comments/$EXISTING_ID" \
+            -f body="$MARKDOWN" > /dev/null
+        else
+          echo "Creating new verdict PR comment"
+          gh pr comment "${{ github.event.pull_request.number }}" --body "$MARKDOWN"
+        fi
