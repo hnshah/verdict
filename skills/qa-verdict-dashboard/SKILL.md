@@ -139,7 +139,7 @@ cd dashboard/build
 **Fix:**
 ```bash
 # Run data cleanup
-node clean-data.cjs
+node scripts/clean-data.cjs
 # Regenerate dashboard
 cd dashboard/build && npm run build-all
 ```

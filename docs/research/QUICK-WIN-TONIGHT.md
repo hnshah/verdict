@@ -79,7 +79,7 @@ settings:
 ### Step 5: Create eval pack (20 min)
 
 ```yaml
-# multimodal-evals/vision-basic.yaml
+# eval-packs/vision/vision-basic.yaml
 name: Vision Basics
 description: Basic vision understanding (20 questions)
 version: "1.0"
@@ -105,7 +105,7 @@ cases:
 ```bash
 verdict run \
   -c verdict-multimodal-config.yaml \
-  --pack multimodal-evals/vision-basic.yaml \
+  --pack eval-packs/vision/vision-basic.yaml \
   --models llava-13b,qwen-vl-7b
 ```
 

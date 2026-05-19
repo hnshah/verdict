@@ -8,6 +8,23 @@ const fs = require('fs');
 // Read dashboard-data.json from command line arg or default location
 const dashboardDataPath = process.argv[2] || '../../dashboard-data.json';
 const dashboardData = JSON.parse(fs.readFileSync(dashboardDataPath, 'utf8'));
+const skippedByName = new Map();
+(dashboardData.skipped_models || []).forEach(model => {
+  const skipped = {
+    name: model.name,
+    reason: model.reason || 'does not fit this hardware',
+    needs_gb: model.needs_gb,
+    available_gb: model.available_gb,
+    run_id: model.run_id || null,
+    timestamp: model.timestamp || null
+  };
+  const existing = skippedByName.get(skipped.name);
+  if (!existing || String(skipped.timestamp || '').localeCompare(String(existing.timestamp || '')) >= 0) {
+    skippedByName.set(skipped.name, skipped);
+  }
+});
+const skippedModels = Array.from(skippedByName.values())
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 // Load run names from individual run files
 const runNames = {};
@@ -245,6 +262,7 @@ const output = {
     total_runs: runs.length,
     total_cases: dashboardData.meta.total_cases,
     total_models: Object.keys(dashboardData.models).length,
+    skipped_models: skippedModels.length,
     avg_score: avgScore,
     test_runs: 0,
     real_runs: runs.length
@@ -253,7 +271,8 @@ const output = {
   top_models: topModels,
   all_models: Object.values(modelStats).sort((a, b) => 
     b.avg_score - a.avg_score || a.name.localeCompare(b.name)
-  )
+  ),
+  skipped_models: skippedModels
 };
 
 console.log(JSON.stringify(output, null, 2));

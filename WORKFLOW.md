@@ -57,7 +57,7 @@ verdict/
 │       └── runs/               # Run detail pages
 │
 ├── dashboard-data.json         # Aggregated dashboard data (ROOT LEVEL)
-├── clean-data.cjs              # Data cleanup script
+├── scripts/clean-data.cjs      # Data cleanup script
 └── regenerate-dashboard-data.sh # Regenerate from individual files
 ```
 
@@ -180,7 +180,7 @@ cp results/2026-03-31-2026-03-31T14-25-37.json \
 This script:
 - Scans `dashboard/published/data/*.json`
 - Aggregates all runs into `dashboard-data.json`
-- Runs `clean-data.cjs` to normalize model names
+- Runs `scripts/clean-data.cjs` to normalize model names
 
 #### 3. Generate Dashboard Pages
 
@@ -233,7 +233,7 @@ results/*.json
 dashboard/published/data/*.json
     ↓ (regenerate-dashboard-data.sh)
 dashboard-data.json (root)
-    ↓ (clean-data.cjs)
+    ↓ (scripts/clean-data.cjs)
 dashboard-data.json (cleaned)
     ↓ (extractors)
 dashboard/build/data/*.json
@@ -248,7 +248,7 @@ GitHub Pages
 | File | Purpose |
 |------|---------|
 | `dashboard-data.json` | Master aggregated data (root level) |
-| `clean-data.cjs` | Normalize model names, remove duplicates |
+| `scripts/clean-data.cjs` | Normalize model names, remove duplicates |
 | `regenerate-dashboard-data.sh` | Rebuild dashboard-data.json from run files |
 | `dashboard/build/extractors/dashboard-from-data.js` | Extract dashboard page data |
 | `dashboard/build/extractors/model-from-data.js` | Extract model page data |
@@ -438,7 +438,7 @@ fi
 
 **Fix:** Run cleanup
 ```bash
-node clean-data.cjs
+node scripts/clean-data.cjs
 ```
 
 This normalizes:

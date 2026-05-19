@@ -4,6 +4,8 @@ These eval packs are for testing, demos, and scorer feature exploration — not 
 
 | File | Purpose |
 |------|---------|
+| `basic-comparison.yaml` | Simple local model comparison demo |
+| `code-quality.yaml` | Code generation and review demo |
 | `quick-test.yaml` | Fast sanity check (2-3 cases) |
 | `python-quick.yaml` | Quick Python smoke test |
 | `tool-test.yaml` | Basic tool-calling smoke test |

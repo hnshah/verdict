@@ -30,10 +30,7 @@ export async function preloadModel(
   try {
     // Make tiny call to load model into memory
     // Using "1+1=?" as minimal prompt (4 tokens)
-    await callModel(model, [{
-      role: 'user',
-      content: '1+1=?'
-    }])
+    await callModel(model, '1+1=?')
     
     const duration = Date.now() - start
     return {

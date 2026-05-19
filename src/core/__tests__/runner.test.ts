@@ -79,11 +79,19 @@ function makeConfig(overrides?: Partial<Config>): Config {
   }
 }
 
-function makePack(cases: EvalPack['cases']): EvalPack {
+function makePack(cases: Array<Partial<EvalPack['cases'][number]> & { id: string; criteria: string }>): EvalPack {
   return {
     name: 'Test Pack',
     version: '1.0.0',
-    cases,
+    cases: cases.map(c => ({
+      prompt: '',
+      scorer: 'llm',
+      tags: [],
+      judge_type: 'llm',
+      max_tokens: undefined,
+      judge_style: 'standard',
+      ...c,
+    })) as EvalPack['cases'],
   }
 }
 

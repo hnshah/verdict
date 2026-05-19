@@ -27,6 +27,7 @@ interface RunOptions {
   failIfRegression?: boolean
   verbose?: boolean
   debug?: boolean
+  store?: boolean
 }
 
 export async function runCommand(opts: RunOptions): Promise<void> {
@@ -219,6 +220,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
       models: result.models,
       results: result.cases,
       summary: summaryArray,
+      ...(result.skipped_models ? { skipped_models: result.skipped_models } : {}),
       ...(result.synthesis ? { synthesis: result.synthesis } : {}),
       ...(result.baselineComparison ? { baselineComparison: result.baselineComparison } : {}),
     }
@@ -232,7 +234,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   fs.writeFileSync(`${base}.json`, JSON.stringify(result, null, 2))
 
   // Persist to SQLite unless --no-store
-  if (!opts.noStore) {
+  if (opts.noStore !== true && opts.store !== false) {
     try {
       const { getDb, initSchema, saveRunResult } = await import('../../db/client.js')
       const db = getDb()

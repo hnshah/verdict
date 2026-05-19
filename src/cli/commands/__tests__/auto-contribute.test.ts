@@ -142,7 +142,11 @@ describe('Config schema validation', () => {
   })
 
   it('should allow settings to be undefined', () => {
-    const config = {
+    const config: {
+      models: Array<{ id: string; model: string }>
+      judge: { model: string }
+      settings?: { auto_contribute?: boolean; contribution_author?: string }
+    } = {
       models: [{ id: 'test', model: 'test-model' }],
       judge: { model: 'test' },
     }

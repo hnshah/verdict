@@ -7,6 +7,7 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 
 console.log('🧹 Starting data cleanup...\n');
 
@@ -102,6 +103,7 @@ data.meta = {
   total_runs: new Set(data.cases.flatMap(c => c.runs.map(r => r.run_id))).size,
   total_cases: data.cases.length,
   total_models: Object.keys(data.models).length,
+  skipped_models: Array.isArray(data.skipped_models) ? data.skipped_models.length : (data.meta?.skipped_models || 0),
   last_updated: new Date().toISOString().split('T')[0]
 };
 
@@ -110,11 +112,14 @@ console.log(`   - Total cases: ${data.meta.total_cases}`);
 console.log(`   - Total models: ${data.meta.total_models}\n`);
 
 // Save cleaned data
-fs.writeFileSync('dashboard-data.json.backup', fs.readFileSync('dashboard-data.json', 'utf8'));
+const backupDir = path.join('dashboard', 'backups');
+fs.mkdirSync(backupDir, { recursive: true });
+const backupPath = path.join(backupDir, `${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}-clean-data-dashboard-data.json`);
+fs.writeFileSync(backupPath, fs.readFileSync('dashboard-data.json', 'utf8'));
 fs.writeFileSync('dashboard-data.json', JSON.stringify(data, null, 2));
 
 console.log('✅ Cleanup complete!');
-console.log('   - Backup saved to dashboard-data.json.backup');
+console.log(`   - Backup saved to ${backupPath}`);
 console.log('   - Cleaned data written to dashboard-data.json\n');
 
 console.log('📊 Summary:');

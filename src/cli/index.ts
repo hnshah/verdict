@@ -2,7 +2,7 @@ import { Command } from 'commander'
 import chalk from 'chalk'
 import readline from 'readline'
 import { runCommand } from './commands/run.js'
-import { modelsCommand, discoverCommand } from './commands/models.js'
+import { modelsCommand, discoverCommand, catalogCommand, suggestCommand, autoPullCommand } from './commands/models.js'
 import { initCommand } from './commands/init.js'
 import { compareCommand } from './commands/compare.js'
 import { baselineSaveCommand, baselineListCommand, baselineCompareCommand } from './commands/baseline.js'
@@ -21,6 +21,11 @@ import { contributeCommand } from './commands/contribute.js'
 import { tuiCommand } from './commands/tui.js'
 // Dashboard CLI removed - use custom build system in dashboard/build/ instead
 // See WORKFLOW.md for complete dashboard workflow
+
+process.stdout.on('error', err => {
+  if ((err as NodeJS.ErrnoException).code === 'EPIPE') process.exit(0)
+  throw err
+})
 
 const program = new Command()
 
@@ -67,7 +72,32 @@ const models = program
 models
   .command('discover')
   .description('Scan for local inference servers (Ollama, MLX, LM Studio)')
+  .option('--json', 'Output discovered models as JSON')
   .action(discoverCommand)
+
+models
+  .command('catalog')
+  .description('List curated catalog models with current hardware fit verdicts')
+  .option('--catalog <path>', 'Model catalog YAML file', './configs/model-catalog.yaml')
+  .option('--json', 'Output catalog and fit verdicts as JSON')
+  .action(catalogCommand)
+
+models
+  .command('suggest')
+  .description('Suggest catalog models that fit this machine and are missing from verdict.yaml')
+  .option('-c, --config <path>', 'Config file', './verdict.yaml')
+  .option('--catalog <path>', 'Model catalog YAML file', './configs/model-catalog.yaml')
+  .option('--json', 'Output suggestions as JSON')
+  .action(suggestCommand)
+
+models
+  .command('auto-pull')
+  .description('Pull fitting small Ollama catalog models that are not installed')
+  .option('--max-size <billions>', 'Largest model size to auto-pull, in billions of parameters', '8')
+  .option('--dry-run', 'Show models that would be pulled without pulling')
+  .option('--catalog <path>', 'Model catalog YAML file', './configs/model-catalog.yaml')
+  .option('--json', 'Output pull summary as JSON')
+  .action(autoPullCommand)
 
 program
   .command('compare [run-a] [run-b]')
@@ -214,7 +244,7 @@ program
 program
   .command('report')
   .description('Generate detailed HTML report from a result file')
-  .option('--result <path>', 'Path to result JSON file', { required: true })
+  .requiredOption('--result <path>', 'Path to result JSON file')
   .option('--output <path>', 'Output HTML file path (default: docs/runs/<run_id>.html)')
   .action((opts: any) => reportCommand({ result: opts.result, output: opts.output }))
 const evalCmd = program

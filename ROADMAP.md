@@ -24,6 +24,67 @@ The project has a strong foundation and clear vision. This roadmap turns it into
 
 ---
 
+## 24/7 Local Eval Machine
+
+**Goal:** Turn Verdict into a reliable, always-on evaluation system that runs continuously against local inference backends such as Ollama, MLX, LM Studio, llama.cpp, and vLLM while keeping Verdict model-agnostic through OpenAI-compatible endpoints.
+
+### Current State (May 2026)
+
+- Verdict uses YAML eval packs and supports OpenAI-compatible APIs.
+- The dashboard and regression-detection paths exist.
+- Local model support exists through provider shortcuts and base URLs.
+- Phase 1 added `scripts/verdict-runner.sh`, `cron/verdict-hourly.yaml`, and the `skills/verdict` workflow.
+
+**Gap:** The scheduled path needs discovery, model rotation, hardware fit checks, and dashboard visibility for models that could not run on the current machine.
+
+### Vision
+
+```bash
+verdict setup --local
+verdict run --local
+# Scheduled runs discover, install, rotate, and benchmark local models automatically.
+```
+
+Results, dashboards, skipped-model reasons, and regressions should be tracked continuously without requiring a human to hand-edit each run.
+
+### Phases
+
+**Phase 1: Hermes Cron + Basic Runner**
+
+- `scripts/verdict-runner.sh` wraps local endpoint runs.
+- `cron/verdict-hourly.yaml` schedules recurring evaluations.
+- Results are written to `results/` and dashboards can be regenerated from run data.
+
+**Phase 2: Terminal Magic & Polish**
+
+- One-command local setup.
+- Auto-detection of Ollama, MLX, and LM Studio backends.
+- Better result storage and notification hooks.
+
+**Phase 3: Advanced Features**
+
+- Multi-model rotation in scheduled runs.
+- Custom eval-pack scheduling.
+- Smart routing/fallback integration.
+- Webhook triggers and historical trend tracking.
+
+**Phase 4: Production 24/7**
+
+- Robust retries and failure isolation.
+- Resource monitoring for CPU, GPU, memory, and disk.
+- Alerts on repeated failures.
+- Self-updating dashboards hosted locally or through GitHub Pages.
+
+### Immediate Work
+
+1. Add a curated model catalog.
+2. Add hardware fit checks and disk-space checks.
+3. Add `verdict models catalog`, `verdict models suggest`, and `verdict models auto-pull`.
+4. Update the hourly cron to auto-pull small models, rotate installed models, and skip recently evaluated models.
+5. Surface skipped models and reasons in dashboard data.
+
+---
+
 ## Area Scores (1-10)
 
 | Area | Score | Summary |
