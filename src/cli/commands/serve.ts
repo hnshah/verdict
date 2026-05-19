@@ -9,10 +9,12 @@ import { selectModel } from '../../router/selector.js'
 import { callModel, callModelMultiTurn } from '../../providers/compat.js'
 import type { ModelConfig } from '../../types/index.js'
 import { buildModelConfig } from '../../utils/model-config.js'
+import { handleUiIndex, handleUiRuns } from '../../serve/ui.js'
 import type Database from 'better-sqlite3'
 
 interface ServeCommandOpts {
   port?: string
+  ui?: boolean
 }
 
 /** Parse the "model" field from the request to determine routing. */
@@ -196,6 +198,10 @@ export async function serveCommand(opts: ServeCommandOpts): Promise<void> {
         await handleChatCompletions(req, res, db)
       } else if (req.method === 'GET' && url.pathname === '/v1/models') {
         handleListModels(res, db)
+      } else if (opts.ui && req.method === 'GET' && (url.pathname === '/' || url.pathname === '/ui' || url.pathname === '/ui/')) {
+        handleUiIndex(res)
+      } else if (opts.ui && req.method === 'GET' && url.pathname === '/ui/runs') {
+        handleUiRuns(res, db)
       } else {
         sendJson(res, 404, { error: { message: 'Not found', type: 'invalid_request_error' } })
       }
@@ -214,6 +220,10 @@ export async function serveCommand(opts: ServeCommandOpts): Promise<void> {
     console.log(chalk.dim(`  → routing: prefer local, fallback cloud`))
     console.log(chalk.dim(`  → /v1/chat/completions  (OpenAI-compatible)`))
     console.log(chalk.dim(`  → /v1/models`))
+    if (opts.ui) {
+      console.log(chalk.dim(`  → /                     (local dashboard UI)`))
+      console.log(chalk.dim(`  → /ui/runs              (recent runs JSON)`))
+    }
     console.log()
   })
 

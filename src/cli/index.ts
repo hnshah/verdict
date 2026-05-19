@@ -165,6 +165,7 @@ program
   .command('serve')
   .description('Start OpenAI-compatible HTTP proxy with smart routing')
   .option('--port <n>', 'Port to listen on', '4000')
+  .option('--ui', 'Also serve a local read-only dashboard at / (no auth, localhost only)')
   .action(serveCommand)
 
 const daemon = program
