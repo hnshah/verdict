@@ -17,8 +17,7 @@ import { reportCommand } from './commands/report.js'
 import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } from './commands/eval.js'
 import { contributeCommand } from './commands/contribute.js'
 import { tuiCommand } from './commands/tui.js'
-// Dashboard CLI removed - use custom build system in dashboard/build/ instead
-// See WORKFLOW.md for complete dashboard workflow
+import { dashboardBuildCommand } from './commands/dashboard.js'
 
 process.stdout.on('error', err => {
   if ((err as NodeJS.ErrnoException).code === 'EPIPE') process.exit(0)
@@ -251,7 +250,16 @@ evalCmd
   .description('Auto-register built-in eval packs')
   .action(evalInitCommand)
 
-// Dashboard CLI removed - use custom build system instead
+const dashboardCmd = program
+  .command('dashboard')
+  .description('Build the static dashboard from local run results')
+
+dashboardCmd
+  .command('build')
+  .description('Regenerate dashboard-data.json and rebuild all HTML pages')
+  .option('--skip-regenerate', 'Use existing dashboard-data.json, only rebuild HTML')
+  .action((opts) => dashboardBuildCommand({ skipRegenerate: opts.skipRegenerate }))
+
 // 
 // The built-in `verdict dashboard` command has been removed in favor of the
 // custom multi-page dashboard system in dashboard/build/
