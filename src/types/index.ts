@@ -78,6 +78,24 @@ export const ConfigSchema = z.object({
     auto_contribute: z.boolean().default(false),
     contribution_author: z.string().optional(),
   }).optional(),
+  notify: z.object({
+    slack: z.object({
+      webhook_url: z.string(),
+      channel: z.string().optional(),
+    }).optional(),
+    macos: z.object({
+      enabled: z.boolean().optional(),
+    }).optional(),
+    email: z.object({
+      binary: z.string().optional(),
+      to: z.string(),
+    }).optional(),
+    triggers: z.object({
+      new_winner: z.boolean().optional(),
+      regression: z.boolean().optional(),
+      cron_failure: z.boolean().optional(),
+    }).optional(),
+  }).optional(),
 })
 export type Config = z.infer<typeof ConfigSchema>
 

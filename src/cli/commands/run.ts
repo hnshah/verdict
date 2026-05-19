@@ -301,6 +301,29 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     })
   } catch { /* never let telemetry affect the user */ }
 
+  // Notifications (Slack / macOS / email) — fire-and-forget.
+  if (config.notify) {
+    try {
+      const { notifyRun } = await import('../../utils/notify.js')
+      // Best-effort: find the previous run's #1 model from SQLite for the
+      // "new winner" event. Skip if history is unavailable.
+      let prevWinnerId: string | undefined
+      try {
+        const { getDb, queryHistory } = await import('../../db/client.js')
+        const db = getDb()
+        const recent = queryHistory(db, { limit: result.models.length * 2, orderBy: 'date' })
+        // Pick the highest-scoring row from the previous (different run_id) run.
+        const prev = recent.find(r => r.run_id !== result.run_id)
+        if (prev) {
+          const prevSameRun = recent.filter(r => r.run_id === prev.run_id)
+          prevWinnerId = prevSameRun.sort((a, b) => b.score - a.score)[0]?.model_id
+        }
+        db.close()
+      } catch { /* DB unavailable, skip prev-winner detection */ }
+      await notifyRun(result, config.notify, prevWinnerId)
+    } catch { /* notifications must not affect run UX */ }
+  }
+
   log()
 }
 
