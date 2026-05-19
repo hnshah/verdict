@@ -237,7 +237,7 @@ async function benchmark() {
   console.log(`  ${chalk.dim('•')} Router ready for smart routing\n`);
   
   console.log(chalk.dim('  Try it now:'));
-  console.log(chalk.cyan('    verdict infer "Write a Python function"\n'));
+  console.log(chalk.cyan('    verdict route "Write a Python function"\n'));
 }
 
 benchmark().catch(err => {
