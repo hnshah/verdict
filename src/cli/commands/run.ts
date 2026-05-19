@@ -7,7 +7,7 @@ import { registryResolve } from '../../core/registry.js'
 import { runEvals } from '../../core/runner.js'
 import { synthesizeRun } from '../../core/synthesis.js'
 import { loadBaseline, compareWithBaseline } from '../../core/baseline.js'
-import { printSummary, printCaseDetail, printBaselineComparison, printSynthesis } from '../../reporter/terminal.js'
+import { printSummary, printCaseDetail, printBaselineComparison, printSynthesis, printVerdict } from '../../reporter/terminal.js'
 import { generateMarkdownReport } from '../../reporter/markdown.js'
 import type { SlackCard } from '../../types/index.js'
 import { setLogLevel } from '../../utils/logger.js'
@@ -156,8 +156,14 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   }
 
   if (!opts.json) {
-    for (const c of result.cases) printCaseDetail(c.case_id, c.prompt, c.scores)
+    // Headline first: deterministic verdict + cost-quality callout.
+    printVerdict(result)
+    // Leaderboard.
     printSummary(result)
+    // Per-case details only on --verbose — they're noise for the headline reader.
+    if (opts.verbose) {
+      for (const c of result.cases) printCaseDetail(c.case_id, c.prompt, c.scores)
+    }
   }
 
   // Auto-compare with default baseline if it exists

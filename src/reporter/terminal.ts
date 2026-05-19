@@ -1,6 +1,89 @@
 import chalk from 'chalk'
 import type { RunResult, BaselineComparison, SynthesisResult } from '../types/index.js'
 
+/**
+ * Deterministic, always-on headline verdict computed from the leaderboard.
+ *
+ * Levels:
+ *   CLEAR        — top model leads #2 by ≥ 0.5pts (high confidence)
+ *   LEAN         — top model leads #2 by 0.2–0.5pts (probable)
+ *   INCONCLUSIVE — top model leads #2 by < 0.2pts (within noise)
+ *
+ * The cost-quality callout is the second-loudest signal: if a free model
+ * matches the best paid within 0.5pts, that's the recommendation regardless
+ * of who "won" by absolute score.
+ */
+export function printVerdict(result: RunResult): void {
+  const sorted = result.models
+    .map(id => result.summary[id])
+    .filter(s => s && s.cases_run > 0)
+    .sort((a, b) => b.avg_total - a.avg_total)
+
+  if (sorted.length === 0) {
+    console.log()
+    console.log(chalk.bold('  VERDICT'))
+    console.log(chalk.red('  No models produced results.'))
+    console.log()
+    return
+  }
+
+  const top = sorted[0]
+  const second = sorted[1]
+  const gap = second ? +(top.avg_total - second.avg_total).toFixed(2) : Infinity
+
+  let level: 'CLEAR' | 'LEAN' | 'INCONCLUSIVE'
+  if (!second) level = 'CLEAR'
+  else if (gap >= 0.5) level = 'CLEAR'
+  else if (gap >= 0.2) level = 'LEAN'
+  else level = 'INCONCLUSIVE'
+
+  const levelColor =
+    level === 'CLEAR' ? chalk.green :
+    level === 'LEAN' ? chalk.yellow :
+    chalk.red
+
+  console.log()
+  console.log(chalk.bold('  ┌' + '─'.repeat(78) + '┐'))
+  console.log(
+    chalk.bold('  │  ') +
+    chalk.bold('VERDICT: ') + levelColor.bold(level.padEnd(13)) +
+    chalk.bold('WINNER: ') + chalk.cyan.bold(top.model_id) +
+    chalk.dim(`  ${top.avg_total.toFixed(1)}/10`)
+  )
+
+  // Cost-quality callout
+  const freeModels = sorted.filter(s => s.total_cost_usd === 0)
+  const paidModels = sorted.filter(s => s.total_cost_usd > 0)
+  if (freeModels.length > 0 && paidModels.length > 0) {
+    const bestFree = freeModels[0]
+    const bestPaid = paidModels[0]
+    const freeGap = +(bestPaid.avg_total - bestFree.avg_total).toFixed(2)
+    if (freeGap < 0.5 && bestPaid.total_cost_usd > 0) {
+      const perRun = bestPaid.total_cost_usd
+      const monthly500 = (perRun * 500).toFixed(2)
+      console.log(
+        chalk.bold('  │  ') +
+        chalk.green(`→ ${bestFree.model_id} matches ${bestPaid.model_id} within ${freeGap}pts. Use local, save ~$${monthly500}/mo at 500 runs.`)
+      )
+    } else if (freeGap >= 0.5) {
+      console.log(
+        chalk.bold('  │  ') +
+        chalk.yellow(`→ ${bestPaid.model_id} leads ${bestFree.model_id} by ${freeGap}pts (paid edge real)`)
+      )
+    }
+  }
+
+  // Gap detail
+  if (second && level !== 'CLEAR') {
+    console.log(
+      chalk.bold('  │  ') +
+      chalk.dim(`  Gap vs #2 (${second.model_id}): ${gap >= 0 ? '+' : ''}${gap.toFixed(2)}pts — ${level === 'LEAN' ? 'probable winner' : 'within noise'}`)
+    )
+  }
+  console.log(chalk.bold('  └' + '─'.repeat(78) + '┘'))
+  console.log()
+}
+
 export function printSummary(result: RunResult): void {
   const sorted = result.models
     .map(id => result.summary[id])
@@ -41,28 +124,6 @@ export function printSummary(result: RunResult): void {
     )
   })
 
-  console.log()
-
-  // Cost-quality frontier
-  const freeModels = sorted.filter(s => s.total_cost_usd === 0 && s.cases_run > 0)
-  const paidModels = sorted.filter(s => s.total_cost_usd > 0 && s.cases_run > 0)
-  if (freeModels.length > 0 && paidModels.length > 0) {
-    const bestFree = freeModels[0]
-    const bestPaid = paidModels[0]
-    const gap = +(bestPaid.avg_total - bestFree.avg_total).toFixed(1)
-    console.log(chalk.bold('  Cost-quality frontier'))
-    if (gap < 0.5) {
-      console.log(chalk.green(`  ${bestFree.model_id} matches ${bestPaid.model_id} within ${gap}pts. Use the free model.`))
-    } else {
-      console.log(chalk.yellow(`  ${bestPaid.model_id} leads ${bestFree.model_id} by ${gap}pts at $${bestPaid.total_cost_usd.toFixed(4)}/run.`))
-    }
-    console.log()
-  }
-
-  const winner = sorted[0]
-  if (winner) {
-    console.log(chalk.bold(`  Winner: ${winner.model_id}`) + chalk.dim(` (${winner.avg_total}/10, ${winner.wins} wins)`))
-  }
   console.log()
 }
 
