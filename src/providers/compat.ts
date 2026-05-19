@@ -12,6 +12,7 @@ import type { ModelConfig, ModelResponse, ToolDef } from '../types/index.js'
 import { callOpenClaw, type OpenClawConfig } from './openclaw.js'
 import { callSubAgent, type SubAgentConfig } from './subagent.js'
 import { log as vlog } from '../utils/logger.js'
+import { humanizeProviderError, formatHumanError } from '../utils/errors.js'
 
 const clientCache = new Map<string, OpenAI>()
 
@@ -140,7 +141,6 @@ export async function callModel(
     return { model_id: config.id, text, input_tokens, output_tokens, latency_ms, cost_usd }
 
   } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err)
     // If vision content failed, retry without image
     if (imagePath && attempt === 0) {
       console.warn(`[verdict] Vision not supported by ${config.model}, retrying text-only`)
@@ -150,9 +150,11 @@ export async function callModel(
       await new Promise(r => setTimeout(r, 1000 * (attempt + 1)))
       return callModel(config, prompt, attempt + 1, imagePath, systemPrompt)
     }
+    const humanized = humanizeProviderError(err, config)
     return {
       model_id: config.id, text: '', input_tokens: 0,
-      output_tokens: 0, latency_ms: Date.now() - start, error: msg
+      output_tokens: 0, latency_ms: Date.now() - start,
+      error: formatHumanError(humanized),
     }
   }
 }
@@ -214,14 +216,15 @@ export async function callModelMultiTurn(
     return { model_id: config.id, text, input_tokens, output_tokens, latency_ms, cost_usd }
 
   } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err)
     if (attempt < 2) {
       await new Promise(r => setTimeout(r, 1000 * (attempt + 1)))
       return callModelMultiTurn(config, messages, attempt + 1, systemPrompt)
     }
+    const humanized = humanizeProviderError(err, config)
     return {
       model_id: config.id, text: '', input_tokens: 0,
-      output_tokens: 0, latency_ms: Date.now() - start, error: msg
+      output_tokens: 0, latency_ms: Date.now() - start,
+      error: formatHumanError(humanized),
     }
   }
 }
@@ -300,14 +303,15 @@ export async function callModelWithTools(
     return { model_id: config.id, text, input_tokens, output_tokens, latency_ms, cost_usd, tool_calls }
 
   } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err)
     if (attempt < 2) {
       await new Promise(r => setTimeout(r, 1000 * (attempt + 1)))
       return callModelWithTools(config, prompt, tools, attempt + 1, systemPrompt)
     }
+    const humanized = humanizeProviderError(err, config)
     return {
       model_id: config.id, text: '', input_tokens: 0,
-      output_tokens: 0, latency_ms: Date.now() - start, error: msg
+      output_tokens: 0, latency_ms: Date.now() - start,
+      error: formatHumanError(humanized),
     }
   }
 }

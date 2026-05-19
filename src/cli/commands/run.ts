@@ -11,6 +11,7 @@ import { printSummary, printCaseDetail, printBaselineComparison, printSynthesis,
 import { generateMarkdownReport } from '../../reporter/markdown.js'
 import type { SlackCard } from '../../types/index.js'
 import { setLogLevel } from '../../utils/logger.js'
+import { humanizeProviderError, formatHumanError } from '../../utils/errors.js'
 import { contributeCommand } from './contribute.js'
 
 interface RunOptions {
@@ -151,7 +152,12 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     result = await runEvals(config, packs, onProgress, opts.resume, categoryFilter, true) // preload enabled
     spinner.succeed('Done')
   } catch (err) {
-    spinner.fail(chalk.red(err instanceof Error ? err.message : String(err)))
+    const humanized = humanizeProviderError(err)
+    spinner.fail(chalk.red(humanized.summary))
+    if (humanized.hint) console.error(chalk.dim(`  → ${humanized.hint}`))
+    if (opts.debug && humanized.raw !== humanized.summary) {
+      console.error(chalk.dim(`  raw: ${humanized.raw}`))
+    }
     process.exit(1)
   }
 
