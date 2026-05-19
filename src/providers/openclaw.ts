@@ -67,7 +67,9 @@ export async function callOpenClaw(
     return {
       text,
       latency_ms: latency,
-      model: config.model,
+      model_id: config.id,
+      input_tokens: data.usage?.prompt_tokens ?? 0,
+      output_tokens: data.usage?.completion_tokens ?? 0,
       cost_usd: calculateCost(data.usage, config.model),
       metadata: {
         provider: 'openclaw',

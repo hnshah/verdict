@@ -99,6 +99,8 @@ describe('generateMarkdownReport', () => {
         {
           case_id: 'test-case-1',
           prompt: 'What is 2+2?',
+          criteria: 'Answer correctly.',
+          responses: {},
           scores: {
             'model-a': { accuracy: 10, completeness: 10, conciseness: 10, total: 10, reasoning: 'Correct.' },
           },

@@ -28,6 +28,7 @@ export const ModelConfigSchema = z.object({
   cost_per_1m_output: z.number().optional(),
   timeout_ms: z.number().default(120_000),
   max_tokens: z.number().default(1024),
+  temperature: z.number().optional(),
 })
 export type ModelConfig = z.infer<typeof ModelConfigSchema>
 
@@ -124,7 +125,7 @@ export const EvalCaseSchema = z.object({
   context: z.string().optional(),    // Used by faithfulness scorer (RAG source context)
   prompt: z.string().default(''),
   system_prompt: z.string().optional(),
-  criteria: z.string(),
+  criteria: z.string().default(''),
   expected: z.union([z.string(), z.array(z.string())]).optional(),
   tags: z.array(z.string()).default([]),
   // scorer: 'llm' uses LLM judge (default), 'json' parses output as JSON (pass/fail),
@@ -157,6 +158,14 @@ export const EvalCaseSchema = z.object({
   // cot_choices: letter-to-score mapping for cot_classify, e.g. [{letter: "A", score: 0}, ...]
   // Defaults to [A=0, B=2, C=5, D=8, E=10] if not specified
   cot_choices: z.array(CotChoiceSchema).optional(),
+}).superRefine((evalCase, ctx) => {
+  if (evalCase.scorer === 'llm' && evalCase.criteria.trim() === '') {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['criteria'],
+      message: 'Required for llm scorer',
+    })
+  }
 })
 export type EvalCase = z.infer<typeof EvalCaseSchema>
 
@@ -184,6 +193,7 @@ export interface ModelResponse {
   cost_usd?: number
   error?: string
   tool_calls?: ToolCallResult[]
+  metadata?: Record<string, unknown>
 }
 
 export interface JudgeScore {

@@ -148,6 +148,6 @@ describe('Config schema validation', () => {
     }
 
     // settings is optional
-    expect(config.settings).toBeUndefined()
+    expect('settings' in config).toBe(false)
   })
 })
