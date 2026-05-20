@@ -7,9 +7,82 @@ export interface HardwareInfo {
   cpuArch: string
   ram: string
   ramGB: number
+  freeDiskGB?: number
   os: string
   osVersion: string
   gpu?: string
+}
+
+function quantBytesPerParam(quant: string): number {
+  const normalized = quant.toLowerCase()
+  if (normalized.includes('fp16') || normalized === 'f16' || normalized.includes('f16')) return 2
+  if (normalized.includes('q8') || normalized.includes('8bit')) return 1
+  if (normalized.includes('q5') || normalized.includes('5bit')) return 0.625
+  if (normalized.includes('q4') || normalized.includes('4bit')) return 0.5
+  return 0.5
+}
+
+/**
+ * Estimate RAM needed to run a quantized model, including KV cache and runtime overhead.
+ */
+export function estimateRamGB(params_b: number, quant: string): number {
+  return +(params_b * quantBytesPerParam(quant) * 1.2).toFixed(1)
+}
+
+function estimateDiskGB(params_b: number, quant: string): number {
+  return +(params_b * quantBytesPerParam(quant) * 1.05).toFixed(1)
+}
+
+function detectFreeDiskGB(): number | undefined {
+  try {
+    const output = execSync('df -k /', { encoding: 'utf-8' }).trim()
+    const line = output.split('\n')[1]
+    if (!line) return undefined
+    const parts = line.trim().split(/\s+/)
+    const availableKb = Number(parts[3])
+    if (!Number.isFinite(availableKb)) return undefined
+    return +(availableKb / (1024 ** 2)).toFixed(1)
+  } catch {
+    return undefined
+  }
+}
+
+/**
+ * Check whether the current machine has enough RAM and disk for a model.
+ */
+export function checkFit(
+  model: { name: string; params_b: number; quant: string },
+  hw: HardwareInfo,
+  opts?: { headroom_gb?: number }
+): { fits: boolean; needs_gb: number; available_gb: number; reason?: string } {
+  const headroomGB = opts?.headroom_gb ?? 4
+  const needsGB = estimateRamGB(model.params_b, model.quant)
+  const availableGB = Math.max(0, +(hw.ramGB - headroomGB).toFixed(1))
+
+  if (needsGB > availableGB) {
+    return {
+      fits: false,
+      needs_gb: needsGB,
+      available_gb: availableGB,
+      reason: `${model.name} needs ${needsGB} GB RAM at ${model.quant}; ${availableGB} GB available after ${headroomGB} GB headroom`,
+    }
+  }
+
+  const diskGB = estimateDiskGB(model.params_b, model.quant)
+  if (hw.freeDiskGB !== undefined && diskGB > hw.freeDiskGB) {
+    return {
+      fits: false,
+      needs_gb: needsGB,
+      available_gb: availableGB,
+      reason: `${model.name} needs about ${diskGB} GB free disk to download; ${hw.freeDiskGB} GB available`,
+    }
+  }
+
+  return {
+    fits: true,
+    needs_gb: needsGB,
+    available_gb: availableGB,
+  }
 }
 
 /**
@@ -21,6 +94,7 @@ export function detectHardware(): HardwareInfo {
   const cpuCores = os.cpus().length
   const totalMem = os.totalmem()
   const ramGB = Math.round(totalMem / (1024 ** 3))
+  const freeDiskGB = detectFreeDiskGB()
 
   let cpu = os.cpus()[0]?.model || 'Unknown CPU'
   let osVersion = os.release()
@@ -61,6 +135,7 @@ export function detectHardware(): HardwareInfo {
     cpuArch: arch,
     ram: ramFormatted,
     ramGB,
+    freeDiskGB,
     os: platform === 'darwin' ? 'macOS' : platform === 'linux' ? 'Linux' : platform === 'win32' ? 'Windows' : platform,
     osVersion,
     gpu
@@ -93,6 +168,7 @@ export function toRunResultFormat(hw: HardwareInfo): {
   cpu_cores: number
   cpu_arch: string
   ram_gb: number
+  free_disk_gb?: number
   gpu?: string
   os: string
   os_version: string
@@ -102,6 +178,7 @@ export function toRunResultFormat(hw: HardwareInfo): {
     cpu_cores: hw.cpuCores,
     cpu_arch: hw.cpuArch,
     ram_gb: hw.ramGB,
+    free_disk_gb: hw.freeDiskGB,
     gpu: hw.gpu,
     os: hw.os,
     os_version: hw.osVersion

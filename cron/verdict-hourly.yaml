@@ -13,15 +13,19 @@ no_agent: true
 
 script: |
   cd ~/code/verdict
+  verdict_cli() {
+    if command -v verdict >/dev/null 2>&1; then
+      verdict "$@"
+    else
+      node dist/cli/index.js "$@"
+    fi
+  }
+  verdict_cli models auto-pull --max-size 8
   ./scripts/verdict-runner.sh \
-    --local \
+    --auto \
+    --since 24 \
+    --max-models 3 \
     --pack comprehensive-mix
-
-# Optional future enhancements:
-# - Add model rotation
-# - Add multiple eval packs
-# - Add notification on regression detection
-# - Add result archiving
 
 # To create this job:
 # hermes cron create --file cron/verdict-hourly.yaml

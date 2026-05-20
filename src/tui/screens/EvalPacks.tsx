@@ -25,7 +25,7 @@ interface PackEntry {
   error?: string
 }
 
-const PACK_DIRS = ['./eval-packs', './multimodal-evals']
+const PACK_DIRS = ['./eval-packs', './eval-packs/vision']
 
 function listPacks(): PackEntry[] {
   const entries: PackEntry[] = []

@@ -44,4 +44,4 @@ tail -f results/.verdict-checkpoint.json
 2. **Run 65** - Ultimate baseline
 3. **Phase 2-6** - Systematic coverage
 
-**See:** `../COMPREHENSIVE-RUN-MATRIX.md` for full plan (65 runs)
+**See:** `../docs/archived/run-matrices/COMPREHENSIVE-RUN-MATRIX.md` for the archived 65-run plan

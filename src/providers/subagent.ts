@@ -51,16 +51,11 @@ export async function callSubAgent(
     const latency = Date.now() - startTime
     
     return {
+      model_id: config.id,
       text: result.message,
+      input_tokens: 0,
+      output_tokens: 0,
       latency_ms: latency,
-      model: config.model,
-      metadata: {
-        provider: 'subagent',
-        session_key: spawnResult.childSessionKey,
-        run_id: spawnResult.runId,
-        runtime: config.runtime || 'subagent',
-        mode: config.mode || 'run'
-      }
     }
   } catch (error) {
     if (error instanceof Error) {

@@ -44,7 +44,7 @@ export async function callOpenClaw(
         model: config.model,
         messages: [{ role: 'user', content: prompt }],
         max_tokens: config.max_tokens || 2048,
-        temperature: config.temperature ?? 0.7,
+        temperature: 0.7,
         stream: false  // Start with non-streaming
       })
     })
@@ -54,7 +54,10 @@ export async function callOpenClaw(
       throw new Error(`OpenClaw API error (${response.status}): ${errorText}`)
     }
     
-    const data = await response.json()
+    const data = await response.json() as {
+      choices?: Array<{ message?: { content?: string }; finish_reason?: string }>
+      usage?: { prompt_tokens?: number; completion_tokens?: number }
+    }
     const latency = Date.now() - startTime
     
     // Extract response text
@@ -65,17 +68,12 @@ export async function callOpenClaw(
     }
     
     return {
+      model_id: config.id,
       text,
+      input_tokens: data.usage?.prompt_tokens ?? 0,
+      output_tokens: data.usage?.completion_tokens ?? 0,
       latency_ms: latency,
-      model: config.model,
       cost_usd: calculateCost(data.usage, config.model),
-      metadata: {
-        provider: 'openclaw',
-        gateway_url: gatewayUrl,
-        agent_id: agentId,
-        usage: data.usage,
-        finish_reason: data.choices?.[0]?.finish_reason
-      }
     }
   } catch (error) {
     if (error instanceof Error) {

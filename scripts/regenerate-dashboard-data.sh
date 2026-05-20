@@ -13,21 +13,37 @@ node -e "
 const fs = require('fs');
 
 const runFiles = fs.readdirSync('../../dashboard/published/data')
-  .filter(f => f.startsWith('2026') && f.endsWith('.json'))
+  .filter(f => f.endsWith('.json') && f !== 'dashboard-data.json')
   .sort();
 
 console.log('Processing', runFiles.length, 'run files...');
 
 const allCases = new Map();
 const models = {};
+const skippedByName = new Map();
+let evalRunCount = 0;
 
 runFiles.forEach(file => {
   const data = JSON.parse(fs.readFileSync(\`../../dashboard/published/data/\${file}\`, 'utf8'));
-  const runId = file.replace(/^2026-03-\\d+-/, '').replace('.json', '');
+  const runId = data.run_id || file.replace(/^\\d{4}-\\d{2}-\\d{2}-/, '').replace('.json', '');
   
   console.log('  -', runId, ':', data.name || 'Unnamed');
+
+  (data.skipped_models || []).forEach(model => {
+    const skipped = {
+      ...model,
+      run_id: runId,
+      timestamp: data.timestamp || null
+    };
+    const existing = skippedByName.get(model.name);
+    if (!existing || String(skipped.timestamp || '').localeCompare(String(existing.timestamp || '')) >= 0) {
+      skippedByName.set(model.name, skipped);
+    }
+  });
+
+  if ((data.cases || []).length > 0) evalRunCount++;
   
-  data.cases.forEach(caseData => {
+  (data.cases || []).forEach(caseData => {
     const caseId = caseData.case_id;
     
     if (!allCases.has(caseId)) {
@@ -60,15 +76,20 @@ runFiles.forEach(file => {
   });
 });
 
+const skippedModels = Array.from(skippedByName.values())
+  .sort((a, b) => String(a.name).localeCompare(String(b.name)));
+
 const output = {
   meta: {
-    total_runs: runFiles.length,
+    total_runs: evalRunCount,
     total_cases: allCases.size,
     total_models: Object.keys(models).length,
+    skipped_models: skippedModels.length,
     last_updated: new Date().toISOString().split('T')[0]
   },
   models: Object.fromEntries(Object.keys(models).sort().map(m => [m, {}])),
-  cases: Array.from(allCases.values())
+  cases: Array.from(allCases.values()),
+  skipped_models: skippedModels
 };
 
 fs.writeFileSync('../../dashboard-data.json', JSON.stringify(output, null, 2));
@@ -82,7 +103,7 @@ cd ../..
 
 echo ""
 echo "Running cleanup..."
-node clean-data.cjs
+node scripts/clean-data.cjs
 
 echo ""
 echo "✅ Dashboard data regenerated!"

@@ -1,14 +1,12 @@
 import { Command } from 'commander'
 import chalk from 'chalk'
-import readline from 'readline'
 import { runCommand } from './commands/run.js'
-import { modelsCommand, discoverCommand } from './commands/models.js'
+import { modelsCommand, discoverCommand, catalogCommand, suggestCommand, autoPullCommand } from './commands/models.js'
 import { initCommand } from './commands/init.js'
 import { compareCommand } from './commands/compare.js'
 import { baselineSaveCommand, baselineListCommand, baselineCompareCommand } from './commands/baseline.js'
 import { historyCommand } from './commands/history.js'
 import { routeCommand } from './commands/route.js'
-import { reviewCommand } from './commands/review.js'
 import { serveCommand } from './commands/serve.js'
 import { daemonStartCommand, daemonStopCommand, daemonStatusCommand, daemonLogsCommand, daemonWorkerCommand } from './commands/daemon.js'
 import { watchCommand } from './commands/watch.js'
@@ -19,8 +17,17 @@ import { reportCommand } from './commands/report.js'
 import { evalAddCommand, evalRemoveCommand, evalListCommand, evalInitCommand } from './commands/eval.js'
 import { contributeCommand } from './commands/contribute.js'
 import { tuiCommand } from './commands/tui.js'
-// Dashboard CLI removed - use custom build system in dashboard/build/ instead
-// See WORKFLOW.md for complete dashboard workflow
+import { dashboardBuildCommand } from './commands/dashboard.js'
+import { telemetryOnCommand, telemetryOffCommand, telemetryStatusCommand } from './commands/telemetry.js'
+import { setupCommand } from './commands/setup.js'
+import { prCommentCommand } from './commands/pr-comment.js'
+import { badgeCommand } from './commands/badge.js'
+import { quantsCommand } from './commands/quants.js'
+
+process.stdout.on('error', err => {
+  if ((err as NodeJS.ErrnoException).code === 'EPIPE') process.exit(0)
+  throw err
+})
 
 const program = new Command()
 
@@ -38,6 +45,7 @@ program
   .command('init')
   .description('Create verdict.yaml and starter eval packs')
   .option('--yes', 'Overwrite existing config')
+  .option('--telemetry <state>', 'Set telemetry on/off non-interactively (default: prompt)')
   .action(initCommand)
 
 program
@@ -67,7 +75,32 @@ const models = program
 models
   .command('discover')
   .description('Scan for local inference servers (Ollama, MLX, LM Studio)')
+  .option('--json', 'Output discovered models as JSON')
   .action(discoverCommand)
+
+models
+  .command('catalog')
+  .description('List curated catalog models with current hardware fit verdicts')
+  .option('--catalog <path>', 'Model catalog YAML file', './configs/model-catalog.yaml')
+  .option('--json', 'Output catalog and fit verdicts as JSON')
+  .action(catalogCommand)
+
+models
+  .command('suggest')
+  .description('Suggest catalog models that fit this machine and are missing from verdict.yaml')
+  .option('-c, --config <path>', 'Config file', './verdict.yaml')
+  .option('--catalog <path>', 'Model catalog YAML file', './configs/model-catalog.yaml')
+  .option('--json', 'Output suggestions as JSON')
+  .action(suggestCommand)
+
+models
+  .command('auto-pull')
+  .description('Pull fitting small Ollama catalog models that are not installed')
+  .option('--max-size <billions>', 'Largest model size to auto-pull, in billions of parameters', '8')
+  .option('--dry-run', 'Show models that would be pulled without pulling')
+  .option('--catalog <path>', 'Model catalog YAML file', './configs/model-catalog.yaml')
+  .option('--json', 'Output pull summary as JSON')
+  .action(autoPullCommand)
 
 program
   .command('compare [run-a] [run-b]')
@@ -129,27 +162,10 @@ program
   .action(routeCommand)
 
 program
-  .command('review')
-  .description('Review code with a coding model (pipe code via stdin: cat file.js | verdict review)')
-  .option('-c, --config <path>', 'Config file', './verdict.yaml')
-  .option('--model <id>', 'Model to use for review')
-  .option('--max-tokens <n>', 'Max output tokens', parseInt)
-  .option('--json', 'Output raw JSON instead of formatted review')
-  .action(async (opts) => {
-    // Read code from stdin
-    const code = await new Promise<string>((resolve) => {
-      const chunks: string[] = []
-      const rl = readline.createInterface({ input: process.stdin, crlfDelay: Infinity })
-      rl.on('line', (line) => chunks.push(line))
-      rl.on('close', () => resolve(chunks.join('\n')))
-    })
-    return reviewCommand(code, opts)
-  })
-
-program
   .command('serve')
   .description('Start OpenAI-compatible HTTP proxy with smart routing')
   .option('--port <n>', 'Port to listen on', '4000')
+  .option('--ui', 'Also serve a local read-only dashboard at / (no auth, localhost only)')
   .action(serveCommand)
 
 const daemon = program
@@ -214,7 +230,7 @@ program
 program
   .command('report')
   .description('Generate detailed HTML report from a result file')
-  .option('--result <path>', 'Path to result JSON file', { required: true })
+  .requiredOption('--result <path>', 'Path to result JSON file')
   .option('--output <path>', 'Output HTML file path (default: docs/runs/<run_id>.html)')
   .action((opts: any) => reportCommand({ result: opts.result, output: opts.output }))
 const evalCmd = program
@@ -241,7 +257,63 @@ evalCmd
   .description('Auto-register built-in eval packs')
   .action(evalInitCommand)
 
-// Dashboard CLI removed - use custom build system instead
+const dashboardCmd = program
+  .command('dashboard')
+  .description('Build the static dashboard from local run results')
+
+dashboardCmd
+  .command('build')
+  .description('Regenerate dashboard-data.json and rebuild all HTML pages')
+  .option('--skip-regenerate', 'Use existing dashboard-data.json, only rebuild HTML')
+  .action((opts) => dashboardBuildCommand({ skipRegenerate: opts.skipRegenerate }))
+
+const telemetryCmd = program
+  .command('telemetry')
+  .description('Manage opt-in anonymous telemetry (off by default)')
+
+telemetryCmd
+  .command('on')
+  .description('Opt in to anonymous telemetry')
+  .action(telemetryOnCommand)
+
+telemetryCmd
+  .command('off')
+  .description('Opt out of anonymous telemetry')
+  .action(telemetryOffCommand)
+
+telemetryCmd
+  .command('status')
+  .description('Show current telemetry state')
+  .action(telemetryStatusCommand)
+
+program
+  .command('setup')
+  .description('One-command setup helper (use --autonomous for 24/7 cron)')
+  .option('--autonomous', 'Install Hermes cron job + verify dashboard build path')
+  .option('--dry-run', 'Show what would run without invoking hermes')
+  .action(setupCommand)
+
+program
+  .command('pr-comment <result>')
+  .description('Emit GitHub PR comment markdown from a result JSON (pipe to `gh pr comment`)')
+  .action(prCommentCommand)
+
+program
+  .command('badge <result>')
+  .description('Emit an SVG score badge for a result JSON (README/dashboards)')
+  .option('--label <text>', 'Left-side label', 'verdict')
+  .option('--show-model', 'Include winning model name in the badge text')
+  .option('-o, --output <path>', 'Write SVG to this path instead of stdout')
+  .action((result, opts) => badgeCommand(result, opts))
+
+program
+  .command('quants <base>')
+  .description('Compare all installed Ollama quants of a base model (e.g. qwen2.5:7b)')
+  .option('-c, --config <path>', 'Config file (for judge settings)', './verdict.yaml')
+  .option('--pack <path>', 'Eval pack to run (default: ./eval-packs/quantization.yaml)')
+  .option('--host <host>', 'Ollama host:port', 'localhost:11434')
+  .action((base, opts) => quantsCommand(base, opts))
+
 // 
 // The built-in `verdict dashboard` command has been removed in favor of the
 // custom multi-page dashboard system in dashboard/build/

@@ -59,7 +59,6 @@ corpus_score_projected: "98% (245/250)"
 - **`verdict daemon`:** Background job runner. Processes queued eval jobs from the `jobs` SQLite table, watches for new local models (tracked in `watched_models` table), communicates via IPC. Unlike `serve`, daemon runs without an HTTP interface.
 - **`verdict watch`:** Watches for new local models (e.g., newly pulled Ollama models) and registers them. Related to daemon's watcher functionality but runs as a standalone command.
 - **Daemon module:** `src/daemon/` — depends on db, core/*. Manages eval queue, model watcher, and IPC communication.
-- **Router DSPy shadow mode:** Optional mode where the router runs a DSPy-based classifier in parallel with the primary classifier for comparison/evaluation purposes.
 
 ### Data Flow
 ```

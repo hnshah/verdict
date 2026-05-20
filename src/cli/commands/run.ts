@@ -7,10 +7,11 @@ import { registryResolve } from '../../core/registry.js'
 import { runEvals } from '../../core/runner.js'
 import { synthesizeRun } from '../../core/synthesis.js'
 import { loadBaseline, compareWithBaseline } from '../../core/baseline.js'
-import { printSummary, printCaseDetail, printBaselineComparison, printSynthesis } from '../../reporter/terminal.js'
+import { printSummary, printCaseDetail, printBaselineComparison, printSynthesis, printVerdict } from '../../reporter/terminal.js'
 import { generateMarkdownReport } from '../../reporter/markdown.js'
 import type { SlackCard } from '../../types/index.js'
 import { setLogLevel } from '../../utils/logger.js'
+import { humanizeProviderError, formatHumanError } from '../../utils/errors.js'
 import { contributeCommand } from './contribute.js'
 
 interface RunOptions {
@@ -27,6 +28,7 @@ interface RunOptions {
   failIfRegression?: boolean
   verbose?: boolean
   debug?: boolean
+  store?: boolean
 }
 
 export async function runCommand(opts: RunOptions): Promise<void> {
@@ -150,13 +152,24 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     result = await runEvals(config, packs, onProgress, opts.resume, categoryFilter, true) // preload enabled
     spinner.succeed('Done')
   } catch (err) {
-    spinner.fail(chalk.red(err instanceof Error ? err.message : String(err)))
+    const humanized = humanizeProviderError(err)
+    spinner.fail(chalk.red(humanized.summary))
+    if (humanized.hint) console.error(chalk.dim(`  → ${humanized.hint}`))
+    if (opts.debug && humanized.raw !== humanized.summary) {
+      console.error(chalk.dim(`  raw: ${humanized.raw}`))
+    }
     process.exit(1)
   }
 
   if (!opts.json) {
-    for (const c of result.cases) printCaseDetail(c.case_id, c.prompt, c.scores)
+    // Headline first: deterministic verdict + cost-quality callout.
+    printVerdict(result)
+    // Leaderboard.
     printSummary(result)
+    // Per-case details only on --verbose — they're noise for the headline reader.
+    if (opts.verbose) {
+      for (const c of result.cases) printCaseDetail(c.case_id, c.prompt, c.scores)
+    }
   }
 
   // Auto-compare with default baseline if it exists
@@ -219,6 +232,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
       models: result.models,
       results: result.cases,
       summary: summaryArray,
+      ...(result.skipped_models ? { skipped_models: result.skipped_models } : {}),
       ...(result.synthesis ? { synthesis: result.synthesis } : {}),
       ...(result.baselineComparison ? { baselineComparison: result.baselineComparison } : {}),
     }
@@ -232,7 +246,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   fs.writeFileSync(`${base}.json`, JSON.stringify(result, null, 2))
 
   // Persist to SQLite unless --no-store
-  if (!opts.noStore) {
+  if (opts.noStore !== true && opts.store !== false) {
     try {
       const { getDb, initSchema, saveRunResult } = await import('../../db/client.js')
       const db = getDb()
@@ -274,6 +288,40 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   // Auto-contribute if enabled and run succeeded
   if (config.settings?.auto_contribute && result.models.length > 0) {
     await tryAutoContribute(`${base}.json`, config, log)
+  }
+
+  // Fire-and-forget telemetry ping (no-op unless user opted in AND
+  // VERDICT_TELEMETRY_URL is configured). Send minimal counts only.
+  try {
+    const { ping } = await import('../../utils/telemetry.js')
+    ping({
+      models_count: result.models.length,
+      packs_count: packs.length,
+      verdict_version: '0.3.0',
+    })
+  } catch { /* never let telemetry affect the user */ }
+
+  // Notifications (Slack / macOS / email) — fire-and-forget.
+  if (config.notify) {
+    try {
+      const { notifyRun } = await import('../../utils/notify.js')
+      // Best-effort: find the previous run's #1 model from SQLite for the
+      // "new winner" event. Skip if history is unavailable.
+      let prevWinnerId: string | undefined
+      try {
+        const { getDb, queryHistory } = await import('../../db/client.js')
+        const db = getDb()
+        const recent = queryHistory(db, { limit: result.models.length * 2, orderBy: 'date' })
+        // Pick the highest-scoring row from the previous (different run_id) run.
+        const prev = recent.find(r => r.run_id !== result.run_id)
+        if (prev) {
+          const prevSameRun = recent.filter(r => r.run_id === prev.run_id)
+          prevWinnerId = prevSameRun.sort((a, b) => b.score - a.score)[0]?.model_id
+        }
+        db.close()
+      } catch { /* DB unavailable, skip prev-winner detection */ }
+      await notifyRun(result, config.notify, prevWinnerId)
+    } catch { /* notifications must not affect run UX */ }
   }
 
   log()

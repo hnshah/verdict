@@ -78,6 +78,24 @@ export const ConfigSchema = z.object({
     auto_contribute: z.boolean().default(false),
     contribution_author: z.string().optional(),
   }).optional(),
+  notify: z.object({
+    slack: z.object({
+      webhook_url: z.string(),
+      channel: z.string().optional(),
+    }).optional(),
+    macos: z.object({
+      enabled: z.boolean().optional(),
+    }).optional(),
+    email: z.object({
+      binary: z.string().optional(),
+      to: z.string(),
+    }).optional(),
+    triggers: z.object({
+      new_winner: z.boolean().optional(),
+      regression: z.boolean().optional(),
+      cron_failure: z.boolean().optional(),
+    }).optional(),
+  }).optional(),
 })
 export type Config = z.infer<typeof ConfigSchema>
 
@@ -226,6 +244,7 @@ export interface HardwareInfo {
   cpu_cores: number
   cpu_arch: string
   ram_gb: number
+  free_disk_gb?: number
   gpu?: string
   os: string
   os_version: string
@@ -282,6 +301,7 @@ export interface RunResult {
   models: string[]
   cases: CaseResult[]
   summary: Record<string, ModelSummary>
+  skipped_models?: SkippedModel[]
   synthesis?: SynthesisResult
   baselineComparison?: BaselineComparison
   // Run-level metadata for reproducibility
@@ -357,8 +377,17 @@ export interface DiscoveredModel {
   model: string            // model name
   base_url: string
   size_gb?: number
+  params_b?: number
+  quant?: string
   is_moe?: boolean         // detected MoE architecture
   tags: string[]
   display_name?: string    // human-readable name (LM Studio)
   context_window?: number  // max context length (LM Studio)
+}
+
+export interface SkippedModel {
+  name: string
+  reason: string
+  needs_gb: number
+  available_gb: number
 }
