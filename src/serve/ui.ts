@@ -1,16 +1,25 @@
 /**
  * Local web UI for `verdict serve --ui`.
  *
- * Read-only, no auth, localhost-only. Serves a single HTML page plus a
- * /ui/runs JSON endpoint that pulls from ~/.verdict/results.db.
+ * Read-only, localhost-only. Serves a TUI-styled React dashboard (loaded via
+ * CDN React + Babel — no build step) plus JSON endpoints that pull from
+ * ~/.verdict/results.db.
  *
- * No framework, no build step — vanilla HTML + a sprinkle of JS so the
- * dashboard is discoverable without setting up GitHub Pages.
+ * Endpoints:
+ *   GET /                        → index.html with SSR data
+ *   GET /ui                      → same
+ *   GET /ui/static/*             → static design assets (css, jsx, js)
+ *   GET /ui/runs                 → list runs (existing shape)
+ *   GET /ui/runs/:run_id/cases   → per-case results for a run
+ *   GET /ui/leaderboard          → aggregated top-N model leaderboard
  */
 
 import http from 'http'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import type Database from 'better-sqlite3'
-import { queryHistory } from '../db/client.js'
+import { queryHistory, queryCaseResults, queryLeaderboard } from '../db/client.js'
 
 interface RunRow {
   run_id: string
@@ -28,10 +37,32 @@ interface RunRow {
   run_at: string
 }
 
-/**
- * GET /ui/runs — returns up to 200 most-recent runs grouped by run_id.
- */
-export function handleUiRuns(res: http.ServerResponse, db: Database.Database): void {
+const STATIC_DIR = (() => {
+  // When loaded from `dist/serve/ui.js`, the static assets sit next to us at
+  // `dist/serve/ui-static/`. In dev (running from `src/`), look one dir up.
+  const here = path.dirname(fileURLToPath(import.meta.url))
+  const candidates = [
+    path.join(here, 'ui-static'),                  // dist/serve/ui-static
+    path.join(here, '..', '..', 'src', 'serve', 'ui-static'), // dist→repo root
+    path.join(here, '..', '..', 'serve', 'ui-static'),
+  ]
+  for (const c of candidates) {
+    if (fs.existsSync(c)) return c
+  }
+  return candidates[0]
+})()
+
+const MIME: Record<string, string> = {
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'application/javascript; charset=utf-8',
+  '.jsx': 'text/babel; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+}
+
+function buildRuns(db: Database.Database) {
   const rows = queryHistory(db, { limit: 200 }) as RunRow[]
   const grouped = new Map<string, { run_id: string; run_at: string; name: string; pack: string; rows: RunRow[] }>()
   for (const row of rows) {
@@ -42,7 +73,7 @@ export function handleUiRuns(res: http.ServerResponse, db: Database.Database): v
     }
     g.rows.push(row)
   }
-  const runs = Array.from(grouped.values())
+  return Array.from(grouped.values())
     .sort((a, b) => b.run_at.localeCompare(a.run_at))
     .map(g => {
       const sorted = [...g.rows].sort((a, b) => b.score - a.score)
@@ -65,96 +96,112 @@ export function handleUiRuns(res: http.ServerResponse, db: Database.Database): v
         })),
       }
     })
+}
 
+function buildLeaderboard(db: Database.Database) {
+  return queryLeaderboard(db, { limit: 10 })
+}
+
+/** GET /ui/runs — list of runs (grouped by run_id). */
+export function handleUiRuns(res: http.ServerResponse, db: Database.Database): void {
+  const runs = buildRuns(db)
   res.writeHead(200, { 'Content-Type': 'application/json' })
-  res.end(JSON.stringify({ runs }))
+  res.end(JSON.stringify({ runs, meta: { version: '0.4.0', path: '~/.verdict' } }))
+}
+
+/** GET /ui/runs/:run_id/cases — per-case rows for the drill-in panel. */
+export function handleUiCases(res: http.ServerResponse, db: Database.Database, runId: string): void {
+  const rows = queryCaseResults(db, runId)
+  // Group by case_id so each unique case appears once, with all models' scores.
+  // For the design's drill-in (which lists cases for a single run), pick the
+  // top-scoring model per case for a quick read-only view.
+  const byCase = new Map<string, ReturnType<typeof queryCaseResults>[number]>()
+  for (const r of rows) {
+    const existing = byCase.get(r.case_id)
+    if (!existing || r.score > existing.score) byCase.set(r.case_id, r)
+  }
+  const cases = Array.from(byCase.values()).map(r => ({
+    case_id: r.case_id,
+    score: r.score,
+    latency_ms: r.latency_ms,
+    prompt: r.prompt,
+    response: r.response,
+    model_id: r.model_id,
+    category: null,
+  }))
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify({ run_id: runId, cases }))
+}
+
+/** GET /ui/leaderboard — aggregated top-N model leaderboard. */
+export function handleUiLeaderboard(res: http.ServerResponse, db: Database.Database): void {
+  const leaderboard = buildLeaderboard(db)
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify({ leaderboard, meta: { version: '0.4.0' } }))
+}
+
+/** GET /ui/static/* — serve design system assets from disk. */
+export function handleUiStatic(res: http.ServerResponse, urlPath: string): void {
+  // urlPath starts with '/ui/static/'. Strip the prefix and resolve.
+  const rel = urlPath.replace(/^\/ui\/static\/?/, '')
+  // Reject traversal attempts.
+  if (rel.includes('..')) {
+    res.writeHead(403)
+    res.end('forbidden')
+    return
+  }
+  const target = path.join(STATIC_DIR, rel)
+  // Resolve and confirm the result is inside STATIC_DIR (belt-and-braces).
+  const resolved = path.resolve(target)
+  if (!resolved.startsWith(path.resolve(STATIC_DIR))) {
+    res.writeHead(403)
+    res.end('forbidden')
+    return
+  }
+  if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) {
+    res.writeHead(404)
+    res.end('not found')
+    return
+  }
+  const ext = path.extname(resolved).toLowerCase()
+  const mime = MIME[ext] ?? 'application/octet-stream'
+  res.writeHead(200, { 'Content-Type': mime, 'Cache-Control': 'no-cache' })
+  fs.createReadStream(resolved).pipe(res)
 }
 
 /**
- * GET / and GET /ui — serves the HTML page.
+ * GET / and GET /ui — serve index.html with SSR data placeholder filled in.
+ * The placeholder `<!-- @SSR_DATA -->` is replaced with a script tag that
+ * sets `window.VERDICT_DATA_SSR` so the React app has data on first paint.
  */
-export function handleUiIndex(res: http.ServerResponse): void {
-  res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
-  res.end(UI_HTML)
-}
+export function handleUiIndex(res: http.ServerResponse, db: Database.Database): void {
+  const indexPath = path.join(STATIC_DIR, 'index.html')
+  if (!fs.existsSync(indexPath)) {
+    res.writeHead(500, { 'Content-Type': 'text/plain' })
+    res.end('Dashboard assets missing. Reinstall verdict or run `npm run build`.')
+    return
+  }
+  let html = fs.readFileSync(indexPath, 'utf-8')
 
-const UI_HTML = `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Verdict — local dashboard</title>
-<style>
-  :root { color-scheme: light dark; }
-  * { box-sizing: border-box; }
-  body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, system-ui, sans-serif; margin: 0; background: #fafafa; color: #111; }
-  @media (prefers-color-scheme: dark) { body { background: #0e0f10; color: #eaeaea; } }
-  header { padding: 24px 32px; border-bottom: 1px solid #00000020; display: flex; align-items: baseline; gap: 16px; }
-  header h1 { margin: 0; font-size: 18px; font-weight: 700; }
-  header .meta { color: #00000080; font-size: 12px; }
-  main { padding: 24px 32px; }
-  .runs { display: flex; flex-direction: column; gap: 16px; }
-  .run { border: 1px solid #00000020; border-radius: 8px; padding: 16px; background: #ffffff80; }
-  @media (prefers-color-scheme: dark) { .run { background: #1a1b1c; border-color: #ffffff20; } }
-  .run-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
-  .run-head h2 { margin: 0; font-size: 14px; font-weight: 600; }
-  .run-head .ts { color: #00000060; font-size: 12px; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #00000010; }
-  th { font-weight: 600; color: #00000080; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
-  td.score { font-weight: 700; }
-  td.score.high { color: #16a34a; }
-  td.score.mid { color: #ca8a04; }
-  td.score.low { color: #dc2626; }
-  .empty { padding: 32px; text-align: center; color: #00000060; }
-  code { font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; padding: 1px 5px; background: #00000010; border-radius: 3px; }
-</style>
-</head>
-<body>
-<header>
-  <h1>Verdict</h1>
-  <span class="meta">local dashboard · <span id="run-count">…</span> runs · read from <code>~/.verdict/results.db</code></span>
-</header>
-<main>
-<div id="content">Loading…</div>
-</main>
-<script>
-(async () => {
-  const content = document.getElementById('content')
-  const runCount = document.getElementById('run-count')
-  try {
-    const res = await fetch('/ui/runs')
-    const data = await res.json()
-    runCount.textContent = data.runs.length
-    if (data.runs.length === 0) {
-      content.innerHTML = '<div class="empty">No runs yet. Try <code>verdict run</code>.</div>'
-      return
-    }
-    const html = ['<div class="runs">']
-    for (const run of data.runs) {
-      const date = new Date(run.run_at).toLocaleString()
-      html.push('<div class="run">')
-      html.push('<div class="run-head"><h2>' + escape(run.name) + ' · <code>' + escape(run.pack) + '</code></h2><span class="ts">' + escape(date) + '</span></div>')
-      html.push('<table><thead><tr><th>Rank</th><th>Model</th><th>Provider</th><th>Score</th><th>Latency</th><th>Cost</th><th>Wins</th></tr></thead><tbody>')
-      run.models.forEach((m, i) => {
-        const cls = m.score >= 8 ? 'high' : m.score >= 6 ? 'mid' : 'low'
-        const cost = m.cost_usd > 0 ? '$' + m.cost_usd.toFixed(4) : 'free'
-        const latency = (m.latency_ms / 1000).toFixed(1) + 's'
-        html.push('<tr><td>' + (i+1) + '</td><td><code>' + escape(m.model_id) + '</code></td><td>' + escape(m.provider || '') + '</td><td class="score ' + cls + '">' + m.score.toFixed(2) + '</td><td>' + latency + '</td><td>' + cost + '</td><td>' + m.wins + '</td></tr>')
-      })
-      html.push('</tbody></table>')
-      html.push('</div>')
-    }
-    html.push('</div>')
-    content.innerHTML = html.join('')
-  } catch (err) {
-    content.innerHTML = '<div class="empty">Error loading runs: ' + escape(String(err)) + '</div>'
+  // Build the SSR payload — keep it small enough to inline.
+  const runs = buildRuns(db)
+  const leaderboard = buildLeaderboard(db)
+  // Include cases for the most-recent run so the drill-in has data immediately.
+  const cases: Record<string, ReturnType<typeof queryCaseResults>> = {}
+  if (runs[0]) {
+    cases[runs[0].run_id] = queryCaseResults(db, runs[0].run_id)
   }
-  function escape(s) {
-    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  const ssr = {
+    runs,
+    leaderboard,
+    cases,
+    meta: { version: '0.4.0', path: '~/.verdict' },
   }
-})()
-</script>
-</body>
-</html>
-`
+  // JSON-encode and escape `</script>` to prevent injection.
+  const json = JSON.stringify(ssr).replace(/</g, '\\u003c')
+  const script = `<script>window.VERDICT_DATA_SSR = ${json};</script>`
+  html = html.replace('<!-- @SSR_DATA -->', script)
+
+  res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+  res.end(html)
+}

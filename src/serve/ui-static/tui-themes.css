@@ -1,0 +1,614 @@
+/* ==========================================================
+   Verdict TUI — Theme tokens & base type
+   IBM Plex Mono as Berkeley Mono proxy.
+   ========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  --tui-font: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+  --tui-font-alt: 'JetBrains Mono', ui-monospace, monospace;
+  --tui-font-tight: 'Geist Mono', ui-monospace, monospace;
+
+  --tui-fs: 13px;
+  --tui-lh: 1.5;
+  --tui-cw: 7.82px;   /* approx char-width for IBM Plex Mono @13px */
+  --tui-rh: 19.5px;   /* row height */
+}
+
+/* ---------- DEFAULT (ANSI 16-color, classic) ---------- */
+.theme-default {
+  --bg:      #0d0f12;
+  --bg-2:    #14171c;
+  --bg-3:    #1c2026;
+  --fg:      #d7dae0;
+  --fg-dim:  #8b9098;
+  --fg-mute: #5b6068;
+  --line:    #2a2f37;
+  --line-2:  #3a4049;
+
+  --red:     #e06c75;
+  --orange:  #d19a66;
+  --yellow:  #e5c07b;
+  --green:   #98c379;
+  --cyan:    #56b6c2;
+  --blue:    #61afef;
+  --magenta: #c678dd;
+  --pink:    #ef9fbc;
+
+  --accent:  var(--cyan);
+  --good:    var(--green);
+  --warn:    var(--yellow);
+  --bad:     var(--red);
+  --hi:      #1f2530;
+  --sel:     #233143;
+}
+
+/* ---------- MONOKAI (warm, high-contrast) ---------- */
+.theme-monokai {
+  --bg:      #272822;
+  --bg-2:    #1e1f1c;
+  --bg-3:    #2f312a;
+  --fg:      #f8f8f2;
+  --fg-dim:  #a59f85;
+  --fg-mute: #75715e;
+  --line:    #3e3d32;
+  --line-2:  #524f3f;
+
+  --red:     #f92672;
+  --orange:  #fd971f;
+  --yellow:  #e6db74;
+  --green:   #a6e22e;
+  --cyan:    #66d9ef;
+  --blue:    #66d9ef;
+  --magenta: #ae81ff;
+  --pink:    #f92672;
+
+  --accent:  var(--orange);
+  --good:    var(--green);
+  --warn:    var(--yellow);
+  --bad:     var(--red);
+  --hi:      #3a3a30;
+  --sel:     #49483e;
+}
+
+/* ---------- DRACULA (cool purples/greens) ---------- */
+.theme-dracula {
+  --bg:      #282a36;
+  --bg-2:    #21222c;
+  --bg-3:    #313442;
+  --fg:      #f8f8f2;
+  --fg-dim:  #bdc1d1;
+  --fg-mute: #6272a4;
+  --line:    #353746;
+  --line-2:  #44475a;
+
+  --red:     #ff5555;
+  --orange:  #ffb86c;
+  --yellow:  #f1fa8c;
+  --green:   #50fa7b;
+  --cyan:    #8be9fd;
+  --blue:    #6272a4;
+  --magenta: #bd93f9;
+  --pink:    #ff79c6;
+
+  --accent:  var(--magenta);
+  --good:    var(--green);
+  --warn:    var(--yellow);
+  --bad:     var(--red);
+  --hi:      #2f3142;
+  --sel:     #44475a;
+}
+
+/* ---------- SOLARIZED DARK (muted classic) ---------- */
+.theme-solarized {
+  --bg:      #002b36;
+  --bg-2:    #00212b;
+  --bg-3:    #073642;
+  --fg:      #93a1a1;
+  --fg-dim:  #839496;
+  --fg-mute: #586e75;
+  --line:    #0a3d4a;
+  --line-2:  #134754;
+
+  --red:     #dc322f;
+  --orange:  #cb4b16;
+  --yellow:  #b58900;
+  --green:   #859900;
+  --cyan:    #2aa198;
+  --blue:    #268bd2;
+  --magenta: #d33682;
+  --pink:    #d33682;
+
+  --accent:  var(--cyan);
+  --good:    var(--green);
+  --warn:    var(--yellow);
+  --bad:     var(--red);
+  --hi:      #073642;
+  --sel:     #0c4a5b;
+}
+
+/* ---------- Base TUI surface ---------- */
+.tui {
+  font-family: var(--tui-font);
+  font-size: var(--tui-fs);
+  line-height: var(--tui-lh);
+  font-variant-ligatures: none;
+  font-feature-settings: "calt" 0;
+  -webkit-font-smoothing: antialiased;
+  background: var(--bg);
+  color: var(--fg);
+  padding: 18px 22px;
+  white-space: pre;
+  letter-spacing: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+.tui-tight { font-family: var(--tui-font-tight); }
+.tui-jet   { font-family: var(--tui-font-alt); }
+
+/* color utility classes — usable inside .tui screens AND overlays */
+.c-fg   { color: var(--fg); }
+.c-dim  { color: var(--fg-dim); }
+.c-mute { color: var(--fg-mute); }
+.c-red  { color: var(--red); }
+.c-orng { color: var(--orange); }
+.c-yel  { color: var(--yellow); }
+.c-grn  { color: var(--green); }
+.c-cyn  { color: var(--cyan); }
+.c-blu  { color: var(--blue); }
+.c-mag  { color: var(--magenta); }
+.c-pnk  { color: var(--pink); }
+.c-acc  { color: var(--accent); }
+.c-good { color: var(--good); }
+.c-warn { color: var(--warn); }
+.c-bad  { color: var(--bad); }
+.c-line { color: var(--line-2); }
+
+.b-bg2  { background: var(--bg-2); }
+.b-bg3  { background: var(--bg-3); }
+.b-sel  { background: var(--sel); }
+.b-hi   { background: var(--hi); }
+.b-acc  { background: var(--accent); color: var(--bg); padding: 0 6px; }
+
+.bold   { font-weight: 600; }
+.ul     { text-decoration: underline; text-underline-offset: 3px; }
+.dim    { opacity: 0.65; }
+.inv    { background: var(--fg); color: var(--bg); }
+
+/* row highlight */
+.tui .row-sel  { background: var(--sel); }
+.tui .row-hi   { background: var(--hi); }
+
+/* scanline overlay (optional) */
+.tui-crt::after {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.018) 0px,
+    rgba(255,255,255,0.018) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+/* subtle vignette to lift it off the canvas */
+.tui-vignette::before {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 80px rgba(0,0,0,0.45);
+}
+
+/* artboard frame chrome (window dots etc.) */
+.tui-chrome {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--tui-font);
+  font-size: 11px;
+  color: var(--fg-mute);
+}
+.tui-chrome .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.tui-chrome .dot.r { background: #ff5f57; }
+.tui-chrome .dot.y { background: #febc2e; }
+.tui-chrome .dot.g { background: #28c840; }
+.tui-chrome .title { margin-left: 10px; letter-spacing: 0.04em; }
+
+/* shell for artboard contents */
+.artboard-shell {
+  display: flex; flex-direction: column;
+  height: 100%; width: 100%;
+  background: var(--bg);
+  font-family: var(--tui-font);
+}
+.artboard-shell .tui { flex: 1; }
+
+/* ========================================================
+   Layout primitives — panels built with box-drawing chars
+   stretched via flexbox so they auto-fit any column width.
+   ======================================================== */
+
+.tui-screen {
+  font-family: var(--tui-font);
+  font-size: var(--tui-fs);
+  line-height: var(--tui-rh);
+  background: var(--bg);
+  color: var(--fg);
+  padding: 14px 18px 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  white-space: pre;
+  font-variant-ligatures: none;
+  font-feature-settings: "calt" 0;
+}
+.tui-screen.font-jet  { font-family: var(--tui-font-alt); }
+.tui-screen.font-geist { font-family: var(--tui-font-tight); }
+
+/* Panel — outer wrapper using box-drawing chars + flex stretch */
+.tp {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 1;
+  min-width: 0;   /* allow shrink in flex/grid containers */
+  overflow: hidden;
+}
+.tp.fill { flex: 1; min-height: 0; }
+.tp + .tp { margin-top: 4px; }
+
+.tp-top, .tp-bot {
+  display: flex;
+  white-space: pre;
+  color: var(--line-2);
+  height: var(--tui-rh);
+  align-items: center;
+  min-width: 0;
+}
+.tp-top .title { color: var(--accent); font-weight: 600; }
+.tp-top .badge { color: var(--fg-mute); }
+.tp-fill {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 0;
+  color: var(--line-2);
+  user-select: none;
+}
+
+.tp-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.tp-row {
+  display: flex;
+  height: var(--tui-rh);
+  align-items: center;
+  min-height: 0;
+}
+.tp-row .side { color: var(--line-2); flex-shrink: 0; }
+.tp-row .content { flex: 1; min-width: 0; white-space: pre; overflow: hidden; }
+.tp-row.hi { background: var(--hi); }
+.tp-row.sel { background: var(--sel); }
+
+/* horizontal divider INSIDE a panel — sharp by default for tables */
+.tp-divider {
+  display: flex;
+  align-items: center;
+  height: var(--tui-rh);
+  color: var(--line-2);
+}
+.tp-divider .side { color: var(--line-2); }
+.tp-divider .fill { flex: 1; overflow: hidden; white-space: nowrap; color: var(--line-2); }
+
+/* horizontal row layout (panel side-by-side) */
+.tp-h {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  flex-shrink: 0;
+}
+.tp-h > .tp { flex: 1; }
+.tp-h > .tp.w2 { flex: 2; }
+.tp-h > .tp.w3 { flex: 3; }
+
+/* tab bar */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  white-space: pre;
+}
+.tabs .tab {
+  padding: 0 10px;
+  color: var(--fg-mute);
+}
+.tabs .tab.active {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+.tabs .brand {
+  color: var(--accent);
+  font-weight: 700;
+  padding-right: 14px;
+}
+
+/* status bar pinned to bottom */
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 4px;
+  background: var(--bg-2);
+  border-top: 1px solid var(--line);
+  height: var(--tui-rh);
+  margin-top: auto;
+  font-size: 12px;
+  color: var(--fg-dim);
+  flex-shrink: 0;
+}
+.statusbar .mode {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 700;
+  padding: 0 10px;
+  height: 100%;
+  display: flex; align-items: center;
+}
+.statusbar .keys { display: flex; gap: 14px; flex-wrap: nowrap; overflow: hidden; }
+.statusbar .keys .k { display: inline-flex; gap: 4px; }
+.statusbar .keys .k .lbl { color: var(--fg-mute); }
+.statusbar .keys .k .v { color: var(--fg); }
+.statusbar .right {
+  margin-left: auto;
+  display: flex; gap: 10px; padding-right: 8px;
+  color: var(--fg-mute);
+}
+.statusbar .right .v { color: var(--fg); }
+
+/* Hairline-panel variant — no box chars, just colored top/bottom hairlines */
+.tp.hair { padding: 0; }
+.tp.hair .tp-top-hair {
+  display: flex; align-items: center; gap: 8px;
+  border-top: 1px solid var(--line-2);
+  height: var(--tui-rh);
+  padding-left: 6px;
+}
+.tp.hair .tp-top-hair::before { content: ""; width: 6px; height: 12px; background: var(--accent); display: inline-block; }
+.tp.hair .tp-body { padding: 0 6px; }
+.tp.hair + .tp.hair { margin-top: 2px; }
+
+/* prompt prefix */
+.prompt-prefix { color: var(--accent); font-weight: 700; }
+
+/* sparkline colored */
+.spark { letter-spacing: 0; }
+.spark.grn { color: var(--green); }
+.spark.acc { color: var(--accent); }
+.spark.mag { color: var(--magenta); }
+.spark.warn { color: var(--yellow); }
+.spark.bad { color: var(--red); }
+
+/* a "scanline" CRT overlay for the optional polish variant */
+.crt::after {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.022) 0px, rgba(255,255,255,0.022) 1px,
+    transparent 1px, transparent 3px);
+}
+
+/* artboard shell title (the chrome strip above each artboard) */
+.shell-chrome {
+  display: flex; align-items: center; gap: 8px;
+  height: 28px; padding: 0 12px;
+  background: #15171b;
+  color: #71757d;
+  font: 500 11px/1 'IBM Plex Mono', monospace;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid #22262c;
+  flex-shrink: 0;
+}
+.shell-chrome .d { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.shell-chrome .d.r { background: #ff5f57; }
+.shell-chrome .d.y { background: #febc2e; }
+.shell-chrome .d.g { background: #28c840; }
+.shell-chrome .t { margin-left: 8px; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shell-chrome .meta { color: #50545b; white-space: nowrap; }
+
+/* =================================================================
+   Overlays — palette, help, splash
+   ================================================================= */
+
+.overlay-scrim {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 70px;
+  z-index: 10;
+  font-family: var(--tui-font);
+}
+
+.overlay-palette {
+  width: min(640px, 80%);
+  background: var(--bg-2);
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.7);
+  overflow: hidden;
+  font-size: var(--tui-fs);
+  color: var(--fg);
+}
+.overlay-palette__input {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.overlay-palette__input .caret {
+  display: inline-block;
+  color: var(--accent);
+  animation: blink 1s steps(2) infinite;
+}
+.overlay-palette__list {
+  max-height: 360px;
+  overflow: auto;
+  padding: 4px 0;
+}
+.palette-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 4px 14px;
+  cursor: pointer;
+  line-height: var(--tui-rh);
+}
+.palette-row.sel { background: var(--sel); }
+.palette-row.dim { opacity: 0.7; cursor: default; }
+
+.overlay-palette__foot {
+  display: flex; gap: 16px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--line);
+  background: var(--bg-3);
+  font-size: 12px;
+}
+
+.overlay-help {
+  width: min(960px, 92%);
+  background: var(--bg-2);
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.7);
+  color: var(--fg);
+  font-size: var(--tui-fs);
+  overflow: hidden;
+}
+.overlay-help__head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.overlay-help__cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0;
+}
+.overlay-help__sec {
+  padding: 14px 18px;
+  border-right: 1px solid var(--line);
+  min-width: 0;
+}
+.overlay-help__sec:last-child { border-right: 0; }
+.overlay-help__title { margin-bottom: 8px; white-space: nowrap; }
+.overlay-help__rows { display: flex; flex-direction: column; gap: 4px; }
+.overlay-help__row {
+  display: flex; gap: 14px;
+  white-space: nowrap;
+  align-items: baseline;
+}
+.overlay-help__key {
+  display: inline-block;
+  min-width: 76px;
+  font-family: var(--tui-font);
+  flex-shrink: 0;
+}
+.overlay-help__row > span:last-child {
+  min-width: 0;
+  overflow: visible;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+/* =================================================================
+   Splash
+   ================================================================= */
+
+.splash {
+  position: absolute; inset: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--tui-font);
+  font-size: var(--tui-fs);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px;
+  z-index: 20;
+  white-space: pre;
+}
+.splash-logo {
+  text-align: left;
+  line-height: var(--tui-rh);
+}
+.splash-tag {
+  margin-top: 10px;
+  font-size: 13px;
+}
+.splash-boot {
+  margin-top: 38px;
+  width: 520px;
+  display: flex; flex-direction: column; gap: 4px;
+  line-height: var(--tui-rh);
+}
+.splash-foot {
+  position: absolute;
+  bottom: 24px;
+  font-size: 12px;
+  opacity: 0.55;
+}
+
+/* Fading splash exit */
+.splash.leaving { animation: splashLeave 280ms ease-in forwards; }
+@keyframes splashLeave {
+  to { opacity: 0; transform: scale(1.01); }
+}
+
+/* small ASCII-bar legend */
+.legend-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  margin-right: 6px; vertical-align: baseline;
+}
+
+/* =================================================================
+   App shell — page bg, terminal window, theme delegation
+   ================================================================= */
+
+html, body {
+  margin: 0; padding: 0;
+  background: #0a0b0e;
+  font-family: var(--tui-font);
+  height: 100vh;
+  overflow: hidden;
+}
+#root { height: 100vh; }
+
+.app {
+  height: 100vh;
+  width: 100vw;
+  display: flex; flex-direction: column;
+  background: var(--bg);
+  color: var(--fg);
+  position: relative;
+  isolation: isolate;
+}
+.app > .tui-screen {
+  flex: 1; min-height: 0;
+}
+
+/* Make panels fill their flex slot vertically when they're the only child */
+.app .tp.fill, .app .tp[data-fill] { flex: 1; min-height: 0; }
+.app .tp .tp-body { overflow: hidden; }

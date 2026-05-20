@@ -1,4 +1,19 @@
 import { defineConfig } from 'tsup'
+import fs from 'fs'
+import path from 'path'
+
+/**
+ * Mirror `src/serve/ui-static/**` into `dist/serve/ui-static/**` so the
+ * dashboard HTML/CSS/JSX assets ship with the built bundle. Runs after
+ * the CLI build completes.
+ */
+function copyUiStatic(): void {
+  const src = path.resolve('src/serve/ui-static')
+  const dst = path.resolve('dist/serve/ui-static')
+  if (!fs.existsSync(src)) return
+  fs.rmSync(dst, { recursive: true, force: true })
+  fs.cpSync(src, dst, { recursive: true })
+}
 
 export default defineConfig([
   // CLI bundle — executable with shebang
@@ -16,6 +31,9 @@ export default defineConfig([
     external: ['openai', 'better-sqlite3', 'react', 'react/jsx-runtime', 'ink', '@inkjs/ui', '@ink-tools/ink-mouse'],
     banner: {
       js: '#!/usr/bin/env node',
+    },
+    onSuccess: async () => {
+      copyUiStatic()
     },
   },
   // Library bundle — programmatic API for `import { runEvals } from 'verdict'`

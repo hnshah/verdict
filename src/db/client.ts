@@ -219,6 +219,118 @@ export function queryHistory(db: Database.Database, opts: HistoryOpts): EvalHist
   return db.prepare(sql).all(params) as EvalHistoryRow[]
 }
 
+/** A per-case result row used by the dashboard drill-in. */
+export interface CaseResultRow {
+  case_id: string
+  model_id: string
+  score: number
+  latency_ms: number | null
+  input_tokens: number | null
+  output_tokens: number | null
+  prompt: string | null
+  response: string | null
+}
+
+/**
+ * Per-case results for a given run. If `modelId` is provided, restrict to
+ * that model's rows; otherwise return all models for the run.
+ */
+export function queryCaseResults(db: Database.Database, runId: string, modelId?: string): CaseResultRow[] {
+  const params: Record<string, string> = { runId }
+  let extra = ''
+  if (modelId) {
+    extra = ' AND qr.model_id = @modelId'
+    params.modelId = modelId
+  }
+  const sql = `
+    SELECT qr.case_id, qr.model_id, qr.score, qr.latency_ms,
+           qr.input_tokens, qr.output_tokens, qr.prompt, qr.response
+    FROM question_results qr
+    JOIN eval_results er ON er.id = qr.eval_result_id
+    WHERE er.run_id = @runId${extra}
+    ORDER BY qr.id ASC
+  `
+  return db.prepare(sql).all(params) as CaseResultRow[]
+}
+
+/** A row in the aggregated leaderboard. */
+export interface LeaderboardRow {
+  model_id: string
+  provider: string | null
+  avg_score: number
+  runs: number
+  last_score: number
+  delta: number
+  trend: number[]
+  avg_cost_usd: number
+  avg_latency_ms: number
+}
+
+/**
+ * Aggregate top-N models across the last `windowRuns` rows in eval_results,
+ * sorted by avg_score desc. Returns trend (last 8 scores chronologically)
+ * and delta (last - previous).
+ */
+export function queryLeaderboard(
+  db: Database.Database,
+  opts: { limit?: number; windowRuns?: number } = {},
+): LeaderboardRow[] {
+  const limit = opts.limit ?? 10
+  const windowRuns = opts.windowRuns ?? 25
+
+  // Pull a window of recent rows (newest first) — large enough to compute trends.
+  const sql = `
+    SELECT model_id, provider, score, total_cost_usd, avg_latency_ms, run_at
+    FROM eval_results
+    ORDER BY run_at DESC
+    LIMIT @cap
+  `
+  const cap = Math.max(windowRuns * limit, 200)
+  const rows = db.prepare(sql).all({ cap }) as Array<{
+    model_id: string
+    provider: string | null
+    score: number
+    total_cost_usd: number | null
+    avg_latency_ms: number | null
+    run_at: string
+  }>
+
+  // Group by model_id, oldest → newest order (for trend chronology).
+  const groups = new Map<string, typeof rows>()
+  for (const r of rows) {
+    let g = groups.get(r.model_id)
+    if (!g) { g = []; groups.set(r.model_id, g) }
+    g.push(r)
+  }
+
+  const aggregated: LeaderboardRow[] = []
+  for (const [modelId, list] of groups) {
+    // list is currently newest → oldest. Reverse for chronological trend.
+    const chrono = [...list].reverse()
+    const recent = chrono.slice(-windowRuns)
+    const scores = recent.map(r => r.score)
+    const avg = scores.reduce((s, v) => s + v, 0) / Math.max(1, scores.length)
+    const last = scores[scores.length - 1] ?? 0
+    const prev = scores.length >= 2 ? scores[scores.length - 2] : last
+    const cost = recent.reduce((s, r) => s + (r.total_cost_usd ?? 0), 0) / Math.max(1, recent.length)
+    const lat = recent.reduce((s, r) => s + (r.avg_latency_ms ?? 0), 0) / Math.max(1, recent.length)
+    aggregated.push({
+      model_id: modelId,
+      provider: recent[recent.length - 1]?.provider ?? null,
+      avg_score: Number(avg.toFixed(2)),
+      runs: scores.length,
+      last_score: last,
+      delta: Number((last - prev).toFixed(2)),
+      trend: scores.slice(-8),
+      avg_cost_usd: Number(cost.toFixed(4)),
+      avg_latency_ms: Math.round(lat),
+    })
+  }
+
+  aggregated.sort((a, b) => b.avg_score - a.avg_score)
+  return aggregated.slice(0, limit)
+}
+
 /** Detect provider from model id conventions. */
 function detectProvider(modelId: string): string | null {
   const lower = modelId.toLowerCase()
