@@ -34,7 +34,7 @@ const program = new Command()
 program
   .name('verdict')
   .description(chalk.bold('verdict') + '\nLLM eval framework. Benchmark local and cloud models with one config file.')
-  .version('0.3.0')
+  .version('0.4.0')
 
 program
   .command('tui')
@@ -319,7 +319,7 @@ program
 // custom multi-page dashboard system in dashboard/build/
 //
 // To update the dashboard:
-//   1. Run evals: npx verdict run --eval-pack eval-packs/my-test.yaml
+//   1. Run evals: verdict run --eval-pack eval-packs/my-test.yaml
 //   2. Add to dashboard: ./quick-add-run.sh results/LATEST.json
 //
 // See WORKFLOW.md for complete documentation

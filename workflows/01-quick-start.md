@@ -5,7 +5,7 @@ Get up and running with Verdict in 5 minutes.
 ## Step 1: Install
 
 ```bash
-npm install -g verdict
+npm install -g @hnshah/verdict
 ```
 
 ## Step 2: Initialize

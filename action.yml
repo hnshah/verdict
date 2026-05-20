@@ -94,7 +94,7 @@ runs:
 
     - name: Install Verdict
       shell: bash
-      run: npm install -g verdict@${{ inputs.verdict-version }}
+      run: npm install -g @hnshah/verdict@${{ inputs.verdict-version }}
 
     - name: Run Verdict Evals
       id: run-verdict

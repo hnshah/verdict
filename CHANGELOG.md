@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.4.0 (2026-05-19)
+
+### Renamed: now published as `@hnshah/verdict`
+
+The unscoped `verdict` name on npm belongs to a different package
+(an unrelated rules engine). To make `npm install -g verdict` actually
+install **this** Verdict, we've moved to a scoped name.
+
+**Install:**
+```bash
+npm install -g @hnshah/verdict
+```
+
+The CLI binary stays `verdict` — only the package name has changed.
+
+All install snippets, `npx` examples, and programmatic-API import
+paths in the docs (`README.md`, `FAQ.md`, `action.yml`, etc.) have
+been updated to the scoped form.
+
+---
+
 ## 0.3.0 (2026-04-15)
 
 ### `verdict tui` — the full interactive terminal UI

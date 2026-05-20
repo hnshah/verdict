@@ -5,7 +5,7 @@
  *
  * @example
  * ```ts
- * import { runEvals, loadEvalPacks, type Config } from 'verdict'
+ * import { runEvals, loadEvalPacks, type Config } from '@hnshah/verdict'
  *
  * const config: Config = {
  *   name: 'My Evals',

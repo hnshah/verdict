@@ -8,13 +8,13 @@
 ## Install
 
 ```bash
-npm install -g verdict
+npm install -g @hnshah/verdict
 ```
 
 Or run without installing:
 
 ```bash
-npx verdict init
+npx @hnshah/verdict init
 ```
 
 ## Your first eval run

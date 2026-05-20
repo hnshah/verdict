@@ -10,7 +10,7 @@ Run verdict evals on a schedule, detect regressions, and post results to Slack.
 
 ## Setup
 
-1. Install verdict: `npm install -g verdict`
+1. Install verdict: `npm install -g @hnshah/verdict`
 2. Create config: `verdict init`
 3. Save a baseline: `verdict run && verdict baseline save default`
 4. Set environment variables:
