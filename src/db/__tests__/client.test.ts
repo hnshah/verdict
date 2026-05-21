@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import Database from 'better-sqlite3'
-import { initSchema, saveRunResult, queryHistory, parseSince } from '../client.js'
+import { initSchema, saveRunResult, queryHistory, parseSince, queryCaseResults, queryLeaderboard } from '../client.js'
 import type { RunResult } from '../../types/index.js'
 
 function createTestDb(): Database.Database {
@@ -254,6 +254,60 @@ describe('client', () => {
       const rows = queryHistory(db, { since: '7d' })
       // Should exclude the old run
       expect(rows.every(r => r.run_at > '2020-01-01')).toBe(true)
+    })
+  })
+
+  describe('queryCaseResults', () => {
+    it('returns per-case rows joined to the run', () => {
+      saveRunResult(db, makeRunResult(), 'general')
+      const rows = queryCaseResults(db, 'test-run-1')
+      // makeRunResult has 1 case across 2 models
+      expect(rows.length).toBe(2)
+      expect(rows[0].case_id).toBe('case-1')
+      expect(rows[0].prompt).toBe('What is 2+2?')
+    })
+
+    it('filters by modelId when supplied', () => {
+      saveRunResult(db, makeRunResult(), 'general')
+      const rows = queryCaseResults(db, 'test-run-1', 'qwen2.5:32b')
+      expect(rows.length).toBe(1)
+      expect(rows[0].model_id).toBe('qwen2.5:32b')
+    })
+
+    it('returns empty array for unknown run', () => {
+      saveRunResult(db, makeRunResult(), 'general')
+      const rows = queryCaseResults(db, 'no-such-run')
+      expect(rows).toEqual([])
+    })
+  })
+
+  describe('queryLeaderboard', () => {
+    it('aggregates across runs with trend, delta, and avg', () => {
+      // 3 runs with different scores → tests trend ordering + delta computation
+      saveRunResult(db, makeRunResult({ run_id: 'r1', timestamp: '2026-03-23T00:00:00Z' }), 'general')
+      saveRunResult(db, makeRunResult({ run_id: 'r2', timestamp: '2026-03-24T00:00:00Z' }), 'general')
+      saveRunResult(db, makeRunResult({ run_id: 'r3', timestamp: '2026-03-25T00:00:00Z' }), 'general')
+
+      const board = queryLeaderboard(db)
+      expect(board.length).toBeGreaterThan(0)
+
+      // Top row sorted by avg_score
+      const top = board[0]
+      expect(top.runs).toBe(3)
+      expect(top.trend.length).toBe(3)
+      // Delta is last - previous; if all scores equal, delta should be 0
+      expect(top.delta).toBe(0)
+    })
+
+    it('honours the limit option', () => {
+      saveRunResult(db, makeRunResult(), 'general')
+      const board = queryLeaderboard(db, { limit: 1 })
+      expect(board.length).toBe(1)
+    })
+
+    it('returns empty array for an empty DB', () => {
+      const board = queryLeaderboard(db)
+      expect(board).toEqual([])
     })
   })
 

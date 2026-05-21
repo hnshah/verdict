@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>verdict — local dashboard</title>
+<link rel="stylesheet" href="/ui/static/tui-themes.css" />
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Server-side data injected before any script runs -->
+  <!-- @SSR_DATA -->
+
+  <!-- React + Babel via CDN — zero build step. -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+  <!-- Data loader + primitives + overlays + screens -->
+  <script src="/ui/static/data-loader.js"></script>
+  <script type="text/babel" src="/ui/static/tui-primitives.jsx"></script>
+  <script type="text/babel" src="/ui/static/overlays.jsx"></script>
+  <script type="text/babel" src="/ui/static/screens/home.jsx"></script>
+  <script type="text/babel" src="/ui/static/screens/runs.jsx"></script>
+  <script type="text/babel" src="/ui/static/screens/models.jsx"></script>
+  <script type="text/babel" src="/ui/static/screens/new-run.jsx"></script>
+
+  <!-- App last -->
+  <script type="text/babel" src="/ui/static/app.jsx"></script>
+</body>
+</html>

@@ -29,6 +29,7 @@ export type Screen =
   | 'config'
   | 'router'
   | 'serve'
+  | 'onboarding'
 
 export interface KeymapState {
   mode: Mode
