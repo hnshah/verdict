@@ -1,17 +1,27 @@
 import { Box, Text, useInput } from 'ink'
 import { theme } from '../../theme.js'
-import type { OnboardingState } from '../../../onboarding/index.js'
+import type {
+  OnboardingState,
+  PlanSelections,
+} from '../../../onboarding/index.js'
 
 export interface ConsentProps {
   state: Extract<OnboardingState, { kind: 'consent' }>
   onConfirm: () => void
   onBack: () => void
+  onEdit: (selections: PlanSelections) => void
 }
 
-export function Consent({ state, onConfirm, onBack }: ConsentProps) {
+export function Consent({ state, onConfirm, onBack, onEdit }: ConsentProps) {
+  const telemetryOn = state.selections.telemetryOptIn === true
   useInput((input, key) => {
     if (input === 'y' || input === 'Y' || key.return) onConfirm()
     if (input === 'b' || input === 'n' || input === 'N' || key.escape) onBack()
+    // Toggle telemetry opt-in. We store true/false explicitly so the engine
+    // knows the user actually made a choice (undefined = unanswered).
+    if (input === 't' || input === 'T') {
+      onEdit({ ...state.selections, telemetryOptIn: !telemetryOn })
+    }
   })
   const willInstall = state.plan.installSteps.length > 0
   const willPull = state.plan.modelsToPull.length > 0
@@ -43,6 +53,18 @@ export function Consent({ state, onConfirm, onBack }: ConsentProps) {
           • You can cancel anytime with <Text color={theme.accent}>Ctrl-C</Text>.
         </Text>
       </Box>
+      <Box flexDirection="column" marginTop={1}>
+        <Text color={theme.text}>
+          <Text color={telemetryOn ? theme.success : theme.muted}>
+            {telemetryOn ? '☑' : '☐'}
+          </Text>{' '}
+          Help us count installs? (anonymous, opt-in)
+        </Text>
+        <Text color={theme.dim}>
+          {'  '}Sends: install id, day, model/pack counts, verdict version. Never prompts/scores/paths.
+        </Text>
+      </Box>
+
       <Box marginTop={1}>
         <Text color={theme.accent}>y</Text>
         <Text color={theme.muted}> or </Text>
@@ -51,7 +73,9 @@ export function Consent({ state, onConfirm, onBack }: ConsentProps) {
         <Text color={theme.accent}>n</Text>
         <Text color={theme.muted}> / </Text>
         <Text color={theme.accent}>b</Text>
-        <Text color={theme.muted}> to go back</Text>
+        <Text color={theme.muted}> to go back · </Text>
+        <Text color={theme.accent}>t</Text>
+        <Text color={theme.muted}> to toggle telemetry</Text>
       </Box>
     </Box>
   )

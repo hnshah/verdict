@@ -15,6 +15,12 @@ export const OllamaSnapshotSchema = z.object({
   version: z.string().optional(),
   daemonRunning: z.boolean(),
   installedModels: z.array(z.string()).default([]),
+  /**
+   * Where the `ollama` binary came from. Affects how we start the daemon:
+   * `mac-app` users have a menu-bar app that owns the daemon — we should
+   * launch the app instead of spawning a competing `ollama serve`.
+   */
+  installSource: z.enum(['mac-app', 'brew', 'curl', 'unknown']).optional(),
 })
 export type OllamaSnapshot = z.infer<typeof OllamaSnapshotSchema>
 
@@ -145,6 +151,13 @@ export const PlanSelectionsSchema = z.object({
       key: z.string(),
     })
     .optional(),
+  /**
+   * Opt-in to anonymous telemetry. Tri-state:
+   *   - undefined: user hasn't decided yet (use prior decision if any)
+   *   - true:      enable
+   *   - false:     disable
+   */
+  telemetryOptIn: z.boolean().optional(),
 })
 export type PlanSelections = z.infer<typeof PlanSelectionsSchema>
 
@@ -207,6 +220,34 @@ export interface VerifyResult {
   failures: Array<{ step: string; error: string }>
 }
 
+/**
+ * Live snapshot of the user's first real eval (kicked off after verify
+ * succeeds). Drives the FirstRun screen so the user sees the AHA moment
+ * forming — the flywheel that makes the dashboard non-empty.
+ */
+export interface FirstRunView {
+  /** Models being evaluated (matches verdict.yaml model ids). */
+  models: string[]
+  /** Total cases in the pack. */
+  casesTotal: number
+  /** Cases completed so far across all models. */
+  casesDone: number
+  /** Last status line from the runner (the case currently in flight). */
+  current: string
+  /** Per-model running averages once cases start scoring. */
+  runningAverages: Record<string, number>
+}
+
+export interface FirstRunResult {
+  ok: boolean
+  durationMs: number
+  runId: string
+  modelScores: Record<string, number>
+  winner?: string
+  casesRun: number
+  errorMessage?: string
+}
+
 export interface DoneSummary {
   pulledModels: string[]
   reusedModels: string[]
@@ -214,6 +255,13 @@ export interface DoneSummary {
   configBackupPath?: string
   smokeScore?: number
   totalDurationMs: number
+  /**
+   * Results of the first real eval that auto-ran after verify. Present
+   * when the engine successfully completed the first-run step; absent
+   * when first-run was skipped (e.g. user cancelled, or no general pack
+   * exists in the config).
+   */
+  firstRun?: FirstRunResult
 }
 
 export type OnboardingState =
@@ -241,6 +289,7 @@ export type OnboardingState =
       action: Plan['config']['action']
     }
   | { kind: 'verify'; result: VerifyResult | null }
+  | { kind: 'first-run'; view: FirstRunView; result: FirstRunResult | null }
   | { kind: 'done'; summary: DoneSummary }
   | { kind: 'cancelled'; from: OnboardingStateKind; reason?: string }
   | {
@@ -282,13 +331,16 @@ export type OnboardingEvent =
   | { type: '__configure-ready'; previewYaml: string; diff: string | null; hasExisting: boolean }
   | { type: '__configure-written'; configPath: string; backupPath?: string }
   | { type: '__verify-complete'; result: VerifyResult }
+  | { type: '__first-run-start'; view: FirstRunView }
+  | { type: '__first-run-progress'; view: FirstRunView }
+  | { type: '__first-run-complete'; result: FirstRunResult }
   | { type: '__error'; error: string; recoverable: boolean }
 
 // ─── Persisted mark (resume across crashes) ─────────────────────────────────
 
 export const OnboardingMarkSchema = z.object({
   version: z.literal(1),
-  status: z.enum(['in-progress', 'completed', 'skipped', 'cancelled']),
+  status: z.enum(['in-progress', 'completed', 'skipped', 'cancelled', 'failed']),
   startedAt: z.string(),
   completedAt: z.string().optional(),
   lastCompletedState: z
@@ -301,9 +353,15 @@ export const OnboardingMarkSchema = z.object({
       'pull',
       'configure',
       'verify',
+      'first-run',
       'done',
     ])
     .optional(),
+  /** When status='failed', the kind of state we failed from + the message. */
+  failedFrom: z
+    .enum(['welcome', 'detect', 'plan', 'consent', 'install', 'pull', 'configure', 'verify', 'first-run'])
+    .optional(),
+  failedError: z.string().optional(),
   snapshot: SnapshotSchema.optional(),
   plan: PlanSchema.optional(),
   /** Models successfully pulled this session (skip re-pull on resume). */

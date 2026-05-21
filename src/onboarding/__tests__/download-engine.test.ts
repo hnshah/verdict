@@ -206,4 +206,78 @@ describe('createDownloadEngine', () => {
     await engine.start([{ modelName: 'm', provider: 'ollama' }])
     expect(logs).toContain('hello world')
   })
+
+  it('aggregate overallPercent never reports 100% while any task is still in-flight', async () => {
+    // Re-create the dogfood scenario: 3 tasks, 2 done, 1 in-flight whose
+    // last layer reported 100% before the next layer / verification fires.
+    // Old math returned 100% overall; new math caps in-flight at 99.
+    let cont: ((v: void) => void) | null = null
+    const blocker = new Promise<void>(r => { cont = r })
+
+    const adapter = (args: AdapterArgs): AsyncIterable<AdapterEvent> => ({
+      async *[Symbol.asyncIterator]() {
+        if (args.model === 'fast-a' || args.model === 'fast-b') {
+          yield { type: 'phase', phase: 'downloading' }
+          yield { type: 'layer-progress', digest: args.model, total: 10, completed: 10 }
+          yield { type: 'done' }
+          return
+        }
+        // 'slow' — start, report a layer at 100%, then HOLD before
+        // emitting verifying/writing/success.
+        yield { type: 'phase', phase: 'downloading' }
+        yield { type: 'layer-progress', digest: 'first', total: 10, completed: 10 }
+        await blocker
+        yield { type: 'done' }
+      },
+    })
+    const engine = createDownloadEngine({ adapter, concurrency: 3, progressIntervalMs: 0 })
+    const startP = engine.start([
+      { modelName: 'fast-a', provider: 'ollama' },
+      { modelName: 'fast-b', provider: 'ollama' },
+      { modelName: 'slow', provider: 'ollama' },
+    ])
+    // Wait a tick for fast tasks to finish and slow task to report 100%.
+    await new Promise(r => setTimeout(r, 20))
+    const mid = engine.snapshot()
+    expect(mid.aggregate.doneTasks).toBe(2)
+    expect(mid.aggregate.totalTasks).toBe(3)
+    // The two done tasks contribute 100 each; the in-flight 'slow' is capped
+    // at 99 even though its percent is currently 100. So overall < 100.
+    expect(mid.aggregate.overallPercent).toBeLessThan(100)
+    expect(mid.aggregate.overallPercent).toBeGreaterThanOrEqual(99)
+    cont!()
+    const summary = await startP
+    expect(summary.succeeded).toHaveLength(3)
+    // After all are done, overall is exactly 100.
+    expect(engine.snapshot().aggregate.overallPercent).toBe(100)
+  })
+
+  it('suppresses noisy `pulling <hash>` log lines (one per Ollama progress tick)', async () => {
+    const adapter = scriptedAdapter({
+      m: [
+        { type: 'phase', phase: 'manifest' },
+        { type: 'log', line: 'pulling manifest' },
+        { type: 'phase', phase: 'downloading' },
+        // These are the spammy lines Ollama emits dozens of times per layer.
+        { type: 'log', line: 'pulling dde5aa3fc5ff' },
+        { type: 'log', line: 'pulling dde5aa3fc5ff' },
+        { type: 'log', line: 'pulling dde5aa3fc5ff' },
+        { type: 'log', line: 'pulling 8934d96d3f08' },
+        // These should still come through.
+        { type: 'log', line: 'verifying sha256 digest' },
+        { type: 'log', line: 'writing manifest' },
+        { type: 'done' },
+      ],
+    })
+    const engine = createDownloadEngine({ adapter, progressIntervalMs: 0 })
+    const logs: string[] = []
+    engine.on('log', e => logs.push(e.line))
+    await engine.start([{ modelName: 'm', provider: 'ollama' }])
+    // None of the pulling-hash lines should reach subscribers.
+    expect(logs.filter(l => /^pulling [0-9a-f]{8,}$/i.test(l))).toEqual([])
+    // The semantic lines still surface.
+    expect(logs).toContain('pulling manifest')
+    expect(logs).toContain('verifying sha256 digest')
+    expect(logs).toContain('writing manifest')
+  })
 })

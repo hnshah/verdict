@@ -141,4 +141,43 @@ packs: [./eval-packs/general.yaml]
   it('which() returns undefined for nonexistent binaries', () => {
     expect(detectMod.which('definitely-not-a-real-binary-xyz-123')).toBeUndefined()
   })
+
+  describe('classifyOllamaSource', () => {
+    it('detects Mac app install via path substring', () => {
+      // Real-world example from cold-start dogfood — symlink resolves into the
+      // app bundle. We can't easily test the realpath resolution without a
+      // matching file on disk, but the path classifier is exercised directly.
+      // Use a known-existent file for realpath to succeed.
+      const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'verdict-mac-app-'))
+      const fakeAppDir = path.join(tmp, 'Applications', 'Ollama.app', 'Contents', 'Resources')
+      fs.mkdirSync(fakeAppDir, { recursive: true })
+      const fakeBin = path.join(fakeAppDir, 'ollama')
+      fs.writeFileSync(fakeBin, '#!/bin/sh\n')
+      // The classifier looks for the substring `/Applications/Ollama.app/`
+      // anywhere in the resolved path, which our temp path doesn't satisfy.
+      // We patch realpath via vi.spyOn for this assertion instead.
+      const spy = vi.spyOn(fs, 'realpathSync').mockReturnValue('/Applications/Ollama.app/Contents/Resources/ollama')
+      expect(detectMod.classifyOllamaSource(fakeBin)).toBe('mac-app')
+      spy.mockRestore()
+      fs.rmSync(tmp, { recursive: true, force: true })
+    })
+
+    it('detects brew install (Cellar path)', () => {
+      const spy = vi.spyOn(fs, 'realpathSync').mockReturnValue('/opt/homebrew/Cellar/ollama/0.5.0/bin/ollama')
+      expect(detectMod.classifyOllamaSource('/opt/homebrew/bin/ollama')).toBe('brew')
+      spy.mockRestore()
+    })
+
+    it('detects curl install (/usr/local/bin)', () => {
+      const spy = vi.spyOn(fs, 'realpathSync').mockReturnValue('/usr/local/bin/ollama')
+      expect(detectMod.classifyOllamaSource('/usr/local/bin/ollama')).toBe('curl')
+      spy.mockRestore()
+    })
+
+    it('returns unknown when realpath fails', () => {
+      const spy = vi.spyOn(fs, 'realpathSync').mockImplementation(() => { throw new Error('dangling symlink') })
+      expect(detectMod.classifyOllamaSource('/path/to/missing')).toBe('unknown')
+      spy.mockRestore()
+    })
+  })
 })

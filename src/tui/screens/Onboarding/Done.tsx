@@ -46,6 +46,30 @@ export function Done({ state, onExit }: DoneProps) {
         <Text color={theme.dim}>Took {(s.totalDurationMs / 1000).toFixed(1)}s.</Text>
       </Box>
 
+      {s.firstRun && s.firstRun.ok && (
+        <Box flexDirection="column" marginTop={1}>
+          <Text color={theme.text} bold>Your first real eval</Text>
+          {s.firstRun.winner && (
+            <Text color={theme.muted}>
+              Winner: <Text color={theme.success}>{s.firstRun.winner}</Text>
+              {' '}<Text color={theme.dim}>({s.firstRun.modelScores[s.firstRun.winner]?.toFixed(2)}/10)</Text>
+            </Text>
+          )}
+          <Text color={theme.muted}>
+            {s.firstRun.casesRun} cases · {Object.keys(s.firstRun.modelScores).length} models · saved to your local results.db
+          </Text>
+        </Box>
+      )}
+
+      {s.firstRun && !s.firstRun.ok && (
+        <Box marginTop={1}>
+          <Text color={theme.warning}>
+            First eval didn't complete: {s.firstRun.errorMessage ?? 'unknown error'}.
+            {' '}Run <Text color={theme.accent}>verdict run</Text> to retry.
+          </Text>
+        </Box>
+      )}
+
       <Box flexDirection="column" marginTop={1}>
         <Text color={theme.text} bold>What's next</Text>
         <Text color={theme.muted}>  • <Text color={theme.accent}>verdict run</Text> — run your first full eval</Text>

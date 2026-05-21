@@ -126,6 +126,9 @@ describe('commitConfigWrite', () => {
     commitConfigWrite(plan, wp)
     expect(fs.existsSync(path.join(tmp, 'eval-packs', 'general.yaml'))).toBe(true)
     expect(fs.existsSync(path.join(tmp, 'eval-packs', 'moe.yaml'))).toBe(true)
+    // quantization.yaml must be scaffolded too — otherwise `verdict quants`
+    // breaks for users who came in through onboarding (A2 dogfood bug).
+    expect(fs.existsSync(path.join(tmp, 'eval-packs', 'quantization.yaml'))).toBe(true)
     expect(fs.existsSync(path.join(tmp, '.env.example'))).toBe(true)
   })
 

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { propose, type CatalogModel } from '../planner.js'
+import { idFromModelName } from '../templates.js'
 import type { Snapshot } from '../events.js'
 
 const CATALOG: CatalogModel[] = [
@@ -64,7 +65,9 @@ describe('propose', () => {
     expect(plan.reuseModels).toContain('qwen2.5:7b')
     expect(plan.installSteps).toEqual([])
     expect(plan.modelsToPull).toEqual([])
-    expect(plan.judge.modelId).toBe('qwen2.5:7b')
+    // Judge id must match the slugified form the YAML writer uses, not the
+    // raw Ollama model name — otherwise the eval runner can't resolve it.
+    expect(plan.judge.modelId).toBe(idFromModelName('qwen2.5:7b'))
   })
 
   it('cloud-only when key present and nothing local', () => {
@@ -150,10 +153,13 @@ describe('propose', () => {
     expect(plan.judge.modelId).toBe('cloud-mini')
   })
 
-  it('local-first with no cloud key uses smallest local as self-judge', () => {
+  it('local-first with no cloud key uses smallest local as self-judge (slugified id)', () => {
     const plan = propose(baseSnapshot(), { catalog: CATALOG })
     const smallest = [...plan.modelsToPull].sort((a, b) => a.paramsB - b.paramsB)[0]
-    expect(plan.judge.modelId).toBe(smallest?.name)
+    // Judge.modelId must equal the slug we write to verdict.yaml so that
+    // runEvals() can look it up. Raw model names (with colons/dots) don't
+    // match.
+    expect(plan.judge.modelId).toBe(idFromModelName(smallest!.name))
   })
 
   it('estimatedDownloadGB sums planned models', () => {

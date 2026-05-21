@@ -25,6 +25,7 @@ import { Install } from './Install.js'
 import { Pull } from './Pull.js'
 import { Configure } from './Configure.js'
 import { Verify } from './Verify.js'
+import { FirstRun } from './FirstRun.js'
 import { Done } from './Done.js'
 import { Cancelled } from './Cancelled.js'
 import { Failed } from './Failed.js'
@@ -127,6 +128,7 @@ function renderBody(
           state={state}
           onConfirm={() => h.send({ type: 'consent-given' })}
           onBack={() => h.send({ type: 'back' })}
+          onEdit={selections => h.send({ type: 'edit-plan', selections })}
         />
       )
     case 'install':
@@ -137,6 +139,8 @@ function renderBody(
       return <Configure state={state} />
     case 'verify':
       return <Verify state={state} />
+    case 'first-run':
+      return <FirstRun state={state} />
     case 'done':
       return <Done state={state} onExit={h.onExit} />
     case 'cancelled':
