@@ -75,6 +75,11 @@ Finds installed Ollama/MLX models, gives you YAML to paste into config.
 ```bash
 verdict run
 
+# Don't know which models to pick? Use a hardware tier preset
+verdict run --tier 24gb               # Mac mini M4 Pro / MacBook Pro M3
+verdict run --tier 16gb               # MacBook Air / most laptops
+verdict tiers                         # See all presets
+
 # Run specific pack
 verdict run --pack code-generation
 
