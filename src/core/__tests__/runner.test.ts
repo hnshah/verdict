@@ -79,6 +79,12 @@ function makeConfig(overrides?: Partial<Config>): Config {
   }
 }
 
+function config_modelA() {
+  // Single-model variant — keeps the multi-assertion tests focused on the
+  // aggregation behavior rather than the cross-model scoring loop.
+  return { id: 'model-a', model: 'model-a', api_key: 'none', base_url: 'http://localhost:11434/v1', tags: [], port: 8080, timeout_ms: 120000, max_tokens: 1024 }
+}
+
 function makePack(cases: Array<Partial<EvalPack['cases'][number]> & { id: string; criteria: string }>): EvalPack {
   return {
     name: 'Test Pack',
@@ -244,6 +250,110 @@ describe('runEvals', () => {
 
     expect(result.cases).toHaveLength(2)
     expect(result.cases.map(c => c.case_id)).toEqual(['math-case', 'writing-case'])
+  })
+
+  // ─── Multi-assertion aggregation modes (C5) ─────────────────────────────
+  //
+  // The runner previously called `aggregateScores(scores)` without
+  // forwarding the case's `aggregation` field — meaning any YAML author
+  // who wrote `aggregation: avg` (or max/weighted) silently got `min`.
+  // These tests pin down the four modes end-to-end.
+
+  describe('multi-assertion aggregation modes', () => {
+    it('default mode is min when aggregation is omitted', async () => {
+      const config = makeConfig({ models: [config_modelA()] })
+      const pack = makePack([
+        {
+          id: 'mixed-pass-fail',
+          prompt: 'p',
+          criteria: 'c',
+          scorer: 'contains',
+          assertions: [
+            { scorer: 'contains', expected: 'hello' },
+            { scorer: 'contains', expected: 'absent-substring' },
+          ],
+          tags: [],
+          judge_type: 'llm',
+          max_tokens: undefined,
+        },
+      ])
+      vi.mocked(callModel).mockResolvedValue(makeModelResponse('model-a', 'hello world'))
+      const result = await runEvals(config, [pack])
+      // contains 'hello' = 10, contains 'absent' = 0 → min = 0
+      expect(result.cases[0].scores['model-a'].total).toBe(0)
+    })
+
+    it('aggregation: max returns the highest assertion score', async () => {
+      const config = makeConfig({ models: [config_modelA()] })
+      const pack = makePack([
+        {
+          id: 'max-case',
+          prompt: 'p',
+          criteria: 'c',
+          scorer: 'contains',
+          aggregation: 'max',
+          assertions: [
+            { scorer: 'contains', expected: 'hello' },
+            { scorer: 'contains', expected: 'absent' },
+          ],
+          tags: [],
+          judge_type: 'llm',
+          max_tokens: undefined,
+        },
+      ])
+      vi.mocked(callModel).mockResolvedValue(makeModelResponse('model-a', 'hello world'))
+      const result = await runEvals(config, [pack])
+      expect(result.cases[0].scores['model-a'].total).toBe(10)
+    })
+
+    it('aggregation: avg returns the mean of assertion scores', async () => {
+      const config = makeConfig({ models: [config_modelA()] })
+      const pack = makePack([
+        {
+          id: 'avg-case',
+          prompt: 'p',
+          criteria: 'c',
+          scorer: 'contains',
+          aggregation: 'avg',
+          assertions: [
+            { scorer: 'contains', expected: 'hello' },
+            { scorer: 'contains', expected: 'absent' },
+          ],
+          tags: [],
+          judge_type: 'llm',
+          max_tokens: undefined,
+        },
+      ])
+      vi.mocked(callModel).mockResolvedValue(makeModelResponse('model-a', 'hello world'))
+      const result = await runEvals(config, [pack])
+      // (10 + 0) / 2 = 5
+      expect(result.cases[0].scores['model-a'].total).toBe(5)
+    })
+
+    it('aggregation: weighted honors per-assertion weight values', async () => {
+      const config = makeConfig({ models: [config_modelA()] })
+      const pack = makePack([
+        {
+          id: 'weighted-case',
+          prompt: 'p',
+          criteria: 'c',
+          scorer: 'contains',
+          aggregation: 'weighted',
+          assertions: [
+            // High weight on the assertion the response passes.
+            { scorer: 'contains', expected: 'hello', weight: 3 },
+            { scorer: 'contains', expected: 'absent', weight: 1 },
+          ],
+          tags: [],
+          judge_type: 'llm',
+          max_tokens: undefined,
+        },
+      ])
+      vi.mocked(callModel).mockResolvedValue(makeModelResponse('model-a', 'hello world'))
+      const result = await runEvals(config, [pack])
+      // weights normalize to [0.75, 0.25] → 10 * 0.75 + 0 * 0.25 = 7.5
+      expect(result.cases[0].scores['model-a'].total).toBe(7.5)
+    })
   })
 
   it('throws when judge model is not in models list', async () => {

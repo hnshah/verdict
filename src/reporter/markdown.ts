@@ -44,6 +44,9 @@ export function generateMarkdownReport(result: RunResult): string {
   if (result.baselineComparison) {
     const bc = result.baselineComparison
     lines.push(``, `## Baseline Comparison (vs "${bc.baselineName}")`, ``)
+    if (bc.baselineDescription) {
+      lines.push(`_${bc.baselineDescription}_`, ``)
+    }
     lines.push(`Baseline date: ${bc.baselineDate}`, ``)
     lines.push(`| Model | Baseline | Current | Delta | Change | Status |`)
     lines.push(`|-------|----------|---------|-------|--------|--------|`)

@@ -660,6 +660,32 @@ verdict run --json --fail-if-regression
 # → Exit 1 if new model worse than baseline
 ```
 
+**GitHub Action** (`uses: hnshah/verdict@v1`):
+
+```yaml
+# .github/workflows/eval.yml
+on:
+  pull_request:
+    paths: ['prompts/**', 'verdict.yaml', 'eval-packs/**']
+
+jobs:
+  verdict:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hnshah/verdict@v1
+        with:
+          config: verdict.yaml
+          fail-if-regression: true
+          comment-on-pr: true   # posts a sticky leaderboard-diff comment
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+```
+
+The `v1` tag follows the latest `v1.x.y` release — bugfix and minor
+updates flow in automatically. Pin to a specific `v1.2.3` if you need
+reproducibility.
+
 ### 4. Cost Optimization
 
 **Goal:** Find cheapest model that meets quality bar

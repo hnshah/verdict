@@ -1,0 +1,44 @@
+name: Update v1 tag pointer
+
+# Keep a moving `v1` tag aligned with the latest `v1.*` release so users
+# can pin to `hnshah/verdict@v1` in their GitHub Actions workflows and get
+# bugfix + minor-version updates automatically without re-pinning.
+#
+# Triggered when a release is published; if its tag is v1.x.y the v1
+# pointer is force-updated to that commit. Same pattern as actions/checkout,
+# actions/setup-node, etc.
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  retag:
+    if: startsWith(github.event.release.tag_name, 'v1.')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Move v1 tag to the released commit
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+          # The release tag (e.g. v1.2.3) should already exist; resolve it to
+          # the canonical commit SHA.
+          TARGET_SHA="$(git rev-list -n 1 "$RELEASE_TAG")"
+          echo "v1 → $TARGET_SHA (from $RELEASE_TAG)"
+
+          # Force-move the v1 tag locally + push. Force is intentional and
+          # standard for moving major-version tags.
+          git tag -f v1 "$TARGET_SHA"
+          git push origin --force v1

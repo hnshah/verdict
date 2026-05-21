@@ -16,6 +16,7 @@ import {
   loadEvalPack,
   // programmatic API
   runEvals,
+  runEvalsFromConfig,
   VerdictRouter,
   // judges
   judgeResponse,
@@ -91,6 +92,10 @@ describe('API exports', () => {
   it('exports config/pack loaders', () => {
     expect(typeof loadConfig).toBe('function')
     expect(typeof loadEvalPack).toBe('function')
+  })
+
+  it('exports runEvalsFromConfig convenience helper', () => {
+    expect(typeof runEvalsFromConfig).toBe('function')
   })
 
   it('exports judge functions', () => {
