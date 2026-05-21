@@ -1,0 +1,156 @@
+name: RAG · faithfulness + relevance
+description: |
+  Eight Q&A cases where each prompt provides a passage of context and the
+  model must answer using ONLY that context. The judge rubric penalises any
+  claim not grounded in the supplied passage (hallucination) and rewards
+  answers that explicitly cite the relevant sentence.
+
+  Replace these passages with your own documents — that's the whole point.
+
+cases:
+  - id: rag-cite-1
+    prompt: |
+      Context:
+      """
+      The James Webb Space Telescope (JWST) was launched on December 25, 2021
+      from French Guiana aboard an Ariane 5 rocket. It is positioned at the
+      Sun-Earth L2 Lagrange point, approximately 1.5 million kilometers from
+      Earth. JWST observes primarily in the infrared spectrum.
+      """
+
+      Question: When was JWST launched, from where, and where does it orbit?
+    criteria: |
+      Must include: December 25, 2021 launch date; launched from French
+      Guiana; positioned at L2 (~1.5M km from Earth). Should NOT invent
+      details not in the passage. Bonus for naming the Ariane 5 rocket.
+    category: rag-citation
+    tags: [factual, easy]
+
+  - id: rag-cite-2
+    prompt: |
+      Context:
+      """
+      Insulin was first isolated in 1921 by Frederick Banting and Charles Best
+      at the University of Toronto, working in the lab of John Macleod. Banting
+      and Macleod shared the 1923 Nobel Prize in Physiology or Medicine.
+      """
+
+      Question: Who discovered insulin, when, and who won the Nobel Prize for it?
+    criteria: |
+      Must name Banting and Best as the isolators in 1921 at Toronto. Must
+      note that Banting and Macleod (NOT Best) shared the 1923 Nobel Prize.
+      Critical: the passage explicitly says Banting + Macleod share — many
+      models will incorrectly include Best because he was a discoverer.
+    category: rag-citation
+    tags: [factual, hard]
+
+  - id: rag-faith-1
+    prompt: |
+      Context:
+      """
+      Saturn has 146 known moons as of 2023. Titan is the largest, with a
+      thick nitrogen atmosphere. Enceladus is notable for its subsurface ocean
+      and active geysers.
+      """
+
+      Question: How many moons does Jupiter have?
+    criteria: |
+      The passage is about Saturn, not Jupiter. A faithful model MUST say
+      something like "the provided context does not state Jupiter's moon count"
+      rather than making up a number. Score: 9-10 for honest refusal; 0-3
+      if the model invents a number.
+    category: rag-faithfulness
+    tags: [hallucination, hard]
+
+  - id: rag-faith-2
+    prompt: |
+      Context:
+      """
+      Photosynthesis is the process by which plants convert light energy into
+      chemical energy. The byproduct is oxygen, released from water molecules.
+      """
+
+      Question: What is cellular respiration and how does it relate to photosynthesis?
+    criteria: |
+      The passage only covers photosynthesis. A faithful answer notes that
+      cellular respiration is not described in the context and limits any
+      additional info to clearly-flagged general knowledge. Hallucinating
+      detailed citations from the context = low score.
+    category: rag-faithfulness
+    tags: [hallucination, medium]
+
+  - id: rag-multi-1
+    prompt: |
+      Context:
+      """
+      Passage A: The Apollo 11 mission landed on the Moon on July 20, 1969.
+      Neil Armstrong was the first human to walk on the lunar surface.
+
+      Passage B: Apollo 13 launched on April 11, 1970, and suffered an oxygen
+      tank explosion two days into the flight. The crew returned safely.
+
+      Passage C: The Apollo program ended in 1972 with Apollo 17.
+      """
+
+      Question: Which Apollo missions are mentioned, and which had problems in flight?
+    criteria: |
+      Must list 11, 13, and 17. Must identify 13 as the one with the oxygen
+      tank explosion. Should not invent problems for 11 or 17 (none mentioned
+      in passages).
+    category: rag-multi-passage
+    tags: [synthesis, medium]
+
+  - id: rag-quote-1
+    prompt: |
+      Context:
+      """
+      In 2019, the World Health Organization declared burnout an "occupational
+      phenomenon" resulting from "chronic workplace stress that has not been
+      successfully managed." It is characterised by three dimensions: feelings
+      of exhaustion, increased mental distance from one's job, and reduced
+      professional efficacy.
+      """
+
+      Question: How does the WHO define burnout?
+    criteria: |
+      Should quote or closely paraphrase the WHO's definition. Bonus for
+      identifying all three dimensions verbatim. No invented stats or dates
+      beyond 2019.
+    category: rag-quotation
+    tags: [definition, easy]
+
+  - id: rag-conflict-1
+    prompt: |
+      Context:
+      """
+      Passage A: The largest ocean by area is the Pacific Ocean, covering
+      about 165 million square kilometers.
+
+      Passage B: Recent re-analysis by oceanographers using updated satellite
+      data put the Pacific at roughly 160 million km².
+      """
+
+      Question: How large is the Pacific Ocean?
+    criteria: |
+      A good answer acknowledges both figures and frames them as a range or
+      explains the source of the discrepancy. Picking one figure without
+      noting the other = partial credit.
+    category: rag-conflict
+    tags: [synthesis, hard]
+
+  - id: rag-numeric-1
+    prompt: |
+      Context:
+      """
+      A typical adult human heart beats at 60-100 beats per minute at rest.
+      Elite endurance athletes often have resting rates below 50 bpm. The
+      world record for lowest verified resting heart rate is 27 bpm (Daniel
+      Green, 2014).
+      """
+
+      Question: What is a normal resting heart rate, and what's the world record low?
+    criteria: |
+      Must give 60-100 bpm as the normal range AND 27 bpm with Daniel Green's
+      name and 2014. Should mention elite athletes go below 50.
+    category: rag-numeric
+    tags: [factual, easy]

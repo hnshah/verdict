@@ -50,6 +50,7 @@ program
   .description('Create verdict.yaml and starter eval packs')
   .option('--yes', 'Overwrite existing config')
   .option('--telemetry <state>', 'Set telemetry on/off non-interactively (default: prompt)')
+  .option('--template <name>', 'Use a focused starter: rag, agent, or support (instead of the default general set)')
   .action(initCommand)
 
 program

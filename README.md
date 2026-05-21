@@ -55,12 +55,15 @@ npx @hnshah/verdict init
 ### Initialize
 
 ```bash
-verdict init
+verdict init                            # general starter (3 packs)
+verdict init --template rag             # RAG: faithfulness + relevance
+verdict init --template agent           # Agents: tool selection + planning
+verdict init --template support         # Customer support: tone + factuality + safety
 ```
 
 Creates:
-- `verdict.yaml` - Your config (models, judge, settings)
-- `eval-packs/` - Test cases for your domain
+- `verdict.yaml` - Your config (models, judge, settings) — tuned per template
+- `eval-packs/` - Test cases for your domain — edit with your real prompts
 
 ### Discover Models
 

@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import readline from 'readline'
 import chalk from 'chalk'
 import { loadPrefs, enable, disable } from '../../utils/telemetry.js'
@@ -6,8 +7,11 @@ import {
   ENV_EXAMPLE,
   GENERAL_PACK,
   MOE_PACK,
+  loadQuantizationPack,
+  QUANTIZATION_PACK_STUB,
   renderVerdictYaml,
 } from '../../onboarding/templates.js'
+import { findTemplate, listTemplateNames, loadTemplate, TEMPLATES } from './templates.js'
 
 /**
  * Render the default verdict.yaml that mirrors what users have seen in
@@ -38,10 +42,24 @@ function defaultConfig(): string {
   })
 }
 
-export async function initCommand(opts: { yes?: boolean; telemetry?: 'on' | 'off' }): Promise<void> {
+export async function initCommand(opts: { yes?: boolean; telemetry?: 'on' | 'off'; template?: string }): Promise<void> {
   console.log()
   console.log(chalk.bold('  verdict') + chalk.dim(' init'))
   console.log()
+
+  // Validate --template before we touch the filesystem.
+  let template = null
+  if (opts.template) {
+    template = findTemplate(opts.template)
+    if (!template) {
+      console.error(chalk.red(`  Unknown template: ${opts.template}`))
+      console.error(chalk.dim(`  Available templates:`))
+      for (const t of TEMPLATES) {
+        console.error(chalk.dim(`    `) + chalk.cyan(t.name.padEnd(10)) + chalk.dim(`  — ${t.description}`))
+      }
+      process.exit(1)
+    }
+  }
 
   if (fs.existsSync('./verdict.yaml') && !opts.yes) {
     console.log(chalk.yellow('  verdict.yaml already exists. Use --yes to overwrite.'))
@@ -50,21 +68,40 @@ export async function initCommand(opts: { yes?: boolean; telemetry?: 'on' | 'off
 
   fs.mkdirSync('./eval-packs', { recursive: true })
   fs.mkdirSync('./results', { recursive: true })
+
+  if (template) {
+    // Template path: write a focused config + a single curated eval-pack.
+    const files = loadTemplate(template.name)
+    fs.writeFileSync('./verdict.yaml', files.verdictYaml)
+    fs.writeFileSync(path.join('./eval-packs', template.evalPackFile), files.evalPackYaml)
+    fs.writeFileSync('./.env.example', ENV_EXAMPLE)
+
+    console.log(chalk.green(`  verdict.yaml created (${template.name} template)`))
+    console.log(chalk.green(`  eval-packs/${template.evalPackFile}`) + chalk.dim(' — edit this with your real prompts'))
+    console.log(chalk.green('  .env.example'))
+    console.log()
+
+    await maybePromptTelemetry(opts.telemetry)
+
+    console.log(chalk.bold('  Next:'))
+    console.log(chalk.dim('  verdict tiers             # see which models fit your machine'))
+    console.log(chalk.dim('  verdict models discover   # auto-detect local models'))
+    console.log(chalk.dim(`  verdict run               # run the ${template.name} eval`))
+    console.log()
+    return
+  }
+
+  // Default path — the original verdict init behaviour.
   fs.writeFileSync('./verdict.yaml', defaultConfig())
   fs.writeFileSync('./eval-packs/general.yaml', GENERAL_PACK)
   fs.writeFileSync('./eval-packs/moe.yaml', MOE_PACK)
 
-  // Try to copy quantization.yaml from the package if available, else write inline stub
-  const pkgQuantPath = new URL('../../../eval-packs/quantization.yaml', import.meta.url)
-  try {
-    const { readFileSync } = await import('fs')
-    const quantContent = readFileSync(pkgQuantPath, 'utf8')
-    fs.writeFileSync('./eval-packs/quantization.yaml', quantContent)
-  } catch {
-    // Package not installed (dev mode) - write a pointer comment
-    fs.writeFileSync('./eval-packs/quantization.yaml',
-      '# See https://github.com/hnshah/verdict/blob/main/eval-packs/quantization.yaml\n')
-  }
+  // Use the shared loader so `verdict init` and `verdict onboarding` end up
+  // with the same eval-packs/quantization.yaml file regardless of entry point.
+  fs.writeFileSync(
+    './eval-packs/quantization.yaml',
+    loadQuantizationPack() ?? QUANTIZATION_PACK_STUB
+  )
 
   fs.writeFileSync('./.env.example', ENV_EXAMPLE)
 
@@ -82,6 +119,7 @@ export async function initCommand(opts: { yes?: boolean; telemetry?: 'on' | 'off
   console.log(chalk.dim('  verdict models discover   # see what local models you have'))
   console.log(chalk.dim('  verdict models            # ping configured models'))
   console.log(chalk.dim('  verdict run               # run your first eval'))
+  console.log(chalk.dim('  verdict init --template rag|agent|support   # start from a focused use-case'))
   console.log()
 }
 
