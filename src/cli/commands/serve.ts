@@ -9,7 +9,7 @@ import { selectModel } from '../../router/selector.js'
 import { callModel, callModelMultiTurn } from '../../providers/compat.js'
 import type { ModelConfig } from '../../types/index.js'
 import { buildModelConfig } from '../../utils/model-config.js'
-import { handleUiIndex, handleUiRuns, handleUiCases, handleUiLeaderboard, handleUiStatic } from '../../serve/ui.js'
+import { handleUiIndex, handleUiRuns, handleUiCases, handleUiLeaderboard, handleUiStatic, handleUiModelsConfigured, handleUiModelsDiscovered, handleUiPacks } from '../../serve/ui.js'
 import type Database from 'better-sqlite3'
 
 interface ServeCommandOpts {
@@ -209,6 +209,12 @@ export async function serveCommand(opts: ServeCommandOpts): Promise<void> {
       } else if (opts.ui && req.method === 'GET' && /^\/ui\/runs\/[^/]+\/cases$/.test(url.pathname)) {
         const runId = decodeURIComponent(url.pathname.split('/')[3] ?? '')
         handleUiCases(res, db, runId)
+      } else if (opts.ui && req.method === 'GET' && url.pathname === '/ui/models/configured') {
+        handleUiModelsConfigured(res, db)
+      } else if (opts.ui && req.method === 'GET' && url.pathname === '/ui/models/discovered') {
+        await handleUiModelsDiscovered(res)
+      } else if (opts.ui && req.method === 'GET' && url.pathname === '/ui/packs') {
+        handleUiPacks(res)
       } else {
         sendJson(res, 404, { error: { message: 'Not found', type: 'invalid_request_error' } })
       }
@@ -232,6 +238,9 @@ export async function serveCommand(opts: ServeCommandOpts): Promise<void> {
       console.log(chalk.dim(`  → /ui/runs              (recent runs JSON)`))
       console.log(chalk.dim(`  → /ui/leaderboard       (top-N aggregate)`))
       console.log(chalk.dim(`  → /ui/runs/:id/cases    (per-case results)`))
+      console.log(chalk.dim(`  → /ui/models/configured (models in registry)`))
+      console.log(chalk.dim(`  → /ui/models/discovered (live Ollama/MLX/LM Studio scan)`))
+      console.log(chalk.dim(`  → /ui/packs             (eval-packs/*.yaml)`))
     }
     console.log()
   })

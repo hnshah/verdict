@@ -17,9 +17,13 @@
 import http from 'http'
 import fs from 'fs'
 import path from 'path'
+import yaml from 'js-yaml'
 import { fileURLToPath } from 'url'
 import type Database from 'better-sqlite3'
 import { queryHistory, queryCaseResults, queryLeaderboard } from '../db/client.js'
+import { discoverOllama } from '../providers/ollama.js'
+import { discoverMLX } from '../providers/mlx.js'
+import { discoverLMStudio } from '../providers/lmstudio.js'
 
 interface RunRow {
   run_id: string
@@ -140,6 +144,119 @@ export function handleUiLeaderboard(res: http.ServerResponse, db: Database.Datab
   res.end(JSON.stringify({ leaderboard, meta: { version: '0.4.0' } }))
 }
 
+/**
+ * GET /ui/models/configured — models known to verdict (from models_registry).
+ *
+ * Augmented with the latest avg_score and last_score from the leaderboard so
+ * the Models screen can show meaningful status without an extra round-trip.
+ */
+export function handleUiModelsConfigured(res: http.ServerResponse, db: Database.Database): void {
+  const rows = db.prepare(
+    'SELECT model_id, provider, first_seen, total_runs, best_score FROM models_registry ORDER BY model_id'
+  ).all() as Array<{ model_id: string; provider: string | null; first_seen: string; total_runs: number; best_score: number | null }>
+
+  const leaderboard = queryLeaderboard(db, { limit: 100 })
+  const lbIndex = new Map(leaderboard.map(r => [r.model_id, r]))
+
+  const configured = rows.map(r => {
+    const lb = lbIndex.get(r.model_id)
+    const provider = r.provider ?? 'unknown'
+    return {
+      id: r.model_id,
+      model: r.model_id,
+      provider,
+      base: provider === 'ollama' ? 'localhost:11434'
+          : provider === 'mlx' ? 'localhost:8080'
+          : provider === 'lmstudio' ? 'localhost:1234'
+          : '—',
+      latency: lb?.avg_latency_ms ?? 0,
+      status: 'ok',
+      first_seen: r.first_seen,
+      total_runs: r.total_runs,
+      best_score: r.best_score,
+      avg_score: lb?.avg_score ?? null,
+      last_score: lb?.last_score ?? null,
+      notes: (provider === 'ollama' || provider === 'mlx' || provider === 'lmstudio') ? 'local' : '',
+    }
+  })
+
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify({ configured }))
+}
+
+/**
+ * GET /ui/models/discovered — live scan of Ollama / MLX / LM Studio.
+ *
+ * Races each backend with a short cap. Backends that aren't reachable return
+ * silently with an empty list rather than throwing.
+ */
+export async function handleUiModelsDiscovered(res: http.ServerResponse): Promise<void> {
+  const timeout = (ms: number) => new Promise<never>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
+  const safe = async <T>(p: Promise<T[]>): Promise<T[]> => {
+    try { return await Promise.race([p, timeout(1500)]) } catch { return [] }
+  }
+  const [ollama, mlx, lmStudio] = await Promise.all([
+    safe(discoverOllama()),
+    safe(discoverMLX()),
+    safe(discoverLMStudio()),
+  ])
+  const discovered = [...ollama, ...mlx, ...lmStudio].map(m => ({
+    id: m.id,
+    model: m.model,
+    provider: m.provider,
+    size: m.size_gb ? `${m.size_gb} GB` : '—',
+    host: m.base_url.replace(/^https?:\/\//, '').replace(/\/v1\/?$/, ''),
+    is_moe: m.is_moe,
+    tags: m.tags,
+  }))
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify({ discovered }))
+}
+
+/**
+ * GET /ui/packs — list eval-packs/*.yaml in cwd with case counts + judge.
+ *
+ * Walks the repo's eval-packs/ directory non-recursively (one level only —
+ * the design's Packs screen shows a flat list).
+ */
+export function handleUiPacks(res: http.ServerResponse): void {
+  const dir = path.resolve(process.cwd(), 'eval-packs')
+  const packs: Array<{
+    id: string
+    file: string
+    cases: number
+    judge: string | null
+    category: string | null
+    description: string | null
+  }> = []
+  if (fs.existsSync(dir)) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true })
+    for (const e of entries) {
+      if (!e.isFile() || !/\.ya?ml$/i.test(e.name)) continue
+      const file = path.join(dir, e.name)
+      try {
+        const content = fs.readFileSync(file, 'utf-8')
+        const parsed = yaml.load(content) as Record<string, unknown> | null
+        if (!parsed || typeof parsed !== 'object') continue
+        const cases = Array.isArray((parsed as { cases?: unknown }).cases) ? (parsed as { cases: unknown[] }).cases.length : 0
+        packs.push({
+          id: e.name.replace(/\.ya?ml$/i, ''),
+          file: `eval-packs/${e.name}`,
+          cases,
+          judge: typeof (parsed as { judge?: string }).judge === 'string' ? (parsed as { judge: string }).judge : null,
+          category: typeof (parsed as { category?: string }).category === 'string' ? (parsed as { category: string }).category : null,
+          description: typeof (parsed as { description?: string }).description === 'string' ? (parsed as { description: string }).description : null,
+        })
+      } catch {
+        // Skip unparseable packs silently rather than failing the whole list
+      }
+    }
+  }
+  packs.sort((a, b) => a.id.localeCompare(b.id))
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify({ packs }))
+}
+
 /** GET /ui/static/* — serve design system assets from disk. */
 export function handleUiStatic(res: http.ServerResponse, urlPath: string): void {
   // urlPath starts with '/ui/static/'. Strip the prefix and resolve.
@@ -191,10 +308,59 @@ export function handleUiIndex(res: http.ServerResponse, db: Database.Database): 
   if (runs[0]) {
     cases[runs[0].run_id] = queryCaseResults(db, runs[0].run_id)
   }
+
+  // Configured models (cheap — single SELECT).
+  const configuredRows = db.prepare(
+    'SELECT model_id, provider, first_seen, total_runs, best_score FROM models_registry ORDER BY model_id'
+  ).all() as Array<{ model_id: string; provider: string | null; first_seen: string; total_runs: number; best_score: number | null }>
+  const lbIndex = new Map(leaderboard.map(r => [r.model_id, r]))
+  const configured = configuredRows.map(r => {
+    const lb = lbIndex.get(r.model_id)
+    const provider = r.provider ?? 'unknown'
+    return {
+      id: r.model_id,
+      model: r.model_id,
+      provider,
+      base: provider === 'ollama' ? 'localhost:11434'
+          : provider === 'mlx' ? 'localhost:8080'
+          : provider === 'lmstudio' ? 'localhost:1234'
+          : '—',
+      latency: lb?.avg_latency_ms ?? 0,
+      status: 'ok',
+      avg_score: lb?.avg_score ?? null,
+      notes: (provider === 'ollama' || provider === 'mlx' || provider === 'lmstudio') ? 'local' : '',
+    }
+  })
+
+  // Packs (filesystem read — cheap for a typical eval-packs/ directory).
+  const packsDir = path.resolve(process.cwd(), 'eval-packs')
+  const packs: Array<{ id: string; cases: number; judge: string | null; category: string | null }> = []
+  if (fs.existsSync(packsDir)) {
+    for (const entry of fs.readdirSync(packsDir, { withFileTypes: true })) {
+      if (!entry.isFile() || !/\.ya?ml$/i.test(entry.name)) continue
+      try {
+        const parsed = yaml.load(fs.readFileSync(path.join(packsDir, entry.name), 'utf-8')) as Record<string, unknown> | null
+        if (!parsed || typeof parsed !== 'object') continue
+        const caseList = Array.isArray((parsed as { cases?: unknown }).cases) ? (parsed as { cases: unknown[] }).cases : []
+        packs.push({
+          id: entry.name.replace(/\.ya?ml$/i, ''),
+          cases: caseList.length,
+          judge: typeof (parsed as { judge?: string }).judge === 'string' ? (parsed as { judge: string }).judge : null,
+          category: typeof (parsed as { category?: string }).category === 'string' ? (parsed as { category: string }).category : null,
+        })
+      } catch { /* skip unparseable */ }
+    }
+    packs.sort((a, b) => a.id.localeCompare(b.id))
+  }
+
   const ssr = {
     runs,
     leaderboard,
     cases,
+    configured,
+    packs,
+    // discovered is intentionally NOT in SSR — it requires live HTTP calls
+    // to Ollama/MLX/LM Studio. The dashboard fetches it client-side.
     meta: { version: '0.4.0', path: '~/.verdict' },
   }
   // JSON-encode and escape `</script>` to prevent injection.

@@ -64,37 +64,47 @@
     }));
   }
 
-  // Shape config-side data. For Phase A we have no /ui/models/configured
-  // endpoint yet, so derive a minimal `configured` list from the runs data
-  // (unique models actually seen). That keeps the Models screen non-empty.
-  function deriveConfigured(serverRuns) {
-    const seen = new Map();
-    for (const r of serverRuns) {
-      for (const m of r.models) {
-        if (!seen.has(m.model_id)) {
-          const provider = m.provider || "unknown";
-          seen.set(m.model_id, {
-            id: m.model_id,
-            provider,
-            base: provider === "ollama" ? "localhost:11434"
-                : provider === "mlx" ? "localhost:8080"
-                : provider === "lmstudio" ? "localhost:1234"
-                : "—",
-            status: "ok",
-            latency: Math.round(m.latency_ms || 0),
-            model: m.model_id,
-            notes: (provider === "ollama" || provider === "mlx" || provider === "lmstudio") ? "local" : "",
-          });
-        }
-      }
-    }
-    return Array.from(seen.values());
+  // Server may not return some fields — normalise.
+  function shapeConfigured(rows) {
+    if (!Array.isArray(rows)) return [];
+    return rows.map(r => ({
+      id: r.id || r.model_id,
+      model: r.model || r.model_id,
+      provider: r.provider || "unknown",
+      base: r.base || "—",
+      status: r.status || "ok",
+      latency: Math.round(r.latency || r.avg_latency_ms || 0),
+      avg_score: r.avg_score,
+      notes: r.notes || "",
+    }));
+  }
+
+  function shapeDiscovered(rows) {
+    if (!Array.isArray(rows)) return [];
+    return rows.map(r => ({
+      id: r.id,
+      provider: r.provider,
+      size: r.size || "—",
+      host: r.host || "—",
+    }));
+  }
+
+  function shapePacks(rows) {
+    if (!Array.isArray(rows)) return [];
+    return rows.map(r => ({
+      id: r.id,
+      cases: r.cases || 0,
+      judge: r.judge || "—",
+      category: r.category || "—",
+    }));
   }
 
   function shape(server) {
     const runs = shapeRuns(server.runs || []);
     const leaderboard = shapeLeaderboard(server.leaderboard || []);
-    const configured = deriveConfigured(server.runs || []);
+    const configured = shapeConfigured(server.configured || []);
+    const discovered = shapeDiscovered(server.discovered || []);
+    const packs = shapePacks(server.packs || []);
     const cases = {};
     for (const [runId, list] of Object.entries(server.cases || {})) {
       cases[runId] = (list || []).map((c, i) => ({
@@ -111,8 +121,8 @@
       models: leaderboard,
       runs,
       configured,
-      discovered: [], // Phase B
-      packs: [],      // Phase B
+      discovered,
+      packs,
       cases,
       // The design references `data.cases847` for the drill-in; expose the
       // first run's cases under that key as a fallback.
@@ -121,9 +131,12 @@
   }
 
   async function fetchAll() {
-    const [runsRes, lbRes] = await Promise.all([
+    const [runsRes, lbRes, cfgRes, packsRes, discRes] = await Promise.all([
       fetch("/ui/runs").then(r => r.json()).catch(() => ({ runs: [] })),
       fetch("/ui/leaderboard").then(r => r.json()).catch(() => ({ leaderboard: [] })),
+      fetch("/ui/models/configured").then(r => r.json()).catch(() => ({ configured: [] })),
+      fetch("/ui/packs").then(r => r.json()).catch(() => ({ packs: [] })),
+      fetch("/ui/models/discovered").then(r => r.json()).catch(() => ({ discovered: [] })),
     ]);
     // Fetch cases for the most recent run so the drill-in panel has data.
     const firstRunId = runsRes.runs && runsRes.runs[0] && runsRes.runs[0].run_id;
@@ -137,6 +150,9 @@
     return {
       runs: runsRes.runs || [],
       leaderboard: lbRes.leaderboard || [],
+      configured: cfgRes.configured || [],
+      discovered: discRes.discovered || [],
+      packs: packsRes.packs || [],
       cases,
       meta: runsRes.meta || lbRes.meta,
     };
