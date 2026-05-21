@@ -24,6 +24,7 @@ import { prCommentCommand } from './commands/pr-comment.js'
 import { badgeCommand } from './commands/badge.js'
 import { quantsCommand } from './commands/quants.js'
 import { tiersListCommand, tiersShowCommand } from './commands/tiers.js'
+import { shareCommand } from './commands/share.js'
 import { onboardingCommand } from '../onboarding/cli.js'
 import { readMark } from '../onboarding/persistence.js'
 import fs from 'fs'
@@ -183,6 +184,12 @@ program
   .option('--port <n>', 'Port to listen on', '4000')
   .option('--ui', 'Also serve a local read-only dashboard at / (no auth, localhost only)')
   .action(serveCommand)
+
+program
+  .command('share <result-json>')
+  .description('Render a portable self-contained HTML snapshot of a run (host it anywhere — GitHub Pages, S3, Vercel, Netlify)')
+  .option('-o, --out <path>', 'Output path (default: ./verdict-share-<run_id>.html)')
+  .action(shareCommand)
 
 const daemon = program
   .command('daemon')
