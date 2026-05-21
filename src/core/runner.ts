@@ -9,7 +9,7 @@ import { judgeFaithfulness } from '../judge/faithfulness.js'
 import { scoreSimilar } from '../judge/similar.js'
 import { scoreDeterministic, isDeterministic, scoreToolCall, scoreLatency, scoreCost } from '../judge/deterministic.js'
 import { detectHardware, toRunResultFormat } from './hardware.js'
-import { preloadModels } from './preload.js'
+import { preloadModels, preloadModelsAsync, type PreloadResult } from './preload.js'
 
 /**
  * Detect environment information
@@ -234,9 +234,25 @@ export async function runEvals(
   )
   const modelIds = config.models.map(m => m.id)
 
-  // Pre-load models if enabled
+  // Preload strategy:
+  //   - sync mode (default when called from `verdict run`): a banner prints,
+  //     then we wait for every model to be warm before any case starts. This
+  //     preserves the user-visible "Pre-loading models..." UX while still
+  //     getting the parallel-slot speedup (B1).
+  //   - async mode (opt-in): kick off the loads in a pool and return per-
+  //     model futures. Cases dispatch as soon as their specific model is
+  //     ready — fast models serve cases while slow models still warm (B3).
+  //     Today async mode is gated behind config.run.async_preload=true; we
+  //     intend to make it the default once it's exercised in CI.
+  let preloadFutures: Map<string, Promise<PreloadResult>> | null = null
   if (preload) {
-    await preloadModels(config.models, false)
+    const preloadConcurrency = (config.run as { preload_concurrency?: number }).preload_concurrency ?? 2
+    const useAsync = (config.run as { async_preload?: boolean }).async_preload === true
+    if (useAsync) {
+      preloadFutures = preloadModelsAsync(config.models, { concurrency: preloadConcurrency })
+    } else {
+      await preloadModels(config.models, { concurrency: preloadConcurrency })
+    }
   }
 
   // Resume from checkpoint if requested
@@ -303,8 +319,14 @@ export async function runEvals(
       criteria: evalCase.criteria, responses: {}, scores: {},
     }
 
-    // Run all models concurrently (chunked)
+    // Run all models concurrently (chunked). In async-preload mode we wait
+    // for THIS model's preload before issuing its call — slow models gate
+    // their own cases, fast models start immediately.
     const jobs = config.models.map(m => async () => {
+      if (preloadFutures) {
+        const f = preloadFutures.get(m.id)
+        if (f) await f
+      }
       let resp
       if (evalCase.scorer === 'tool_call' && evalCase.tools && evalCase.tools.length > 0) {
         resp = await callModelWithTools(m, evalCase.prompt, evalCase.tools, 0, evalCase.system_prompt)

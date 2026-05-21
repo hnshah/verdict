@@ -16,6 +16,71 @@ import { humanizeProviderError, formatHumanError } from '../utils/errors.js'
 
 const clientCache = new Map<string, OpenAI>()
 
+export interface FirstTokenResult {
+  ok: boolean
+  /** ms from request start to first streamed token (the meaningful signal
+   * that weights are loaded and inference is running). -1 if no token. */
+  firstTokenMs: number
+  /** ms to stream completion (or to failure). */
+  totalMs: number
+  error?: string
+}
+
+/**
+ * Send a minimal streaming request and resolve when the first token
+ * arrives. Used by preload to show users a "model warmed" signal rather
+ * than waiting for a complete response. Closes the stream early because
+ * we only care about latency-to-first-token.
+ */
+export async function streamFirstToken(
+  config: ModelConfig,
+  prompt: string,
+  opts: { signal?: AbortSignal } = {}
+): Promise<FirstTokenResult> {
+  const baseURL = config.base_url
+  if (!baseURL) {
+    return { ok: false, firstTokenMs: -1, totalMs: 0, error: `Model '${config.id}' has no base_url` }
+  }
+  const apiKey = config.api_key === 'none' ? 'no-key-required' : (config.api_key ?? 'ollama')
+  const client = getOrCreateClient(baseURL, apiKey, config.timeout_ms)
+  const start = Date.now()
+  let firstTokenMs = -1
+  try {
+    const stream = await client.chat.completions.create({
+      model: config.model,
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 8,
+      temperature: 0,
+      stream: true,
+    })
+    for await (const chunk of stream) {
+      if (opts.signal?.aborted) break
+      const delta = chunk.choices[0]?.delta?.content
+      if (delta && firstTokenMs === -1) {
+        firstTokenMs = Date.now() - start
+        // Stop reading as soon as we have the signal — the goal is "first
+        // token = warm," not a full generation. Some SDK versions don't
+        // support `stream.controller.abort()` directly; breaking here drops
+        // our reference and lets the underlying HTTP stream close.
+        break
+      }
+    }
+    return {
+      ok: firstTokenMs >= 0,
+      firstTokenMs,
+      totalMs: Date.now() - start,
+      error: firstTokenMs < 0 ? 'stream closed without producing a token' : undefined,
+    }
+  } catch (err) {
+    return {
+      ok: false,
+      firstTokenMs,
+      totalMs: Date.now() - start,
+      error: err instanceof Error ? err.message : String(err),
+    }
+  }
+}
+
 function getOrCreateClient(baseUrl: string, apiKey: string, timeout?: number): OpenAI {
   const key = baseUrl + ':::' + apiKey
   if (!clientCache.has(key)) {

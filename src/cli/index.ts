@@ -71,6 +71,7 @@ program
   .option('--fail-if-regression', 'Exit with code 1 if any model regresses vs the default baseline')
   .option('--verbose', 'Show model call results, scores, and timing as they happen')
   .option('--debug', 'Show verbose output plus raw API request/response bodies')
+  .option('--no-preload', 'Skip model preloading (cold-start tax shifts to the first case per model)')
   .action(runCommand)
 
 const tiers = program

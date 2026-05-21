@@ -32,6 +32,8 @@ interface RunOptions {
   verbose?: boolean
   debug?: boolean
   store?: boolean
+  /** Commander's negated `--no-preload` flag arrives as `preload: false`. */
+  preload?: boolean
 }
 
 export async function runCommand(opts: RunOptions): Promise<void> {
@@ -174,7 +176,12 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   const spinner = ora({ prefixText: '  ', text: 'Starting...', stream: opts.json ? process.stderr : process.stdout }).start()
   let result
   try {
-    result = await runEvals(config, packs, onProgress, opts.resume, categoryFilter, true) // preload enabled
+    // Preload is on by default — it pays back roughly its own cost in
+    // first-case latency. CI / scripted runs that already have warm models
+    // (or are calling cloud endpoints) skip it with --no-preload, and the
+    // tax shifts to each model's first case rather than being amortized.
+    const preloadEnabled = opts.preload !== false
+    result = await runEvals(config, packs, onProgress, opts.resume, categoryFilter, preloadEnabled)
     spinner.succeed('Done')
   } catch (err) {
     const humanized = humanizeProviderError(err)

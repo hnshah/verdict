@@ -278,13 +278,19 @@ export function propose(snapshot: Snapshot, opts: PlannerOptions = {}): Plan {
     })
   }
 
-  // Pair selection:
-  // 1. general-small (3B) — fastest first pull
-  // 2. general-mid (7B) — most machines run this
-  // 3. coder (7B) if RAM >= 16 GB
+  // Pair selection — tuned for the first-run experience (Theme B):
+  //  - Small machines (<32 GB RAM): two 3Bs from different families. Cold-load
+  //    is ~5-15s each, total time-to-first-token under a minute.
+  //  - Larger machines (≥32 GB RAM): mid pick upgrades to 7B for capability
+  //    diversity; coder model added at 7B for code tasks.
+  //
+  // The dogfood revealed qwen2.5:7b takes ~147s to cold-load even on M4 Pro,
+  // which is the single worst moment of onboarding. Two 3Bs cover the
+  // "compare local options" decision in a fraction of that time.
   const installed = new Set(snapshot.ollama.installedModels)
   const picked: PlannedModel[] = []
   const usedFamilies = new Set<string>()
+  const wantsLargerModels = hardware.ramGB >= 32
 
   const smallCandidates = ['llama3.2:3b', 'qwen2.5:3b']
   const small = pickFirstFitting(catalog, smallCandidates, hardware, installed)
@@ -293,19 +299,24 @@ export function propose(snapshot: Snapshot, opts: PlannerOptions = {}): Plan {
     usedFamilies.add(familyOf(small.name))
   }
 
-  const midCandidates = ['qwen2.5:7b', 'llama3.1:8b', 'mistral:7b', 'gemma2:9b'].filter(
-    n => !usedFamilies.has(familyOf(n))
-  )
+  // On smaller machines, prefer a second 3B from a different family over a
+  // 7B — the diversity is what answers "which local model is good for me?"
+  // and a 7B doubles cold-load time for marginal capability gain at 3B-task
+  // resolution.
+  const midCandidates = (wantsLargerModels
+    ? ['qwen2.5:7b', 'llama3.1:8b', 'mistral:7b', 'gemma2:9b']
+    : ['qwen2.5:3b', 'llama3.2:3b', 'mistral:7b']
+  ).filter(n => !usedFamilies.has(familyOf(n)))
   const mid = pickFirstFitting(catalog, midCandidates, hardware, installed)
   if (mid) {
-    picked.push(toPlannedModel(mid, 'general-mid'))
+    picked.push(toPlannedModel(mid, wantsLargerModels ? 'general-mid' : 'general-small'))
     usedFamilies.add(familyOf(mid.name))
   }
 
-  if (hardware.ramGB >= 16) {
-    // Coder variants are intentionally distinct from their general siblings
-    // (qwen2.5-coder ≠ qwen2.5 for our purposes), so we don't apply family
-    // diversity here — a coder pick is a separate role.
+  if (wantsLargerModels) {
+    // Coder pick is only useful at 7B+ — smaller coder models score
+    // similarly to general 3Bs on the canonical pack while adding load
+    // time. Gate behind RAM ≥ 32 GB.
     const coderCandidates = ['qwen2.5-coder:7b', 'deepseek-coder:6.7b', 'codellama:7b']
     const coder = pickFirstFitting(catalog, coderCandidates, hardware, installed)
     if (coder) {

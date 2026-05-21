@@ -68,6 +68,19 @@ export const ConfigSchema = z.object({
     concurrency: z.number().default(3),
     retries: z.number().default(2),
     cache: z.boolean().default(true),
+    /**
+     * Async preload mode (opt-in, B3). When true, the runner starts case
+     * execution on each model as soon as that model finishes preloading,
+     * rather than waiting for every model to be warm first. Fast models
+     * serve cases while slow models still load.
+     */
+    async_preload: z.boolean().default(false),
+    /**
+     * Maximum concurrent preload requests (B1). Default 2 — Ollama can
+     * handle two warmup loads in parallel on a 24 GB machine without
+     * memory pressure. Beyond 4 the aggregate throughput regresses.
+     */
+    preload_concurrency: z.number().default(2),
   }).default({}),
   output: z.object({
     dir: z.string().default('./results'),

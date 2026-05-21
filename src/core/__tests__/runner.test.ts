@@ -73,7 +73,7 @@ function makeConfig(overrides?: Partial<Config>): Config {
       rubric: { accuracy: 0.4, completeness: 0.4, conciseness: 0.2 },
     },
     packs: ['./eval-packs/general.yaml'],
-    run: { concurrency: 3, retries: 2, cache: true },
+    run: { concurrency: 3, retries: 2, cache: true, async_preload: false, preload_concurrency: 2 },
     output: { dir: './test-results', formats: ['json'], delta: true },
     ...overrides,
   }

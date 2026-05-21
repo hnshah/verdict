@@ -75,7 +75,7 @@ const minimalConfig: Config = {
     rubric: { accuracy: 0.4, completeness: 0.4, conciseness: 0.2 },
   },
   packs: [],
-  run: { concurrency: 3, retries: 2, cache: true },
+  run: { concurrency: 3, retries: 2, cache: true, async_preload: false, preload_concurrency: 2 },
   output: { dir: './results', formats: ['json', 'markdown'], delta: true },
 }
 

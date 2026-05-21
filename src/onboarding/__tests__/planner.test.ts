@@ -96,18 +96,37 @@ describe('propose', () => {
     expect(plan.intent).toBe('cloud-only')
   })
 
-  it('local-first on a fresh Apple Silicon machine: install + pull small + mid + coder', () => {
+  it('local-first on a high-RAM machine (≥32 GB): install + pull small + mid 7B + coder', () => {
+    // Base snapshot uses 32 GB RAM — qualifies for the larger-model branch.
     const plan = propose(baseSnapshot(), { catalog: CATALOG })
     expect(plan.intent).toBe('local-first')
-    // brew is present in the stub, so install step uses brew
     expect(plan.installSteps[0]).toMatchObject({
       id: 'install-ollama',
       method: 'brew',
     })
     expect(plan.installSteps.some(s => s.id === 'start-ollama')).toBe(true)
     expect(plan.modelsToPull.length).toBeGreaterThanOrEqual(2)
-    // Includes a coder because ramGB is 32 (≥ 16)
     expect(plan.modelsToPull.some(m => m.role === 'coder')).toBe(true)
+    const mid = plan.modelsToPull.find(m => m.role === 'general-mid')
+    expect(mid?.paramsB).toBeGreaterThanOrEqual(7)
+  })
+
+  it('local-first on a 24 GB machine: two 3B models, no coder, no 7B', () => {
+    const plan = propose(
+      baseSnapshot({
+        hardware: { ...baseSnapshot().hardware, ramGB: 24, ram: '24 GB' },
+      }),
+      { catalog: CATALOG }
+    )
+    expect(plan.intent).toBe('local-first')
+    expect(plan.modelsToPull.length).toBeGreaterThanOrEqual(2)
+    expect(plan.modelsToPull.some(m => m.role === 'coder')).toBe(false)
+    // Every picked model should be 3B (to keep cold-load time tolerable on
+    // the lower tier) — explicitly checked because the regression we're
+    // guarding is "7B sneaks in via the mid pick on a 24 GB machine."
+    for (const m of plan.modelsToPull) {
+      expect(m.paramsB).toBeLessThan(7)
+    }
   })
 
   it('local-first uses curl install when brew is missing', () => {
