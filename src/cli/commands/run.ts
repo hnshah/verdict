@@ -14,6 +14,7 @@ import { setLogLevel } from '../../utils/logger.js'
 import { humanizeProviderError, formatHumanError } from '../../utils/errors.js'
 import { contributeCommand } from './contribute.js'
 import { resolveTier, listTierNames } from '../../core/tiers.js'
+import { computeReceipt, buildReproCommand } from '../../core/receipt.js'
 
 interface RunOptions {
   config: string
@@ -268,6 +269,26 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   const base = path.join(config.output.dir, `${ts}-${result.run_id}`)
 
   fs.writeFileSync(`${base}.json`, JSON.stringify(result, null, 2))
+
+  // Reproducibility receipt — additive, never fails the run.
+  try {
+    const receipt = computeReceipt({
+      config,
+      packs,
+      runId: result.run_id,
+      verdictVersion: '0.4.0',
+      reproCommand: buildReproCommand(opts.config, {
+        pack: opts.pack,
+        models: opts.models,
+        tier: opts.tier,
+        category: opts.category,
+      }),
+    })
+    fs.writeFileSync(`${base}-receipt.json`, JSON.stringify(receipt, null, 2))
+    log(chalk.dim(`  receipt: ${base}-receipt.json`))
+  } catch (err) {
+    console.warn(chalk.yellow(`  warning: failed to write receipt: ${err instanceof Error ? err.message : err}`))
+  }
 
   // Persist to SQLite unless --no-store
   if (opts.noStore !== true && opts.store !== false) {
