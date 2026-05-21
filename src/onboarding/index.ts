@@ -98,6 +98,10 @@ interface InternalState {
   // Path where the current configure step will write.
   finalConfigPath?: string
   configBackupPath?: string
+  // Smoke eval result captured during verify; surfaced in the Done summary.
+  smokeResult?: import('./events.js').VerifyResult
+  // First-run result captured after verify succeeds.
+  firstRunResult?: import('./events.js').FirstRunResult
 }
 
 export function startOnboarding(opts: StartOnboardingOptions = {}): OnboardingController {
@@ -136,21 +140,34 @@ export function startOnboarding(opts: StartOnboardingOptions = {}): OnboardingCo
   }
 
   function persistMark(status: OnboardingMark['status'] = 'in-progress'): void {
-    // Only persist progress-bearing states; cancelled/failed don't need a
-    // resume target.
     const lastCompletedState: OnboardingMark['lastCompletedState'] =
       internal.state.kind === 'welcome' ||
       internal.state.kind === 'cancelled' ||
       internal.state.kind === 'failed'
         ? undefined
         : internal.state.kind
+    // When we land in 'failed', record what failed and why so the next launch
+    // can decide whether to offer a resume vs a fresh start.
+    const failedFrom: OnboardingMark['failedFrom'] =
+      internal.state.kind === 'failed' &&
+      internal.state.from !== 'done' &&
+      internal.state.from !== 'cancelled' &&
+      internal.state.from !== 'failed'
+        ? internal.state.from
+        : undefined
+    const failedError =
+      internal.state.kind === 'failed' ? internal.state.error : undefined
     const mark: OnboardingMark = {
       version: 1,
       status,
       startedAt: new Date(internal.startedAt).toISOString(),
       completedAt:
-        status === 'completed' || status === 'cancelled' ? new Date().toISOString() : undefined,
+        status === 'completed' || status === 'cancelled' || status === 'failed'
+          ? new Date().toISOString()
+          : undefined,
       lastCompletedState,
+      failedFrom,
+      failedError,
       snapshot: internal.snapshot,
       plan: internal.plan,
       pulledModels: internal.pulledModels,
@@ -182,13 +199,27 @@ export function startOnboarding(opts: StartOnboardingOptions = {}): OnboardingCo
       // No-op event — nothing to do.
       return
     }
+    // Telemetry opt-in: when the user confirms consent, apply the choice they
+    // made on the Consent screen (or no-op in headless / undefined). Lifted
+    // into the engine boundary so neither the reducer (pure) nor the UI
+    // (presentation) has to touch telemetry side effects directly.
+    if (prev.kind === 'consent' && next.kind === 'install') {
+      const decision = prev.selections.telemetryOptIn
+      if (decision === true) {
+        void applyTelemetryDecision(true).catch(() => undefined)
+      } else if (decision === false) {
+        void applyTelemetryDecision(false).catch(() => undefined)
+      }
+    }
     internal.state = next
     persistMark(
       next.kind === 'done'
         ? 'completed'
         : next.kind === 'cancelled'
           ? 'cancelled'
-          : 'in-progress'
+          : next.kind === 'failed'
+            ? 'failed'
+            : 'in-progress'
     )
     emitState()
     if (prev.kind !== next.kind) {
@@ -218,6 +249,10 @@ export function startOnboarding(opts: StartOnboardingOptions = {}): OnboardingCo
       }
       case 'verify': {
         void runVerifyStep()
+        break
+      }
+      case 'first-run': {
+        void runFirstRunStep()
         break
       }
       case 'done':
@@ -313,7 +348,12 @@ export function startOnboarding(opts: StartOnboardingOptions = {}): OnboardingCo
         if (step.id === 'install-ollama') {
           runner = installOllama({ method: step.method ?? 'brew' })
         } else if (step.id === 'start-ollama') {
-          runner = startOllamaDaemon({ host: ollamaHost })
+          // Pass the detected install source so Mac-app installs launch
+          // the desktop app instead of spawning a competing daemon.
+          runner = startOllamaDaemon({
+            host: ollamaHost,
+            installSource: internal.snapshot?.ollama.installSource,
+          })
         } else if (step.id === 'capture-cloud-key') {
           // Wait for the consent step to supply the key — engine layer
           // attaches it. For now, no-op.
@@ -456,27 +496,32 @@ export function startOnboarding(opts: StartOnboardingOptions = {}): OnboardingCo
         configPath: internal.finalConfigPath ?? configPath,
         onProgress: msg => emitLog('info', msg, 'verify'),
       })
+      internal.smokeResult = result
       dispatch({ type: '__verify-complete', result })
-      // Transition automatically to done.
-      const durationMs = Date.now() - internal.startedAt
-      internal.state = {
-        kind: 'done',
-        summary: {
-          pulledModels: internal.pulledModels,
-          reusedModels: internal.plan?.reuseModels ?? [],
-          configPath: internal.finalConfigPath ?? configPath,
-          configBackupPath: internal.configBackupPath,
-          smokeScore: result.exampleScore,
-          totalDurationMs: durationMs,
-        },
+      // If verify failed, surface the failure and stop. If it succeeded,
+      // hand off to first-run so the user lands on a populated dashboard
+      // rather than a smoke-only baseline.
+      if (!result.ok) {
+        dispatch({
+          type: '__error',
+          error:
+            'Smoke eval failed: ' +
+            (result.failures[0]?.error ?? 'unknown failure'),
+          recoverable: true,
+        })
+        return
       }
-      persistMark('completed')
-      emitState()
-      if (terminalResolver) {
-        terminalResolver(internal.state)
-        terminalResolver = null
+      // Initialize an empty FirstRunView so the reducer + UI have something
+      // to render the moment we enter the state.
+      const view: import('./events.js').FirstRunView = {
+        models: [],
+        casesTotal: 0,
+        casesDone: 0,
+        current: '',
+        runningAverages: {},
       }
-      emitter.emit('done')
+      dispatch({ type: '__first-run-start', view })
+      return
     } catch (err) {
       dispatch({
         type: '__error',
@@ -484,6 +529,149 @@ export function startOnboarding(opts: StartOnboardingOptions = {}): OnboardingCo
         recoverable: true,
       })
     }
+  }
+
+  /**
+   * Run the user's first real eval against their general pack and persist
+   * to ~/.verdict/results.db so the dashboard isn't empty when they finish
+   * onboarding. Failures here are non-fatal — we still transition to done
+   * with a note that the first run can be re-attempted manually.
+   */
+  async function runFirstRunStep(): Promise<void> {
+    const ac = addAbort()
+    void ac
+    const cfgPath = internal.finalConfigPath ?? configPath
+    const startedAt = Date.now()
+
+    // Track per-case progress so the FirstRun screen can update.
+    const seenCaseIds = new Set<string>()
+    const view: import('./events.js').FirstRunView = {
+      models: [],
+      casesTotal: 0,
+      casesDone: 0,
+      current: '',
+      runningAverages: {},
+    }
+
+    const onProgress = (msg: string) => {
+      emitLog('info', msg, 'first-run')
+      const m = msg.match(/^([\w:.\-]+):\s+running\s+\d+\s+model/)
+      if (m && !seenCaseIds.has(m[1]!)) {
+        seenCaseIds.add(m[1]!)
+        view.casesDone = seenCaseIds.size
+        view.current = msg
+        dispatch({ type: '__first-run-progress', view: { ...view } })
+      } else {
+        view.current = msg
+      }
+    }
+
+    try {
+      const [{ loadConfig, loadEvalPack }, { runEvals }, { getDb, initSchema, saveRunResult }] = await Promise.all([
+        import('../core/config.js'),
+        import('../core/runner.js'),
+        import('../db/client.js'),
+      ])
+
+      const config = loadConfig(cfgPath)
+      const cfgDir = path.dirname(path.resolve(cfgPath))
+      const packs = config.packs.map(p => loadEvalPack(p, cfgDir))
+      if (packs.length === 0 || packs[0]!.cases.length === 0) {
+        // No pack to run — skip first-run gracefully.
+        emitLog('warn', 'No eval pack found; skipping first real eval.', 'first-run')
+        finishWithFirstRun(undefined, startedAt)
+        return
+      }
+      view.models = config.models.map(m => m.id)
+      view.casesTotal = packs[0]!.cases.length
+      dispatch({ type: '__first-run-progress', view: { ...view } })
+
+      const result = await runEvals(
+        config,
+        packs,
+        onProgress,
+        false,
+        undefined,
+        false, // preload disabled — A6 keeps this fast for first-run; Theme B will improve preload UX
+        cfgPath
+      )
+
+      // Persist to SQLite so `verdict history` + dashboard show this run.
+      const db = getDb()
+      initSchema(db)
+      const packLabel = packs.map(p => p.name).join(',') || 'onboarding'
+      saveRunResult(db, result, packLabel)
+
+      // Compute the winning model and per-model averages.
+      const modelScores: Record<string, number> = {}
+      let winner: string | undefined
+      let topScore = -Infinity
+      for (const [modelId, sum] of Object.entries(result.summary)) {
+        modelScores[modelId] = sum.avg_total
+        if (sum.avg_total > topScore) {
+          topScore = sum.avg_total
+          winner = modelId
+        }
+      }
+
+      const firstRun: import('./events.js').FirstRunResult = {
+        ok: true,
+        durationMs: Date.now() - startedAt,
+        runId: result.run_id,
+        modelScores,
+        winner,
+        casesRun: packs[0]!.cases.length,
+      }
+      dispatch({ type: '__first-run-complete', result: firstRun })
+      finishWithFirstRun(firstRun, startedAt)
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : String(err)
+      emitLog('error', `First eval failed: ${errMsg}`, 'first-run')
+      // Non-fatal: still transition to done so the user can manually retry.
+      const firstRun: import('./events.js').FirstRunResult = {
+        ok: false,
+        durationMs: Date.now() - startedAt,
+        runId: '',
+        modelScores: {},
+        casesRun: 0,
+        errorMessage: errMsg,
+      }
+      dispatch({ type: '__first-run-complete', result: firstRun })
+      finishWithFirstRun(firstRun, startedAt)
+    }
+  }
+
+  /**
+   * Transition to the 'done' terminal state with a summary that folds in
+   * the smoke result (verify) AND the first-run result if present. Direct
+   * state mutation (rather than dispatch) because 'done' is constructed
+   * from internal context the reducer doesn't have.
+   */
+  function finishWithFirstRun(
+    firstRun: import('./events.js').FirstRunResult | undefined,
+    _firstRunStartedAt: number
+  ): void {
+    internal.firstRunResult = firstRun
+    const totalDurationMs = Date.now() - internal.startedAt
+    internal.state = {
+      kind: 'done',
+      summary: {
+        pulledModels: internal.pulledModels,
+        reusedModels: internal.plan?.reuseModels ?? [],
+        configPath: internal.finalConfigPath ?? configPath,
+        configBackupPath: internal.configBackupPath,
+        smokeScore: internal.smokeResult?.exampleScore,
+        totalDurationMs,
+        firstRun,
+      },
+    }
+    persistMark('completed')
+    emitState()
+    if (terminalResolver) {
+      terminalResolver(internal.state)
+      terminalResolver = null
+    }
+    emitter.emit('done')
   }
 
   // ─── Public methods ──────────────────────────────────────────────────────
@@ -513,6 +701,20 @@ export function startOnboarding(opts: StartOnboardingOptions = {}): OnboardingCo
   queueMicrotask(emitState)
 
   return controller
+}
+
+/**
+ * Apply the telemetry opt-in/out decision captured during consent. Imported
+ * lazily so the engine module doesn't pull in `~/.verdict/telemetry.json`
+ * disk IO at import time (cleaner for tests + tree-shaking).
+ */
+async function applyTelemetryDecision(optIn: boolean): Promise<void> {
+  const { enable, disable, loadPrefs } = await import('../utils/telemetry.js')
+  // Don't churn the prefs file if the decision matches the existing one.
+  const prior = loadPrefs()
+  if (prior && prior.enabled === optIn) return
+  if (optIn) enable()
+  else disable()
 }
 
 // Re-exports for the CLI and TUI to import from one place.

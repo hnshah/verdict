@@ -11,6 +11,7 @@ const STEPS = [
   { kind: 'pull', label: 'Pull' },
   { kind: 'configure', label: 'Configure' },
   { kind: 'verify', label: 'Verify' },
+  { kind: 'first-run', label: 'First Run' },
   { kind: 'done', label: 'Done' },
 ] as const
 

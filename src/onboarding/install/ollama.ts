@@ -72,6 +72,13 @@ function installCmd(method: 'brew' | 'curl'): { cmd: string; args: string[] } {
 export interface StartOllamaOptions {
   host?: string // 'localhost:11434'
   readinessTimeoutMs?: number
+  /**
+   * How the user's `ollama` binary was installed. Determines the launch
+   * strategy: `mac-app` opens the desktop app (so the menu-bar icon stays
+   * valid + the user retains control); anything else spawns `ollama serve`.
+   * Defaults to spawning `ollama serve` — backwards-compatible.
+   */
+  installSource?: 'mac-app' | 'brew' | 'curl' | 'unknown'
   /** Inject for tests. */
   spawnFn?: SpawnFn
   /** Inject for tests. */
@@ -104,6 +111,41 @@ export function startOllamaDaemon(opts: StartOllamaOptions = {}): InstallStepRun
         return
       }
       ensureVerdictDir()
+
+      // Mac-app branch: launch the desktop app. The app owns the daemon,
+      // the menu-bar icon stays valid, and the user can stop/start via
+      // their normal flow. Avoids the dogfood-discovered issue where our
+      // spawn would steal the daemon and leave the menu-bar icon dangling.
+      if (opts.installSource === 'mac-app') {
+        onLine('Launching Ollama.app (Mac desktop app)…')
+        const child = spawnFn('open', ['-a', 'Ollama'], {
+          stdio: ['ignore', 'pipe', 'pipe'],
+          env: process.env,
+        })
+        // `open -a` exits quickly; we don't track its PID since the app
+        // (not us) owns the daemon.
+        await new Promise<void>((resolve, reject) => {
+          child.on('error', reject)
+          child.on('close', () => resolve())
+        })
+        onLine(`Waiting for daemon to become ready on ${host}…`)
+        const deadline = Date.now() + readinessTimeoutMs
+        while (Date.now() < deadline) {
+          if (signal.aborted) throw makeStepFailure('start-ollama', 'cancelled')
+          if (await isRunning(host)) {
+            onLine('Ollama is ready.')
+            return
+          }
+          await sleep(500)
+        }
+        throw makeStepFailure(
+          'start-ollama',
+          `Ollama.app did not become ready within ${readinessTimeoutMs}ms — check the menu-bar icon.`
+        )
+      }
+
+      // Default: spawn `ollama serve` ourselves. Used for brew/curl/unknown
+      // install sources. We record the PID so we can clean up on cancel.
       const out = fs.openSync(OLLAMA_LOG_FILE, 'a')
       onLine(`Spawning: ollama serve  (log: ${OLLAMA_LOG_FILE})`)
       const child = spawnFn('ollama', ['serve'], {

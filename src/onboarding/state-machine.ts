@@ -244,8 +244,22 @@ export function reduce(
       if (event.type === '__verify-complete') {
         return { kind: 'verify', result: event.result }
       }
+      if (event.type === '__first-run-start') {
+        return { kind: 'first-run', view: event.view, result: null }
+      }
       // Verify result presented; user advances by `next`. Engine then
       // constructs the done summary.
+      return state
+    }
+
+    // ─── first-run ──────────────────────────────────────────────────
+    case 'first-run': {
+      if (event.type === '__first-run-progress') {
+        return { ...state, view: event.view }
+      }
+      if (event.type === '__first-run-complete') {
+        return { ...state, result: event.result }
+      }
       return state
     }
 

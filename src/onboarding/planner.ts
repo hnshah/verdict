@@ -16,6 +16,7 @@ import { z } from 'zod'
 
 import { checkFit, estimateRamGB } from '../core/hardware.js'
 import type { HardwareInfo } from '../core/hardware.js'
+import { idFromModelName } from './templates.js'
 import type {
   HardwareSnapshot,
   InstallStep,
@@ -228,7 +229,11 @@ export function propose(snapshot: Snapshot, opts: PlannerOptions = {}): Plan {
   // ── 3. Reuse local ────────────────────────────────────────────────────────
   if (snapshot.ollama.daemonRunning && snapshot.ollama.installedModels.length >= 1) {
     const reuse = snapshot.ollama.installedModels.slice(0, 3)
-    const judgeId = hasCloudKey ? CLOUD_FAST_MINI.id : reuse[0] ?? ''
+    // Judge id must match the `id:` we write to verdict.yaml — that's the
+    // slugified form, not the raw `ollama list` name.
+    const judgeId = hasCloudKey
+      ? CLOUD_FAST_MINI.id
+      : reuse[0] ? idFromModelName(reuse[0]) : ''
     return {
       intent: 'reuse-local',
       installSteps: [],
@@ -311,9 +316,11 @@ export function propose(snapshot: Snapshot, opts: PlannerOptions = {}): Plan {
   // Judge: cloud if available, else smallest local model.
   const cloudModels: PlannedCloudModel[] = hasCloudKey ? [CLOUD_FAST_MINI] : []
   const smallestLocal = [...picked].sort((a, b) => a.paramsB - b.paramsB)[0]
+  // Match the slug the YAML writer will use as the model's `id:` — never
+  // the raw model name, which differs (e.g. "llama3.2:3b" vs "llama3-2-3b").
   const judgeModelId = hasCloudKey
     ? CLOUD_FAST_MINI.id
-    : smallestLocal?.name ?? ''
+    : smallestLocal ? idFromModelName(smallestLocal.name) : ''
   const judgeRationale = hasCloudKey
     ? 'Using cloud mini as judge — cheapest and most consistent option.'
     : smallestLocal

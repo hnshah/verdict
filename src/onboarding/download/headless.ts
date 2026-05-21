@@ -132,6 +132,17 @@ function stateSummary(state: OnboardingState, c: ColorFns): string {
           ? c.green(`• verify: ok (score ${state.result.exampleScore.toFixed(1)})`)
           : c.red(`• verify: failed (${state.result.failures.map(f => f.step).join(',')})`)
         : c.dim('• verify: running…')
+    case 'first-run': {
+      if (state.result) {
+        if (!state.result.ok) return c.yellow(`• first-run: failed (${state.result.errorMessage ?? 'unknown'})`)
+        const w = state.result.winner ?? '?'
+        const ws = state.result.modelScores[w]?.toFixed(2) ?? '?'
+        return c.green(`• first-run: done — winner ${w} (${ws}/10), ${state.result.casesRun} cases`)
+      }
+      const total = state.view.casesTotal
+      const done = state.view.casesDone
+      return c.dim(`• first-run: ${done}/${total} cases — ${state.view.current.slice(0, 60)}`)
+    }
     case 'done':
       return c.green(`• done — pulled ${state.summary.pulledModels.length} model(s) to ${state.summary.configPath}`)
     case 'cancelled':

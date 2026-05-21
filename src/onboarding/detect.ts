@@ -136,9 +136,31 @@ async function probeOllama(host: string): Promise<OllamaSnapshot> {
   const binPath = which('ollama')
   const installed = binPath !== undefined
   const version = installed ? ollamaVersion() : undefined
+  const installSource = installed ? classifyOllamaSource(binPath!) : undefined
   const daemonRunning = await isOllamaRunning(host)
   const installedModels = daemonRunning ? await listOllamaModels(host) : []
-  return { installed, binPath, version, daemonRunning, installedModels }
+  return { installed, binPath, version, installSource, daemonRunning, installedModels }
+}
+
+/**
+ * Resolve the `ollama` binary to its real path and classify the install
+ * source. Mac users frequently install via the desktop app; brew users
+ * have the binary in a Cellar; curl|sh users land in /usr/local/bin
+ * (Intel) or /usr/local/Cellar (Apple Silicon brew).
+ */
+export function classifyOllamaSource(binPath: string): OllamaSnapshot['installSource'] {
+  let resolved = binPath
+  try {
+    resolved = fs.realpathSync(binPath)
+  } catch {
+    // realpath can fail on a dangling symlink — treat as unknown
+    return 'unknown'
+  }
+  if (resolved.includes('/Applications/Ollama.app/')) return 'mac-app'
+  if (resolved.includes('/Cellar/ollama/')) return 'brew'
+  if (resolved.includes('/opt/homebrew/Cellar/ollama/')) return 'brew'
+  if (resolved.startsWith('/usr/local/bin/') || resolved.startsWith('/usr/bin/')) return 'curl'
+  return 'unknown'
 }
 
 async function probeMLX(port: number): Promise<MlxSnapshot> {

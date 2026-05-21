@@ -170,6 +170,11 @@ export function createDownloadEngine(opts: DownloadEngineOptions = {}): Download
       }
       case 'log': {
         if (ev.line) task.lastStatusLine = ev.line
+        // Suppress the high-frequency `pulling <hash>` noise — Ollama emits
+        // one per progress tick, dozens per layer. The same info is already
+        // conveyed by `task-phase` and `task-progress` events. Pass through
+        // semantically meaningful lines only.
+        if (isNoisyPullLine(ev.line)) return false
         emit({ type: 'log', modelName: task.modelName, line: ev.line })
         return false
       }
@@ -391,6 +396,17 @@ function makeTask(req: DownloadRequest, maxAttempts: number, ts: number): TaskSt
   }
 }
 
+function isInFlightPhase(phase: TaskState['phase']): boolean {
+  return (
+    phase === 'starting' ||
+    phase === 'manifest' ||
+    phase === 'downloading' ||
+    phase === 'verifying' ||
+    phase === 'writing' ||
+    phase === 'retrying'
+  )
+}
+
 function computeAggregate(
   tasks: Record<string, TaskState>,
   startedAt: number
@@ -399,17 +415,28 @@ function computeAggregate(
   const done = list.filter(t => t.phase === 'done').length
   const failed = list.filter(t => t.phase === 'failed').length
   const queued = list.filter(t => t.phase === 'queued').length
-  const inFlight = list.filter(
-    t =>
-      t.phase === 'starting' ||
-      t.phase === 'manifest' ||
-      t.phase === 'downloading' ||
-      t.phase === 'verifying' ||
-      t.phase === 'writing' ||
-      t.phase === 'retrying'
-  ).length
-  // Average percent across tasks; -1 (indeterminate) counts as 0.
-  const sum = list.reduce((acc, t) => acc + (t.percent < 0 ? 0 : t.percent), 0)
+  const inFlight = list.filter(t => isInFlightPhase(t.phase)).length
+
+  // Per-task contribution to overall progress:
+  //  - done       → 100
+  //  - failed     → 100 (counted as "settled", just unsuccessfully — keeps
+  //                  the bar moving when one model fails of N)
+  //  - queued     → 0
+  //  - in-flight  → percent clamped to [0, 99]. The clamp prevents premature
+  //                  100% claims: a layer that completes before the next is
+  //                  announced briefly reports task.percent=100 even though
+  //                  more layers + verification still remain. Only the
+  //                  terminal 'done' phase earns 100.
+  const contribution = (t: TaskState): number => {
+    if (t.phase === 'done') return 100
+    if (t.phase === 'failed' || t.phase === 'canceled') return 100
+    if (t.phase === 'queued') return 0
+    // in-flight
+    const p = t.percent
+    if (p < 0) return 0
+    return Math.min(99, p)
+  }
+  const sum = list.reduce((acc, t) => acc + contribution(t), 0)
   const overall = list.length > 0 ? sum / list.length : 0
   return {
     totalTasks: list.length,
@@ -429,6 +456,17 @@ function clamp(n: number, lo: number, hi: number): number {
 function humanPct(p: number): string {
   if (p < 0) return '…'
   return p.toFixed(0) + '%'
+}
+
+/**
+ * `pulling <12-hex-digest>` is Ollama's per-layer progress status. The
+ * underlying NDJSON emits this dozens of times per layer (one per
+ * progress tick). The engine already surfaces the same fact via
+ * `task-phase` ('downloading') and `task-progress` events, so forwarding
+ * every variant as a log line just spams subscribers.
+ */
+function isNoisyPullLine(line: string): boolean {
+  return /^pulling [0-9a-f]{8,}$/i.test(line.trim())
 }
 
 function classifyTaskError(message: string | undefined): boolean {

@@ -9,7 +9,13 @@
 import fs from 'fs'
 import path from 'path'
 import { renderVerdictYamlFromPlan } from './templates.js'
-import { GENERAL_PACK, MOE_PACK, ENV_EXAMPLE } from './templates.js'
+import {
+  GENERAL_PACK,
+  MOE_PACK,
+  ENV_EXAMPLE,
+  loadQuantizationPack,
+  QUANTIZATION_PACK_STUB,
+} from './templates.js'
 import type { Plan } from './events.js'
 
 export type ConfigWriteAction =
@@ -120,6 +126,14 @@ function scaffoldExtras(rootDir: string): void {
 
   const moePath = path.join(packsDir, 'moe.yaml')
   if (!fs.existsSync(moePath)) fs.writeFileSync(moePath, MOE_PACK)
+
+  // Mirror `verdict init`: write the quantization pack from the bundled
+  // file when available, fall back to a pointer stub. Without this,
+  // `verdict quants` later breaks for users who came in through onboarding.
+  const quantPath = path.join(packsDir, 'quantization.yaml')
+  if (!fs.existsSync(quantPath)) {
+    fs.writeFileSync(quantPath, loadQuantizationPack() ?? QUANTIZATION_PACK_STUB)
+  }
 
   const envExamplePath = path.join(rootDir, '.env.example')
   if (!fs.existsSync(envExamplePath)) fs.writeFileSync(envExamplePath, ENV_EXAMPLE)
