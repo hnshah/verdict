@@ -1,8 +1,10 @@
 /**
  * `verdict onboarding` CLI command. Wraps the engine, picks the right
- * renderer (TUI or headless) based on environment.
+ * renderer (Ink TUI or headless) based on environment.
  */
 
+import React from 'react'
+import { render } from 'ink'
 import chalk from 'chalk'
 import {
   isMarkStale,
@@ -17,6 +19,7 @@ import {
 } from './download/headless.js'
 import { writeMark } from './persistence.js'
 import type { OnboardingMark } from './events.js'
+import { Onboarding } from '../tui/screens/Onboarding/index.js'
 
 export interface OnboardingCliOptions {
   headless?: boolean
@@ -77,13 +80,24 @@ export async function onboardingCommand(opts: OnboardingCliOptions = {}): Promis
     }
   }
 
-  // 3. Start the engine.
-  const headless =
-    opts.headless ||
-    opts.json ||
-    !process.stdout.isTTY ||
-    !!process.env['CI']
+  // 3. Pick renderer mode. Explicit --headless/--json wins; otherwise prefer
+  // the Ink TUI when stdout is a TTY (and we're not in CI).
+  const useTui =
+    !opts.headless &&
+    !opts.json &&
+    !!process.stdout.isTTY &&
+    !process.env['CI']
 
+  if (useTui) {
+    return runInkTui(opts)
+  }
+
+  return runHeadless(opts)
+}
+
+// ─── TUI launcher ──────────────────────────────────────────────────────────
+
+async function runInkTui(opts: OnboardingCliOptions): Promise<number> {
   const controller = startOnboarding({
     configPath: opts.configPath,
     catalogPath: opts.catalogPath,
@@ -92,41 +106,76 @@ export async function onboardingCommand(opts: OnboardingCliOptions = {}): Promis
     detectOnly: opts.detectOnly,
   })
 
-  // 4. Attach renderer.
-  let unsubRender = () => undefined as void
-  if (opts.json) {
-    unsubRender = attachJsonHeadless(controller)
-  } else if (headless) {
-    unsubRender = attachPeriodicHeadless(controller)
-  } else {
-    // Default: still headless until the TUI screen lands (we'll wire the
-    // Ink screen in a later milestone). The periodic renderer is the most
-    // useful default for now.
-    unsubRender = attachPeriodicHeadless(controller)
-  }
+  // Render Ink against the existing controller so the engine isn't
+  // recreated by the hook. exitOnCtrlC is false because the Onboarding
+  // screen handles Ctrl-C → controller.cancel itself (so the engine can
+  // clean up before we tear down React).
+  const instance = render(
+    React.createElement(Onboarding, {
+      controller,
+      onExit: () => {
+        // Stop the Ink reconciler; the surrounding `verdict onboarding`
+        // command will exit cleanly with the engine's final code.
+        instance.unmount()
+      },
+    }),
+    { exitOnCtrlC: false }
+  )
 
-  // 5. Install signal handlers so Ctrl-C cleanly cancels.
+  // SIGINT cleanly cancels through the engine (preserves cleanup).
   const sigintHandler = () => controller.cancel('SIGINT')
   process.on('SIGINT', sigintHandler)
   process.on('SIGTERM', sigintHandler)
 
-  // 6. Auto-drive: from welcome → next; from plan → next; from consent →
-  // consent-given. The TUI version of this will obviously stop for user
-  // input. For now, headless mode auto-advances based on the plan.
+  try {
+    await instance.waitUntilExit()
+  } finally {
+    process.off('SIGINT', sigintHandler)
+    process.off('SIGTERM', sigintHandler)
+  }
+  const final = controller.getState()
+  controller.dispose()
+
+  if (final.kind === 'done') return 0
+  if (final.kind === 'cancelled') return 130
+  if (final.kind === 'failed') return 1
+  return 0
+}
+
+// ─── Headless launcher ─────────────────────────────────────────────────────
+
+async function runHeadless(opts: OnboardingCliOptions): Promise<number> {
+  const controller = startOnboarding({
+    configPath: opts.configPath,
+    catalogPath: opts.catalogPath,
+    resume: opts.resume,
+    force: opts.force,
+    detectOnly: opts.detectOnly,
+  })
+
+  let unsubRender = () => undefined as void
+  if (opts.json) {
+    unsubRender = attachJsonHeadless(controller)
+  } else {
+    unsubRender = attachPeriodicHeadless(controller)
+  }
+
+  const sigintHandler = () => controller.cancel('SIGINT')
+  process.on('SIGINT', sigintHandler)
+  process.on('SIGTERM', sigintHandler)
+
+  // Headless mode auto-drives through welcome/plan/consent — there's no UI
+  // for the user to interact with.
   controller.on('state', (s: OnboardingState) => {
     if (s.kind === 'welcome') {
-      // Begin detect right away.
       setImmediate(() => controller.send({ type: 'next' }))
     } else if (s.kind === 'plan') {
-      // Auto-confirm in headless mode.
       setImmediate(() => controller.send({ type: 'next' }))
     } else if (s.kind === 'consent') {
-      // Auto-confirm. Real consent prompts come from the TUI.
       setImmediate(() => controller.send({ type: 'consent-given' }))
     }
   })
 
-  // 7. Wait for terminal.
   const final = await controller.waitForTerminal()
   process.off('SIGINT', sigintHandler)
   process.off('SIGTERM', sigintHandler)

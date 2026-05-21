@@ -11,6 +11,7 @@
  */
 
 import { useCallback, useEffect, useState } from 'react'
+import fs from 'fs'
 import { Box } from 'ink'
 import { MouseProvider } from '@ink-tools/ink-mouse'
 import { useKeymap } from './hooks/useKeymap.js'
@@ -33,7 +34,9 @@ import { EvalPacks } from './screens/EvalPacks.js'
 import { ConfigEditor } from './screens/ConfigEditor.js'
 import { Router } from './screens/Router.js'
 import { Serve } from './screens/Serve.js'
+import { Onboarding } from './screens/Onboarding/index.js'
 import { loadSession, updateSession } from './utils/session.js'
+import { readMark } from '../onboarding/persistence.js'
 import type { EvalHistoryRow } from '../db/client.js'
 
 export function App() {
@@ -42,12 +45,18 @@ export function App() {
   const [bootstrapped, setBootstrapped] = useState(false)
 
   // Restore last active screen on first render (but skip run-detail which
-  // needs a hydrated row to make sense).
+  // needs a hydrated row to make sense). On a brand-new install (no
+  // verdict.yaml + no completed onboarding mark), route to onboarding
+  // instead of the last-seen screen.
   useEffect(() => {
     if (bootstrapped) return
-    const sess = loadSession()
-    if (sess.lastScreen && sess.lastScreen !== 'run-detail' && sess.lastScreen !== state.screen) {
-      dispatch({ type: 'set-screen', screen: sess.lastScreen })
+    if (shouldFirstRun()) {
+      dispatch({ type: 'set-screen', screen: 'onboarding' })
+    } else {
+      const sess = loadSession()
+      if (sess.lastScreen && sess.lastScreen !== 'run-detail' && sess.lastScreen !== state.screen) {
+        dispatch({ type: 'set-screen', screen: sess.lastScreen })
+      }
     }
     setBootstrapped(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,6 +114,7 @@ export function App() {
       case 'config':      return <ConfigEditor onBack={() => goto('home')} />
       case 'router':      return <Router onBack={() => goto('home')} />
       case 'serve':       return <Serve onBack={() => goto('home')} />
+      case 'onboarding':  return <Onboarding onExit={() => goto('home')} />
       default:            return <Home />
     }
   }
@@ -145,4 +155,20 @@ export function App() {
       </ToastProvider>
     </MouseProvider>
   )
+}
+
+/**
+ * First-run detection: brand-new install with no verdict.yaml and no
+ * completed/skipped onboarding mark. The TUI auto-routes to the onboarding
+ * screen on launch in that case.
+ */
+function shouldFirstRun(): boolean {
+  try {
+    if (fs.existsSync('./verdict.yaml')) return false
+    const mark = readMark()
+    if (mark && (mark.status === 'completed' || mark.status === 'skipped')) return false
+    return true
+  } catch {
+    return false
+  }
 }

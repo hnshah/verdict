@@ -37,6 +37,7 @@ const SCREEN_NAMES: Record<Screen, string> = {
   'config':     'Config',
   'router':     'Router',
   'serve':      'Serve',
+  'onboarding': 'Onboarding',
 }
 
 const SHORT_NAMES: Record<Screen, string> = {
@@ -53,6 +54,7 @@ const SHORT_NAMES: Record<Screen, string> = {
   'config':     'Cfg',
   'router':     'Rtr',
   'serve':      'Srv',
+  'onboarding': 'Setup',
 }
 
 function useTerminalWidth(): number {
