@@ -15,6 +15,19 @@ function copyUiStatic(): void {
   fs.cpSync(src, dst, { recursive: true })
 }
 
+/**
+ * Mirror `src/templates/**` into `dist/templates/**` so `verdict init
+ * --template <name>` can read the starter yaml files at runtime, both
+ * from the published npm package and a local `npm link`.
+ */
+function copyTemplates(): void {
+  const src = path.resolve('src/templates')
+  const dst = path.resolve('dist/templates')
+  if (!fs.existsSync(src)) return
+  fs.rmSync(dst, { recursive: true, force: true })
+  fs.cpSync(src, dst, { recursive: true })
+}
+
 export default defineConfig([
   // CLI bundle — executable with shebang
   {
@@ -34,6 +47,7 @@ export default defineConfig([
     },
     onSuccess: async () => {
       copyUiStatic()
+      copyTemplates()
     },
   },
   // Library bundle — programmatic API for `import { runEvals } from '@hnshah/verdict'`
