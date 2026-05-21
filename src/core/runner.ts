@@ -360,13 +360,25 @@ export async function runEvals(
         let score: JudgeScore
 
         if (evalCase.assertions && evalCase.assertions.length > 0) {
-          // Multi-assertion mode: run each assertion, aggregate with configured mode
+          // Multi-assertion mode: run each assertion, aggregate with the
+          // case's configured mode (defaults to 'min'). When mode is
+          // 'weighted' we collect per-assertion `weight` values from the
+          // assertions themselves so YAML authors can prioritize, e.g.,
+          // an LLM rubric score over a contains-check.
           const assertionScores: JudgeScore[] = []
+          const weights: number[] = []
           for (const assertion of evalCase.assertions) {
             const s = scoreAssertion(assertion, resp.text, resp.tool_calls)
-            if (s) assertionScores.push(s)
+            if (s) {
+              assertionScores.push(s)
+              weights.push(assertion.weight ?? 1)
+            }
           }
-          score = aggregateScores(assertionScores)
+          score = aggregateScores(
+            assertionScores,
+            evalCase.aggregation ?? 'min',
+            evalCase.aggregation === 'weighted' ? weights : undefined
+          )
         } else if (evalCase.scorer === 'similar') {
           const baseEmbeddingConfig = config.judge.embedding_model ?? {
             base_url: judgeModel.base_url ?? 'http://localhost:11434/v1',

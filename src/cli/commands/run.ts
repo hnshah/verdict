@@ -204,10 +204,14 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     }
   }
 
-  // Auto-compare with default baseline if it exists
+  // Auto-compare with default baseline if it exists. Pull description from
+  // the sidecar so PR comments / reporters can surface "vs baseline
+  // production-v1.2 — before sonnet-4.6 upgrade".
   const defaultBaseline = loadBaseline('default')
   if (defaultBaseline) {
-    const comparison = compareWithBaseline(defaultBaseline, result, 'default')
+    const { loadBaselineMeta } = await import('../../core/baseline.js')
+    const meta = loadBaselineMeta('default')
+    const comparison = compareWithBaseline(defaultBaseline, result, 'default', meta?.description)
     result.baselineComparison = comparison
     if (!opts.json) printBaselineComparison(comparison)
   }

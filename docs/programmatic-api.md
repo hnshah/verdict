@@ -8,14 +8,64 @@ Use Verdict as a library in your own scripts, CI pipelines, or custom tools.
 npm install @hnshah/verdict
 ```
 
-## Quick Start
+## Quick Start (one-liner)
+
+```ts
+import { runEvalsFromConfig } from '@hnshah/verdict'
+
+const result = await runEvalsFromConfig('./verdict.yaml', {
+  onProgress: msg => console.log(msg),
+})
+
+console.log(`Run: ${result.run_id}`)
+for (const [modelId, summary] of Object.entries(result.summary)) {
+  console.log(`${modelId}: ${summary.avg_total.toFixed(2)}/10 — ${summary.cases_run} cases`)
+}
+```
+
+`runEvalsFromConfig` loads the YAML, resolves eval packs relative to the
+config's directory, and runs everything in one shot. Use it when the
+config file is the source of truth.
+
+### Options
+
+```ts
+type RunEvalsFromConfigOptions = {
+  onProgress?: (msg: string) => void
+  resume?: boolean           // resume from checkpoint
+  categoryFilter?: string[]  // only run these case categories
+  preload?: boolean          // default true; disable for cloud-only configs
+  packs?: string[]           // override config.packs (paths relative to config dir)
+}
+```
+
+### Embed in a Next.js / Express route
+
+```ts
+// app/api/eval/route.ts
+import { runEvalsFromConfig } from '@hnshah/verdict'
+
+export async function POST() {
+  const result = await runEvalsFromConfig('./verdict.yaml', { preload: false })
+  return Response.json({
+    winner: result.summary[Object.keys(result.summary).sort(
+      (a, b) => result.summary[b].avg_total - result.summary[a].avg_total
+    )[0]],
+  })
+}
+```
+
+## Advanced: manual orchestration
+
+When you need finer control (custom pack lists, mutated configs, in-memory
+packs), call the three primitives directly:
 
 ```ts
 import { loadConfig, loadEvalPack, runEvals } from '@hnshah/verdict'
 import path from 'path'
 
-const config = loadConfig('./verdict.config.yaml')
-const configDir = path.dirname(path.resolve('./verdict.config.yaml'))
+const config = loadConfig('./verdict.yaml')
+const configDir = path.dirname(path.resolve('./verdict.yaml'))
 const packs = config.packs.map(p => loadEvalPack(p, configDir))
 
 const result = await runEvals(config, packs, msg => console.log(msg))

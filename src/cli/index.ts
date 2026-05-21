@@ -145,6 +145,7 @@ baseline
   .command('save <name>')
   .description('Save the most recent result as a named baseline')
   .option('-c, --config <path>', 'Config file', './verdict.yaml')
+  .option('--describe <text>', 'Short note about the baseline (e.g. "before sonnet-4.6 upgrade")')
   .action(baselineSaveCommand)
 
 baseline

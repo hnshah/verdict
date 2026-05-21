@@ -365,6 +365,8 @@ export interface BaselineDelta {
 export interface BaselineComparison {
   baselineName: string
   baselineDate: string
+  /** Human-readable description set via `baseline save --describe`. */
+  baselineDescription?: string
   deltas: BaselineDelta[]
   newModels: string[]
   removedModels: string[]
