@@ -23,6 +23,9 @@ import { setupCommand } from './commands/setup.js'
 import { prCommentCommand } from './commands/pr-comment.js'
 import { badgeCommand } from './commands/badge.js'
 import { quantsCommand } from './commands/quants.js'
+import { onboardingCommand } from '../onboarding/cli.js'
+import { readMark } from '../onboarding/persistence.js'
+import fs from 'fs'
 
 process.stdout.on('error', err => {
   if ((err as NodeJS.ErrnoException).code === 'EPIPE') process.exit(0)
@@ -334,4 +337,47 @@ program
   .option('--dry-run', 'Show what would be uploaded without doing it')
   .action(contributeCommand)
 
-program.parse()
+program
+  .command('onboarding')
+  .description('First-run setup: detect environment, install Ollama, pull models, write verdict.yaml')
+  .option('--headless', 'Skip the TUI; print periodic status to stdout')
+  .option('--json', 'Emit NDJSON events to stdout (machine-readable)')
+  .option('--force', 'Ignore prior completed/skipped mark and restart')
+  .option('--resume', 'Resume from saved progress if a stale in-progress mark exists')
+  .option('--detect-only', 'Run detection, print the resulting plan, then exit')
+  .option('--skip', "Record 'skipped' status and exit immediately")
+  .option('-c, --config <path>', 'verdict.yaml path', './verdict.yaml')
+  .option('--catalog <path>', 'Model catalog path', './configs/model-catalog.yaml')
+  .action(async opts => {
+    const code = await onboardingCommand({
+      headless: opts.headless,
+      json: opts.json,
+      force: opts.force,
+      resume: opts.resume,
+      detectOnly: opts.detectOnly,
+      skip: opts.skip,
+      configPath: opts.config,
+      catalogPath: opts.catalog,
+    })
+    process.exit(code)
+  })
+
+// First-run dispatch: `verdict` with no args, on a TTY, with no verdict.yaml
+// and no prior mark → launch onboarding instead of help. CI / non-TTY / no-args
+// fall through to Commander's default help.
+async function maybeFirstRunDispatch(): Promise<boolean> {
+  if (process.argv.length > 2) return false
+  if (!process.stdout.isTTY) return false
+  if (process.env['CI']) return false
+  if (process.env['VERDICT_SKIP_ONBOARDING'] === '1') return false
+  if (fs.existsSync('./verdict.yaml')) return false
+  const mark = readMark()
+  if (mark && (mark.status === 'completed' || mark.status === 'skipped')) return false
+  // Launch onboarding.
+  const code = await onboardingCommand({})
+  process.exit(code)
+}
+
+void maybeFirstRunDispatch().then(handled => {
+  if (!handled) program.parse()
+})
