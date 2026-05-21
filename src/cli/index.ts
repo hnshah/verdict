@@ -23,6 +23,7 @@ import { setupCommand } from './commands/setup.js'
 import { prCommentCommand } from './commands/pr-comment.js'
 import { badgeCommand } from './commands/badge.js'
 import { quantsCommand } from './commands/quants.js'
+import { tiersListCommand, tiersShowCommand } from './commands/tiers.js'
 import { onboardingCommand } from '../onboarding/cli.js'
 import { readMark } from '../onboarding/persistence.js'
 import fs from 'fs'
@@ -58,6 +59,7 @@ program
   .option('-p, --pack <names>', 'Run specific pack(s), comma-separated')
   .option('-e, --eval <names>', 'Run named eval(s) from registry, comma-separated')
   .option('-m, --models <ids>', 'Run specific model(s), comma-separated')
+  .option('--tier <name>', 'Use a hardware-tier preset (8gb, 16gb, 24gb, 32gb, 64gb). Replaces the config models. Run `verdict tiers` to see.')
   .option('--dry-run', 'Preview without calling any APIs')
   .option('--resume', 'Resume from last checkpoint')
   .option('--question <text>', 'Question for synthesis agent to answer after eval')
@@ -68,6 +70,16 @@ program
   .option('--verbose', 'Show model call results, scores, and timing as they happen')
   .option('--debug', 'Show verbose output plus raw API request/response bodies')
   .action(runCommand)
+
+const tiers = program
+  .command('tiers')
+  .description('Hardware-tier model presets — list / show what verdict run --tier resolves to')
+  .action(tiersListCommand)
+
+tiers
+  .command('show <name>')
+  .description('Print the models a tier resolves to')
+  .action(tiersShowCommand)
 
 const models = program
   .command('models')

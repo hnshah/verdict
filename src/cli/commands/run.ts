@@ -13,12 +13,14 @@ import type { SlackCard } from '../../types/index.js'
 import { setLogLevel } from '../../utils/logger.js'
 import { humanizeProviderError, formatHumanError } from '../../utils/errors.js'
 import { contributeCommand } from './contribute.js'
+import { resolveTier, listTierNames } from '../../core/tiers.js'
 
 interface RunOptions {
   config: string
   pack?: string
   eval?: string
   models?: string
+  tier?: string
   dryRun?: boolean
   resume?: boolean
   question?: string
@@ -50,6 +52,28 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   } catch (err) {
     console.error(chalk.red(`  ${err instanceof Error ? err.message : err}`))
     process.exit(1)
+  }
+
+  if (opts.tier && opts.models) {
+    console.error(chalk.red('  --tier and --models are mutually exclusive. Pick one.'))
+    process.exit(1)
+  }
+
+  if (opts.tier) {
+    const resolved = resolveTier(opts.tier)
+    if (!resolved) {
+      console.error(chalk.red(`  Unknown tier: ${opts.tier}`))
+      console.error(chalk.dim(`  Available: ${listTierNames().join(', ')}`))
+      console.error(chalk.dim(`  Run \`verdict tiers\` to see details.`))
+      process.exit(1)
+    }
+    // Replace the config's models with the tier preset, and override the judge
+    // if the user hasn't explicitly set one in their config.
+    config.models = resolved.models
+    if (!config.judge?.model || config.judge.model === '') {
+      config.judge = { ...config.judge, model: resolved.judge }
+    }
+    log(`  ${chalk.bold('Tier:')}   ${chalk.cyan(resolved.tier.name)} ${chalk.dim('— ' + resolved.tier.description)}`)
   }
 
   if (opts.models) {
