@@ -101,13 +101,13 @@ cases:
 cd /path/to/verdict
 
 # Run specific eval pack
-npx verdict run --eval-pack eval-packs/my-test.yaml
+npx @hnshah/verdict run --eval-pack eval-packs/my-test.yaml
 
 # Run with specific models
-npx verdict run --eval-pack eval-packs/my-test.yaml --models ollama:phi4,ollama:qwen2.5:7b
+npx @hnshah/verdict run --eval-pack eval-packs/my-test.yaml --models ollama:phi4,ollama:qwen2.5:7b
 
 # Run all eval packs
-npx verdict run --all
+npx @hnshah/verdict run --all
 ```
 
 ### 3. Results Saved to `results/`
@@ -482,7 +482,7 @@ Fix issues, then rebuild.
 
 ### Run Eval
 ```bash
-npx verdict run --eval-pack eval-packs/my-test.yaml
+npx @hnshah/verdict run --eval-pack eval-packs/my-test.yaml
 ```
 
 ### Add to Dashboard

@@ -5,13 +5,13 @@ Use Verdict as a library in your own scripts, CI pipelines, or custom tools.
 ## Installation
 
 ```bash
-npm install verdict
+npm install @hnshah/verdict
 ```
 
 ## Quick Start
 
 ```ts
-import { loadConfig, loadEvalPack, runEvals } from 'verdict'
+import { loadConfig, loadEvalPack, runEvals } from '@hnshah/verdict'
 import path from 'path'
 
 const config = loadConfig('./verdict.config.yaml')
@@ -33,7 +33,7 @@ for (const [modelId, summary] of Object.entries(result.summary)) {
 Load and validate a Verdict YAML config file. Resolves environment variables and provider shortcuts.
 
 ```ts
-import { loadConfig } from 'verdict'
+import { loadConfig } from '@hnshah/verdict'
 
 const config = loadConfig('./verdict.config.yaml')
 ```
@@ -45,7 +45,7 @@ Throws if the file is missing or the config is invalid.
 Load and validate a YAML eval pack. `configDir` is used to resolve relative pack paths.
 
 ```ts
-import { loadEvalPack } from 'verdict'
+import { loadEvalPack } from '@hnshah/verdict'
 
 const pack = loadEvalPack('./eval-packs/general.yaml', process.cwd())
 ```
@@ -55,7 +55,7 @@ const pack = loadEvalPack('./eval-packs/general.yaml', process.cwd())
 Run evaluations across all models and eval packs.
 
 ```ts
-import { loadConfig, loadEvalPack, runEvals } from 'verdict'
+import { loadConfig, loadEvalPack, runEvals } from '@hnshah/verdict'
 
 const config = loadConfig('./verdict.config.yaml')
 const packs = config.packs.map(p => loadEvalPack(p, '.'))
@@ -83,7 +83,7 @@ const result = await runEvals(
 Score a single response using an LLM judge.
 
 ```ts
-import { judgeResponse } from 'verdict'
+import { judgeResponse } from '@hnshah/verdict'
 
 const score = await judgeResponse(
   judgeModel,   // ModelConfig for the judge
@@ -101,7 +101,7 @@ console.log(`Score: ${score.total}/10 — ${score.reasoning}`)
 Score a response using deterministic (non-LLM) scorers.
 
 ```ts
-import { scoreDeterministic } from 'verdict'
+import { scoreDeterministic } from '@hnshah/verdict'
 
 // Exact match
 scoreDeterministic('exact', 'Paris', 'Paris')       // { total: 10, ... }
@@ -131,7 +131,7 @@ Returns `null` for unknown scorer types.
 Route prompts to the best model based on eval history.
 
 ```ts
-import { VerdictRouter } from 'verdict'
+import { VerdictRouter } from '@hnshah/verdict'
 
 const router = new VerdictRouter('./verdict-router.db')
 const { classification, choice } = await router.route('Explain quantum computing')
@@ -158,5 +158,5 @@ import type {
   CaseResult,
   ModelSummary,
   EvalResult,
-} from 'verdict'
+} from '@hnshah/verdict'
 ```

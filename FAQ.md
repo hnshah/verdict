@@ -63,8 +63,8 @@ API keys are only needed if you want to test cloud models (OpenAI, Anthropic, et
 **Yes!** Use `npx`:
 
 ```bash
-npx verdict init
-npx verdict run
+npx @hnshah/verdict init
+npx @hnshah/verdict run
 ```
 
 No global install needed. npx downloads and runs Verdict temporarily.
@@ -89,17 +89,17 @@ No global install needed. npx downloads and runs Verdict temporarily.
 
 **Option 1: Global install (recommended)**
 ```bash
-npm install -g verdict
+npm install -g @hnshah/verdict
 ```
 
 **Option 2: npx (no install)**
 ```bash
-npx verdict init
+npx @hnshah/verdict init
 ```
 
 **Option 3: Project dependency**
 ```bash
-npm install verdict
+npm install @hnshah/verdict
 ```
 
 ---
@@ -845,7 +845,7 @@ verdict baseline compare before-finetuning
 **Yes! Use the programmatic API:**
 
 ```typescript
-import { VerdictRunner, VerdictRouter } from 'verdict';
+import { VerdictRunner, VerdictRouter } from '@hnshah/verdict';
 
 // Run evals
 const runner = new VerdictRunner('./verdict.yaml');
@@ -1031,7 +1031,7 @@ settings:
 **Fix:**
 ```bash
 # Option 1: Use npx
-npx verdict init
+npx @hnshah/verdict init
 
 # Option 2: Fix PATH
 echo 'export PATH="$PATH:$(npm config get prefix)/bin"' >> ~/.zshrc

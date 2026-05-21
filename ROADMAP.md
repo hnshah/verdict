@@ -213,7 +213,7 @@ Results, dashboards, skipped-model reasons, and regressions should be tracked co
 
 ### MT-4: Export a programmatic API
 
-**Problem:** verdict is CLI-only. No `import { runEvals } from 'verdict'`. Can't be used as a library in CI scripts, custom tools, or other frameworks.
+**Problem:** verdict is CLI-only. No `import { runEvals } from '@hnshah/verdict'`. Can't be used as a library in CI scripts, custom tools, or other frameworks.
 
 **Action:**
 - Add `src/index.ts` that exports: `runEvals`, `loadConfig`, `loadEvalPack`, `judgeResponse`, `scoreDeterministic`, `VerdictRouter`
@@ -337,7 +337,7 @@ promptfoo has `promptfoo view` which launches a full React app.
 > Users need custom scoring logic (e.g., "check that the output is valid Python by running `python -c`"). Add a `javascript` scorer that accepts a file path or inline function: `scorer: javascript`, `scoreFn: "file://score.js"`.
 
 **Issue #9: "Export programmatic API (library mode)"**
-> Verdict is CLI-only. There's no way to `import { runEvals } from 'verdict'`. Add an `src/index.ts` entry point exporting core functions and update `package.json` exports.
+> Verdict is CLI-only. There's no way to `import { runEvals } from '@hnshah/verdict'`. Add an `src/index.ts` entry point exporting core functions and update `package.json` exports.
 
 ### Medium Priority
 
@@ -444,7 +444,7 @@ promptfoo has `promptfoo view` which launches a full React app.
 - **Task-custom eval design** — write your own eval cases for your specific use case vs. fixed academic benchmarks
 - **Real-world model comparison** — focuses on practical "which model for my workload" vs. academic leaderboard scores
 - **Conversational eval** — multi-turn and tool-calling support. lm-eval is single-turn completion oriented
-- **Lightweight** — `npm install -g verdict` vs. complex Python environment setup with optional extras
+- **Lightweight** — `npm install -g @hnshah/verdict` vs. complex Python environment setup with optional extras
 
 ### Scorer Comparison Table
 

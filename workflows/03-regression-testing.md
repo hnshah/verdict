@@ -178,7 +178,7 @@ jobs:
           ollama pull qwen2.5:7b
       
       - name: Install Verdict
-        run: npm install -g verdict
+        run: npm install -g @hnshah/verdict
       
       - name: Run Evals
         run: verdict run --packs production-scenarios

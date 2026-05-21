@@ -297,7 +297,7 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     ping({
       models_count: result.models.length,
       packs_count: packs.length,
-      verdict_version: '0.3.0',
+      verdict_version: '0.4.0',
     })
   } catch { /* never let telemetry affect the user */ }
 

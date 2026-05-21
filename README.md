@@ -47,9 +47,9 @@ You're choosing between models based on:
 ### Install
 
 ```bash
-npm install -g verdict
+npm install -g @hnshah/verdict
 # or
-npx verdict init
+npx @hnshah/verdict init
 ```
 
 ### Initialize

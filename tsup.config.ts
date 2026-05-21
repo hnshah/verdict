@@ -36,7 +36,7 @@ export default defineConfig([
       copyUiStatic()
     },
   },
-  // Library bundle — programmatic API for `import { runEvals } from 'verdict'`
+  // Library bundle — programmatic API for `import { runEvals } from '@hnshah/verdict'`
   {
     entry: { index: 'src/index.ts' },
     format: ['esm'],

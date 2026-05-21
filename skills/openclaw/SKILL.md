@@ -14,7 +14,7 @@ corpus_score_projected: "98% (245/250)"
 ## Architecture (Key Facts)
 
 - **Language/Stack:** TypeScript (ESM), Node 18+, built with tsup. ~9,700 LOC across 53 files.
-- **Dual entry:** CLI (`verdict run|init|models|history|route|serve|validate|compare|baseline|daemon|watch`) and programmatic library (`import { runEvals, loadConfig } from 'verdict'`).
+- **Dual entry:** CLI (`verdict run|init|models|history|route|serve|validate|compare|baseline|daemon|watch`) and programmatic library (`import { runEvals, loadConfig } from '@hnshah/verdict'`).
 - **Single provider path:** ALL model providers use OpenAI-compatible HTTP (`POST /v1/chat/completions`) via `src/providers/compat.ts`. No per-provider adapters. Supports Ollama, MLX, LM Studio, OpenRouter, Groq, OpenAI, etc.
 - **Config:** `verdict.yaml` (Zod-validated) defines models, judge, packs, run settings, output formats. Supports `${ENV_VAR:-default}` interpolation.
   - ⚠️ `${UNSET_VAR}` (without `:-default` suffix) resolves to empty string `""` before Zod validation. For `api_key` this becomes `""` which passes string validation but fails at the provider. Always use `${VAR:-default}` syntax for fallbacks.
