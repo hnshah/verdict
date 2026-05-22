@@ -112,6 +112,13 @@ models:
     family: gemma
     tags: [general]
 
+  - name: "gemma4:e4b"
+    provider: ollama
+    params_b: 8
+    default_quant: q4_K_M
+    family: gemma
+    tags: [general, reasoning, coding, multimodal, local]
+
   - name: "mistral:7b"
     provider: ollama
     params_b: 7

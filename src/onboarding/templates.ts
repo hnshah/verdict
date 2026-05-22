@@ -4,6 +4,9 @@
  * strips comments, which matter here for user-facing docs in the file.
  */
 
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import type { Plan } from './events.js'
 
 // ─── verdict.yaml ───────────────────────────────────────────────────────────
@@ -249,6 +252,36 @@ cases:
     criteria: "Correct SQL with GROUP BY, SUM, ORDER BY DESC, LIMIT 3. Reasonable index suggestion (customer_id or composite)."
     tags: [coding, sql, performance]
 `
+
+// ─── eval-packs/quantization.yaml ──────────────────────────────────────────
+
+export const QUANTIZATION_PACK_STUB = `# eval-packs/quantization.yaml
+name: Quantization
+version: 1.0.0
+description: Minimal fallback pack for checking structured output degradation.
+
+cases:
+  - id: quant-001
+    prompt: "Return only this JSON object: {\"status\":\"ok\",\"count\":3}"
+    criteria: "Valid JSON only, exact status and count fields"
+    scorer: json
+    expected: "{\"status\":\"ok\",\"count\":3}"
+    tags: [json, structured-output, quantization-sensitive]
+`
+
+export function loadQuantizationPack(): string | null {
+  const here = path.dirname(fileURLToPath(import.meta.url))
+  const candidates = [
+    path.resolve(here, '..', '..', 'eval-packs', 'quantization.yaml'),
+    path.resolve(process.cwd(), 'eval-packs', 'quantization.yaml'),
+  ]
+
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) return fs.readFileSync(candidate, 'utf8')
+  }
+
+  return null
+}
 
 // ─── .env.example ───────────────────────────────────────────────────────────
 
