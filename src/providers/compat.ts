@@ -11,6 +11,7 @@ import fs from 'fs'
 import type { ModelConfig, ModelResponse, ToolDef } from '../types/index.js'
 import { callOpenClaw, type OpenClawConfig } from './openclaw.js'
 import { callSubAgent, type SubAgentConfig } from './subagent.js'
+import { callOllamaChatNative, type OllamaChatMessage } from './ollama-native.js'
 import { log as vlog } from '../utils/logger.js'
 import { humanizeProviderError, formatHumanError } from '../utils/errors.js'
 
@@ -128,9 +129,22 @@ export async function callModel(
     })
 
     const latency_ms = Date.now() - start
-    const text = response.choices[0]?.message?.content ?? ''
-    const input_tokens = response.usage?.prompt_tokens ?? 0
-    const output_tokens = response.usage?.completion_tokens ?? 0
+    let text = response.choices[0]?.message?.content ?? ''
+    let input_tokens = response.usage?.prompt_tokens ?? 0
+    let output_tokens = response.usage?.completion_tokens ?? 0
+
+    if (!text && config.provider === 'ollama') {
+      const native = await callOllamaChatNative(config, messages as OllamaChatMessage[], {
+        max_tokens: config.max_tokens,
+        temperature: 0,
+      })
+      if (native?.text) {
+        text = native.text
+        input_tokens = native.input_tokens || input_tokens
+        output_tokens = native.output_tokens || output_tokens
+      }
+    }
+
     const cost_usd = config.cost_per_1m_input && config.cost_per_1m_output
       ? (input_tokens / 1_000_000) * config.cost_per_1m_input
         + (output_tokens / 1_000_000) * config.cost_per_1m_output
@@ -203,9 +217,22 @@ export async function callModelMultiTurn(
     })
 
     const latency_ms = Date.now() - start
-    const text = response.choices[0]?.message?.content ?? ''
-    const input_tokens = response.usage?.prompt_tokens ?? 0
-    const output_tokens = response.usage?.completion_tokens ?? 0
+    let text = response.choices[0]?.message?.content ?? ''
+    let input_tokens = response.usage?.prompt_tokens ?? 0
+    let output_tokens = response.usage?.completion_tokens ?? 0
+
+    if (!text && config.provider === 'ollama') {
+      const native = await callOllamaChatNative(config, allMessages as OllamaChatMessage[], {
+        max_tokens: config.max_tokens,
+        temperature: 0,
+      })
+      if (native?.text) {
+        text = native.text
+        input_tokens = native.input_tokens || input_tokens
+        output_tokens = native.output_tokens || output_tokens
+      }
+    }
+
     const cost_usd = config.cost_per_1m_input && config.cost_per_1m_output
       ? (input_tokens / 1_000_000) * config.cost_per_1m_input
         + (output_tokens / 1_000_000) * config.cost_per_1m_output

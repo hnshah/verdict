@@ -79,6 +79,25 @@ verdict run --pack quantization,moe
 verdict run --models local-fast,cloud-mini
 ```
 
+## Local Gemma 4 dogfood
+
+Verdict includes example configs for exercising local runs with official
+Ollama `gemma4:e4b`:
+
+```bash
+ollama pull gemma4:e4b
+ollama pull nomic-embed-text
+ollama pull qwen2.5:7b
+ollama pull llama3.2:3b
+
+npm run dev -- run --config configs/examples/gemma4-dogfood.yaml --dry-run
+npm run dev -- run --config configs/examples/gemma4-dogfood.yaml --resume
+npm run dev -- run --config configs/examples/gemma4-dogfood-self-judge.yaml --resume
+```
+
+See [Provider setup](./providers.md#gemma-4-local-dogfood) for the Qwen-judged
+and Gemma self-judge paths.
+
 ## Next steps
 
 - [Writing eval packs](./writing-eval-packs.md)

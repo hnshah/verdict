@@ -1,6 +1,7 @@
 import OpenAI from 'openai'
 import type { ModelConfig, JudgeConfig, JudgeScore } from '../types/index.js'
 import type { OpenClawConfig } from '../providers/openclaw.js'
+import { callOllamaChatNative } from '../providers/ollama-native.js'
 
 const faithfulnessClientCache = new Map<string, OpenAI>()
 
@@ -81,6 +82,14 @@ export async function judgeFaithfulness(
       temperature: 0.0,
     })
     text = result.choices[0]?.message?.content ?? ''
+    if (!text && judgeModel.provider === 'ollama') {
+      const native = await callOllamaChatNative(
+        { ...judgeModel, max_tokens: 256 },
+        [{ role: 'user', content: faithfulnessPrompt }],
+        { max_tokens: 256, temperature: 0 }
+      )
+      text = native?.text ?? text
+    }
   }
 
   const parsed = parseFaithfulnessJson(text)

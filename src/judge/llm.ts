@@ -2,6 +2,7 @@ import OpenAI from 'openai'
 import type { ModelConfig, JudgeConfig, JudgeScore, CotChoice } from '../types/index.js'
 import { callOpenClaw, type OpenClawConfig } from '../providers/openclaw.js'
 import { callSubAgent, type SubAgentConfig } from '../providers/subagent.js'
+import { callOllamaChatNative } from '../providers/ollama-native.js'
 import { log as vlog } from '../utils/logger.js'
 
 const judgeClientCache = new Map<string, OpenAI>()
@@ -136,6 +137,14 @@ export async function judgeResponse(
     })
 
     text = result.choices[0]?.message?.content ?? ''
+    if (!text && judgeModel.provider === 'ollama') {
+      const native = await callOllamaChatNative(
+        { ...judgeModel, max_tokens: 256 },
+        [{ role: 'user', content: judgePrompt }],
+        { max_tokens: 256, temperature: 0 }
+      )
+      text = native?.text ?? text
+    }
   }
   vlog('debug', `judge ${judgeModel.id}: response`, text)
   const parsed = parseJudgeJson(text)

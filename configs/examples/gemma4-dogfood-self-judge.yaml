@@ -1,0 +1,37 @@
+version: "1.0"
+name: "Gemma 4 Dogfood Self-Judge"
+
+models:
+  - id: gemma4:e4b
+    provider: ollama
+    model: gemma4:e4b
+    host: "${OLLAMA_HOST:-localhost:11434}"
+    tags: [local, free, gemma, general, reasoning, coding, multimodal, judge]
+    timeout_ms: 180000
+    max_tokens: 2048
+
+judge:
+  model: gemma4:e4b
+  blind: true
+  rubric:
+    accuracy: 0.4
+    completeness: 0.4
+    conciseness: 0.2
+  embedding_model:
+    base_url: "http://${OLLAMA_HOST:-localhost:11434}/v1"
+    api_key: "none"
+    model: nomic-embed-text
+
+packs:
+  - ../../eval-packs/general.yaml
+  - ../../eval-packs/format-compliance.yaml
+  - ../../eval-packs/integration-test.yaml
+
+run:
+  concurrency: 1
+  retries: 1
+  cache: false
+
+output:
+  dir: ./results
+  formats: [json, markdown]
