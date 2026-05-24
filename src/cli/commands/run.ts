@@ -22,6 +22,7 @@ interface RunOptions {
   eval?: string
   models?: string
   tier?: string
+  frontier?: boolean
   dryRun?: boolean
   resume?: boolean
   question?: string
@@ -61,12 +62,15 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   }
 
   if (opts.tier) {
-    const resolved = resolveTier(opts.tier)
+    const resolved = resolveTier(opts.tier, { mode: opts.frontier ? 'frontier' : 'default' })
     if (!resolved) {
       console.error(chalk.red(`  Unknown tier: ${opts.tier}`))
       console.error(chalk.dim(`  Available: ${listTierNames().join(', ')}`))
       console.error(chalk.dim(`  Run \`verdict tiers\` to see details.`))
       process.exit(1)
+    }
+    if (opts.frontier && (!resolved.tier.frontier || resolved.tier.frontier.length === 0)) {
+      log(chalk.yellow(`  --frontier: tier ${resolved.tier.name} has no frontier candidates; using the standard list.`))
     }
     // Replace the config's models with the tier preset, and override the judge
     // if the user hasn't explicitly set one in their config.
@@ -74,7 +78,10 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     if (!config.judge?.model || config.judge.model === '') {
       config.judge = { ...config.judge, model: resolved.judge }
     }
-    log(`  ${chalk.bold('Tier:')}   ${chalk.cyan(resolved.tier.name)} ${chalk.dim('— ' + resolved.tier.description)}`)
+    const modeNote = opts.frontier && resolved.tier.frontier && resolved.tier.frontier.length > 0
+      ? chalk.yellow(' (frontier)')
+      : ''
+    log(`  ${chalk.bold('Tier:')}   ${chalk.cyan(resolved.tier.name)}${modeNote} ${chalk.dim('— ' + resolved.tier.description)}`)
   }
 
   if (opts.models) {

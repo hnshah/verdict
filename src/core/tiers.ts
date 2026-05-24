@@ -2,12 +2,17 @@
  * Hardware-tier model presets.
  *
  * Removes the "which models do I even pick?" cold-start cognitive load by
- * mapping a RAM envelope to a curated set of ~4-6 models that fit. Used by
+ * mapping a RAM envelope to a curated set of models that fit. Used by
  * `verdict run --tier <name>` and the `verdict tiers` command.
  *
- * Models are listed in priority order (most-recommended first). The judge
- * is whichever model is fastest + good-enough at that tier — usually the
- * smallest 7B in the list.
+ * Each tier has two lists:
+ *   - `models`     — primary candidates safe to keep warm 24/7. Listed in
+ *                    priority order (most-recommended first). The judge is
+ *                    typically the smallest 7B in the list.
+ *   - `frontier?`  — larger benchmark-only candidates that need exclusive
+ *                    use of the machine. Returned only when callers pass
+ *                    `{ mode: 'frontier' }` to `resolveTier`. Reachable from
+ *                    the CLI via `verdict run --tier <name> --frontier`.
  */
 
 import type { ModelConfig } from '../types/index.js'
@@ -26,6 +31,11 @@ export interface Tier {
   ram_gb: number                               // approximate RAM envelope
   judge_id: string                             // which model in `models` should be the judge
   models: TierModelSpec[]
+  /**
+   * Larger candidates that *can* run on this tier but are too tight to keep
+   * resident. Used with `resolveTier(name, { mode: 'frontier' })`.
+   */
+  frontier?: TierModelSpec[]
   aliases?: string[]                           // alternate names (e.g. 'm4-pro', 'mac-mini')
 }
 
@@ -70,11 +80,19 @@ export const TIERS: Tier[] = [
     judge_id: 'qwen2.5:7b',
     aliases: ['mac-mini-pro', 'm4-pro', 'macbook-pro-m3'],
     models: [
-      { id: 'qwen2.5:7b',       model: 'qwen2.5:7b',       provider: 'ollama', size_gb: 4.7 },
+      { id: 'qwen2.5:7b',       model: 'qwen2.5:7b',       provider: 'ollama', size_gb: 4.7, notes: 'safe default · judge' },
       { id: 'qwen2.5-coder:7b', model: 'qwen2.5-coder:7b', provider: 'ollama', size_gb: 4.7, notes: 'code' },
       { id: 'llama3.1:8b',      model: 'llama3.1:8b',      provider: 'ollama', size_gb: 4.9 },
-      { id: 'qwen2.5:14b',      model: 'qwen2.5:14b',      provider: 'ollama', size_gb: 9.0, notes: 'frontier of the tier' },
-      { id: 'phi3.5',           model: 'phi3.5',           provider: 'ollama', size_gb: 2.2 },
+      { id: 'qwen3:14b',        model: 'qwen3:14b',        provider: 'ollama', size_gb: 9.3, notes: 'qwen3 — strong reasoning' },
+      { id: 'gemma3:12b',       model: 'gemma3:12b',       provider: 'ollama', size_gb: 8.1, notes: '128K context' },
+      { id: 'qwen2.5:14b',      model: 'qwen2.5:14b',      provider: 'ollama', size_gb: 9.0 },
+      { id: 'phi3.5',           model: 'phi3.5',           provider: 'ollama', size_gb: 2.2, notes: 'fastest fallback' },
+    ],
+    // Larger candidates — pulled and benchmarked on demand, not kept warm 24/7.
+    // On 24 GB Apple Silicon these need exclusive use of the machine.
+    frontier: [
+      { id: 'gemma3:27b',  model: 'gemma3:27b',  provider: 'ollama', size_gb: 17,  notes: 'benchmark-only — needs ~21 GB RAM' },
+      { id: 'qwen3:32b',   model: 'qwen3:32b',   provider: 'ollama', size_gb: 20,  notes: 'benchmark-only — tight on 24 GB' },
     ],
   },
   {
@@ -146,10 +164,23 @@ export function expandTierModel(spec: TierModelSpec): ModelConfig {
 /**
  * Resolve a tier name to a full model list + recommended judge model id.
  * Returns null if the tier is unknown.
+ *
+ * `mode: 'frontier'` includes the tier's `frontier` candidates (e.g. larger
+ * models that need exclusive use of the machine — for benchmarking only).
+ * In frontier mode the judge is still drawn from the safe `models` list,
+ * since the larger candidates are the *subjects* of evaluation, not the
+ * scorers.
  */
-export function resolveTier(name: string): { tier: Tier; models: ModelConfig[]; judge: string } | null {
+export function resolveTier(
+  name: string,
+  opts: { mode?: 'default' | 'frontier' } = {},
+): { tier: Tier; models: ModelConfig[]; judge: string } | null {
   const tier = findTier(name)
   if (!tier) return null
-  const models = tier.models.map(expandTierModel)
+  const mode = opts.mode ?? 'default'
+  const specs = mode === 'frontier' && tier.frontier
+    ? [...tier.models, ...tier.frontier]
+    : tier.models
+  const models = specs.map(expandTierModel)
   return { tier, models, judge: tier.judge_id }
 }

@@ -10,6 +10,8 @@ import { scoreSimilar } from '../judge/similar.js'
 import { scoreDeterministic, isDeterministic, scoreToolCall, scoreLatency, scoreCost } from '../judge/deterministic.js'
 import { detectHardware, toRunResultFormat } from './hardware.js'
 import { preloadModels } from './preload.js'
+import { createRealProbe } from './machine.js'
+import { evaluateGuardLive, effectiveConcurrency, describeDisabledMisconfig, type ResourceGuardConfig, type GuardResult } from './resource-guard.js'
 
 /**
  * Detect environment information
@@ -269,7 +271,36 @@ export async function runEvals(
 
   const cases: CaseResult[] = checkpoint ? [...checkpoint.partialResults] : []
   const completedIds = new Set(checkpoint?.completedCaseIds ?? [])
-  const { concurrency } = config.run
+
+  // Resource guard — gate the run on live machine state before any model call.
+  // The guard config defaults to undefined (off); when present but
+  // `enabled: false`, we warn if the user set thresholds that we'll ignore.
+  const guardCfg = config.run.resource_guard as ResourceGuardConfig | undefined
+  const misconfig = describeDisabledMisconfig(guardCfg)
+  if (misconfig) log(`resource_guard: ${misconfig}`)
+
+  const probe = guardCfg?.enabled ? createRealProbe() : null
+  let lastGuardCheckAt = 0
+  const guardLog: Array<{ phase: 'start' | 'mid_run'; ts: string; result: GuardResult }> = []
+
+  if (probe && guardCfg) {
+    const { snapshot, guard } = await evaluateGuardLive(probe, guardCfg, {
+      configuredConcurrency: config.run.concurrency,
+    })
+    guardLog.push({ phase: 'start', ts: new Date().toISOString(), result: guard })
+    log(`resource_guard: ${guard.ok ? 'ok' : 'fail'} (verdict ${guard.verdict})`)
+    for (const c of guard.checks) log(`  - ${c.rule}: ${c.detail}${c.skipped ? ' [skipped]' : ''}`)
+    if (!guard.ok) {
+      const msg = `resource_guard refused to start: ${guard.reason} (machine verdict: ${snapshot.verdict.state})`
+      if (guardCfg.on_fail === 'abort') throw new Error(msg)
+      log(`resource_guard: on_fail=warn — continuing despite: ${guard.reason}`)
+    }
+    lastGuardCheckAt = Date.now()
+  }
+  const concurrency = effectiveConcurrency(config.run.concurrency, guardCfg)
+  if (probe && guardCfg && concurrency !== config.run.concurrency) {
+    log(`resource_guard: clamping concurrency ${config.run.concurrency} -> ${concurrency}`)
+  }
 
   for (const evalCase of allCases) {
     // Skip already-completed cases when resuming
@@ -295,6 +326,34 @@ export async function runEvals(
         }
       }
       continue
+    }
+
+    // Mid-run resource_guard check — gates each subsequent case once the
+    // user-configured cooldown has elapsed. Default cooldown is 0 (off).
+    // On the first failure we wait 2 s and re-check once, so a transient
+    // spike (e.g. Time Machine kicking off) doesn't kill a 30-minute run.
+    if (probe && guardCfg && guardCfg.mid_run_check_seconds > 0) {
+      const elapsedMs = Date.now() - lastGuardCheckAt
+      if (elapsedMs >= guardCfg.mid_run_check_seconds * 1000) {
+        let { guard } = await evaluateGuardLive(probe, guardCfg, {
+          configuredConcurrency: concurrency,
+        })
+        if (!guard.ok) {
+          log(`resource_guard: ${guard.reason} — retrying after 2s`)
+          await new Promise(r => setTimeout(r, 2000))
+          guard = (await evaluateGuardLive(probe, guardCfg, { configuredConcurrency: concurrency })).guard
+        }
+        guardLog.push({ phase: 'mid_run', ts: new Date().toISOString(), result: guard })
+        lastGuardCheckAt = Date.now()
+        if (!guard.ok) {
+          const msg = `resource_guard tripped between cases (after retry): ${guard.reason}`
+          if (guardCfg.on_fail === 'abort') {
+            log(`resource_guard: pause before ${evalCase.id} — ${guard.reason}`)
+            throw new Error(msg)
+          }
+          log(`resource_guard: on_fail=warn — continuing despite: ${guard.reason}`)
+        }
+      }
     }
 
     log(`${evalCase.id}: running ${modelIds.length} model(s)`)
@@ -435,6 +494,16 @@ export async function runEvals(
     config_file: configFile || 'verdict.yaml',
     verdict_version: environment.verdict_version,
     hardware: `${hwFormat.cpu} ${hwFormat.ram_gb}GB`,
+    ...(guardLog.length > 0 && {
+      resource_guard: guardLog.map(e => ({
+        phase: e.phase,
+        ts: e.ts,
+        ok: e.result.ok,
+        verdict: e.result.verdict,
+        checks: e.result.checks.map(c => ({ rule: c.rule, ok: c.ok, skipped: c.skipped, detail: c.detail })),
+        reason: e.result.reason,
+      })),
+    }),
   }
 
   return {

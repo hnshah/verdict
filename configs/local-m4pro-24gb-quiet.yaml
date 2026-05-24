@@ -1,0 +1,92 @@
+# Verdict config for a 24 GB Mac mini M4 Pro running evals in the background
+# while you keep using the machine. Optimized for "quiet default" — preserves
+# normal foreground responsiveness over peak local-model quality.
+#
+# - One model resident at a time (concurrency: 1).
+# - Short max_tokens to keep KV cache and total memory low.
+# - Local judge — runner looks up `judge.model` by id in `models[]`, so the
+#   judge inherits qwen2.5:7b's ollama endpoint automatically (no network
+#   calls during scoring).
+# - resource_guard gates the run on live machine state; the run aborts before
+#   starting if memory pressure exceeds `warn` or free disk is below 25 GB.
+#
+# Usage:
+#   verdict machine inspect --fast       # check state before kicking off
+#   verdict run -c configs/local-m4pro-24gb-quiet.yaml --resume
+#
+# For an exclusive-use frontier benchmark (gemma3:27b, qwen3:32b), see
+# configs/local-m4pro-24gb-frontier.yaml — do NOT keep that one always-on.
+
+version: "0.4"
+name: "Local M4 Pro 24GB — quiet"
+
+models:
+  - id: qwen2.5:7b
+    model: qwen2.5:7b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+    max_tokens: 512
+    timeout_ms: 240000
+    tags: [local, free, quiet-default]
+
+  - id: qwen2.5-coder:7b
+    model: qwen2.5-coder:7b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+    max_tokens: 512
+    timeout_ms: 240000
+    tags: [local, free, coding]
+
+  - id: llama3.1:8b
+    model: llama3.1:8b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+    max_tokens: 512
+    timeout_ms: 240000
+    tags: [local, free]
+
+  - id: gemma4:e4b
+    model: gemma4:e4b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+    max_tokens: 512
+    timeout_ms: 240000
+    tags: [local, free, multimodal]
+
+# The judge's `model` field is an id that the runner resolves against the
+# models[] entries above. That's why only `model` appears here — the rest
+# (provider, base_url, etc.) come from qwen2.5:7b's entry.
+judge:
+  model: qwen2.5:7b
+
+packs:
+  - ../eval-packs/general.yaml
+
+run:
+  concurrency: 1
+  retries: 1
+  cache: true
+  resource_guard:
+    enabled: true
+    on_fail: abort
+    max_concurrency: 1
+    min_free_disk_gb: 25
+    max_memory_pressure: warn
+    # Swap-delta is OFF by default in the quiet config (swap_sample_ms: 0)
+    # so the pre-run check stays fast. The max_swap_delta_mb threshold below
+    # only takes effect if you raise swap_sample_ms above 0 (try 2000 if you
+    # want active swap-growth gating during long runs).
+    swap_sample_ms: 0
+    max_swap_delta_mb: 200
+    # Re-check between cases every 60 s. The runner retries once after 2 s on
+    # the first failure, so transient spikes don't kill the run.
+    mid_run_check_seconds: 60
+
+output:
+  dir: ./results
+  formats: [json, markdown]
+  delta: true
