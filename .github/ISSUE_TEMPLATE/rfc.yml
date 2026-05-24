@@ -1,0 +1,55 @@
+name: RFC (design proposal)
+description: Propose a design before code. Open for comment, then accepted or rejected with a recorded reason.
+labels: [rfc]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        RFCs are for decisions that will outlive a single PR (transport choice,
+        schema design, auth model). Small? Just open a PR.
+
+        After accept or reject, link the resulting commit or rationale and close.
+        Closed RFCs are the audit trail.
+
+  - type: input
+    id: epic
+    attributes:
+      label: Parent epic (issue #)
+      placeholder: "e.g. #142"
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user-visible thing isn't possible today, and which JTBD does this serve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Concrete design. Schemas, signatures, behaviour.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered (and why rejected)
+      description: |
+        At least two. "We just did the obvious thing" still counts, say so. For
+        each alternative include one line on why it was rejected.
+    validations:
+      required: true
+
+  - type: textarea
+    id: open-questions
+    attributes:
+      label: Open questions
+
+  - type: input
+    id: discovery-doc
+    attributes:
+      label: Discovery doc path (if any)
+      placeholder: "e.g. docs/discovery/agent-driver/04-protocol-scorecard.md"
