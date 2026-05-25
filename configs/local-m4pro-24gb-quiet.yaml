@@ -76,14 +76,13 @@ run:
     max_concurrency: 1
     min_free_disk_gb: 25
     max_memory_pressure: warn
-    # Swap-delta is OFF by default in the quiet config (swap_sample_ms: 0)
-    # so the pre-run check stays fast. The max_swap_delta_mb threshold below
-    # only takes effect if you raise swap_sample_ms above 0 (try 2000 if you
-    # want active swap-growth gating during long runs).
-    swap_sample_ms: 0
+    # Active swap-growth gating. This adds a short sample before the run and
+    # during mid-run checks, but catches the failure mode that matters on a
+    # 24 GB unified-memory machine: swap growing while evals are still running.
+    swap_sample_ms: 2000
     max_swap_delta_mb: 200
-    # Re-check between cases every 60 s. The runner retries once after 2 s on
-    # the first failure, so transient spikes don't kill the run.
+    # Re-check between cases every 60 s. If a threshold fails mid-run, the
+    # runner pauses before the next case and rechecks until the machine recovers.
     mid_run_check_seconds: 60
 
 output:

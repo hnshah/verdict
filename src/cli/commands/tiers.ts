@@ -90,12 +90,14 @@ export function tiersShowCommand(name: string): void {
   }
 
   console.log()
-  console.log(chalk.dim('  Pull the missing ones with:'))
-  const allModels = [...tier.models, ...(tier.frontier ?? [])]
-  for (const m of allModels) {
+  console.log(chalk.dim('  Pull the default-tier models with:'))
+  for (const m of tier.models) {
     if (m.provider === 'ollama') {
       console.log(chalk.dim('    ollama pull ') + chalk.white(m.model))
     }
+  }
+  if (tier.frontier && tier.frontier.length > 0) {
+    console.log(chalk.dim('  Frontier pulls are intentionally separate; use them only with --frontier.'))
   }
   console.log()
   console.log(chalk.dim('  Then run:'))

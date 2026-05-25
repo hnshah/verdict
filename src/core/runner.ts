@@ -220,6 +220,16 @@ async function runMultiTurn(
   return lastResponse
 }
 
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+function midRunPauseMs(cfg: ResourceGuardConfig): number {
+  const configuredMs = cfg.mid_run_check_seconds * 1000
+  if (!Number.isFinite(configuredMs) || configuredMs <= 0) return 5000
+  return Math.min(Math.max(configuredMs, 2000), 30000)
+}
+
 export async function runEvals(
   config: Config,
   packs: EvalPack[],
@@ -236,43 +246,11 @@ export async function runEvals(
   )
   const modelIds = config.models.map(m => m.id)
 
-  // Pre-load models if enabled
-  if (preload) {
-    await preloadModels(config.models, false)
-  }
-
-  // Resume from checkpoint if requested
-  let checkpoint: Checkpoint | null = null
-  let runId: string
-  if (resume) {
-    checkpoint = loadCheckpoint(config.output.dir, configHash)
-    if (checkpoint) {
-      runId = checkpoint.runId
-      log(`Resuming run ${runId} — ${checkpoint.completedCaseIds.length}/${allCases.length} cases already done`)
-    } else {
-      runId = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
-      log('No checkpoint found, starting fresh run')
-    }
-  } else {
-    runId = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
-  }
-
   const judgeModel = config.models.find(m => m.id === config.judge.model)
   if (!judgeModel) throw new Error(`Judge model '${config.judge.model}' not found in models list`)
 
-  const summary: Record<string, ModelSummary> = {}
-  for (const id of modelIds) {
-    summary[id] = {
-      model_id: id, avg_total: 0, avg_accuracy: 0, avg_completeness: 0,
-      avg_conciseness: 0, avg_latency_ms: 0, avg_tokens_per_sec: 0,
-      total_cost_usd: 0, win_rate: 0, wins: 0, cases_run: 0, avg_solve_rate: 0,
-    }
-  }
-
-  const cases: CaseResult[] = checkpoint ? [...checkpoint.partialResults] : []
-  const completedIds = new Set(checkpoint?.completedCaseIds ?? [])
-
-  // Resource guard — gate the run on live machine state before any model call.
+  // Resource guard — gate the run on live machine state before any model call,
+  // including Ollama preload.
   // The guard config defaults to undefined (off); when present but
   // `enabled: false`, we warn if the user set thresholds that we'll ignore.
   const guardCfg = config.run.resource_guard as ResourceGuardConfig | undefined
@@ -302,6 +280,40 @@ export async function runEvals(
     log(`resource_guard: clamping concurrency ${config.run.concurrency} -> ${concurrency}`)
   }
 
+  // Pre-load models only after the start guard has passed. Preload makes real
+  // Ollama calls and can page in several GB per model.
+  if (preload) {
+    await preloadModels(config.models, false)
+  }
+
+  // Resume from checkpoint if requested
+  let checkpoint: Checkpoint | null = null
+  let runId: string
+  if (resume) {
+    checkpoint = loadCheckpoint(config.output.dir, configHash)
+    if (checkpoint) {
+      runId = checkpoint.runId
+      log(`Resuming run ${runId} — ${checkpoint.completedCaseIds.length}/${allCases.length} cases already done`)
+    } else {
+      runId = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
+      log('No checkpoint found, starting fresh run')
+    }
+  } else {
+    runId = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
+  }
+
+  const summary: Record<string, ModelSummary> = {}
+  for (const id of modelIds) {
+    summary[id] = {
+      model_id: id, avg_total: 0, avg_accuracy: 0, avg_completeness: 0,
+      avg_conciseness: 0, avg_latency_ms: 0, avg_tokens_per_sec: 0,
+      total_cost_usd: 0, win_rate: 0, wins: 0, cases_run: 0, avg_solve_rate: 0,
+    }
+  }
+
+  const cases: CaseResult[] = checkpoint ? [...checkpoint.partialResults] : []
+  const completedIds = new Set(checkpoint?.completedCaseIds ?? [])
+
   for (const evalCase of allCases) {
     // Skip already-completed cases when resuming
     if (completedIds.has(evalCase.id)) {
@@ -330,28 +342,30 @@ export async function runEvals(
 
     // Mid-run resource_guard check — gates each subsequent case once the
     // user-configured cooldown has elapsed. Default cooldown is 0 (off).
-    // On the first failure we wait 2 s and re-check once, so a transient
-    // spike (e.g. Time Machine kicking off) doesn't kill a 30-minute run.
+    // Start failures can abort; mid-run failures pause between cases until
+    // the machine recovers so completed checkpointed work is preserved.
     if (probe && guardCfg && guardCfg.mid_run_check_seconds > 0) {
       const elapsedMs = Date.now() - lastGuardCheckAt
       if (elapsedMs >= guardCfg.mid_run_check_seconds * 1000) {
         let { guard } = await evaluateGuardLive(probe, guardCfg, {
           configuredConcurrency: concurrency,
         })
-        if (!guard.ok) {
-          log(`resource_guard: ${guard.reason} — retrying after 2s`)
-          await new Promise(r => setTimeout(r, 2000))
-          guard = (await evaluateGuardLive(probe, guardCfg, { configuredConcurrency: concurrency })).guard
-        }
         guardLog.push({ phase: 'mid_run', ts: new Date().toISOString(), result: guard })
         lastGuardCheckAt = Date.now()
         if (!guard.ok) {
-          const msg = `resource_guard tripped between cases (after retry): ${guard.reason}`
-          if (guardCfg.on_fail === 'abort') {
-            log(`resource_guard: pause before ${evalCase.id} — ${guard.reason}`)
-            throw new Error(msg)
+          if (guardCfg.on_fail === 'warn') {
+            log(`resource_guard: on_fail=warn — continuing despite: ${guard.reason}`)
+          } else {
+            const pauseMs = midRunPauseMs(guardCfg)
+            while (!guard.ok) {
+              log(`resource_guard: pause before ${evalCase.id} — ${guard.reason}; rechecking in ${Math.round(pauseMs / 1000)}s`)
+              await sleep(pauseMs)
+              guard = (await evaluateGuardLive(probe, guardCfg, { configuredConcurrency: concurrency })).guard
+              guardLog.push({ phase: 'mid_run', ts: new Date().toISOString(), result: guard })
+              lastGuardCheckAt = Date.now()
+            }
+            log(`resource_guard: recovered; resuming before ${evalCase.id}`)
           }
-          log(`resource_guard: on_fail=warn — continuing despite: ${guard.reason}`)
         }
       }
     }

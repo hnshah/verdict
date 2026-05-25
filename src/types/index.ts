@@ -75,7 +75,11 @@ export const ConfigSchema = z.object({
      */
     resource_guard: z.object({
       enabled: z.boolean().default(false),
-      /** Behavior on failure. 'abort' throws and stops the run; 'warn' logs and continues. */
+      /**
+       * Behavior on failure. At start, 'abort' throws before any model calls
+       * and 'warn' logs/continues. Mid-run, 'abort' pauses between cases until
+       * the machine recovers, while 'warn' logs/continues.
+       */
       on_fail: z.enum(['abort', 'warn']).default('abort'),
       max_concurrency: z.number().int().positive().optional(),
       min_free_disk_gb: z.number().nonnegative().default(25),
