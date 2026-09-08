@@ -9,6 +9,10 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./vitest": {
+      "import": "./dist/integrations.js",
+      "types": "./dist/integrations.d.ts"
     }
   },
   "bin": {
