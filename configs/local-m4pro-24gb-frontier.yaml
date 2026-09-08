@@ -1,0 +1,91 @@
+# Frontier benchmark config — Mac mini M4 Pro 24 GB
+#
+# WARNING: This config is for BENCHMARKING ONLY. Do NOT run it as part of the
+# always-on daemon. The candidate models below (gemma3:27b, qwen3:32b) each
+# claim ~17–20 GB of RAM and need exclusive use of the machine. Plan for:
+#
+#  - Quit Chrome / Slack / Docker / anything else heavy before starting.
+#  - Expect the machine to be unresponsive for the duration of the run.
+#  - Free disk before running — each model is 17–20 GB to download.
+#
+# The resource_guard here is *stricter than the quiet config*: a tight disk
+# reserve, an active swap-delta sample, and a short mid-run cooldown. We
+# accept `warn` pressure (Mac compressor often runs in warn under load) but
+# refuse `critical`.
+#
+# Pull the candidates first (and verify you have room before each pull):
+#   verdict machine inspect --fast
+#   ollama pull gemma3:27b
+#   ollama pull qwen3:32b
+#
+# Then run:
+#   verdict run -c configs/local-m4pro-24gb-frontier.yaml --resume
+
+version: "0.4"
+name: "Local M4 Pro 24GB — frontier (benchmark-only)"
+
+models:
+  # Always include the safe default as a baseline so the frontier candidates
+  # have something to beat.
+  - id: qwen2.5:7b
+    model: qwen2.5:7b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+    max_tokens: 1024
+    timeout_ms: 300000
+    tags: [local, free, baseline]
+
+  - id: gemma3:27b
+    model: gemma3:27b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+    max_tokens: 1024
+    timeout_ms: 600000
+    tags: [local, free, large, benchmark-only]
+
+  - id: qwen3:32b
+    model: qwen3:32b
+    provider: ollama
+    base_url: http://localhost:11434/v1
+    api_key: none
+    max_tokens: 1024
+    timeout_ms: 600000
+    tags: [local, free, large, benchmark-only]
+
+# Use the small model as judge — the candidates are the subjects of
+# evaluation, not the scorers. Using a 30B judge on a 30B candidate is
+# expensive and doesn't add accuracy at this size. The runner resolves the
+# judge's `model` id against models[] above, so the judge inherits
+# qwen2.5:7b's local Ollama endpoint.
+judge:
+  model: qwen2.5:7b
+
+packs:
+  - ../eval-packs/general.yaml
+
+run:
+  concurrency: 1
+  retries: 1
+  cache: true
+  resource_guard:
+    enabled: true
+    on_fail: abort
+    max_concurrency: 1
+    # Just enough headroom to recover from one failed pull. A larger reserve
+    # is unreachable here: 27B + 32B = 37 GB of pulls; even at 50 GB free,
+    # post-pull free disk is ~13 GB. Set higher only after both models are
+    # already pulled.
+    min_free_disk_gb: 10
+    max_memory_pressure: warn
+    # Active swap-growth gating — frontier runs are short and one-off, so
+    # paying 2 s per check is fine.
+    swap_sample_ms: 2000
+    max_swap_delta_mb: 100
+    mid_run_check_seconds: 30
+
+output:
+  dir: ./results
+  formats: [json, markdown]
+  delta: true

@@ -69,6 +69,45 @@ export const ConfigSchema = z.object({
     retries: z.number().default(2),
     cache: z.boolean().default(true),
     /**
+     * Resource guard — gates a run on live machine state. Aborts before
+     * starting if thresholds fail; pauses between cases if they fail mid-run.
+     * See src/core/resource-guard.ts for the evaluator.
+     */
+    resource_guard: z.object({
+      enabled: z.boolean().default(false),
+      /**
+       * Behavior on failure. At start, 'abort' throws before any model calls
+       * and 'warn' logs/continues. Mid-run, 'abort' pauses between cases until
+       * the machine recovers, while 'warn' logs/continues.
+       */
+      on_fail: z.enum(['abort', 'warn']).default('abort'),
+      max_concurrency: z.number().int().positive().optional(),
+      min_free_disk_gb: z.number().nonnegative().default(25),
+      /**
+       * Highest memory pressure the guard accepts. Field reads naturally as
+       * "the maximum pressure I allow" — `warn` means warn-or-better passes,
+       * `normal` means only normal passes, `critical` means anything passes.
+       */
+      max_memory_pressure: z.enum(['normal', 'warn', 'critical']).default('warn'),
+      /**
+       * MB of swap growth tolerated within the sample window. Disabled
+       * unless `swap_sample_ms > 0`; otherwise the sample is back-to-back
+       * and the delta is always ~0.
+       */
+      max_swap_delta_mb: z.number().nonnegative().default(200),
+      /**
+       * Window over which to measure swap-delta. 0 disables the swap-delta
+       * check entirely (the field is reported as "skipped" in the result).
+       * 1000–2000 ms is plenty for catching active growth.
+       */
+      swap_sample_ms: z.number().nonnegative().default(0),
+      /**
+       * Seconds to wait between mid-run checks. The pre-run check always
+       * runs once; mid-run checks happen before each case if `> 0`.
+       */
+      mid_run_check_seconds: z.number().nonnegative().default(0),
+    }).optional(),
+    /**
      * Async preload mode (opt-in, B3). When true, the runner starts case
      * execution on each model as soon as that model finishes preloading,
      * rather than waiting for every model to be warm first. Fast models
@@ -224,7 +263,8 @@ export interface JudgeScore {
   total: number
   reasoning: string
   structured_reasoning?: StructuredReasoning
-  confidence?: number  // 0-10, optional — how certain is the judge?
+  // 0-10 — how certain is the judge? null = LLM didn't return it; undefined = not an LLM judge
+  confidence?: number | null
 }
 
 export interface CaseResult {
@@ -299,6 +339,22 @@ export interface RunMeta {
   config_file: string
   verdict_version: string
   hardware: string
+  /** When the resource guard was enabled, the entries captured at start + each mid-run check. */
+  resource_guard?: ResourceGuardLogEntry[]
+}
+
+export interface ResourceGuardLogEntry {
+  phase: 'start' | 'mid_run'
+  ts: string
+  ok: boolean
+  verdict: 'quiet' | 'benchmark' | 'unsafe'
+  checks: Array<{
+    rule: 'memory_pressure' | 'free_disk' | 'swap_delta' | 'concurrency'
+    ok: boolean
+    skipped?: boolean
+    detail: string
+  }>
+  reason?: string
 }
 
 export interface StructuredReasoning {

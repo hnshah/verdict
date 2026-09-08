@@ -110,7 +110,35 @@ models:
     params_b: 12
     default_quant: q4_K_M
     family: gemma
-    tags: [general]
+    tags: [general, long-context]
+
+  - name: "gemma3:27b"
+    provider: ollama
+    params_b: 27
+    default_quant: q4_K_M
+    family: gemma
+    tags: [general, long-context, large, benchmark-only]
+
+  - name: "qwen3:14b"
+    provider: ollama
+    params_b: 14
+    default_quant: q4_K_M
+    family: qwen
+    tags: [general, reasoning]
+
+  - name: "qwen3:32b"
+    provider: ollama
+    params_b: 32
+    default_quant: q4_K_M
+    family: qwen
+    tags: [general, reasoning, large, benchmark-only]
+
+  - name: "gemma4:e4b"
+    provider: ollama
+    params_b: 8
+    default_quant: q4_K_M
+    family: gemma
+    tags: [general, reasoning, coding, multimodal, local]
 
   - name: "mistral:7b"
     provider: ollama

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import type { Config, EvalPack, ModelResponse, JudgeScore } from '../../types/index.js'
 
 // Mock providers and judge before importing runner
@@ -10,6 +10,22 @@ vi.mock('../../providers/compat.js', () => ({
 
 vi.mock('../../judge/llm.js', () => ({
   judgeResponse: vi.fn(),
+}))
+
+vi.mock('../preload.js', () => ({
+  preloadModels: vi.fn().mockResolvedValue([]),
+}))
+
+vi.mock('../machine.js', () => ({
+  createRealProbe: vi.fn(() => ({ kind: 'probe' })),
+}))
+
+vi.mock('../resource-guard.js', () => ({
+  evaluateGuardLive: vi.fn(),
+  effectiveConcurrency: vi.fn((configured: number, cfg?: { enabled?: boolean; max_concurrency?: number }) => (
+    cfg?.enabled && cfg.max_concurrency !== undefined ? Math.min(configured, cfg.max_concurrency) : configured
+  )),
+  describeDisabledMisconfig: vi.fn(() => undefined),
 }))
 
 // Mock fs to avoid writing checkpoint files during tests
@@ -36,6 +52,8 @@ vi.mock('fs', async (importOriginal) => {
 import { runEvals, computeConfigHash } from '../runner.js'
 import { callModel, callModelMultiTurn, callModelWithTools } from '../../providers/compat.js'
 import { judgeResponse } from '../../judge/llm.js'
+import { preloadModels } from '../preload.js'
+import { evaluateGuardLive, effectiveConcurrency, describeDisabledMisconfig } from '../resource-guard.js'
 
 // --- Helpers ---
 
@@ -57,6 +75,31 @@ function makeJudgeScore(total = 8): JudgeScore {
     total,
     reasoning: 'Good response.',
   }
+}
+
+function makeResourceGuardConfig() {
+  return {
+    enabled: true,
+    on_fail: 'abort' as const,
+    max_concurrency: 1,
+    min_free_disk_gb: 25,
+    max_memory_pressure: 'warn' as const,
+    max_swap_delta_mb: 200,
+    swap_sample_ms: 2000,
+    mid_run_check_seconds: 0,
+  }
+}
+
+function makeGuardLiveResult(ok = true, reason?: string) {
+  return {
+    snapshot: { verdict: { state: ok ? 'quiet' : 'unsafe' } },
+    guard: {
+      ok,
+      verdict: ok ? 'quiet' : 'unsafe',
+      checks: [],
+      reason,
+    },
+  } as unknown as Awaited<ReturnType<typeof evaluateGuardLive>>
 }
 
 function makeConfig(overrides?: Partial<Config>): Config {
@@ -105,6 +148,16 @@ function makePack(cases: Array<Partial<EvalPack['cases'][number]> & { id: string
 
 beforeEach(() => {
   vi.clearAllMocks()
+  vi.mocked(preloadModels).mockResolvedValue([])
+  vi.mocked(evaluateGuardLive).mockResolvedValue(makeGuardLiveResult())
+  vi.mocked(effectiveConcurrency).mockImplementation((configured: number, cfg?: { enabled?: boolean; max_concurrency?: number }) => (
+    cfg?.enabled && cfg.max_concurrency !== undefined ? Math.min(configured, cfg.max_concurrency) : configured
+  ))
+  vi.mocked(describeDisabledMisconfig).mockReturnValue(undefined)
+})
+
+afterEach(() => {
+  vi.useRealTimers()
 })
 
 describe('computeConfigHash', () => {
@@ -372,6 +425,85 @@ describe('runEvals', () => {
     await expect(runEvals(config, [pack])).rejects.toThrow("Judge model 'nonexistent-model' not found")
   })
 
+  it('runs resource_guard before preloading models', async () => {
+    const order: string[] = []
+    const config = makeConfig({
+      run: { concurrency: 3, retries: 2, cache: true, async_preload: false, preload_concurrency: 2, resource_guard: makeResourceGuardConfig() },
+    })
+    const pack = makePack([
+      { id: 'case-1', prompt: 'Hello', criteria: 'Be polite', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
+    ])
+
+    vi.mocked(evaluateGuardLive).mockImplementation(async () => {
+      order.push('guard')
+      return makeGuardLiveResult()
+    })
+    vi.mocked(preloadModels).mockImplementation(async () => {
+      order.push('preload')
+      return []
+    })
+    vi.mocked(callModel).mockResolvedValue(makeModelResponse('model-a'))
+    vi.mocked(judgeResponse).mockResolvedValue(makeJudgeScore(8))
+
+    await runEvals(config, [pack])
+
+    expect(order.slice(0, 2)).toEqual(['guard', 'preload'])
+  })
+
+  it('aborts before preload when the start resource_guard fails', async () => {
+    const config = makeConfig({
+      run: { concurrency: 3, retries: 2, cache: true, async_preload: false, preload_concurrency: 2, resource_guard: makeResourceGuardConfig() },
+    })
+    const pack = makePack([
+      { id: 'case-1', prompt: 'Hello', criteria: 'Be polite', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
+    ])
+
+    vi.mocked(evaluateGuardLive).mockResolvedValueOnce(makeGuardLiveResult(false, 'pressure critical'))
+
+    await expect(runEvals(config, [pack])).rejects.toThrow(/resource_guard refused to start/)
+    expect(preloadModels).not.toHaveBeenCalled()
+    expect(callModel).not.toHaveBeenCalled()
+  })
+
+  it('pauses mid-run until resource_guard recovers when on_fail is abort', async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(0)
+    const messages: string[] = []
+    const config = makeConfig({
+      run: {
+        concurrency: 3,
+        retries: 2,
+        cache: true,
+        async_preload: false,
+        preload_concurrency: 2,
+        resource_guard: { ...makeResourceGuardConfig(), mid_run_check_seconds: 0.001 },
+      },
+    })
+    const pack = makePack([
+      { id: 'case-1', prompt: 'Hello', criteria: 'Be polite', scorer: 'llm', tags: [], judge_type: 'llm', max_tokens: undefined },
+    ])
+
+    vi.mocked(preloadModels).mockImplementation(async () => {
+      vi.setSystemTime(1000)
+      return []
+    })
+    vi.mocked(evaluateGuardLive)
+      .mockResolvedValueOnce(makeGuardLiveResult())
+      .mockResolvedValueOnce(makeGuardLiveResult(false, 'swap grew 500 MB during sample'))
+      .mockResolvedValueOnce(makeGuardLiveResult())
+    vi.mocked(callModel).mockResolvedValue(makeModelResponse('model-a'))
+    vi.mocked(judgeResponse).mockResolvedValue(makeJudgeScore(8))
+
+    const runPromise = runEvals(config, [pack], msg => messages.push(msg))
+    await vi.advanceTimersByTimeAsync(2000)
+    const result = await runPromise
+
+    expect(result.cases).toHaveLength(1)
+    expect(messages.some(m => m.includes('pause before case-1'))).toBe(true)
+    expect(messages.some(m => m.includes('recovered; resuming before case-1'))).toBe(true)
+    expect(callModel).toHaveBeenCalled()
+  })
+
   it('handles model errors gracefully with zero scores', async () => {
     const config = makeConfig()
     const pack = makePack([
@@ -451,6 +583,33 @@ describe('runEvals', () => {
     expect(callModelWithTools).toHaveBeenCalled()
     expect(callModel).not.toHaveBeenCalled()
     expect(result.cases[0].scores['model-a'].total).toBe(6) // correct tool, no expected args
+  })
+
+  it('uses random tiebreaker when models tie — no systematic first-model bias (#108)', async () => {
+    const config = makeConfig()
+    const pack = makePack([
+      { id: 'tie-case', prompt: 'Test', criteria: 'Test', scorer: 'exact', expected: 'answer', tags: [], judge_type: 'llm', max_tokens: undefined },
+    ])
+
+    // Both models return identical correct answers → tie
+    vi.mocked(callModel)
+      .mockResolvedValueOnce(makeModelResponse('model-a', 'answer'))
+      .mockResolvedValueOnce(makeModelResponse('model-b', 'answer'))
+
+    // Run 100 times and verify both models win at least once (random selection)
+    const winCounts: Record<string, number> = { 'model-a': 0, 'model-b': 0 }
+    for (let i = 0; i < 100; i++) {
+      vi.mocked(callModel)
+        .mockResolvedValueOnce(makeModelResponse('model-a', 'answer'))
+        .mockResolvedValueOnce(makeModelResponse('model-b', 'answer'))
+      const result = await runEvals(config, [pack])
+      const winner = result.cases[0].winner
+      if (winner) winCounts[winner] = (winCounts[winner] ?? 0) + 1
+    }
+
+    // Both models should win at least once in 100 trials (probability of all-same: 2^-100 ≈ 0)
+    expect(winCounts['model-a']).toBeGreaterThan(0)
+    expect(winCounts['model-b']).toBeGreaterThan(0)
   })
 
   it('uses callModelMultiTurn for multi-turn cases', async () => {

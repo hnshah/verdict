@@ -35,6 +35,43 @@ ollama pull mixtral:8x7b
 
 verdict auto-detects MoE models by name and tags them.
 
+### Gemma 4 local dogfood
+
+Use the official Ollama `gemma4:e4b` tag when you want to dogfood Verdict
+with a recent local Gemma model. The tag is about 9.6 GB, so keep at least
+12 GB of free disk before pulling it. On a 24 GB RAM Verdict dogfood machine
+with tight disk headroom, `gemma4:e4b` should fit, but avoid parallel local
+generations by using `run.concurrency: 1`.
+
+Pull the models used by the included dogfood configs:
+
+```bash
+ollama pull gemma4:e4b
+ollama pull nomic-embed-text
+ollama pull qwen2.5:7b
+ollama pull llama3.2:3b
+```
+
+Run the Qwen-judged path first. It evaluates Gemma 4 against local baselines
+while keeping the judge consistent with existing Verdict local runs:
+
+```bash
+npm run dev -- models --config configs/examples/gemma4-dogfood.yaml
+npm run dev -- run --config configs/examples/gemma4-dogfood.yaml --dry-run
+npm run dev -- run --config configs/examples/gemma4-dogfood.yaml --resume
+```
+
+Then run the fully Gemma-driven path, where Gemma 4 is both the model under
+test and the judge:
+
+```bash
+npm run dev -- run --config configs/examples/gemma4-dogfood-self-judge.yaml --resume
+```
+
+The self-judge run intentionally uses the existing judge parser. If Gemma emits
+extra thinking text around the required JSON, treat that as dogfood feedback and
+document the limitation rather than changing parser behavior for this config.
+
 ## MLX (Apple Silicon)
 
 Runs models natively on M-series chips. Generally faster than Ollama on Apple Silicon.

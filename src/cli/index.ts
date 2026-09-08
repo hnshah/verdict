@@ -25,6 +25,7 @@ import { badgeCommand } from './commands/badge.js'
 import { quantsCommand } from './commands/quants.js'
 import { tiersListCommand, tiersShowCommand } from './commands/tiers.js'
 import { shareCommand } from './commands/share.js'
+import { machineInspectCommand } from './commands/machine.js'
 import { onboardingCommand } from '../onboarding/cli.js'
 import { readMark } from '../onboarding/persistence.js'
 import fs from 'fs'
@@ -62,6 +63,7 @@ program
   .option('-e, --eval <names>', 'Run named eval(s) from registry, comma-separated')
   .option('-m, --models <ids>', 'Run specific model(s), comma-separated')
   .option('--tier <name>', 'Use a hardware-tier preset (8gb, 16gb, 24gb, 32gb, 64gb). Replaces the config models. Run `verdict tiers` to see.')
+  .option('--frontier', 'When combined with --tier, include the tier\'s frontier (benchmark-only) candidates — larger models that are too tight to keep resident 24/7.')
   .option('--dry-run', 'Preview without calling any APIs')
   .option('--resume', 'Resume from last checkpoint')
   .option('--question <text>', 'Question for synthesis agent to answer after eval')
@@ -186,6 +188,18 @@ program
   .option('--port <n>', 'Port to listen on', '4000')
   .option('--ui', 'Also serve a local read-only dashboard at / (no auth, localhost only)')
   .action(serveCommand)
+
+const machine = program
+  .command('machine')
+  .description('Inspect this machine — CPU load, memory pressure, swap, disk, and an actionable verdict')
+
+machine
+  .command('inspect')
+  .description('Snapshot the current machine state and return a quiet/benchmark/unsafe verdict')
+  .option('--json', 'Output snapshot as JSON (single line, machine-readable)')
+  .option('--fast', 'Skip the 10 s swap-delta sample (lower fidelity, faster)')
+  .option('--exit-on <states>', 'Exit non-zero if verdict matches one of: quiet,benchmark,unsafe (comma-separated)')
+  .action(machineInspectCommand)
 
 program
   .command('share <result-json>')
