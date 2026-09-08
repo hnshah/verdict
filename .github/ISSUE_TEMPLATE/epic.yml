@@ -1,0 +1,61 @@
+name: Epic (umbrella tracking issue)
+description: Long-lived issue grouping a multi-PR initiative. One per major feature.
+labels: [epic]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Epics are tables of contents. The decisions live in linked RFCs and discovery
+        docs; the work lives in linked PRs. Keep the body skimmable. Close when the
+        last workstream checkbox ticks.
+
+  - type: input
+    id: phase-code
+    attributes:
+      label: Phase-code prefix
+      description: Two letters used in PR titles for this epic. e.g. AD for agent-driver.
+      placeholder: "e.g. AD"
+    validations:
+      required: true
+
+  - type: textarea
+    id: one-paragraph
+    attributes:
+      label: What this unlocks (one paragraph)
+      description: What gets unlocked when this is done? Who benefits?
+    validations:
+      required: true
+
+  - type: textarea
+    id: discovery
+    attributes:
+      label: Discovery and research links
+      description: |
+        Bullet list of docs in repo (e.g. docs/discovery/<epic>/*) plus RFC issue
+        numbers. Markdown links preferred.
+    validations:
+      required: true
+
+  - type: textarea
+    id: workstreams
+    attributes:
+      label: Workstreams (phase-code checklist)
+      description: |
+        Checkbox list. Each item is either an RFC or a shippable PR. Use the
+        phase-code prefix, e.g. `- [ ] AD1 transport spike (#TBD)`.
+    validations:
+      required: true
+
+  - type: textarea
+    id: definition-of-done
+    attributes:
+      label: Definition of done
+      description: What is visibly true when this epic closes?
+    validations:
+      required: true
+
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope
+      description: What this epic intentionally does NOT cover.

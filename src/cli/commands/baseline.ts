@@ -1,10 +1,11 @@
 import chalk from 'chalk'
 import { loadConfig } from '../../core/config.js'
-import { findLatestResult, saveBaseline, listBaselines, loadBaseline, compareWithBaseline } from '../../core/baseline.js'
+import { findLatestResult, saveBaseline, listBaselines, loadBaseline, loadBaselineMeta, compareWithBaseline } from '../../core/baseline.js'
 import { printBaselineComparison } from '../../reporter/terminal.js'
 
 interface SaveOptions {
   config: string
+  describe?: string
 }
 
 export async function baselineSaveCommand(name: string, opts: SaveOptions): Promise<void> {
@@ -26,8 +27,11 @@ export async function baselineSaveCommand(name: string, opts: SaveOptions): Prom
     process.exit(1)
   }
 
-  const dest = saveBaseline(name, latestPath)
+  const dest = saveBaseline(name, latestPath, { description: opts.describe })
   console.log(chalk.green(`  Saved baseline "${name}"`))
+  if (opts.describe) {
+    console.log(chalk.dim(`  ${opts.describe}`))
+  }
   console.log(chalk.dim(`  ${dest}`))
   console.log()
 }
@@ -50,6 +54,9 @@ export async function baselineListCommand(): Promise<void> {
 
   for (const b of baselines) {
     console.log(`  ${col(b.name, 20)}${col(b.date, 22)}${col(String(b.modelCount), 8)}${b.caseCount}`)
+    if (b.description) {
+      console.log(chalk.dim(`  ${col('', 20)}${b.description}`))
+    }
   }
   console.log()
 }
@@ -92,6 +99,7 @@ export async function baselineCompareCommand(name: string, opts: CompareOptions)
     process.exit(1)
   }
 
-  const comparison = compareWithBaseline(baselineResult, currentResult, name)
+  const meta = loadBaselineMeta(name)
+  const comparison = compareWithBaseline(baselineResult, currentResult, name, meta?.description)
   printBaselineComparison(comparison)
 }

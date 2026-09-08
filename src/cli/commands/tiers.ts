@@ -74,15 +74,36 @@ export function tiersShowCommand(name: string): void {
       chalk.dim(m.notes ?? '')
     )
   }
+
+  if (tier.frontier && tier.frontier.length > 0) {
+    console.log()
+    console.log('  ' + chalk.yellow('frontier (benchmark-only — not for 24/7 use):'))
+    for (const m of tier.frontier) {
+      console.log(
+        '  ' +
+        chalk.white(m.id.padEnd(28)) +
+        chalk.cyan(m.provider.padEnd(12)) +
+        chalk.white(`${m.size_gb} GB`.padEnd(10)) +
+        chalk.dim(m.notes ?? '')
+      )
+    }
+  }
+
   console.log()
-  console.log(chalk.dim('  Pull the missing ones with:'))
+  console.log(chalk.dim('  Pull the default-tier models with:'))
   for (const m of tier.models) {
     if (m.provider === 'ollama') {
       console.log(chalk.dim('    ollama pull ') + chalk.white(m.model))
     }
   }
+  if (tier.frontier && tier.frontier.length > 0) {
+    console.log(chalk.dim('  Frontier pulls are intentionally separate; use them only with --frontier.'))
+  }
   console.log()
   console.log(chalk.dim('  Then run:'))
   console.log('    ' + chalk.cyan(`verdict run --tier ${tier.name}`))
+  if (tier.frontier && tier.frontier.length > 0) {
+    console.log('    ' + chalk.cyan(`verdict run --tier ${tier.name} --frontier`) + chalk.dim('   # include frontier candidates'))
+  }
   console.log()
 }

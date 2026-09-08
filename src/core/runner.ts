@@ -9,7 +9,9 @@ import { judgeFaithfulness } from '../judge/faithfulness.js'
 import { scoreSimilar } from '../judge/similar.js'
 import { scoreDeterministic, isDeterministic, scoreToolCall, scoreLatency, scoreCost } from '../judge/deterministic.js'
 import { detectHardware, toRunResultFormat } from './hardware.js'
-import { preloadModels } from './preload.js'
+import { preloadModels, preloadModelsAsync, type PreloadResult } from './preload.js'
+import { createRealProbe } from './machine.js'
+import { evaluateGuardLive, effectiveConcurrency, describeDisabledMisconfig, type ResourceGuardConfig, type GuardResult } from './resource-guard.js'
 
 /**
  * Detect environment information
@@ -218,6 +220,16 @@ async function runMultiTurn(
   return lastResponse
 }
 
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+function midRunPauseMs(cfg: ResourceGuardConfig): number {
+  const configuredMs = cfg.mid_run_check_seconds * 1000
+  if (!Number.isFinite(configuredMs) || configuredMs <= 0) return 5000
+  return Math.min(Math.max(configuredMs, 2000), 30000)
+}
+
 export async function runEvals(
   config: Config,
   packs: EvalPack[],
@@ -234,9 +246,61 @@ export async function runEvals(
   )
   const modelIds = config.models.map(m => m.id)
 
-  // Pre-load models if enabled
+  const judgeModel = config.models.find(m => m.id === config.judge.model)
+  if (!judgeModel) throw new Error(`Judge model '${config.judge.model}' not found in models list`)
+
+  // Resource guard — gate the run on live machine state before any model call,
+  // including Ollama preload.
+  // The guard config defaults to undefined (off); when present but
+  // `enabled: false`, we warn if the user set thresholds that we'll ignore.
+  const guardCfg = config.run.resource_guard as ResourceGuardConfig | undefined
+  const misconfig = describeDisabledMisconfig(guardCfg)
+  if (misconfig) log(`resource_guard: ${misconfig}`)
+
+  const probe = guardCfg?.enabled ? createRealProbe() : null
+  let lastGuardCheckAt = 0
+  const guardLog: Array<{ phase: 'start' | 'mid_run'; ts: string; result: GuardResult }> = []
+
+  if (probe && guardCfg) {
+    const { snapshot, guard } = await evaluateGuardLive(probe, guardCfg, {
+      configuredConcurrency: config.run.concurrency,
+    })
+    guardLog.push({ phase: 'start', ts: new Date().toISOString(), result: guard })
+    log(`resource_guard: ${guard.ok ? 'ok' : 'fail'} (verdict ${guard.verdict})`)
+    for (const c of guard.checks) log(`  - ${c.rule}: ${c.detail}${c.skipped ? ' [skipped]' : ''}`)
+    if (!guard.ok) {
+      const msg = `resource_guard refused to start: ${guard.reason} (machine verdict: ${snapshot.verdict.state})`
+      if (guardCfg.on_fail === 'abort') throw new Error(msg)
+      log(`resource_guard: on_fail=warn — continuing despite: ${guard.reason}`)
+    }
+    lastGuardCheckAt = Date.now()
+  }
+  const concurrency = effectiveConcurrency(config.run.concurrency, guardCfg)
+  if (probe && guardCfg && concurrency !== config.run.concurrency) {
+    log(`resource_guard: clamping concurrency ${config.run.concurrency} -> ${concurrency}`)
+  }
+
+  // Pre-load models only after the start guard has passed. Preload makes real
+  // Ollama calls and can page in several GB per model.
+  // Preload strategy:
+  //   - sync mode (default when called from `verdict run`): a banner prints,
+  //     then we wait for every model to be warm before any case starts. This
+  //     preserves the user-visible "Pre-loading models..." UX while still
+  //     getting the parallel-slot speedup (B1).
+  //   - async mode (opt-in): kick off the loads in a pool and return per-
+  //     model futures. Cases dispatch as soon as their specific model is
+  //     ready — fast models serve cases while slow models still warm (B3).
+  //     Today async mode is gated behind config.run.async_preload=true; we
+  //     intend to make it the default once it's exercised in CI.
+  let preloadFutures: Map<string, Promise<PreloadResult>> | null = null
   if (preload) {
-    await preloadModels(config.models, false)
+    const preloadConcurrency = (config.run as { preload_concurrency?: number }).preload_concurrency ?? 2
+    const useAsync = (config.run as { async_preload?: boolean }).async_preload === true
+    if (useAsync) {
+      preloadFutures = preloadModelsAsync(config.models, { concurrency: preloadConcurrency })
+    } else {
+      await preloadModels(config.models, { concurrency: preloadConcurrency })
+    }
   }
 
   // Resume from checkpoint if requested
@@ -255,9 +319,6 @@ export async function runEvals(
     runId = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
   }
 
-  const judgeModel = config.models.find(m => m.id === config.judge.model)
-  if (!judgeModel) throw new Error(`Judge model '${config.judge.model}' not found in models list`)
-
   const summary: Record<string, ModelSummary> = {}
   for (const id of modelIds) {
     summary[id] = {
@@ -269,7 +330,6 @@ export async function runEvals(
 
   const cases: CaseResult[] = checkpoint ? [...checkpoint.partialResults] : []
   const completedIds = new Set(checkpoint?.completedCaseIds ?? [])
-  const { concurrency } = config.run
 
   for (const evalCase of allCases) {
     // Skip already-completed cases when resuming
@@ -297,14 +357,50 @@ export async function runEvals(
       continue
     }
 
+    // Mid-run resource_guard check — gates each subsequent case once the
+    // user-configured cooldown has elapsed. Default cooldown is 0 (off).
+    // Start failures can abort; mid-run failures pause between cases until
+    // the machine recovers so completed checkpointed work is preserved.
+    if (probe && guardCfg && guardCfg.mid_run_check_seconds > 0) {
+      const elapsedMs = Date.now() - lastGuardCheckAt
+      if (elapsedMs >= guardCfg.mid_run_check_seconds * 1000) {
+        let { guard } = await evaluateGuardLive(probe, guardCfg, {
+          configuredConcurrency: concurrency,
+        })
+        guardLog.push({ phase: 'mid_run', ts: new Date().toISOString(), result: guard })
+        lastGuardCheckAt = Date.now()
+        if (!guard.ok) {
+          if (guardCfg.on_fail === 'warn') {
+            log(`resource_guard: on_fail=warn — continuing despite: ${guard.reason}`)
+          } else {
+            const pauseMs = midRunPauseMs(guardCfg)
+            while (!guard.ok) {
+              log(`resource_guard: pause before ${evalCase.id} — ${guard.reason}; rechecking in ${Math.round(pauseMs / 1000)}s`)
+              await sleep(pauseMs)
+              guard = (await evaluateGuardLive(probe, guardCfg, { configuredConcurrency: concurrency })).guard
+              guardLog.push({ phase: 'mid_run', ts: new Date().toISOString(), result: guard })
+              lastGuardCheckAt = Date.now()
+            }
+            log(`resource_guard: recovered; resuming before ${evalCase.id}`)
+          }
+        }
+      }
+    }
+
     log(`${evalCase.id}: running ${modelIds.length} model(s)`)
     const caseResult: CaseResult = {
       case_id: evalCase.id, prompt: evalCase.prompt,
       criteria: evalCase.criteria, responses: {}, scores: {},
     }
 
-    // Run all models concurrently (chunked)
+    // Run all models concurrently (chunked). In async-preload mode we wait
+    // for THIS model's preload before issuing its call — slow models gate
+    // their own cases, fast models start immediately.
     const jobs = config.models.map(m => async () => {
+      if (preloadFutures) {
+        const f = preloadFutures.get(m.id)
+        if (f) await f
+      }
       let resp
       if (evalCase.scorer === 'tool_call' && evalCase.tools && evalCase.tools.length > 0) {
         resp = await callModelWithTools(m, evalCase.prompt, evalCase.tools, 0, evalCase.system_prompt)
@@ -338,13 +434,25 @@ export async function runEvals(
         let score: JudgeScore
 
         if (evalCase.assertions && evalCase.assertions.length > 0) {
-          // Multi-assertion mode: run each assertion, aggregate with configured mode
+          // Multi-assertion mode: run each assertion, aggregate with the
+          // case's configured mode (defaults to 'min'). When mode is
+          // 'weighted' we collect per-assertion `weight` values from the
+          // assertions themselves so YAML authors can prioritize, e.g.,
+          // an LLM rubric score over a contains-check.
           const assertionScores: JudgeScore[] = []
+          const weights: number[] = []
           for (const assertion of evalCase.assertions) {
             const s = scoreAssertion(assertion, resp.text, resp.tool_calls)
-            if (s) assertionScores.push(s)
+            if (s) {
+              assertionScores.push(s)
+              weights.push(assertion.weight ?? 1)
+            }
           }
-          score = aggregateScores(assertionScores)
+          score = aggregateScores(
+            assertionScores,
+            evalCase.aggregation ?? 'min',
+            evalCase.aggregation === 'weighted' ? weights : undefined
+          )
         } else if (evalCase.scorer === 'similar') {
           const baseEmbeddingConfig = config.judge.embedding_model ?? {
             base_url: judgeModel.base_url ?? 'http://localhost:11434/v1',
@@ -388,11 +496,15 @@ export async function runEvals(
       }
     }
 
-    // Find winner
-    const winner = Object.entries(caseResult.scores)
-      .filter(([, s]) => s.total > 0)
-      .sort((a, b) => b[1].total - a[1].total)[0]
-    if (winner) { caseResult.winner = winner[0]; summary[winner[0]].wins++ }
+    // Find winner — random tiebreaker to avoid first-model bias (#108)
+    const validScores = Object.entries(caseResult.scores).filter(([, s]) => s.total > 0)
+    if (validScores.length > 0) {
+      const topScore = Math.max(...validScores.map(([, s]) => s.total))
+      const tied = validScores.filter(([, s]) => s.total === topScore)
+      const winner = tied[Math.floor(Math.random() * tied.length)]
+      caseResult.winner = winner[0]
+      summary[winner[0]].wins++
+    }
 
     cases.push(caseResult)
 
@@ -435,6 +547,16 @@ export async function runEvals(
     config_file: configFile || 'verdict.yaml',
     verdict_version: environment.verdict_version,
     hardware: `${hwFormat.cpu} ${hwFormat.ram_gb}GB`,
+    ...(guardLog.length > 0 && {
+      resource_guard: guardLog.map(e => ({
+        phase: e.phase,
+        ts: e.ts,
+        ok: e.result.ok,
+        verdict: e.result.verdict,
+        checks: e.result.checks.map(c => ({ rule: c.rule, ok: c.ok, skipped: c.skipped, detail: c.detail })),
+        reason: e.result.reason,
+      })),
+    }),
   }
 
   return {

@@ -4,6 +4,9 @@
  * strips comments, which matter here for user-facing docs in the file.
  */
 
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import type { Plan } from './events.js'
 
 // ─── verdict.yaml ───────────────────────────────────────────────────────────
@@ -251,35 +254,34 @@ cases:
 `
 
 // ─── eval-packs/quantization.yaml ──────────────────────────────────────────
-//
-// 155-line pack; bundled with the package on publish (see `files` in
-// package.json). We read it from the package at runtime so we don't
-// duplicate the source — keeps a single source of truth in the repo.
-// If the file isn't present (e.g. running from a stripped build), the
-// caller writes the pointer stub via `quantizationPackPointerStub()`.
 
-import fs from 'fs'
-import { URL } from 'url'
+export const QUANTIZATION_PACK_STUB = `# eval-packs/quantization.yaml
+name: Quantization
+version: 1.0.0
+description: Minimal fallback pack for checking structured output degradation.
 
-/**
- * Best-effort load of the bundled `quantization.yaml`. Returns null if
- * the file isn't found at the expected package-relative path.
- */
+cases:
+  - id: quant-001
+    prompt: "Return only this JSON object: {\"status\":\"ok\",\"count\":3}"
+    criteria: "Valid JSON only, exact status and count fields"
+    scorer: json
+    expected: "{\"status\":\"ok\",\"count\":3}"
+    tags: [json, structured-output, quantization-sensitive]
+`
+
 export function loadQuantizationPack(): string | null {
-  try {
-    const pkgQuantPath = new URL('../../eval-packs/quantization.yaml', import.meta.url)
-    return fs.readFileSync(pkgQuantPath, 'utf-8')
-  } catch {
-    return null
-  }
-}
+  const here = path.dirname(fileURLToPath(import.meta.url))
+  const candidates = [
+    path.resolve(here, '..', '..', 'eval-packs', 'quantization.yaml'),
+    path.resolve(process.cwd(), 'eval-packs', 'quantization.yaml'),
+  ]
 
-/**
- * Tiny pointer file written when the bundled pack isn't available
- * (dev mode, partial install). Tells the user where to find the canonical
- * source.
- */
-export const QUANTIZATION_PACK_STUB = '# See https://github.com/hnshah/verdict/blob/main/eval-packs/quantization.yaml\n'
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) return fs.readFileSync(candidate, 'utf8')
+  }
+
+  return null
+}
 
 // ─── .env.example ───────────────────────────────────────────────────────────
 

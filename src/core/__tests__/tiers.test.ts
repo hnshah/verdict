@@ -102,5 +102,34 @@ describe('tiers', () => {
       expect(a?.tier.name).toBe(b?.tier.name)
       expect(a?.models.length).toBe(b?.models.length)
     })
+
+    it('default mode does not include frontier models', () => {
+      const r = resolveTier('24gb')
+      const ids = r!.models.map(m => m.id)
+      expect(ids).not.toContain('qwen3:32b')
+      expect(ids).not.toContain('gemma3:27b')
+    })
+
+    it('frontier mode includes the larger benchmark-only candidates', () => {
+      const r = resolveTier('24gb', { mode: 'frontier' })
+      const ids = r!.models.map(m => m.id)
+      expect(ids).toContain('qwen3:32b')
+      expect(ids).toContain('gemma3:27b')
+      // Safe defaults still present
+      expect(ids).toContain('qwen2.5:7b')
+    })
+
+    it('frontier mode is a no-op for tiers without a frontier list', () => {
+      const r = resolveTier('8gb', { mode: 'frontier' })
+      const base = resolveTier('8gb')
+      expect(r!.models.length).toBe(base!.models.length)
+    })
+
+    it('24gb tier includes qwen3:14b and gemma3:12b as primary candidates', () => {
+      const r = resolveTier('24gb')
+      const ids = r!.models.map(m => m.id)
+      expect(ids).toContain('qwen3:14b')
+      expect(ids).toContain('gemma3:12b')
+    })
   })
 })

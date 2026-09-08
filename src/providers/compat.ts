@@ -11,10 +11,76 @@ import fs from 'fs'
 import type { ModelConfig, ModelResponse, ToolDef } from '../types/index.js'
 import { callOpenClaw, type OpenClawConfig } from './openclaw.js'
 import { callSubAgent, type SubAgentConfig } from './subagent.js'
+import { callOllamaChatNative, type OllamaChatMessage } from './ollama-native.js'
 import { log as vlog } from '../utils/logger.js'
 import { humanizeProviderError, formatHumanError } from '../utils/errors.js'
 
 const clientCache = new Map<string, OpenAI>()
+
+export interface FirstTokenResult {
+  ok: boolean
+  /** ms from request start to first streamed token (the meaningful signal
+   * that weights are loaded and inference is running). -1 if no token. */
+  firstTokenMs: number
+  /** ms to stream completion (or to failure). */
+  totalMs: number
+  error?: string
+}
+
+/**
+ * Send a minimal streaming request and resolve when the first token
+ * arrives. Used by preload to show users a "model warmed" signal rather
+ * than waiting for a complete response. Closes the stream early because
+ * we only care about latency-to-first-token.
+ */
+export async function streamFirstToken(
+  config: ModelConfig,
+  prompt: string,
+  opts: { signal?: AbortSignal } = {}
+): Promise<FirstTokenResult> {
+  const baseURL = config.base_url
+  if (!baseURL) {
+    return { ok: false, firstTokenMs: -1, totalMs: 0, error: `Model '${config.id}' has no base_url` }
+  }
+  const apiKey = config.api_key === 'none' ? 'no-key-required' : (config.api_key ?? 'ollama')
+  const client = getOrCreateClient(baseURL, apiKey, config.timeout_ms)
+  const start = Date.now()
+  let firstTokenMs = -1
+  try {
+    const stream = await client.chat.completions.create({
+      model: config.model,
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 8,
+      temperature: 0,
+      stream: true,
+    })
+    for await (const chunk of stream) {
+      if (opts.signal?.aborted) break
+      const delta = chunk.choices[0]?.delta?.content
+      if (delta && firstTokenMs === -1) {
+        firstTokenMs = Date.now() - start
+        // Stop reading as soon as we have the signal — the goal is "first
+        // token = warm," not a full generation. Some SDK versions don't
+        // support `stream.controller.abort()` directly; breaking here drops
+        // our reference and lets the underlying HTTP stream close.
+        break
+      }
+    }
+    return {
+      ok: firstTokenMs >= 0,
+      firstTokenMs,
+      totalMs: Date.now() - start,
+      error: firstTokenMs < 0 ? 'stream closed without producing a token' : undefined,
+    }
+  } catch (err) {
+    return {
+      ok: false,
+      firstTokenMs,
+      totalMs: Date.now() - start,
+      error: err instanceof Error ? err.message : String(err),
+    }
+  }
+}
 
 function getOrCreateClient(baseUrl: string, apiKey: string, timeout?: number): OpenAI {
   const key = baseUrl + ':::' + apiKey
@@ -128,9 +194,22 @@ export async function callModel(
     })
 
     const latency_ms = Date.now() - start
-    const text = response.choices[0]?.message?.content ?? ''
-    const input_tokens = response.usage?.prompt_tokens ?? 0
-    const output_tokens = response.usage?.completion_tokens ?? 0
+    let text = response.choices[0]?.message?.content ?? ''
+    let input_tokens = response.usage?.prompt_tokens ?? 0
+    let output_tokens = response.usage?.completion_tokens ?? 0
+
+    if (!text && config.provider === 'ollama') {
+      const native = await callOllamaChatNative(config, messages as OllamaChatMessage[], {
+        max_tokens: config.max_tokens,
+        temperature: 0,
+      })
+      if (native?.text) {
+        text = native.text
+        input_tokens = native.input_tokens || input_tokens
+        output_tokens = native.output_tokens || output_tokens
+      }
+    }
+
     const cost_usd = config.cost_per_1m_input && config.cost_per_1m_output
       ? (input_tokens / 1_000_000) * config.cost_per_1m_input
         + (output_tokens / 1_000_000) * config.cost_per_1m_output
@@ -203,9 +282,22 @@ export async function callModelMultiTurn(
     })
 
     const latency_ms = Date.now() - start
-    const text = response.choices[0]?.message?.content ?? ''
-    const input_tokens = response.usage?.prompt_tokens ?? 0
-    const output_tokens = response.usage?.completion_tokens ?? 0
+    let text = response.choices[0]?.message?.content ?? ''
+    let input_tokens = response.usage?.prompt_tokens ?? 0
+    let output_tokens = response.usage?.completion_tokens ?? 0
+
+    if (!text && config.provider === 'ollama') {
+      const native = await callOllamaChatNative(config, allMessages as OllamaChatMessage[], {
+        max_tokens: config.max_tokens,
+        temperature: 0,
+      })
+      if (native?.text) {
+        text = native.text
+        input_tokens = native.input_tokens || input_tokens
+        output_tokens = native.output_tokens || output_tokens
+      }
+    }
+
     const cost_usd = config.cost_per_1m_input && config.cost_per_1m_output
       ? (input_tokens / 1_000_000) * config.cost_per_1m_input
         + (output_tokens / 1_000_000) * config.cost_per_1m_output

@@ -22,6 +22,7 @@ interface RunOptions {
   eval?: string
   models?: string
   tier?: string
+  frontier?: boolean
   dryRun?: boolean
   resume?: boolean
   question?: string
@@ -32,6 +33,8 @@ interface RunOptions {
   verbose?: boolean
   debug?: boolean
   store?: boolean
+  /** Commander's negated `--no-preload` flag arrives as `preload: false`. */
+  preload?: boolean
 }
 
 export async function runCommand(opts: RunOptions): Promise<void> {
@@ -61,12 +64,15 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   }
 
   if (opts.tier) {
-    const resolved = resolveTier(opts.tier)
+    const resolved = resolveTier(opts.tier, { mode: opts.frontier ? 'frontier' : 'default' })
     if (!resolved) {
       console.error(chalk.red(`  Unknown tier: ${opts.tier}`))
       console.error(chalk.dim(`  Available: ${listTierNames().join(', ')}`))
       console.error(chalk.dim(`  Run \`verdict tiers\` to see details.`))
       process.exit(1)
+    }
+    if (opts.frontier && (!resolved.tier.frontier || resolved.tier.frontier.length === 0)) {
+      log(chalk.yellow(`  --frontier: tier ${resolved.tier.name} has no frontier candidates; using the standard list.`))
     }
     // Replace the config's models with the tier preset, and override the judge
     // if the user hasn't explicitly set one in their config.
@@ -74,7 +80,10 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     if (!config.judge?.model || config.judge.model === '') {
       config.judge = { ...config.judge, model: resolved.judge }
     }
-    log(`  ${chalk.bold('Tier:')}   ${chalk.cyan(resolved.tier.name)} ${chalk.dim('— ' + resolved.tier.description)}`)
+    const modeNote = opts.frontier && resolved.tier.frontier && resolved.tier.frontier.length > 0
+      ? chalk.yellow(' (frontier)')
+      : ''
+    log(`  ${chalk.bold('Tier:')}   ${chalk.cyan(resolved.tier.name)}${modeNote} ${chalk.dim('— ' + resolved.tier.description)}`)
   }
 
   if (opts.models) {
@@ -174,7 +183,12 @@ export async function runCommand(opts: RunOptions): Promise<void> {
   const spinner = ora({ prefixText: '  ', text: 'Starting...', stream: opts.json ? process.stderr : process.stdout }).start()
   let result
   try {
-    result = await runEvals(config, packs, onProgress, opts.resume, categoryFilter, true) // preload enabled
+    // Preload is on by default — it pays back roughly its own cost in
+    // first-case latency. CI / scripted runs that already have warm models
+    // (or are calling cloud endpoints) skip it with --no-preload, and the
+    // tax shifts to each model's first case rather than being amortized.
+    const preloadEnabled = opts.preload !== false
+    result = await runEvals(config, packs, onProgress, opts.resume, categoryFilter, preloadEnabled)
     spinner.succeed('Done')
   } catch (err) {
     const humanized = humanizeProviderError(err)
@@ -197,10 +211,14 @@ export async function runCommand(opts: RunOptions): Promise<void> {
     }
   }
 
-  // Auto-compare with default baseline if it exists
+  // Auto-compare with default baseline if it exists. Pull description from
+  // the sidecar so PR comments / reporters can surface "vs baseline
+  // production-v1.2 — before sonnet-4.6 upgrade".
   const defaultBaseline = loadBaseline('default')
   if (defaultBaseline) {
-    const comparison = compareWithBaseline(defaultBaseline, result, 'default')
+    const { loadBaselineMeta } = await import('../../core/baseline.js')
+    const meta = loadBaselineMeta('default')
+    const comparison = compareWithBaseline(defaultBaseline, result, 'default', meta?.description)
     result.baselineComparison = comparison
     if (!opts.json) printBaselineComparison(comparison)
   }

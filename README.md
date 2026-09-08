@@ -52,6 +52,30 @@ npm install -g @hnshah/verdict
 npx @hnshah/verdict init
 ```
 
+### Runtime notes
+
+Verdict uses `better-sqlite3` for local history, routing, and daemon state.
+That package has a native binding.
+
+If you switch Node versions or install on a fresh machine and see an error like:
+
+```text
+Could not locate the bindings file ... better_sqlite3.node
+```
+
+run:
+
+```bash
+npm rebuild better-sqlite3
+```
+
+Then rerun:
+
+```bash
+npm run doctor
+npm test
+```
+
 ### Initialize
 
 ```bash
@@ -565,6 +589,11 @@ verdict tui                             # Open the interactive terminal UI
 verdict models                          # Ping all configured models
 verdict models discover                 # Find Ollama/MLX models
 
+# Maintenance
+npm run doctor                          # Check native SQLite binding health
+npm rebuild better-sqlite3              # Repair local SQLite native binding after Node changes
+npm test                                # Run full test suite (runs doctor first)
+
 # Run evals
 verdict run                             # Run all packs, all models
 verdict run -p code-gen                 # Run specific pack
@@ -659,6 +688,32 @@ Tool-calling: 9.2 → 6.1 (-3.1pts)
 verdict run --json --fail-if-regression
 # → Exit 1 if new model worse than baseline
 ```
+
+**GitHub Action** (`uses: hnshah/verdict@v1`):
+
+```yaml
+# .github/workflows/eval.yml
+on:
+  pull_request:
+    paths: ['prompts/**', 'verdict.yaml', 'eval-packs/**']
+
+jobs:
+  verdict:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hnshah/verdict@v1
+        with:
+          config: verdict.yaml
+          fail-if-regression: true
+          comment-on-pr: true   # posts a sticky leaderboard-diff comment
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+```
+
+The `v1` tag follows the latest `v1.x.y` release — bugfix and minor
+updates flow in automatically. Pin to a specific `v1.2.3` if you need
+reproducibility.
 
 ### 4. Cost Optimization
 
